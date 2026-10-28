@@ -1,0 +1,6 @@
+# Cloudflare Pages – Konfiguration für statisches Astro-Deployment
+name = "programmatic-seo"
+compatibility_date = "2025-01-01"
+
+# Astro erzeugt einen statischen Export in ./dist
+pages_build_output_dir = "dist"
