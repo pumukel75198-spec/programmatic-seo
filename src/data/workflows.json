@@ -4,11 +4,21 @@
     "title": "AI Content Automation",
     "description": "A complete workflow to research, write and automatically publish content ideas with AI and APIs at scale.",
     "category": "Content & SEO",
-    "tags": ["ai", "content", "seo", "automation"],
+    "tags": [
+      "ai",
+      "content",
+      "seo",
+      "automation"
+    ],
     "details": {
       "difficulty": "Advanced",
       "duration": "About 2–3 hours setup",
-      "tools": ["OpenAI API", "Supabase", "Astro", "n8n"],
+      "tools": [
+        "OpenAI API",
+        "Supabase",
+        "Astro",
+        "n8n"
+      ],
       "steps": [
         "Run keyword and topic research",
         "Set up the data model in Supabase",
@@ -24,11 +34,21 @@
     "title": "Automate Lead Qualification",
     "description": "Automatically score, enrich and route incoming leads to the right team – without manual sorting.",
     "category": "Sales & CRM",
-    "tags": ["sales", "crm", "ai", "automation"],
+    "tags": [
+      "sales",
+      "crm",
+      "ai",
+      "automation"
+    ],
     "details": {
       "difficulty": "Advanced",
       "duration": "About 1–2 hours setup",
-      "tools": ["Make", "OpenAI API", "Resend API", "CRM"],
+      "tools": [
+        "Make",
+        "OpenAI API",
+        "Resend API",
+        "CRM"
+      ],
       "steps": [
         "Capture leads via forms or webhooks",
         "Enrich company data and verify emails",
@@ -44,11 +64,21 @@
     "title": "Programmatic SEO Pipeline",
     "description": "The complete workflow for thousands of SEO pages: data sources, template engine, build process and monitoring.",
     "category": "SEO & Scaling",
-    "tags": ["seo", "astro", "scaling", "deployment"],
+    "tags": [
+      "seo",
+      "astro",
+      "scaling",
+      "deployment"
+    ],
     "details": {
       "difficulty": "Expert",
       "duration": "About 1 day setup",
-      "tools": ["Astro", "Supabase", "OpenAI API", "n8n"],
+      "tools": [
+        "Astro",
+        "Supabase",
+        "OpenAI API",
+        "n8n"
+      ],
       "steps": [
         "Define data sources",
         "Build templates with getStaticPaths",
@@ -64,11 +94,21 @@
     "title": "Newsletter Automation",
     "description": "A workflow for automated newsletters: capture signups, prepare content and deliver emails reliably via the Resend API.",
     "category": "Marketing & Content",
-    "tags": ["newsletter", "email", "automation", "content"],
+    "tags": [
+      "newsletter",
+      "email",
+      "automation",
+      "content"
+    ],
     "details": {
       "difficulty": "Beginner",
       "duration": "About 1 hour setup",
-      "tools": ["Resend API", "Astro", "Supabase", "n8n"],
+      "tools": [
+        "Resend API",
+        "Astro",
+        "Supabase",
+        "n8n"
+      ],
       "steps": [
         "Set up a signup form with double opt-in",
         "Store contacts in Supabase",
@@ -84,11 +124,21 @@
     "title": "Social Media Scheduling",
     "description": "Automate social media scheduling: create content with AI, get editorial approval and publish across channels on schedule.",
     "category": "Marketing & Content",
-    "tags": ["social-media", "scheduling", "automation", "content"],
+    "tags": [
+      "social-media",
+      "scheduling",
+      "automation",
+      "content"
+    ],
     "details": {
       "difficulty": "Advanced",
       "duration": "About 2 hours setup",
-      "tools": ["Make", "OpenAI API", "Buffer", "Notion"],
+      "tools": [
+        "Make",
+        "OpenAI API",
+        "Buffer",
+        "Notion"
+      ],
       "steps": [
         "Collect content ideas in Notion",
         "Generate and shorten posts with AI",
@@ -104,11 +154,21 @@
     "title": "Customer Support Chatbot",
     "description": "An AI support chatbot: understand requests, answer from a knowledge base and hand off to humans when needed.",
     "category": "Support & AI",
-    "tags": ["chatbot", "support", "ai", "automation"],
+    "tags": [
+      "chatbot",
+      "support",
+      "ai",
+      "automation"
+    ],
     "details": {
       "difficulty": "Advanced",
       "duration": "About 3 hours setup",
-      "tools": ["OpenAI API", "Supabase", "Astro", "Resend API"],
+      "tools": [
+        "OpenAI API",
+        "Supabase",
+        "Astro",
+        "Resend API"
+      ],
       "steps": [
         "Build a knowledge base from FAQs and docs",
         "Generate embeddings for semantic search",
@@ -124,11 +184,21 @@
     "title": "Data Enrichment Pipeline",
     "description": "A data enrichment pipeline: import raw data, enrich it via API, normalize it with AI and store it structured in Supabase.",
     "category": "Data & Automation",
-    "tags": ["data", "enrichment", "api", "automation"],
+    "tags": [
+      "data",
+      "enrichment",
+      "api",
+      "automation"
+    ],
     "details": {
       "difficulty": "Expert",
       "duration": "About 4 hours setup",
-      "tools": ["n8n", "Supabase", "OpenAI API", "Mapbox Maps API"],
+      "tools": [
+        "n8n",
+        "Supabase",
+        "OpenAI API",
+        "Mapbox Maps API"
+      ],
       "steps": [
         "Import raw data from CSV or APIs",
         "Enrich records via external APIs",
@@ -144,11 +214,21 @@
     "title": "SEO Monitoring Dashboard",
     "description": "A dashboard for SEO monitoring: automatically collect rankings, indexing and Core Web Vitals and visualize them clearly.",
     "category": "SEO & Analytics",
-    "tags": ["seo", "monitoring", "analytics", "dashboard"],
+    "tags": [
+      "seo",
+      "monitoring",
+      "analytics",
+      "dashboard"
+    ],
     "details": {
       "difficulty": "Advanced",
       "duration": "About 2–3 hours setup",
-      "tools": ["Astro", "Supabase", "Google Search Console API", "n8n"],
+      "tools": [
+        "Astro",
+        "Supabase",
+        "Google Search Console API",
+        "n8n"
+      ],
       "steps": [
         "Fetch Search Console data via API",
         "Store metrics in Supabase",
@@ -164,11 +244,21 @@
     "title": "Invoice Automation",
     "description": "Automate invoice creation, delivery and reconciliation: generate PDFs, send them and sync payment status with your accounting.",
     "category": "Finance & Ops",
-    "tags": ["invoices", "finance", "automation", "accounting"],
+    "tags": [
+      "invoices",
+      "finance",
+      "automation",
+      "accounting"
+    ],
     "details": {
       "difficulty": "Advanced",
       "duration": "About 2–3 hours setup",
-      "tools": ["Stripe Payments API", "Resend Email API", "Supabase", "n8n"],
+      "tools": [
+        "Stripe Payments API",
+        "Resend Email API",
+        "Supabase",
+        "n8n"
+      ],
       "steps": [
         "Capture billable events",
         "Generate invoice PDFs",
@@ -184,11 +274,21 @@
     "title": "Appointment Booking Automation",
     "description": "Build an automated booking flow: show availability, collect details, confirm appointments and send reminders.",
     "category": "Sales & Scheduling",
-    "tags": ["booking", "scheduling", "automation", "calendar"],
+    "tags": [
+      "booking",
+      "scheduling",
+      "automation",
+      "calendar"
+    ],
     "details": {
       "difficulty": "Beginner",
       "duration": "About 1–2 hours setup",
-      "tools": ["Cal.com", "Supabase", "Resend Email API", "n8n"],
+      "tools": [
+        "Cal.com",
+        "Supabase",
+        "Resend Email API",
+        "n8n"
+      ],
       "steps": [
         "Expose available slots",
         "Collect booking details",
@@ -204,11 +304,21 @@
     "title": "Product Feed Sync",
     "description": "Keep product data in sync across storefronts and marketplaces: normalize feeds, validate fields and publish updates automatically.",
     "category": "E-commerce",
-    "tags": ["ecommerce", "product-feed", "sync", "automation"],
+    "tags": [
+      "ecommerce",
+      "product-feed",
+      "sync",
+      "automation"
+    ],
     "details": {
       "difficulty": "Expert",
       "duration": "About 4 hours setup",
-      "tools": ["Shopify Admin API", "Supabase", "n8n", "OpenAI API"],
+      "tools": [
+        "Shopify Admin API",
+        "Supabase",
+        "n8n",
+        "OpenAI API"
+      ],
       "steps": [
         "Import product feeds",
         "Normalize and validate fields",
@@ -224,11 +334,21 @@
     "title": "Knowledge Base Ingestion",
     "description": "Turn docs and FAQs into a searchable knowledge base: chunk content, generate embeddings and power semantic retrieval.",
     "category": "AI & Support",
-    "tags": ["knowledge-base", "embeddings", "rag", "support"],
+    "tags": [
+      "knowledge-base",
+      "embeddings",
+      "rag",
+      "support"
+    ],
     "details": {
       "difficulty": "Advanced",
       "duration": "About 3 hours setup",
-      "tools": ["Cohere Embed API", "Pinecone Vector API", "Supabase", "n8n"],
+      "tools": [
+        "Cohere Embed API",
+        "Pinecone Vector API",
+        "Supabase",
+        "n8n"
+      ],
       "steps": [
         "Collect source documents",
         "Chunk and clean content",
@@ -244,11 +364,21 @@
     "title": "Multi-Language Content Pipeline",
     "description": "Scale content across languages: manage translations, localize metadata and publish locale-aware pages automatically.",
     "category": "Content & i18n",
-    "tags": ["i18n", "content", "localization", "automation"],
+    "tags": [
+      "i18n",
+      "content",
+      "localization",
+      "automation"
+    ],
     "details": {
       "difficulty": "Expert",
       "duration": "About 4 hours setup",
-      "tools": ["OpenAI API", "Astro", "Supabase", "n8n"],
+      "tools": [
+        "OpenAI API",
+        "Astro",
+        "Supabase",
+        "n8n"
+      ],
       "steps": [
         "Define source content",
         "Generate translations",
@@ -264,11 +394,21 @@
     "title": "Webhook Event Routing",
     "description": "Route incoming webhooks reliably: verify signatures, deduplicate events and forward them to the right services.",
     "category": "Engineering",
-    "tags": ["webhooks", "events", "integration", "reliability"],
+    "tags": [
+      "webhooks",
+      "events",
+      "integration",
+      "reliability"
+    ],
     "details": {
       "difficulty": "Advanced",
       "duration": "About 2 hours setup",
-      "tools": ["Cloudflare Workers API", "Supabase", "n8n", "Resend Email API"],
+      "tools": [
+        "Cloudflare Workers API",
+        "Supabase",
+        "n8n",
+        "Resend Email API"
+      ],
       "steps": [
         "Receive webhook payloads",
         "Verify signatures",
@@ -277,6 +417,366 @@
         "Alert on failures"
       ],
       "useCase": "Platforms integrating with multiple third-party services"
+    }
+  },
+  {
+    "slug": "document-summarization",
+    "title": "Document Summarization",
+    "description": "Summarize long documents automatically: ingest PDFs, chunk content, generate concise summaries and store them for search.",
+    "category": "AI & Content",
+    "tags": [
+      "summarization",
+      "documents",
+      "ai",
+      "automation"
+    ],
+    "details": {
+      "difficulty": "Advanced",
+      "duration": "About 2–3 hours setup",
+      "tools": [
+        "OpenAI API",
+        "Supabase",
+        "n8n",
+        "Pinecone Vector API"
+      ],
+      "steps": [
+        "Ingest PDFs and documents",
+        "Extract and chunk text",
+        "Generate summaries with AI",
+        "Store summaries and embeddings",
+        "Expose a search endpoint"
+      ],
+      "useCase": "Research teams, legal review and knowledge management"
+    }
+  },
+  {
+    "slug": "ai-customer-feedback-analysis",
+    "title": "AI Customer Feedback Analysis",
+    "description": "Analyze customer feedback at scale: classify sentiment, extract themes and route insights to the right teams automatically.",
+    "category": "Support & AI",
+    "tags": [
+      "feedback",
+      "sentiment",
+      "ai",
+      "analytics"
+    ],
+    "details": {
+      "difficulty": "Advanced",
+      "duration": "About 2–3 hours setup",
+      "tools": [
+        "OpenAI API",
+        "Supabase",
+        "PostHog Analytics API",
+        "n8n"
+      ],
+      "steps": [
+        "Collect feedback from multiple sources",
+        "Classify sentiment and topics",
+        "Extract actionable themes",
+        "Store insights in Supabase",
+        "Send weekly summaries"
+      ],
+      "useCase": "Product and support teams prioritizing improvements"
+    }
+  },
+  {
+    "slug": "automated-code-review",
+    "title": "Automated Code Review",
+    "description": "Automate pull-request reviews: summarize diffs, flag risks and post structured comments with AI assistance.",
+    "category": "Engineering",
+    "tags": [
+      "code-review",
+      "ai",
+      "github",
+      "devops"
+    ],
+    "details": {
+      "difficulty": "Expert",
+      "duration": "About 3–4 hours setup",
+      "tools": [
+        "OpenAI API",
+        "GitHub Alternatives",
+        "n8n",
+        "Slack"
+      ],
+      "steps": [
+        "Receive pull-request webhooks",
+        "Fetch and summarize diffs",
+        "Flag risky changes with AI",
+        "Post review comments",
+        "Notify the team"
+      ],
+      "useCase": "Engineering teams that want faster, consistent reviews"
+    }
+  },
+  {
+    "slug": "lead-scraping-enrichment",
+    "title": "Lead Scraping & Enrichment",
+    "description": "Build a lead pipeline: collect prospects from public sources, enrich company data and score leads for outreach.",
+    "category": "Sales & CRM",
+    "tags": [
+      "leads",
+      "scraping",
+      "enrichment",
+      "sales"
+    ],
+    "details": {
+      "difficulty": "Advanced",
+      "duration": "About 3 hours setup",
+      "tools": [
+        "n8n",
+        "OpenAI API",
+        "Supabase",
+        "Resend Email API"
+      ],
+      "steps": [
+        "Collect prospect data",
+        "Normalize and deduplicate leads",
+        "Enrich company information",
+        "Score leads with AI",
+        "Export to CRM"
+      ],
+      "useCase": "Sales teams building targeted outbound pipelines"
+    }
+  },
+  {
+    "slug": "support-ticket-triage",
+    "title": "Support Ticket Triage",
+    "description": "Triage support tickets automatically: classify intent, set priority and route each ticket to the right queue.",
+    "category": "Support & AI",
+    "tags": [
+      "support",
+      "triage",
+      "ai",
+      "automation"
+    ],
+    "details": {
+      "difficulty": "Advanced",
+      "duration": "About 2 hours setup",
+      "tools": [
+        "OpenAI API",
+        "Zendesk Alternatives",
+        "n8n",
+        "Slack"
+      ],
+      "steps": [
+        "Receive incoming tickets",
+        "Classify intent and urgency",
+        "Assign priority and tags",
+        "Route to the right queue",
+        "Escalate critical issues"
+      ],
+      "useCase": "Support teams handling high ticket volumes"
+    }
+  },
+  {
+    "slug": "content-repurposing",
+    "title": "Content Repurposing",
+    "description": "Repurpose long-form content into social posts, newsletters and summaries while keeping brand voice consistent.",
+    "category": "Content & SEO",
+    "tags": [
+      "content",
+      "repurposing",
+      "social-media",
+      "ai"
+    ],
+    "details": {
+      "difficulty": "Advanced",
+      "duration": "About 2 hours setup",
+      "tools": [
+        "OpenAI API",
+        "Notion API",
+        "Buffer",
+        "n8n"
+      ],
+      "steps": [
+        "Ingest long-form content",
+        "Generate channel-specific variants",
+        "Apply brand voice guidelines",
+        "Schedule posts",
+        "Track performance"
+      ],
+      "useCase": "Content teams maximizing reach from each asset"
+    }
+  },
+  {
+    "slug": "social-listening",
+    "title": "Social Listening",
+    "description": "Monitor brand mentions and trends across channels: collect posts, analyze sentiment and alert the team to spikes.",
+    "category": "Marketing & Analytics",
+    "tags": [
+      "social-media",
+      "listening",
+      "sentiment",
+      "monitoring"
+    ],
+    "details": {
+      "difficulty": "Advanced",
+      "duration": "About 3 hours setup",
+      "tools": [
+        "n8n",
+        "OpenAI API",
+        "Supabase",
+        "Slack"
+      ],
+      "steps": [
+        "Collect mentions from channels",
+        "Detect language and sentiment",
+        "Cluster emerging topics",
+        "Store trends in Supabase",
+        "Alert on spikes"
+      ],
+      "useCase": "Brand and marketing teams monitoring reputation"
+    }
+  },
+  {
+    "slug": "price-monitoring",
+    "title": "Price Monitoring",
+    "description": "Track competitor prices automatically: scrape product pages, detect changes and trigger alerts or repricing rules.",
+    "category": "E-commerce",
+    "tags": [
+      "pricing",
+      "monitoring",
+      "ecommerce",
+      "automation"
+    ],
+    "details": {
+      "difficulty": "Advanced",
+      "duration": "About 3 hours setup",
+      "tools": [
+        "n8n",
+        "Supabase",
+        "OpenAI API",
+        "Resend Email API"
+      ],
+      "steps": [
+        "Define competitor product URLs",
+        "Scrape prices on a schedule",
+        "Detect and store changes",
+        "Apply alert thresholds",
+        "Notify the pricing team"
+      ],
+      "useCase": "E-commerce teams keeping prices competitive"
+    }
+  },
+  {
+    "slug": "competitor-analysis",
+    "title": "Competitor Analysis",
+    "description": "Automate competitor research: collect updates, summarize changes and generate weekly competitive intelligence briefs.",
+    "category": "Marketing & Analytics",
+    "tags": [
+      "competitors",
+      "research",
+      "ai",
+      "automation"
+    ],
+    "details": {
+      "difficulty": "Advanced",
+      "duration": "About 3 hours setup",
+      "tools": [
+        "OpenAI API",
+        "n8n",
+        "Supabase",
+        "Resend Email API"
+      ],
+      "steps": [
+        "Track competitor sources",
+        "Collect new content and updates",
+        "Summarize changes with AI",
+        "Store insights over time",
+        "Send weekly briefs"
+      ],
+      "useCase": "Product marketing and strategy teams"
+    }
+  },
+  {
+    "slug": "onboarding-email-sequence",
+    "title": "Onboarding Email Sequence",
+    "description": "Run behavior-based onboarding emails: trigger sequences from user events and personalize content automatically.",
+    "category": "Marketing & CRM",
+    "tags": [
+      "onboarding",
+      "email",
+      "automation",
+      "lifecycle"
+    ],
+    "details": {
+      "difficulty": "Advanced",
+      "duration": "About 2 hours setup",
+      "tools": [
+        "Resend Email API",
+        "Supabase",
+        "n8n",
+        "OpenAI API"
+      ],
+      "steps": [
+        "Capture signup events",
+        "Segment users by behavior",
+        "Trigger email sequences",
+        "Personalize content with AI",
+        "Track activation metrics"
+      ],
+      "useCase": "SaaS teams improving activation and retention"
+    }
+  },
+  {
+    "slug": "churn-prediction",
+    "title": "Churn Prediction",
+    "description": "Predict customer churn from usage signals: score accounts, flag at-risk customers and trigger retention playbooks.",
+    "category": "Analytics & CRM",
+    "tags": [
+      "churn",
+      "prediction",
+      "retention",
+      "analytics"
+    ],
+    "details": {
+      "difficulty": "Expert",
+      "duration": "About 4 hours setup",
+      "tools": [
+        "OpenAI API",
+        "Supabase",
+        "PostHog Analytics API",
+        "n8n"
+      ],
+      "steps": [
+        "Collect usage and billing signals",
+        "Build churn features",
+        "Score accounts with a model",
+        "Flag at-risk customers",
+        "Trigger retention playbooks"
+      ],
+      "useCase": "SaaS teams reducing churn proactively"
+    }
+  },
+  {
+    "slug": "meeting-notes-automation",
+    "title": "Meeting Notes Automation",
+    "description": "Automate meeting notes: transcribe calls, extract action items and sync summaries to your workspace.",
+    "category": "Productivity & AI",
+    "tags": [
+      "meetings",
+      "transcription",
+      "notes",
+      "ai"
+    ],
+    "details": {
+      "difficulty": "Advanced",
+      "duration": "About 2–3 hours setup",
+      "tools": [
+        "Deepgram Speech API",
+        "OpenAI API",
+        "Notion API",
+        "n8n"
+      ],
+      "steps": [
+        "Join or upload meeting audio",
+        "Transcribe with Deepgram",
+        "Summarize and extract actions",
+        "Create notes in Notion",
+        "Notify participants"
+      ],
+      "useCase": "Teams that want reliable meeting documentation"
     }
   }
 ]

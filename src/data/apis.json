@@ -4,7 +4,12 @@
     "title": "OpenAI Whisper API",
     "description": "OpenAI's Whisper API transcribes audio to text with high accuracy across 50+ languages – ideal for podcasts, meetings and voice apps.",
     "category": "AI & Speech",
-    "tags": ["speech-to-text", "transcription", "ai", "audio"],
+    "tags": [
+      "speech-to-text",
+      "transcription",
+      "ai",
+      "audio"
+    ],
     "details": {
       "provider": "OpenAI",
       "pricing": "$0.006 per minute of audio",
@@ -23,7 +28,12 @@
     "title": "Stripe Payments API",
     "description": "The Stripe Payments API is the leading interface for online payments, subscriptions and financial infrastructure with an excellent developer experience.",
     "category": "Finance",
-    "tags": ["payments", "fintech", "subscriptions", "checkout"],
+    "tags": [
+      "payments",
+      "fintech",
+      "subscriptions",
+      "checkout"
+    ],
     "details": {
       "provider": "Stripe",
       "pricing": "~1.5% + $0.30 per transaction",
@@ -42,7 +52,12 @@
     "title": "Supabase Database API",
     "description": "Supabase provides an auto-generated REST and GraphQL API on top of PostgreSQL – including auth, storage and realtime subscriptions.",
     "category": "Backend",
-    "tags": ["postgresql", "backend", "open-source", "auth"],
+    "tags": [
+      "postgresql",
+      "backend",
+      "open-source",
+      "auth"
+    ],
     "details": {
       "provider": "Supabase",
       "pricing": "Free tier, then from $25/month",
@@ -61,7 +76,12 @@
     "title": "Anthropic Claude API",
     "description": "Anthropic's Claude API offers strong reasoning, a large context window and safe agentic workflows for demanding applications.",
     "category": "AI & LLM",
-    "tags": ["llm", "reasoning", "agents", "safety"],
+    "tags": [
+      "llm",
+      "reasoning",
+      "agents",
+      "safety"
+    ],
     "details": {
       "provider": "Anthropic",
       "pricing": "Pay-as-you-go per token",
@@ -80,7 +100,12 @@
     "title": "Google Gemini API",
     "description": "The Google Gemini API combines text, image and audio in one multimodal model – ideal for vision, analysis and assistant applications.",
     "category": "AI & Multimodal",
-    "tags": ["llm", "multimodal", "vision", "google"],
+    "tags": [
+      "llm",
+      "multimodal",
+      "vision",
+      "google"
+    ],
     "details": {
       "provider": "Google",
       "pricing": "Free quota, then per token",
@@ -99,7 +124,11 @@
     "title": "Resend Email API",
     "description": "The Resend API simplifies transactional email with clean documentation, React Email templates and reliable delivery.",
     "category": "Communication",
-    "tags": ["email", "transactional", "developer-tools"],
+    "tags": [
+      "email",
+      "transactional",
+      "developer-tools"
+    ],
     "details": {
       "provider": "Resend",
       "pricing": "Free up to 3,000 emails/month",
@@ -118,7 +147,12 @@
     "title": "Clerk Authentication API",
     "description": "The Clerk API delivers ready-made authentication with SSO, multi-factor login and user management – quickly integrated into modern web apps.",
     "category": "Auth & Identity",
-    "tags": ["auth", "sso", "user-management", "security"],
+    "tags": [
+      "auth",
+      "sso",
+      "user-management",
+      "security"
+    ],
     "details": {
       "provider": "Clerk",
       "pricing": "Free up to 10,000 MAU",
@@ -137,7 +171,12 @@
     "title": "Cloudflare Workers API",
     "description": "The Cloudflare Workers API runs code directly at the edge – for fast, scalable serverless functions without managing your own server.",
     "category": "Edge Computing",
-    "tags": ["edge", "serverless", "cdn", "performance"],
+    "tags": [
+      "edge",
+      "serverless",
+      "cdn",
+      "performance"
+    ],
     "details": {
       "provider": "Cloudflare",
       "pricing": "Free up to 100,000 requests/day",
@@ -156,7 +195,12 @@
     "title": "Mapbox Maps API",
     "description": "The Mapbox Maps API provides interactive maps, geocoding and routing for web and mobile applications with high performance.",
     "category": "Geodata",
-    "tags": ["maps", "geolocation", "routing", "visualization"],
+    "tags": [
+      "maps",
+      "geolocation",
+      "routing",
+      "visualization"
+    ],
     "details": {
       "provider": "Mapbox",
       "pricing": "Free quota, then usage-based",
@@ -175,7 +219,12 @@
     "title": "Twilio Messaging API",
     "description": "The Twilio Messaging API reliably sends SMS, WhatsApp and RCS messages – ideal for notifications and two-factor authentication.",
     "category": "Communication",
-    "tags": ["sms", "whatsapp", "messaging", "notifications"],
+    "tags": [
+      "sms",
+      "whatsapp",
+      "messaging",
+      "notifications"
+    ],
     "details": {
       "provider": "Twilio",
       "pricing": "Pay-as-you-go per message",
@@ -194,7 +243,12 @@
     "title": "Hugging Face Inference API",
     "description": "The Hugging Face Inference API gives you hosted access to thousands of open models for text, vision and audio – without managing infrastructure.",
     "category": "AI & ML",
-    "tags": ["ai", "models", "inference", "open-source"],
+    "tags": [
+      "ai",
+      "models",
+      "inference",
+      "open-source"
+    ],
     "details": {
       "provider": "Hugging Face",
       "pricing": "Free tier, then usage-based",
@@ -213,7 +267,12 @@
     "title": "Cohere Embed API",
     "description": "Cohere's Embed API turns text into high-quality vector embeddings for semantic search, clustering and retrieval-augmented generation.",
     "category": "AI & Embeddings",
-    "tags": ["embeddings", "search", "rag", "nlp"],
+    "tags": [
+      "embeddings",
+      "search",
+      "rag",
+      "nlp"
+    ],
     "details": {
       "provider": "Cohere",
       "pricing": "Pay-as-you-go per token",
@@ -232,7 +291,12 @@
     "title": "Pinecone Vector API",
     "description": "The Pinecone Vector API is a fully managed vector database for fast similarity search at scale – ideal for RAG and recommendation systems.",
     "category": "Vector Database",
-    "tags": ["vector-database", "similarity-search", "rag", "ai"],
+    "tags": [
+      "vector-database",
+      "similarity-search",
+      "rag",
+      "ai"
+    ],
     "details": {
       "provider": "Pinecone",
       "pricing": "Free tier, then usage-based",
@@ -251,7 +315,12 @@
     "title": "Auth0 Authentication API",
     "description": "The Auth0 API provides enterprise-grade authentication and authorization with SSO, social logins and fine-grained access control.",
     "category": "Auth & Identity",
-    "tags": ["auth", "sso", "oauth", "security"],
+    "tags": [
+      "auth",
+      "sso",
+      "oauth",
+      "security"
+    ],
     "details": {
       "provider": "Auth0",
       "pricing": "Free tier, then per MAU",
@@ -270,7 +339,12 @@
     "title": "SendGrid Email API",
     "description": "The SendGrid Email API delivers transactional and marketing emails reliably at scale, with analytics, templates and webhooks.",
     "category": "Communication",
-    "tags": ["email", "transactional", "marketing", "deliverability"],
+    "tags": [
+      "email",
+      "transactional",
+      "marketing",
+      "deliverability"
+    ],
     "details": {
       "provider": "Twilio SendGrid",
       "pricing": "Free tier, then usage-based",
@@ -289,7 +363,12 @@
     "title": "Algolia Search API",
     "description": "The Algolia Search API delivers instant, relevant search and discovery experiences with typo tolerance and faceting out of the box.",
     "category": "Search",
-    "tags": ["search", "discovery", "relevance", "api"],
+    "tags": [
+      "search",
+      "discovery",
+      "relevance",
+      "api"
+    ],
     "details": {
       "provider": "Algolia",
       "pricing": "Free tier, then usage-based",
@@ -308,7 +387,12 @@
     "title": "OpenWeather Weather API",
     "description": "The OpenWeather API provides current weather, forecasts and historical data for any location – ideal for apps and data products.",
     "category": "Weather",
-    "tags": ["weather", "forecast", "geodata", "api"],
+    "tags": [
+      "weather",
+      "forecast",
+      "geodata",
+      "api"
+    ],
     "details": {
       "provider": "OpenWeather",
       "pricing": "Free tier, then usage-based",
@@ -327,7 +411,12 @@
     "title": "Shopify Admin API",
     "description": "The Shopify Admin API lets you manage products, orders, customers and inventory programmatically for e-commerce automation.",
     "category": "E-commerce",
-    "tags": ["ecommerce", "orders", "inventory", "shopify"],
+    "tags": [
+      "ecommerce",
+      "orders",
+      "inventory",
+      "shopify"
+    ],
     "details": {
       "provider": "Shopify",
       "pricing": "Included with Shopify plans",
@@ -346,7 +435,12 @@
     "title": "Notion API",
     "description": "The Notion API connects your workspace to other tools, enabling automated pages, databases and content pipelines.",
     "category": "Productivity",
-    "tags": ["productivity", "database", "content", "automation"],
+    "tags": [
+      "productivity",
+      "database",
+      "content",
+      "automation"
+    ],
     "details": {
       "provider": "Notion",
       "pricing": "Free for most integrations",
@@ -365,7 +459,12 @@
     "title": "Airtable API",
     "description": "The Airtable API turns your bases into a REST API, so you can read and write records, attachments and views from any application.",
     "category": "Databases",
-    "tags": ["database", "no-code", "rest", "automation"],
+    "tags": [
+      "database",
+      "no-code",
+      "rest",
+      "automation"
+    ],
     "details": {
       "provider": "Airtable",
       "pricing": "Included with Airtable plans",
@@ -377,6 +476,486 @@
       ],
       "useCase": "No-code databases as a backend for apps and automations",
       "website": "https://airtable.com/developers/web/api"
+    }
+  },
+  {
+    "slug": "mistral-ai-api",
+    "title": "Mistral AI API",
+    "description": "The Mistral AI API offers fast, efficient open-weight language models for chat, coding and retrieval tasks at competitive prices.",
+    "category": "AI & LLM",
+    "tags": [
+      "llm",
+      "open-weight",
+      "chat",
+      "efficiency"
+    ],
+    "details": {
+      "provider": "Mistral AI",
+      "pricing": "Pay-as-you-go per token",
+      "features": [
+        "Open-weight models",
+        "Fast inference",
+        "Function calling",
+        "Multilingual support"
+      ],
+      "useCase": "Cost-efficient chat, coding and RAG applications",
+      "website": "https://mistral.ai"
+    }
+  },
+  {
+    "slug": "groq-inference-api",
+    "title": "Groq Inference API",
+    "description": "The Groq API delivers extremely fast LLM inference on custom hardware, ideal for real-time chat and voice applications.",
+    "category": "AI & Inference",
+    "tags": [
+      "llm",
+      "inference",
+      "speed",
+      "realtime"
+    ],
+    "details": {
+      "provider": "Groq",
+      "pricing": "Pay-as-you-go per token",
+      "features": [
+        "Ultra-low latency inference",
+        "Open-model support",
+        "Streaming responses",
+        "OpenAI-compatible API"
+      ],
+      "useCase": "Real-time chat, voice agents and latency-critical apps",
+      "website": "https://groq.com"
+    }
+  },
+  {
+    "slug": "together-ai-api",
+    "title": "Together AI API",
+    "description": "The Together AI API provides access to a wide range of open-source models with fine-tuning, embeddings and serverless inference.",
+    "category": "AI & LLM",
+    "tags": [
+      "llm",
+      "open-source",
+      "fine-tuning",
+      "inference"
+    ],
+    "details": {
+      "provider": "Together AI",
+      "pricing": "Pay-as-you-go per token",
+      "features": [
+        "Many open-source models",
+        "Fine-tuning support",
+        "Embeddings and image models",
+        "Serverless inference"
+      ],
+      "useCase": "Custom models, fine-tuning and multi-model applications",
+      "website": "https://www.together.ai"
+    }
+  },
+  {
+    "slug": "replicate-model-api",
+    "title": "Replicate Model API",
+    "description": "Replicate lets you run thousands of open-source models via a simple API, from image generation to speech and language tasks.",
+    "category": "AI & ML",
+    "tags": [
+      "models",
+      "image-generation",
+      "api",
+      "open-source"
+    ],
+    "details": {
+      "provider": "Replicate",
+      "pricing": "Pay-per-second of compute",
+      "features": [
+        "Thousands of community models",
+        "Image, audio and text tasks",
+        "Custom model deployment",
+        "Simple REST API"
+      ],
+      "useCase": "Prototyping and running open-source models without infrastructure",
+      "website": "https://replicate.com"
+    }
+  },
+  {
+    "slug": "elevenlabs-voice-api",
+    "title": "ElevenLabs Voice API",
+    "description": "The ElevenLabs API generates natural, expressive speech and clones voices for apps, audiobooks and voice agents.",
+    "category": "AI & Voice",
+    "tags": [
+      "text-to-speech",
+      "voice-cloning",
+      "audio",
+      "ai"
+    ],
+    "details": {
+      "provider": "ElevenLabs",
+      "pricing": "Free tier, then per character",
+      "features": [
+        "Natural text-to-speech",
+        "Voice cloning",
+        "Multilingual voices",
+        "Low-latency streaming"
+      ],
+      "useCase": "Voiceovers, audiobooks and conversational voice agents",
+      "website": "https://elevenlabs.io"
+    }
+  },
+  {
+    "slug": "deepgram-speech-api",
+    "title": "Deepgram Speech API",
+    "description": "Deepgram offers fast, accurate speech-to-text and text-to-speech APIs for real-time transcription and voice interfaces.",
+    "category": "AI & Speech",
+    "tags": [
+      "speech-to-text",
+      "transcription",
+      "realtime",
+      "audio"
+    ],
+    "details": {
+      "provider": "Deepgram",
+      "pricing": "Pay-as-you-go per minute",
+      "features": [
+        "Real-time transcription",
+        "Speaker diarization",
+        "Multilingual support",
+        "Text-to-speech"
+      ],
+      "useCase": "Meeting transcription, call analytics and voice interfaces",
+      "website": "https://deepgram.com"
+    }
+  },
+  {
+    "slug": "stability-ai-image-api",
+    "title": "Stability AI Image API",
+    "description": "The Stability AI API generates and edits images with Stable Diffusion models, including upscaling and inpainting.",
+    "category": "AI & Image",
+    "tags": [
+      "image-generation",
+      "stable-diffusion",
+      "inpainting",
+      "ai"
+    ],
+    "details": {
+      "provider": "Stability AI",
+      "pricing": "Pay-as-you-go per image",
+      "features": [
+        "Text-to-image generation",
+        "Inpainting and upscaling",
+        "Multiple model versions",
+        "REST API access"
+      ],
+      "useCase": "Marketing visuals, concept art and image editing",
+      "website": "https://stability.ai"
+    }
+  },
+  {
+    "slug": "weaviate-vector-api",
+    "title": "Weaviate Vector API",
+    "description": "Weaviate is an open-source vector database with a GraphQL API for semantic search, hybrid search and RAG at scale.",
+    "category": "Vector Database",
+    "tags": [
+      "vector-database",
+      "semantic-search",
+      "rag",
+      "open-source"
+    ],
+    "details": {
+      "provider": "Weaviate",
+      "pricing": "Open-source, cloud usage-based",
+      "features": [
+        "Open-source and managed cloud",
+        "Hybrid search",
+        "GraphQL API",
+        "Built-in vectorizers"
+      ],
+      "useCase": "Semantic search, RAG and recommendation systems",
+      "website": "https://weaviate.io"
+    }
+  },
+  {
+    "slug": "qdrant-vector-api",
+    "title": "Qdrant Vector API",
+    "description": "Qdrant is a high-performance vector database with REST and gRPC APIs for similarity search and RAG workloads.",
+    "category": "Vector Database",
+    "tags": [
+      "vector-database",
+      "similarity-search",
+      "rag",
+      "rust"
+    ],
+    "details": {
+      "provider": "Qdrant",
+      "pricing": "Open-source, cloud usage-based",
+      "features": [
+        "REST and gRPC APIs",
+        "Payload filtering",
+        "Hybrid search",
+        "Self-hosting option"
+      ],
+      "useCase": "Similarity search, RAG and large-scale recommendations",
+      "website": "https://qdrant.tech"
+    }
+  },
+  {
+    "slug": "mongodb-atlas-api",
+    "title": "MongoDB Atlas API",
+    "description": "MongoDB Atlas provides a managed document database with a flexible Data API for serverless and app-driven workloads.",
+    "category": "Databases",
+    "tags": [
+      "database",
+      "document-db",
+      "serverless",
+      "api"
+    ],
+    "details": {
+      "provider": "MongoDB",
+      "pricing": "Free tier, then usage-based",
+      "features": [
+        "Managed MongoDB clusters",
+        "Data API for HTTPS access",
+        "Full-text and vector search",
+        "Global distribution"
+      ],
+      "useCase": "Flexible document storage for modern applications",
+      "website": "https://www.mongodb.com/atlas"
+    }
+  },
+  {
+    "slug": "neon-postgres-api",
+    "title": "Neon Postgres API",
+    "description": "Neon is a serverless Postgres platform with branching, autoscaling and a simple API for modern application backends.",
+    "category": "Databases",
+    "tags": [
+      "postgresql",
+      "serverless",
+      "database",
+      "branching"
+    ],
+    "details": {
+      "provider": "Neon",
+      "pricing": "Free tier, then usage-based",
+      "features": [
+        "Serverless Postgres",
+        "Database branching",
+        "Autoscaling",
+        "REST and SQL access"
+      ],
+      "useCase": "Serverless apps, preview environments and modern backends",
+      "website": "https://neon.tech"
+    }
+  },
+  {
+    "slug": "planetscale-database-api",
+    "title": "PlanetScale Database API",
+    "description": "PlanetScale offers a MySQL-compatible serverless database with branching, safe schema changes and a developer-friendly API.",
+    "category": "Databases",
+    "tags": [
+      "mysql",
+      "serverless",
+      "database",
+      "branching"
+    ],
+    "details": {
+      "provider": "PlanetScale",
+      "pricing": "Free tier, then usage-based",
+      "features": [
+        "MySQL-compatible serverless DB",
+        "Database branching",
+        "Non-blocking schema changes",
+        "Connection management"
+      ],
+      "useCase": "Scalable SaaS backends and safe schema migrations",
+      "website": "https://planetscale.com"
+    }
+  },
+  {
+    "slug": "upstash-redis-api",
+    "title": "Upstash Redis API",
+    "description": "Upstash provides serverless Redis and Kafka with REST APIs and pay-per-request pricing for edge and serverless apps.",
+    "category": "Databases",
+    "tags": [
+      "redis",
+      "serverless",
+      "caching",
+      "rest"
+    ],
+    "details": {
+      "provider": "Upstash",
+      "pricing": "Pay-per-request, free tier",
+      "features": [
+        "Serverless Redis",
+        "REST API",
+        "Global replication",
+        "Kafka and QStash"
+      ],
+      "useCase": "Caching, rate limiting and queues in serverless apps",
+      "website": "https://upstash.com"
+    }
+  },
+  {
+    "slug": "vercel-blob-api",
+    "title": "Vercel Blob API",
+    "description": "Vercel Blob offers simple, scalable object storage with a TypeScript-friendly API for uploads, downloads and public assets.",
+    "category": "Storage",
+    "tags": [
+      "storage",
+      "files",
+      "serverless",
+      "cdn"
+    ],
+    "details": {
+      "provider": "Vercel",
+      "pricing": "Usage-based",
+      "features": [
+        "Object storage for files",
+        "Simple upload API",
+        "CDN delivery",
+        "Integration with Next.js"
+      ],
+      "useCase": "User uploads, images and static assets in serverless apps",
+      "website": "https://vercel.com/docs/storage/vercel-blob"
+    }
+  },
+  {
+    "slug": "liveblocks-collaboration-api",
+    "title": "Liveblocks Collaboration API",
+    "description": "Liveblocks adds real-time multiplayer collaboration to apps with presence, comments, notifications and conflict-free storage.",
+    "category": "Realtime",
+    "tags": [
+      "realtime",
+      "collaboration",
+      "presence",
+      "multiplayer"
+    ],
+    "details": {
+      "provider": "Liveblocks",
+      "pricing": "Free tier, then usage-based",
+      "features": [
+        "Presence and cursors",
+        "Collaborative storage",
+        "Comments and threads",
+        "Webhooks and notifications"
+      ],
+      "useCase": "Collaborative editors, whiteboards and design tools",
+      "website": "https://liveblocks.io"
+    }
+  },
+  {
+    "slug": "ably-realtime-api",
+    "title": "Ably Realtime API",
+    "description": "Ably provides globally distributed realtime messaging with pub/sub channels, presence and reliable delivery at scale.",
+    "category": "Realtime",
+    "tags": [
+      "realtime",
+      "pubsub",
+      "websockets",
+      "messaging"
+    ],
+    "details": {
+      "provider": "Ably",
+      "pricing": "Free tier, then usage-based",
+      "features": [
+        "Pub/sub channels",
+        "Presence and history",
+        "WebSocket and SSE",
+        "Global edge network"
+      ],
+      "useCase": "Chat, live dashboards and collaborative apps",
+      "website": "https://ably.com"
+    }
+  },
+  {
+    "slug": "posthog-analytics-api",
+    "title": "PostHog Analytics API",
+    "description": "PostHog combines product analytics, session replay, feature flags and experiments in one privacy-friendly platform.",
+    "category": "Analytics",
+    "tags": [
+      "analytics",
+      "product",
+      "feature-flags",
+      "session-replay"
+    ],
+    "details": {
+      "provider": "PostHog",
+      "pricing": "Free tier, then usage-based",
+      "features": [
+        "Product analytics",
+        "Session replay",
+        "Feature flags",
+        "A/B experiments"
+      ],
+      "useCase": "Product teams measuring activation, retention and experiments",
+      "website": "https://posthog.com"
+    }
+  },
+  {
+    "slug": "sentry-error-api",
+    "title": "Sentry Error API",
+    "description": "Sentry captures errors, traces and performance data across your stack so teams can find and fix issues faster.",
+    "category": "Observability",
+    "tags": [
+      "monitoring",
+      "errors",
+      "tracing",
+      "performance"
+    ],
+    "details": {
+      "provider": "Sentry",
+      "pricing": "Free tier, then usage-based",
+      "features": [
+        "Error tracking",
+        "Distributed tracing",
+        "Release health",
+        "SDKs for every stack"
+      ],
+      "useCase": "Debugging production errors and monitoring performance",
+      "website": "https://sentry.io"
+    }
+  },
+  {
+    "slug": "launchdarkly-feature-api",
+    "title": "LaunchDarkly Feature API",
+    "description": "LaunchDarkly lets teams ship features safely with feature flags, targeting rules, experiments and gradual rollouts.",
+    "category": "DevOps",
+    "tags": [
+      "feature-flags",
+      "devops",
+      "experimentation",
+      "rollouts"
+    ],
+    "details": {
+      "provider": "LaunchDarkly",
+      "pricing": "Free tier, then usage-based",
+      "features": [
+        "Feature flags",
+        "Targeting and segments",
+        "Gradual rollouts",
+        "Experimentation"
+      ],
+      "useCase": "Safe releases, A/B tests and kill switches",
+      "website": "https://launchdarkly.com"
+    }
+  },
+  {
+    "slug": "doppler-secrets-api",
+    "title": "Doppler Secrets API",
+    "description": "Doppler centralizes secrets and environment configuration with a secure API and integrations for every major cloud.",
+    "category": "Security",
+    "tags": [
+      "secrets",
+      "security",
+      "devops",
+      "configuration"
+    ],
+    "details": {
+      "provider": "Doppler",
+      "pricing": "Free tier, then per user",
+      "features": [
+        "Centralized secrets",
+        "Environment configs",
+        "Access controls and audit logs",
+        "CI/CD integrations"
+      ],
+      "useCase": "Managing secrets and config across environments",
+      "website": "https://www.doppler.com"
     }
   }
 ]

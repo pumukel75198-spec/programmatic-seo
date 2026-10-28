@@ -4,10 +4,19 @@
     "title": "Notion Alternatives",
     "description": "The best Notion alternatives for knowledge management, project planning and collaborative docs – from open source to enterprise.",
     "category": "Productivity",
-    "tags": ["knowledge-management", "notes", "collaboration", "productivity"],
+    "tags": [
+      "knowledge-management",
+      "notes",
+      "collaboration",
+      "productivity"
+    ],
     "details": {
       "original": "Notion",
-      "alternatives": ["Obsidian", "Coda", "AppFlowy"],
+      "alternatives": [
+        "Obsidian",
+        "Coda",
+        "AppFlowy"
+      ],
       "bestFor": "Teams that need offline access, privacy or self-hosting",
       "pricing": "Free to about $10/user/month depending on the tool",
       "features": [
@@ -22,10 +31,19 @@
     "title": "Zapier Alternatives",
     "description": "Zapier alternatives for automation and integrations – cheaper, more privacy-friendly or with more control over your workflows.",
     "category": "Automation",
-    "tags": ["automation", "no-code", "integrations", "workflows"],
+    "tags": [
+      "automation",
+      "no-code",
+      "integrations",
+      "workflows"
+    ],
     "details": {
       "original": "Zapier",
-      "alternatives": ["Make", "n8n", "Pipedream"],
+      "alternatives": [
+        "Make",
+        "n8n",
+        "Pipedream"
+      ],
       "bestFor": "Teams with high workflow volume or self-hosting needs",
       "pricing": "Free to about $20/month, n8n self-hosted is free",
       "features": [
@@ -40,10 +58,19 @@
     "title": "Figma Alternatives",
     "description": "Figma alternatives for UI design and prototyping – including open-source and privacy-friendly options.",
     "category": "Design",
-    "tags": ["design", "ui-ux", "prototyping", "open-source"],
+    "tags": [
+      "design",
+      "ui-ux",
+      "prototyping",
+      "open-source"
+    ],
     "details": {
       "original": "Figma",
-      "alternatives": ["Penpot", "Sketch", "Framer"],
+      "alternatives": [
+        "Penpot",
+        "Sketch",
+        "Framer"
+      ],
       "bestFor": "Design teams focused on privacy, local files or publishing",
       "pricing": "Free to about $15/user/month",
       "features": [
@@ -58,10 +85,18 @@
     "title": "Slack Alternatives",
     "description": "Slack alternatives for team chat and communication – more privacy-friendly, cheaper or with self-hosting for more control.",
     "category": "Communication",
-    "tags": ["team-chat", "communication", "collaboration"],
+    "tags": [
+      "team-chat",
+      "communication",
+      "collaboration"
+    ],
     "details": {
       "original": "Slack",
-      "alternatives": ["Mattermost", "Rocket.Chat", "Discord"],
+      "alternatives": [
+        "Mattermost",
+        "Rocket.Chat",
+        "Discord"
+      ],
       "bestFor": "Teams with privacy, compliance or self-hosting requirements",
       "pricing": "Free to about $8/user/month, self-hosting optional",
       "features": [
@@ -76,10 +111,19 @@
     "title": "Airtable Alternatives",
     "description": "Airtable alternatives for no-code databases and spreadsheets – with open-source options, self-hosting and fair pricing.",
     "category": "Databases",
-    "tags": ["no-code", "database", "spreadsheets", "automation"],
+    "tags": [
+      "no-code",
+      "database",
+      "spreadsheets",
+      "automation"
+    ],
     "details": {
       "original": "Airtable",
-      "alternatives": ["Baserow", "NocoDB", "SeaTable"],
+      "alternatives": [
+        "Baserow",
+        "NocoDB",
+        "SeaTable"
+      ],
       "bestFor": "Teams that need data ownership, self-hosting or open formats",
       "pricing": "Free to about $12/user/month, self-hosting is free",
       "features": [
@@ -94,10 +138,18 @@
     "title": "Mailchimp Alternatives",
     "description": "Mailchimp alternatives for newsletters and email marketing – cheaper, GDPR-friendly and without complex pricing tiers.",
     "category": "Marketing",
-    "tags": ["email-marketing", "newsletter", "crm"],
+    "tags": [
+      "email-marketing",
+      "newsletter",
+      "crm"
+    ],
     "details": {
       "original": "Mailchimp",
-      "alternatives": ["Brevo", "MailerLite", "Buttondown"],
+      "alternatives": [
+        "Brevo",
+        "MailerLite",
+        "Buttondown"
+      ],
       "bestFor": "Small and mid-sized teams focused on fair pricing and GDPR",
       "pricing": "Free to about $20/month depending on contact count",
       "features": [
@@ -112,10 +164,18 @@
     "title": "Trello Alternatives",
     "description": "Trello alternatives for Kanban boards and project management – with more automation, open-source options and fairer pricing.",
     "category": "Project Management",
-    "tags": ["kanban", "project-management", "tasks"],
+    "tags": [
+      "kanban",
+      "project-management",
+      "tasks"
+    ],
     "details": {
       "original": "Trello",
-      "alternatives": ["Plane", "Vikunja", "Linear"],
+      "alternatives": [
+        "Plane",
+        "Vikunja",
+        "Linear"
+      ],
       "bestFor": "Teams that want Kanban with automation or self-hosting",
       "pricing": "Free to about $10/user/month",
       "features": [
@@ -130,10 +190,18 @@
     "title": "Google Analytics Alternatives",
     "description": "Google Analytics alternatives for privacy-friendly web tracking – cookieless, GDPR-compliant and without data transfers to the US.",
     "category": "Analytics",
-    "tags": ["analytics", "privacy", "tracking"],
+    "tags": [
+      "analytics",
+      "privacy",
+      "tracking"
+    ],
     "details": {
       "original": "Google Analytics",
-      "alternatives": ["Plausible", "Umami", "Matomo"],
+      "alternatives": [
+        "Plausible",
+        "Umami",
+        "Matomo"
+      ],
       "bestFor": "Websites with high privacy requirements and EU hosting",
       "pricing": "Free to about $10/month, self-hosting optional",
       "features": [
@@ -148,10 +216,19 @@
     "title": "HubSpot Alternatives",
     "description": "HubSpot alternatives for CRM and marketing automation – more affordable, privacy-friendly or better suited to small teams.",
     "category": "CRM & Marketing",
-    "tags": ["crm", "marketing", "automation", "sales"],
+    "tags": [
+      "crm",
+      "marketing",
+      "automation",
+      "sales"
+    ],
     "details": {
       "original": "HubSpot",
-      "alternatives": ["Pipedrive", "Brevo", "Odoo"],
+      "alternatives": [
+        "Pipedrive",
+        "Brevo",
+        "Odoo"
+      ],
       "bestFor": "Small and mid-sized teams that need CRM without enterprise pricing",
       "pricing": "Free to about $25/user/month",
       "features": [
@@ -166,10 +243,19 @@
     "title": "Asana Alternatives",
     "description": "Asana alternatives for project and task management – with open-source options, simpler workflows and fairer pricing.",
     "category": "Project Management",
-    "tags": ["project-management", "tasks", "teamwork", "kanban"],
+    "tags": [
+      "project-management",
+      "tasks",
+      "teamwork",
+      "kanban"
+    ],
     "details": {
       "original": "Asana",
-      "alternatives": ["Plane", "Vikunja", "ClickUp"],
+      "alternatives": [
+        "Plane",
+        "Vikunja",
+        "ClickUp"
+      ],
       "bestFor": "Teams that want flexible project management without high per-seat costs",
       "pricing": "Free to about $12/user/month",
       "features": [
@@ -184,10 +270,19 @@
     "title": "Dropbox Alternatives",
     "description": "Dropbox alternatives for cloud storage and file sync – with more privacy, self-hosting or generous free tiers.",
     "category": "Storage",
-    "tags": ["cloud-storage", "file-sync", "privacy", "collaboration"],
+    "tags": [
+      "cloud-storage",
+      "file-sync",
+      "privacy",
+      "collaboration"
+    ],
     "details": {
       "original": "Dropbox",
-      "alternatives": ["Nextcloud", "Proton Drive", "pCloud"],
+      "alternatives": [
+        "Nextcloud",
+        "Proton Drive",
+        "pCloud"
+      ],
       "bestFor": "Users and teams that prioritize privacy or self-hosting",
       "pricing": "Free to about $10/month",
       "features": [
@@ -202,10 +297,19 @@
     "title": "Calendly Alternatives",
     "description": "Calendly alternatives for scheduling and booking – open-source, privacy-friendly and with more control over your calendar.",
     "category": "Scheduling",
-    "tags": ["scheduling", "booking", "calendar", "automation"],
+    "tags": [
+      "scheduling",
+      "booking",
+      "calendar",
+      "automation"
+    ],
     "details": {
       "original": "Calendly",
-      "alternatives": ["Cal.com", "Zcal", "Rallly"],
+      "alternatives": [
+        "Cal.com",
+        "Zcal",
+        "Rallly"
+      ],
       "bestFor": "Teams that want self-hosted or customizable scheduling",
       "pricing": "Free to about $12/user/month",
       "features": [
@@ -220,10 +324,19 @@
     "title": "WordPress Alternatives",
     "description": "WordPress alternatives for websites and blogs – faster, more secure and developer-friendly CMS options.",
     "category": "CMS",
-    "tags": ["cms", "blogging", "static-site", "publishing"],
+    "tags": [
+      "cms",
+      "blogging",
+      "static-site",
+      "publishing"
+    ],
     "details": {
       "original": "WordPress",
-      "alternatives": ["Ghost", "Hugo", "Astro"],
+      "alternatives": [
+        "Ghost",
+        "Hugo",
+        "Astro"
+      ],
       "bestFor": "Publishers who want speed, security and modern developer workflows",
       "pricing": "Free to about $15/month",
       "features": [
@@ -238,16 +351,349 @@
     "title": "Shopify Alternatives",
     "description": "Shopify alternatives for online stores – open-source, headless or lower-cost platforms for growing e-commerce brands.",
     "category": "E-commerce",
-    "tags": ["ecommerce", "online-store", "headless", "open-source"],
+    "tags": [
+      "ecommerce",
+      "online-store",
+      "headless",
+      "open-source"
+    ],
     "details": {
       "original": "Shopify",
-      "alternatives": ["WooCommerce", "Medusa", "BigCommerce"],
+      "alternatives": [
+        "WooCommerce",
+        "Medusa",
+        "BigCommerce"
+      ],
       "bestFor": "Merchants who need more customization or lower transaction fees",
       "pricing": "Free to about $30/month plus transaction fees",
       "features": [
         "Open-source and headless options",
         "Custom checkout flows",
         "Scalable product catalogs"
+      ]
+    }
+  },
+  {
+    "slug": "monday-alternatives",
+    "title": "Monday.com Alternatives",
+    "description": "Monday.com alternatives for work management – simpler, cheaper or open-source options for teams that need flexible boards.",
+    "category": "Project Management",
+    "tags": [
+      "work-management",
+      "boards",
+      "project-management",
+      "collaboration"
+    ],
+    "details": {
+      "original": "Monday.com",
+      "alternatives": [
+        "ClickUp",
+        "Plane",
+        "Vikunja"
+      ],
+      "bestFor": "Teams that want flexible boards without high per-seat pricing",
+      "pricing": "Free to about $12/user/month",
+      "features": [
+        "Boards and timelines",
+        "Automations and integrations",
+        "Open-source options"
+      ]
+    }
+  },
+  {
+    "slug": "clickup-alternatives",
+    "title": "ClickUp Alternatives",
+    "description": "ClickUp alternatives for all-in-one productivity – focused, faster and easier to adopt for small and mid-sized teams.",
+    "category": "Productivity",
+    "tags": [
+      "productivity",
+      "tasks",
+      "project-management",
+      "collaboration"
+    ],
+    "details": {
+      "original": "ClickUp",
+      "alternatives": [
+        "Asana",
+        "Linear",
+        "Plane"
+      ],
+      "bestFor": "Teams that find ClickUp too complex or overwhelming",
+      "pricing": "Free to about $10/user/month",
+      "features": [
+        "Task and project views",
+        "Docs and goals",
+        "Developer-friendly alternatives"
+      ]
+    }
+  },
+  {
+    "slug": "miro-alternatives",
+    "title": "Miro Alternatives",
+    "description": "Miro alternatives for visual collaboration and whiteboarding – open-source, self-hosted or simpler tools for workshops.",
+    "category": "Collaboration",
+    "tags": [
+      "whiteboard",
+      "collaboration",
+      "workshops",
+      "visual"
+    ],
+    "details": {
+      "original": "Miro",
+      "alternatives": [
+        "Excalidraw",
+        "tldraw",
+        "Penpot"
+      ],
+      "bestFor": "Teams that need whiteboarding with privacy or self-hosting",
+      "pricing": "Free to about $10/user/month",
+      "features": [
+        "Infinite canvas",
+        "Real-time collaboration",
+        "Open-source options"
+      ]
+    }
+  },
+  {
+    "slug": "loom-alternatives",
+    "title": "Loom Alternatives",
+    "description": "Loom alternatives for screen recording and async video – privacy-friendly, open-source or lower-cost options for teams.",
+    "category": "Communication",
+    "tags": [
+      "screen-recording",
+      "video",
+      "async",
+      "communication"
+    ],
+    "details": {
+      "original": "Loom",
+      "alternatives": [
+        "Cap",
+        "OBS Studio",
+        "Screen Studio"
+      ],
+      "bestFor": "Teams that want async video without per-seat subscription costs",
+      "pricing": "Free to about $15/user/month",
+      "features": [
+        "Screen and camera recording",
+        "Sharing and comments",
+        "Open-source recording with OBS"
+      ]
+    }
+  },
+  {
+    "slug": "intercom-alternatives",
+    "title": "Intercom Alternatives",
+    "description": "Intercom alternatives for customer messaging and support – AI-ready, affordable and privacy-friendly helpdesk options.",
+    "category": "Support",
+    "tags": [
+      "support",
+      "chat",
+      "helpdesk",
+      "customer-messaging"
+    ],
+    "details": {
+      "original": "Intercom",
+      "alternatives": [
+        "Crisp",
+        "Chatwoot",
+        "Freshdesk"
+      ],
+      "bestFor": "Support teams that need chat and helpdesk without enterprise pricing",
+      "pricing": "Free to about $20/agent/month",
+      "features": [
+        "Live chat and inbox",
+        "Knowledge base and bots",
+        "Open-source helpdesk"
+      ]
+    }
+  },
+  {
+    "slug": "zendesk-alternatives",
+    "title": "Zendesk Alternatives",
+    "description": "Zendesk alternatives for customer support – open-source, AI-assisted and lower-cost helpdesk platforms for growing teams.",
+    "category": "Support",
+    "tags": [
+      "helpdesk",
+      "support",
+      "ticketing",
+      "customer-service"
+    ],
+    "details": {
+      "original": "Zendesk",
+      "alternatives": [
+        "Zammad",
+        "Chatwoot",
+        "Freshdesk"
+      ],
+      "bestFor": "Support teams that want ticketing with self-hosting or lower costs",
+      "pricing": "Free to about $25/agent/month",
+      "features": [
+        "Ticketing and SLAs",
+        "Knowledge base",
+        "Open-source and self-hosting options"
+      ]
+    }
+  },
+  {
+    "slug": "jira-alternatives",
+    "title": "Jira Alternatives",
+    "description": "Jira alternatives for issue tracking and agile planning – faster, simpler and developer-friendly tools for software teams.",
+    "category": "DevOps",
+    "tags": [
+      "issue-tracking",
+      "agile",
+      "project-management",
+      "developers"
+    ],
+    "details": {
+      "original": "Jira",
+      "alternatives": [
+        "Linear",
+        "Plane",
+        "YouTrack"
+      ],
+      "bestFor": "Engineering teams that want fast, focused issue tracking",
+      "pricing": "Free to about $10/user/month",
+      "features": [
+        "Issue tracking and backlogs",
+        "Sprints and roadmaps",
+        "Git integrations"
+      ]
+    }
+  },
+  {
+    "slug": "github-alternatives",
+    "title": "GitHub Alternatives",
+    "description": "GitHub alternatives for source code hosting and collaboration – self-hosted, privacy-focused or open-source platforms.",
+    "category": "DevOps",
+    "tags": [
+      "git",
+      "code-hosting",
+      "devops",
+      "open-source"
+    ],
+    "details": {
+      "original": "GitHub",
+      "alternatives": [
+        "GitLab",
+        "Gitea",
+        "Bitbucket"
+      ],
+      "bestFor": "Teams that need self-hosting, CI/CD or more control over their code",
+      "pricing": "Free to about $10/user/month, self-hosting optional",
+      "features": [
+        "Git repositories",
+        "Pull requests and reviews",
+        "CI/CD and self-hosting"
+      ]
+    }
+  },
+  {
+    "slug": "gitlab-alternatives",
+    "title": "GitLab Alternatives",
+    "description": "GitLab alternatives for DevOps and code hosting – lighter, self-hosted or open-source platforms with strong CI/CD.",
+    "category": "DevOps",
+    "tags": [
+      "git",
+      "devops",
+      "ci-cd",
+      "code-hosting"
+    ],
+    "details": {
+      "original": "GitLab",
+      "alternatives": [
+        "GitHub",
+        "Gitea",
+        "Forgejo"
+      ],
+      "bestFor": "Teams that want lighter self-hosted DevOps platforms",
+      "pricing": "Free to about $10/user/month, self-hosting optional",
+      "features": [
+        "Git hosting and merge requests",
+        "CI/CD pipelines",
+        "Lightweight self-hosting"
+      ]
+    }
+  },
+  {
+    "slug": "bitbucket-alternatives",
+    "title": "Bitbucket Alternatives",
+    "description": "Bitbucket alternatives for Git hosting and CI – open-source, self-hosted or tightly integrated developer platforms.",
+    "category": "DevOps",
+    "tags": [
+      "git",
+      "code-hosting",
+      "ci-cd",
+      "devops"
+    ],
+    "details": {
+      "original": "Bitbucket",
+      "alternatives": [
+        "GitLab",
+        "Gitea",
+        "GitHub"
+      ],
+      "bestFor": "Teams looking for more CI/CD flexibility or self-hosting",
+      "pricing": "Free to about $8/user/month, self-hosting optional",
+      "features": [
+        "Git repositories",
+        "Pipelines and integrations",
+        "Self-hosting options"
+      ]
+    }
+  },
+  {
+    "slug": "netlify-alternatives",
+    "title": "Netlify Alternatives",
+    "description": "Netlify alternatives for static hosting and serverless deploys – with more control, self-hosting or generous free tiers.",
+    "category": "Hosting",
+    "tags": [
+      "hosting",
+      "static-site",
+      "serverless",
+      "deployment"
+    ],
+    "details": {
+      "original": "Netlify",
+      "alternatives": [
+        "Vercel",
+        "Cloudflare Pages",
+        "Render"
+      ],
+      "bestFor": "Teams that need static hosting with edge functions or self-hosting",
+      "pricing": "Free to about $20/month",
+      "features": [
+        "Static and serverless hosting",
+        "Preview deployments",
+        "Edge functions and CDN"
+      ]
+    }
+  },
+  {
+    "slug": "vercel-alternatives",
+    "title": "Vercel Alternatives",
+    "description": "Vercel alternatives for frontend hosting and serverless – open, self-hosted or more predictable pricing for growing projects.",
+    "category": "Hosting",
+    "tags": [
+      "hosting",
+      "frontend",
+      "serverless",
+      "deployment"
+    ],
+    "details": {
+      "original": "Vercel",
+      "alternatives": [
+        "Netlify",
+        "Cloudflare Pages",
+        "Coolify"
+      ],
+      "bestFor": "Teams that want predictable pricing or self-hosted deployments",
+      "pricing": "Free to about $20/month, self-hosting optional",
+      "features": [
+        "Frontend hosting",
+        "Preview deployments",
+        "Self-hosting with Coolify"
       ]
     }
   }
