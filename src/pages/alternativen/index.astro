@@ -2,12 +2,23 @@
 import Layout from "../../layouts/Layout.astro";
 import PageHeader from "../../components/PageHeader.astro";
 import ContentCard from "../../components/ContentCard.astro";
-import alternativen from "../../data/alternativen.json";
+import { alternativen } from "../../lib/content";
+import { itemListSchema } from "../../lib/schema";
+
+const jsonLd = itemListSchema(
+  "Alternativen – Tool-Vergleiche",
+  alternativen.map((entry) => ({
+    name: entry.title,
+    url: `/alternativen/${entry.slug}/`,
+  }))
+);
 ---
 
 <Layout
   title="Alternativen – Tool-Vergleiche"
   description="Die besten Alternativen zu bekannten Tools – mit Vor- und Nachteilen, Preisen und Zielgruppen."
+  keywords={["Alternativen", "Tool-Vergleich", "Produktivität", "Automatisierung", "Design"]}
+  jsonLd={jsonLd}
 >
   <PageHeader
     eyebrow="Tool-Vergleiche"

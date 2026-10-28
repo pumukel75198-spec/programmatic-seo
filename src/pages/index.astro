@@ -2,9 +2,8 @@
 import Layout from "../layouts/Layout.astro";
 import CategoryCard from "../components/CategoryCard.astro";
 import Badge from "../components/Badge.astro";
-import apis from "../data/apis.json";
-import alternativen from "../data/alternativen.json";
-import workflows from "../data/workflows.json";
+import { apis, alternativen, workflows } from "../lib/content";
+import { organizationSchema, websiteSchema } from "../lib/schema";
 
 const stats = [
   { value: `${apis.length}`, label: "APIs" },
@@ -12,11 +11,15 @@ const stats = [
   { value: `${workflows.length}`, label: "Workflows" },
   { value: "100 %", label: "Open Content" },
 ];
+
+const jsonLd = [websiteSchema(), organizationSchema()];
 ---
 
 <Layout
   title="Programmatic SEO Hub – APIs, Alternativen & Workflows"
   description="Entdecke kuratierte APIs, die besten Alternativen und erprobte Workflows für moderne Produkt- und SEO-Teams."
+  keywords={["APIs", "Alternativen", "Workflows", "Programmatic SEO", "Automatisierung"]}
+  jsonLd={jsonLd}
 >
   <!-- Hero -->
   <section class="relative overflow-hidden">

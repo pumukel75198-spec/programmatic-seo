@@ -4,7 +4,8 @@ import Breadcrumb from "../../components/Breadcrumb.astro";
 import DetailBox from "../../components/DetailBox.astro";
 import CTA from "../../components/CTA.astro";
 import Badge from "../../components/Badge.astro";
-import workflows from "../../data/workflows.json";
+import { workflows, getRelated } from "../../lib/content";
+import { breadcrumbSchema, howToSchema } from "../../lib/schema";
 
 export function getStaticPaths() {
   return workflows.map((workflow) => ({
@@ -14,7 +15,7 @@ export function getStaticPaths() {
 }
 
 const { workflow } = Astro.props;
-const related = workflows.filter((w) => w.slug !== workflow.slug).slice(0, 3);
+const related = getRelated(workflows, workflow.slug);
 
 const pageTitle = `${workflow.title} – ${workflow.category}`;
 const pageDescription = workflow.description;
@@ -25,9 +26,24 @@ const difficultyTone =
     : workflow.details.difficulty === "Fortgeschritten"
       ? "amber"
       : "brand";
+
+const jsonLd = [
+  breadcrumbSchema([
+    { name: "Start", url: "/" },
+    { name: "Workflows", url: "/workflows/" },
+    { name: workflow.title, url: `/workflows/${workflow.slug}/` },
+  ]),
+  howToSchema(workflow),
+];
 ---
 
-<Layout title={pageTitle} description={pageDescription}>
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  type="article"
+  keywords={workflow.tags}
+  jsonLd={jsonLd}
+>
   <article>
     <!-- Header -->
     <header class="relative overflow-hidden border-b border-white/5">

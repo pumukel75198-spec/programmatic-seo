@@ -2,12 +2,23 @@
 import Layout from "../../layouts/Layout.astro";
 import PageHeader from "../../components/PageHeader.astro";
 import ContentCard from "../../components/ContentCard.astro";
-import workflows from "../../data/workflows.json";
+import { workflows } from "../../lib/content";
+import { itemListSchema } from "../../lib/schema";
+
+const jsonLd = itemListSchema(
+  "Workflows – Automatisierung Schritt für Schritt",
+  workflows.map((workflow) => ({
+    name: workflow.title,
+    url: `/workflows/${workflow.slug}/`,
+  }))
+);
 ---
 
 <Layout
   title="Workflows – Automatisierung Schritt für Schritt"
   description="Erprobte Workflows für Content, Sales und Programmatic SEO – inklusive Tool-Stack und Schritt-für-Schritt-Anleitung."
+  keywords={["Workflows", "Automatisierung", "Content", "Sales", "Programmatic SEO"]}
+  jsonLd={jsonLd}
 >
   <PageHeader
     eyebrow="Automatisierung"

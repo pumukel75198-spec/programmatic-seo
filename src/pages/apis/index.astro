@@ -2,12 +2,20 @@
 import Layout from "../../layouts/Layout.astro";
 import PageHeader from "../../components/PageHeader.astro";
 import ContentCard from "../../components/ContentCard.astro";
-import apis from "../../data/apis.json";
+import { apis } from "../../lib/content";
+import { itemListSchema } from "../../lib/schema";
+
+const jsonLd = itemListSchema(
+  "APIs – kuratiertes Verzeichnis",
+  apis.map((api) => ({ name: api.title, url: `/apis/${api.slug}/` }))
+);
 ---
 
 <Layout
   title="APIs – kuratiertes Verzeichnis"
   description="Entdecke kuratierte APIs für KI, Payments, Backend und Kommunikation – mit Features, Preisen und Bewertungen."
+  keywords={["APIs", "Schnittstellen", "KI", "Payments", "Backend"]}
+  jsonLd={jsonLd}
 >
   <PageHeader
     eyebrow="API-Verzeichnis"

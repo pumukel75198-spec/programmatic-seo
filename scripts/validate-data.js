@@ -4,8 +4,11 @@
  *
  * Prüft die strukturierten JSON-Dateien in src/data:
  *   1. Ob alle JSON-Dateien fehlerfrei geparst werden können.
- *   2. Ob jeder Datensatz ein gültiges "slug"-Feld besitzt.
- *   3. Ob "slugs" über alle Kategorien hinweg eindeutig sind.
+ *   2. Ob jeder Datensatz alle Pflichtfelder besitzt
+ *      (slug, title, description, category, tags, details).
+ *   3. Ob "slug" URL-freundlich (kebab-case) und über alle Kategorien eindeutig ist.
+ *   4. Ob "tags" ein Array und "details" ein Objekt ist.
+ *   5. SEO-Warnungen für Title-/Description-Längen.
  *
  * Ausführen:  node scripts/validate-data.js
  *        oder npm run validate
@@ -19,6 +22,15 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const dataDir = path.resolve(__dirname, "../src/data");
 
 const FILES = ["apis.json", "alternativen.json", "workflows.json"];
+const REQUIRED_FIELDS = [
+  "slug",
+  "title",
+  "description",
+  "category",
+  "tags",
+  "details",
+];
+const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 const c = {
   reset: "\x1b[0m",
@@ -31,6 +43,7 @@ const c = {
 };
 
 let errorCount = 0;
+let warningCount = 0;
 /** @type {Map<string, string>} slug -> Fundstelle */
 const seenSlugs = new Map();
 let recordCount = 0;
@@ -38,6 +51,11 @@ let recordCount = 0;
 function fail(message) {
   errorCount += 1;
   console.error(`${c.red}${c.bold}✖ FEHLER:${c.reset} ${c.red}${message}${c.reset}`);
+}
+
+function warn(message) {
+  warningCount += 1;
+  console.warn(`${c.yellow}${c.bold}⚠ WARNUNG:${c.reset} ${c.yellow}${message}${c.reset}`);
 }
 
 console.log(`${c.cyan}${c.bold}▶ Validiere Datendateien in ${dataDir}${c.reset}\n`);
@@ -83,21 +101,86 @@ for (const file of FILES) {
       return;
     }
 
+    // Pflichtfelder vorhanden?
+    for (const field of REQUIRED_FIELDS) {
+      if (!(field in record)) {
+        fail(`${location}: Pflichtfeld "${field}" fehlt.`);
+      }
+    }
+
+    // slug: nicht leer, kebab-case, eindeutig
     const slug = record.slug;
     if (typeof slug !== "string" || slug.trim() === "") {
       fail(`${location}: Pflichtfeld "slug" fehlt oder ist kein nicht-leerer String.`);
-      return;
+    } else {
+      const normalized = slug.trim();
+      if (!SLUG_PATTERN.test(normalized)) {
+        fail(
+          `${location}: Slug "${normalized}" ist nicht URL-freundlich (erwartet: kebab-case, z. B. "openai-whisper-api").`
+        );
+      }
+      if (seenSlugs.has(normalized)) {
+        fail(
+          `Doppelter Slug "${normalized}" in ${location} – bereits vergeben in ${seenSlugs.get(normalized)}.`
+        );
+      } else {
+        seenSlugs.set(normalized, location);
+      }
     }
 
-    const normalized = slug.trim();
-
-    // 4. Doppelte Slugs über alle Kategorien hinweg
-    if (seenSlugs.has(normalized)) {
-      fail(
-        `Doppelter Slug "${normalized}" in ${location} – bereits vergeben in ${seenSlugs.get(normalized)}.`
+    // title
+    if (typeof record.title !== "string" || record.title.trim() === "") {
+      fail(`${location}: "title" fehlt oder ist leer.`);
+    } else if (record.title.length > 60) {
+      warn(
+        `${location}: "title" ist ${record.title.length} Zeichen lang (empfohlen: ≤ 60).`
       );
+    }
+
+    // description
+    if (
+      typeof record.description !== "string" ||
+      record.description.trim() === ""
+    ) {
+      fail(`${location}: "description" fehlt oder ist leer.`);
     } else {
-      seenSlugs.set(normalized, location);
+      if (record.description.length > 160) {
+        warn(
+          `${location}: "description" ist ${record.description.length} Zeichen lang (empfohlen: ≤ 160).`
+        );
+      }
+      if (record.description.length < 50) {
+        warn(
+          `${location}: "description" ist sehr kurz (${record.description.length} Zeichen, empfohlen: ≥ 50).`
+        );
+      }
+    }
+
+    // category
+    if (typeof record.category !== "string" || record.category.trim() === "") {
+      fail(`${location}: "category" fehlt oder ist leer.`);
+    }
+
+    // tags
+    if (!Array.isArray(record.tags)) {
+      fail(`${location}: "tags" muss ein Array sein.`);
+    } else if (record.tags.length === 0) {
+      warn(`${location}: "tags" ist leer.`);
+    } else if (
+      record.tags.some((tag) => typeof tag !== "string" || tag.trim() === "")
+    ) {
+      fail(`${location}: "tags" enthält leere oder nicht-string Werte.`);
+    }
+
+    // details
+    if (
+      record.details === null ||
+      typeof record.details !== "object" ||
+      Array.isArray(record.details)
+    ) {
+      fail(`${location}: "details" muss ein Objekt sein.`);
+    } else if (Object.keys(record.details).length === 0) {
+      warn(`${location}: "details" ist leer.`);
     }
   });
 
@@ -110,11 +193,13 @@ console.log("");
 
 if (errorCount > 0) {
   console.error(
-    `${c.red}${c.bold}✖ Validierung fehlgeschlagen: ${errorCount} Fehler gefunden.${c.reset}`
+    `${c.red}${c.bold}✖ Validierung fehlgeschlagen: ${errorCount} Fehler, ${warningCount} Warnungen.${c.reset}`
   );
   process.exit(1);
 }
 
+const warningSuffix =
+  warningCount > 0 ? ` (${warningCount} Warnungen)` : "";
 console.log(
-  `${c.green}${c.bold}✔ Validierung erfolgreich: ${recordCount} Datensätze in ${FILES.length} Dateien, alle Slugs eindeutig.${c.reset}`
+  `${c.green}${c.bold}✔ Validierung erfolgreich: ${recordCount} Datensätze in ${FILES.length} Dateien, alle Slugs eindeutig.${warningSuffix}${c.reset}`
 );

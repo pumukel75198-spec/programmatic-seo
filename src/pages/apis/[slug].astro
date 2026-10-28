@@ -4,7 +4,8 @@ import Breadcrumb from "../../components/Breadcrumb.astro";
 import DetailBox from "../../components/DetailBox.astro";
 import CTA from "../../components/CTA.astro";
 import Badge from "../../components/Badge.astro";
-import apis from "../../data/apis.json";
+import { apis, getRelated } from "../../lib/content";
+import { breadcrumbSchema, softwareApplicationSchema } from "../../lib/schema";
 
 export function getStaticPaths() {
   return apis.map((api) => ({
@@ -14,13 +15,28 @@ export function getStaticPaths() {
 }
 
 const { api } = Astro.props;
-const related = apis.filter((a) => a.slug !== api.slug).slice(0, 3);
+const related = getRelated(apis, api.slug);
 
 const pageTitle = `${api.title} – ${api.category}`;
 const pageDescription = api.description;
+
+const jsonLd = [
+  breadcrumbSchema([
+    { name: "Start", url: "/" },
+    { name: "APIs", url: "/apis/" },
+    { name: api.title, url: `/apis/${api.slug}/` },
+  ]),
+  softwareApplicationSchema(api),
+];
 ---
 
-<Layout title={pageTitle} description={pageDescription}>
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  type="article"
+  keywords={api.tags}
+  jsonLd={jsonLd}
+>
   <article>
     <!-- Header -->
     <header class="relative overflow-hidden border-b border-white/5">

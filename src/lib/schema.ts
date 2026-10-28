@@ -1,0 +1,119 @@
+/**
+ * JSON-LD / Schema.org Helfer für strukturierte Daten.
+ * Verbessert Rich Results und die maschinelle Lesbarkeit der pSEO-Seiten.
+ */
+import { site } from "./site";
+import type { AlternativeEntry, ApiEntry, WorkflowEntry } from "./content";
+
+export type JsonLd = Record<string, unknown>;
+
+const absolute = (path: string) => new URL(path, site.url).toString();
+
+export function websiteSchema(): JsonLd {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: site.name,
+    url: site.url,
+    description: site.description,
+    inLanguage: site.lang,
+  };
+}
+
+export function organizationSchema(): JsonLd {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: site.name,
+    url: site.url,
+    logo: absolute("/favicon.svg"),
+  };
+}
+
+export function breadcrumbSchema(
+  items: { name: string; url: string }[]
+): JsonLd {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: absolute(item.url),
+    })),
+  };
+}
+
+export function softwareApplicationSchema(api: ApiEntry): JsonLd {
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: api.title,
+    description: api.description,
+    applicationCategory: api.category,
+    operatingSystem: "Web",
+    url: absolute(`/apis/${api.slug}/`),
+    keywords: api.tags.join(", "),
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "EUR",
+      description: api.details.pricing,
+    },
+  };
+}
+
+export function articleSchema(entry: AlternativeEntry): JsonLd {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: entry.title,
+    description: entry.description,
+    articleSection: entry.category,
+    keywords: entry.tags.join(", "),
+    url: absolute(`/alternativen/${entry.slug}/`),
+    inLanguage: site.lang,
+    author: { "@type": "Organization", name: site.name },
+    publisher: { "@type": "Organization", name: site.name },
+  };
+}
+
+export function howToSchema(workflow: WorkflowEntry): JsonLd {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: workflow.title,
+    description: workflow.description,
+    totalTime: workflow.details.duration,
+    inLanguage: site.lang,
+    tool: workflow.details.tools.map((tool) => ({
+      "@type": "HowToTool",
+      name: tool,
+    })),
+    step: workflow.details.steps.map((step, index) => ({
+      "@type": "HowToStep",
+      position: index + 1,
+      name: step,
+      text: step,
+    })),
+  };
+}
+
+export function itemListSchema(
+  name: string,
+  items: { name: string; url: string }[]
+): JsonLd {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name,
+    numberOfItems: items.length,
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      url: absolute(item.url),
+    })),
+  };
+}
