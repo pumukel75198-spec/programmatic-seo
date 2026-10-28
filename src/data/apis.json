@@ -55,5 +55,138 @@
       "useCase": "Schnelle Backend-Entwicklung für Web- und Mobile-Apps",
       "website": "https://supabase.com"
     }
+  },
+  {
+    "slug": "anthropic-claude-api",
+    "title": "Anthropic Claude API",
+    "description": "Die Claude API von Anthropic bietet starke Reasoning-Fähigkeiten, ein großes Kontextfenster und sichere Agenten-Workflows für anspruchsvolle Anwendungen.",
+    "category": "KI & LLM",
+    "tags": ["llm", "reasoning", "agents", "sicherheit"],
+    "details": {
+      "provider": "Anthropic",
+      "pricing": "Pay-as-you-go pro Token",
+      "features": [
+        "Sehr großes Kontextfenster",
+        "Starke Reasoning- und Coding-Fähigkeiten",
+        "Tool Use und Agenten-Workflows",
+        "Fokus auf KI-Sicherheit"
+      ],
+      "useCase": "Analyse langer Dokumente, Coding-Assistenten und agentische Systeme",
+      "website": "https://www.anthropic.com"
+    }
+  },
+  {
+    "slug": "google-gemini-api",
+    "title": "Google Gemini API",
+    "description": "Die Google Gemini API verbindet Text, Bild und Audio in einem multimodalen Modell – ideal für Vision-, Analyse- und Assistenz-Anwendungen.",
+    "category": "KI & Multimodal",
+    "tags": ["llm", "multimodal", "vision", "google"],
+    "details": {
+      "provider": "Google",
+      "pricing": "Kostenloses Kontingent, danach pro Token",
+      "features": [
+        "Multimodale Eingaben aus Text, Bild und Audio",
+        "Große Kontextfenster",
+        "Integration in Google Cloud",
+        "Function Calling und strukturierte Ausgaben"
+      ],
+      "useCase": "Bildanalyse, Dokumentenverarbeitung und multimodale Assistenten",
+      "website": "https://ai.google.dev"
+    }
+  },
+  {
+    "slug": "resend-email-api",
+    "title": "Resend E-Mail API",
+    "description": "Die Resend API vereinfacht transaktionale E-Mails mit sauberer Dokumentation, React-Email-Templates und zuverlässiger Zustellung.",
+    "category": "Kommunikation",
+    "tags": ["email", "transaktional", "developer-tools"],
+    "details": {
+      "provider": "Resend",
+      "pricing": "Kostenlos bis 3.000 E-Mails/Monat",
+      "features": [
+        "Transaktionale E-Mails",
+        "React-Email-Templates",
+        "Zustellbarkeits-Tracking",
+        "Einfache SDK-Integration"
+      ],
+      "useCase": "Anmeldebestätigungen, Passwort-Resets und Benachrichtigungen",
+      "website": "https://resend.com"
+    }
+  },
+  {
+    "slug": "clerk-authentication-api",
+    "title": "Clerk Authentication API",
+    "description": "Die Clerk API liefert fertige Authentifizierung mit SSO, Multi-Faktor-Login und Nutzerverwaltung – schnell integriert in moderne Web-Apps.",
+    "category": "Auth & Identity",
+    "tags": ["auth", "sso", "user-management", "security"],
+    "details": {
+      "provider": "Clerk",
+      "pricing": "Kostenlos bis 10.000 MAU",
+      "features": [
+        "Fertige Login- und Registrierungs-UI",
+        "SSO und Multi-Faktor-Authentifizierung",
+        "Nutzer- und Session-Verwaltung",
+        "Vorgefertigte React-Komponenten"
+      ],
+      "useCase": "SaaS-Anwendungen mit schneller, sicherer Nutzerverwaltung",
+      "website": "https://clerk.com"
+    }
+  },
+  {
+    "slug": "cloudflare-workers-api",
+    "title": "Cloudflare Workers API",
+    "description": "Die Cloudflare Workers API führt Code direkt am Edge aus – für schnelle, skalierbare Serverless-Funktionen ohne eigenen Server.",
+    "category": "Edge Computing",
+    "tags": ["edge", "serverless", "cdn", "performance"],
+    "details": {
+      "provider": "Cloudflare",
+      "pricing": "Kostenlos bis 100.000 Requests/Tag",
+      "features": [
+        "Globale Ausführung am Edge",
+        "Niedrige Latenz weltweit",
+        "KV-, D1- und R2-Integration",
+        "Automatische Skalierung"
+      ],
+      "useCase": "APIs, Personalisierung und Geodaten-Auslieferung mit geringer Latenz",
+      "website": "https://workers.cloudflare.com"
+    }
+  },
+  {
+    "slug": "mapbox-maps-api",
+    "title": "Mapbox Maps API",
+    "description": "Die Mapbox Maps API bietet interaktive Karten, Geocoding und Routing für Web- und Mobile-Anwendungen mit hoher Performance.",
+    "category": "Geodaten",
+    "tags": ["maps", "geolocation", "routing", "visualisierung"],
+    "details": {
+      "provider": "Mapbox",
+      "pricing": "Kostenloses Kontingent, danach nutzungsbasiert",
+      "features": [
+        "Interaktive Karten und Styles",
+        "Geocoding und Reverse-Geocoding",
+        "Routing und Isochronen",
+        "Hohe Performance auch auf Mobilgeräten"
+      ],
+      "useCase": "Standortsuche, Lieferdienste und datengetriebene Kartenvisualisierungen",
+      "website": "https://www.mapbox.com"
+    }
+  },
+  {
+    "slug": "twilio-messaging-api",
+    "title": "Twilio Messaging API",
+    "description": "Die Twilio Messaging API versendet SMS, WhatsApp- und RCS-Nachrichten zuverlässig – ideal für Benachrichtigungen und Zwei-Faktor-Authentifizierung.",
+    "category": "Kommunikation",
+    "tags": ["sms", "whatsapp", "messaging", "notifications"],
+    "details": {
+      "provider": "Twilio",
+      "pricing": "Pay-as-you-go pro Nachricht",
+      "features": [
+        "SMS, WhatsApp und RCS aus einer API",
+        "Globale Zustellung",
+        "Zwei-Faktor-Authentifizierung",
+        "Webhooks für Zustellstatus"
+      ],
+      "useCase": "Benachrichtigungen, OTP-Codes und Omnichannel-Kundenkommunikation",
+      "website": "https://www.twilio.com"
+    }
   }
 ]

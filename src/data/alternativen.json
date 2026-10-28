@@ -52,5 +52,95 @@
         "Direktes Website-Publishing bei Framer"
       ]
     }
+  },
+  {
+    "slug": "slack-alternativen",
+    "title": "Slack Alternativen",
+    "description": "Slack-Alternativen für Team-Chat und Kommunikation – datenschutzfreundlicher, günstiger oder mit Self-Hosting-Option für mehr Kontrolle.",
+    "category": "Kommunikation",
+    "tags": ["team-chat", "kommunikation", "kollaboration"],
+    "details": {
+      "original": "Slack",
+      "alternatives": ["Mattermost", "Rocket.Chat", "Discord"],
+      "bestFor": "Teams mit Datenschutz-, Compliance- oder Self-Hosting-Anforderungen",
+      "pricing": "Kostenlos bis ca. 8 €/Nutzer/Monat, Self-Hosting optional",
+      "features": [
+        "Self-Hosting bei Mattermost und Rocket.Chat",
+        "Kanäle, Threads und Integrationen",
+        "Open-Source-Optionen"
+      ]
+    }
+  },
+  {
+    "slug": "airtable-alternativen",
+    "title": "Airtable Alternativen",
+    "description": "Airtable-Alternativen für No-Code-Datenbanken und Tabellen – mit Open-Source-Optionen, Self-Hosting und fairer Preisgestaltung.",
+    "category": "Datenbanken",
+    "tags": ["no-code", "datenbank", "tabellen", "automatisierung"],
+    "details": {
+      "original": "Airtable",
+      "alternatives": ["Baserow", "NocoDB", "SeaTable"],
+      "bestFor": "Teams, die Datenhoheit, Self-Hosting oder offene Formate benötigen",
+      "pricing": "Kostenlos bis ca. 12 €/Nutzer/Monat, Self-Hosting kostenlos",
+      "features": [
+        "Open-Source- und Self-Hosting-Optionen",
+        "Tabellen mit Formeln und Ansichten",
+        "REST-APIs für eigene Integrationen"
+      ]
+    }
+  },
+  {
+    "slug": "mailchimp-alternativen",
+    "title": "Mailchimp Alternativen",
+    "description": "Mailchimp-Alternativen für Newsletter und E-Mail-Marketing – günstiger, DSGVO-freundlicher und ohne komplexe Preisstufen.",
+    "category": "Marketing",
+    "tags": ["email-marketing", "newsletter", "crm"],
+    "details": {
+      "original": "Mailchimp",
+      "alternatives": ["Brevo", "MailerLite", "Buttondown"],
+      "bestFor": "Kleine und mittlere Teams mit Fokus auf faire Preise und DSGVO",
+      "pricing": "Kostenlos bis ca. 20 €/Monat je nach Kontaktzahl",
+      "features": [
+        "Newsletter- und Automations-Flows",
+        "DSGVO-freundliche Anbieter",
+        "Einfache Import- und Segmentierungsfunktionen"
+      ]
+    }
+  },
+  {
+    "slug": "trello-alternativen",
+    "title": "Trello Alternativen",
+    "description": "Trello-Alternativen für Kanban-Boards und Projektmanagement – mit mehr Automatisierung, Open-Source-Optionen und faireren Preisen.",
+    "category": "Projektmanagement",
+    "tags": ["kanban", "projektmanagement", "aufgaben"],
+    "details": {
+      "original": "Trello",
+      "alternatives": ["Plane", "Vikunja", "Linear"],
+      "bestFor": "Teams, die Kanban mit Automatisierung oder Self-Hosting kombinieren",
+      "pricing": "Kostenlos bis ca. 10 €/Nutzer/Monat",
+      "features": [
+        "Kanban-Boards und Swimlanes",
+        "Automatisierungen und Integrationen",
+        "Open-Source- und Self-Hosting-Optionen"
+      ]
+    }
+  },
+  {
+    "slug": "google-analytics-alternativen",
+    "title": "Google Analytics Alternativen",
+    "description": "Google-Analytics-Alternativen für datenschutzfreundliches Web-Tracking – cookielos, DSGVO-konform und ohne Datenexport in die USA.",
+    "category": "Analytics",
+    "tags": ["analytics", "datenschutz", "tracking"],
+    "details": {
+      "original": "Google Analytics",
+      "alternatives": ["Plausible", "Umami", "Matomo"],
+      "bestFor": "Websites mit hohen Datenschutzanforderungen und EU-Hosting",
+      "pricing": "Kostenlos bis ca. 10 €/Monat, Self-Hosting optional",
+      "features": [
+        "Cookieloses Tracking",
+        "EU-Hosting und DSGVO-Konformität",
+        "Self-Hosting bei Matomo und Umami"
+      ]
+    }
   }
 ]

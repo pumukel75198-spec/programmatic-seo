@@ -58,5 +58,105 @@
       ],
       "useCase": "Große SEO-Projekte mit hunderten bis tausenden Seiten"
     }
+  },
+  {
+    "slug": "newsletter-automation",
+    "title": "Newsletter-Automation",
+    "description": "Ein Workflow für automatisierte Newsletter: Anmeldungen erfassen, Inhalte aufbereiten und E-Mails zuverlässig über die Resend API versenden.",
+    "category": "Marketing & Content",
+    "tags": ["newsletter", "email", "automatisierung", "content"],
+    "details": {
+      "difficulty": "Einsteiger",
+      "duration": "ca. 1 Stunde Setup",
+      "tools": ["Resend API", "Astro", "Supabase", "n8n"],
+      "steps": [
+        "Anmeldeformular mit Double-Opt-in einrichten",
+        "Kontakte in Supabase speichern",
+        "Newsletter-Inhalte als Markdown pflegen",
+        "Versand über die Resend API automatisieren",
+        "Öffnungs- und Klickraten auswerten"
+      ],
+      "useCase": "Regelmäßige Newsletter für Blogs, Produkte und Communities"
+    }
+  },
+  {
+    "slug": "social-media-scheduling",
+    "title": "Social-Media-Scheduling",
+    "description": "Social-Media-Scheduling automatisieren: Inhalte per KI erstellen, redaktionell freigeben und zeitgesteuert über mehrere Kanäle veröffentlichen.",
+    "category": "Marketing & Content",
+    "tags": ["social-media", "scheduling", "automatisierung", "content"],
+    "details": {
+      "difficulty": "Fortgeschritten",
+      "duration": "ca. 2 Stunden Setup",
+      "tools": ["Make", "OpenAI API", "Buffer", "Notion"],
+      "steps": [
+        "Content-Ideen in Notion sammeln",
+        "Beiträge per KI generieren und kürzen",
+        "Redaktionelle Freigabe einholen",
+        "Beiträge in Buffer einplanen",
+        "Performance regelmäßig auswerten"
+      ],
+      "useCase": "Teams, die mehrere Social-Media-Kanäle konsistent bespielen"
+    }
+  },
+  {
+    "slug": "customer-support-chatbot",
+    "title": "Customer-Support-Chatbot",
+    "description": "Ein KI-Chatbot für den Kundensupport: Anfragen verstehen, aus einer Wissensdatenbank beantworten und bei Bedarf an Menschen übergeben.",
+    "category": "Support & KI",
+    "tags": ["chatbot", "support", "ki", "automatisierung"],
+    "details": {
+      "difficulty": "Fortgeschritten",
+      "duration": "ca. 3 Stunden Setup",
+      "tools": ["OpenAI API", "Supabase", "Astro", "Resend API"],
+      "steps": [
+        "Wissensdatenbank mit FAQ und Dokumenten aufbauen",
+        "Embeddings für semantische Suche erzeugen",
+        "Chat-Endpoint mit Kontextabruf implementieren",
+        "Eskalation an Menschen per E-Mail einrichten",
+        "Antwortqualität laufend evaluieren"
+      ],
+      "useCase": "Support-Teams, die häufige Fragen automatisiert beantworten"
+    }
+  },
+  {
+    "slug": "data-enrichment-pipeline",
+    "title": "Daten-Anreicherungs-Pipeline",
+    "description": "Eine Pipeline zur Datenanreicherung: Rohdaten importieren, per API ergänzen, mit KI normalisieren und strukturiert in Supabase speichern.",
+    "category": "Daten & Automatisierung",
+    "tags": ["daten", "enrichment", "api", "automatisierung"],
+    "details": {
+      "difficulty": "Experte",
+      "duration": "ca. 4 Stunden Setup",
+      "tools": ["n8n", "Supabase", "OpenAI API", "Mapbox Maps API"],
+      "steps": [
+        "Rohdaten aus CSV oder API importieren",
+        "Datensätze per externer API anreichern",
+        "Felder mit KI normalisieren und klassifizieren",
+        "Duplikate erkennen und zusammenführen",
+        "Ergebnisse in Supabase versionieren"
+      ],
+      "useCase": "Datengetriebene Produkte mit großen, uneinheitlichen Datensätzen"
+    }
+  },
+  {
+    "slug": "seo-monitoring-dashboard",
+    "title": "SEO-Monitoring-Dashboard",
+    "description": "Ein Dashboard für SEO-Monitoring: Rankings, Indexierung und Core Web Vitals automatisch erfassen und übersichtlich visualisieren.",
+    "category": "SEO & Analytics",
+    "tags": ["seo", "monitoring", "analytics", "dashboard"],
+    "details": {
+      "difficulty": "Fortgeschritten",
+      "duration": "ca. 2–3 Stunden Setup",
+      "tools": ["Astro", "Supabase", "Google Search Console API", "n8n"],
+      "steps": [
+        "Search-Console-Daten per API abrufen",
+        "Kennzahlen in Supabase speichern",
+        "Core Web Vitals regelmäßig messen",
+        "Dashboard mit Astro und Charts bauen",
+        "Alarme bei Rankings- oder Fehleranstieg einrichten"
+      ],
+      "useCase": "SEO-Teams, die viele Seiten kontinuierlich überwachen müssen"
+    }
   }
 ]
