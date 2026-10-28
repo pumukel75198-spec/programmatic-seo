@@ -4,6 +4,13 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { site } from "../lib/site";
 import type { JsonLd } from "../lib/schema";
+import { languages } from "../i18n/ui";
+import {
+  defaultLocale,
+  getLocale,
+  pathWithoutLocale,
+  switchLocalePath,
+} from "../i18n/utils";
 
 interface Props {
   title?: string;
@@ -15,6 +22,7 @@ interface Props {
   publishedTime?: string;
   modifiedTime?: string;
   jsonLd?: JsonLd | JsonLd[];
+  lang?: string;
 }
 
 const {
@@ -27,8 +35,10 @@ const {
   publishedTime,
   modifiedTime,
   jsonLd = [],
+  lang: langProp,
 } = Astro.props;
 
+const lang = getLocale(langProp);
 const fullTitle = title === site.name ? title : `${title} | ${site.name}`;
 const baseUrl = Astro.site ?? new URL(site.url);
 const canonical = new URL(Astro.url.pathname, baseUrl).toString();
@@ -37,10 +47,33 @@ const ogImage = new URL(image, baseUrl).toString();
 const jsonLdItems = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
 const serializeJsonLd = (value: JsonLd) =>
   JSON.stringify(value).replace(/</g, "\\u003c");
+
+const localeMap: Record<string, string> = {
+  en: "en_US",
+  de: "de_DE",
+  fr: "fr_FR",
+  es: "es_ES",
+  it: "it_IT",
+  pt: "pt_PT",
+  nl: "nl_NL",
+  pl: "pl_PL",
+  sv: "sv_SE",
+  tr: "tr_TR",
+  ja: "ja_JP",
+  zh: "zh_CN",
+};
+const ogLocale = localeMap[lang] ?? "en_US";
+
+const cleanPath = pathWithoutLocale(Astro.url.pathname);
+const alternates = languages.map((l) => ({
+  code: l.code,
+  href: new URL(switchLocalePath(Astro.url.pathname, l.code), baseUrl).toString(),
+}));
+const defaultHref = new URL(`/${defaultLocale}${cleanPath}`, baseUrl).toString();
 ---
 
 <!doctype html>
-<html lang={site.lang} class="dark">
+<html lang={lang} class="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -61,10 +94,18 @@ const serializeJsonLd = (value: JsonLd) =>
     <link rel="canonical" href={canonical} />
     <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
 
+    <!-- hreflang alternates -->
+    {
+      alternates.map((alt) => (
+        <link rel="alternate" hreflang={alt.code} href={alt.href} />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={defaultHref} />
+
     <!-- Open Graph -->
     <meta property="og:type" content={type} />
     <meta property="og:site_name" content={site.name} />
-    <meta property="og:locale" content={site.locale} />
+    <meta property="og:locale" content={ogLocale} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
@@ -85,24 +126,21 @@ const serializeJsonLd = (value: JsonLd) =>
 
     <meta name="theme-color" content="#06070d" />
 
-    <!-- Strukturierte Daten (JSON-LD) -->
+    <!-- Structured data (JSON-LD) -->
     {
       jsonLdItems.map((item) => (
-        <script
-          type="application/ld+json"
-          set:html={serializeJsonLd(item)}
-        />
+        <script type="application/ld+json" set:html={serializeJsonLd(item)} />
       ))
     }
   </head>
   <body class="min-h-screen bg-[#06070d] text-slate-200 antialiased selection:bg-brand-500/30 selection:text-white">
     <div class="relative flex min-h-screen flex-col">
       <div class="pointer-events-none fixed inset-0 -z-10 bg-grid" aria-hidden="true"></div>
-      <Header />
+      <Header lang={lang} />
       <main class="flex-1">
         <slot />
       </main>
-      <Footer />
+      <Footer lang={lang} />
     </div>
   </body>
 </html>

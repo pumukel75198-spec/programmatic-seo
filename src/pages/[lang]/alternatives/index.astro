@@ -1,0 +1,64 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import PageHeader from "../../../components/PageHeader.astro";
+import ContentCard from "../../../components/ContentCard.astro";
+import { alternatives } from "../../../lib/content";
+import { itemListSchema } from "../../../lib/schema";
+import { languages } from "../../../i18n/ui";
+import { getLocale, localizedPath, t } from "../../../i18n/utils";
+import { localizeAlternative } from "../../../i18n/content";
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({
+    params: { lang: lang.code },
+    props: { lang: lang.code },
+  }));
+}
+
+const lang = getLocale(Astro.props.lang);
+const localizedAlternatives = alternatives.map((entry) =>
+  localizeAlternative(entry, lang)
+);
+
+const jsonLd = itemListSchema(
+  "Alternatives – tool comparisons",
+  localizedAlternatives.map((entry) => ({
+    name: entry.title,
+    url: `/alternatives/${entry.slug}/`,
+  }))
+);
+---
+
+<Layout
+  title="Alternatives – tool comparisons"
+  description={t(lang, "cat.alt.desc")}
+  keywords={["alternatives", "tool comparison", "productivity", "automation", "design"]}
+  jsonLd={jsonLd}
+  lang={lang}
+>
+  <PageHeader
+    eyebrow={t(lang, "cat.alt.label")}
+    title={t(lang, "cat.alt.title")}
+    description={t(lang, "cat.alt.desc")}
+  >
+    <p class="text-sm text-slate-500">
+      {localizedAlternatives.length} {t(lang, "stats.alternatives")}
+    </p>
+  </PageHeader>
+
+  <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {
+        localizedAlternatives.map((entry) => (
+          <ContentCard
+            href={localizedPath(lang, `/alternatives/${entry.slug}`)}
+            title={entry.title}
+            description={entry.description}
+            meta={`${entry.details.alternatives.length} ${t(lang, "stats.alternatives")}`}
+            tags={entry.tags}
+          />
+        ))
+      }
+    </div>
+  </section>
+</Layout>

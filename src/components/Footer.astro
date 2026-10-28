@@ -1,13 +1,21 @@
 ---
+import { t } from "../i18n/utils";
+
+interface Props {
+  lang?: string;
+}
+
+const lang = Astro.props.lang ?? "en";
 const year = new Date().getFullYear();
+
 const links = [
-  { href: "/apis", label: "APIs", key: "nav.apis" },
-  { href: "/alternatives", label: "Alternatives", key: "nav.alternatives" },
-  { href: "/workflows", label: "Workflows", key: "nav.workflows" },
+  { href: `/${lang}/apis`, label: t(lang, "nav.apis") },
+  { href: `/${lang}/alternatives`, label: t(lang, "nav.alternatives") },
+  { href: `/${lang}/workflows`, label: t(lang, "nav.workflows") },
 ];
 const legalLinks = [
-  { href: "/imprint", label: "Imprint", key: "footer.imprint" },
-  { href: "/privacy", label: "Privacy", key: "footer.privacy" },
+  { href: `/${lang}/imprint`, label: t(lang, "footer.imprint") },
+  { href: `/${lang}/privacy`, label: t(lang, "footer.privacy") },
 ];
 ---
 
@@ -16,9 +24,8 @@ const legalLinks = [
     <div class="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
       <div>
         <p class="text-sm font-semibold text-white">Programmatic SEO Hub</p>
-        <p class="mt-1 max-w-md text-sm text-slate-500" data-i18n="footer.tagline">
-          Curated APIs, alternatives and workflows for modern product and SEO
-          teams.
+        <p class="mt-1 max-w-md text-sm text-slate-500">
+          {t(lang, "footer.tagline")}
         </p>
       </div>
       <nav class="flex flex-wrap gap-x-6 gap-y-2" aria-label="Footer navigation">
@@ -26,7 +33,6 @@ const legalLinks = [
           links.map((link) => (
             <a
               href={link.href}
-              data-i18n={link.key}
               class="text-sm text-slate-400 transition-colors hover:text-brand-300"
             >
               {link.label}
@@ -44,7 +50,6 @@ const legalLinks = [
           legalLinks.map((link) => (
             <a
               href={link.href}
-              data-i18n={link.key}
               class="text-xs text-slate-500 transition-colors hover:text-brand-300"
             >
               {link.label}

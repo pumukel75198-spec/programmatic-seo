@@ -1,30 +1,41 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import Breadcrumb from "../../components/Breadcrumb.astro";
-import DetailBox from "../../components/DetailBox.astro";
-import CTA from "../../components/CTA.astro";
-import Badge from "../../components/Badge.astro";
-import { apis, getRelated } from "../../lib/content";
-import { breadcrumbSchema, softwareApplicationSchema } from "../../lib/schema";
+import Layout from "../../../layouts/Layout.astro";
+import Breadcrumb from "../../../components/Breadcrumb.astro";
+import DetailBox from "../../../components/DetailBox.astro";
+import CTA from "../../../components/CTA.astro";
+import Badge from "../../../components/Badge.astro";
+import { apis, getRelated } from "../../../lib/content";
+import {
+  breadcrumbSchema,
+  softwareApplicationSchema,
+} from "../../../lib/schema";
+import { languages } from "../../../i18n/ui";
+import { getLocale, localizedPath, t } from "../../../i18n/utils";
+import { localizeApi } from "../../../i18n/content";
 
 export function getStaticPaths() {
-  return apis.map((api) => ({
-    params: { slug: api.slug },
-    props: { api },
-  }));
+  return languages.flatMap((lang) =>
+    apis.map((api) => ({
+      params: { lang: lang.code, slug: api.slug },
+      props: { api, lang: lang.code },
+    }))
+  );
 }
 
-const { api } = Astro.props;
-const related = getRelated(apis, api.slug);
+const lang = getLocale(Astro.props.lang);
+const api = localizeApi(Astro.props.api, lang);
+const related = getRelated(apis, api.slug).map((item) =>
+  localizeApi(item, lang)
+);
 
 const pageTitle = `${api.title} – ${api.category}`;
 const pageDescription = api.description;
 
 const jsonLd = [
   breadcrumbSchema([
-    { name: "Home", url: "/" },
-    { name: "APIs", url: "/apis/" },
-    { name: api.title, url: `/apis/${api.slug}/` },
+    { name: "Home", url: `/${lang}/` },
+    { name: t(lang, "nav.apis"), url: `/${lang}/apis/` },
+    { name: api.title, url: `/${lang}/apis/${api.slug}/` },
   ]),
   softwareApplicationSchema(api),
 ];
@@ -36,6 +47,7 @@ const jsonLd = [
   type="article"
   keywords={api.tags}
   jsonLd={jsonLd}
+  lang={lang}
 >
   <article>
     <!-- Header -->
@@ -43,8 +55,8 @@ const jsonLd = [
       <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
         <Breadcrumb
           items={[
-            { label: "Home", href: "/" },
-            { label: "APIs", href: "/apis" },
+            { label: "Home", href: localizedPath(lang, "/") },
+            { label: t(lang, "nav.apis"), href: localizedPath(lang, "/apis") },
             { label: api.title },
           ]}
         />
@@ -83,7 +95,7 @@ const jsonLd = [
             <div class="mt-6 grid gap-4 sm:grid-cols-3">
               {related.map((item) => (
                 <a
-                  href={`/apis/${item.slug}`}
+                  href={localizedPath(lang, `/apis/${item.slug}`)}
                   class="group card-hover rounded-xl border border-white/10 bg-surface/50 p-5"
                 >
                   <p class="text-sm font-semibold text-white group-hover:text-brand-300">

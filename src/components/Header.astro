@@ -1,10 +1,17 @@
 ---
 import LanguageSwitcher from "./LanguageSwitcher.astro";
+import { t } from "../i18n/utils";
+
+interface Props {
+  lang?: string;
+}
+
+const lang = Astro.props.lang ?? "en";
 
 const nav = [
-  { href: "/apis", label: "APIs", key: "nav.apis" },
-  { href: "/alternatives", label: "Alternatives", key: "nav.alternatives" },
-  { href: "/workflows", label: "Workflows", key: "nav.workflows" },
+  { href: `/${lang}/apis`, label: t(lang, "nav.apis") },
+  { href: `/${lang}/alternatives`, label: t(lang, "nav.alternatives") },
+  { href: `/${lang}/workflows`, label: t(lang, "nav.workflows") },
 ];
 
 const pathname = Astro.url.pathname;
@@ -14,7 +21,7 @@ const isActive = (href: string) =>
 
 <header class="sticky top-0 z-50 border-b border-white/5 bg-[#06070d]/80 backdrop-blur-xl">
   <div class="mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-2 px-4 py-2 sm:px-6 lg:px-8">
-    <a href="/" class="group flex items-center gap-2.5">
+    <a href={`/${lang}/`} class="group flex items-center gap-2.5">
       <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-cyan-400 text-sm font-bold text-white shadow-lg shadow-brand-500/30">
         PS
       </span>
@@ -29,7 +36,6 @@ const isActive = (href: string) =>
           nav.map((item) => (
             <a
               href={item.href}
-              data-i18n={item.key}
               class:list={[
                 "rounded-lg px-2.5 py-2 text-sm font-medium transition-colors sm:px-3",
                 isActive(item.href)
@@ -42,7 +48,7 @@ const isActive = (href: string) =>
           ))
         }
       </nav>
-      <LanguageSwitcher />
+      <LanguageSwitcher lang={lang} />
     </div>
   </div>
 </header>

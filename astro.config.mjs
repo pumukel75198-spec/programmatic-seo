@@ -3,22 +3,63 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
+/** @type {string[]} */
+const locales = [
+  'en',
+  'de',
+  'fr',
+  'es',
+  'it',
+  'pt',
+  'nl',
+  'pl',
+  'sv',
+  'tr',
+  'ja',
+  'zh',
+];
+
 // https://astro.build/config
 export default defineConfig({
-  // Statischer Export: erzeugt reine HTML/CSS/JS-Dateien in ./dist
+  // Static export: generates plain HTML/CSS/JS in ./dist
   output: 'static',
 
-  // Passe diese URL auf deine Produktions-Domain an (wichtig für Canonical-URLs & Sitemap).
+  // TODO: Set this to the real production domain before going live.
   site: 'https://example.com',
+
+  i18n: {
+    defaultLocale: 'en',
+    locales,
+    routing: {
+      prefixDefaultLocale: true,
+      redirectToDefaultLocale: true,
+    },
+  },
 
   integrations: [
     sitemap({
-      // 404-Seite nicht in die Sitemap aufnehmen
       filter: (page) => !page.includes('/404'),
+      i18n: {
+        defaultLocale: 'en',
+        locales: {
+          en: 'en-US',
+          de: 'de-DE',
+          fr: 'fr-FR',
+          es: 'es-ES',
+          it: 'it-IT',
+          pt: 'pt-PT',
+          nl: 'nl-NL',
+          pl: 'pl-PL',
+          sv: 'sv-SE',
+          tr: 'tr-TR',
+          ja: 'ja-JP',
+          zh: 'zh-CN',
+        },
+      },
     }),
   ],
 
   vite: {
-    plugins: [tailwindcss()]
-  }
+    plugins: [tailwindcss()],
+  },
 });

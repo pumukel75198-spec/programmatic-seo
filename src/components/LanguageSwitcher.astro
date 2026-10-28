@@ -1,18 +1,29 @@
 ---
 import { languages } from "../i18n/ui";
+
+interface Props {
+  lang?: string;
+}
+
+const lang = Astro.props.lang ?? "en";
 ---
 
 <div class="relative">
   <label for="language-select" class="sr-only">Language</label>
   <select
     id="language-select"
+    data-current={lang}
     aria-label="Select language"
     class="appearance-none rounded-lg border border-white/10 bg-white/5 py-2 pl-3 pr-8 text-sm text-slate-300 transition-colors hover:border-white/20 focus:border-brand-500/50 focus:outline-none"
   >
     {
-      languages.map((lang) => (
-        <option value={lang.code} class="bg-[#0b0d16] text-slate-200">
-          {lang.flag} {lang.name}
+      languages.map((item) => (
+        <option
+          value={item.code}
+          selected={item.code === lang}
+          class="bg-[#0b0d16] text-slate-200"
+        >
+          {item.flag} {item.name}
         </option>
       ))
     }
@@ -32,32 +43,23 @@ import { languages } from "../i18n/ui";
 </div>
 
 <script>
-  import { translations } from "../i18n/ui";
+  import { languages } from "../i18n/ui";
 
-  const STORAGE_KEY = "pseo-lang";
+  const locales = languages.map((item) => item.code);
   const select = document.getElementById(
     "language-select"
   ) as HTMLSelectElement | null;
 
-  function applyLanguage(lang: string) {
-    const dict = translations[lang] ?? translations.en;
-    document.documentElement.lang = lang;
-
-    document.querySelectorAll<HTMLElement>("[data-i18n]").forEach((el) => {
-      const key = el.dataset.i18n as keyof typeof dict;
-      const value = dict[key] ?? translations.en[key];
-      if (value) el.textContent = value;
-    });
-
-    if (select) select.value = lang;
-  }
-
-  const stored = localStorage.getItem(STORAGE_KEY) ?? "en";
-  applyLanguage(stored);
-
   select?.addEventListener("change", () => {
-    const lang = select.value;
-    localStorage.setItem(STORAGE_KEY, lang);
-    applyLanguage(lang);
+    const target = select.value;
+    const parts = window.location.pathname.split("/").filter(Boolean);
+
+    if (parts.length > 0 && locales.includes(parts[0])) {
+      parts[0] = target;
+    } else {
+      parts.unshift(target);
+    }
+
+    window.location.href = `/${parts.join("/")}/`;
   });
 </script>

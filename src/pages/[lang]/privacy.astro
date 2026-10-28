@@ -1,8 +1,18 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import Badge from "../components/Badge.astro";
-import Placeholder from "../components/Placeholder.astro";
+import Layout from "../../layouts/Layout.astro";
+import Badge from "../../components/Badge.astro";
+import Placeholder from "../../components/Placeholder.astro";
+import { languages } from "../../i18n/ui";
+import { getLocale } from "../../i18n/utils";
 
+export function getStaticPaths() {
+  return languages.map((lang) => ({
+    params: { lang: lang.code },
+    props: { lang: lang.code },
+  }));
+}
+
+const lang = getLocale(Astro.props.lang);
 // TODO: remove noindex once the real privacy details have been filled in.
 ---
 
@@ -10,6 +20,7 @@ import Placeholder from "../components/Placeholder.astro";
   title="Privacy Policy"
   description="Privacy policy – a placeholder that must be filled with the real details before going live."
   noindex={true}
+  lang={lang}
 >
   <article class="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
     <Badge tone="amber">Placeholder</Badge>
@@ -24,9 +35,7 @@ import Placeholder from "../components/Placeholder.astro";
 
     <div class="mt-10 space-y-10 text-sm leading-relaxed text-slate-300">
       <section>
-        <h2 class="text-lg font-semibold text-white">
-          1. Controller
-        </h2>
+        <h2 class="text-lg font-semibold text-white">1. Controller</h2>
         <p class="mt-3">
           The controller responsible for data processing on this website is:
         </p>
