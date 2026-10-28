@@ -43,11 +43,23 @@ export interface AlternativeEntry {
   details: AlternativeDetails;
 }
 
+export interface WorkflowStepLink {
+  label: string;
+  url: string;
+}
+
+export interface WorkflowStep {
+  title: string;
+  description?: string;
+  links?: WorkflowStepLink[];
+}
+
 export interface WorkflowDetails {
   difficulty: string;
   duration: string;
   tools: string[];
-  steps: string[];
+  /** Steps can be plain strings (legacy) or enriched objects. */
+  steps: (string | WorkflowStep)[];
   useCase: string;
 }
 

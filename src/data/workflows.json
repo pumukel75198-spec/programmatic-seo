@@ -20,11 +20,60 @@
         "n8n"
       ],
       "steps": [
-        "Run keyword and topic research",
-        "Set up the data model in Supabase",
-        "Generate drafts with the OpenAI API",
-        "Run quality checks and approvals",
-        "Publish automatically via CI/CD"
+        {
+          "title": "Run keyword and topic research",
+          "description": "Collect seed keywords and cluster them by search intent.",
+          "links": [
+            {
+              "label": "Google Keyword Planner",
+              "url": "https://ads.google.com/home/tools/keyword-planner/"
+            },
+            {
+              "label": "Ahrefs Keywords Explorer",
+              "url": "https://ahrefs.com/keywords-explorer"
+            }
+          ]
+        },
+        {
+          "title": "Set up the data model in Supabase",
+          "description": "Create tables for topics, status and metadata.",
+          "links": [
+            {
+              "label": "Supabase Docs",
+              "url": "https://supabase.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Generate drafts with the OpenAI API",
+          "description": "Use structured prompts and JSON outputs for consistent drafts.",
+          "links": [
+            {
+              "label": "OpenAI API Docs",
+              "url": "https://platform.openai.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Run quality checks and approvals",
+          "description": "Validate facts, duplicates and SEO criteria before publishing.",
+          "links": [
+            {
+              "label": "Google Search Essentials",
+              "url": "https://developers.google.com/search/docs/essentials"
+            }
+          ]
+        },
+        {
+          "title": "Publish automatically via CI/CD",
+          "description": "Build static pages with Astro and deploy on every approved change.",
+          "links": [
+            {
+              "label": "Astro Docs",
+              "url": "https://docs.astro.build"
+            }
+          ]
+        }
       ],
       "useCase": "Scalable content production for programmatic SEO projects"
     }
@@ -80,11 +129,60 @@
         "n8n"
       ],
       "steps": [
-        "Define data sources",
-        "Build templates with getStaticPaths",
-        "Automate internal linking",
-        "Deploy static builds via CI/CD",
-        "Monitor indexing and rankings"
+        {
+          "title": "Define data sources",
+          "description": "Decide which structured data powers your pages.",
+          "links": [
+            {
+              "label": "Schema.org",
+              "url": "https://schema.org/"
+            }
+          ]
+        },
+        {
+          "title": "Build templates with getStaticPaths",
+          "description": "Generate one page per record using dynamic routes.",
+          "links": [
+            {
+              "label": "Astro getStaticPaths",
+              "url": "https://docs.astro.build/en/reference/api-reference/#getstaticpaths"
+            }
+          ]
+        },
+        {
+          "title": "Automate internal linking",
+          "description": "Link related pages to improve crawlability and relevance.",
+          "links": [
+            {
+              "label": "Google Internal Linking Guide",
+              "url": "https://developers.google.com/search/docs/crawling-indexing/links-crawlable"
+            }
+          ]
+        },
+        {
+          "title": "Deploy static builds via CI/CD",
+          "description": "Ship every data change through an automated pipeline.",
+          "links": [
+            {
+              "label": "GitHub Actions Docs",
+              "url": "https://docs.github.com/actions"
+            }
+          ]
+        },
+        {
+          "title": "Monitor indexing and rankings",
+          "description": "Track coverage, rankings and Core Web Vitals.",
+          "links": [
+            {
+              "label": "Search Console",
+              "url": "https://search.google.com/search-console"
+            },
+            {
+              "label": "PageSpeed Insights",
+              "url": "https://pagespeed.web.dev/"
+            }
+          ]
+        }
       ],
       "useCase": "Large SEO projects with hundreds to thousands of pages"
     }
@@ -110,11 +208,56 @@
         "n8n"
       ],
       "steps": [
-        "Set up a signup form with double opt-in",
-        "Store contacts in Supabase",
-        "Maintain newsletter content in Markdown",
-        "Automate delivery via the Resend API",
-        "Track open and click rates"
+        {
+          "title": "Set up a signup form with double opt-in",
+          "description": "Collect consent compliant with GDPR.",
+          "links": [
+            {
+              "label": "GDPR Info",
+              "url": "https://gdpr.eu/"
+            }
+          ]
+        },
+        {
+          "title": "Store contacts in Supabase",
+          "description": "Keep subscribers and consent state in one table.",
+          "links": [
+            {
+              "label": "Supabase Docs",
+              "url": "https://supabase.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Maintain newsletter content in Markdown",
+          "description": "Version content alongside your code.",
+          "links": [
+            {
+              "label": "Markdown Guide",
+              "url": "https://www.markdownguide.org/"
+            }
+          ]
+        },
+        {
+          "title": "Automate delivery via the Resend API",
+          "description": "Send campaigns and transactional emails reliably.",
+          "links": [
+            {
+              "label": "Resend Docs",
+              "url": "https://resend.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Track open and click rates",
+          "description": "Measure engagement and iterate on content.",
+          "links": [
+            {
+              "label": "Resend Analytics",
+              "url": "https://resend.com/docs/dashboard/emails/introduction"
+            }
+          ]
+        }
       ],
       "useCase": "Regular newsletters for blogs, products and communities"
     }
@@ -170,11 +313,56 @@
         "Resend API"
       ],
       "steps": [
-        "Build a knowledge base from FAQs and docs",
-        "Generate embeddings for semantic search",
-        "Implement a chat endpoint with context retrieval",
-        "Set up escalation to humans via email",
-        "Continuously evaluate answer quality"
+        {
+          "title": "Build a knowledge base from FAQs and docs",
+          "description": "Centralize trusted answers for retrieval.",
+          "links": [
+            {
+              "label": "OpenAI Retrieval Guide",
+              "url": "https://platform.openai.com/docs/guides/retrieval"
+            }
+          ]
+        },
+        {
+          "title": "Generate embeddings for semantic search",
+          "description": "Turn documents into vectors for similarity search.",
+          "links": [
+            {
+              "label": "OpenAI Embeddings",
+              "url": "https://platform.openai.com/docs/guides/embeddings"
+            }
+          ]
+        },
+        {
+          "title": "Implement a chat endpoint with context retrieval",
+          "description": "Combine retrieved context with the user question.",
+          "links": [
+            {
+              "label": "OpenAI Chat Completions",
+              "url": "https://platform.openai.com/docs/guides/chat-completions"
+            }
+          ]
+        },
+        {
+          "title": "Set up escalation to humans via email",
+          "description": "Hand off complex cases with full context.",
+          "links": [
+            {
+              "label": "Resend Docs",
+              "url": "https://resend.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Continuously evaluate answer quality",
+          "description": "Review transcripts and improve prompts and sources.",
+          "links": [
+            {
+              "label": "OpenAI Evals",
+              "url": "https://platform.openai.com/docs/guides/evals"
+            }
+          ]
+        }
       ],
       "useCase": "Support teams that want to automate common questions"
     }
@@ -230,11 +418,56 @@
         "n8n"
       ],
       "steps": [
-        "Fetch Search Console data via API",
-        "Store metrics in Supabase",
-        "Measure Core Web Vitals regularly",
-        "Build a dashboard with Astro and charts",
-        "Set alerts for ranking or error spikes"
+        {
+          "title": "Fetch Search Console data via API",
+          "description": "Pull queries, pages and coverage data.",
+          "links": [
+            {
+              "label": "Search Console API",
+              "url": "https://developers.google.com/webmaster-tools"
+            }
+          ]
+        },
+        {
+          "title": "Store metrics in Supabase",
+          "description": "Keep historical data for trend analysis.",
+          "links": [
+            {
+              "label": "Supabase Docs",
+              "url": "https://supabase.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Measure Core Web Vitals regularly",
+          "description": "Track LCP, INP and CLS over time.",
+          "links": [
+            {
+              "label": "web.dev Core Web Vitals",
+              "url": "https://web.dev/vitals/"
+            }
+          ]
+        },
+        {
+          "title": "Build a dashboard with Astro and charts",
+          "description": "Visualize trends and anomalies.",
+          "links": [
+            {
+              "label": "Astro Docs",
+              "url": "https://docs.astro.build"
+            }
+          ]
+        },
+        {
+          "title": "Set alerts for ranking or error spikes",
+          "description": "Notify the team when metrics move unexpectedly.",
+          "links": [
+            {
+              "label": "n8n Docs",
+              "url": "https://docs.n8n.io/"
+            }
+          ]
+        }
       ],
       "useCase": "SEO teams that need to monitor many pages continuously"
     }

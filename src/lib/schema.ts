@@ -91,12 +91,17 @@ export function howToSchema(workflow: WorkflowEntry): JsonLd {
       "@type": "HowToTool",
       name: tool,
     })),
-    step: workflow.details.steps.map((step, index) => ({
-      "@type": "HowToStep",
-      position: index + 1,
-      name: step,
-      text: step,
-    })),
+    step: workflow.details.steps.map((step, index) => {
+      const title = typeof step === "string" ? step : step.title;
+      const text =
+        typeof step === "string" ? step : step.description ?? step.title;
+      return {
+        "@type": "HowToStep",
+        position: index + 1,
+        name: title,
+        text,
+      };
+    }),
   };
 }
 

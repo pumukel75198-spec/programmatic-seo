@@ -35,6 +35,18 @@ const entries = Object.entries(details).filter(([, value]) => {
 const isUrl = (value: unknown): value is string =>
   typeof value === "string" && /^https?:\/\//i.test(value);
 
+interface StepLink {
+  label: string;
+  url: string;
+}
+interface StepObject {
+  title: string;
+  description?: string;
+  links?: StepLink[];
+}
+const asStep = (item: unknown): StepObject =>
+  typeof item === "string" ? { title: item } : (item as StepObject);
+
 const chipClass =
   "rounded-full bg-white/5 px-2.5 py-0.5 text-xs text-slate-300 ring-1 ring-inset ring-white/10";
 const chipLinkClass =
@@ -53,15 +65,54 @@ const chipLinkClass =
         <dd class="flex-1 text-sm leading-relaxed text-slate-300">
           {Array.isArray(value) ? (
             key === "steps" ? (
-              <ol class="space-y-2">
-                {value.map((item, index) => (
-                  <li class="flex gap-2.5">
-                    <span class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-500/15 text-[11px] font-bold text-brand-300">
-                      {index + 1}
-                    </span>
-                    <span set:html={linkifyTools(String(item))} />
-                  </li>
-                ))}
+              <ol class="space-y-4">
+                {value.map((item, index) => {
+                  const step = asStep(item);
+                  return (
+                    <li class="flex gap-2.5">
+                      <span class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-500/15 text-[11px] font-bold text-brand-300">
+                        {index + 1}
+                      </span>
+                      <div class="space-y-1">
+                        <p
+                          class="font-medium text-slate-200"
+                          set:html={linkifyTools(step.title)}
+                        />
+                        {step.description && (
+                          <p
+                            class="text-sm text-slate-400"
+                            set:html={linkifyTools(step.description)}
+                          />
+                        )}
+                        {step.links && step.links.length > 0 && (
+                          <ul class="mt-1.5 flex flex-wrap gap-x-4 gap-y-1">
+                            {step.links.map((link) => (
+                              <li>
+                                <a
+                                  href={link.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  class="inline-flex items-center gap-1 text-xs font-medium text-brand-300 underline decoration-brand-500/30 underline-offset-2 transition-colors hover:text-brand-200"
+                                >
+                                  {link.label}
+                                  <svg
+                                    class="h-3 w-3"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                    aria-hidden="true"
+                                  >
+                                    <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
+                                    <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+                                  </svg>
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    </li>
+                  );
+                })}
               </ol>
             ) : (
               <div class="flex flex-wrap gap-1.5">
