@@ -13,9 +13,52 @@
     "details": {
       "original": "Notion",
       "alternatives": [
-        "Obsidian",
-        "Coda",
-        "AppFlowy"
+        {
+          "name": "Obsidian",
+          "description": "Local Markdown notes with a powerful plugin ecosystem.",
+          "pros": [
+            "Offline & local",
+            "Very fast",
+            "Large plugin community"
+          ],
+          "cons": [
+            "No native collaboration",
+            "Sync is paid"
+          ],
+          "bestFor": "Privacy-focused users who want local files",
+          "recommended": true,
+          "url": "https://obsidian.md"
+        },
+        {
+          "name": "Coda",
+          "description": "Documents and tables with strong automations.",
+          "pros": [
+            "Powerful formulas",
+            "Good automation",
+            "Team-friendly"
+          ],
+          "cons": [
+            "Learning curve",
+            "Pricing scales quickly"
+          ],
+          "bestFor": "Teams that need docs and tables in one place",
+          "url": "https://coda.io"
+        },
+        {
+          "name": "AppFlowy",
+          "description": "Open-source alternative with a focus on privacy.",
+          "pros": [
+            "Open source",
+            "Self-hosting",
+            "Notion-like UI"
+          ],
+          "cons": [
+            "Fewer integrations",
+            "Younger ecosystem"
+          ],
+          "bestFor": "Teams that want self-hosted knowledge management",
+          "url": "https://appflowy.io"
+        }
       ],
       "bestFor": "Teams that need offline access, privacy or self-hosting",
       "pricing": "Free to about $10/user/month depending on the tool",
@@ -40,9 +83,52 @@
     "details": {
       "original": "Zapier",
       "alternatives": [
-        "Make",
-        "n8n",
-        "Pipedream"
+        {
+          "name": "Make",
+          "description": "Visual workflow builder with a generous free tier.",
+          "pros": [
+            "Visual scenarios",
+            "Cheaper than Zapier",
+            "Many integrations"
+          ],
+          "cons": [
+            "More complex UI",
+            "Operation limits"
+          ],
+          "bestFor": "Teams that want visual automation at a lower cost",
+          "recommended": true,
+          "url": "https://make.com"
+        },
+        {
+          "name": "n8n",
+          "description": "Open-source automation with self-hosting.",
+          "pros": [
+            "Open source",
+            "Self-hosting",
+            "Code nodes"
+          ],
+          "cons": [
+            "Technical setup",
+            "Fewer ready-made templates"
+          ],
+          "bestFor": "Developers who want full control and self-hosting",
+          "url": "https://n8n.io"
+        },
+        {
+          "name": "Pipedream",
+          "description": "Developer-friendly platform with real code.",
+          "pros": [
+            "Code-first",
+            "Great developer experience",
+            "Fair pricing"
+          ],
+          "cons": [
+            "Less no-code",
+            "Smaller community"
+          ],
+          "bestFor": "Developers building custom integrations",
+          "url": "https://pipedream.com"
+        }
       ],
       "bestFor": "Teams with high workflow volume or self-hosting needs",
       "pricing": "Free to about $20/month, n8n self-hosted is free",
@@ -67,9 +153,52 @@
     "details": {
       "original": "Figma",
       "alternatives": [
-        "Penpot",
-        "Sketch",
-        "Framer"
+        {
+          "name": "Penpot",
+          "description": "Open-source design tool for teams, in the browser or self-hosted.",
+          "pros": [
+            "Open source",
+            "Self-hosting",
+            "Web standards"
+          ],
+          "cons": [
+            "Fewer plugins",
+            "Performance on large files"
+          ],
+          "bestFor": "Teams that want open-source design with self-hosting",
+          "recommended": true,
+          "url": "https://penpot.app"
+        },
+        {
+          "name": "Sketch",
+          "description": "Established macOS design tool with a local workflow.",
+          "pros": [
+            "Native macOS",
+            "Local files",
+            "Mature ecosystem"
+          ],
+          "cons": [
+            "macOS only",
+            "Weaker collaboration"
+          ],
+          "bestFor": "macOS designers who prefer local files",
+          "url": "https://www.sketch.com"
+        },
+        {
+          "name": "Framer",
+          "description": "Design and publishing in one for modern websites.",
+          "pros": [
+            "Direct publishing",
+            "Strong animations",
+            "Fast prototyping"
+          ],
+          "cons": [
+            "Less suited for design systems",
+            "Per-site pricing"
+          ],
+          "bestFor": "Teams that want to design and publish in one tool",
+          "url": "https://www.framer.com"
+        }
       ],
       "bestFor": "Design teams focused on privacy, local files or publishing",
       "pricing": "Free to about $15/user/month",
@@ -93,9 +222,52 @@
     "details": {
       "original": "Slack",
       "alternatives": [
-        "Mattermost",
-        "Rocket.Chat",
-        "Discord"
+        {
+          "name": "Mattermost",
+          "description": "Self-hosted team messaging for secure collaboration.",
+          "pros": [
+            "Self-hosting",
+            "Strong security",
+            "Open source"
+          ],
+          "cons": [
+            "Requires ops",
+            "Smaller app ecosystem"
+          ],
+          "bestFor": "Teams with strict security and compliance needs",
+          "recommended": true,
+          "url": "https://mattermost.com"
+        },
+        {
+          "name": "Rocket.Chat",
+          "description": "Open-source chat platform with omnichannel support.",
+          "pros": [
+            "Open source",
+            "Omnichannel",
+            "Self-hosting"
+          ],
+          "cons": [
+            "Setup complexity",
+            "UI can feel busy"
+          ],
+          "bestFor": "Teams that need chat plus customer channels",
+          "url": "https://rocket.chat"
+        },
+        {
+          "name": "Discord",
+          "description": "Community chat with voice and video built in.",
+          "pros": [
+            "Free for communities",
+            "Great voice/video",
+            "Large ecosystem"
+          ],
+          "cons": [
+            "Not enterprise-focused",
+            "Less control over data"
+          ],
+          "bestFor": "Communities and creator teams",
+          "url": "https://discord.com"
+        }
       ],
       "bestFor": "Teams with privacy, compliance or self-hosting requirements",
       "pricing": "Free to about $8/user/month, self-hosting optional",
@@ -120,9 +292,52 @@
     "details": {
       "original": "Airtable",
       "alternatives": [
-        "Baserow",
-        "NocoDB",
-        "SeaTable"
+        {
+          "name": "Baserow",
+          "description": "Open-source no-code database with self-hosting.",
+          "pros": [
+            "Open source",
+            "Self-hosting",
+            "Familiar table UI"
+          ],
+          "cons": [
+            "Fewer integrations",
+            "Smaller template library"
+          ],
+          "bestFor": "Teams that want Airtable-like tables with data ownership",
+          "recommended": true,
+          "url": "https://baserow.io"
+        },
+        {
+          "name": "NocoDB",
+          "description": "Turns any SQL database into a smart spreadsheet.",
+          "pros": [
+            "Works with existing SQL",
+            "Self-hosting",
+            "REST API"
+          ],
+          "cons": [
+            "Setup required",
+            "UI less polished"
+          ],
+          "bestFor": "Teams with existing databases that want a no-code UI",
+          "url": "https://nocodb.com"
+        },
+        {
+          "name": "SeaTable",
+          "description": "Spreadsheet-database hybrid with strong collaboration.",
+          "pros": [
+            "Hybrid tables",
+            "Good collaboration",
+            "Self-hosting option"
+          ],
+          "cons": [
+            "Smaller ecosystem",
+            "Learning curve"
+          ],
+          "bestFor": "Teams that need spreadsheets and databases together",
+          "url": "https://seatable.io"
+        }
       ],
       "bestFor": "Teams that need data ownership, self-hosting or open formats",
       "pricing": "Free to about $12/user/month, self-hosting is free",

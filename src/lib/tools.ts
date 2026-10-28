@@ -238,6 +238,206 @@ export const tools: Record<string, ToolConfig> = {
     name: "Zapier",
     url: "https://zapier.com/",
   },
+  Obsidian: {
+    name: "Obsidian",
+    url: "https://obsidian.md/",
+    affiliateUrl: `https://obsidian.md/${REF}`,
+    sponsored: true,
+  },
+  Coda: {
+    name: "Coda",
+    url: "https://coda.io/",
+  },
+  AppFlowy: {
+    name: "AppFlowy",
+    url: "https://appflowy.io/",
+  },
+  Pipedream: {
+    name: "Pipedream",
+    url: "https://pipedream.com/",
+  },
+  Penpot: {
+    name: "Penpot",
+    url: "https://penpot.app/",
+    affiliateUrl: `https://penpot.app/${REF}`,
+    sponsored: true,
+  },
+  Sketch: {
+    name: "Sketch",
+    url: "https://www.sketch.com/",
+  },
+  Framer: {
+    name: "Framer",
+    url: "https://www.framer.com/",
+  },
+  Mattermost: {
+    name: "Mattermost",
+    url: "https://mattermost.com/",
+    affiliateUrl: `https://mattermost.com/${REF}`,
+    sponsored: true,
+  },
+  "Rocket.Chat": {
+    name: "Rocket.Chat",
+    url: "https://rocket.chat/",
+  },
+  Discord: {
+    name: "Discord",
+    url: "https://discord.com/",
+  },
+  Baserow: {
+    name: "Baserow",
+    url: "https://baserow.io/",
+    affiliateUrl: `https://baserow.io/${REF}`,
+    sponsored: true,
+  },
+  NocoDB: {
+    name: "NocoDB",
+    url: "https://nocodb.com/",
+  },
+  SeaTable: {
+    name: "SeaTable",
+    url: "https://seatable.io/",
+  },
+  Brevo: {
+    name: "Brevo",
+    url: "https://www.brevo.com/",
+  },
+  MailerLite: {
+    name: "MailerLite",
+    url: "https://www.mailerlite.com/",
+  },
+  Buttondown: {
+    name: "Buttondown",
+    url: "https://buttondown.email/",
+  },
+  Plane: {
+    name: "Plane",
+    url: "https://plane.so/",
+  },
+  Vikunja: {
+    name: "Vikunja",
+    url: "https://vikunja.io/",
+  },
+  Linear: {
+    name: "Linear",
+    url: "https://linear.app/",
+  },
+  Plausible: {
+    name: "Plausible",
+    url: "https://plausible.io/",
+  },
+  Umami: {
+    name: "Umami",
+    url: "https://umami.is/",
+  },
+  Matomo: {
+    name: "Matomo",
+    url: "https://matomo.org/",
+  },
+  Pipedrive: {
+    name: "Pipedrive",
+    url: "https://www.pipedrive.com/",
+  },
+  Odoo: {
+    name: "Odoo",
+    url: "https://www.odoo.com/",
+  },
+  Excalidraw: {
+    name: "Excalidraw",
+    url: "https://excalidraw.com/",
+  },
+  tldraw: {
+    name: "tldraw",
+    url: "https://tldraw.dev/",
+  },
+  Cap: {
+    name: "Cap",
+    url: "https://cap.so/",
+  },
+  "OBS Studio": {
+    name: "OBS Studio",
+    url: "https://obsproject.com/",
+  },
+  "Screen Studio": {
+    name: "Screen Studio",
+    url: "https://www.screen.studio/",
+  },
+  Crisp: {
+    name: "Crisp",
+    url: "https://crisp.chat/",
+  },
+  Chatwoot: {
+    name: "Chatwoot",
+    url: "https://www.chatwoot.com/",
+  },
+  Freshdesk: {
+    name: "Freshdesk",
+    url: "https://freshdesk.com/",
+  },
+  Zammad: {
+    name: "Zammad",
+    url: "https://zammad.com/",
+  },
+  YouTrack: {
+    name: "YouTrack",
+    url: "https://www.jetbrains.com/youtrack/",
+  },
+  Gitea: {
+    name: "Gitea",
+    url: "https://gitea.com/",
+  },
+  Forgejo: {
+    name: "Forgejo",
+    url: "https://forgejo.org/",
+  },
+  Render: {
+    name: "Render",
+    url: "https://render.com/",
+  },
+  Coolify: {
+    name: "Coolify",
+    url: "https://coolify.io/",
+  },
+  WooCommerce: {
+    name: "WooCommerce",
+    url: "https://woocommerce.com/",
+  },
+  Medusa: {
+    name: "Medusa",
+    url: "https://medusajs.com/",
+  },
+  BigCommerce: {
+    name: "BigCommerce",
+    url: "https://www.bigcommerce.com/",
+  },
+  Nextcloud: {
+    name: "Nextcloud",
+    url: "https://nextcloud.com/",
+  },
+  "Proton Drive": {
+    name: "Proton Drive",
+    url: "https://proton.me/drive",
+  },
+  pCloud: {
+    name: "pCloud",
+    url: "https://www.pcloud.com/",
+  },
+  Zcal: {
+    name: "Zcal",
+    url: "https://zcal.co/",
+  },
+  Rallly: {
+    name: "Rallly",
+    url: "https://rallly.co/",
+  },
+  Ghost: {
+    name: "Ghost",
+    url: "https://ghost.org/",
+  },
+  Hugo: {
+    name: "Hugo",
+    url: "https://gohugo.io/",
+  },
 };
 
 export interface ToolLink {

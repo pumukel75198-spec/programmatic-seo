@@ -26,9 +26,21 @@ export interface ApiEntry {
   details: ApiDetails;
 }
 
+export interface AlternativeOption {
+  name: string;
+  description?: string;
+  pros?: string[];
+  cons?: string[];
+  bestFor?: string;
+  recommended?: boolean;
+  /** Optional fallback URL if the tool is not in src/lib/tools.ts. */
+  url?: string;
+}
+
 export interface AlternativeDetails {
   original: string;
-  alternatives: string[];
+  /** Alternatives can be plain names (legacy) or enriched objects. */
+  alternatives: (string | AlternativeOption)[];
   bestFor: string;
   pricing: string;
   features: string[];
