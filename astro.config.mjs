@@ -36,6 +36,15 @@ export default defineConfig({
     },
   },
 
+  // Legacy paths without a locale prefix -> default locale (English).
+  redirects: {
+    '/apis': '/en/apis',
+    '/alternatives': '/en/alternatives',
+    '/workflows': '/en/workflows',
+    '/imprint': '/en/imprint',
+    '/privacy': '/en/privacy',
+  },
+
   integrations: [
     sitemap({
       filter: (page) => !page.includes('/404'),

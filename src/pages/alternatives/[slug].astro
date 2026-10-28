@@ -1,0 +1,23 @@
+---
+import { alternatives } from "../../lib/content";
+
+export function getStaticPaths() {
+  return alternatives.map((entry) => ({ params: { slug: entry.slug } }));
+}
+
+const slug = Astro.params.slug;
+const target = `/en/alternatives/${slug}/`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content={`0;url=${target}`} />
+    <link rel="canonical" href={target} />
+    <title>Redirecting…</title>
+  </head>
+  <body>
+    <p>Redirecting to <a href={target}>{target}</a>…</p>
+  </body>
+</html>

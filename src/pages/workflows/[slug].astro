@@ -1,0 +1,23 @@
+---
+import { workflows } from "../../lib/content";
+
+export function getStaticPaths() {
+  return workflows.map((workflow) => ({ params: { slug: workflow.slug } }));
+}
+
+const slug = Astro.params.slug;
+const target = `/en/workflows/${slug}/`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content={`0;url=${target}`} />
+    <link rel="canonical" href={target} />
+    <title>Redirecting…</title>
+  </head>
+  <body>
+    <p>Redirecting to <a href={target}>{target}</a>…</p>
+  </body>
+</html>
