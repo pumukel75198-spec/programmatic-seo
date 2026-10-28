@@ -6,7 +6,7 @@ import { workflows } from "../../lib/content";
 import { itemListSchema } from "../../lib/schema";
 
 const jsonLd = itemListSchema(
-  "Workflows – Automatisierung Schritt für Schritt",
+  "Workflows – automation step by step",
   workflows.map((workflow) => ({
     name: workflow.title,
     url: `/workflows/${workflow.slug}/`,
@@ -15,17 +15,17 @@ const jsonLd = itemListSchema(
 ---
 
 <Layout
-  title="Workflows – Automatisierung Schritt für Schritt"
-  description="Erprobte Workflows für Content, Sales und Programmatic SEO – inklusive Tool-Stack und Schritt-für-Schritt-Anleitung."
-  keywords={["Workflows", "Automatisierung", "Content", "Sales", "Programmatic SEO"]}
+  title="Workflows – automation step by step"
+  description="Proven workflows for content, sales and programmatic SEO – including the tool stack and step-by-step instructions."
+  keywords={["workflows", "automation", "content", "sales", "programmatic SEO"]}
   jsonLd={jsonLd}
 >
   <PageHeader
-    eyebrow="Automatisierung"
-    title="Workflows, die wirklich funktionieren"
-    description="Schritt-für-Schritt-Anleitungen für skalierbare Prozesse – von Content-Automation bis zur Programmatic-SEO-Pipeline."
+    eyebrow="Automation"
+    title="Workflows that actually work"
+    description="Step-by-step guides for scalable processes – from content automation to the programmatic SEO pipeline."
   >
-    <p class="text-sm text-slate-500">{workflows.length} Workflows verfügbar</p>
+    <p class="text-sm text-slate-500">{workflows.length} workflows available</p>
   </PageHeader>
 
   <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">

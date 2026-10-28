@@ -6,23 +6,23 @@ import { apis } from "../../lib/content";
 import { itemListSchema } from "../../lib/schema";
 
 const jsonLd = itemListSchema(
-  "APIs – kuratiertes Verzeichnis",
+  "APIs – curated directory",
   apis.map((api) => ({ name: api.title, url: `/apis/${api.slug}/` }))
 );
 ---
 
 <Layout
-  title="APIs – kuratiertes Verzeichnis"
-  description="Entdecke kuratierte APIs für KI, Payments, Backend und Kommunikation – mit Features, Preisen und Bewertungen."
-  keywords={["APIs", "Schnittstellen", "KI", "Payments", "Backend"]}
+  title="APIs – curated directory"
+  description="Discover curated APIs for AI, payments, backend and communication – with features, pricing and ratings."
+  keywords={["APIs", "interfaces", "AI", "payments", "backend"]}
   jsonLd={jsonLd}
 >
   <PageHeader
-    eyebrow="API-Verzeichnis"
-    title="Die richtige API für dein Projekt"
-    description="Strukturierte Übersicht über leistungsstarke Schnittstellen – von generativer KI bis zu Zahlungsinfrastruktur."
+    eyebrow="API directory"
+    title="The right API for your project"
+    description="A structured overview of powerful interfaces – from generative AI to payment infrastructure."
   >
-    <p class="text-sm text-slate-500">{apis.length} APIs im Verzeichnis</p>
+    <p class="text-sm text-slate-500">{apis.length} APIs in the directory</p>
   </PageHeader>
 
   <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">

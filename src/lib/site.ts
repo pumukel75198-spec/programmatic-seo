@@ -1,16 +1,16 @@
 /**
- * Zentrale Site-Konfiguration.
- * Hier werden alle globalen SEO-/Branding-Werte gepflegt.
+ * Central site configuration.
+ * All global SEO/branding values are maintained here.
  */
 export const site = {
   name: "Programmatic SEO Hub",
   shortName: "pSEO Hub",
-  // TODO: Vor dem Livegang auf die echte Produktionsdomain setzen.
+  // TODO: Set this to the real production domain before going live.
   url: "https://example.com",
   description:
-    "Entdecke APIs, Alternativen und Workflows – kuratiert für moderne Entwickler und SEO-Teams.",
-  lang: "de",
-  locale: "de_DE",
+    "Discover APIs, alternatives and workflows – curated for modern developers and SEO teams.",
+  lang: "en",
+  locale: "en_US",
   author: "Programmatic SEO Hub",
   twitter: "@programmaticseo",
   defaultOgImage: "/og-default.png",

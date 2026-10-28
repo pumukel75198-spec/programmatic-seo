@@ -22,7 +22,7 @@ const pageDescription = api.description;
 
 const jsonLd = [
   breadcrumbSchema([
-    { name: "Start", url: "/" },
+    { name: "Home", url: "/" },
     { name: "APIs", url: "/apis/" },
     { name: api.title, url: `/apis/${api.slug}/` },
   ]),
@@ -43,7 +43,7 @@ const jsonLd = [
       <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
         <Breadcrumb
           items={[
-            { label: "Start", href: "/" },
+            { label: "Home", href: "/" },
             { label: "APIs", href: "/apis" },
             { label: api.title },
           ]}
@@ -69,17 +69,17 @@ const jsonLd = [
       <DetailBox details={api.details} />
 
       <CTA
-        title="API in dieser Kategorie bewerben?"
-        description="Erreiche Entwickler und SEO-Teams, die aktiv nach passenden APIs suchen. Platz für Affiliate- und Sponsoring-Links."
-        ctaLabel="Sponsoring anfragen"
+        title="Promote an API in this category?"
+        description="Reach developers and SEO teams actively looking for the right APIs. Space available for affiliate and sponsorship links."
+        ctaLabel="Request sponsorship"
         ctaHref="mailto:sponsoring@example.com"
       />
 
-      <!-- Verwandte APIs -->
+      <!-- Related APIs -->
       {
         related.length > 0 && (
           <section class="mt-12 border-t border-white/5 pt-10">
-            <h2 class="text-xl font-semibold text-white sm:text-2xl">Weitere APIs</h2>
+            <h2 class="text-xl font-semibold text-white sm:text-2xl">More APIs</h2>
             <div class="mt-6 grid gap-4 sm:grid-cols-3">
               {related.map((item) => (
                 <a

@@ -1,12 +1,12 @@
 /**
- * Typisierte Daten-Loader für die pSEO-Pipeline.
+ * Typed data loaders for the pSEO pipeline.
  *
- * Die JSON-Dateien in src/data sind die Single Source of Truth.
- * Hier werden sie importiert, typisiert und über Hilfsfunktionen
- * für die dynamischen Astro-Routen bereitgestellt.
+ * The JSON files in src/data are the single source of truth.
+ * They are imported, typed and exposed through helper functions
+ * for the dynamic Astro routes.
  */
 import apisData from "../data/apis.json";
-import alternativenData from "../data/alternativen.json";
+import alternativesData from "../data/alternatives.json";
 import workflowsData from "../data/workflows.json";
 
 export interface ApiDetails {
@@ -61,7 +61,7 @@ export interface WorkflowEntry {
 }
 
 export const apis = apisData as ApiEntry[];
-export const alternativen = alternativenData as AlternativeEntry[];
+export const alternatives = alternativesData as AlternativeEntry[];
 export const workflows = workflowsData as WorkflowEntry[];
 
 export function getApi(slug: string): ApiEntry | undefined {
@@ -69,7 +69,7 @@ export function getApi(slug: string): ApiEntry | undefined {
 }
 
 export function getAlternative(slug: string): AlternativeEntry | undefined {
-  return alternativen.find((entry) => entry.slug === slug);
+  return alternatives.find((entry) => entry.slug === slug);
 }
 
 export function getWorkflow(slug: string): WorkflowEntry | undefined {
@@ -77,7 +77,7 @@ export function getWorkflow(slug: string): WorkflowEntry | undefined {
 }
 
 /**
- * Liefert verwandte Einträge (ohne den aktuellen) für interne Verlinkung.
+ * Returns related entries (excluding the current one) for internal linking.
  */
 export function getRelated<T extends { slug: string }>(
   items: T[],

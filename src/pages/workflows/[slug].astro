@@ -21,15 +21,15 @@ const pageTitle = `${workflow.title} – ${workflow.category}`;
 const pageDescription = workflow.description;
 
 const difficultyTone =
-  workflow.details.difficulty === "Einsteiger"
+  workflow.details.difficulty === "Beginner"
     ? "emerald"
-    : workflow.details.difficulty === "Fortgeschritten"
+    : workflow.details.difficulty === "Advanced"
       ? "amber"
       : "brand";
 
 const jsonLd = [
   breadcrumbSchema([
-    { name: "Start", url: "/" },
+    { name: "Home", url: "/" },
     { name: "Workflows", url: "/workflows/" },
     { name: workflow.title, url: `/workflows/${workflow.slug}/` },
   ]),
@@ -50,7 +50,7 @@ const jsonLd = [
       <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
         <Breadcrumb
           items={[
-            { label: "Start", href: "/" },
+            { label: "Home", href: "/" },
             { label: "Workflows", href: "/workflows" },
             { label: workflow.title },
           ]}
@@ -73,21 +73,21 @@ const jsonLd = [
 
     <!-- Details -->
     <section class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
-      <h2 class="text-xl font-semibold text-white sm:text-2xl">Workflow-Details</h2>
+      <h2 class="text-xl font-semibold text-white sm:text-2xl">Workflow details</h2>
       <DetailBox details={workflow.details} />
 
       <CTA
-        title="Dein Tool im Workflow platzieren"
-        description="Präsentiere dein Produkt genau dort, wo Entwickler nach passenden Tools für ihre Automatisierung suchen."
-        ctaLabel="Sponsoring anfragen"
+        title="Place your tool in this workflow"
+        description="Showcase your product right where developers look for the right tools for their automation."
+        ctaLabel="Request sponsorship"
         ctaHref="mailto:sponsoring@example.com"
       />
 
-      <!-- Verwandte Workflows -->
+      <!-- Related workflows -->
       {
         related.length > 0 && (
           <section class="mt-12 border-t border-white/5 pt-10">
-            <h2 class="text-xl font-semibold text-white sm:text-2xl">Weitere Workflows</h2>
+            <h2 class="text-xl font-semibold text-white sm:text-2xl">More workflows</h2>
             <div class="mt-6 grid gap-4 sm:grid-cols-3">
               {related.map((item) => (
                 <a

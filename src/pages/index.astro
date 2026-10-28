@@ -2,23 +2,23 @@
 import Layout from "../layouts/Layout.astro";
 import CategoryCard from "../components/CategoryCard.astro";
 import Badge from "../components/Badge.astro";
-import { apis, alternativen, workflows } from "../lib/content";
+import { apis, alternatives, workflows } from "../lib/content";
 import { organizationSchema, websiteSchema } from "../lib/schema";
 
 const stats = [
-  { value: `${apis.length}`, label: "APIs" },
-  { value: `${alternativen.length}`, label: "Alternativen" },
-  { value: `${workflows.length}`, label: "Workflows" },
-  { value: "100 %", label: "Open Content" },
+  { value: `${apis.length}`, label: "APIs", key: "stats.apis" },
+  { value: `${alternatives.length}`, label: "Alternatives", key: "stats.alternatives" },
+  { value: `${workflows.length}`, label: "Workflows", key: "stats.workflows" },
+  { value: "100 %", label: "Open content", key: "stats.open" },
 ];
 
 const jsonLd = [websiteSchema(), organizationSchema()];
 ---
 
 <Layout
-  title="Programmatic SEO Hub – APIs, Alternativen & Workflows"
-  description="Entdecke kuratierte APIs, die besten Alternativen und erprobte Workflows für moderne Produkt- und SEO-Teams."
-  keywords={["APIs", "Alternativen", "Workflows", "Programmatic SEO", "Automatisierung"]}
+  title="Programmatic SEO Hub – APIs, Alternatives & Workflows"
+  description="Discover curated APIs, the best alternatives and proven workflows for modern product and SEO teams."
+  keywords={["APIs", "alternatives", "workflows", "programmatic SEO", "automation"]}
   jsonLd={jsonLd}
 >
   <!-- Hero -->
@@ -31,20 +31,21 @@ const jsonLd = [websiteSchema(), organizationSchema()];
               <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-400 opacity-75"></span>
               <span class="relative inline-flex h-2 w-2 rounded-full bg-brand-400"></span>
             </span>
-            Programmatic SEO · kuratiert & aktuell
+            <span data-i18n="hero.badge">Programmatic SEO · curated & current</span>
           </Badge>
         </div>
 
         <h1 class="text-balance text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
-          Das Wissens-Hub für
-          <span class="gradient-text"> APIs, Alternativen</span>
-          und Workflows
+          <span data-i18n="hero.title1">The knowledge hub for</span>
+          <span class="gradient-text" data-i18n="hero.title2">APIs, alternatives and workflows</span>
         </h1>
 
-        <p class="mx-auto mt-6 max-w-2xl text-pretty text-base leading-relaxed text-slate-400 sm:text-lg">
-          Strukturierte, durchsuchbare Inhalte für Entwickler und SEO-Teams.
-          Finde die passende API, vergleiche Alternativen und baue skalierbare
-          Automatisierungen.
+        <p
+          data-i18n="hero.subtitle"
+          class="mx-auto mt-6 max-w-2xl text-pretty text-base leading-relaxed text-slate-400 sm:text-lg"
+        >
+          Structured, searchable content for developers and SEO teams. Find the
+          right API, compare alternatives and build scalable automations.
         </p>
 
         <div class="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -52,7 +53,7 @@ const jsonLd = [websiteSchema(), organizationSchema()];
             href="/apis"
             class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-500/30 transition-colors hover:bg-brand-400 sm:w-auto"
           >
-            APIs entdecken
+            <span data-i18n="hero.ctaApis">Explore APIs</span>
             <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path
                 fill-rule="evenodd"
@@ -65,7 +66,7 @@ const jsonLd = [websiteSchema(), organizationSchema()];
             href="/workflows"
             class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition-colors hover:border-white/20 hover:bg-white/10 sm:w-auto"
           >
-            Workflows ansehen
+            <span data-i18n="hero.ctaWorkflows">View workflows</span>
           </a>
         </div>
       </div>
@@ -76,7 +77,10 @@ const jsonLd = [websiteSchema(), organizationSchema()];
           stats.map((stat) => (
             <div class="rounded-2xl border border-white/10 bg-surface/50 px-4 py-5 text-center backdrop-blur-sm">
               <dt class="text-2xl font-bold text-white sm:text-3xl">{stat.value}</dt>
-              <dd class="mt-1 text-xs font-medium uppercase tracking-wider text-slate-500">
+              <dd
+                data-i18n={stat.key}
+                class="mt-1 text-xs font-medium uppercase tracking-wider text-slate-500"
+              >
                 {stat.label}
               </dd>
             </div>
@@ -86,15 +90,15 @@ const jsonLd = [websiteSchema(), organizationSchema()];
     </div>
   </section>
 
-  <!-- Kategorien -->
+  <!-- Categories -->
   <section class="mx-auto max-w-6xl px-4 pb-24 sm:px-6 lg:px-8">
     <div class="mb-10 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <h2 class="text-2xl font-bold tracking-tight text-white sm:text-3xl">
-          Drei Kategorien, ein Hub
+        <h2 data-i18n="categories.title" class="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+          Three categories, one hub
         </h2>
-        <p class="mt-2 text-slate-400">
-          Wähle einen Bereich und tauche in strukturierte, verlinkte Inhalte ein.
+        <p data-i18n="categories.subtitle" class="mt-2 text-slate-400">
+          Choose an area and dive into structured, linked content.
         </p>
       </div>
     </div>
@@ -103,8 +107,11 @@ const jsonLd = [websiteSchema(), organizationSchema()];
       <CategoryCard
         href="/apis"
         title="APIs"
-        label="Schnittstellen"
-        description="Kuratierte APIs für KI, Payments, Backend und Kommunikation – mit Features, Preisen und Bewertungen."
+        label="Interfaces"
+        titleKey="cat.apis.title"
+        labelKey="cat.apis.label"
+        descKey="cat.apis.desc"
+        description="Curated APIs for AI, payments, backend and communication – with features, pricing and ratings."
         count={apis.length}
         accent="brand"
       >
@@ -114,11 +121,14 @@ const jsonLd = [websiteSchema(), organizationSchema()];
       </CategoryCard>
 
       <CategoryCard
-        href="/alternativen"
-        title="Alternativen"
-        label="Vergleiche"
-        description="Die besten Alternativen zu bekannten Tools – mit Vor- und Nachteilen, Preisen und Zielgruppen."
-        count={alternativen.length}
+        href="/alternatives"
+        title="Alternatives"
+        label="Comparisons"
+        titleKey="cat.alt.title"
+        labelKey="cat.alt.label"
+        descKey="cat.alt.desc"
+        description="The best alternatives to popular tools – with pros, cons, pricing and target audiences."
+        count={alternatives.length}
         accent="cyan"
       >
         <svg slot="icon" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
@@ -129,8 +139,11 @@ const jsonLd = [websiteSchema(), organizationSchema()];
       <CategoryCard
         href="/workflows"
         title="Workflows"
-        label="Automatisierung"
-        description="Schritt-für-Schritt-Workflows für Content, Sales und Programmatic SEO – inklusive Tool-Stack."
+        label="Automation"
+        titleKey="cat.wf.title"
+        labelKey="cat.wf.label"
+        descKey="cat.wf.desc"
+        description="Step-by-step workflows for content, sales and programmatic SEO – including the tool stack."
         count={workflows.length}
         accent="emerald"
       >
@@ -147,25 +160,25 @@ const jsonLd = [websiteSchema(), organizationSchema()];
       <div class="pointer-events-none absolute -left-20 -top-20 h-64 w-64 rounded-full bg-brand-500/20 blur-3xl" aria-hidden="true"></div>
       <div class="pointer-events-none absolute -bottom-20 -right-20 h-64 w-64 rounded-full bg-cyan-500/20 blur-3xl" aria-hidden="true"></div>
 
-      <h2 class="relative text-balance text-2xl font-bold tracking-tight text-white sm:text-3xl">
-        Bereit, dein Programmatic-SEO-Projekt zu skalieren?
+      <h2 data-i18n="cta.title" class="relative text-balance text-2xl font-bold tracking-tight text-white sm:text-3xl">
+        Ready to scale your programmatic SEO project?
       </h2>
-      <p class="relative mx-auto mt-3 max-w-xl text-pretty text-slate-400">
-        Starte mit den APIs, vergleiche Alternativen und automatisiere deine
-        Workflows – alles an einem Ort.
+      <p data-i18n="cta.desc" class="relative mx-auto mt-3 max-w-xl text-pretty text-slate-400">
+        Start with the APIs, compare alternatives and automate your workflows –
+        all in one place.
       </p>
       <div class="relative mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
         <a
           href="/apis"
           class="inline-flex w-full items-center justify-center rounded-xl bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-200 sm:w-auto"
         >
-          Jetzt starten
+          <span data-i18n="cta.start">Get started</span>
         </a>
         <a
-          href="/alternativen"
+          href="/alternatives"
           class="inline-flex w-full items-center justify-center rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10 sm:w-auto"
         >
-          Alternativen vergleichen
+          <span data-i18n="cta.compare">Compare alternatives</span>
         </a>
       </div>
     </div>

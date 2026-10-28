@@ -7,18 +7,18 @@ interface Props {
 const { details, labels = {} } = Astro.props;
 
 const defaultLabels: Record<string, string> = {
-  provider: "Anbieter",
-  pricing: "Preis",
+  provider: "Provider",
+  pricing: "Pricing",
   features: "Features",
-  useCase: "Use Case",
+  useCase: "Use case",
   website: "Website",
   original: "Original",
-  alternatives: "Alternativen",
-  bestFor: "Am besten für",
-  difficulty: "Schwierigkeit",
-  duration: "Dauer",
+  alternatives: "Alternatives",
+  bestFor: "Best for",
+  difficulty: "Difficulty",
+  duration: "Duration",
   tools: "Tools",
-  steps: "Schritte",
+  steps: "Steps",
 };
 
 const labelFor = (key: string) => labels[key] ?? defaultLabels[key] ?? key;

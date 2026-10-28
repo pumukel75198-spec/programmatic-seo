@@ -2,190 +2,190 @@
   {
     "slug": "openai-whisper-api",
     "title": "OpenAI Whisper API",
-    "description": "Die Whisper API von OpenAI transkribiert Audio in Text mit hoher Genauigkeit und unterstützt über 50 Sprachen – ideal für Podcasts, Meetings und Voice-Apps.",
-    "category": "KI & Speech",
-    "tags": ["speech-to-text", "transcription", "ki", "audio"],
+    "description": "OpenAI's Whisper API transcribes audio to text with high accuracy across 50+ languages – ideal for podcasts, meetings and voice apps.",
+    "category": "AI & Speech",
+    "tags": ["speech-to-text", "transcription", "ai", "audio"],
     "details": {
       "provider": "OpenAI",
-      "pricing": "0,006 $ pro Minute Audio",
+      "pricing": "$0.006 per minute of audio",
       "features": [
-        "Transkription in über 50 Sprachen",
-        "Unterstützung für MP3, MP4, WAV und mehr",
-        "Automatische Spracherkennung",
-        "Hochpräzise auch bei Hintergrundgeräuschen"
+        "Transcription in 50+ languages",
+        "Supports MP3, MP4, WAV and more",
+        "Automatic language detection",
+        "High accuracy even with background noise"
       ],
-      "useCase": "Automatische Untertitel, Meeting-Protokolle und Voice-Assistenten",
+      "useCase": "Automatic subtitles, meeting notes and voice assistants",
       "website": "https://platform.openai.com/docs/guides/speech-to-text"
     }
   },
   {
     "slug": "stripe-payments-api",
     "title": "Stripe Payments API",
-    "description": "Die Stripe Payments API ist die führende Schnittstelle für Online-Zahlungen, Abonnements und Finanzinfrastruktur mit exzellenter Developer Experience.",
-    "category": "Finanzen",
-    "tags": ["payments", "fintech", "abonnements", "checkout"],
+    "description": "The Stripe Payments API is the leading interface for online payments, subscriptions and financial infrastructure with an excellent developer experience.",
+    "category": "Finance",
+    "tags": ["payments", "fintech", "subscriptions", "checkout"],
     "details": {
       "provider": "Stripe",
-      "pricing": "ca. 1,5 % + 0,25 € pro Transaktion",
+      "pricing": "~1.5% + $0.30 per transaction",
       "features": [
-        "Einmalzahlungen und Abonnements",
-        "Stripe Checkout und Elements",
-        "Webhooks und Event-Streaming",
-        "Umfangreiche SDKs für alle gängigen Sprachen"
+        "One-time payments and subscriptions",
+        "Stripe Checkout and Elements",
+        "Webhooks and event streaming",
+        "Comprehensive SDKs for all major languages"
       ],
-      "useCase": "E-Commerce, SaaS-Abrechnung und Marktplätze",
+      "useCase": "E-commerce, SaaS billing and marketplaces",
       "website": "https://stripe.com"
     }
   },
   {
     "slug": "supabase-database-api",
     "title": "Supabase Database API",
-    "description": "Supabase bietet eine automatisch generierte REST- und GraphQL-API auf Basis von PostgreSQL – inklusive Auth, Storage und Realtime-Subscriptions.",
+    "description": "Supabase provides an auto-generated REST and GraphQL API on top of PostgreSQL – including auth, storage and realtime subscriptions.",
     "category": "Backend",
     "tags": ["postgresql", "backend", "open-source", "auth"],
     "details": {
       "provider": "Supabase",
-      "pricing": "Kostenloser Tarif, danach ab 25 $/Monat",
+      "pricing": "Free tier, then from $25/month",
       "features": [
-        "Automatische REST-API für jede Tabelle",
+        "Auto-generated REST API for every table",
         "Row Level Security",
-        "Realtime-Subscriptions",
-        "Storage und Edge Functions"
+        "Realtime subscriptions",
+        "Storage and Edge Functions"
       ],
-      "useCase": "Schnelle Backend-Entwicklung für Web- und Mobile-Apps",
+      "useCase": "Fast backend development for web and mobile apps",
       "website": "https://supabase.com"
     }
   },
   {
     "slug": "anthropic-claude-api",
     "title": "Anthropic Claude API",
-    "description": "Die Claude API von Anthropic bietet starke Reasoning-Fähigkeiten, ein großes Kontextfenster und sichere Agenten-Workflows für anspruchsvolle Anwendungen.",
-    "category": "KI & LLM",
-    "tags": ["llm", "reasoning", "agents", "sicherheit"],
+    "description": "Anthropic's Claude API offers strong reasoning, a large context window and safe agentic workflows for demanding applications.",
+    "category": "AI & LLM",
+    "tags": ["llm", "reasoning", "agents", "safety"],
     "details": {
       "provider": "Anthropic",
-      "pricing": "Pay-as-you-go pro Token",
+      "pricing": "Pay-as-you-go per token",
       "features": [
-        "Sehr großes Kontextfenster",
-        "Starke Reasoning- und Coding-Fähigkeiten",
-        "Tool Use und Agenten-Workflows",
-        "Fokus auf KI-Sicherheit"
+        "Very large context window",
+        "Strong reasoning and coding skills",
+        "Tool use and agentic workflows",
+        "Focus on AI safety"
       ],
-      "useCase": "Analyse langer Dokumente, Coding-Assistenten und agentische Systeme",
+      "useCase": "Long-document analysis, coding assistants and agentic systems",
       "website": "https://www.anthropic.com"
     }
   },
   {
     "slug": "google-gemini-api",
     "title": "Google Gemini API",
-    "description": "Die Google Gemini API verbindet Text, Bild und Audio in einem multimodalen Modell – ideal für Vision-, Analyse- und Assistenz-Anwendungen.",
-    "category": "KI & Multimodal",
+    "description": "The Google Gemini API combines text, image and audio in one multimodal model – ideal for vision, analysis and assistant applications.",
+    "category": "AI & Multimodal",
     "tags": ["llm", "multimodal", "vision", "google"],
     "details": {
       "provider": "Google",
-      "pricing": "Kostenloses Kontingent, danach pro Token",
+      "pricing": "Free quota, then per token",
       "features": [
-        "Multimodale Eingaben aus Text, Bild und Audio",
-        "Große Kontextfenster",
-        "Integration in Google Cloud",
-        "Function Calling und strukturierte Ausgaben"
+        "Multimodal input from text, image and audio",
+        "Large context windows",
+        "Integration with Google Cloud",
+        "Function calling and structured output"
       ],
-      "useCase": "Bildanalyse, Dokumentenverarbeitung und multimodale Assistenten",
+      "useCase": "Image analysis, document processing and multimodal assistants",
       "website": "https://ai.google.dev"
     }
   },
   {
     "slug": "resend-email-api",
-    "title": "Resend E-Mail API",
-    "description": "Die Resend API vereinfacht transaktionale E-Mails mit sauberer Dokumentation, React-Email-Templates und zuverlässiger Zustellung.",
-    "category": "Kommunikation",
-    "tags": ["email", "transaktional", "developer-tools"],
+    "title": "Resend Email API",
+    "description": "The Resend API simplifies transactional email with clean documentation, React Email templates and reliable delivery.",
+    "category": "Communication",
+    "tags": ["email", "transactional", "developer-tools"],
     "details": {
       "provider": "Resend",
-      "pricing": "Kostenlos bis 3.000 E-Mails/Monat",
+      "pricing": "Free up to 3,000 emails/month",
       "features": [
-        "Transaktionale E-Mails",
-        "React-Email-Templates",
-        "Zustellbarkeits-Tracking",
-        "Einfache SDK-Integration"
+        "Transactional email",
+        "React Email templates",
+        "Deliverability tracking",
+        "Simple SDK integration"
       ],
-      "useCase": "Anmeldebestätigungen, Passwort-Resets und Benachrichtigungen",
+      "useCase": "Signup confirmations, password resets and notifications",
       "website": "https://resend.com"
     }
   },
   {
     "slug": "clerk-authentication-api",
     "title": "Clerk Authentication API",
-    "description": "Die Clerk API liefert fertige Authentifizierung mit SSO, Multi-Faktor-Login und Nutzerverwaltung – schnell integriert in moderne Web-Apps.",
+    "description": "The Clerk API delivers ready-made authentication with SSO, multi-factor login and user management – quickly integrated into modern web apps.",
     "category": "Auth & Identity",
     "tags": ["auth", "sso", "user-management", "security"],
     "details": {
       "provider": "Clerk",
-      "pricing": "Kostenlos bis 10.000 MAU",
+      "pricing": "Free up to 10,000 MAU",
       "features": [
-        "Fertige Login- und Registrierungs-UI",
-        "SSO und Multi-Faktor-Authentifizierung",
-        "Nutzer- und Session-Verwaltung",
-        "Vorgefertigte React-Komponenten"
+        "Ready-made login and signup UI",
+        "SSO and multi-factor authentication",
+        "User and session management",
+        "Prebuilt React components"
       ],
-      "useCase": "SaaS-Anwendungen mit schneller, sicherer Nutzerverwaltung",
+      "useCase": "SaaS applications that need fast, secure user management",
       "website": "https://clerk.com"
     }
   },
   {
     "slug": "cloudflare-workers-api",
     "title": "Cloudflare Workers API",
-    "description": "Die Cloudflare Workers API führt Code direkt am Edge aus – für schnelle, skalierbare Serverless-Funktionen ohne eigenen Server.",
+    "description": "The Cloudflare Workers API runs code directly at the edge – for fast, scalable serverless functions without managing your own server.",
     "category": "Edge Computing",
     "tags": ["edge", "serverless", "cdn", "performance"],
     "details": {
       "provider": "Cloudflare",
-      "pricing": "Kostenlos bis 100.000 Requests/Tag",
+      "pricing": "Free up to 100,000 requests/day",
       "features": [
-        "Globale Ausführung am Edge",
-        "Niedrige Latenz weltweit",
-        "KV-, D1- und R2-Integration",
-        "Automatische Skalierung"
+        "Global execution at the edge",
+        "Low latency worldwide",
+        "KV, D1 and R2 integration",
+        "Automatic scaling"
       ],
-      "useCase": "APIs, Personalisierung und Geodaten-Auslieferung mit geringer Latenz",
+      "useCase": "APIs, personalization and low-latency data delivery",
       "website": "https://workers.cloudflare.com"
     }
   },
   {
     "slug": "mapbox-maps-api",
     "title": "Mapbox Maps API",
-    "description": "Die Mapbox Maps API bietet interaktive Karten, Geocoding und Routing für Web- und Mobile-Anwendungen mit hoher Performance.",
-    "category": "Geodaten",
-    "tags": ["maps", "geolocation", "routing", "visualisierung"],
+    "description": "The Mapbox Maps API provides interactive maps, geocoding and routing for web and mobile applications with high performance.",
+    "category": "Geodata",
+    "tags": ["maps", "geolocation", "routing", "visualization"],
     "details": {
       "provider": "Mapbox",
-      "pricing": "Kostenloses Kontingent, danach nutzungsbasiert",
+      "pricing": "Free quota, then usage-based",
       "features": [
-        "Interaktive Karten und Styles",
-        "Geocoding und Reverse-Geocoding",
-        "Routing und Isochronen",
-        "Hohe Performance auch auf Mobilgeräten"
+        "Interactive maps and styles",
+        "Geocoding and reverse geocoding",
+        "Routing and isochrones",
+        "High performance on mobile devices"
       ],
-      "useCase": "Standortsuche, Lieferdienste und datengetriebene Kartenvisualisierungen",
+      "useCase": "Location search, delivery services and data-driven map visualizations",
       "website": "https://www.mapbox.com"
     }
   },
   {
     "slug": "twilio-messaging-api",
     "title": "Twilio Messaging API",
-    "description": "Die Twilio Messaging API versendet SMS, WhatsApp- und RCS-Nachrichten zuverlässig – ideal für Benachrichtigungen und Zwei-Faktor-Authentifizierung.",
-    "category": "Kommunikation",
+    "description": "The Twilio Messaging API reliably sends SMS, WhatsApp and RCS messages – ideal for notifications and two-factor authentication.",
+    "category": "Communication",
     "tags": ["sms", "whatsapp", "messaging", "notifications"],
     "details": {
       "provider": "Twilio",
-      "pricing": "Pay-as-you-go pro Nachricht",
+      "pricing": "Pay-as-you-go per message",
       "features": [
-        "SMS, WhatsApp und RCS aus einer API",
-        "Globale Zustellung",
-        "Zwei-Faktor-Authentifizierung",
-        "Webhooks für Zustellstatus"
+        "SMS, WhatsApp and RCS from one API",
+        "Global delivery",
+        "Two-factor authentication",
+        "Webhooks for delivery status"
       ],
-      "useCase": "Benachrichtigungen, OTP-Codes und Omnichannel-Kundenkommunikation",
+      "useCase": "Notifications, OTP codes and omnichannel customer communication",
       "website": "https://www.twilio.com"
     }
   }

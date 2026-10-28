@@ -6,9 +6,22 @@ interface Props {
   count: number;
   label: string;
   accent?: "brand" | "cyan" | "emerald";
+  titleKey?: string;
+  descKey?: string;
+  labelKey?: string;
 }
 
-const { href, title, description, count, label, accent = "brand" } = Astro.props;
+const {
+  href,
+  title,
+  description,
+  count,
+  label,
+  accent = "brand",
+  titleKey,
+  descKey,
+  labelKey,
+} = Astro.props;
 
 const accents: Record<string, { ring: string; icon: string; glow: string }> = {
   brand: {
@@ -56,18 +69,23 @@ const a = accents[accent];
     <slot name="icon" />
   </div>
 
-  <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+  <span
+    data-i18n={labelKey}
+    class="text-xs font-semibold uppercase tracking-wider text-slate-500"
+  >
     {label}
   </span>
-  <h3 class="mt-1 text-lg font-semibold text-white">{title}</h3>
-  <p class="mt-2 flex-1 text-sm leading-relaxed text-slate-400">
+  <h3 data-i18n={titleKey} class="mt-1 text-lg font-semibold text-white">
+    {title}
+  </h3>
+  <p data-i18n={descKey} class="mt-2 flex-1 text-sm leading-relaxed text-slate-400">
     {description}
   </p>
 
   <div class="mt-6 flex items-center justify-between">
-    <span class="text-sm font-medium text-slate-500">{count} Einträge</span>
+    <span class="text-sm font-medium text-slate-500">{count} entries</span>
     <span class="inline-flex items-center gap-1 text-sm font-medium text-brand-300 transition-transform group-hover:translate-x-0.5">
-      Entdecken
+      Explore
       <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
         <path
           fill-rule="evenodd"

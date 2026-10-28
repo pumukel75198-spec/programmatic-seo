@@ -4,27 +4,27 @@ import Breadcrumb from "../../components/Breadcrumb.astro";
 import DetailBox from "../../components/DetailBox.astro";
 import CTA from "../../components/CTA.astro";
 import Badge from "../../components/Badge.astro";
-import { alternativen, getRelated } from "../../lib/content";
+import { alternatives, getRelated } from "../../lib/content";
 import { articleSchema, breadcrumbSchema } from "../../lib/schema";
 
 export function getStaticPaths() {
-  return alternativen.map((entry) => ({
+  return alternatives.map((entry) => ({
     params: { slug: entry.slug },
     props: { entry },
   }));
 }
 
 const { entry } = Astro.props;
-const related = getRelated(alternativen, entry.slug);
+const related = getRelated(alternatives, entry.slug);
 
 const pageTitle = `${entry.title} – ${entry.category}`;
 const pageDescription = entry.description;
 
 const jsonLd = [
   breadcrumbSchema([
-    { name: "Start", url: "/" },
-    { name: "Alternativen", url: "/alternativen/" },
-    { name: entry.title, url: `/alternativen/${entry.slug}/` },
+    { name: "Home", url: "/" },
+    { name: "Alternatives", url: "/alternatives/" },
+    { name: entry.title, url: `/alternatives/${entry.slug}/` },
   ]),
   articleSchema(entry),
 ];
@@ -43,8 +43,8 @@ const jsonLd = [
       <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
         <Breadcrumb
           items={[
-            { label: "Start", href: "/" },
-            { label: "Alternativen", href: "/alternativen" },
+            { label: "Home", href: "/" },
+            { label: "Alternatives", href: "/alternatives" },
             { label: entry.title },
           ]}
         />
@@ -69,21 +69,21 @@ const jsonLd = [
       <DetailBox details={entry.details} />
 
       <CTA
-        title="Alternative in diesem Vergleich vermissen?"
-        description="Du kennst ein Tool, das hier fehlt? Wir nehmen gerne Vorschläge auf und bieten Platz für Affiliate- und Sponsoring-Links."
-        ctaLabel="Tool vorschlagen"
+        title="Missing an alternative in this comparison?"
+        description="Know a tool that should be here? We welcome suggestions and offer space for affiliate and sponsorship links."
+        ctaLabel="Suggest a tool"
         ctaHref="mailto:sponsoring@example.com"
       />
 
-      <!-- Verwandte Vergleiche -->
+      <!-- Related comparisons -->
       {
         related.length > 0 && (
           <section class="mt-12 border-t border-white/5 pt-10">
-            <h2 class="text-xl font-semibold text-white sm:text-2xl">Weitere Vergleiche</h2>
+            <h2 class="text-xl font-semibold text-white sm:text-2xl">More comparisons</h2>
             <div class="mt-6 grid gap-4 sm:grid-cols-3">
               {related.map((item) => (
                 <a
-                  href={`/alternativen/${item.slug}`}
+                  href={`/alternatives/${item.slug}`}
                   class="group card-hover rounded-xl border border-white/10 bg-surface/50 p-5"
                 >
                   <p class="text-sm font-semibold text-white group-hover:text-cyan-300">

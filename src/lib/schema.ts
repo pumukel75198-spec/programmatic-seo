@@ -1,6 +1,6 @@
 /**
- * JSON-LD / Schema.org Helfer für strukturierte Daten.
- * Verbessert Rich Results und die maschinelle Lesbarkeit der pSEO-Seiten.
+ * JSON-LD / Schema.org helpers for structured data.
+ * Improves rich results and machine readability of the pSEO pages.
  */
 import { site } from "./site";
 import type { AlternativeEntry, ApiEntry, WorkflowEntry } from "./content";
@@ -58,7 +58,7 @@ export function softwareApplicationSchema(api: ApiEntry): JsonLd {
     offers: {
       "@type": "Offer",
       price: "0",
-      priceCurrency: "EUR",
+      priceCurrency: "USD",
       description: api.details.pricing,
     },
   };
@@ -72,7 +72,7 @@ export function articleSchema(entry: AlternativeEntry): JsonLd {
     description: entry.description,
     articleSection: entry.category,
     keywords: entry.tags.join(", "),
-    url: absolute(`/alternativen/${entry.slug}/`),
+    url: absolute(`/alternatives/${entry.slug}/`),
     inLanguage: site.lang,
     author: { "@type": "Organization", name: site.name },
     publisher: { "@type": "Organization", name: site.name },

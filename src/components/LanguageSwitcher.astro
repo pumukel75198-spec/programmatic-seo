@@ -1,0 +1,63 @@
+---
+import { languages } from "../i18n/ui";
+---
+
+<div class="relative">
+  <label for="language-select" class="sr-only">Language</label>
+  <select
+    id="language-select"
+    aria-label="Select language"
+    class="appearance-none rounded-lg border border-white/10 bg-white/5 py-2 pl-3 pr-8 text-sm text-slate-300 transition-colors hover:border-white/20 focus:border-brand-500/50 focus:outline-none"
+  >
+    {
+      languages.map((lang) => (
+        <option value={lang.code} class="bg-[#0b0d16] text-slate-200">
+          {lang.flag} {lang.name}
+        </option>
+      ))
+    }
+  </select>
+  <svg
+    class="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
+    viewBox="0 0 20 20"
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+      clip-rule="evenodd"
+    />
+  </svg>
+</div>
+
+<script>
+  import { translations } from "../i18n/ui";
+
+  const STORAGE_KEY = "pseo-lang";
+  const select = document.getElementById(
+    "language-select"
+  ) as HTMLSelectElement | null;
+
+  function applyLanguage(lang: string) {
+    const dict = translations[lang] ?? translations.en;
+    document.documentElement.lang = lang;
+
+    document.querySelectorAll<HTMLElement>("[data-i18n]").forEach((el) => {
+      const key = el.dataset.i18n as keyof typeof dict;
+      const value = dict[key] ?? translations.en[key];
+      if (value) el.textContent = value;
+    });
+
+    if (select) select.value = lang;
+  }
+
+  const stored = localStorage.getItem(STORAGE_KEY) ?? "en";
+  applyLanguage(stored);
+
+  select?.addEventListener("change", () => {
+    const lang = select.value;
+    localStorage.setItem(STORAGE_KEY, lang);
+    applyLanguage(lang);
+  });
+</script>

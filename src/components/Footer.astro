@@ -1,13 +1,13 @@
 ---
 const year = new Date().getFullYear();
 const links = [
-  { href: "/apis", label: "APIs" },
-  { href: "/alternativen", label: "Alternativen" },
-  { href: "/workflows", label: "Workflows" },
+  { href: "/apis", label: "APIs", key: "nav.apis" },
+  { href: "/alternatives", label: "Alternatives", key: "nav.alternatives" },
+  { href: "/workflows", label: "Workflows", key: "nav.workflows" },
 ];
 const legalLinks = [
-  { href: "/impressum", label: "Impressum" },
-  { href: "/datenschutz", label: "Datenschutz" },
+  { href: "/imprint", label: "Imprint", key: "footer.imprint" },
+  { href: "/privacy", label: "Privacy", key: "footer.privacy" },
 ];
 ---
 
@@ -16,16 +16,17 @@ const legalLinks = [
     <div class="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
       <div>
         <p class="text-sm font-semibold text-white">Programmatic SEO Hub</p>
-        <p class="mt-1 max-w-md text-sm text-slate-500">
-          Kuratierte APIs, Alternativen und Workflows für moderne Produkt- und
-          SEO-Teams.
+        <p class="mt-1 max-w-md text-sm text-slate-500" data-i18n="footer.tagline">
+          Curated APIs, alternatives and workflows for modern product and SEO
+          teams.
         </p>
       </div>
-      <nav class="flex flex-wrap gap-x-6 gap-y-2" aria-label="Footer-Navigation">
+      <nav class="flex flex-wrap gap-x-6 gap-y-2" aria-label="Footer navigation">
         {
           links.map((link) => (
             <a
               href={link.href}
+              data-i18n={link.key}
               class="text-sm text-slate-400 transition-colors hover:text-brand-300"
             >
               {link.label}
@@ -36,13 +37,14 @@ const legalLinks = [
     </div>
     <div class="mt-8 flex flex-col items-start justify-between gap-3 border-t border-white/5 pt-6 sm:flex-row sm:items-center">
       <p class="text-xs text-slate-600">
-        © {year} Programmatic SEO Hub. Alle Angaben ohne Gewähr.
+        © {year} Programmatic SEO Hub. All information without guarantee.
       </p>
-      <nav class="flex flex-wrap gap-x-5 gap-y-2" aria-label="Rechtliche Hinweise">
+      <nav class="flex flex-wrap gap-x-5 gap-y-2" aria-label="Legal">
         {
           legalLinks.map((link) => (
             <a
               href={link.href}
+              data-i18n={link.key}
               class="text-xs text-slate-500 transition-colors hover:text-brand-300"
             >
               {link.label}

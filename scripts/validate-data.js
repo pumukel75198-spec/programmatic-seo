@@ -21,7 +21,7 @@ import path from "node:path";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const dataDir = path.resolve(__dirname, "../src/data");
 
-const FILES = ["apis.json", "alternativen.json", "workflows.json"];
+const FILES = ["apis.json", "alternatives.json", "workflows.json"];
 const REQUIRED_FIELDS = [
   "slug",
   "title",

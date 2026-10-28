@@ -1,0 +1,146 @@
+[
+  {
+    "slug": "notion-alternatives",
+    "title": "Notion Alternatives",
+    "description": "The best Notion alternatives for knowledge management, project planning and collaborative docs – from open source to enterprise.",
+    "category": "Productivity",
+    "tags": ["knowledge-management", "notes", "collaboration", "productivity"],
+    "details": {
+      "original": "Notion",
+      "alternatives": ["Obsidian", "Coda", "AppFlowy"],
+      "bestFor": "Teams that need offline access, privacy or self-hosting",
+      "pricing": "Free to about $10/user/month depending on the tool",
+      "features": [
+        "Local Markdown files",
+        "Databases and formulas",
+        "Open-source options"
+      ]
+    }
+  },
+  {
+    "slug": "zapier-alternatives",
+    "title": "Zapier Alternatives",
+    "description": "Zapier alternatives for automation and integrations – cheaper, more privacy-friendly or with more control over your workflows.",
+    "category": "Automation",
+    "tags": ["automation", "no-code", "integrations", "workflows"],
+    "details": {
+      "original": "Zapier",
+      "alternatives": ["Make", "n8n", "Pipedream"],
+      "bestFor": "Teams with high workflow volume or self-hosting needs",
+      "pricing": "Free to about $20/month, n8n self-hosted is free",
+      "features": [
+        "Visual workflow builders",
+        "Self-hosting with n8n",
+        "Code nodes for developers"
+      ]
+    }
+  },
+  {
+    "slug": "figma-alternatives",
+    "title": "Figma Alternatives",
+    "description": "Figma alternatives for UI design and prototyping – including open-source and privacy-friendly options.",
+    "category": "Design",
+    "tags": ["design", "ui-ux", "prototyping", "open-source"],
+    "details": {
+      "original": "Figma",
+      "alternatives": ["Penpot", "Sketch", "Framer"],
+      "bestFor": "Design teams focused on privacy, local files or publishing",
+      "pricing": "Free to about $15/user/month",
+      "features": [
+        "Self-hosting with Penpot",
+        "Native macOS app with Sketch",
+        "Direct website publishing with Framer"
+      ]
+    }
+  },
+  {
+    "slug": "slack-alternatives",
+    "title": "Slack Alternatives",
+    "description": "Slack alternatives for team chat and communication – more privacy-friendly, cheaper or with self-hosting for more control.",
+    "category": "Communication",
+    "tags": ["team-chat", "communication", "collaboration"],
+    "details": {
+      "original": "Slack",
+      "alternatives": ["Mattermost", "Rocket.Chat", "Discord"],
+      "bestFor": "Teams with privacy, compliance or self-hosting requirements",
+      "pricing": "Free to about $8/user/month, self-hosting optional",
+      "features": [
+        "Self-hosting with Mattermost and Rocket.Chat",
+        "Channels, threads and integrations",
+        "Open-source options"
+      ]
+    }
+  },
+  {
+    "slug": "airtable-alternatives",
+    "title": "Airtable Alternatives",
+    "description": "Airtable alternatives for no-code databases and spreadsheets – with open-source options, self-hosting and fair pricing.",
+    "category": "Databases",
+    "tags": ["no-code", "database", "spreadsheets", "automation"],
+    "details": {
+      "original": "Airtable",
+      "alternatives": ["Baserow", "NocoDB", "SeaTable"],
+      "bestFor": "Teams that need data ownership, self-hosting or open formats",
+      "pricing": "Free to about $12/user/month, self-hosting is free",
+      "features": [
+        "Open-source and self-hosting options",
+        "Tables with formulas and views",
+        "REST APIs for custom integrations"
+      ]
+    }
+  },
+  {
+    "slug": "mailchimp-alternatives",
+    "title": "Mailchimp Alternatives",
+    "description": "Mailchimp alternatives for newsletters and email marketing – cheaper, GDPR-friendly and without complex pricing tiers.",
+    "category": "Marketing",
+    "tags": ["email-marketing", "newsletter", "crm"],
+    "details": {
+      "original": "Mailchimp",
+      "alternatives": ["Brevo", "MailerLite", "Buttondown"],
+      "bestFor": "Small and mid-sized teams focused on fair pricing and GDPR",
+      "pricing": "Free to about $20/month depending on contact count",
+      "features": [
+        "Newsletter and automation flows",
+        "GDPR-friendly providers",
+        "Simple import and segmentation"
+      ]
+    }
+  },
+  {
+    "slug": "trello-alternatives",
+    "title": "Trello Alternatives",
+    "description": "Trello alternatives for Kanban boards and project management – with more automation, open-source options and fairer pricing.",
+    "category": "Project Management",
+    "tags": ["kanban", "project-management", "tasks"],
+    "details": {
+      "original": "Trello",
+      "alternatives": ["Plane", "Vikunja", "Linear"],
+      "bestFor": "Teams that want Kanban with automation or self-hosting",
+      "pricing": "Free to about $10/user/month",
+      "features": [
+        "Kanban boards and swimlanes",
+        "Automations and integrations",
+        "Open-source and self-hosting options"
+      ]
+    }
+  },
+  {
+    "slug": "google-analytics-alternatives",
+    "title": "Google Analytics Alternatives",
+    "description": "Google Analytics alternatives for privacy-friendly web tracking – cookieless, GDPR-compliant and without data transfers to the US.",
+    "category": "Analytics",
+    "tags": ["analytics", "privacy", "tracking"],
+    "details": {
+      "original": "Google Analytics",
+      "alternatives": ["Plausible", "Umami", "Matomo"],
+      "bestFor": "Websites with high privacy requirements and EU hosting",
+      "pricing": "Free to about $10/month, self-hosting optional",
+      "features": [
+        "Cookieless tracking",
+        "EU hosting and GDPR compliance",
+        "Self-hosting with Matomo and Umami"
+      ]
+    }
+  }
+]
