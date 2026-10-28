@@ -188,5 +188,195 @@
       "useCase": "Notifications, OTP codes and omnichannel customer communication",
       "website": "https://www.twilio.com"
     }
+  },
+  {
+    "slug": "hugging-face-inference-api",
+    "title": "Hugging Face Inference API",
+    "description": "The Hugging Face Inference API gives you hosted access to thousands of open models for text, vision and audio – without managing infrastructure.",
+    "category": "AI & ML",
+    "tags": ["ai", "models", "inference", "open-source"],
+    "details": {
+      "provider": "Hugging Face",
+      "pricing": "Free tier, then usage-based",
+      "features": [
+        "Thousands of community models",
+        "Text, vision and audio tasks",
+        "Serverless inference",
+        "Simple REST and SDK access"
+      ],
+      "useCase": "Prototyping and production inference for open models",
+      "website": "https://huggingface.co/inference-api"
+    }
+  },
+  {
+    "slug": "cohere-embed-api",
+    "title": "Cohere Embed API",
+    "description": "Cohere's Embed API turns text into high-quality vector embeddings for semantic search, clustering and retrieval-augmented generation.",
+    "category": "AI & Embeddings",
+    "tags": ["embeddings", "search", "rag", "nlp"],
+    "details": {
+      "provider": "Cohere",
+      "pricing": "Pay-as-you-go per token",
+      "features": [
+        "Multilingual embeddings",
+        "Optimized for semantic search",
+        "Batch processing",
+        "RAG-ready vectors"
+      ],
+      "useCase": "Semantic search, clustering and RAG pipelines",
+      "website": "https://cohere.com"
+    }
+  },
+  {
+    "slug": "pinecone-vector-api",
+    "title": "Pinecone Vector API",
+    "description": "The Pinecone Vector API is a fully managed vector database for fast similarity search at scale – ideal for RAG and recommendation systems.",
+    "category": "Vector Database",
+    "tags": ["vector-database", "similarity-search", "rag", "ai"],
+    "details": {
+      "provider": "Pinecone",
+      "pricing": "Free tier, then usage-based",
+      "features": [
+        "Fully managed vector database",
+        "Low-latency similarity search",
+        "Metadata filtering",
+        "Namespace isolation"
+      ],
+      "useCase": "RAG, recommendations and semantic search at scale",
+      "website": "https://www.pinecone.io"
+    }
+  },
+  {
+    "slug": "auth0-authentication-api",
+    "title": "Auth0 Authentication API",
+    "description": "The Auth0 API provides enterprise-grade authentication and authorization with SSO, social logins and fine-grained access control.",
+    "category": "Auth & Identity",
+    "tags": ["auth", "sso", "oauth", "security"],
+    "details": {
+      "provider": "Auth0",
+      "pricing": "Free tier, then per MAU",
+      "features": [
+        "SSO and social logins",
+        "OAuth 2.0 and OpenID Connect",
+        "Fine-grained authorization",
+        "Extensive SDKs"
+      ],
+      "useCase": "Enterprise authentication and secure API access",
+      "website": "https://auth0.com"
+    }
+  },
+  {
+    "slug": "sendgrid-email-api",
+    "title": "SendGrid Email API",
+    "description": "The SendGrid Email API delivers transactional and marketing emails reliably at scale, with analytics, templates and webhooks.",
+    "category": "Communication",
+    "tags": ["email", "transactional", "marketing", "deliverability"],
+    "details": {
+      "provider": "Twilio SendGrid",
+      "pricing": "Free tier, then usage-based",
+      "features": [
+        "Transactional and marketing email",
+        "Dynamic templates",
+        "Delivery analytics",
+        "Webhooks and event tracking"
+      ],
+      "useCase": "High-volume email delivery and marketing campaigns",
+      "website": "https://sendgrid.com"
+    }
+  },
+  {
+    "slug": "algolia-search-api",
+    "title": "Algolia Search API",
+    "description": "The Algolia Search API delivers instant, relevant search and discovery experiences with typo tolerance and faceting out of the box.",
+    "category": "Search",
+    "tags": ["search", "discovery", "relevance", "api"],
+    "details": {
+      "provider": "Algolia",
+      "pricing": "Free tier, then usage-based",
+      "features": [
+        "Instant search and autocomplete",
+        "Typo tolerance and synonyms",
+        "Faceting and filtering",
+        "Analytics and A/B testing"
+      ],
+      "useCase": "Product search, documentation search and discovery",
+      "website": "https://www.algolia.com"
+    }
+  },
+  {
+    "slug": "openweather-weather-api",
+    "title": "OpenWeather Weather API",
+    "description": "The OpenWeather API provides current weather, forecasts and historical data for any location – ideal for apps and data products.",
+    "category": "Weather",
+    "tags": ["weather", "forecast", "geodata", "api"],
+    "details": {
+      "provider": "OpenWeather",
+      "pricing": "Free tier, then usage-based",
+      "features": [
+        "Current weather and forecasts",
+        "Historical weather data",
+        "Global coverage",
+        "Simple JSON responses"
+      ],
+      "useCase": "Weather apps, logistics and data-driven dashboards",
+      "website": "https://openweathermap.org/api"
+    }
+  },
+  {
+    "slug": "shopify-admin-api",
+    "title": "Shopify Admin API",
+    "description": "The Shopify Admin API lets you manage products, orders, customers and inventory programmatically for e-commerce automation.",
+    "category": "E-commerce",
+    "tags": ["ecommerce", "orders", "inventory", "shopify"],
+    "details": {
+      "provider": "Shopify",
+      "pricing": "Included with Shopify plans",
+      "features": [
+        "Product and order management",
+        "Inventory and fulfillment",
+        "Customer and discount APIs",
+        "Webhooks for events"
+      ],
+      "useCase": "E-commerce automation, integrations and storefronts",
+      "website": "https://shopify.dev/docs/api/admin"
+    }
+  },
+  {
+    "slug": "notion-api",
+    "title": "Notion API",
+    "description": "The Notion API connects your workspace to other tools, enabling automated pages, databases and content pipelines.",
+    "category": "Productivity",
+    "tags": ["productivity", "database", "content", "automation"],
+    "details": {
+      "provider": "Notion",
+      "pricing": "Free for most integrations",
+      "features": [
+        "Read and write pages",
+        "Query databases",
+        "Block-level content",
+        "Webhooks for changes"
+      ],
+      "useCase": "Content pipelines, internal tools and workspace automation",
+      "website": "https://developers.notion.com"
+    }
+  },
+  {
+    "slug": "airtable-api",
+    "title": "Airtable API",
+    "description": "The Airtable API turns your bases into a REST API, so you can read and write records, attachments and views from any application.",
+    "category": "Databases",
+    "tags": ["database", "no-code", "rest", "automation"],
+    "details": {
+      "provider": "Airtable",
+      "pricing": "Included with Airtable plans",
+      "features": [
+        "REST access to bases",
+        "Create and update records",
+        "Attachment handling",
+        "Webhooks and automations"
+      ],
+      "useCase": "No-code databases as a backend for apps and automations",
+      "website": "https://airtable.com/developers/web/api"
+    }
   }
 ]

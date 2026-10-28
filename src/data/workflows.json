@@ -158,5 +158,125 @@
       ],
       "useCase": "SEO teams that need to monitor many pages continuously"
     }
+  },
+  {
+    "slug": "invoice-automation",
+    "title": "Invoice Automation",
+    "description": "Automate invoice creation, delivery and reconciliation: generate PDFs, send them and sync payment status with your accounting.",
+    "category": "Finance & Ops",
+    "tags": ["invoices", "finance", "automation", "accounting"],
+    "details": {
+      "difficulty": "Advanced",
+      "duration": "About 2–3 hours setup",
+      "tools": ["Stripe Payments API", "Resend Email API", "Supabase", "n8n"],
+      "steps": [
+        "Capture billable events",
+        "Generate invoice PDFs",
+        "Send invoices via email",
+        "Track payment status",
+        "Sync with accounting"
+      ],
+      "useCase": "SaaS and agencies with recurring billing"
+    }
+  },
+  {
+    "slug": "appointment-booking",
+    "title": "Appointment Booking Automation",
+    "description": "Build an automated booking flow: show availability, collect details, confirm appointments and send reminders.",
+    "category": "Sales & Scheduling",
+    "tags": ["booking", "scheduling", "automation", "calendar"],
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "About 1–2 hours setup",
+      "tools": ["Cal.com", "Supabase", "Resend Email API", "n8n"],
+      "steps": [
+        "Expose available slots",
+        "Collect booking details",
+        "Store appointments",
+        "Send confirmations",
+        "Schedule reminders"
+      ],
+      "useCase": "Consultants, clinics and service businesses"
+    }
+  },
+  {
+    "slug": "product-feed-sync",
+    "title": "Product Feed Sync",
+    "description": "Keep product data in sync across storefronts and marketplaces: normalize feeds, validate fields and publish updates automatically.",
+    "category": "E-commerce",
+    "tags": ["ecommerce", "product-feed", "sync", "automation"],
+    "details": {
+      "difficulty": "Expert",
+      "duration": "About 4 hours setup",
+      "tools": ["Shopify Admin API", "Supabase", "n8n", "OpenAI API"],
+      "steps": [
+        "Import product feeds",
+        "Normalize and validate fields",
+        "Enrich descriptions with AI",
+        "Publish to marketplaces",
+        "Monitor sync errors"
+      ],
+      "useCase": "E-commerce teams selling across multiple channels"
+    }
+  },
+  {
+    "slug": "knowledge-base-ingestion",
+    "title": "Knowledge Base Ingestion",
+    "description": "Turn docs and FAQs into a searchable knowledge base: chunk content, generate embeddings and power semantic retrieval.",
+    "category": "AI & Support",
+    "tags": ["knowledge-base", "embeddings", "rag", "support"],
+    "details": {
+      "difficulty": "Advanced",
+      "duration": "About 3 hours setup",
+      "tools": ["Cohere Embed API", "Pinecone Vector API", "Supabase", "n8n"],
+      "steps": [
+        "Collect source documents",
+        "Chunk and clean content",
+        "Generate embeddings",
+        "Store vectors with metadata",
+        "Expose a retrieval endpoint"
+      ],
+      "useCase": "Support bots, internal search and RAG assistants"
+    }
+  },
+  {
+    "slug": "multi-language-content",
+    "title": "Multi-Language Content Pipeline",
+    "description": "Scale content across languages: manage translations, localize metadata and publish locale-aware pages automatically.",
+    "category": "Content & i18n",
+    "tags": ["i18n", "content", "localization", "automation"],
+    "details": {
+      "difficulty": "Expert",
+      "duration": "About 4 hours setup",
+      "tools": ["OpenAI API", "Astro", "Supabase", "n8n"],
+      "steps": [
+        "Define source content",
+        "Generate translations",
+        "Review and approve locales",
+        "Store localized metadata",
+        "Build locale-prefixed pages"
+      ],
+      "useCase": "International pSEO and multi-market content teams"
+    }
+  },
+  {
+    "slug": "webhook-event-routing",
+    "title": "Webhook Event Routing",
+    "description": "Route incoming webhooks reliably: verify signatures, deduplicate events and forward them to the right services.",
+    "category": "Engineering",
+    "tags": ["webhooks", "events", "integration", "reliability"],
+    "details": {
+      "difficulty": "Advanced",
+      "duration": "About 2 hours setup",
+      "tools": ["Cloudflare Workers API", "Supabase", "n8n", "Resend Email API"],
+      "steps": [
+        "Receive webhook payloads",
+        "Verify signatures",
+        "Deduplicate events",
+        "Route to services",
+        "Alert on failures"
+      ],
+      "useCase": "Platforms integrating with multiple third-party services"
+    }
   }
 ]

@@ -95,6 +95,76 @@ export const apiOverrides: Record<string, Record<string, ApiOverride>> = {
       category: "Kommunikation",
       tags: ["sms", "whatsapp", "messaging", "notifications"],
     },
+    "hugging-face-inference-api": {
+      title: "Hugging Face Inference API",
+      description:
+        "Die Hugging Face Inference API bietet gehosteten Zugriff auf tausende offene Modelle für Text, Vision und Audio – ohne eigene Infrastruktur.",
+      category: "KI & ML",
+      tags: ["ki", "modelle", "inference", "open-source"],
+    },
+    "cohere-embed-api": {
+      title: "Cohere Embed API",
+      description:
+        "Die Cohere Embed API wandelt Text in hochwertige Vektor-Embeddings für semantische Suche, Clustering und RAG um.",
+      category: "KI & Embeddings",
+      tags: ["embeddings", "suche", "rag", "nlp"],
+    },
+    "pinecone-vector-api": {
+      title: "Pinecone Vector API",
+      description:
+        "Die Pinecone Vector API ist eine vollständig verwaltete Vektordatenbank für schnelle Ähnlichkeitssuche – ideal für RAG und Empfehlungen.",
+      category: "Vektordatenbank",
+      tags: ["vektordatenbank", "ähnlichkeitssuche", "rag", "ki"],
+    },
+    "auth0-authentication-api": {
+      title: "Auth0 Authentication API",
+      description:
+        "Die Auth0 API bietet Enterprise-Authentifizierung mit SSO, Social Logins und feingranularer Zugriffskontrolle.",
+      category: "Auth & Identity",
+      tags: ["auth", "sso", "oauth", "sicherheit"],
+    },
+    "sendgrid-email-api": {
+      title: "SendGrid Email API",
+      description:
+        "Die SendGrid Email API liefert transaktionale und Marketing-E-Mails zuverlässig in großem Umfang – inklusive Analytics und Templates.",
+      category: "Kommunikation",
+      tags: ["email", "transaktional", "marketing", "zustellbarkeit"],
+    },
+    "algolia-search-api": {
+      title: "Algolia Search API",
+      description:
+        "Die Algolia Search API liefert sofortige, relevante Sucherlebnisse mit Tippfehlertoleranz und Facettierung out of the box.",
+      category: "Suche",
+      tags: ["suche", "discovery", "relevanz", "api"],
+    },
+    "openweather-weather-api": {
+      title: "OpenWeather Weather API",
+      description:
+        "Die OpenWeather API liefert aktuelles Wetter, Vorhersagen und historische Daten für jeden Ort – ideal für Apps und Datenprodukte.",
+      category: "Wetter",
+      tags: ["wetter", "vorhersage", "geodaten", "api"],
+    },
+    "shopify-admin-api": {
+      title: "Shopify Admin API",
+      description:
+        "Die Shopify Admin API verwaltet Produkte, Bestellungen, Kunden und Inventar programmatisch – für E-Commerce-Automatisierung.",
+      category: "E-Commerce",
+      tags: ["ecommerce", "bestellungen", "inventar", "shopify"],
+    },
+    "notion-api": {
+      title: "Notion API",
+      description:
+        "Die Notion API verbindet deinen Workspace mit anderen Tools und ermöglicht automatisierte Seiten, Datenbanken und Content-Pipelines.",
+      category: "Produktivität",
+      tags: ["produktivität", "datenbank", "content", "automatisierung"],
+    },
+    "airtable-api": {
+      title: "Airtable API",
+      description:
+        "Die Airtable API macht aus deinen Bases eine REST-API, sodass du Datensätze, Anhänge und Ansichten aus jeder App lesen und schreiben kannst.",
+      category: "Datenbanken",
+      tags: ["datenbank", "no-code", "rest", "automatisierung"],
+    },
   },
 };
 
@@ -159,6 +229,48 @@ export const alternativeOverrides: Record<
       category: "Analytics",
       tags: ["analytics", "datenschutz", "tracking"],
     },
+    "hubspot-alternatives": {
+      title: "HubSpot Alternativen",
+      description:
+        "HubSpot-Alternativen für CRM und Marketing-Automatisierung – günstiger, datenschutzfreundlicher oder besser für kleine Teams.",
+      category: "CRM & Marketing",
+      tags: ["crm", "marketing", "automatisierung", "sales"],
+    },
+    "asana-alternatives": {
+      title: "Asana Alternativen",
+      description:
+        "Asana-Alternativen für Projekt- und Aufgabenmanagement – mit Open-Source-Optionen, einfacheren Workflows und faireren Preisen.",
+      category: "Projektmanagement",
+      tags: ["projektmanagement", "aufgaben", "teamwork", "kanban"],
+    },
+    "dropbox-alternatives": {
+      title: "Dropbox Alternativen",
+      description:
+        "Dropbox-Alternativen für Cloud-Speicher und Dateisynchronisation – mit mehr Datenschutz, Self-Hosting oder großzügigen Free-Tiers.",
+      category: "Speicher",
+      tags: ["cloud-speicher", "dateisync", "datenschutz", "kollaboration"],
+    },
+    "calendly-alternatives": {
+      title: "Calendly Alternativen",
+      description:
+        "Calendly-Alternativen für Terminplanung und Buchung – Open Source, datenschutzfreundlich und mit mehr Kontrolle über den Kalender.",
+      category: "Terminplanung",
+      tags: ["terminplanung", "buchung", "kalender", "automatisierung"],
+    },
+    "wordpress-alternatives": {
+      title: "WordPress Alternativen",
+      description:
+        "WordPress-Alternativen für Websites und Blogs – schnellere, sicherere und entwicklerfreundlichere CMS-Optionen.",
+      category: "CMS",
+      tags: ["cms", "blogging", "static-site", "publishing"],
+    },
+    "shopify-alternatives": {
+      title: "Shopify Alternativen",
+      description:
+        "Shopify-Alternativen für Online-Shops – Open Source, Headless oder günstigere Plattformen für wachsende E-Commerce-Marken.",
+      category: "E-Commerce",
+      tags: ["ecommerce", "online-shop", "headless", "open-source"],
+    },
   },
 };
 
@@ -222,6 +334,48 @@ export const workflowOverrides: Record<
         "Ein Dashboard für SEO-Monitoring: Rankings, Indexierung und Core Web Vitals automatisch erfassen und übersichtlich visualisieren.",
       category: "SEO & Analytics",
       tags: ["seo", "monitoring", "analytics", "dashboard"],
+    },
+    "invoice-automation": {
+      title: "Rechnungs-Automation",
+      description:
+        "Rechnungserstellung, Versand und Abstimmung automatisieren: PDFs erzeugen, versenden und Zahlungsstatus mit der Buchhaltung synchronisieren.",
+      category: "Finance & Ops",
+      tags: ["rechnungen", "finanzen", "automatisierung", "buchhaltung"],
+    },
+    "appointment-booking": {
+      title: "Terminbuchungs-Automation",
+      description:
+        "Einen automatisierten Buchungsablauf bauen: Verfügbarkeit anzeigen, Daten erfassen, Termine bestätigen und Erinnerungen senden.",
+      category: "Sales & Terminplanung",
+      tags: ["buchung", "terminplanung", "automatisierung", "kalender"],
+    },
+    "product-feed-sync": {
+      title: "Produktfeed-Synchronisation",
+      description:
+        "Produktdaten über Shops und Marktplätze synchron halten: Feeds normalisieren, Felder validieren und Updates automatisch veröffentlichen.",
+      category: "E-Commerce",
+      tags: ["ecommerce", "produktfeed", "sync", "automatisierung"],
+    },
+    "knowledge-base-ingestion": {
+      title: "Wissensdatenbank-Ingestion",
+      description:
+        "Dokumente und FAQs in eine durchsuchbare Wissensdatenbank verwandeln: Inhalte chunken, Embeddings erzeugen und semantische Suche ermöglichen.",
+      category: "KI & Support",
+      tags: ["wissensdatenbank", "embeddings", "rag", "support"],
+    },
+    "multi-language-content": {
+      title: "Mehrsprachige Content-Pipeline",
+      description:
+        "Content über Sprachen skalieren: Übersetzungen verwalten, Metadaten lokalisieren und sprachspezifische Seiten automatisch veröffentlichen.",
+      category: "Content & i18n",
+      tags: ["i18n", "content", "lokalisierung", "automatisierung"],
+    },
+    "webhook-event-routing": {
+      title: "Webhook-Event-Routing",
+      description:
+        "Eingehende Webhooks zuverlässig routen: Signaturen prüfen, Events deduplizieren und an die richtigen Services weiterleiten.",
+      category: "Engineering",
+      tags: ["webhooks", "events", "integration", "zuverlässigkeit"],
     },
   },
 };

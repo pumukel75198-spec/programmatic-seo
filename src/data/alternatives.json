@@ -142,5 +142,113 @@
         "Self-hosting with Matomo and Umami"
       ]
     }
+  },
+  {
+    "slug": "hubspot-alternatives",
+    "title": "HubSpot Alternatives",
+    "description": "HubSpot alternatives for CRM and marketing automation – more affordable, privacy-friendly or better suited to small teams.",
+    "category": "CRM & Marketing",
+    "tags": ["crm", "marketing", "automation", "sales"],
+    "details": {
+      "original": "HubSpot",
+      "alternatives": ["Pipedrive", "Brevo", "Odoo"],
+      "bestFor": "Small and mid-sized teams that need CRM without enterprise pricing",
+      "pricing": "Free to about $25/user/month",
+      "features": [
+        "Contact and deal pipelines",
+        "Email marketing automation",
+        "Open-source and low-cost options"
+      ]
+    }
+  },
+  {
+    "slug": "asana-alternatives",
+    "title": "Asana Alternatives",
+    "description": "Asana alternatives for project and task management – with open-source options, simpler workflows and fairer pricing.",
+    "category": "Project Management",
+    "tags": ["project-management", "tasks", "teamwork", "kanban"],
+    "details": {
+      "original": "Asana",
+      "alternatives": ["Plane", "Vikunja", "ClickUp"],
+      "bestFor": "Teams that want flexible project management without high per-seat costs",
+      "pricing": "Free to about $12/user/month",
+      "features": [
+        "Kanban, list and timeline views",
+        "Automations and integrations",
+        "Open-source and self-hosting options"
+      ]
+    }
+  },
+  {
+    "slug": "dropbox-alternatives",
+    "title": "Dropbox Alternatives",
+    "description": "Dropbox alternatives for cloud storage and file sync – with more privacy, self-hosting or generous free tiers.",
+    "category": "Storage",
+    "tags": ["cloud-storage", "file-sync", "privacy", "collaboration"],
+    "details": {
+      "original": "Dropbox",
+      "alternatives": ["Nextcloud", "Proton Drive", "pCloud"],
+      "bestFor": "Users and teams that prioritize privacy or self-hosting",
+      "pricing": "Free to about $10/month",
+      "features": [
+        "File sync and sharing",
+        "Self-hosting with Nextcloud",
+        "End-to-end encryption options"
+      ]
+    }
+  },
+  {
+    "slug": "calendly-alternatives",
+    "title": "Calendly Alternatives",
+    "description": "Calendly alternatives for scheduling and booking – open-source, privacy-friendly and with more control over your calendar.",
+    "category": "Scheduling",
+    "tags": ["scheduling", "booking", "calendar", "automation"],
+    "details": {
+      "original": "Calendly",
+      "alternatives": ["Cal.com", "Zcal", "Rallly"],
+      "bestFor": "Teams that want self-hosted or customizable scheduling",
+      "pricing": "Free to about $12/user/month",
+      "features": [
+        "Booking links and calendar sync",
+        "Self-hosting with Cal.com",
+        "Custom availability rules"
+      ]
+    }
+  },
+  {
+    "slug": "wordpress-alternatives",
+    "title": "WordPress Alternatives",
+    "description": "WordPress alternatives for websites and blogs – faster, more secure and developer-friendly CMS options.",
+    "category": "CMS",
+    "tags": ["cms", "blogging", "static-site", "publishing"],
+    "details": {
+      "original": "WordPress",
+      "alternatives": ["Ghost", "Hugo", "Astro"],
+      "bestFor": "Publishers who want speed, security and modern developer workflows",
+      "pricing": "Free to about $15/month",
+      "features": [
+        "Static and headless publishing",
+        "Markdown-based content",
+        "Fast builds and deployments"
+      ]
+    }
+  },
+  {
+    "slug": "shopify-alternatives",
+    "title": "Shopify Alternatives",
+    "description": "Shopify alternatives for online stores – open-source, headless or lower-cost platforms for growing e-commerce brands.",
+    "category": "E-commerce",
+    "tags": ["ecommerce", "online-store", "headless", "open-source"],
+    "details": {
+      "original": "Shopify",
+      "alternatives": ["WooCommerce", "Medusa", "BigCommerce"],
+      "bestFor": "Merchants who need more customization or lower transaction fees",
+      "pricing": "Free to about $30/month plus transaction fees",
+      "features": [
+        "Open-source and headless options",
+        "Custom checkout flows",
+        "Scalable product catalogs"
+      ]
+    }
   }
 ]
