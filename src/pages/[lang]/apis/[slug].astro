@@ -9,6 +9,7 @@ import {
   breadcrumbSchema,
   softwareApplicationSchema,
 } from "../../../lib/schema";
+import { getToolLink } from "../../../lib/tools";
 import { languages } from "../../../i18n/ui";
 import { getLocale, localizedPath, t } from "../../../i18n/utils";
 import { localizeApi } from "../../../i18n/content";
@@ -30,6 +31,22 @@ const related = getRelated(apis, api.slug).map((item) =>
 
 const pageTitle = `${api.title} – ${api.category}`;
 const pageDescription = api.description;
+
+const {
+  endpoint,
+  authentication,
+  apiKeyRequired,
+  sdkLanguages,
+  rateLimit,
+  docsUrl,
+  provider,
+  pricing,
+  ...restDetails
+} = api.details;
+
+const providerLink = getToolLink(provider);
+const providerHref = providerLink?.href ?? api.details.website;
+const providerSponsored = providerLink?.sponsored ?? false;
 
 const jsonLd = [
   breadcrumbSchema([
@@ -75,10 +92,153 @@ const jsonLd = [
       </div>
     </header>
 
-    <!-- Details -->
     <section class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
-      <h2 class="text-xl font-semibold text-white sm:text-2xl">Details</h2>
-      <DetailBox details={api.details} />
+      <!-- Quick facts -->
+      <dl class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="rounded-xl border border-white/10 bg-surface/50 p-4">
+          <dt class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+            Provider
+          </dt>
+          <dd class="mt-1 text-sm font-medium text-white">{provider}</dd>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-surface/50 p-4">
+          <dt class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+            Pricing
+          </dt>
+          <dd class="mt-1 text-sm font-medium text-white">{pricing}</dd>
+        </div>
+        {authentication && (
+          <div class="rounded-xl border border-white/10 bg-surface/50 p-4">
+            <dt class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+              Authentication
+            </dt>
+            <dd class="mt-1 text-sm font-medium text-white">{authentication}</dd>
+          </div>
+        )}
+        {apiKeyRequired !== undefined && (
+          <div class="rounded-xl border border-white/10 bg-surface/50 p-4">
+            <dt class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+              API key
+            </dt>
+            <dd class="mt-1 text-sm font-medium text-white">
+              {apiKeyRequired ? "Required" : "Not required"}
+            </dd>
+          </div>
+        )}
+      </dl>
+
+      <!-- Affiliate / provider CTA -->
+      <div class="mt-8 rounded-2xl border border-brand-500/30 bg-gradient-to-br from-brand-500/10 to-transparent p-6">
+        <Badge tone="brand">Get started</Badge>
+        <h2 class="mt-3 text-xl font-semibold text-white">
+          Start building with {provider}
+        </h2>
+        <p class="mt-2 text-sm leading-relaxed text-slate-400">
+          Create an account, get your API key and start integrating {api.title}.
+        </p>
+        <div class="mt-4 flex flex-wrap gap-3">
+          {providerHref && (
+            <a
+              href={providerHref}
+              target="_blank"
+              rel={providerSponsored ? "noopener sponsored" : "noopener noreferrer"}
+              class="inline-flex items-center gap-2 rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-brand-500/30 transition-colors hover:bg-brand-400"
+            >
+              Visit {provider}
+              <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
+                <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+              </svg>
+            </a>
+          )}
+          {docsUrl && (
+            <a
+              href={docsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+            >
+              Read the docs
+            </a>
+          )}
+        </div>
+      </div>
+
+      <!-- Technical details -->
+      {
+        (endpoint || authentication || sdkLanguages || rateLimit || docsUrl) && (
+          <div class="mt-10">
+            <h2 class="text-xl font-semibold text-white sm:text-2xl">
+              Technical details
+            </h2>
+            <dl class="mt-4 divide-y divide-white/5 overflow-hidden rounded-2xl border border-white/10 bg-surface/60">
+              {endpoint && (
+                <div class="flex flex-col gap-1.5 p-5 sm:flex-row sm:gap-6">
+                  <dt class="w-full shrink-0 text-sm font-semibold text-slate-400 sm:w-40">
+                    Endpoint
+                  </dt>
+                  <dd class="flex-1">
+                    <code class="break-all rounded bg-white/5 px-2 py-1 font-mono text-xs text-brand-300">
+                      {endpoint}
+                    </code>
+                  </dd>
+                </div>
+              )}
+              {authentication && (
+                <div class="flex flex-col gap-1.5 p-5 sm:flex-row sm:gap-6">
+                  <dt class="w-full shrink-0 text-sm font-semibold text-slate-400 sm:w-40">
+                    Authentication
+                  </dt>
+                  <dd class="flex-1 text-sm text-slate-300">{authentication}</dd>
+                </div>
+              )}
+              {rateLimit && (
+                <div class="flex flex-col gap-1.5 p-5 sm:flex-row sm:gap-6">
+                  <dt class="w-full shrink-0 text-sm font-semibold text-slate-400 sm:w-40">
+                    Rate limit
+                  </dt>
+                  <dd class="flex-1 text-sm text-slate-300">{rateLimit}</dd>
+                </div>
+              )}
+              {sdkLanguages && sdkLanguages.length > 0 && (
+                <div class="flex flex-col gap-1.5 p-5 sm:flex-row sm:gap-6">
+                  <dt class="w-full shrink-0 text-sm font-semibold text-slate-400 sm:w-40">
+                    SDKs
+                  </dt>
+                  <dd class="flex flex-1 flex-wrap gap-1.5">
+                    {sdkLanguages.map((sdk) => (
+                      <span class="rounded-full bg-white/5 px-2.5 py-0.5 text-xs text-slate-300 ring-1 ring-inset ring-white/10">
+                        {sdk}
+                      </span>
+                    ))}
+                  </dd>
+                </div>
+              )}
+              {docsUrl && (
+                <div class="flex flex-col gap-1.5 p-5 sm:flex-row sm:gap-6">
+                  <dt class="w-full shrink-0 text-sm font-semibold text-slate-400 sm:w-40">
+                    Documentation
+                  </dt>
+                  <dd class="flex-1">
+                    <a
+                      href={docsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-brand-300 underline decoration-brand-500/30 underline-offset-2 transition-colors hover:text-brand-200"
+                    >
+                      Open official docs
+                    </a>
+                  </dd>
+                </div>
+              )}
+            </dl>
+          </div>
+        )
+      }
+
+      <!-- Features & use case -->
+      <h2 class="mt-10 text-xl font-semibold text-white sm:text-2xl">Details</h2>
+      <DetailBox details={restDetails} />
 
       <CTA
         title="Promote an API in this category?"

@@ -15,6 +15,13 @@ export interface ApiDetails {
   features: string[];
   useCase: string;
   website: string;
+  /** Optional technical details for developer-focused API pages. */
+  endpoint?: string;
+  authentication?: string;
+  apiKeyRequired?: boolean;
+  sdkLanguages?: string[];
+  rateLimit?: string;
+  docsUrl?: string;
 }
 
 export interface ApiEntry {

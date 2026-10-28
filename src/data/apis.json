@@ -20,7 +20,17 @@
         "High accuracy even with background noise"
       ],
       "useCase": "Automatic subtitles, meeting notes and voice assistants",
-      "website": "https://platform.openai.com/docs/guides/speech-to-text"
+      "website": "https://platform.openai.com/docs/guides/speech-to-text",
+      "endpoint": "https://api.openai.com/v1/audio/transcriptions",
+      "authentication": "Bearer API key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "Python",
+        "JavaScript",
+        "cURL"
+      ],
+      "rateLimit": "Tier-based rate limits",
+      "docsUrl": "https://platform.openai.com/docs/guides/speech-to-text"
     }
   },
   {
@@ -44,7 +54,20 @@
         "Comprehensive SDKs for all major languages"
       ],
       "useCase": "E-commerce, SaaS billing and marketplaces",
-      "website": "https://stripe.com"
+      "website": "https://stripe.com",
+      "endpoint": "https://api.stripe.com/v1",
+      "authentication": "Secret API key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python",
+        "Ruby",
+        "PHP",
+        "Go",
+        "Java"
+      ],
+      "rateLimit": "100 read ops/s, 100 write ops/s",
+      "docsUrl": "https://stripe.com/docs/api"
     }
   },
   {
@@ -68,7 +91,18 @@
         "Storage and Edge Functions"
       ],
       "useCase": "Fast backend development for web and mobile apps",
-      "website": "https://supabase.com"
+      "website": "https://supabase.com",
+      "endpoint": "https://<project-ref>.supabase.co/rest/v1",
+      "authentication": "API key + JWT",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python",
+        "Flutter",
+        "Swift"
+      ],
+      "rateLimit": "Plan-based limits",
+      "docsUrl": "https://supabase.com/docs/guides/api"
     }
   },
   {
@@ -92,7 +126,17 @@
         "Focus on AI safety"
       ],
       "useCase": "Long-document analysis, coding assistants and agentic systems",
-      "website": "https://www.anthropic.com"
+      "website": "https://www.anthropic.com",
+      "endpoint": "https://api.anthropic.com/v1/messages",
+      "authentication": "x-api-key header",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "Python",
+        "TypeScript",
+        "cURL"
+      ],
+      "rateLimit": "Tier-based rate limits",
+      "docsUrl": "https://docs.anthropic.com"
     }
   },
   {
@@ -116,7 +160,18 @@
         "Function calling and structured output"
       ],
       "useCase": "Image analysis, document processing and multimodal assistants",
-      "website": "https://ai.google.dev"
+      "website": "https://ai.google.dev",
+      "endpoint": "https://generativelanguage.googleapis.com/v1beta",
+      "authentication": "API key or OAuth",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "Python",
+        "JavaScript",
+        "Go",
+        "Java"
+      ],
+      "rateLimit": "Quota-based limits",
+      "docsUrl": "https://ai.google.dev/gemini-api/docs"
     }
   },
   {
@@ -139,7 +194,18 @@
         "Simple SDK integration"
       ],
       "useCase": "Signup confirmations, password resets and notifications",
-      "website": "https://resend.com"
+      "website": "https://resend.com",
+      "endpoint": "https://api.resend.com/emails",
+      "authentication": "Bearer API key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "Node.js",
+        "Python",
+        "PHP",
+        "Ruby"
+      ],
+      "rateLimit": "2 requests/second",
+      "docsUrl": "https://resend.com/docs"
     }
   },
   {
@@ -163,7 +229,18 @@
         "Prebuilt React components"
       ],
       "useCase": "SaaS applications that need fast, secure user management",
-      "website": "https://clerk.com"
+      "website": "https://clerk.com",
+      "endpoint": "https://api.clerk.com/v1",
+      "authentication": "Secret key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "React",
+        "Next.js",
+        "Remix"
+      ],
+      "rateLimit": "Plan-based limits",
+      "docsUrl": "https://clerk.com/docs"
     }
   },
   {
@@ -187,7 +264,17 @@
         "Automatic scaling"
       ],
       "useCase": "APIs, personalization and low-latency data delivery",
-      "website": "https://workers.cloudflare.com"
+      "website": "https://workers.cloudflare.com",
+      "endpoint": "https://api.cloudflare.com/client/v4",
+      "authentication": "Bearer API token",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "TypeScript",
+        "Rust"
+      ],
+      "rateLimit": "1,200 requests/5 minutes",
+      "docsUrl": "https://developers.cloudflare.com/workers/"
     }
   },
   {
@@ -211,7 +298,18 @@
         "High performance on mobile devices"
       ],
       "useCase": "Location search, delivery services and data-driven map visualizations",
-      "website": "https://www.mapbox.com"
+      "website": "https://www.mapbox.com",
+      "endpoint": "https://api.mapbox.com",
+      "authentication": "Access token",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "iOS",
+        "Android",
+        "Python"
+      ],
+      "rateLimit": "Usage-based limits",
+      "docsUrl": "https://docs.mapbox.com"
     }
   },
   {
@@ -235,7 +333,19 @@
         "Webhooks for delivery status"
       ],
       "useCase": "Notifications, OTP codes and omnichannel customer communication",
-      "website": "https://www.twilio.com"
+      "website": "https://www.twilio.com",
+      "endpoint": "https://api.twilio.com/2010-04-01",
+      "authentication": "Account SID + Auth Token",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python",
+        "Java",
+        "C#",
+        "PHP"
+      ],
+      "rateLimit": "Message queue-based",
+      "docsUrl": "https://www.twilio.com/docs/messaging"
     }
   },
   {
