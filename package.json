@@ -11,6 +11,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "validate": "node scripts/validate-data.js",
+    "deploy:init": "wrangler pages project create programmatic-seo --production-branch=main",
     "deploy": "npm run build && wrangler pages deploy dist --project-name=programmatic-seo",
     "cf:preview": "wrangler pages dev dist"
   },
