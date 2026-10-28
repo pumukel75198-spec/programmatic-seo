@@ -1,0 +1,35 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import ContentCard from "../../components/ContentCard.astro";
+import apis from "../../data/apis.json";
+---
+
+<Layout
+  title="APIs – kuratiertes Verzeichnis"
+  description="Entdecke kuratierte APIs für KI, Payments, Backend und Kommunikation – mit Features, Preisen und Bewertungen."
+>
+  <PageHeader
+    eyebrow="API-Verzeichnis"
+    title="Die richtige API für dein Projekt"
+    description="Strukturierte Übersicht über leistungsstarke Schnittstellen – von generativer KI bis zu Zahlungsinfrastruktur."
+  >
+    <p class="text-sm text-slate-500">{apis.length} APIs im Verzeichnis</p>
+  </PageHeader>
+
+  <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {
+        apis.map((api) => (
+          <ContentCard
+            href={`/apis/${api.slug}`}
+            title={api.title}
+            description={api.description}
+            meta={api.category}
+            tags={api.tags}
+          />
+        ))
+      }
+    </div>
+  </section>
+</Layout>

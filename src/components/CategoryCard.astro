@@ -1,0 +1,80 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  description: string;
+  count: number;
+  label: string;
+  accent?: "brand" | "cyan" | "emerald";
+}
+
+const { href, title, description, count, label, accent = "brand" } = Astro.props;
+
+const accents: Record<string, { ring: string; icon: string; glow: string }> = {
+  brand: {
+    ring: "group-hover:border-brand-500/50",
+    icon: "from-brand-500 to-indigo-400 shadow-brand-500/30",
+    glow: "bg-brand-500/10",
+  },
+  cyan: {
+    ring: "group-hover:border-cyan-500/50",
+    icon: "from-cyan-500 to-sky-400 shadow-cyan-500/30",
+    glow: "bg-cyan-500/10",
+  },
+  emerald: {
+    ring: "group-hover:border-emerald-500/50",
+    icon: "from-emerald-500 to-teal-400 shadow-emerald-500/30",
+    glow: "bg-emerald-500/10",
+  },
+};
+
+const a = accents[accent];
+---
+
+<a
+  href={href}
+  class:list={[
+    "group card-hover relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-surface/60 p-6 backdrop-blur-sm",
+    a.ring,
+  ]}
+>
+  <div
+    class:list={[
+      "pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full blur-3xl transition-opacity duration-300 opacity-60 group-hover:opacity-100",
+      a.glow,
+    ]}
+    aria-hidden="true"
+  >
+  </div>
+
+  <div
+    class:list={[
+      "mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br text-white shadow-lg",
+      a.icon,
+    ]}
+  >
+    <slot name="icon" />
+  </div>
+
+  <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+    {label}
+  </span>
+  <h3 class="mt-1 text-lg font-semibold text-white">{title}</h3>
+  <p class="mt-2 flex-1 text-sm leading-relaxed text-slate-400">
+    {description}
+  </p>
+
+  <div class="mt-6 flex items-center justify-between">
+    <span class="text-sm font-medium text-slate-500">{count} Einträge</span>
+    <span class="inline-flex items-center gap-1 text-sm font-medium text-brand-300 transition-transform group-hover:translate-x-0.5">
+      Entdecken
+      <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path
+          fill-rule="evenodd"
+          d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z"
+          clip-rule="evenodd"
+        />
+      </svg>
+    </span>
+  </div>
+</a>

@@ -1,0 +1,35 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import ContentCard from "../../components/ContentCard.astro";
+import alternativen from "../../data/alternativen.json";
+---
+
+<Layout
+  title="Alternativen – Tool-Vergleiche"
+  description="Die besten Alternativen zu bekannten Tools – mit Vor- und Nachteilen, Preisen und Zielgruppen."
+>
+  <PageHeader
+    eyebrow="Tool-Vergleiche"
+    title="Bessere Alternativen finden"
+    description="Vergleiche etablierte Tools mit starken Alternativen – inklusive Vor- und Nachteilen, damit du die richtige Wahl triffst."
+  >
+    <p class="text-sm text-slate-500">{alternativen.length} Vergleiche verfügbar</p>
+  </PageHeader>
+
+  <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {
+        alternativen.map((entry) => (
+          <ContentCard
+            href={`/alternativen/${entry.slug}`}
+            title={entry.title}
+            description={entry.description}
+            meta={`${entry.details.alternatives.length} Alternativen`}
+            tags={entry.tags}
+          />
+        ))
+      }
+    </div>
+  </section>
+</Layout>

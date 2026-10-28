@@ -1,0 +1,170 @@
+---
+import Layout from "../layouts/Layout.astro";
+import CategoryCard from "../components/CategoryCard.astro";
+import Badge from "../components/Badge.astro";
+import apis from "../data/apis.json";
+import alternativen from "../data/alternativen.json";
+import workflows from "../data/workflows.json";
+
+const stats = [
+  { value: `${apis.length}`, label: "APIs" },
+  { value: `${alternativen.length}`, label: "Alternativen" },
+  { value: `${workflows.length}`, label: "Workflows" },
+  { value: "100 %", label: "Open Content" },
+];
+---
+
+<Layout
+  title="Programmatic SEO Hub – APIs, Alternativen & Workflows"
+  description="Entdecke kuratierte APIs, die besten Alternativen und erprobte Workflows für moderne Produkt- und SEO-Teams."
+>
+  <!-- Hero -->
+  <section class="relative overflow-hidden">
+    <div class="mx-auto max-w-6xl px-4 pb-16 pt-20 sm:px-6 sm:pb-24 sm:pt-28 lg:px-8">
+      <div class="mx-auto max-w-3xl text-center">
+        <div class="mb-6 flex justify-center">
+          <Badge tone="brand" class="gap-2 px-3 py-1">
+            <span class="relative flex h-2 w-2">
+              <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-400 opacity-75"></span>
+              <span class="relative inline-flex h-2 w-2 rounded-full bg-brand-400"></span>
+            </span>
+            Programmatic SEO · kuratiert & aktuell
+          </Badge>
+        </div>
+
+        <h1 class="text-balance text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
+          Das Wissens-Hub für
+          <span class="gradient-text"> APIs, Alternativen</span>
+          und Workflows
+        </h1>
+
+        <p class="mx-auto mt-6 max-w-2xl text-pretty text-base leading-relaxed text-slate-400 sm:text-lg">
+          Strukturierte, durchsuchbare Inhalte für Entwickler und SEO-Teams.
+          Finde die passende API, vergleiche Alternativen und baue skalierbare
+          Automatisierungen.
+        </p>
+
+        <div class="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <a
+            href="/apis"
+            class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-500/30 transition-colors hover:bg-brand-400 sm:w-auto"
+          >
+            APIs entdecken
+            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path
+                fill-rule="evenodd"
+                d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </a>
+          <a
+            href="/workflows"
+            class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition-colors hover:border-white/20 hover:bg-white/10 sm:w-auto"
+          >
+            Workflows ansehen
+          </a>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <dl class="mx-auto mt-16 grid max-w-3xl grid-cols-2 gap-4 sm:grid-cols-4">
+        {
+          stats.map((stat) => (
+            <div class="rounded-2xl border border-white/10 bg-surface/50 px-4 py-5 text-center backdrop-blur-sm">
+              <dt class="text-2xl font-bold text-white sm:text-3xl">{stat.value}</dt>
+              <dd class="mt-1 text-xs font-medium uppercase tracking-wider text-slate-500">
+                {stat.label}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <!-- Kategorien -->
+  <section class="mx-auto max-w-6xl px-4 pb-24 sm:px-6 lg:px-8">
+    <div class="mb-10 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <h2 class="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+          Drei Kategorien, ein Hub
+        </h2>
+        <p class="mt-2 text-slate-400">
+          Wähle einen Bereich und tauche in strukturierte, verlinkte Inhalte ein.
+        </p>
+      </div>
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-3">
+      <CategoryCard
+        href="/apis"
+        title="APIs"
+        label="Schnittstellen"
+        description="Kuratierte APIs für KI, Payments, Backend und Kommunikation – mit Features, Preisen und Bewertungen."
+        count={apis.length}
+        accent="brand"
+      >
+        <svg slot="icon" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" />
+        </svg>
+      </CategoryCard>
+
+      <CategoryCard
+        href="/alternativen"
+        title="Alternativen"
+        label="Vergleiche"
+        description="Die besten Alternativen zu bekannten Tools – mit Vor- und Nachteilen, Preisen und Zielgruppen."
+        count={alternativen.length}
+        accent="cyan"
+      >
+        <svg slot="icon" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+        </svg>
+      </CategoryCard>
+
+      <CategoryCard
+        href="/workflows"
+        title="Workflows"
+        label="Automatisierung"
+        description="Schritt-für-Schritt-Workflows für Content, Sales und Programmatic SEO – inklusive Tool-Stack."
+        count={workflows.length}
+        accent="emerald"
+      >
+        <svg slot="icon" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+        </svg>
+      </CategoryCard>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="mx-auto max-w-6xl px-4 pb-24 sm:px-6 lg:px-8">
+    <div class="glow relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-surface-2 to-[#0a0c15] px-6 py-12 text-center sm:px-12 sm:py-16">
+      <div class="pointer-events-none absolute -left-20 -top-20 h-64 w-64 rounded-full bg-brand-500/20 blur-3xl" aria-hidden="true"></div>
+      <div class="pointer-events-none absolute -bottom-20 -right-20 h-64 w-64 rounded-full bg-cyan-500/20 blur-3xl" aria-hidden="true"></div>
+
+      <h2 class="relative text-balance text-2xl font-bold tracking-tight text-white sm:text-3xl">
+        Bereit, dein Programmatic-SEO-Projekt zu skalieren?
+      </h2>
+      <p class="relative mx-auto mt-3 max-w-xl text-pretty text-slate-400">
+        Starte mit den APIs, vergleiche Alternativen und automatisiere deine
+        Workflows – alles an einem Ort.
+      </p>
+      <div class="relative mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <a
+          href="/apis"
+          class="inline-flex w-full items-center justify-center rounded-xl bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-200 sm:w-auto"
+        >
+          Jetzt starten
+        </a>
+        <a
+          href="/alternativen"
+          class="inline-flex w-full items-center justify-center rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10 sm:w-auto"
+        >
+          Alternativen vergleichen
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

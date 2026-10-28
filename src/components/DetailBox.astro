@@ -1,0 +1,84 @@
+---
+interface Props {
+  details: Record<string, unknown>;
+  labels?: Record<string, string>;
+}
+
+const { details, labels = {} } = Astro.props;
+
+const defaultLabels: Record<string, string> = {
+  provider: "Anbieter",
+  pricing: "Preis",
+  features: "Features",
+  useCase: "Use Case",
+  website: "Website",
+  original: "Original",
+  alternatives: "Alternativen",
+  bestFor: "Am besten für",
+  difficulty: "Schwierigkeit",
+  duration: "Dauer",
+  tools: "Tools",
+  steps: "Schritte",
+};
+
+const labelFor = (key: string) => labels[key] ?? defaultLabels[key] ?? key;
+
+const entries = Object.entries(details).filter(([, value]) => {
+  if (value === null || value === undefined) return false;
+  if (typeof value === "string" && value.trim() === "") return false;
+  if (Array.isArray(value) && value.length === 0) return false;
+  return true;
+});
+
+const isUrl = (value: unknown): value is string =>
+  typeof value === "string" && /^https?:\/\//i.test(value);
+---
+
+<dl
+  class="mt-6 divide-y divide-white/5 overflow-hidden rounded-2xl border border-white/10 bg-surface/60"
+>
+  {
+    entries.map(([key, value]) => (
+      <div class="flex flex-col gap-1.5 p-5 sm:flex-row sm:gap-6">
+        <dt class="w-full shrink-0 text-sm font-semibold text-slate-400 sm:w-40">
+          {labelFor(key)}
+        </dt>
+        <dd class="flex-1 text-sm leading-relaxed text-slate-300">
+          {Array.isArray(value) ? (
+            key === "steps" ? (
+              <ol class="space-y-2">
+                {value.map((item, index) => (
+                  <li class="flex gap-2.5">
+                    <span class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-500/15 text-[11px] font-bold text-brand-300">
+                      {index + 1}
+                    </span>
+                    <span>{String(item)}</span>
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <div class="flex flex-wrap gap-1.5">
+                {value.map((item) => (
+                  <span class="rounded-full bg-white/5 px-2.5 py-0.5 text-xs text-slate-300 ring-1 ring-inset ring-white/10">
+                    {String(item)}
+                  </span>
+                ))}
+              </div>
+            )
+          ) : isUrl(value) ? (
+            <a
+              href={value}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="break-all text-brand-300 underline decoration-brand-500/30 underline-offset-2 transition-colors hover:text-brand-200"
+            >
+              {value}
+            </a>
+          ) : (
+            String(value)
+          )}
+        </dd>
+      </div>
+    ))
+  }
+</dl>

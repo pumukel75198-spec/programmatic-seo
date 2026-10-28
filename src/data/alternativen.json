@@ -1,0 +1,56 @@
+[
+  {
+    "slug": "notion-alternativen",
+    "title": "Notion Alternativen",
+    "description": "Die besten Notion-Alternativen für Wissensmanagement, Projektplanung und kollaborative Dokumente – von Open Source bis Enterprise.",
+    "category": "Produktivität",
+    "tags": ["wissensmanagement", "notizen", "kollaboration", "produktivität"],
+    "details": {
+      "original": "Notion",
+      "alternatives": ["Obsidian", "Coda", "AppFlowy"],
+      "bestFor": "Teams, die Offline-Nutzung, Datenschutz oder Self-Hosting benötigen",
+      "pricing": "Je nach Tool kostenlos bis ca. 10 €/Nutzer/Monat",
+      "features": [
+        "Lokale Markdown-Dateien",
+        "Datenbanken und Formeln",
+        "Open-Source-Optionen"
+      ]
+    }
+  },
+  {
+    "slug": "zapier-alternativen",
+    "title": "Zapier Alternativen",
+    "description": "Zapier-Alternativen für Automatisierung und Integrationen – günstiger, datenschutzfreundlicher oder mit mehr Kontrolle über deine Workflows.",
+    "category": "Automatisierung",
+    "tags": ["automatisierung", "no-code", "integrationen", "workflows"],
+    "details": {
+      "original": "Zapier",
+      "alternatives": ["Make", "n8n", "Pipedream"],
+      "bestFor": "Teams mit hohem Workflow-Volumen oder Self-Hosting-Bedarf",
+      "pricing": "Kostenlos bis ca. 20 €/Monat, n8n self-hosted kostenlos",
+      "features": [
+        "Visuelle Workflow-Builder",
+        "Self-Hosting bei n8n",
+        "Code-Nodes für Entwickler"
+      ]
+    }
+  },
+  {
+    "slug": "figma-alternativen",
+    "title": "Figma Alternativen",
+    "description": "Figma-Alternativen für UI-Design und Prototyping – inklusive Open-Source- und datenschutzfreundlicher Optionen.",
+    "category": "Design",
+    "tags": ["design", "ui-ux", "prototyping", "open-source"],
+    "details": {
+      "original": "Figma",
+      "alternatives": ["Penpot", "Sketch", "Framer"],
+      "bestFor": "Design-Teams mit Fokus auf Datenschutz, lokale Dateien oder Publishing",
+      "pricing": "Kostenlos bis ca. 15 €/Nutzer/Monat",
+      "features": [
+        "Self-Hosting bei Penpot",
+        "Native macOS-App bei Sketch",
+        "Direktes Website-Publishing bei Framer"
+      ]
+    }
+  }
+]

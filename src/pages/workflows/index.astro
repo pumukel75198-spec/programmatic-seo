@@ -1,0 +1,35 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import ContentCard from "../../components/ContentCard.astro";
+import workflows from "../../data/workflows.json";
+---
+
+<Layout
+  title="Workflows – Automatisierung Schritt für Schritt"
+  description="Erprobte Workflows für Content, Sales und Programmatic SEO – inklusive Tool-Stack und Schritt-für-Schritt-Anleitung."
+>
+  <PageHeader
+    eyebrow="Automatisierung"
+    title="Workflows, die wirklich funktionieren"
+    description="Schritt-für-Schritt-Anleitungen für skalierbare Prozesse – von Content-Automation bis zur Programmatic-SEO-Pipeline."
+  >
+    <p class="text-sm text-slate-500">{workflows.length} Workflows verfügbar</p>
+  </PageHeader>
+
+  <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {
+        workflows.map((workflow) => (
+          <ContentCard
+            href={`/workflows/${workflow.slug}`}
+            title={workflow.title}
+            description={workflow.description}
+            meta={`${workflow.details.difficulty} · ${workflow.details.duration}`}
+            tags={workflow.tags}
+          />
+        ))
+      }
+    </div>
+  </section>
+</Layout>

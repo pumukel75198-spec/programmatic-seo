@@ -1,0 +1,59 @@
+[
+  {
+    "slug": "openai-whisper-api",
+    "title": "OpenAI Whisper API",
+    "description": "Die Whisper API von OpenAI transkribiert Audio in Text mit hoher Genauigkeit und unterstützt über 50 Sprachen – ideal für Podcasts, Meetings und Voice-Apps.",
+    "category": "KI & Speech",
+    "tags": ["speech-to-text", "transcription", "ki", "audio"],
+    "details": {
+      "provider": "OpenAI",
+      "pricing": "0,006 $ pro Minute Audio",
+      "features": [
+        "Transkription in über 50 Sprachen",
+        "Unterstützung für MP3, MP4, WAV und mehr",
+        "Automatische Spracherkennung",
+        "Hochpräzise auch bei Hintergrundgeräuschen"
+      ],
+      "useCase": "Automatische Untertitel, Meeting-Protokolle und Voice-Assistenten",
+      "website": "https://platform.openai.com/docs/guides/speech-to-text"
+    }
+  },
+  {
+    "slug": "stripe-payments-api",
+    "title": "Stripe Payments API",
+    "description": "Die Stripe Payments API ist die führende Schnittstelle für Online-Zahlungen, Abonnements und Finanzinfrastruktur mit exzellenter Developer Experience.",
+    "category": "Finanzen",
+    "tags": ["payments", "fintech", "abonnements", "checkout"],
+    "details": {
+      "provider": "Stripe",
+      "pricing": "ca. 1,5 % + 0,25 € pro Transaktion",
+      "features": [
+        "Einmalzahlungen und Abonnements",
+        "Stripe Checkout und Elements",
+        "Webhooks und Event-Streaming",
+        "Umfangreiche SDKs für alle gängigen Sprachen"
+      ],
+      "useCase": "E-Commerce, SaaS-Abrechnung und Marktplätze",
+      "website": "https://stripe.com"
+    }
+  },
+  {
+    "slug": "supabase-database-api",
+    "title": "Supabase Database API",
+    "description": "Supabase bietet eine automatisch generierte REST- und GraphQL-API auf Basis von PostgreSQL – inklusive Auth, Storage und Realtime-Subscriptions.",
+    "category": "Backend",
+    "tags": ["postgresql", "backend", "open-source", "auth"],
+    "details": {
+      "provider": "Supabase",
+      "pricing": "Kostenloser Tarif, danach ab 25 $/Monat",
+      "features": [
+        "Automatische REST-API für jede Tabelle",
+        "Row Level Security",
+        "Realtime-Subscriptions",
+        "Storage und Edge Functions"
+      ],
+      "useCase": "Schnelle Backend-Entwicklung für Web- und Mobile-Apps",
+      "website": "https://supabase.com"
+    }
+  }
+]

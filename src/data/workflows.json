@@ -1,0 +1,62 @@
+[
+  {
+    "slug": "content-automation",
+    "title": "Content-Automation mit KI",
+    "description": "Ein vollständiger Workflow, um mit KI und APIs Content-Ideen zu recherchieren, zu schreiben und automatisiert zu veröffentlichen.",
+    "category": "Content & SEO",
+    "tags": ["ki", "content", "seo", "automatisierung"],
+    "details": {
+      "difficulty": "Fortgeschritten",
+      "duration": "ca. 2–3 Stunden Setup",
+      "tools": ["OpenAI API", "Supabase", "Astro", "n8n"],
+      "steps": [
+        "Keyword- und Themenrecherche durchführen",
+        "Datenmodell in Supabase anlegen",
+        "KI-Texterstellung über die OpenAI API",
+        "Qualitätssicherung und Freigabe",
+        "Automatische Veröffentlichung per CI/CD"
+      ],
+      "useCase": "Skalierbare Content-Produktion für Programmatic-SEO-Projekte"
+    }
+  },
+  {
+    "slug": "lead-qualification",
+    "title": "Lead-Qualifizierung automatisieren",
+    "description": "Eingehende Leads automatisch bewerten, anreichern und an das richtige Team weiterleiten – ohne manuelle Sortierung.",
+    "category": "Sales & CRM",
+    "tags": ["sales", "crm", "ki", "automatisierung"],
+    "details": {
+      "difficulty": "Fortgeschritten",
+      "duration": "ca. 1–2 Stunden Setup",
+      "tools": ["Make", "OpenAI API", "Resend API", "CRM"],
+      "steps": [
+        "Leads über Formulare oder Webhooks erfassen",
+        "Firmendaten anreichern und E-Mails prüfen",
+        "Leads per Sprachmodell bewerten",
+        "An das passende Team routen",
+        "Personalisierte E-Mails versenden"
+      ],
+      "useCase": "Vertriebsteams, die eingehende Leads priorisieren möchten"
+    }
+  },
+  {
+    "slug": "programmatic-seo-pipeline",
+    "title": "Programmatic-SEO-Pipeline",
+    "description": "Der komplette Workflow für tausende SEO-Seiten: Datenquellen, Template-Engine, Build-Prozess und Monitoring.",
+    "category": "SEO & Skalierung",
+    "tags": ["seo", "astro", "skalierung", "deployment"],
+    "details": {
+      "difficulty": "Experte",
+      "duration": "ca. 1 Tag Setup",
+      "tools": ["Astro", "Supabase", "OpenAI API", "n8n"],
+      "steps": [
+        "Datenquellen definieren",
+        "Templates mit getStaticPaths entwickeln",
+        "Interne Verlinkung automatisieren",
+        "Statischen Build per CI/CD deployen",
+        "Indexierung und Rankings überwachen"
+      ],
+      "useCase": "Große SEO-Projekte mit hunderten bis tausenden Seiten"
+    }
+  }
+]
