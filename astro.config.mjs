@@ -24,8 +24,8 @@ export default defineConfig({
   // Static export: generates plain HTML/CSS/JS in ./dist
   output: 'static',
 
-  // TODO: Set this to the real production domain before going live.
-  site: 'https://example.com',
+  // Production domain – used for canonical URLs and the sitemap.
+  site: 'https://flowmatrix.com',
 
   i18n: {
     defaultLocale: 'en',

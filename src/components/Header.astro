@@ -21,12 +21,16 @@ const isActive = (href: string) =>
 
 <header class="sticky top-0 z-50 border-b border-white/5 bg-[#06070d]/80 backdrop-blur-xl">
   <div class="mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-2 px-4 py-2 sm:px-6 lg:px-8">
-    <a href={`/${lang}/`} class="group flex items-center gap-2.5">
+    <a
+      href={`/${lang}/`}
+      class="notranslate group flex items-center gap-2.5"
+      translate="no"
+    >
       <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-cyan-400 text-sm font-bold text-white shadow-lg shadow-brand-500/30">
-        PS
+        FM
       </span>
       <span class="text-sm font-semibold tracking-tight text-white sm:text-base">
-        Programmatic<span class="text-brand-400">SEO</span>
+        Flow<span class="text-brand-400">Matrix</span>
       </span>
     </a>
 

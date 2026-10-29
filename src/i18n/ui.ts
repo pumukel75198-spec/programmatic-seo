@@ -66,7 +66,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     "nav.apis": "APIs",
     "nav.alternatives": "Alternatives",
     "nav.workflows": "Workflows",
-    "hero.badge": "Programmatic SEO · curated & current",
+    "hero.badge": "FlowMatrix · curated & current",
     "hero.title1": "The knowledge hub for",
     "hero.title2": "APIs, alternatives and workflows",
     "hero.subtitle":
@@ -106,7 +106,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     "nav.apis": "APIs",
     "nav.alternatives": "Alternativen",
     "nav.workflows": "Workflows",
-    "hero.badge": "Programmatic SEO · kuratiert & aktuell",
+    "hero.badge": "FlowMatrix · kuratiert & aktuell",
     "hero.title1": "Das Wissens-Hub für",
     "hero.title2": "APIs, Alternativen und Workflows",
     "hero.subtitle":
@@ -146,7 +146,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     "nav.apis": "API",
     "nav.alternatives": "Alternatives",
     "nav.workflows": "Workflows",
-    "hero.badge": "Programmatic SEO · sélectionné et à jour",
+    "hero.badge": "FlowMatrix · sélectionné et à jour",
     "hero.title1": "Le hub de connaissances pour",
     "hero.title2": "API, alternatives et workflows",
     "hero.subtitle":
@@ -186,7 +186,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     "nav.apis": "APIs",
     "nav.alternatives": "Alternativas",
     "nav.workflows": "Flujos de trabajo",
-    "hero.badge": "Programmatic SEO · curado y actualizado",
+    "hero.badge": "FlowMatrix · curado y actualizado",
     "hero.title1": "El centro de conocimiento para",
     "hero.title2": "APIs, alternativas y flujos de trabajo",
     "hero.subtitle":
@@ -226,7 +226,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     "nav.apis": "API",
     "nav.alternatives": "Alternative",
     "nav.workflows": "Workflow",
-    "hero.badge": "Programmatic SEO · curato e aggiornato",
+    "hero.badge": "FlowMatrix · curato e aggiornato",
     "hero.title1": "L'hub di conoscenza per",
     "hero.title2": "API, alternative e workflow",
     "hero.subtitle":
@@ -266,7 +266,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     "nav.apis": "APIs",
     "nav.alternatives": "Alternativas",
     "nav.workflows": "Fluxos de trabalho",
-    "hero.badge": "Programmatic SEO · curado e atualizado",
+    "hero.badge": "FlowMatrix · curado e atualizado",
     "hero.title1": "O hub de conhecimento para",
     "hero.title2": "APIs, alternativas e fluxos de trabalho",
     "hero.subtitle":
@@ -306,7 +306,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     "nav.apis": "API's",
     "nav.alternatives": "Alternatieven",
     "nav.workflows": "Workflows",
-    "hero.badge": "Programmatic SEO · gecureerd en actueel",
+    "hero.badge": "FlowMatrix · gecureerd en actueel",
     "hero.title1": "De kennis hub voor",
     "hero.title2": "API's, alternatieven en workflows",
     "hero.subtitle":
@@ -346,7 +346,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     "nav.apis": "API",
     "nav.alternatives": "Alternatywy",
     "nav.workflows": "Workflowy",
-    "hero.badge": "Programmatic SEO · wyselekcjonowane i aktualne",
+    "hero.badge": "FlowMatrix · wyselekcjonowane i aktualne",
     "hero.title1": "Centrum wiedzy o",
     "hero.title2": "API, alternatywach i workflowach",
     "hero.subtitle":
@@ -386,7 +386,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     "nav.apis": "API:er",
     "nav.alternatives": "Alternativ",
     "nav.workflows": "Arbetsflöden",
-    "hero.badge": "Programmatic SEO · kurerat och aktuellt",
+    "hero.badge": "FlowMatrix · kurerat och aktuellt",
     "hero.title1": "Kunskapshubben för",
     "hero.title2": "API:er, alternativ och arbetsflöden",
     "hero.subtitle":
@@ -426,7 +426,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     "nav.apis": "API'ler",
     "nav.alternatives": "Alternatifler",
     "nav.workflows": "İş akışları",
-    "hero.badge": "Programmatic SEO · seçkin ve güncel",
+    "hero.badge": "FlowMatrix · seçkin ve güncel",
     "hero.title1": "Bilgi merkezi:",
     "hero.title2": "API'ler, alternatifler ve iş akışları",
     "hero.subtitle":
@@ -466,7 +466,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     "nav.apis": "API",
     "nav.alternatives": "代替ツール",
     "nav.workflows": "ワークフロー",
-    "hero.badge": "Programmatic SEO · 厳選・最新",
+    "hero.badge": "FlowMatrix · 厳選・最新",
     "hero.title1": "ナレッジハブ：",
     "hero.title2": "API・代替ツール・ワークフロー",
     "hero.subtitle":
@@ -506,7 +506,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     "nav.apis": "API",
     "nav.alternatives": "替代方案",
     "nav.workflows": "工作流",
-    "hero.badge": "Programmatic SEO · 精选且及时",
+    "hero.badge": "FlowMatrix · 精选且及时",
     "hero.title1": "知识中心：",
     "hero.title2": "API、替代方案与工作流",
     "hero.subtitle":

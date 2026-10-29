@@ -1,6 +1,6 @@
-# Programmatic SEO Hub
+# FlowMatrix
 
-Ein modernes **Astro + Tailwind CSS**-Projekt für Programmatic SEO mit drei dynamischen Routen-Kategorien und einem dunklen, responsiven UI.
+Ein modernes **Astro + Tailwind CSS**-Projekt für Programmatic SEO mit drei dynamischen Routen-Kategorien, Mehrsprachigkeit und einem dunklen, responsiven UI.
 
 ## Features
 
@@ -8,9 +8,11 @@ Ein modernes **Astro + Tailwind CSS**-Projekt für Programmatic SEO mit drei dyn
 - 🎨 **Tailwind CSS 4** über die offizielle Vite-Integration
 - 🌙 **Dark Mode** als Standard-Design
 - 🧭 Drei dynamische Routen: **APIs**, **Alternativen**, **Workflows**
-- 🔍 SEO-freundlich: Canonical-URLs, Open-Graph- und Twitter-Meta-Tags
+- 🌍 **12 Sprachen** (`en`, `de`, `fr`, `es`, `it`, `pt`, `nl`, `pl`, `sv`, `tr`, `ja`, `zh`) mit lokalisierten Routen
+- 🔍 SEO-freundlich: Canonical-URLs, Open-Graph-/Twitter-Meta-Tags, JSON-LD, Sitemap und `robots.txt`
+- 🖼️ Automatisch generiertes Open-Graph-Bild aus SVG (`sharp`)
 - 📱 Vollständig responsives Layout
-- 🧩 Wiederverwendbare Komponenten (`Layout`, `Header`, `Footer`, `ContentCard`, `CategoryCard`, `Badge`, `PageHeader`)
+- 🧩 Wiederverwendbare Komponenten (`Layout`, `Header`, `Footer`, `ContentCard`, `CategoryCard`, `Badge`, `PageHeader`, `Breadcrumb`, `CTA`, `DetailBox`, `LanguageSwitcher`)
 
 ## Projektstruktur
 
@@ -18,56 +20,82 @@ Ein modernes **Astro + Tailwind CSS**-Projekt für Programmatic SEO mit drei dyn
 programmatic-seo/
 ├── astro.config.mjs
 ├── package.json
+├── wrangler.toml
 ├── public/
+│   ├── favicon.svg
+│   ├── og-default.svg
+│   └── og-default.png
+├── scripts/
+│   ├── generate-og.mjs      # SVG -> PNG für Open Graph
+│   └── validate-data.js     # prüft Datendateien und Slugs
 └── src/
     ├── components/
-    │   ├── Badge.astro
-    │   ├── CategoryCard.astro
-    │   ├── ContentCard.astro
-    │   ├── Footer.astro
-    │   ├── Header.astro
-    │   └── PageHeader.astro
     ├── data/
-    │   ├── apis.ts
-    │   ├── alternativen.ts
-    │   └── workflows.ts
+    │   ├── apis.json
+    │   ├── alternatives.json
+    │   └── workflows.json
+    ├── i18n/
+    │   ├── content.ts
+    │   ├── ui.ts
+    │   └── utils.ts
     ├── layouts/
     │   └── Layout.astro
+    ├── lib/
+    │   ├── content.ts
+    │   ├── schema.ts
+    │   ├── site.ts
+    │   └── tools.ts
     ├── pages/
     │   ├── 404.astro
     │   ├── index.astro
-    │   ├── apis/
+    │   ├── robots.txt.ts
+    │   ├── [lang]/
     │   │   ├── index.astro
-    │   │   └── [slug].astro
-    │   ├── alternativen/
-    │   │   ├── index.astro
-    │   │   └── [slug].astro
-    │   └── workflows/
-    │       ├── index.astro
-    │       └── [slug].astro
+    │   │   ├── imprint.astro
+    │   │   ├── privacy.astro
+    │   │   ├── apis/
+    │   │   ├── alternatives/
+    │   │   └── workflows/
+    │   ├── apis/[...slug].astro
+    │   ├── alternatives/[...slug].astro
+    │   └── workflows/[...slug].astro
     └── styles/
         └── global.css
 ```
 
 ## Befehle
 
-| Befehl            | Beschreibung                                  |
-| ----------------- | --------------------------------------------- |
-| `npm install`     | Abhängigkeiten installieren                   |
-| `npm run dev`     | Dev-Server unter `http://localhost:4321`      |
-| `npm run build`   | Produktions-Build nach `./dist/`              |
-| `npm run preview` | Produktions-Build lokal testen                |
+| Befehl              | Beschreibung                                        |
+| ------------------- | --------------------------------------------------- |
+| `npm install`       | Abhängigkeiten installieren                         |
+| `npm run dev`       | Dev-Server unter `http://localhost:4321`            |
+| `npm run validate`  | Datendateien und Slug-Eindeutigkeit prüfen          |
+| `npm run og:generate` | Open-Graph-PNG aus `public/og-default.svg` erzeugen |
+| `npm run build`     | Produktions-Build nach `./dist/` (inkl. OG-Bild)    |
+| `npm run preview`   | Produktions-Build lokal testen                      |
+| `npm run deploy`    | Build erstellen und auf Cloudflare Pages deployen   |
 
 ## Inhalte erweitern
 
 Die Inhalte liegen zentral in `src/data/`:
 
-- `apis.ts` – Einträge vom Typ `ApiEntry`
-- `alternativen.ts` – Einträge vom Typ `AlternativeEntry`
-- `workflows.ts` – Einträge vom Typ `WorkflowEntry`
+- `apis.json` – API-Einträge
+- `alternatives.json` – Alternativen-Vergleiche
+- `workflows.json` – Workflow-Anleitungen
 
-Neuen Eintrag hinzufügen, `slug` setzen – die dynamische Route (`getStaticPaths`) erzeugt automatisch die passende Seite.
+Neuen Eintrag hinzufügen, eindeutigen `slug` setzen – die dynamischen Routen (`getStaticPaths`) erzeugen automatisch die passenden Seiten für alle Sprachen. Anschließend `npm run validate` ausführen.
 
-## Vor dem Deployment
+Übersetzungen für UI-Texte und redaktionelle Inhalte liegen in `src/i18n/ui.ts` bzw. `src/i18n/content.ts`.
 
-Passe in `astro.config.mjs` die `site`-URL auf deine Produktions-Domain an. Das sorgt für korrekte Canonical-URLs und ist Voraussetzung für eine spätere Sitemap-Integration.
+## Branding & SEO
+
+Globale Werte (Name, Domain, Twitter-Handle, Standard-OG-Bild) werden zentral in `src/lib/site.ts` gepflegt. Die Produktions-Domain steht zusätzlich in `astro.config.mjs` (`site`) und wird für Canonical-URLs und die Sitemap verwendet.
+
+## Deployment
+
+Das Projekt ist für **Cloudflare Pages** vorbereitet (`wrangler.toml`). Nach dem Login via `wrangler login`:
+
+```bash
+npm run deploy:init   # einmalig: Pages-Projekt anlegen
+npm run deploy        # Build + Deployment
+```

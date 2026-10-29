@@ -5,7 +5,7 @@
  * official URLs and optional affiliate URLs. Templates use these helpers
  * to render tools as clean, sponsored links.
  *
- * TODO: Replace the placeholder `?ref=programmatic-seo` parameters with
+ * TODO: Replace the placeholder `?ref=flowmatrix` parameters with
  * your real affiliate parameters.
  */
 export interface ToolConfig {
@@ -15,7 +15,7 @@ export interface ToolConfig {
   sponsored?: boolean;
 }
 
-const REF = "?ref=programmatic-seo";
+const REF = "?ref=flowmatrix";
 
 export const tools: Record<string, ToolConfig> = {
   "OpenAI API": {

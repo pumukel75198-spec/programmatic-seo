@@ -16,12 +16,12 @@
   <circle cx="170" cy="570" r="210" fill="#22d3ee" opacity="0.12"/>
 
   <rect x="80" y="80" width="76" height="76" rx="20" fill="url(#accent)"/>
-  <text x="118" y="130" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700" fill="#ffffff" text-anchor="middle">PS</text>
+  <text x="118" y="130" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700" fill="#ffffff" text-anchor="middle">FM</text>
 
-  <text x="80" y="300" font-family="Inter, Arial, sans-serif" font-size="66" font-weight="700" fill="#ffffff">Programmatic SEO Hub</text>
+  <text x="80" y="300" font-family="Inter, Arial, sans-serif" font-size="66" font-weight="700" fill="#ffffff">FlowMatrix</text>
   <text x="80" y="372" font-family="Inter, Arial, sans-serif" font-size="34" fill="#94a3b8">APIs · Alternativen · Workflows</text>
   <text x="80" y="432" font-family="Inter, Arial, sans-serif" font-size="26" fill="#64748b">Kuratiert für Entwickler und SEO-Teams</text>
 
   <rect x="80" y="500" width="1040" height="2" fill="#1e293b"/>
-  <text x="80" y="560" font-family="Inter, Arial, sans-serif" font-size="24" fill="#818cf8">programmatic-seo</text>
+  <text x="80" y="560" font-family="Inter, Arial, sans-serif" font-size="24" fill="#818cf8">flowmatrix</text>
 </svg>
