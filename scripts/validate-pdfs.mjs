@@ -63,6 +63,7 @@ const lower = (value) => normalize(value).toLowerCase();
 const matchNormalize = (value) =>
   normalize(value)
     .replace(/-\s+/g, "-")
+    .replace(/\/\s+/g, "/")
     .replace(/\s+([.,;:!?])/g, "$1")
     .toLowerCase();
 
@@ -84,9 +85,12 @@ const JUNK_PATTERNS = [
   ["TBD", /\bT\s*B\s*D\b/i],
   ["undefined", /\bundefined\b/i],
   ["NaN", /\bNaN\b/],
-  ["Template-Platzhalter", /\{\{|\}\}/],
-  ["JSON-Fragment", /\{\s*"[a-zA-Z0-9_]+"\s*:/],
-  ["Array-Fragment", /\[\s*\{/],
+  ["veralteter OpenAI-Endpoint /v1/engines", /api\.openai\.com\/v1\/engines\//i],
+  ["veralteter OpenAI-Completions-Endpoint", /api\.openai\.com\/v1\/completions/i],
+  ["veraltetes Modell text-davinci", /text-davinci/i],
+  ["veraltetes Modell gpt-3.5-turbo", /gpt-3\.5-turbo/i],
+  ["veralteter Befehl npm init astro", /npm init astro/i],
+  ["Template-Platzhalter", /\{\{/],
 ];
 
 const COMPACT_JUNK = [
@@ -149,6 +153,79 @@ function checkStructure(workflow, text, errors) {
         );
       }
     }
+
+    if (typeof step === "string") {
+      errors.push(`Step ${index + 1}: keine strukturierten Detailfelder`);
+      return;
+    }
+
+    // Master-Anleitung: konkrete Actions, Checkliste und Ergebnis
+    if (!Array.isArray(step.actions) || step.actions.length < 3) {
+      errors.push(
+        `Step ${index + 1}: mindestens 3 konkrete Actions erwartet`
+      );
+    } else {
+      step.actions.forEach((action, actionIndex) => {
+        checkContains(
+          text,
+          action,
+          `Step ${index + 1} Action ${actionIndex + 1}`,
+          errors
+        );
+      });
+    }
+
+    if (!Array.isArray(step.checklist) || step.checklist.length < 2) {
+      errors.push(
+        `Step ${index + 1}: mindestens 2 Checklisten-Punkte erwartet`
+      );
+    } else {
+      step.checklist.forEach((item, itemIndex) => {
+        checkContains(
+          text,
+          item,
+          `Step ${index + 1} Checkliste ${itemIndex + 1}`,
+          errors
+        );
+      });
+    }
+
+    if (!normalize(step.expectedResult)) {
+      errors.push(`Step ${index + 1}: expectedResult fehlt`);
+    } else {
+      checkContains(
+        text,
+        step.expectedResult,
+        `Step ${index + 1} Ergebnis`,
+        errors
+      );
+    }
+
+    if (Array.isArray(step.commands)) {
+      step.commands.forEach((command, commandIndex) => {
+        if (command?.code) {
+          checkContains(
+            text,
+            command.code,
+            `Step ${index + 1} Befehl ${commandIndex + 1}`,
+            errors
+          );
+        }
+      });
+    }
+
+    if (Array.isArray(step.config)) {
+      step.config.forEach((entry, entryIndex) => {
+        if (entry?.key) {
+          checkContains(
+            text,
+            entry.key,
+            `Step ${index + 1} Config ${entryIndex + 1}`,
+            errors
+          );
+        }
+      });
+    }
   });
 
   const compactText = compact(text);
@@ -163,6 +240,15 @@ function checkStructure(workflow, text, errors) {
   }
   if (!lower(text).includes("how to build it")) {
     errors.push('Abschnitt "How to build it" fehlt');
+  }
+  if (!compactText.includes("wasdutust")) {
+    errors.push('Abschnitt "WAS DU TUST" fehlt');
+  }
+  if (!compactText.includes("checkliste")) {
+    errors.push('Abschnitt "CHECKLISTE" fehlt');
+  }
+  if (!compactText.includes("ergebnis")) {
+    errors.push('Abschnitt "ERGEBNIS" fehlt');
   }
 }
 
@@ -202,6 +288,35 @@ function checkLinks(workflow, text, raw, partner, monetization, errors) {
       );
     }
   }
+
+  // Affiliate-Links müssen direkt in den jeweiligen Steps eingebettet sein.
+  const steps = Array.isArray(workflow.details?.steps)
+    ? workflow.details.steps
+    : [];
+  steps.forEach((step, index) => {
+    if (typeof step === "string") return;
+    for (const name of step.tools ?? []) {
+      const entry = partner[name];
+      if (!entry) {
+        errors.push(
+          `Step ${index + 1}: Tool "${name}" fehlt in partner.json`
+        );
+        continue;
+      }
+      const href = entry.affiliateUrl ?? entry.url;
+      if (!href) {
+        errors.push(
+          `Step ${index + 1}: Tool "${name}" hat keine URL in partner.json`
+        );
+        continue;
+      }
+      if (!uriMatches.includes(href) && !raw.includes(href)) {
+        errors.push(
+          `Step ${index + 1}: Affiliate-Link für "${name}" fehlt im PDF: ${href}`
+        );
+      }
+    }
+  });
 
   if (!monetization.checkoutUrl) {
     errors.push("Keine Lemon-Squeezy-Checkout-URL konfiguriert");

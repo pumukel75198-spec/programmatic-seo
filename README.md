@@ -181,10 +181,10 @@ npm run pdf:generate
 
 [`scripts/validate-pdfs.mjs`](scripts/validate-pdfs.mjs) prüft jedes PDF automatisch vor dem Build:
 
-1. **Inhaltlicher Abgleich** mit `workflows.json` (Titel, Beschreibung, Kategorie, Difficulty, Dauer, Use Case, alle Steps)
-2. **Junk-/Halluzinations-Check** (Lorem Ipsum, TODO, Platzhalter, `undefined`, `NaN`, kaputte JSON-Fragmente)
-3. **Struktur** (mind. 3 Steps, nicht-leere Beschreibungen, vollständige Sätze, alle Abschnitte)
-4. **Link-Integrität** (Affiliate-Links aus `partner.json`, `ref`-Parameter, Lemon-Squeezy-Checkout-Link, Preis 4,99 €)
+1. **Inhaltlicher Abgleich** mit `workflows.json` (Titel, Beschreibung, Kategorie, Difficulty, Dauer, Use Case, alle Steps inkl. Actions, Commands, Config, Checkliste und Ergebnis)
+2. **Junk-/Halluzinations-Check** (Lorem Ipsum, TODO, Platzhalter, `undefined`, `NaN`, veraltete OpenAI-Endpunkte/-Modelle, `npm init astro`)
+3. **Struktur** (mind. 3 Steps, mind. 3 Actions und 2 Checklisten-Punkte pro Step, vollständige Sätze, alle Abschnitte)
+4. **Link-Integrität** (Affiliate-Links aus `partner.json` direkt in den Steps, `ref`-Parameter, Lemon-Squeezy-Checkout-Link, Preis 4,99 €)
 
 Der Check läuft im `prebuild`-Schritt und bricht den Build bei Fehlern mit Exit-Code 1 ab. Manuell:
 
@@ -192,11 +192,24 @@ Der Check läuft im `prebuild`-Schritt und bricht den Build bei Fehlern mit Exit
 npm run pdf:validate
 ```
 
-Fehlende Step-Beschreibungen lassen sich per LLM ergänzen:
+### Master-Anleitung pro Step
+
+Jeder Step enthält jetzt:
+
+- `description` – ausführliche Einordnung
+- `actions` – konkrete Handlungen mit Klickpfaden/Parametern
+- `commands` – echte CLI-/API-/Code-Schnipsel
+- `config` – konkrete Umgebungsvariablen/Parameter
+- `tools` – benötigte Tools; die Affiliate-Links werden direkt im Step gerendert
+- `checklist` – überprüfbare Punkte
+- `expectedResult` – was nach dem Step fertig ist
+
+Fehlende Details lassen sich per LLM ergänzen:
 
 ```bash
-npm run enrich:workflows -- --dry-run
-npm run enrich:workflows
+npm run enrich:workflow-details -- --dry-run
+npm run enrich:workflow-details -- --force --only=content-automation
+npm run enrich:workflow-details
 ```
 
 Die Landingpage [`src/pages/[lang]/workflows/[slug].astro`](src/pages/[lang]/workflows/[slug].astro) bindet [`PremiumDownload.astro`](src/components/PremiumDownload.astro) ein:

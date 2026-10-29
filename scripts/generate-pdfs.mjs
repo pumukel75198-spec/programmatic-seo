@@ -42,6 +42,7 @@ const COLORS = {
   muted: "#94a3b8",
   dim: "#64748b",
   white: "#ffffff",
+  emerald: "#34d399",
 };
 
 const PAGE = { width: 595.28, height: 841.89, margin: 50 };
@@ -52,12 +53,28 @@ function isNonEmptyString(value) {
 
 function normalizeStep(step) {
   if (typeof step === "string") {
-    return { title: step, description: "", links: [] };
+    return {
+      title: step,
+      description: "",
+      links: [],
+      actions: [],
+      commands: [],
+      config: [],
+      tools: [],
+      checklist: [],
+      expectedResult: "",
+    };
   }
   return {
     title: step?.title ?? "Step",
     description: step?.description ?? "",
     links: Array.isArray(step?.links) ? step.links : [],
+    actions: Array.isArray(step?.actions) ? step.actions : [],
+    commands: Array.isArray(step?.commands) ? step.commands : [],
+    config: Array.isArray(step?.config) ? step.config : [],
+    tools: Array.isArray(step?.tools) ? step.tools : [],
+    checklist: Array.isArray(step?.checklist) ? step.checklist : [],
+    expectedResult: step?.expectedResult ?? "",
   };
 }
 
@@ -283,7 +300,24 @@ function drawOverview(doc, workflow) {
   }
 }
 
-function drawSteps(doc, workflow) {
+function ensureSpace(doc, needed = 80) {
+  if (doc.y + needed > PAGE.height - 60) {
+    doc.addPage();
+    doc.rect(0, 0, PAGE.width, PAGE.height).fill(COLORS.bg);
+    doc.fillColor(COLORS.text);
+  }
+}
+
+function subHeading(doc, text, x, width) {
+  ensureSpace(doc, 40);
+  doc
+    .font("Helvetica-Bold")
+    .fontSize(8.5)
+    .fillColor(COLORS.brandLight)
+    .text(text, x, doc.y + 6, { width, characterSpacing: 1 });
+}
+
+function drawSteps(doc, workflow, partner) {
   const steps = Array.isArray(workflow.details?.steps)
     ? workflow.details.steps.map(normalizeStep)
     : [];
@@ -307,18 +341,12 @@ function drawSteps(doc, workflow) {
   doc.moveDown(1.5);
 
   steps.forEach((step, index) => {
-    if (doc.y > PAGE.height - 150) {
-      doc.addPage();
-      doc.rect(0, 0, PAGE.width, PAGE.height).fill(COLORS.bg);
-      doc.fillColor(COLORS.text);
-    }
+    ensureSpace(doc, 120);
 
     const startY = doc.y;
 
     // Number badge
-    doc
-      .circle(PAGE.margin + 14, startY + 14, 14)
-      .fill(COLORS.brand);
+    doc.circle(PAGE.margin + 14, startY + 14, 14).fill(COLORS.brand);
     doc
       .font("Helvetica-Bold")
       .fontSize(11)
@@ -348,15 +376,137 @@ function drawSteps(doc, workflow) {
         });
     }
 
-    if (step.links.length > 0) {
-      doc.moveDown(0.4);
+    // Concrete actions
+    if (Array.isArray(step.actions) && step.actions.length > 0) {
+      subHeading(doc, "WAS DU TUST", contentX, contentWidth);
+      step.actions.forEach((action, actionIndex) => {
+        ensureSpace(doc, 30);
+        doc
+          .font("Helvetica")
+          .fontSize(9.5)
+          .fillColor(COLORS.text)
+          .text(`${actionIndex + 1}. ${action}`, contentX, doc.y + 2, {
+            width: contentWidth,
+            lineGap: 2,
+          });
+      });
+    }
+
+    // Commands / code snippets
+    if (Array.isArray(step.commands) && step.commands.length > 0) {
+      subHeading(doc, "BEFEHLE & CODE", contentX, contentWidth);
+      for (const command of step.commands) {
+        if (!isNonEmptyString(command?.code)) continue;
+        const code = command.code;
+        const codeHeight = doc
+          .font("Courier")
+          .fontSize(8.5)
+          .heightOfString(code, { width: contentWidth - 20 });
+        ensureSpace(doc, codeHeight + 40);
+        const boxY = doc.y + 4;
+        doc
+          .roundedRect(contentX, boxY, contentWidth, codeHeight + 22, 6)
+          .fill(COLORS.surface)
+          .strokeColor(COLORS.border)
+          .lineWidth(1)
+          .stroke();
+        doc
+          .font("Helvetica-Bold")
+          .fontSize(7.5)
+          .fillColor(COLORS.dim)
+          .text(command.label ?? "Code", contentX + 10, boxY + 6, {
+            width: contentWidth - 20,
+          });
+        doc
+          .font("Courier")
+          .fontSize(8.5)
+          .fillColor(COLORS.text)
+          .text(code, contentX + 10, boxY + 18, {
+            width: contentWidth - 20,
+          });
+        doc.y = boxY + codeHeight + 26;
+      }
+    }
+
+    // Configuration parameters
+    if (Array.isArray(step.config) && step.config.length > 0) {
+      subHeading(doc, "KONFIGURATION", contentX, contentWidth);
+      for (const entry of step.config) {
+        ensureSpace(doc, 30);
+        doc
+          .font("Courier-Bold")
+          .fontSize(9)
+          .fillColor(COLORS.white)
+          .text(entry.key, contentX, doc.y + 2, { width: contentWidth });
+        doc
+          .font("Helvetica")
+          .fontSize(9)
+          .fillColor(COLORS.muted)
+          .text(
+            `${entry.value}${entry.description ? ` – ${entry.description}` : ""}`,
+            contentX,
+            doc.y + 1,
+            { width: contentWidth, lineGap: 2 }
+          );
+      }
+    }
+
+    // Tools with affiliate links embedded in the step
+    if (Array.isArray(step.tools) && step.tools.length > 0) {
+      subHeading(doc, "TOOLS FÜR DIESEN SCHRITT", contentX, contentWidth);
+      for (const name of step.tools) {
+        const entry = partner[name];
+        if (!entry) continue;
+        const href = entry.affiliateUrl ?? entry.url;
+        if (!href) continue;
+        ensureSpace(doc, 24);
+        doc
+          .font("Helvetica")
+          .fontSize(9.5)
+          .fillColor(COLORS.brandLight)
+          .text(`→ ${name}: ${href}`, contentX, doc.y + 2, {
+            width: contentWidth,
+            link: href,
+            underline: true,
+          });
+      }
+    }
+
+    // Checklist
+    if (Array.isArray(step.checklist) && step.checklist.length > 0) {
+      subHeading(doc, "CHECKLISTE", contentX, contentWidth);
+      for (const item of step.checklist) {
+        ensureSpace(doc, 24);
+        doc
+          .font("Helvetica")
+          .fontSize(9.5)
+          .fillColor(COLORS.text)
+          .text(`[ ] ${item}`, contentX, doc.y + 2, {
+            width: contentWidth,
+            lineGap: 2,
+          });
+      }
+    }
+
+    // Expected result
+    if (isNonEmptyString(step.expectedResult)) {
+      subHeading(doc, "ERGEBNIS", contentX, contentWidth);
       doc
-        .font("Helvetica-Bold")
-        .fontSize(8)
-        .fillColor(COLORS.dim)
-        .text("RESOURCES", contentX, doc.y, { characterSpacing: 1 });
+        .font("Helvetica")
+        .fontSize(9.5)
+        .fillColor(COLORS.emerald)
+        .text(step.expectedResult, contentX, doc.y + 2, {
+          width: contentWidth,
+          lineGap: 2,
+        });
+    }
+
+    // Documentation links
+    if (step.links.length > 0) {
+      subHeading(doc, "RESSOURCEN", contentX, contentWidth);
       for (const link of step.links) {
         if (!isNonEmptyString(link?.url)) continue;
+        ensureSpace(doc, 24);
         doc
           .font("Helvetica")
           .fontSize(9.5)
@@ -573,7 +723,7 @@ async function generatePdf(workflow, partner, monetization) {
 
   drawCover(doc, workflow, monetization);
   drawOverview(doc, workflow);
-  drawSteps(doc, workflow);
+  drawSteps(doc, workflow, partner);
   drawTools(doc, workflow, partner, monetization);
   addFooters(doc);
 
