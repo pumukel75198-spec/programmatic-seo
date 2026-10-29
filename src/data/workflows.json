@@ -34,8 +34,8 @@
             }
           ],
           "actions": [
-            "Erstellen Sie einen API-Schlüssel unter https://platform.openai.com/api-keys",
-            "Senden Sie eine Anfrage an https://api.openai.com/v1/chat/completions mit dem Modell gpt-4o-mini",
+            "Erstellen Sie einen API-Schlüssel im OpenAI-Dashboard",
+            "Senden Sie eine Anfrage an den Chat-Completions-Endpoint mit dem Modell gpt-4o-mini",
             "Verwenden Sie das Prompt: 'Generiere relevante Themen für <Keyword>'",
             "Clustern Sie die generierten Themen nach Suchintentionen",
             "Speichern Sie die Ergebnisse in einer CSV-Datei"
@@ -73,7 +73,7 @@
             }
           ],
           "actions": [
-            "Registrieren Sie sich bei Supabase unter https://supabase.com",
+            "Registrieren Sie sich bei Supabase",
             "Erstellen Sie ein neues Projekt und wählen Sie PostgreSQL als Datenbank",
             "Erstellen Sie eine Tabelle 'topics' mit Feldern für 'id', 'name', 'intent'",
             "Erstellen Sie eine Tabelle 'metadata' mit Feldern für 'topic_id', 'status', 'created_at'",
@@ -101,7 +101,7 @@
           ],
           "actions": [
             "Erstellen Sie strukturierte Prompts für die OpenAI API",
-            "Senden Sie eine Anfrage an https://api.openai.com/v1/chat/completions mit dem Modell gpt-4o-mini",
+            "Senden Sie eine Anfrage an den Chat-Completions-Endpoint mit dem Modell gpt-4o-mini",
             "Verarbeiten Sie die JSON-Ausgabe zu konsistenten Entwürfen",
             "Speichern Sie die Entwürfe in der 'topics' Tabelle in Supabase",
             "Überprüfen Sie die Entwürfe auf Vollständigkeit"
@@ -835,8 +835,8 @@
             }
           ],
           "actions": [
-            "Erstellen Sie einen API-Schlüssel unter https://platform.openai.com/api-keys.",
-            "Senden Sie eine Anfrage an https://api.openai.com/v1/chat/completions mit dem Modell 'gpt-4o-mini'.",
+            "Erstellen Sie einen API-Schlüssel im OpenAI-Dashboard",
+            "Senden Sie eine Anfrage an den Chat-Completions-Endpoint mit dem Modell 'gpt-4o-mini'.",
             "Verwenden Sie die 'messages'-Struktur, um einen Beitrag zu generieren.",
             "Kürzen Sie den generierten Beitrag auf maximal 280 Zeichen."
           ],
@@ -898,7 +898,7 @@
             }
           ],
           "actions": [
-            "Melden Sie sich bei Buffer an oder erstellen Sie ein Konto unter https://buffer.com.",
+            "Melden Sie sich bei Buffer an oder erstellen Sie ein Konto",
             "Fügen Sie Ihr Social-Media-Konto zu Buffer hinzu.",
             "Planen Sie den genehmigten Beitrag zur Veröffentlichung zu einer optimalen Zeit."
           ],
@@ -999,7 +999,7 @@
             }
           ],
           "actions": [
-            "Rufen Sie den OpenAI API-Key unter https://platform.openai.com/api-keys ab.",
+            "Rufen Sie den OpenAI API-Key im OpenAI-Dashboard ab.",
             "Verwenden Sie die OpenAI API, um Einbettungen für jede Frage in der Supabase-Tabelle zu generieren.",
             "Speichern Sie die generierten Vektoren in einer neuen Spalte in der Supabase-Tabelle.",
             "Überprüfen Sie die Korrektheit der gespeicherten Einbettungen."
@@ -2300,7 +2300,7 @@
             }
           ],
           "actions": [
-            "Rufe die OpenAI API unter https://api.openai.com/v1/chat/completions auf.",
+            "Rufe die OpenAI API über den Chat-Completions-Endpoint auf.",
             "Sende die Inhalte mit dem Parameter 'messages' zur Übersetzung.",
             "Erhalte die übersetzten Inhalte in den gewünschten Sprachen."
           ],
@@ -3324,7 +3324,7 @@
           ],
           "actions": [
             "Füge einen HTTP Request Node in n8n hinzu, um die OpenAI API anzusprechen.",
-            "Konfiguriere den Node mit der URL https://api.openai.com/v1/chat/completions.",
+            "Konfiguriere den Node mit dem Chat-Completions-Endpoint.",
             "Setze die Methode auf POST und füge die erforderlichen Parameter hinzu.",
             "Verarbeite die Antwort und aktualisiere die Lead-Daten mit den Scores."
           ],
@@ -4443,7 +4443,7 @@
             }
           ],
           "actions": [
-            "Erstellen Sie einen OpenAI API-Schlüssel unter https://platform.openai.com/api-keys.",
+            "Erstellen Sie einen OpenAI API-Schlüssel im OpenAI-Dashboard",
             "Integrieren Sie die OpenAI API in Ihren n8n-Workflow zur Generierung personalisierter Inhalte.",
             "Definieren Sie Parameter für die Personalisierung basierend auf Benutzersegmenten."
           ],

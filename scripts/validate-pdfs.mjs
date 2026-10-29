@@ -235,9 +235,6 @@ function checkStructure(workflow, text, errors) {
   if (!compactText.includes("overview")) {
     errors.push('Abschnitt "OVERVIEW" fehlt');
   }
-  if (!lower(text).includes("empfohlene tools & ressourcen")) {
-    errors.push('Abschnitt "Empfohlene Tools & Ressourcen" fehlt');
-  }
   if (!lower(text).includes("how to build it")) {
     errors.push('Abschnitt "How to build it" fehlt');
   }

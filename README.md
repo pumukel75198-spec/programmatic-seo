@@ -169,7 +169,7 @@ Bestehende Query-Strings und Hash-Fragmente bleiben erhalten; Parameter werden n
 - Clean Cover mit „FlowMatrix.dev Premium Workflow“
 - Übersicht mit Kategorie, Difficulty, Dauer und Use Case
 - Ausführliche Step-by-Step-Erklärungen ohne externe Links – alle Informationen stehen direkt im PDF
-- „Empfohlene Tools & Ressourcen“ mit Tool-Namen und offiziellen URLs als Klartext aus [`src/data/partner.json`](src/data/partner.json)
+- Keine Tool- oder Dokumentationslinks; das PDF ist vollständig eigenständig
 
 Das Skript läuft automatisch im `prebuild`-Schritt. Manuell:
 
@@ -200,7 +200,7 @@ Jeder Step enthält jetzt:
 - `actions` – konkrete Handlungen mit Klickpfaden/Parametern
 - `commands` – echte CLI-/API-/Code-Schnipsel
 - `config` – konkrete Umgebungsvariablen/Parameter
-- `tools` – benötigte Tools (werden im PDF als Klartext referenziert, ohne externe Links)
+- `tools` – interne Zuordnung der benötigten Tools (wird nicht als Link gerendert)
 - `checklist` – überprüfbare Punkte
 - `expectedResult` – was nach dem Step fertig ist
 

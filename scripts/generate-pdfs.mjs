@@ -683,7 +683,6 @@ async function generatePdf(workflow, partner, monetization) {
   drawCover(doc, workflow, monetization);
   drawOverview(doc, workflow);
   drawSteps(doc, workflow, partner);
-  drawTools(doc, workflow, partner, monetization);
   addFooters(doc);
 
   doc.end();
