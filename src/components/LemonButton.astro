@@ -1,0 +1,121 @@
+---
+/**
+ * Conversion-optimised Lemon Squeezy buy button.
+ *
+ * The checkout URL is resolved in this order:
+ *   1. `checkoutUrl` prop
+ *   2. `PUBLIC_LEMON_CHECKOUT_URL` environment variable
+ *
+ * When a URL is available, the anchor gets the `lemonsqueezy-button` class so
+ * Lemon Squeezy's overlay script opens the checkout in a modal instead of
+ * navigating away. The overlay script is injected once per page.
+ */
+interface Props {
+  checkoutUrl?: string;
+  label?: string;
+  price?: string;
+  note?: string;
+  productName?: string;
+  variant?: "primary" | "secondary";
+  class?: string;
+  id?: string;
+}
+
+const {
+  checkoutUrl,
+  label = "Buy now",
+  price,
+  note = "Secure checkout · Instant access",
+  productName,
+  variant = "primary",
+  class: className = "",
+  id,
+} = Astro.props;
+
+const envUrl = import.meta.env.PUBLIC_LEMON_CHECKOUT_URL;
+const href = (checkoutUrl ?? envUrl ?? "").trim();
+const isConfigured = href.length > 0;
+
+const baseClasses =
+  "group inline-flex items-center justify-center gap-2.5 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#06070d]";
+
+const variantClasses = {
+  primary:
+    "bg-gradient-to-r from-brand-500 to-cyan-500 text-white shadow-lg shadow-brand-500/30 hover:from-brand-400 hover:to-cyan-400 hover:shadow-brand-500/40",
+  secondary:
+    "border border-white/15 bg-white/5 text-white hover:border-brand-400/50 hover:bg-white/10",
+} as const;
+
+const classes = [
+  baseClasses,
+  variantClasses[variant],
+  isConfigured ? "" : "cursor-not-allowed opacity-60",
+  className,
+]
+  .filter(Boolean)
+  .join(" ");
+---
+
+{
+  isConfigured ? (
+    <a
+      id={id}
+      href={href}
+      class:list={[classes, "lemonsqueezy-button"]}
+      data-lemon-checkout
+      data-product={productName}
+      rel="noopener noreferrer"
+    >
+      <span class="flex flex-col items-start leading-tight">
+        <span>{label}</span>
+        {price && (
+          <span class="text-[11px] font-medium text-white/70">{price}</span>
+        )}
+      </span>
+      <svg
+        class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z"
+          clip-rule="evenodd"
+        />
+      </svg>
+    </a>
+  ) : (
+    <span
+      id={id}
+      class={classes}
+      role="button"
+      aria-disabled="true"
+      title="Checkout URL is not configured yet"
+    >
+      <span class="flex flex-col items-start leading-tight">
+        <span>{label}</span>
+        <span class="text-[11px] font-medium text-white/70">
+          Checkout coming soon
+        </span>
+      </span>
+    </span>
+  )
+}
+
+{
+  note && (
+    <p class="mt-2 text-center text-[11px] text-slate-500">{note}</p>
+  )
+}
+
+<script is:inline>
+  (function () {
+    if (document.querySelector("script[data-lemon-squeezy]")) return;
+    var script = document.createElement("script");
+    script.src = "https://app.lemonsqueezy.com/js/lemon.js";
+    script.defer = true;
+    script.setAttribute("data-lemon-squeezy", "");
+    document.head.appendChild(script);
+  })();
+</script>

@@ -133,6 +133,44 @@ Manuell startbar über „Run workflow“ (`workflow_dispatch`).
 
 > Hinweis: Die Insights-Routen liegen bewusst außerhalb der `[lang]`-Struktur. Im statischen Build und in `npm run preview` sind sie unter `/insights/...` erreichbar; der Astro-Dev-Server mit `prefixDefaultLocale` liefert unpräfixierte Routen jedoch mit 404 aus.
 
+## Monetarisierung
+
+### Lemon Squeezy Checkout
+
+[`src/components/LemonButton.astro`](src/components/LemonButton.astro) ist ein wiederverwendbarer, conversion-optimierter Buy-Button. Die Checkout-URL kommt aus der Prop `checkoutUrl` oder aus `PUBLIC_LEMON_CHECKOUT_URL`. Bei gesetzter URL erhält der Link die Klasse `lemonsqueezy-button`; das Overlay-Skript `lemon.js` wird automatisch einmal pro Seite eingebunden.
+
+```astro
+---
+import LemonButton from "../components/LemonButton.astro";
+---
+
+<LemonButton
+  label="Get instant access"
+  price="One-time purchase"
+  productName="FlowMatrix Playbook"
+/>
+```
+
+Ohne konfigurierte URL rendert die Komponente einen deaktivierten Button („Checkout coming soon“), sodass der Build nie bricht.
+
+### Affiliate-Parameter
+
+Alle Tool-Links laufen über [`src/lib/tools.ts`](src/lib/tools.ts). `getToolLink()` und `linkifyTools()` hängen die Affiliate-Parameter zentral an:
+
+- globaler Default: `PUBLIC_AFFILIATE_REF` (Fallback: `flowmatrix`)
+- pro Tool überschreibbar über `affiliateParams`
+
+Bestehende Query-Strings und Hash-Fragmente bleiben erhalten; Parameter werden nicht doppelt angehängt.
+
+### Umgebungsvariablen
+
+Siehe [`.env.example`](.env.example):
+
+```bash
+PUBLIC_LEMON_CHECKOUT_URL=https://your-store.lemonsqueezy.com/checkout/buy/...
+PUBLIC_AFFILIATE_REF=flowmatrix
+```
+
 ## Branding & SEO
 
 Globale Werte (Name, Domain, Twitter-Handle, Standard-OG-Bild) werden zentral in `src/lib/site.ts` gepflegt. Die Produktions-Domain steht zusätzlich in `astro.config.mjs` (`site`) und wird für Canonical-URLs und die Sitemap verwendet.

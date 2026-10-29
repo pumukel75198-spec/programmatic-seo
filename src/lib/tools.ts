@@ -5,17 +5,55 @@
  * official URLs and optional affiliate URLs. Templates use these helpers
  * to render tools as clean, sponsored links.
  *
- * TODO: Replace the placeholder `?ref=flowmatrix` parameters with
- * your real affiliate parameters.
+ * Affiliate parameters are applied centrally in `getToolLink()`:
+ *   - global default: `PUBLIC_AFFILIATE_REF` (fallback: "flowmatrix")
+ *   - per-tool override: `affiliateParams`
+ *
+ * This keeps partner IDs in one place and avoids hard-coding query strings
+ * in every tool entry.
  */
 export interface ToolConfig {
   name: string;
   url: string;
   affiliateUrl?: string;
+  /** Per-tool affiliate parameters, e.g. { ref: "partner-123" }. */
+  affiliateParams?: Record<string, string>;
   sponsored?: boolean;
 }
 
-const REF = "?ref=flowmatrix";
+/**
+ * Legacy placeholder kept so existing entries stay readable. The actual
+ * affiliate parameters are appended by `getToolLink()`.
+ */
+const REF = "";
+
+/** Global affiliate reference, configurable via environment. */
+export const AFFILIATE_REF =
+  import.meta.env.PUBLIC_AFFILIATE_REF?.trim() || "flowmatrix";
+
+export const DEFAULT_AFFILIATE_PARAMS: Record<string, string> = {
+  ref: AFFILIATE_REF,
+};
+
+/**
+ * Appends affiliate parameters to a URL without duplicating existing keys
+ * and without breaking existing query strings or hash fragments.
+ */
+export function withAffiliateParams(
+  url: string,
+  params: Record<string, string> = DEFAULT_AFFILIATE_PARAMS
+): string {
+  try {
+    const parsed = new URL(url);
+    for (const [key, value] of Object.entries(params)) {
+      if (!value) continue;
+      parsed.searchParams.set(key, value);
+    }
+    return parsed.toString();
+  } catch {
+    return url;
+  }
+}
 
 export const tools: Record<string, ToolConfig> = {
   "OpenAI API": {
@@ -649,11 +687,21 @@ export interface ToolLink {
 export function getToolLink(name: string): ToolLink | null {
   const tool = tools[name];
   if (!tool) return null;
+
+  const baseUrl = tool.affiliateUrl ?? tool.url;
+  const params = tool.affiliateParams ?? DEFAULT_AFFILIATE_PARAMS;
+  const sponsored = tool.sponsored ?? Boolean(tool.affiliateUrl);
+
   return {
     name: tool.name,
-    href: tool.affiliateUrl ?? tool.url,
-    sponsored: tool.sponsored ?? Boolean(tool.affiliateUrl),
+    href: sponsored ? withAffiliateParams(baseUrl, params) : baseUrl,
+    sponsored,
   };
+}
+
+/** Returns the affiliate URL for a tool, or its official URL as fallback. */
+export function getAffiliateUrl(name: string): string | null {
+  return getToolLink(name)?.href ?? null;
 }
 
 const escapeHtml = (value: string): string =>

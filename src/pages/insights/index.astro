@@ -2,9 +2,11 @@
 import Layout from "../../layouts/Layout.astro";
 import Badge from "../../components/Badge.astro";
 import ContentCard from "../../components/ContentCard.astro";
+import LemonButton from "../../components/LemonButton.astro";
 import { getAllInsights } from "../../lib/insights";
 
 const insights = getAllInsights();
+const checkoutUrl = import.meta.env.PUBLIC_LEMON_CHECKOUT_URL;
 
 const formatDate = (value: string) =>
   new Date(value).toLocaleDateString("en-US", {
@@ -57,4 +59,35 @@ const formatDate = (value: string) =>
       )
     }
   </section>
+
+  {
+    checkoutUrl && (
+      <section class="mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:px-8">
+        <div class="relative overflow-hidden rounded-2xl border border-brand-500/30 bg-gradient-to-br from-brand-500/10 via-surface to-cyan-500/5 p-8 text-center sm:p-10">
+          <div
+            class="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-brand-500/20 blur-3xl"
+            aria-hidden="true"
+          />
+          <div class="relative">
+            <Badge tone="cyan">Support the project</Badge>
+            <h2 class="mt-3 text-2xl font-semibold text-white">
+              Get the FlowMatrix Playbook
+            </h2>
+            <p class="mx-auto mt-2 max-w-xl text-sm leading-relaxed text-slate-400">
+              A practical collection of templates, checklists and automation
+              recipes for building programmatic SEO systems that last.
+            </p>
+            <div class="mt-6 flex justify-center">
+              <LemonButton
+                label="Get instant access"
+                price="One-time purchase"
+                productName="FlowMatrix Playbook"
+                note="Secure checkout via Lemon Squeezy · Instant download"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
 </Layout>
