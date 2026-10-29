@@ -177,6 +177,28 @@ Das Skript läuft automatisch im `prebuild`-Schritt. Manuell:
 npm run pdf:generate
 ```
 
+### PDF-Qualitäts-Gatekeeper
+
+[`scripts/validate-pdfs.mjs`](scripts/validate-pdfs.mjs) prüft jedes PDF automatisch vor dem Build:
+
+1. **Inhaltlicher Abgleich** mit `workflows.json` (Titel, Beschreibung, Kategorie, Difficulty, Dauer, Use Case, alle Steps)
+2. **Junk-/Halluzinations-Check** (Lorem Ipsum, TODO, Platzhalter, `undefined`, `NaN`, kaputte JSON-Fragmente)
+3. **Struktur** (mind. 3 Steps, nicht-leere Beschreibungen, vollständige Sätze, alle Abschnitte)
+4. **Link-Integrität** (Affiliate-Links aus `partner.json`, `ref`-Parameter, Lemon-Squeezy-Checkout-Link, Preis 4,99 €)
+
+Der Check läuft im `prebuild`-Schritt und bricht den Build bei Fehlern mit Exit-Code 1 ab. Manuell:
+
+```bash
+npm run pdf:validate
+```
+
+Fehlende Step-Beschreibungen lassen sich per LLM ergänzen:
+
+```bash
+npm run enrich:workflows -- --dry-run
+npm run enrich:workflows
+```
+
 Die Landingpage [`src/pages/[lang]/workflows/[slug].astro`](src/pages/[lang]/workflows/[slug].astro) bindet [`PremiumDownload.astro`](src/components/PremiumDownload.astro) ein:
 
 - Buy-Button mit festem Preis **4,99 €**

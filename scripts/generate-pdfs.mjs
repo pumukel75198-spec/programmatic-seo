@@ -28,6 +28,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
 const workflowsFile = join(root, "src", "data", "workflows.json");
 const partnerFile = join(root, "src", "data", "partner.json");
+const monetizationFile = join(root, "src", "data", "monetization.json");
 const outputDir = join(root, "public", "downloads");
 
 const COLORS = {
@@ -60,7 +61,7 @@ function normalizeStep(step) {
   };
 }
 
-function drawCover(doc, workflow) {
+function drawCover(doc, workflow, monetization) {
   const { width, height } = PAGE;
 
   doc.rect(0, 0, width, height).fill(COLORS.bg);
@@ -157,10 +158,12 @@ function drawCover(doc, workflow) {
   doc
     .font("Helvetica")
     .fontSize(10)
-    .fillColor(COLORS.dim)
-    .text("Premium PDF · 4,99 €", PAGE.margin, height - 70, {
+    .fillColor(COLORS.brandLight)
+    .text(`Premium PDF · ${monetization.price}`, PAGE.margin, height - 70, {
       width: width - PAGE.margin * 2,
       align: "right",
+      link: monetization.checkoutUrl,
+      underline: true,
     });
 }
 
@@ -370,7 +373,7 @@ function drawSteps(doc, workflow) {
   });
 }
 
-function drawTools(doc, workflow, partner) {
+function drawTools(doc, workflow, partner, monetization) {
   const toolNames = Array.isArray(workflow.details?.tools)
     ? workflow.details.tools
     : [];
@@ -465,6 +468,55 @@ function drawTools(doc, workflow, partner) {
 
     doc.y = cardY + 64 + 10;
   }
+
+  // Checkout CTA
+  if (doc.y > PAGE.height - 150) {
+    doc.addPage();
+    doc.rect(0, 0, PAGE.width, PAGE.height).fill(COLORS.bg);
+    doc.fillColor(COLORS.text);
+  }
+
+  const ctaY = doc.y + 10;
+  doc
+    .roundedRect(PAGE.margin, ctaY, PAGE.width - PAGE.margin * 2, 92, 12)
+    .fill(COLORS.surface)
+    .strokeColor(COLORS.brand)
+    .lineWidth(1)
+    .stroke();
+
+  doc
+    .font("Helvetica-Bold")
+    .fontSize(13)
+    .fillColor(COLORS.white)
+    .text("Vollversion als Premium-PDF", PAGE.margin + 18, ctaY + 18, {
+      width: PAGE.width - PAGE.margin * 2 - 36,
+    });
+
+  doc
+    .font("Helvetica")
+    .fontSize(10)
+    .fillColor(COLORS.muted)
+    .text(
+      `Alle Schritte, Tools und Ressourcen als PDF – ${monetization.price}.`,
+      PAGE.margin + 18,
+      ctaY + 40,
+      { width: PAGE.width - PAGE.margin * 2 - 36 }
+    );
+
+  doc
+    .font("Helvetica-Bold")
+    .fontSize(10)
+    .fillColor(COLORS.brandLight)
+    .text(
+      `Jetzt kaufen – ${monetization.price}`,
+      PAGE.margin + 18,
+      ctaY + 62,
+      {
+        width: PAGE.width - PAGE.margin * 2 - 36,
+        link: monetization.checkoutUrl,
+        underline: true,
+      }
+    );
 }
 
 function addFooters(doc) {
@@ -490,7 +542,7 @@ function addFooters(doc) {
   }
 }
 
-async function generatePdf(workflow, partner) {
+async function generatePdf(workflow, partner, monetization) {
   const fileName = `flowmatrix-${workflow.slug}.pdf`;
   const outputPath = join(outputDir, fileName);
 
@@ -515,10 +567,10 @@ async function generatePdf(workflow, partner) {
     doc.on("error", reject);
   });
 
-  drawCover(doc, workflow);
+  drawCover(doc, workflow, monetization);
   drawOverview(doc, workflow);
   drawSteps(doc, workflow);
-  drawTools(doc, workflow, partner);
+  drawTools(doc, workflow, partner, monetization);
   addFooters(doc);
 
   doc.end();
@@ -529,7 +581,7 @@ async function generatePdf(workflow, partner) {
 }
 
 async function main() {
-  for (const file of [workflowsFile, partnerFile]) {
+  for (const file of [workflowsFile, partnerFile, monetizationFile]) {
     if (!existsSync(file)) {
       console.error(`✖ Datei nicht gefunden: ${file}`);
       process.exit(1);
@@ -538,9 +590,21 @@ async function main() {
 
   const workflows = JSON.parse(await readFile(workflowsFile, "utf8"));
   const partner = JSON.parse(await readFile(partnerFile, "utf8"));
+  const monetization = JSON.parse(await readFile(monetizationFile, "utf8"));
 
   if (!Array.isArray(workflows)) {
     console.error("✖ workflows.json muss ein Array sein.");
+    process.exit(1);
+  }
+
+  // Environment overrides the configured checkout URL.
+  monetization.checkoutUrl =
+    process.env.PUBLIC_LEMON_WORKFLOW_CHECKOUT_URL?.trim() ||
+    process.env.PUBLIC_LEMON_CHECKOUT_URL?.trim() ||
+    monetization.checkoutUrl;
+
+  if (!monetization.checkoutUrl) {
+    console.error("✖ Keine Lemon-Squeezy-Checkout-URL konfiguriert.");
     process.exit(1);
   }
 
@@ -550,7 +614,11 @@ async function main() {
 
   let totalBytes = 0;
   for (const workflow of workflows) {
-    const { fileName, bytes } = await generatePdf(workflow, partner);
+    const { fileName, bytes } = await generatePdf(
+      workflow,
+      partner,
+      monetization
+    );
     totalBytes += bytes;
     console.log(
       `  ✓ ${fileName} (${(bytes / 1024).toFixed(1)} KB)`

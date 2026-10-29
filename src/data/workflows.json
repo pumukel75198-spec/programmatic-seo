@@ -99,11 +99,56 @@
         "CRM"
       ],
       "steps": [
-        "Capture leads via forms or webhooks",
-        "Enrich company data and verify emails",
-        "Score leads with a language model",
-        "Route them to the right team",
-        "Send personalized emails"
+        {
+          "title": "Capture leads via forms or webhooks",
+          "description": "Leads werden durch Formulare oder Webhooks erfasst, die auf Ihrer Website oder in Anwendungen integriert sind. Diese Daten werden automatisch gesammelt und in Ihrem CRM-System gespeichert, um eine nahtlose Übertragung und Verarbeitung zu gewährleisten.",
+          "links": [
+            {
+              "label": "Dokumentation",
+              "url": "https://www.make.com/en/help/webhooks"
+            }
+          ]
+        },
+        {
+          "title": "Enrich company data and verify emails",
+          "description": "Die gesammelten Daten werden mit zusätzlichen Informationen angereichert, um ein vollständiges Profil der Unternehmen zu erstellen. Zudem werden E-Mail-Adressen auf ihre Gültigkeit überprüft, um sicherzustellen, dass die Kommunikation effektiv ist.",
+          "links": [
+            {
+              "label": "Dokumentation",
+              "url": "https://resend.com/docs/api"
+            }
+          ]
+        },
+        {
+          "title": "Score leads with a language model",
+          "description": "Ein KI-gestütztes Sprachmodell bewertet die Leads basierend auf verschiedenen Kriterien, wie Engagement und demografischen Daten. Dies ermöglicht eine präzisere Einschätzung der Verkaufschancen und hilft bei der Priorisierung der Leads.",
+          "links": [
+            {
+              "label": "Dokumentation",
+              "url": "https://platform.openai.com/docs/api-reference"
+            }
+          ]
+        },
+        {
+          "title": "Route them to the right team",
+          "description": "Nach der Bewertung werden die Leads automatisch an die zuständige Vertriebsmannschaft weitergeleitet. Dies geschieht basierend auf vordefinierten Regeln, um sicherzustellen, dass jeder Lead von den richtigen Personen bearbeitet wird.",
+          "links": [
+            {
+              "label": "Dokumentation",
+              "url": "https://www.make.com/en/help/scenarios"
+            }
+          ]
+        },
+        {
+          "title": "Send personalized emails",
+          "description": "Nachdem die Leads zugewiesen wurden, werden personalisierte E-Mails automatisch versendet. Diese E-Mails sind auf die Interessen und Bedürfnisse der Leads zugeschnitten, um die Wahrscheinlichkeit einer positiven Reaktion zu erhöhen.",
+          "links": [
+            {
+              "label": "Dokumentation",
+              "url": "https://resend.com/docs/email"
+            }
+          ]
+        }
       ],
       "useCase": "Sales teams that need to prioritize incoming leads"
     }
@@ -283,11 +328,56 @@
         "Notion"
       ],
       "steps": [
-        "Collect content ideas in Notion",
-        "Generate and shorten posts with AI",
-        "Get editorial approval",
-        "Schedule posts in Buffer",
-        "Review performance regularly"
+        {
+          "title": "Collect content ideas in Notion",
+          "description": "Sammeln Sie kreative Ideen für Inhalte in Notion, um eine zentrale Datenbank zu erstellen. Nutzen Sie die verschiedenen Funktionen von Notion, um Ideen zu kategorisieren und zu priorisieren, sodass Sie jederzeit darauf zugreifen können.",
+          "links": [
+            {
+              "label": "Notion Dokumentation",
+              "url": "https://www.notion.so/help"
+            }
+          ]
+        },
+        {
+          "title": "Generate and shorten posts with AI",
+          "description": "Verwenden Sie die OpenAI API, um ansprechende Social-Media-Beiträge zu generieren und diese zu kürzen. Diese automatisierte Lösung hilft dabei, Zeit zu sparen und qualitativ hochwertige Inhalte zu erstellen, die Ihre Zielgruppe ansprechen.",
+          "links": [
+            {
+              "label": "OpenAI API Dokumentation",
+              "url": "https://beta.openai.com/docs/"
+            }
+          ]
+        },
+        {
+          "title": "Get editorial approval",
+          "description": "Stellen Sie sicher, dass alle erstellten Inhalte von einem Redakteur genehmigt werden, bevor sie veröffentlicht werden. Dies gewährleistet die Qualität und Konsistenz der Botschaften, die über Ihre Social-Media-Kanäle kommuniziert werden.",
+          "links": [
+            {
+              "label": "Editorial Approval Prozess",
+              "url": "https://www.contentmarketinginstitute.com/2020/03/editorial-approval-process/"
+            }
+          ]
+        },
+        {
+          "title": "Schedule posts in Buffer",
+          "description": "Nutzen Sie Buffer, um Ihre genehmigten Beiträge zu planen und automatisch zu veröffentlichen. Mit Buffer können Sie die besten Zeiten für die Veröffentlichung auswählen und Ihre Inhalte effizient über verschiedene Plattformen verteilen.",
+          "links": [
+            {
+              "label": "Buffer Dokumentation",
+              "url": "https://buffer.com/library"
+            }
+          ]
+        },
+        {
+          "title": "Review performance regularly",
+          "description": "Analysieren Sie regelmäßig die Leistung Ihrer veröffentlichten Beiträge, um herauszufinden, welche Inhalte am besten funktionieren. Diese Überprüfung hilft Ihnen, Ihre Strategie kontinuierlich zu optimieren und die Zielgruppe besser zu erreichen.",
+          "links": [
+            {
+              "label": "Social Media Performance Analyse",
+              "url": "https://sproutsocial.com/insights/data/social-media-metrics/"
+            }
+          ]
+        }
       ],
       "useCase": "Teams that need to run multiple social channels consistently"
     }
@@ -388,11 +478,56 @@
         "Mapbox Maps API"
       ],
       "steps": [
-        "Import raw data from CSV or APIs",
-        "Enrich records via external APIs",
-        "Normalize and classify fields with AI",
-        "Detect and merge duplicates",
-        "Version results in Supabase"
+        {
+          "title": "Import raw data from CSV or APIs",
+          "description": "In diesem Schritt werden Rohdaten aus CSV-Dateien oder über APIs importiert. Der Importprozess ermöglicht es, große Datenmengen effizient zu erfassen und in das System einzufügen, um sie für die weitere Verarbeitung vorzubereiten.",
+          "links": [
+            {
+              "label": "n8n CSV Import",
+              "url": "https://docs.n8n.io/integrations/builtin/applications/csv/"
+            }
+          ]
+        },
+        {
+          "title": "Enrich records via external APIs",
+          "description": "Hier werden die importierten Datensätze durch externe APIs angereichert. Dies kann zusätzliche Informationen wie Standortdaten, demografische Informationen oder andere relevante Daten umfassen, die die Qualität der Datensätze verbessern.",
+          "links": [
+            {
+              "label": "OpenAI API",
+              "url": "https://platform.openai.com/docs/api-reference"
+            }
+          ]
+        },
+        {
+          "title": "Normalize and classify fields with AI",
+          "description": "In diesem Schritt werden die Daten mithilfe von KI-Technologien normalisiert und klassifiziert. Dies sorgt dafür, dass die Daten einheitlich sind und in die richtigen Kategorien eingeordnet werden, was die Analyse und Verarbeitung erleichtert.",
+          "links": [
+            {
+              "label": "OpenAI AI Modelle",
+              "url": "https://platform.openai.com/docs/models"
+            }
+          ]
+        },
+        {
+          "title": "Detect and merge duplicates",
+          "description": "Dieser Schritt identifiziert und kombiniert doppelte Datensätze, um die Datenintegrität zu gewährleisten. Durch die Eliminierung von Duplikaten wird die Effizienz der Datenverarbeitung erhöht und die Genauigkeit der Analysen verbessert.",
+          "links": [
+            {
+              "label": "Supabase Duplicate Detection",
+              "url": "https://supabase.com/docs/guides/database"
+            }
+          ]
+        },
+        {
+          "title": "Version results in Supabase",
+          "description": "Abschließend werden die angereicherten und bereinigten Daten in Supabase versioniert. Dies ermöglicht eine einfache Nachverfolgung von Änderungen und stellt sicher, dass immer die aktuellsten Daten zur Verfügung stehen.",
+          "links": [
+            {
+              "label": "Supabase Versioning",
+              "url": "https://supabase.com/docs/guides/database/versioning"
+            }
+          ]
+        }
       ],
       "useCase": "Data-driven products with large, inconsistent datasets"
     }
@@ -493,11 +628,56 @@
         "n8n"
       ],
       "steps": [
-        "Capture billable events",
-        "Generate invoice PDFs",
-        "Send invoices via email",
-        "Track payment status",
-        "Sync with accounting"
+        {
+          "title": "Capture billable events",
+          "description": "In diesem Schritt werden alle abrechnungsfähigen Ereignisse erfasst, die für die Rechnungsstellung relevant sind. Dazu gehören Transaktionen, Dienstleistungen oder Produkte, die dem Kunden in Rechnung gestellt werden sollen. Eine präzise Erfassung stellt sicher, dass alle Einnahmen korrekt dokumentiert werden.",
+          "links": [
+            {
+              "label": "Stripe API Dokumentation",
+              "url": "https://stripe.com/docs/api"
+            }
+          ]
+        },
+        {
+          "title": "Generate invoice PDFs",
+          "description": "Hier werden aus den erfassten abrechnungsfähigen Ereignissen PDF-Rechnungen generiert. Diese PDFs enthalten alle notwendigen Informationen wie Rechnungsnummer, Datum, Artikelbeschreibung und Beträge. Die Automatisierung dieses Prozesses spart Zeit und minimiert Fehler.",
+          "links": [
+            {
+              "label": "PDF Generation Documentation",
+              "url": "https://stripe.com/docs/invoicing/invoice-pdfs"
+            }
+          ]
+        },
+        {
+          "title": "Send invoices via email",
+          "description": "In diesem Schritt werden die erstellten Rechnungen automatisch per E-Mail an die Kunden versendet. Die Verwendung der Resend Email API ermöglicht eine zuverlässige und schnelle Zustellung. Dies verbessert die Kommunikation mit den Kunden und beschleunigt den Zahlungsprozess.",
+          "links": [
+            {
+              "label": "Resend Email API Dokumentation",
+              "url": "https://resend.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Track payment status",
+          "description": "Nachdem die Rechnungen versendet wurden, ist es wichtig, den Zahlungsstatus zu verfolgen. Dieser Schritt umfasst die Überwachung von Zahlungen, um sicherzustellen, dass alle Rechnungen beglichen werden. Ein effektives Tracking hilft, Zahlungsausfälle frühzeitig zu erkennen und zu handeln.",
+          "links": [
+            {
+              "label": "Stripe Payments API - Payment Status",
+              "url": "https://stripe.com/docs/payments"
+            }
+          ]
+        },
+        {
+          "title": "Sync with accounting",
+          "description": "Der letzte Schritt beinhaltet die Synchronisierung der Zahlungsdaten mit dem Buchhaltungssystem. Durch die Integration mit Supabase wird sichergestellt, dass alle finanziellen Transaktionen aktuell und korrekt in den Büchern erfasst sind. Dies erleichtert die Finanzberichterstattung und das Controlling.",
+          "links": [
+            {
+              "label": "Supabase Dokumentation",
+              "url": "https://supabase.com/docs"
+            }
+          ]
+        }
       ],
       "useCase": "SaaS and agencies with recurring billing"
     }
@@ -523,11 +703,56 @@
         "n8n"
       ],
       "steps": [
-        "Expose available slots",
-        "Collect booking details",
-        "Store appointments",
-        "Send confirmations",
-        "Schedule reminders"
+        {
+          "title": "Expose available slots",
+          "description": "In diesem Schritt werden die verfügbaren Zeitfenster für Termine angezeigt. Die Integration mit Cal.com ermöglicht es, aktuelle Verfügbarkeiten in Echtzeit abzurufen und potenziellen Kunden anzuzeigen, wann sie einen Termin buchen können.",
+          "links": [
+            {
+              "label": "Cal.com Dokumentation",
+              "url": "https://cal.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Collect booking details",
+          "description": "Hier werden die erforderlichen Informationen für die Buchung gesammelt, wie Name, E-Mail-Adresse und spezifische Anforderungen des Kunden. Diese Daten werden in einem benutzerfreundlichen Formular erfasst, um eine reibungslose Buchung zu gewährleisten.",
+          "links": [
+            {
+              "label": "Supabase Dokumentation",
+              "url": "https://supabase.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Store appointments",
+          "description": "Die gesammelten Buchungsdetails werden in einer Datenbank gespeichert, um eine einfache Verwaltung und Nachverfolgung von Terminen zu ermöglichen. Supabase bietet eine effiziente Möglichkeit, diese Daten sicher und strukturiert zu speichern.",
+          "links": [
+            {
+              "label": "Supabase Datenbank",
+              "url": "https://supabase.com/docs/guides/database"
+            }
+          ]
+        },
+        {
+          "title": "Send confirmations",
+          "description": "Nach der Buchung wird eine Bestätigungs-E-Mail an den Kunden gesendet. Die Resend Email API sorgt dafür, dass die E-Mails zuverlässig und schnell zugestellt werden, um den Kunden über den erfolgreichen Termin zu informieren.",
+          "links": [
+            {
+              "label": "Resend Email API",
+              "url": "https://resend.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Schedule reminders",
+          "description": "Um sicherzustellen, dass die Kunden ihre Termine nicht vergessen, werden automatische Erinnerungen eingerichtet. Diese Erinnerungen können über n8n konfiguriert werden, um rechtzeitig vor dem Termin per E-Mail oder SMS versendet zu werden.",
+          "links": [
+            {
+              "label": "n8n Dokumentation",
+              "url": "https://docs.n8n.io"
+            }
+          ]
+        }
       ],
       "useCase": "Consultants, clinics and service businesses"
     }
@@ -553,11 +778,56 @@
         "OpenAI API"
       ],
       "steps": [
-        "Import product feeds",
-        "Normalize and validate fields",
-        "Enrich descriptions with AI",
-        "Publish to marketplaces",
-        "Monitor sync errors"
+        {
+          "title": "Import product feeds",
+          "description": "Importieren Sie Produktdaten aus verschiedenen Quellen, um sicherzustellen, dass alle Informationen zentralisiert sind. Dies ermöglicht eine effiziente Verwaltung und Aktualisierung der Produktinformationen in Ihrem E-Commerce-System.",
+          "links": [
+            {
+              "label": "Shopify Admin API",
+              "url": "https://shopify.dev/api/admin-rest"
+            }
+          ]
+        },
+        {
+          "title": "Normalize and validate fields",
+          "description": "Normalisieren und validieren Sie die importierten Daten, um sicherzustellen, dass alle Felder einheitlich und korrekt formatiert sind. Dies reduziert Fehler und verbessert die Datenqualität, bevor die Produkte veröffentlicht werden.",
+          "links": [
+            {
+              "label": "Supabase Documentation",
+              "url": "https://supabase.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Enrich descriptions with AI",
+          "description": "Verwenden Sie KI-gestützte Tools, um die Produktbeschreibungen zu optimieren und ansprechender zu gestalten. Dies kann helfen, die Sichtbarkeit und Attraktivität der Produkte auf den Marktplätzen zu erhöhen.",
+          "links": [
+            {
+              "label": "OpenAI API",
+              "url": "https://beta.openai.com/docs/"
+            }
+          ]
+        },
+        {
+          "title": "Publish to marketplaces",
+          "description": "Veröffentlichen Sie die aktualisierten und angereicherten Produktdaten automatisch auf verschiedenen Marktplätzen. Dies stellt sicher, dass Ihre Produkte immer aktuell und für potenzielle Käufer sichtbar sind.",
+          "links": [
+            {
+              "label": "Shopify Admin API",
+              "url": "https://shopify.dev/api/admin-rest"
+            }
+          ]
+        },
+        {
+          "title": "Monitor sync errors",
+          "description": "Überwachen Sie den Synchronisierungsprozess, um Fehler rechtzeitig zu erkennen und zu beheben. Eine proaktive Fehlerüberwachung hilft, die Integrität der Produktdaten zu gewährleisten und Unterbrechungen im Verkauf zu vermeiden.",
+          "links": [
+            {
+              "label": "n8n Documentation",
+              "url": "https://docs.n8n.io"
+            }
+          ]
+        }
       ],
       "useCase": "E-commerce teams selling across multiple channels"
     }
@@ -583,11 +853,56 @@
         "n8n"
       ],
       "steps": [
-        "Collect source documents",
-        "Chunk and clean content",
-        "Generate embeddings",
-        "Store vectors with metadata",
-        "Expose a retrieval endpoint"
+        {
+          "title": "Collect source documents",
+          "description": "In diesem Schritt werden die relevanten Quellendokumente gesammelt, die in die Wissensdatenbank aufgenommen werden sollen. Dazu gehören FAQs, Handbücher und andere informative Texte, die als Grundlage für die semantische Suche dienen.",
+          "links": [
+            {
+              "label": "Cohere Embed API",
+              "url": "https://docs.cohere.ai/embed"
+            }
+          ]
+        },
+        {
+          "title": "Chunk and clean content",
+          "description": "Der gesammelte Inhalt wird in kleinere, handhabbare Abschnitte unterteilt, die als 'Chunks' bezeichnet werden. Diese Chunks werden anschließend gereinigt, um irrelevante Informationen zu entfernen und die Qualität der Daten für die weitere Verarbeitung zu verbessern.",
+          "links": [
+            {
+              "label": "Pinecone Vector API",
+              "url": "https://docs.pinecone.io/docs"
+            }
+          ]
+        },
+        {
+          "title": "Generate embeddings",
+          "description": "In diesem Schritt werden für die bereinigten Chunks Vektoren (Embeddings) generiert, die die semantische Bedeutung des Inhalts erfassen. Diese Vektoren ermöglichen eine effektive und präzise Suche innerhalb der Wissensdatenbank.",
+          "links": [
+            {
+              "label": "Cohere Embed API",
+              "url": "https://docs.cohere.ai/embed"
+            }
+          ]
+        },
+        {
+          "title": "Store vectors with metadata",
+          "description": "Die generierten Vektoren werden zusammen mit den zugehörigen Metadaten in einer Datenbank gespeichert. Dies ermöglicht eine schnelle und effiziente Abfrage der Informationen, die für die semantische Suche benötigt werden.",
+          "links": [
+            {
+              "label": "Supabase",
+              "url": "https://supabase.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Expose a retrieval endpoint",
+          "description": "Der letzte Schritt besteht darin, einen Abfrage-Endpunkt bereitzustellen, über den Benutzer auf die Wissensdatenbank zugreifen können. Dieser Endpunkt ermöglicht es, Anfragen zu stellen und relevante Informationen schnell und effizient abzurufen.",
+          "links": [
+            {
+              "label": "n8n",
+              "url": "https://n8n.io/docs"
+            }
+          ]
+        }
       ],
       "useCase": "Support bots, internal search and RAG assistants"
     }
@@ -613,11 +928,56 @@
         "n8n"
       ],
       "steps": [
-        "Define source content",
-        "Generate translations",
-        "Review and approve locales",
-        "Store localized metadata",
-        "Build locale-prefixed pages"
+        {
+          "title": "Define source content",
+          "description": "In diesem Schritt wird der Ausgangsinhalte definiert, der als Grundlage für die Übersetzungen dient. Es ist wichtig, klare und gut strukturierte Inhalte zu wählen, um die Qualität der Übersetzungen zu gewährleisten.",
+          "links": [
+            {
+              "label": "Dokumentation",
+              "url": "https://docs.openai.com/api/"
+            }
+          ]
+        },
+        {
+          "title": "Generate translations",
+          "description": "Hier werden die definierten Inhalte mithilfe der OpenAI API in die gewünschten Zielsprachen übersetzt. Die Übersetzungen sollten auf Genauigkeit und kulturelle Relevanz überprüft werden, um Missverständnisse zu vermeiden.",
+          "links": [
+            {
+              "label": "Dokumentation",
+              "url": "https://docs.openai.com/api-reference/completions/create"
+            }
+          ]
+        },
+        {
+          "title": "Review and approve locales",
+          "description": "In diesem Schritt erfolgt eine gründliche Überprüfung der übersetzten Inhalte durch Sprachspezialisten oder das Team. Es wird sichergestellt, dass alle Übersetzungen korrekt und kontextgerecht sind, bevor sie genehmigt werden.",
+          "links": [
+            {
+              "label": "Dokumentation",
+              "url": "https://astro.build/docs"
+            }
+          ]
+        },
+        {
+          "title": "Store localized metadata",
+          "description": "Nach der Genehmigung werden die lokalisierten Metadaten in einer Datenbank wie Supabase gespeichert. Diese Metadaten sind entscheidend für die korrekte Anzeige der Inhalte in den jeweiligen Sprachen auf der Website.",
+          "links": [
+            {
+              "label": "Dokumentation",
+              "url": "https://supabase.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Build locale-prefixed pages",
+          "description": "Schließlich werden die Seiten mit sprachspezifischen Präfixen erstellt, um sicherzustellen, dass Benutzer die Inhalte in ihrer bevorzugten Sprache sehen. Dies geschieht automatisch mithilfe von Tools wie Astro und n8n.",
+          "links": [
+            {
+              "label": "Dokumentation",
+              "url": "https://n8n.io/docs"
+            }
+          ]
+        }
       ],
       "useCase": "International pSEO and multi-market content teams"
     }
@@ -643,11 +1003,56 @@
         "Resend Email API"
       ],
       "steps": [
-        "Receive webhook payloads",
-        "Verify signatures",
-        "Deduplicate events",
-        "Route to services",
-        "Alert on failures"
+        {
+          "title": "Receive webhook payloads",
+          "description": "Dieser Schritt umfasst das Empfangen von Webhook-Payloads von verschiedenen Quellen. Die Payloads werden in einem definierten Format über HTTP POST-Anfragen an den Server gesendet. Es ist wichtig, sicherzustellen, dass die empfangenen Daten korrekt und vollständig sind.",
+          "links": [
+            {
+              "label": "Cloudflare Workers API",
+              "url": "https://developers.cloudflare.com/workers/"
+            }
+          ]
+        },
+        {
+          "title": "Verify signatures",
+          "description": "In diesem Schritt werden die Signaturen der empfangenen Webhook-Payloads überprüft, um die Authentizität der Daten zu gewährleisten. Dies geschieht durch den Vergleich der erhaltenen Signatur mit einer erwarteten Signatur, die auf einem geheimen Schlüssel basiert. Eine erfolgreiche Überprüfung stellt sicher, dass die Daten von einer vertrauenswürdigen Quelle stammen.",
+          "links": [
+            {
+              "label": "Webhook Security",
+              "url": "https://stripe.com/docs/webhooks/signatures"
+            }
+          ]
+        },
+        {
+          "title": "Deduplicate events",
+          "description": "Um sicherzustellen, dass keine doppelten Ereignisse verarbeitet werden, werden empfangene Webhooks auf ihre Eindeutigkeit überprüft. Dies geschieht durch die Verwendung von Identifikatoren oder Zeitstempeln, die jedem Ereignis zugeordnet sind. Durch die Eliminierung von Duplikaten wird die Integrität der Datenverarbeitung gewahrt.",
+          "links": [
+            {
+              "label": "Event Deduplication",
+              "url": "https://supabase.com/docs/guides/realtime"
+            }
+          ]
+        },
+        {
+          "title": "Route to services",
+          "description": "Nachdem die Payloads empfangen und verifiziert wurden, erfolgt die Weiterleitung an die entsprechenden Backend-Services. Dies kann durch das Senden der Daten an verschiedene APIs oder interne Systeme geschehen. Die Routing-Logik kann basierend auf dem Inhalt der Payload oder spezifischen Regeln implementiert werden.",
+          "links": [
+            {
+              "label": "n8n Documentation",
+              "url": "https://docs.n8n.io"
+            }
+          ]
+        },
+        {
+          "title": "Alert on failures",
+          "description": "Im Falle von Fehlern während der Verarbeitung der Webhook-Payloads werden Alarme ausgelöst, um das Team zu benachrichtigen. Dies kann durch das Senden von E-Mails oder das Erstellen von Benachrichtigungen in Monitoring-Tools erfolgen. Eine schnelle Reaktion auf Fehler ist entscheidend, um die Zuverlässigkeit des Systems zu gewährleisten.",
+          "links": [
+            {
+              "label": "Resend Email API",
+              "url": "https://resend.com/docs"
+            }
+          ]
+        }
       ],
       "useCase": "Platforms integrating with multiple third-party services"
     }
@@ -673,11 +1078,56 @@
         "Pinecone Vector API"
       ],
       "steps": [
-        "Ingest PDFs and documents",
-        "Extract and chunk text",
-        "Generate summaries with AI",
-        "Store summaries and embeddings",
-        "Expose a search endpoint"
+        {
+          "title": "Ingest PDFs and documents",
+          "description": "In diesem Schritt werden PDF-Dokumente und andere Dateiformate in das System importiert. Die Dateien werden analysiert und für die weitere Verarbeitung vorbereitet, um sicherzustellen, dass alle relevanten Informationen erfasst werden.",
+          "links": [
+            {
+              "label": "OpenAI API Dokumentation",
+              "url": "https://platform.openai.com/docs/api-reference"
+            }
+          ]
+        },
+        {
+          "title": "Extract and chunk text",
+          "description": "Hier wird der extrahierte Text in kleinere, handhabbare Abschnitte unterteilt. Dies erleichtert die spätere Verarbeitung und Analyse, da die KI so effizienter mit den Informationen umgehen kann.",
+          "links": [
+            {
+              "label": "n8n Dokumentation",
+              "url": "https://docs.n8n.io/integrations/builtin/applications/"
+            }
+          ]
+        },
+        {
+          "title": "Generate summaries with AI",
+          "description": "In diesem Schritt wird die KI verwendet, um aus den zuvor chunked Texten prägnante Zusammenfassungen zu erstellen. Die KI analysiert den Inhalt und extrahiert die wichtigsten Informationen, um eine klare und verständliche Zusammenfassung zu generieren.",
+          "links": [
+            {
+              "label": "OpenAI API Dokumentation",
+              "url": "https://platform.openai.com/docs/guides/gpt"
+            }
+          ]
+        },
+        {
+          "title": "Store summaries and embeddings",
+          "description": "Die generierten Zusammenfassungen sowie die entsprechenden Embeddings werden in einer Datenbank gespeichert. Dies ermöglicht eine effiziente Speicherung und einen schnellen Zugriff auf die Informationen für zukünftige Abfragen.",
+          "links": [
+            {
+              "label": "Supabase Dokumentation",
+              "url": "https://supabase.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Expose a search endpoint",
+          "description": "Ein Suchendpunkt wird bereitgestellt, um die gespeicherten Zusammenfassungen und Embeddings abzufragen. Dies ermöglicht es Benutzern, gezielt nach Informationen zu suchen und relevante Ergebnisse schnell zu finden.",
+          "links": [
+            {
+              "label": "Pinecone Dokumentation",
+              "url": "https://docs.pinecone.io"
+            }
+          ]
+        }
       ],
       "useCase": "Research teams, legal review and knowledge management"
     }
@@ -703,11 +1153,56 @@
         "n8n"
       ],
       "steps": [
-        "Collect feedback from multiple sources",
-        "Classify sentiment and topics",
-        "Extract actionable themes",
-        "Store insights in Supabase",
-        "Send weekly summaries"
+        {
+          "title": "Collect feedback from multiple sources",
+          "description": "In diesem Schritt wird Kundenfeedback aus verschiedenen Quellen gesammelt, wie z.B. Umfragen, sozialen Medien und E-Mails. Die Aggregation dieser Daten ermöglicht eine umfassende Analyse der Kundenmeinungen und -erfahrungen. Ziel ist es, ein vollständiges Bild der Kundenstimmung zu erhalten.",
+          "links": [
+            {
+              "label": "OpenAI API Dokumentation",
+              "url": "https://platform.openai.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Classify sentiment and topics",
+          "description": "Hier wird das gesammelte Feedback analysiert, um die vorherrschenden Stimmungen und Themen zu klassifizieren. Mithilfe von KI-Algorithmen wird ermittelt, ob das Feedback positiv, negativ oder neutral ist und welche spezifischen Themen angesprochen werden. Dies hilft, Trends und Probleme schnell zu identifizieren.",
+          "links": [
+            {
+              "label": "PostHog Analytics API",
+              "url": "https://posthog.com/docs/api"
+            }
+          ]
+        },
+        {
+          "title": "Extract actionable themes",
+          "description": "In diesem Schritt werden aus den klassifizierten Daten umsetzbare Themen extrahiert. Diese Themen bieten wertvolle Einblicke, die direkt in strategische Maßnahmen umgesetzt werden können. Die Extraktion erfolgt durch die Identifizierung wiederkehrender Muster und Anliegen der Kunden.",
+          "links": [
+            {
+              "label": "n8n Dokumentation",
+              "url": "https://docs.n8n.io"
+            }
+          ]
+        },
+        {
+          "title": "Store insights in Supabase",
+          "description": "Die gewonnenen Erkenntnisse werden in einer Supabase-Datenbank gespeichert. Dies ermöglicht eine strukturierte und sichere Ablage der Daten, die für zukünftige Analysen und Berichte verwendet werden können. Supabase bietet eine benutzerfreundliche Schnittstelle zur Verwaltung dieser Daten.",
+          "links": [
+            {
+              "label": "Supabase Dokumentation",
+              "url": "https://supabase.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Send weekly summaries",
+          "description": "Abschließend werden wöchentliche Zusammenfassungen der analysierten Daten an die relevanten Teams gesendet. Diese Berichte enthalten die wichtigsten Erkenntnisse und Trends, die aus dem Kundenfeedback abgeleitet wurden. So können Teams schnell auf Änderungen in der Kundenstimmung reagieren.",
+          "links": [
+            {
+              "label": "n8n Workflow Automation",
+              "url": "https://docs.n8n.io/integrations/builtin/applications/"
+            }
+          ]
+        }
       ],
       "useCase": "Product and support teams prioritizing improvements"
     }
@@ -733,11 +1228,56 @@
         "Slack"
       ],
       "steps": [
-        "Receive pull-request webhooks",
-        "Fetch and summarize diffs",
-        "Flag risky changes with AI",
-        "Post review comments",
-        "Notify the team"
+        {
+          "title": "Receive pull-request webhooks",
+          "description": "Dieser Schritt umfasst das Empfangen von Webhooks, die von GitHub oder einer ähnlichen Plattform gesendet werden, wenn ein Pull-Request erstellt oder aktualisiert wird. Diese Webhooks enthalten Informationen über den Pull-Request, die für die nachfolgenden Schritte benötigt werden.",
+          "links": [
+            {
+              "label": "GitHub Webhooks",
+              "url": "https://docs.github.com/de/de/developers/webhooks-and-events/webhooks/creating-webhooks"
+            }
+          ]
+        },
+        {
+          "title": "Fetch and summarize diffs",
+          "description": "In diesem Schritt werden die Änderungen (Diffs) zwischen dem aktuellen Branch und dem Ziel-Branch abgerufen. Diese Diffs werden dann zusammengefasst, um eine klare Übersicht über die vorgenommenen Änderungen zu bieten, was die anschließende Analyse erleichtert.",
+          "links": [
+            {
+              "label": "GitHub API - Compare Commits",
+              "url": "https://docs.github.com/de/rest/commits/commits#compare-commits"
+            }
+          ]
+        },
+        {
+          "title": "Flag risky changes with AI",
+          "description": "Hierbei wird eine KI eingesetzt, um die zusammengefassten Diffs auf potenziell riskante Änderungen zu überprüfen. Diese Analyse hilft dabei, kritische Codeänderungen zu identifizieren, die möglicherweise zu Fehlern oder Sicherheitsproblemen führen könnten.",
+          "links": [
+            {
+              "label": "OpenAI API",
+              "url": "https://beta.openai.com/docs/api-reference/introduction"
+            }
+          ]
+        },
+        {
+          "title": "Post review comments",
+          "description": "In diesem Schritt werden strukturierte Kommentare zu den identifizierten Änderungen verfasst und im Pull-Request hinterlegt. Diese Kommentare bieten Entwicklern wertvolles Feedback und Verbesserungsvorschläge, die auf den Ergebnissen der vorherigen Schritte basieren.",
+          "links": [
+            {
+              "label": "GitHub API - Create a Review Comment",
+              "url": "https://docs.github.com/de/rest/pulls/reviews#submit-a-review-for-a-pull-request"
+            }
+          ]
+        },
+        {
+          "title": "Notify the team",
+          "description": "Der letzte Schritt besteht darin, das Team über die Ergebnisse der automatisierten Code-Überprüfung zu informieren. Dies geschieht typischerweise über Slack oder ähnliche Kommunikationsplattformen, um sicherzustellen, dass alle relevanten Mitglieder über die Änderungen und die erhaltenen Rückmeldungen informiert sind.",
+          "links": [
+            {
+              "label": "Slack API - Chat Post Message",
+              "url": "https://api.slack.com/methods/chat.postMessage"
+            }
+          ]
+        }
       ],
       "useCase": "Engineering teams that want faster, consistent reviews"
     }
@@ -763,11 +1303,56 @@
         "Resend Email API"
       ],
       "steps": [
-        "Collect prospect data",
-        "Normalize and deduplicate leads",
-        "Enrich company information",
-        "Score leads with AI",
-        "Export to CRM"
+        {
+          "title": "Collect prospect data",
+          "description": "In diesem Schritt werden potenzielle Kunden aus öffentlichen Quellen gesammelt. Dazu gehören Social Media, Unternehmensverzeichnisse und andere Online-Plattformen. Ziel ist es, eine umfassende Liste von Kontakten zu erstellen, die für das Unternehmen von Interesse sein könnten.",
+          "links": [
+            {
+              "label": "n8n Dokumentation",
+              "url": "https://docs.n8n.io/integrations/builtin/applications/"
+            }
+          ]
+        },
+        {
+          "title": "Normalize and deduplicate leads",
+          "description": "Hier werden die gesammelten Leads normalisiert und Duplikate entfernt. Dies geschieht durch die Vereinheitlichung von Datenformaten und die Anwendung von Algorithmen zur Identifizierung redundanter Einträge. Dadurch wird sichergestellt, dass die Lead-Datenbank sauber und effizient bleibt.",
+          "links": [
+            {
+              "label": "Supabase Dokumentation",
+              "url": "https://supabase.com/docs/guides/database"
+            }
+          ]
+        },
+        {
+          "title": "Enrich company information",
+          "description": "In diesem Schritt wird die Unternehmensinformation der gesammelten Leads angereichert. Dazu werden zusätzliche Datenquellen genutzt, um Informationen wie Firmengröße, Branche und Umsatz zu erfassen. Dies hilft, ein vollständigeres Bild der potenziellen Kunden zu erhalten.",
+          "links": [
+            {
+              "label": "OpenAI API Dokumentation",
+              "url": "https://platform.openai.com/docs/api-reference"
+            }
+          ]
+        },
+        {
+          "title": "Score leads with AI",
+          "description": "Hier werden die Leads mithilfe von KI-Algorithmen bewertet. Anhand von Kriterien wie Interaktionshistorie und demografischen Daten wird ein Score zugewiesen, der die Wahrscheinlichkeit eines erfolgreichen Verkaufsabschlusses widerspiegelt. Dies ermöglicht eine gezielte Ansprache der vielversprechendsten Leads.",
+          "links": [
+            {
+              "label": "OpenAI API Dokumentation",
+              "url": "https://platform.openai.com/docs/api-reference"
+            }
+          ]
+        },
+        {
+          "title": "Export to CRM",
+          "description": "Im letzten Schritt werden die angereicherten und bewerteten Leads in das CRM-System exportiert. Dies geschieht in einem automatisierten Prozess, der sicherstellt, dass alle relevanten Informationen nahtlos in das CRM integriert werden. Dadurch wird der Verkaufsprozess effizienter gestaltet.",
+          "links": [
+            {
+              "label": "Resend Email API Dokumentation",
+              "url": "https://resend.com/docs"
+            }
+          ]
+        }
       ],
       "useCase": "Sales teams building targeted outbound pipelines"
     }
@@ -793,11 +1378,56 @@
         "Slack"
       ],
       "steps": [
-        "Receive incoming tickets",
-        "Classify intent and urgency",
-        "Assign priority and tags",
-        "Route to the right queue",
-        "Escalate critical issues"
+        {
+          "title": "Receive incoming tickets",
+          "description": "Dieser Schritt umfasst die Erfassung aller eingehenden Support-Tickets aus verschiedenen Kanälen wie E-Mail, Webformularen oder sozialen Medien. Die Tickets werden in einem zentralen System gesammelt, um eine effiziente Bearbeitung zu gewährleisten.",
+          "links": [
+            {
+              "label": "Zendesk API",
+              "url": "https://developer.zendesk.com/api-reference/ticketing/introduction/"
+            }
+          ]
+        },
+        {
+          "title": "Classify intent and urgency",
+          "description": "In diesem Schritt wird der Inhalt jedes Tickets analysiert, um die Absicht des Kunden und die Dringlichkeit des Anliegens zu bestimmen. Dies geschieht durch den Einsatz von KI-gestützten Modellen, die Schlüsselwörter und Phrasen erkennen.",
+          "links": [
+            {
+              "label": "OpenAI API",
+              "url": "https://platform.openai.com/docs/introduction"
+            }
+          ]
+        },
+        {
+          "title": "Assign priority and tags",
+          "description": "Hier werden jedem Ticket Prioritäten zugewiesen, basierend auf der Dringlichkeit und dem Inhalt. Zusätzlich werden relevante Tags hinzugefügt, um eine schnellere Identifizierung und Kategorisierung der Tickets zu ermöglichen.",
+          "links": [
+            {
+              "label": "n8n Documentation",
+              "url": "https://docs.n8n.io/integrations/builtin/applications/zendesk/"
+            }
+          ]
+        },
+        {
+          "title": "Route to the right queue",
+          "description": "In diesem Schritt werden die klassifizierten Tickets an die entsprechenden Support-Queues oder Teams weitergeleitet. Dies stellt sicher, dass die Anfragen von den richtigen Fachleuten bearbeitet werden, die über das notwendige Wissen verfügen.",
+          "links": [
+            {
+              "label": "Slack API",
+              "url": "https://api.slack.com/"
+            }
+          ]
+        },
+        {
+          "title": "Escalate critical issues",
+          "description": "Kritische Probleme, die sofortige Aufmerksamkeit erfordern, werden in diesem Schritt eskaliert. Dies kann durch Benachrichtigungen an das Management oder spezielle Teams erfolgen, um eine schnelle Lösung sicherzustellen.",
+          "links": [
+            {
+              "label": "Zendesk Escalation",
+              "url": "https://support.zendesk.com/hc/en-us/articles/360022363393-Escalating-tickets"
+            }
+          ]
+        }
       ],
       "useCase": "Support teams handling high ticket volumes"
     }
@@ -823,11 +1453,56 @@
         "n8n"
       ],
       "steps": [
-        "Ingest long-form content",
-        "Generate channel-specific variants",
-        "Apply brand voice guidelines",
-        "Schedule posts",
-        "Track performance"
+        {
+          "title": "Ingest long-form content",
+          "description": "Lade den langen Inhalt, wie Blogartikel oder Whitepapers, in das System hoch. Dieser Schritt ist entscheidend, um die Basis für die Umwandlung in verschiedene Formate zu schaffen. Achte darauf, dass der Inhalt vollständig und gut strukturiert ist.",
+          "links": [
+            {
+              "label": "OpenAI API Dokumentation",
+              "url": "https://platform.openai.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Generate channel-specific variants",
+          "description": "Erstelle spezifische Varianten des Inhalts für verschiedene Kanäle wie soziale Medien, Newsletter und Webseiten. Diese Varianten sollten auf die jeweilige Zielgruppe und das Format abgestimmt sein, um maximale Engagement-Raten zu erzielen.",
+          "links": [
+            {
+              "label": "Buffer API Dokumentation",
+              "url": "https://buffer.com/developers/api"
+            }
+          ]
+        },
+        {
+          "title": "Apply brand voice guidelines",
+          "description": "Stelle sicher, dass alle generierten Inhalte den Markenstimmrichtlinien entsprechen. Dies umfasst den Ton, die Sprache und die Stilistik, um die Konsistenz der Markenkommunikation über alle Kanäle hinweg zu gewährleisten.",
+          "links": [
+            {
+              "label": "Notion API Dokumentation",
+              "url": "https://developers.notion.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Schedule posts",
+          "description": "Plane die Veröffentlichung der erstellten Inhalte zu optimalen Zeiten. Nutze Tools wie Buffer, um die Posts automatisch zu den festgelegten Zeiten in den jeweiligen Kanälen zu veröffentlichen und die Sichtbarkeit zu maximieren.",
+          "links": [
+            {
+              "label": "Buffer Hilfe",
+              "url": "https://buffer.com/support"
+            }
+          ]
+        },
+        {
+          "title": "Track performance",
+          "description": "Überwache die Leistung der veröffentlichten Inhalte, um deren Effektivität zu bewerten. Analysiere Metriken wie Engagement, Reichweite und Klickrate, um zukünftige Inhalte zu optimieren und den ROI zu steigern.",
+          "links": [
+            {
+              "label": "n8n Dokumentation",
+              "url": "https://docs.n8n.io"
+            }
+          ]
+        }
       ],
       "useCase": "Content teams maximizing reach from each asset"
     }
@@ -853,11 +1528,56 @@
         "Slack"
       ],
       "steps": [
-        "Collect mentions from channels",
-        "Detect language and sentiment",
-        "Cluster emerging topics",
-        "Store trends in Supabase",
-        "Alert on spikes"
+        {
+          "title": "Collect mentions from channels",
+          "description": "In diesem Schritt werden alle Erwähnungen der Marke aus verschiedenen sozialen Medien und Online-Kanälen gesammelt. Dies umfasst Posts, Kommentare und Nachrichten, um ein umfassendes Bild der Markenwahrnehmung zu erhalten.",
+          "links": [
+            {
+              "label": "n8n Dokumentation",
+              "url": "https://docs.n8n.io/integrations/builtin/applications/social-media/"
+            }
+          ]
+        },
+        {
+          "title": "Detect language and sentiment",
+          "description": "Hier wird die Sprache der gesammelten Inhalte identifiziert und die Stimmung analysiert. Diese Analyse hilft dabei, positive, negative und neutrale Erwähnungen zu kategorisieren und ein besseres Verständnis für die öffentliche Wahrnehmung zu entwickeln.",
+          "links": [
+            {
+              "label": "OpenAI API Dokumentation",
+              "url": "https://platform.openai.com/docs/api-reference"
+            }
+          ]
+        },
+        {
+          "title": "Cluster emerging topics",
+          "description": "In diesem Schritt werden die gesammelten Daten analysiert, um aufkommende Themen und Trends zu identifizieren. Durch das Clustern ähnlicher Erwähnungen können Muster erkannt werden, die für die Markenstrategie von Bedeutung sind.",
+          "links": [
+            {
+              "label": "n8n Dokumentation",
+              "url": "https://docs.n8n.io/integrations/builtin/applications/data-analysis/"
+            }
+          ]
+        },
+        {
+          "title": "Store trends in Supabase",
+          "description": "Die identifizierten Trends und Themen werden in einer Supabase-Datenbank gespeichert. Dies ermöglicht eine effiziente Speicherung und den späteren Zugriff auf die gesammelten Daten für Analysen und Berichte.",
+          "links": [
+            {
+              "label": "Supabase Dokumentation",
+              "url": "https://supabase.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Alert on spikes",
+          "description": "Dieser Schritt dient dazu, das Team über plötzliche Anstiege in den Erwähnungen oder der Stimmung zu informieren. Solche Alerts sind entscheidend, um schnell auf Krisen oder virale Trends reagieren zu können.",
+          "links": [
+            {
+              "label": "Slack API Dokumentation",
+              "url": "https://api.slack.com/"
+            }
+          ]
+        }
       ],
       "useCase": "Brand and marketing teams monitoring reputation"
     }
@@ -883,11 +1603,56 @@
         "Resend Email API"
       ],
       "steps": [
-        "Define competitor product URLs",
-        "Scrape prices on a schedule",
-        "Detect and store changes",
-        "Apply alert thresholds",
-        "Notify the pricing team"
+        {
+          "title": "Define competitor product URLs",
+          "description": "In diesem Schritt werden die URLs der Produkte von Wettbewerbern festgelegt, die überwacht werden sollen. Es ist wichtig, präzise und relevante Links auszuwählen, um sicherzustellen, dass die gesammelten Daten nützlich sind. Diese URLs dienen als Grundlage für die Preisüberwachung.",
+          "links": [
+            {
+              "label": "Dokumentation",
+              "url": "https://docs.n8n.io/integrations/builtin/applications/http-request/"
+            }
+          ]
+        },
+        {
+          "title": "Scrape prices on a schedule",
+          "description": "Hier wird ein Zeitplan für das regelmäßige Scrapen der Preise von den definierten URLs erstellt. Dies kann in festen Intervallen erfolgen, um sicherzustellen, dass die Daten aktuell sind. Automatisierte Scraping-Tools helfen dabei, die Effizienz zu steigern und manuelle Eingriffe zu minimieren.",
+          "links": [
+            {
+              "label": "Dokumentation",
+              "url": "https://docs.n8n.io/integrations/builtin/applications/html-extract/"
+            }
+          ]
+        },
+        {
+          "title": "Detect and store changes",
+          "description": "In diesem Schritt werden die gesammelten Preisdaten analysiert, um Änderungen im Vergleich zu vorherigen Werten zu erkennen. Alle signifikanten Preisänderungen werden gespeichert, um eine Historie der Preisentwicklung zu ermöglichen. Dies ist entscheidend für die spätere Analyse und Entscheidungsfindung.",
+          "links": [
+            {
+              "label": "Dokumentation",
+              "url": "https://supabase.com/docs/guides/database"
+            }
+          ]
+        },
+        {
+          "title": "Apply alert thresholds",
+          "description": "Hier werden Schwellenwerte definiert, die festlegen, wann eine Preisänderung als relevant betrachtet wird. Diese Schwellenwerte helfen dabei, nur bedeutende Veränderungen zu berücksichtigen und unnötige Benachrichtigungen zu vermeiden. Dadurch wird die Effizienz des Monitoring-Systems erhöht.",
+          "links": [
+            {
+              "label": "Dokumentation",
+              "url": "https://docs.n8n.io/integrations/builtin/applications/if/"
+            }
+          ]
+        },
+        {
+          "title": "Notify the pricing team",
+          "description": "In diesem letzten Schritt werden die relevanten Mitglieder des Preis-Teams über erkannte Änderungen informiert. Dies geschieht typischerweise über E-Mail-Benachrichtigungen oder andere Kommunikationskanäle. Eine zeitnahe Benachrichtigung ist entscheidend, um schnell auf Marktveränderungen reagieren zu können.",
+          "links": [
+            {
+              "label": "Dokumentation",
+              "url": "https://resend.com/docs"
+            }
+          ]
+        }
       ],
       "useCase": "E-commerce teams keeping prices competitive"
     }
@@ -913,11 +1678,56 @@
         "Resend Email API"
       ],
       "steps": [
-        "Track competitor sources",
-        "Collect new content and updates",
-        "Summarize changes with AI",
-        "Store insights over time",
-        "Send weekly briefs"
+        {
+          "title": "Track competitor sources",
+          "description": "Identifizieren und überwachen Sie die wichtigsten Quellen Ihrer Wettbewerber, einschließlich ihrer Websites, Social-Media-Kanäle und Blogs. Durch das Tracking dieser Quellen erhalten Sie wertvolle Einblicke in deren Strategien und Aktivitäten.",
+          "links": [
+            {
+              "label": "OpenAI API Dokumentation",
+              "url": "https://platform.openai.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Collect new content and updates",
+          "description": "Sammeln Sie regelmäßig neue Inhalte und Aktualisierungen von den identifizierten Wettbewerbsquellen. Dies umfasst Artikel, Pressemitteilungen und Social-Media-Posts, um stets über die neuesten Entwicklungen informiert zu sein.",
+          "links": [
+            {
+              "label": "n8n Dokumentation",
+              "url": "https://docs.n8n.io"
+            }
+          ]
+        },
+        {
+          "title": "Summarize changes with AI",
+          "description": "Nutzen Sie KI-gestützte Tools, um die gesammelten Inhalte und Änderungen zu analysieren und zusammenzufassen. Dies ermöglicht eine schnelle und präzise Übersicht über die wichtigsten Entwicklungen im Wettbewerbsumfeld.",
+          "links": [
+            {
+              "label": "OpenAI API Dokumentation",
+              "url": "https://platform.openai.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Store insights over time",
+          "description": "Speichern Sie die gewonnenen Erkenntnisse in einer strukturierten Datenbank, um Trends und Veränderungen über einen längeren Zeitraum zu verfolgen. Dies hilft Ihnen, fundierte Entscheidungen basierend auf historischen Daten zu treffen.",
+          "links": [
+            {
+              "label": "Supabase Dokumentation",
+              "url": "https://supabase.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Send weekly briefs",
+          "description": "Erstellen und versenden Sie wöchentliche Informationsbriefe, die die gesammelten Erkenntnisse und Zusammenfassungen enthalten. Diese Briefe halten Ihr Team über die neuesten Wettbewerbsentwicklungen auf dem Laufenden.",
+          "links": [
+            {
+              "label": "Resend Email API Dokumentation",
+              "url": "https://resend.com/docs"
+            }
+          ]
+        }
       ],
       "useCase": "Product marketing and strategy teams"
     }
@@ -943,11 +1753,56 @@
         "OpenAI API"
       ],
       "steps": [
-        "Capture signup events",
-        "Segment users by behavior",
-        "Trigger email sequences",
-        "Personalize content with AI",
-        "Track activation metrics"
+        {
+          "title": "Capture signup events",
+          "description": "Erfassen Sie die Anmeldedaten von Benutzern, um deren Interesse und Engagement zu messen. Diese Ereignisse sind der Ausgangspunkt für die Erstellung gezielter Onboarding-E-Mails und helfen, die Benutzerbasis besser zu verstehen.",
+          "links": [
+            {
+              "label": "Supabase Dokumentation",
+              "url": "https://supabase.com/docs/guides/auth#signup"
+            }
+          ]
+        },
+        {
+          "title": "Segment users by behavior",
+          "description": "Analysieren Sie das Verhalten der Benutzer, um sie in verschiedene Segmente einzuteilen. Diese Segmentierung ermöglicht es, personalisierte Inhalte zu erstellen, die auf die spezifischen Bedürfnisse und Vorlieben der Benutzer zugeschnitten sind.",
+          "links": [
+            {
+              "label": "n8n Dokumentation",
+              "url": "https://docs.n8n.io/integrations/builtin/applications/supabase/"
+            }
+          ]
+        },
+        {
+          "title": "Trigger email sequences",
+          "description": "Aktivieren Sie automatisierte E-Mail-Sequenzen basierend auf den erfassten Benutzerereignissen. Diese Vorgehensweise stellt sicher, dass Benutzer zur richtigen Zeit die richtigen Informationen erhalten, um ihre Erfahrung zu verbessern.",
+          "links": [
+            {
+              "label": "Resend Email API",
+              "url": "https://resend.com/docs/api"
+            }
+          ]
+        },
+        {
+          "title": "Personalize content with AI",
+          "description": "Nutzen Sie KI-Technologien, um den Inhalt der E-Mails basierend auf den Benutzerpräferenzen und Verhaltensmustern zu personalisieren. Dies erhöht die Relevanz der Kommunikation und fördert das Engagement der Benutzer.",
+          "links": [
+            {
+              "label": "OpenAI API",
+              "url": "https://platform.openai.com/docs/api-reference"
+            }
+          ]
+        },
+        {
+          "title": "Track activation metrics",
+          "description": "Überwachen Sie die Aktivierungsmetriken, um den Erfolg der Onboarding-E-Mails zu bewerten. Diese Metriken helfen dabei, die Effektivität der Kampagnen zu analysieren und notwendige Anpassungen vorzunehmen.",
+          "links": [
+            {
+              "label": "Supabase Dokumentation",
+              "url": "https://supabase.com/docs/guides/database#metrics"
+            }
+          ]
+        }
       ],
       "useCase": "SaaS teams improving activation and retention"
     }
@@ -973,11 +1828,56 @@
         "n8n"
       ],
       "steps": [
-        "Collect usage and billing signals",
-        "Build churn features",
-        "Score accounts with a model",
-        "Flag at-risk customers",
-        "Trigger retention playbooks"
+        {
+          "title": "Collect usage and billing signals",
+          "description": "In diesem Schritt werden Daten über die Nutzung und Abrechnung der Kunden gesammelt. Dazu gehören Informationen über Kaufverhalten, Abonnements und Interaktionen mit dem Produkt. Diese Signale sind entscheidend, um Muster im Kundenverhalten zu erkennen.",
+          "links": [
+            {
+              "label": "Supabase Dokumentation",
+              "url": "https://supabase.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Build churn features",
+          "description": "Hier werden spezifische Merkmale entwickelt, die zur Vorhersage von Kundenabwanderung verwendet werden. Diese Merkmale basieren auf den gesammelten Nutzungssignalen und helfen dabei, das Risiko einer Abwanderung zu quantifizieren. Die Merkmale können Verhaltensmuster, Nutzungshäufigkeit und Zahlungsinformationen umfassen.",
+          "links": [
+            {
+              "label": "PostHog Analytics API",
+              "url": "https://posthog.com/docs/api"
+            }
+          ]
+        },
+        {
+          "title": "Score accounts with a model",
+          "description": "In diesem Schritt werden die Kundenkonten mithilfe eines Vorhersagemodells bewertet. Das Modell analysiert die zuvor erstellten Merkmale und weist jedem Konto eine Abwanderungswahrscheinlichkeit zu. Dies ermöglicht eine datenbasierte Einschätzung des Risikos für jedes Konto.",
+          "links": [
+            {
+              "label": "OpenAI API Dokumentation",
+              "url": "https://platform.openai.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Flag at-risk customers",
+          "description": "Kunden, die ein hohes Risiko für eine Abwanderung aufweisen, werden in diesem Schritt gekennzeichnet. Diese Kennzeichnung ermöglicht es dem Team, gezielte Maßnahmen zur Kundenbindung zu ergreifen. Die Identifizierung dieser Kunden ist entscheidend für die Implementierung effektiver Retentionsstrategien.",
+          "links": [
+            {
+              "label": "n8n Dokumentation",
+              "url": "https://docs.n8n.io"
+            }
+          ]
+        },
+        {
+          "title": "Trigger retention playbooks",
+          "description": "In diesem finalen Schritt werden spezifische Retentionsstrategien aktiviert, um gefährdete Kunden zu halten. Dies kann durch personalisierte Angebote, Kundenkommunikation oder andere Maßnahmen geschehen. Ziel ist es, die Kundenbindung zu verbessern und die Abwanderung zu reduzieren.",
+          "links": [
+            {
+              "label": "PostHog Retention Guide",
+              "url": "https://posthog.com/docs/guides/retention"
+            }
+          ]
+        }
       ],
       "useCase": "SaaS teams reducing churn proactively"
     }
@@ -1003,11 +1903,56 @@
         "n8n"
       ],
       "steps": [
-        "Join or upload meeting audio",
-        "Transcribe with Deepgram",
-        "Summarize and extract actions",
-        "Create notes in Notion",
-        "Notify participants"
+        {
+          "title": "Join or upload meeting audio",
+          "description": "In diesem Schritt können Benutzer entweder an einem Meeting teilnehmen oder eine Audioaufnahme des Meetings hochladen. Die Audioquelle wird für die Transkription vorbereitet, um sicherzustellen, dass alle relevanten Informationen erfasst werden.",
+          "links": [
+            {
+              "label": "Deepgram Audio Upload",
+              "url": "https://developers.deepgram.com/docs/audio-upload"
+            }
+          ]
+        },
+        {
+          "title": "Transcribe with Deepgram",
+          "description": "Hier wird die hochgeladene Audioaufnahme mithilfe der Deepgram Speech API in Text umgewandelt. Die Transkription ermöglicht es, den Inhalt des Meetings in schriftlicher Form zu erfassen, was die spätere Analyse erleichtert.",
+          "links": [
+            {
+              "label": "Deepgram Transcription",
+              "url": "https://developers.deepgram.com/docs/transcription"
+            }
+          ]
+        },
+        {
+          "title": "Summarize and extract actions",
+          "description": "In diesem Schritt wird der transkribierte Text analysiert, um wichtige Informationen und Handlungsaufforderungen zu extrahieren. Mithilfe der OpenAI API werden die Inhalte zusammengefasst und relevante Aktionen identifiziert, die während des Meetings besprochen wurden.",
+          "links": [
+            {
+              "label": "OpenAI API Documentation",
+              "url": "https://beta.openai.com/docs/"
+            }
+          ]
+        },
+        {
+          "title": "Create notes in Notion",
+          "description": "Die extrahierten Informationen und Zusammenfassungen werden in Notion als Notizen erstellt. Dieser Schritt sorgt dafür, dass alle Meeting-Notizen an einem zentralen Ort gespeichert werden, was die Nachverfolgung und Zusammenarbeit erleichtert.",
+          "links": [
+            {
+              "label": "Notion API Documentation",
+              "url": "https://developers.notion.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Notify participants",
+          "description": "Nachdem die Notizen erstellt wurden, werden die Teilnehmer des Meetings benachrichtigt. Dies kann durch E-Mail oder andere Kommunikationskanäle erfolgen, um sicherzustellen, dass alle über die Ergebnisse und nächsten Schritte informiert sind.",
+          "links": [
+            {
+              "label": "n8n Notifications",
+              "url": "https://docs.n8n.io/integrations/builtin/notifications/"
+            }
+          ]
+        }
       ],
       "useCase": "Teams that want reliable meeting documentation"
     }
