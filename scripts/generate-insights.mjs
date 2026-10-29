@@ -494,6 +494,66 @@ function validateArticle(article, workflows, existingSlugs) {
   };
 }
 
+const STOPWORDS = new Set([
+  "the", "and", "for", "with", "that", "this", "from", "into", "your", "you",
+  "are", "was", "were", "will", "can", "how", "why", "what", "when", "where",
+  "der", "die", "das", "und", "oder", "für", "mit", "von", "auf", "ein", "eine",
+  "einen", "dem", "den", "des", "ist", "sind", "wird", "werden", "wie", "was",
+]);
+
+function tokenize(text) {
+  return String(text ?? "")
+    .toLowerCase()
+    .split(/[^a-z0-9äöüß]+/)
+    .filter((token) => token.length > 2 && !STOPWORDS.has(token));
+}
+
+/**
+ * Deterministischer Fallback-Matcher: bewertet Workflows anhand von
+ * Tag-, Titel-, Kategorie- und Beschreibungs-Überschneidungen. Wird nur
+ * genutzt, wenn das LLM keinen (gültigen) Workflow ausgewählt hat.
+ */
+function matchWorkflowByKeywords(article, workflows) {
+  const tokens = new Set(
+    tokenize(
+      [
+        article.title,
+        article.excerpt,
+        article.category,
+        ...(Array.isArray(article.tags) ? article.tags : []),
+        article.content,
+      ].join(" ")
+    )
+  );
+
+  let best = null;
+  let bestScore = 0;
+
+  for (const workflow of workflows) {
+    let score = 0;
+
+    for (const tag of workflow.tags ?? []) {
+      if (tokens.has(String(tag).toLowerCase())) score += 3;
+    }
+    for (const word of tokenize(workflow.title)) {
+      if (tokens.has(word)) score += 2;
+    }
+    for (const word of tokenize(workflow.category)) {
+      if (tokens.has(word)) score += 1;
+    }
+    for (const word of tokenize(workflow.description)) {
+      if (tokens.has(word)) score += 1;
+    }
+
+    if (score > bestScore) {
+      bestScore = score;
+      best = workflow;
+    }
+  }
+
+  return bestScore >= 4 ? best : null;
+}
+
 /**
  * Stellt sicher, dass der interne Workflow-Link im Markdown vorhanden ist.
  * Der LLM-Link wird bevorzugt; fehlt er, wird ein kontextueller Abschnitt
@@ -657,9 +717,20 @@ async function main() {
           throw new Error(`Validierung fehlgeschlagen: ${validation.errors.join(", ")}`);
         }
 
-        const workflow = validation.relatedWorkflowSlug
+        let workflow = validation.relatedWorkflowSlug
           ? workflows.find((entry) => entry.slug === validation.relatedWorkflowSlug)
           : null;
+
+        // Deterministischer Fallback, falls das LLM keinen Workflow gewählt hat.
+        if (!workflow) {
+          const matched = matchWorkflowByKeywords(article, workflows);
+          if (matched) {
+            workflow = matched;
+            console.log(
+              `  ${c.cyan}↳${c.reset} Keyword-Match: ${matched.title}`
+            );
+          }
+        }
 
         const content = ensureWorkflowLink(article.content, workflow, opts.lang);
 

@@ -116,6 +116,21 @@ npm run insights:generate -- --lang=de            # deutschsprachige Artikel
 
 Weitere Optionen: `--max-age-days=14`, `--model=openai/gpt-4o-mini`, `--concurrency=2`. Bereits verarbeitete Quellen werden über ihre URL erkannt und nicht erneut erzeugt. Nach dem Lauf `npm run build` ausführen.
 
+### Mindestbestand & Fallback
+
+Der Feed zeigt immer mindestens **4 Beiträge**. Reichen die generierten Artikel nicht aus, füllt [`src/data/insights-seed.json`](src/data/insights-seed.json) mit kuratierten Evergreen-Artikeln auf. Generierte Artikel haben Vorrang; Seed-Artikel ersetzen nie bestehende Inhalte.
+
+### Automatischer 6-Stunden-Takt
+
+[`.github/workflows/insights.yml`](.github/workflows/insights.yml) läuft per Cron zu **00:00, 06:00, 12:00 und 18:00 Uhr UTC**, generiert bis zu 4 neue Artikel, validiert, baut und committet `src/data/insights.json`. Der anschließende Push löst das bestehende Deploy-Workflow aus.
+
+Voraussetzung im Repository:
+
+- Secret `OPENROUTER_API_KEY` (Settings → Secrets and variables → Actions)
+- Optional Variable `OPENROUTER_MODEL` (Default: `openai/gpt-4o-mini`)
+
+Manuell startbar über „Run workflow“ (`workflow_dispatch`).
+
 > Hinweis: Die Insights-Routen liegen bewusst außerhalb der `[lang]`-Struktur. Im statischen Build und in `npm run preview` sind sie unter `/insights/...` erreichbar; der Astro-Dev-Server mit `prefixDefaultLocale` liefert unpräfixierte Routen jedoch mit 404 aus.
 
 ## Branding & SEO
