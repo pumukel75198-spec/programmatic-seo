@@ -556,6 +556,10 @@ async function generatePdf(workflow, partner, monetization) {
       Subject: workflow.description,
       Keywords: [workflow.category, ...(workflow.tags ?? [])].join(", "),
       Creator: "FlowMatrix.dev PDF Generator",
+      // Fixed timestamps keep generated PDFs byte-for-byte deterministic,
+      // so a rebuild does not dirty the working tree.
+      CreationDate: new Date("2026-01-01T00:00:00.000Z"),
+      ModDate: new Date("2026-01-01T00:00:00.000Z"),
     },
   });
 
