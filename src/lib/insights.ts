@@ -39,7 +39,7 @@ export interface Insight {
 }
 
 /** The feed must always show at least this many articles. */
-export const MIN_INSIGHTS = 4;
+export const MIN_INSIGHTS = 6;
 
 const generated = insightsData as Insight[];
 const seed = seedData as Insight[];

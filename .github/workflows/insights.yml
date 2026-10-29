@@ -38,7 +38,7 @@ jobs:
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           OPENROUTER_MODEL: ${{ vars.OPENROUTER_MODEL || 'openai/gpt-4o-mini' }}
-        run: npm run insights:generate -- --limit=4
+        run: npm run insights:generate -- --limit=6
 
       - name: Validate data
         run: npm run validate

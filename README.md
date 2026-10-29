@@ -118,11 +118,11 @@ Weitere Optionen: `--max-age-days=14`, `--model=openai/gpt-4o-mini`, `--concurre
 
 ### Mindestbestand & Fallback
 
-Der Feed zeigt immer mindestens **4 Beiträge**. Reichen die generierten Artikel nicht aus, füllt [`src/data/insights-seed.json`](src/data/insights-seed.json) mit kuratierten Evergreen-Artikeln auf. Generierte Artikel haben Vorrang; Seed-Artikel ersetzen nie bestehende Inhalte.
+Der Feed zeigt immer mindestens **6 Beiträge**. Reichen die generierten Artikel nicht aus, füllt [`src/data/insights-seed.json`](src/data/insights-seed.json) mit kuratierten Evergreen-Artikeln auf. Generierte Artikel haben Vorrang; Seed-Artikel ersetzen nie bestehende Inhalte.
 
 ### Automatischer 6-Stunden-Takt
 
-[`.github/workflows/insights.yml`](.github/workflows/insights.yml) läuft per Cron zu **00:00, 06:00, 12:00 und 18:00 Uhr UTC**, generiert bis zu 4 neue Artikel, validiert, baut und committet `src/data/insights.json`. Der anschließende Push löst das bestehende Deploy-Workflow aus.
+[`.github/workflows/insights.yml`](.github/workflows/insights.yml) läuft per Cron zu **00:00, 06:00, 12:00 und 18:00 Uhr UTC**, generiert bis zu 6 neue Artikel, validiert, baut und committet `src/data/insights.json`. Der anschließende Push löst das bestehende Deploy-Workflow aus.
 
 Voraussetzung im Repository:
 

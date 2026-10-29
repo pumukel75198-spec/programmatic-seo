@@ -82,5 +82,47 @@
     },
     "publishedAt": "2026-10-26T08:00:00.000Z",
     "updatedAt": "2026-10-26T08:00:00.000Z"
+  },
+  {
+    "slug": "webhook-reliability-idempotency-retries",
+    "title": "Webhook Reliability: Idempotency, Retries and Dead-Letter Queues",
+    "excerpt": "Most integration bugs are not logic errors. They are duplicate events, lost retries and silent failures. Here is how to design webhooks that survive real traffic.",
+    "content": "## The failure mode nobody plans for\n\nA webhook endpoint that works in staging usually fails in production for three reasons: the same event arrives twice, a downstream service is briefly unavailable, or an event is delivered but never processed. None of these are exotic. They are the normal behaviour of distributed systems, and they need to be designed for explicitly.\n\n## Assume every event can arrive twice\n\nAt-least-once delivery is the default for most providers. Your handler must therefore be idempotent. The simplest approach is to store the provider's event ID and reject duplicates before doing any work. If the provider does not send a stable ID, derive one from the event type and payload hash.\n\nIdempotency should cover side effects, not just database writes. Sending an email, charging a card or creating a ticket are all operations that must not happen twice for the same event.\n\n## Retry with backoff, then stop\n\nRetries are essential, but unbounded retries are a denial-of-service attack you inflict on yourself. Use exponential backoff with jitter, cap the number of attempts, and make the retry window explicit. After the window closes, move the event to a dead-letter queue instead of dropping it silently.\n\nA dead-letter queue is not a graveyard. It is an operational surface: someone must be able to inspect failed events, fix the cause and replay them safely.\n\n## Make failures observable\n\nLog the event ID, the attempt number, the response status and the time spent. Emit metrics for delivery latency, failure rate and queue depth. Alert on sustained failures, not on single errors. Without this, a broken integration can go unnoticed for days while events pile up.\n\n## Verify signatures and validate payloads\n\nAlways verify the provider's signature before processing an event. Validate the payload against a schema and reject malformed events early. This protects both your system and your downstream services from garbage data.\n\n## A practical checklist\n\nStore event IDs, make handlers idempotent, retry with backoff, cap attempts, use a dead-letter queue, verify signatures, validate payloads and monitor queue depth. None of these steps is complicated on its own; together they turn a fragile endpoint into a reliable integration.\n\nThe [Webhook Event Routing](/en/workflows/webhook-event-routing) workflow walks through the routing, retry and dead-letter setup in detail.\n\nReliability is not about preventing failures. It is about making them visible, bounded and recoverable.",
+    "category": "Engineering",
+    "tags": ["webhooks", "reliability", "integration", "events"],
+    "source": {
+      "name": "Stripe Engineering Blog",
+      "url": "https://stripe.com/blog/engineering",
+      "guid": "seed-webhook-reliability-idempotency-retries",
+      "publishedAt": "2026-10-27T08:00:00.000Z"
+    },
+    "relatedWorkflow": {
+      "slug": "webhook-event-routing",
+      "title": "Webhook Event Routing",
+      "reason": "The workflow covers routing, retries and dead-letter handling for webhook events."
+    },
+    "publishedAt": "2026-10-27T08:00:00.000Z",
+    "updatedAt": "2026-10-27T08:00:00.000Z"
+  },
+  {
+    "slug": "meeting-notes-automation-privacy",
+    "title": "Meeting Notes That Write Themselves: A Transcription Pipeline That Respects Privacy",
+    "excerpt": "Automated meeting notes save hours, but they also create a sensitive data trail. A privacy-first pipeline keeps the value and limits the risk.",
+    "content": "## The appeal and the risk\n\nAutomated meeting notes promise to remove one of the most tedious tasks in knowledge work. They also create a searchable record of everything said in every meeting, including salaries, legal discussions and customer details. The value is real, but so is the risk. A good pipeline treats privacy as a design constraint, not an afterthought.\n\n## Choose the processing location deliberately\n\nTranscription can happen on-device, in your own cloud account or through a third-party API. Each option has different data-residency and retention implications. For sensitive teams, on-device or self-hosted transcription is often the right default; for others, a vendor with a clear data processing agreement and a no-training guarantee is acceptable.\n\n## Minimise what you store\n\nYou rarely need the raw audio after the transcript is produced. Delete it on a schedule, and store only the transcript plus a short summary. Redact obvious sensitive fields such as account numbers and personal identifiers before the transcript is indexed.\n\n## Separate capture from distribution\n\nCapture should be automatic; distribution should be deliberate. Generate the transcript and summary, then let the meeting owner decide who receives it. This prevents accidental sharing of sensitive notes with entire channels.\n\n## Make the output useful\n\nA wall of text is not notes. Structure the output into decisions, action items, owners and deadlines. Link action items to the tools where the work actually happens, such as a task tracker or CRM. This is where automation turns into leverage.\n\n## Review the first weeks closely\n\nTranscription quality varies by language, accent and audio setup. Review outputs for the first few weeks, correct recurring errors and tune the glossary. A small amount of curation early on prevents a large amount of cleanup later.\n\n## A balanced default\n\nProcess locally where possible, store the minimum, redact before indexing, distribute deliberately and structure the output around actions. This keeps the productivity gain without turning meetings into a compliance liability.\n\nThe [Meeting Notes Automation](/en/workflows/meeting-notes-automation) workflow covers the capture, transcription and distribution steps in more detail.\n\nAutomation should make meetings lighter, not create a new archive nobody controls.",
+    "category": "Productivity & AI",
+    "tags": ["meetings", "transcription", "privacy", "automation"],
+    "source": {
+      "name": "OpenAI Documentation",
+      "url": "https://platform.openai.com/docs/guides/speech-to-text",
+      "guid": "seed-meeting-notes-automation-privacy",
+      "publishedAt": "2026-10-28T08:00:00.000Z"
+    },
+    "relatedWorkflow": {
+      "slug": "meeting-notes-automation",
+      "title": "Meeting Notes Automation",
+      "reason": "The workflow describes the transcription and distribution pipeline with privacy controls."
+    },
+    "publishedAt": "2026-10-28T08:00:00.000Z",
+    "updatedAt": "2026-10-28T08:00:00.000Z"
   }
 ]
