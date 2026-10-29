@@ -168,8 +168,8 @@ Bestehende Query-Strings und Hash-Fragmente bleiben erhalten; Parameter werden n
 
 - Clean Cover mit „FlowMatrix.dev Premium Workflow“
 - Übersicht mit Kategorie, Difficulty, Dauer und Use Case
-- Ausführliche Step-by-Step-Erklärungen inkl. Dokumentationslinks
-- „Empfohlene Tools & Ressourcen“ mit klickbaren Affiliate-Links aus [`src/data/partner.json`](src/data/partner.json)
+- Ausführliche Step-by-Step-Erklärungen ohne externe Links – alle Informationen stehen direkt im PDF
+- „Empfohlene Tools & Ressourcen“ mit Tool-Namen und offiziellen URLs als Klartext aus [`src/data/partner.json`](src/data/partner.json)
 
 Das Skript läuft automatisch im `prebuild`-Schritt. Manuell:
 
@@ -184,7 +184,7 @@ npm run pdf:generate
 1. **Inhaltlicher Abgleich** mit `workflows.json` (Titel, Beschreibung, Kategorie, Difficulty, Dauer, Use Case, alle Steps inkl. Actions, Commands, Config, Checkliste und Ergebnis)
 2. **Junk-/Halluzinations-Check** (Lorem Ipsum, TODO, Platzhalter, `undefined`, `NaN`, veraltete OpenAI-Endpunkte/-Modelle, `npm init astro`)
 3. **Struktur** (mind. 3 Steps, mind. 3 Actions und 2 Checklisten-Punkte pro Step, vollständige Sätze, alle Abschnitte)
-4. **Link-Integrität** (Affiliate-Links aus `partner.json` direkt in den Steps, `ref`-Parameter, Lemon-Squeezy-Checkout-Link, Preis 4,99 €)
+4. **Link-Integrität** (Lemon-Squeezy-Checkout-Link und Preis 4,99 €; die Step-Anleitungen selbst enthalten keine externen Links)
 
 Der Check läuft im `prebuild`-Schritt und bricht den Build bei Fehlern mit Exit-Code 1 ab. Manuell:
 
@@ -200,7 +200,7 @@ Jeder Step enthält jetzt:
 - `actions` – konkrete Handlungen mit Klickpfaden/Parametern
 - `commands` – echte CLI-/API-/Code-Schnipsel
 - `config` – konkrete Umgebungsvariablen/Parameter
-- `tools` – benötigte Tools; die Affiliate-Links werden direkt im Step gerendert
+- `tools` – benötigte Tools (werden im PDF als Klartext referenziert, ohne externe Links)
 - `checklist` – überprüfbare Punkte
 - `expectedResult` – was nach dem Step fertig ist
 

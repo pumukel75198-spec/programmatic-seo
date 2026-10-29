@@ -451,27 +451,6 @@ function drawSteps(doc, workflow, partner) {
       }
     }
 
-    // Tools with affiliate links embedded in the step
-    if (Array.isArray(step.tools) && step.tools.length > 0) {
-      subHeading(doc, "TOOLS FÜR DIESEN SCHRITT", contentX, contentWidth);
-      for (const name of step.tools) {
-        const entry = partner[name];
-        if (!entry) continue;
-        const href = entry.affiliateUrl ?? entry.url;
-        if (!href) continue;
-        ensureSpace(doc, 24);
-        doc
-          .font("Helvetica")
-          .fontSize(9.5)
-          .fillColor(COLORS.brandLight)
-          .text(`→ ${name}: ${href}`, contentX, doc.y + 2, {
-            width: contentWidth,
-            link: href,
-            underline: true,
-          });
-      }
-    }
-
     // Checklist
     if (Array.isArray(step.checklist) && step.checklist.length > 0) {
       subHeading(doc, "CHECKLISTE", contentX, contentWidth);
@@ -499,24 +478,6 @@ function drawSteps(doc, workflow, partner) {
           width: contentWidth,
           lineGap: 2,
         });
-    }
-
-    // Documentation links
-    if (step.links.length > 0) {
-      subHeading(doc, "RESSOURCEN", contentX, contentWidth);
-      for (const link of step.links) {
-        if (!isNonEmptyString(link?.url)) continue;
-        ensureSpace(doc, 24);
-        doc
-          .font("Helvetica")
-          .fontSize(9.5)
-          .fillColor(COLORS.brandLight)
-          .text(`→ ${link.label ?? link.url}`, contentX, doc.y + 2, {
-            width: contentWidth,
-            link: link.url,
-            underline: true,
-          });
-      }
     }
 
     doc.y = Math.max(doc.y, startY + 40) + 18;
@@ -553,7 +514,7 @@ function drawTools(doc, workflow, partner, monetization) {
     .fontSize(10)
     .fillColor(COLORS.muted)
     .text(
-      "Alle Links sind klickbar. Einige Links sind Affiliate-Links – für dich entstehen dadurch keine Mehrkosten.",
+      "Alle benötigten Tools und offiziellen URLs sind hier als Klartext aufgeführt.",
       PAGE.margin,
       doc.y + 8,
       { width: PAGE.width - PAGE.margin * 2, lineGap: 2 }
@@ -604,8 +565,6 @@ function drawTools(doc, workflow, partner, monetization) {
       .fillColor(COLORS.brandLight)
       .text(href, PAGE.margin + 16, cardY + 34, {
         width: PAGE.width - PAGE.margin * 2 - 32,
-        link: href,
-        underline: true,
       });
 
     if (entry.sponsored) {
@@ -613,7 +572,7 @@ function drawTools(doc, workflow, partner, monetization) {
         .font("Helvetica")
         .fontSize(7.5)
         .fillColor(COLORS.dim)
-        .text("Affiliate-Link", PAGE.margin + 16, cardY + 48);
+        .text("Offizielle URL", PAGE.margin + 16, cardY + 48);
     }
 
     doc.y = cardY + 64 + 10;

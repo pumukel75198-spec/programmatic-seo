@@ -261,63 +261,6 @@ function checkLinks(workflow, text, raw, partner, monetization, errors) {
     errors.push("Keine klickbaren URLs (/URI) im PDF gefunden");
   }
 
-  const tools = Array.isArray(workflow.details?.tools)
-    ? workflow.details.tools
-    : [];
-
-  for (const name of tools) {
-    const entry = partner[name];
-    if (!entry) {
-      errors.push(`Tool "${name}" fehlt in partner.json`);
-      continue;
-    }
-
-    const href = entry.affiliateUrl ?? entry.url;
-    if (!href) {
-      errors.push(`Tool "${name}" hat keine URL in partner.json`);
-      continue;
-    }
-
-    if (!uriMatches.includes(href) && !raw.includes(href)) {
-      errors.push(`Affiliate-Link für "${name}" fehlt im PDF: ${href}`);
-    }
-
-    if (entry.sponsored && !href.includes("ref=")) {
-      errors.push(
-        `Affiliate-Link für "${name}" enthält keinen ref-Parameter: ${href}`
-      );
-    }
-  }
-
-  // Affiliate-Links müssen direkt in den jeweiligen Steps eingebettet sein.
-  const steps = Array.isArray(workflow.details?.steps)
-    ? workflow.details.steps
-    : [];
-  steps.forEach((step, index) => {
-    if (typeof step === "string") return;
-    for (const name of step.tools ?? []) {
-      const entry = partner[name];
-      if (!entry) {
-        errors.push(
-          `Step ${index + 1}: Tool "${name}" fehlt in partner.json`
-        );
-        continue;
-      }
-      const href = entry.affiliateUrl ?? entry.url;
-      if (!href) {
-        errors.push(
-          `Step ${index + 1}: Tool "${name}" hat keine URL in partner.json`
-        );
-        continue;
-      }
-      if (!uriMatches.includes(href) && !raw.includes(href)) {
-        errors.push(
-          `Step ${index + 1}: Affiliate-Link für "${name}" fehlt im PDF: ${href}`
-        );
-      }
-    }
-  });
-
   if (!monetization.checkoutUrl) {
     errors.push("Keine Lemon-Squeezy-Checkout-URL konfiguriert");
   } else if (
