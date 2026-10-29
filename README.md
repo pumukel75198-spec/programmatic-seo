@@ -71,6 +71,7 @@ programmatic-seo/
 | `npm run dev`       | Dev-Server unter `http://localhost:4321`            |
 | `npm run validate`  | Datendateien und Slug-Eindeutigkeit prüfen          |
 | `npm run enrich:alternatives` | Alternativen-Strings per OpenRouter-LLM anreichern |
+| `npm run insights:generate` | RSS-Feeds einlesen und Insights-Artikel per LLM erzeugen |
 | `npm run og:generate` | Open-Graph-PNG aus `public/og-default.svg` erzeugen |
 | `npm run build`     | Produktions-Build nach `./dist/` (inkl. OG-Bild)    |
 | `npm run preview`   | Produktions-Build lokal testen                      |
@@ -101,6 +102,21 @@ npm run enrich:alternatives                       # alle Kandidaten anreichern
 ```
 
 Weitere Optionen: `--model=openai/gpt-4o-mini`, `--concurrency=3`, `--no-cache`. Ergebnisse werden in `.cache/enrich-alternatives.json` zwischengespeichert; die Datendatei wird atomar geschrieben. Danach `npm run validate` und `npm run build` ausführen.
+
+## Insights automatisch erzeugen
+
+[`scripts/generate-insights.mjs`](scripts/generate-insights.mjs) liest die RSS-/Atom-Feeds aus [`src/data/feeds.json`](src/data/feeds.json), erkennt neue Einträge und lässt über die **OpenRouter-API** eigenständige Artikel schreiben. Das Skript wählt automatisch den thematisch passendsten Workflow aus [`src/data/workflows.json`](src/data/workflows.json) und setzt einen kontextbezogenen internen Link. Die Ergebnisse landen in [`src/data/insights.json`](src/data/insights.json); Astro generiert daraus statische Seiten unter `/insights/[slug]`.
+
+```bash
+npm run insights:generate -- --dry-run            # Feeds prüfen, keine API-Calls
+npm run insights:generate -- --limit=3            # 3 neue Artikel
+npm run insights:generate -- --feed=TechCrunch    # nur einen Feed
+npm run insights:generate -- --lang=de            # deutschsprachige Artikel
+```
+
+Weitere Optionen: `--max-age-days=14`, `--model=openai/gpt-4o-mini`, `--concurrency=2`. Bereits verarbeitete Quellen werden über ihre URL erkannt und nicht erneut erzeugt. Nach dem Lauf `npm run build` ausführen.
+
+> Hinweis: Die Insights-Routen liegen bewusst außerhalb der `[lang]`-Struktur. Im statischen Build und in `npm run preview` sind sie unter `/insights/...` erreichbar; der Astro-Dev-Server mit `prefixDefaultLocale` liefert unpräfixierte Routen jedoch mit 404 aus.
 
 ## Branding & SEO
 

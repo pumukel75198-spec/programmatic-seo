@@ -1,0 +1,60 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Badge from "../../components/Badge.astro";
+import ContentCard from "../../components/ContentCard.astro";
+import { getAllInsights } from "../../lib/insights";
+
+const insights = getAllInsights();
+
+const formatDate = (value: string) =>
+  new Date(value).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+---
+
+<Layout
+  title="Insights"
+  description="Original analysis and practical takeaways on APIs, automation and modern software workflows."
+  keywords={["insights", "tech analysis", "APIs", "automation", "workflows"]}
+>
+  <section class="relative overflow-hidden border-b border-white/5">
+    <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+      <Badge tone="cyan">Insights</Badge>
+      <h1 class="mt-4 max-w-3xl text-balance text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
+        Analysis and practical takeaways for modern software teams
+      </h1>
+      <p class="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-slate-400 sm:text-lg">
+        Original articles generated from current industry news and linked to the
+        workflows in our catalog.
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+    {
+      insights.length === 0 ? (
+        <div class="rounded-2xl border border-white/10 bg-surface/50 p-10 text-center">
+          <p class="text-lg font-semibold text-white">No insights yet</p>
+          <p class="mt-2 text-sm text-slate-400">
+            Run <code class="rounded bg-white/5 px-1.5 py-0.5 text-brand-300">npm run insights:generate</code>
+            to create the first articles from the configured RSS feeds.
+          </p>
+        </div>
+      ) : (
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {insights.map((insight) => (
+            <ContentCard
+              href={`/insights/${insight.slug}`}
+              title={insight.title}
+              description={insight.excerpt}
+              meta={`${formatDate(insight.publishedAt)} · ${insight.source.name}`}
+              tags={insight.tags}
+            />
+          ))}
+        </div>
+      )
+    }
+  </section>
+</Layout>

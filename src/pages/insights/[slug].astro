@@ -1,0 +1,155 @@
+---
+import { marked } from "marked";
+import Layout from "../../layouts/Layout.astro";
+import Badge from "../../components/Badge.astro";
+import Breadcrumb from "../../components/Breadcrumb.astro";
+import ContentCard from "../../components/ContentCard.astro";
+import { getAllInsights, getRelatedInsights } from "../../lib/insights";
+import { site } from "../../lib/site";
+
+export function getStaticPaths() {
+  return getAllInsights().map((insight) => ({
+    params: { slug: insight.slug },
+    props: { insight },
+  }));
+}
+
+const { insight } = Astro.props;
+const related = getRelatedInsights(insight, 3);
+
+const html = marked.parse(insight.content, { async: false }) as string;
+
+const formatDate = (value: string) =>
+  new Date(value).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: insight.title,
+  description: insight.excerpt,
+  articleSection: insight.category,
+  keywords: insight.tags.join(", "),
+  datePublished: insight.publishedAt,
+  dateModified: insight.updatedAt ?? insight.publishedAt,
+  url: new URL(`/insights/${insight.slug}/`, site.url).toString(),
+  inLanguage: "en",
+  author: { "@type": "Organization", name: site.name },
+  publisher: { "@type": "Organization", name: site.name },
+  isBasedOn: insight.source.url,
+};
+---
+
+<Layout
+  title={insight.title}
+  description={insight.excerpt}
+  type="article"
+  keywords={insight.tags}
+  publishedTime={insight.publishedAt}
+  modifiedTime={insight.updatedAt}
+  jsonLd={jsonLd}
+>
+  <article>
+    <header class="relative overflow-hidden border-b border-white/5">
+      <div class="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+        <Breadcrumb
+          items={[
+            { label: "Home", href: "/en/" },
+            { label: "Insights", href: "/insights" },
+            { label: insight.title },
+          ]}
+        />
+
+        <div class="mt-6 flex flex-wrap gap-2">
+          <Badge tone="cyan">{insight.category}</Badge>
+          {insight.tags.map((tag) => <Badge tone="slate">{tag}</Badge>)}
+        </div>
+
+        <h1 class="mt-4 text-balance text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
+          {insight.title}
+        </h1>
+        <p class="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-slate-400 sm:text-lg">
+          {insight.excerpt}
+        </p>
+
+        <div class="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500">
+          <time datetime={insight.publishedAt}>{formatDate(insight.publishedAt)}</time>
+          <span aria-hidden="true">·</span>
+          <span>Source: {insight.source.name}</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
+      <div class="insight-content" set:html={html} />
+
+      {
+        insight.relatedWorkflow && (
+          <aside class="mt-12 rounded-2xl border border-brand-500/30 bg-gradient-to-br from-brand-500/10 to-transparent p-6">
+            <Badge tone="cyan">Related workflow</Badge>
+            <h2 class="mt-3 text-xl font-semibold text-white">
+              {insight.relatedWorkflow.title}
+            </h2>
+            {insight.relatedWorkflow.reason && (
+              <p class="mt-2 text-sm leading-relaxed text-slate-400">
+                {insight.relatedWorkflow.reason}
+              </p>
+            )}
+            <a
+              href={`/en/workflows/${insight.relatedWorkflow.slug}`}
+              class="mt-4 inline-flex items-center gap-2 rounded-xl bg-brand-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-400"
+            >
+              Open workflow
+              <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path
+                  fill-rule="evenodd"
+                  d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </a>
+          </aside>
+        )
+      }
+
+      <footer class="mt-10 border-t border-white/5 pt-6 text-xs text-slate-500">
+        <p>
+          Based on reporting from
+          <a
+            href={insight.source.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-brand-300 underline-offset-4 hover:underline"
+          >
+            {insight.source.name}
+          </a>. This article is an independent analysis and does not reproduce the
+          original content.
+        </p>
+      </footer>
+    </div>
+
+    {
+      related.length > 0 && (
+        <section class="mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:px-8">
+          <h2 class="text-xl font-semibold text-white sm:text-2xl">
+            More insights
+          </h2>
+          <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {related.map((item) => (
+              <ContentCard
+                href={`/insights/${item.slug}`}
+                title={item.title}
+                description={item.excerpt}
+                meta={`${formatDate(item.publishedAt)} · ${item.source.name}`}
+                tags={item.tags}
+              />
+            ))}
+          </div>
+        </section>
+      )
+    }
+  </article>
+</Layout>
