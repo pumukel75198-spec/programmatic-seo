@@ -1,0 +1,146 @@
+{
+  "Astro": {
+    "name": "Astro",
+    "url": "https://astro.build/",
+    "affiliateUrl": "https://astro.build/",
+    "sponsored": false
+  },
+  "Buffer": {
+    "name": "Buffer",
+    "url": "https://buffer.com/",
+    "affiliateUrl": "https://buffer.com/?ref=flowmatrix",
+    "sponsored": true
+  },
+  "CRM": {
+    "name": "CRM",
+    "url": "https://www.hubspot.com/products/crm",
+    "affiliateUrl": "https://www.hubspot.com/products/crm",
+    "sponsored": false
+  },
+  "Cal.com": {
+    "name": "Cal.com",
+    "url": "https://cal.com/",
+    "affiliateUrl": "https://cal.com/",
+    "sponsored": false
+  },
+  "Cloudflare Workers API": {
+    "name": "Cloudflare Workers API",
+    "url": "https://workers.cloudflare.com/",
+    "affiliateUrl": "https://workers.cloudflare.com/",
+    "sponsored": false
+  },
+  "Cohere Embed API": {
+    "name": "Cohere Embed API",
+    "url": "https://cohere.com/",
+    "affiliateUrl": "https://cohere.com/",
+    "sponsored": false
+  },
+  "Deepgram Speech API": {
+    "name": "Deepgram Speech API",
+    "url": "https://deepgram.com/",
+    "affiliateUrl": "https://deepgram.com/",
+    "sponsored": false
+  },
+  "GitHub Alternatives": {
+    "name": "GitHub Alternatives",
+    "url": "https://github.com/",
+    "affiliateUrl": "https://github.com/",
+    "sponsored": false
+  },
+  "Google Search Console API": {
+    "name": "Google Search Console API",
+    "url": "https://developers.google.com/webmaster-tools",
+    "affiliateUrl": "https://developers.google.com/webmaster-tools",
+    "sponsored": false
+  },
+  "Make": {
+    "name": "Make",
+    "url": "https://www.make.com/",
+    "affiliateUrl": "https://www.make.com/en/register?ref=flowmatrix",
+    "sponsored": true
+  },
+  "Mapbox Maps API": {
+    "name": "Mapbox Maps API",
+    "url": "https://www.mapbox.com/",
+    "affiliateUrl": "https://www.mapbox.com/",
+    "sponsored": false
+  },
+  "Notion": {
+    "name": "Notion",
+    "url": "https://www.notion.so/",
+    "affiliateUrl": "https://www.notion.so/?ref=flowmatrix",
+    "sponsored": true
+  },
+  "Notion API": {
+    "name": "Notion API",
+    "url": "https://developers.notion.com/",
+    "affiliateUrl": "https://www.notion.so/?ref=flowmatrix",
+    "sponsored": true
+  },
+  "OpenAI API": {
+    "name": "OpenAI API",
+    "url": "https://platform.openai.com/",
+    "affiliateUrl": "https://platform.openai.com/?ref=flowmatrix",
+    "sponsored": true
+  },
+  "Pinecone Vector API": {
+    "name": "Pinecone Vector API",
+    "url": "https://www.pinecone.io/",
+    "affiliateUrl": "https://www.pinecone.io/",
+    "sponsored": false
+  },
+  "PostHog Analytics API": {
+    "name": "PostHog Analytics API",
+    "url": "https://posthog.com/",
+    "affiliateUrl": "https://posthog.com/",
+    "sponsored": false
+  },
+  "Resend API": {
+    "name": "Resend API",
+    "url": "https://resend.com/",
+    "affiliateUrl": "https://resend.com/?ref=flowmatrix",
+    "sponsored": true
+  },
+  "Resend Email API": {
+    "name": "Resend Email API",
+    "url": "https://resend.com/",
+    "affiliateUrl": "https://resend.com/?ref=flowmatrix",
+    "sponsored": true
+  },
+  "Shopify Admin API": {
+    "name": "Shopify Admin API",
+    "url": "https://shopify.dev/docs/api/admin",
+    "affiliateUrl": "https://shopify.dev/docs/api/admin",
+    "sponsored": false
+  },
+  "Slack": {
+    "name": "Slack",
+    "url": "https://slack.com/",
+    "affiliateUrl": "https://slack.com/",
+    "sponsored": false
+  },
+  "Stripe Payments API": {
+    "name": "Stripe Payments API",
+    "url": "https://stripe.com/",
+    "affiliateUrl": "https://stripe.com/",
+    "sponsored": false
+  },
+  "Supabase": {
+    "name": "Supabase",
+    "url": "https://supabase.com/",
+    "affiliateUrl": "https://supabase.com/?ref=flowmatrix",
+    "sponsored": true
+  },
+  "Zendesk Alternatives": {
+    "name": "Zendesk Alternatives",
+    "url": "https://www.zendesk.com/",
+    "affiliateUrl": "https://www.zendesk.com/",
+    "sponsored": false
+  },
+  "n8n": {
+    "name": "n8n",
+    "url": "https://n8n.io/",
+    "affiliateUrl": "https://n8n.io/?ref=flowmatrix",
+    "sponsored": true
+  }
+}

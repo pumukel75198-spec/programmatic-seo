@@ -7,13 +7,14 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "prebuild": "node scripts/generate-og.mjs",
+    "prebuild": "node scripts/generate-og.mjs && node scripts/generate-pdfs.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
     "validate": "node scripts/validate-data.js",
     "enrich:alternatives": "node scripts/enrich-alternatives.mjs",
     "insights:generate": "node scripts/generate-insights.mjs",
+    "pdf:generate": "node scripts/generate-pdfs.mjs",
     "og:generate": "node scripts/generate-og.mjs",
     "deploy:init": "wrangler pages project create programmatic-seo --production-branch=main",
     "deploy": "npm run build && wrangler pages deploy dist --project-name=programmatic-seo",
@@ -28,6 +29,7 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
+    "pdfkit": "^0.20.2",
     "sharp": "^0.35.5",
     "wrangler": "^4.154.0"
   }

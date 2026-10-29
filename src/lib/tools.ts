@@ -1,3 +1,5 @@
+import partnerData from "../data/partner.json";
+
 /**
  * Central tool & affiliate link configuration.
  *
@@ -29,7 +31,7 @@ const REF = "";
 
 /** Global affiliate reference, configurable via environment. */
 export const AFFILIATE_REF =
-  import.meta.env.PUBLIC_AFFILIATE_REF?.trim() || "flowmatrix";
+  import.meta.env?.PUBLIC_AFFILIATE_REF?.trim() || "flowmatrix";
 
 export const DEFAULT_AFFILIATE_PARAMS: Record<string, string> = {
   ref: AFFILIATE_REF,
@@ -677,6 +679,23 @@ export const tools: Record<string, ToolConfig> = {
     sponsored: true,
   },
 };
+
+/**
+ * Merge central partner overrides from `src/data/partner.json`.
+ * This keeps affiliate URLs/IDs in one place while preserving the
+ * existing tool catalogue as a fallback.
+ */
+const partnerOverrides = partnerData as Record<string, Partial<ToolConfig>>;
+for (const [name, override] of Object.entries(partnerOverrides)) {
+  const existing = tools[name];
+  const merged: ToolConfig = {
+    ...(existing ?? { name, url: "" }),
+    ...override,
+    name,
+    url: override.url ?? existing?.url ?? "",
+  };
+  tools[name] = merged;
+}
 
 export interface ToolLink {
   name: string;

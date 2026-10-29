@@ -1,0 +1,168 @@
+---
+/**
+ * Premium PDF purchase + download unlock.
+ *
+ * Flow:
+ *   1. Visitor sees a locked card with a Lemon Squeezy buy button (4,99 €).
+ *   2. Lemon Squeezy opens the checkout in its overlay.
+ *   3. On a successful checkout, Lemon.js emits
+ *      `lemon-squeezy:checkout:success`; the component then reveals the
+ *      download link and remembers the unlock in localStorage.
+ *
+ * The PDF itself is generated at build time by `scripts/generate-pdfs.mjs`
+ * and served from `/downloads/flowmatrix-<slug>.pdf`.
+ */
+import LemonButton from "./LemonButton.astro";
+
+interface Props {
+  slug: string;
+  title: string;
+  price?: string;
+  checkoutUrl?: string;
+}
+
+const {
+  slug,
+  title,
+  price = "4,99 €",
+  checkoutUrl,
+} = Astro.props;
+
+const downloadUrl = `/downloads/flowmatrix-${slug}.pdf`;
+const storageKey = `flowmatrix:unlocked:${slug}`;
+const resolvedCheckoutUrl =
+  checkoutUrl ??
+  import.meta.env.PUBLIC_LEMON_WORKFLOW_CHECKOUT_URL ??
+  import.meta.env.PUBLIC_LEMON_CHECKOUT_URL;
+---
+
+<section
+  class="mt-10 overflow-hidden rounded-2xl border border-brand-500/30 bg-gradient-to-br from-brand-500/10 via-surface to-cyan-500/5"
+  data-premium-download
+  data-storage-key={storageKey}
+  data-slug={slug}
+>
+  <div class="p-6 sm:p-8">
+    <div class="flex flex-wrap items-center gap-2">
+      <span class="inline-flex items-center rounded-full bg-brand-500/15 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-brand-200 ring-1 ring-inset ring-brand-500/30">
+        Premium PDF
+      </span>
+      <span class="text-xs text-slate-500">Sofort-Download · {price}</span>
+    </div>
+
+    <h2 class="mt-3 text-xl font-semibold text-white sm:text-2xl">
+      {title} als Premium-Workflow
+    </h2>
+    <p class="mt-2 max-w-2xl text-sm leading-relaxed text-slate-400">
+      Das vollständige PDF enthält das Cover, ausführliche Step-by-Step-Erklärungen
+      und eine kuratierte Liste empfohlener Tools mit direkten Links.
+    </p>
+
+    <!-- Locked state -->
+    <div class="mt-6" data-locked>
+      <LemonButton
+        label={`PDF kaufen – ${price}`}
+        price="Einmalzahlung · PDF-Download"
+        productName={`${title} – Premium Workflow`}
+        checkoutUrl={resolvedCheckoutUrl}
+        note="Sichere Zahlung über Lemon Squeezy · Download wird nach dem Kauf freigeschaltet"
+      />
+    </div>
+
+    <!-- Unlocked state -->
+    <div class="mt-6 hidden" data-unlocked>
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <a
+          href={downloadUrl}
+          download
+          class="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition-colors hover:bg-emerald-400"
+        >
+          <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M10 2a.75.75 0 01.75.75v8.69l2.72-2.72a.75.75 0 111.06 1.06l-4 4a.75.75 0 01-1.06 0l-4-4a.75.75 0 111.06-1.06l2.72 2.72V2.75A.75.75 0 0110 2z" />
+            <path d="M3.5 13.75a.75.75 0 00-1.5 0v2.5A1.75 1.75 0 003.75 18h12.5A1.75 1.75 0 0018 16.25v-2.5a.75.75 0 00-1.5 0v2.5a.25.25 0 01-.25.25H3.75a.25.25 0 01-.25-.25v-2.5z" />
+          </svg>
+          PDF herunterladen
+        </a>
+        <p class="text-xs text-slate-500">
+          Kauf bestätigt. Der Download bleibt in diesem Browser freigeschaltet.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (function () {
+    function boot() {
+      var roots = document.querySelectorAll("[data-premium-download]");
+      if (!roots.length) return;
+
+      function unlock(root) {
+        var locked = root.querySelector("[data-locked]");
+        var unlocked = root.querySelector("[data-unlocked]");
+        if (locked) locked.classList.add("hidden");
+        if (unlocked) unlocked.classList.remove("hidden");
+      }
+
+      function isUnlocked(root) {
+        try {
+          return localStorage.getItem(root.dataset.storageKey) === "1";
+        } catch (error) {
+          return false;
+        }
+      }
+
+      function remember(root) {
+        try {
+          localStorage.setItem(root.dataset.storageKey, "1");
+        } catch (error) {
+          /* localStorage may be unavailable */
+        }
+      }
+
+      roots.forEach(function (root) {
+        if (isUnlocked(root)) unlock(root);
+      });
+
+      // Lemon Squeezy overlay success event.
+      window.addEventListener("lemon-squeezy:checkout:success", function () {
+        roots.forEach(function (root) {
+          remember(root);
+          unlock(root);
+        });
+      });
+
+      // Fallback for postMessage-based integrations.
+      window.addEventListener("message", function (event) {
+        var data = event.data;
+        if (!data) return;
+        var type = typeof data === "string" ? data : data.event || data.type;
+        if (type === "checkout:success" || type === "lemon-squeezy:checkout:success") {
+          roots.forEach(function (root) {
+            remember(root);
+            unlock(root);
+          });
+        }
+      });
+
+      // Fallback for redirect-based flows: /workflows/<slug>/?purchased=1
+      try {
+        var params = new URLSearchParams(window.location.search);
+        if (params.get("purchased") === "1" || params.get("order_id")) {
+          roots.forEach(function (root) {
+            remember(root);
+            unlock(root);
+          });
+        }
+      } catch (error) {
+        /* ignore */
+      }
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", boot);
+    } else {
+      boot();
+    }
+  })();
+</script>

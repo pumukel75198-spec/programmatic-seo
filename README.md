@@ -162,12 +162,36 @@ Alle Tool-Links laufen über [`src/lib/tools.ts`](src/lib/tools.ts). `getToolLin
 
 Bestehende Query-Strings und Hash-Fragmente bleiben erhalten; Parameter werden nicht doppelt angehängt.
 
+### Premium-Workflow-PDFs (4,99 €)
+
+[`scripts/generate-pdfs.mjs`](scripts/generate-pdfs.mjs) erzeugt für jeden Workflow ein PDF in `public/downloads/flowmatrix-<slug>.pdf`:
+
+- Clean Cover mit „FlowMatrix.dev Premium Workflow“
+- Übersicht mit Kategorie, Difficulty, Dauer und Use Case
+- Ausführliche Step-by-Step-Erklärungen inkl. Dokumentationslinks
+- „Empfohlene Tools & Ressourcen“ mit klickbaren Affiliate-Links aus [`src/data/partner.json`](src/data/partner.json)
+
+Das Skript läuft automatisch im `prebuild`-Schritt. Manuell:
+
+```bash
+npm run pdf:generate
+```
+
+Die Landingpage [`src/pages/[lang]/workflows/[slug].astro`](src/pages/[lang]/workflows/[slug].astro) bindet [`PremiumDownload.astro`](src/components/PremiumDownload.astro) ein:
+
+- Buy-Button mit festem Preis **4,99 €**
+- Lemon Squeezy Overlay-Checkout
+- Nach erfolgreichem Checkout (`lemon-squeezy:checkout:success`) wird der PDF-Download freigeschaltet und in `localStorage` gemerkt
+
+> Hinweis: Der Unlock ist clientseitig. Für echten Kopierschutz wäre eine serverseitige Verifikation (z. B. Cloudflare Function + Lemon Squeezy API) nötig.
+
 ### Umgebungsvariablen
 
 Siehe [`.env.example`](.env.example):
 
 ```bash
 PUBLIC_LEMON_CHECKOUT_URL=https://your-store.lemonsqueezy.com/checkout/buy/...
+PUBLIC_LEMON_WORKFLOW_CHECKOUT_URL=https://your-store.lemonsqueezy.com/checkout/buy/...
 PUBLIC_AFFILIATE_REF=flowmatrix
 ```
 
