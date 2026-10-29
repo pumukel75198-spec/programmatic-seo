@@ -49,6 +49,14 @@ let dataFile = join(root, "src", "data", "alternatives.json");
 const cacheDir = join(root, ".cache");
 const cacheFile = join(cacheDir, "enrich-alternatives.json");
 
+// Lokale .env laden, falls vorhanden (Node >= 20.6). Shell-Variablen
+// haben Vorrang, weil loadEnvFile vorhandene Werte nicht überschreibt.
+try {
+  process.loadEnvFile(join(root, ".env"));
+} catch {
+  // Keine .env vorhanden – es gelten die Shell-Umgebungsvariablen.
+}
+
 const API_URL =
   process.env.OPENROUTER_BASE_URL?.replace(/\/$/, "") ??
   "https://openrouter.ai/api/v1";
