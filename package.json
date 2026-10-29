@@ -12,6 +12,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "validate": "node scripts/validate-data.js",
+    "enrich:alternatives": "node scripts/enrich-alternatives.mjs",
     "og:generate": "node scripts/generate-og.mjs",
     "deploy:init": "wrangler pages project create programmatic-seo --production-branch=main",
     "deploy": "npm run build && wrangler pages deploy dist --project-name=programmatic-seo",
