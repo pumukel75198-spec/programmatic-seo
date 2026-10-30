@@ -12,6 +12,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "validate": "node scripts/validate-data.js",
+    "generate:batch": "node scripts/generate-batch.mjs",
     "enrich:alternatives": "node scripts/enrich-alternatives.mjs",
     "enrich:workflows": "node scripts/enrich-workflows.mjs",
     "enrich:workflow-details": "node scripts/enrich-workflow-details.mjs",

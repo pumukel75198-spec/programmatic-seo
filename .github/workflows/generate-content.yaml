@@ -1,0 +1,70 @@
+name: Generate Content Batch
+
+# Alle 3 Tage um 06:00 UTC: zufällig ~10 neue Einträge
+# (APIs, Alternatives, Workflows) inkl. PDFs, Python-Skripten,
+# strenger Validierung, KV-Upload, Build und Deploy.
+on:
+  schedule:
+    - cron: "0 6 */3 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: content-batch
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    name: Generate, validate, deploy & commit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate content batch
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          OPENROUTER_MODEL: ${{ vars.OPENROUTER_MODEL || 'openai/gpt-4o-mini' }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          PDF_KV_NAMESPACE_ID: 60b777e050ae4134bf22d3ef1b6a5a5e
+          PUBLIC_VISITOR_COUNTER_URL: ${{ vars.PUBLIC_VISITOR_COUNTER_URL || 'https://flowmatrix-visitor-counter.pumukel75198.workers.dev' }}
+          PUBLIC_CF_ANALYTICS_TOKEN: ${{ vars.PUBLIC_CF_ANALYTICS_TOKEN }}
+          PUBLIC_DOWNLOAD_GATE_URL: ${{ vars.PUBLIC_DOWNLOAD_GATE_URL || 'https://flowmatrix-download-gate.pumukel75198.workers.dev' }}
+          PUBLIC_LEMON_SCRIPT_CHECKOUT_URL: ${{ vars.PUBLIC_LEMON_SCRIPT_CHECKOUT_URL }}
+          PUBLIC_LEMON_WORKFLOW_CHECKOUT_URL: ${{ vars.PUBLIC_LEMON_WORKFLOW_CHECKOUT_URL }}
+          PUBLIC_LEMON_CHECKOUT_URL: ${{ vars.PUBLIC_LEMON_CHECKOUT_URL }}
+        run: npm run generate:batch
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=programmatic-seo --branch=main
+
+      - name: Commit new content
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data public/og public/_redirects
+          if git diff --cached --quiet; then
+            echo "No new content to commit."
+          else
+            git commit -m "chore: auto-generate content batch"
+            git push
+          fi
