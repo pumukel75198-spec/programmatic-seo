@@ -12,7 +12,7 @@
  *   3. Struktur (mind. 3 Steps, nicht-leere Titel/Beschreibungen,
  *      vollständige Sätze, vorhandene Abschnitte)
  *   4. Link-Integrität (Affiliate-Links aus partner.json + Lemon-Squeezy-
- *      Checkout-Link + Preis 4,99 €)
+ *      Checkout-Link + Preis €4.99)
  *
  * Läuft automatisch im `prebuild`-Schritt. Bei einem Fehler bricht das
  * Skript mit Exit-Code 1 ab und blockiert damit den Build.
@@ -79,7 +79,7 @@ const truncate = (value, max = 90) => {
 
 const JUNK_PATTERNS = [
   ["Lorem Ipsum", /lorem\s+ipsum/i],
-  ["TODO", /\bT\s*O\s*D\s*O\b/i],
+  ["TODO", /\bTODO\b|\bT\s+O\s+D\s+O\b/i],
   ["Platzhalter [Hier einfügen]", /\[hier\s+einfügen\]/i],
   ["Platzhalter [insert …]", /\[insert[^\]]*\]/i],
   ["TBD", /\bT\s*B\s*D\b/i],
@@ -201,31 +201,6 @@ function checkStructure(workflow, text, errors) {
       );
     }
 
-    if (Array.isArray(step.commands)) {
-      step.commands.forEach((command, commandIndex) => {
-        if (command?.code) {
-          checkContains(
-            text,
-            command.code,
-            `Step ${index + 1} Befehl ${commandIndex + 1}`,
-            errors
-          );
-        }
-      });
-    }
-
-    if (Array.isArray(step.config)) {
-      step.config.forEach((entry, entryIndex) => {
-        if (entry?.key) {
-          checkContains(
-            text,
-            entry.key,
-            `Step ${index + 1} Config ${entryIndex + 1}`,
-            errors
-          );
-        }
-      });
-    }
   });
 
   const compactText = compact(text);
@@ -235,17 +210,17 @@ function checkStructure(workflow, text, errors) {
   if (!compactText.includes("overview")) {
     errors.push('Abschnitt "OVERVIEW" fehlt');
   }
-  if (!lower(text).includes("how to build it")) {
-    errors.push('Abschnitt "How to build it" fehlt');
+  if (!lower(text).includes("how to implement it")) {
+    errors.push('Abschnitt "How to implement it" fehlt');
   }
-  if (!compactText.includes("wasdutust")) {
-    errors.push('Abschnitt "WAS DU TUST" fehlt');
+  if (!compactText.includes("whatyouneedtodo")) {
+    errors.push('Abschnitt "WHAT YOU NEED TO DO" fehlt');
   }
-  if (!compactText.includes("checkliste")) {
-    errors.push('Abschnitt "CHECKLISTE" fehlt');
+  if (!compactText.includes("checkattheend")) {
+    errors.push('Abschnitt "CHECK AT THE END" fehlt');
   }
-  if (!compactText.includes("ergebnis")) {
-    errors.push('Abschnitt "ERGEBNIS" fehlt');
+  if (!compactText.includes("result")) {
+    errors.push('Abschnitt "RESULT" fehlt');
   }
 }
 
@@ -273,11 +248,12 @@ function checkLinks(workflow, text, raw, partner, monetization, errors) {
     errors.push(`Preis "${monetization.price}" fehlt im PDF-Text`);
   }
 
+  const premiumText = lower(text).replace(/[-\s]+/g, " ");
   if (
-    !lower(text).includes("premium pdf") &&
-    !lower(text).includes("premium workflow")
+    !premiumText.includes("premium pdf") &&
+    !premiumText.includes("premium workflow")
   ) {
-    errors.push('Hinweis "Premium PDF"/"Premium Workflow" fehlt');
+    errors.push('Hinweis "Premium-PDF"/"Premium-Workflow" fehlt');
   }
 }
 

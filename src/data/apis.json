@@ -1067,5 +1067,345 @@
       "useCase": "Managing secrets and config across environments",
       "website": "https://www.doppler.com"
     }
+  },
+  {
+    "slug": "openai-batch-api",
+    "title": "OpenAI Batch API",
+    "description": "OpenAI's Batch API processes large request sets asynchronously at lower cost – ideal for bulk classification, embeddings and content jobs.",
+    "category": "AI & Automation",
+    "tags": [
+      "ai",
+      "batch",
+      "async",
+      "openai"
+    ],
+    "details": {
+      "provider": "OpenAI",
+      "pricing": "Usage-based with batch discounts; see OpenAI pricing",
+      "features": [
+        "Asynchronous batch jobs",
+        "Lower cost than synchronous calls",
+        "JSONL input and output",
+        "Status and result endpoints"
+      ],
+      "useCase": "Bulk classification, content generation and large evaluation jobs",
+      "website": "https://platform.openai.com/docs/guides/batch",
+      "endpoint": "https://api.openai.com/v1/batches",
+      "authentication": "Bearer API key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "Python",
+        "JavaScript",
+        "cURL"
+      ],
+      "rateLimit": "Subject to account tier limits",
+      "docsUrl": "https://platform.openai.com/docs/guides/batch"
+    }
+  },
+  {
+    "slug": "google-sheets-api",
+    "title": "Google Sheets API",
+    "description": "The Google Sheets API reads and writes spreadsheet data programmatically – useful for reporting, lightweight databases and content pipelines.",
+    "category": "Productivity & Data",
+    "tags": [
+      "spreadsheet",
+      "google",
+      "automation",
+      "data"
+    ],
+    "details": {
+      "provider": "Google",
+      "pricing": "Free with Google Cloud quotas; see Google Cloud pricing",
+      "features": [
+        "Read and write cell ranges",
+        "Batch updates",
+        "Formatting and charts",
+        "OAuth 2.0 access control"
+      ],
+      "useCase": "Reporting dashboards, content calendars and lightweight data stores",
+      "website": "https://developers.google.com/sheets/api",
+      "endpoint": "https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}",
+      "authentication": "OAuth 2.0 or service account",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "Python",
+        "JavaScript",
+        "Java"
+      ],
+      "rateLimit": "Per-project quotas in Google Cloud",
+      "docsUrl": "https://developers.google.com/sheets/api/reference/rest"
+    }
+  },
+  {
+    "slug": "slack-web-api",
+    "title": "Slack Web API",
+    "description": "The Slack Web API sends messages, manages channels and reads workspace data – the fastest way to add Slack notifications to any workflow.",
+    "category": "Communication",
+    "tags": [
+      "slack",
+      "messaging",
+      "notifications",
+      "automation"
+    ],
+    "details": {
+      "provider": "Slack",
+      "pricing": "Included with Slack plans; see Slack pricing",
+      "features": [
+        "Send and update messages",
+        "Manage channels and users",
+        "Block Kit message layouts",
+        "OAuth scopes per app"
+      ],
+      "useCase": "Alerts, approvals and conversational automations in Slack",
+      "website": "https://api.slack.com/web",
+      "endpoint": "https://slack.com/api/chat.postMessage",
+      "authentication": "OAuth 2.0 bot token",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python",
+        "cURL"
+      ],
+      "rateLimit": "Tier-based method rate limits",
+      "docsUrl": "https://api.slack.com/methods"
+    }
+  },
+  {
+    "slug": "hubspot-crm-api",
+    "title": "HubSpot CRM API",
+    "description": "The HubSpot CRM API manages contacts, companies, deals and tickets programmatically – ideal for syncing sales and marketing data.",
+    "category": "CRM & Sales",
+    "tags": [
+      "crm",
+      "sales",
+      "marketing",
+      "hubspot"
+    ],
+    "details": {
+      "provider": "HubSpot",
+      "pricing": "Free tier available; paid plans for advanced features",
+      "features": [
+        "CRUD for CRM objects",
+        "Associations and pipelines",
+        "Custom properties",
+        "Webhooks for changes"
+      ],
+      "useCase": "Lead sync, deal automation and customer data enrichment",
+      "website": "https://developers.hubspot.com/docs/api/crm/contacts",
+      "endpoint": "https://api.hubapi.com/crm/v3/objects/contacts",
+      "authentication": "OAuth 2.0 or private app token",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python",
+        "PHP"
+      ],
+      "rateLimit": "Per-account API limits by plan",
+      "docsUrl": "https://developers.hubspot.com/docs/api/crm/contacts"
+    }
+  },
+  {
+    "slug": "zendesk-support-api",
+    "title": "Zendesk Support API",
+    "description": "The Zendesk Support API manages tickets, users and comments programmatically – useful for support automation and reporting.",
+    "category": "Customer Support",
+    "tags": [
+      "support",
+      "tickets",
+      "helpdesk",
+      "zendesk"
+    ],
+    "details": {
+      "provider": "Zendesk",
+      "pricing": "Included with Zendesk plans; see Zendesk pricing",
+      "features": [
+        "Create and update tickets",
+        "Manage users and organizations",
+        "Add comments and tags",
+        "Search and incremental exports"
+      ],
+      "useCase": "Ticket routing, SLA reporting and helpdesk integrations",
+      "website": "https://developer.zendesk.com/api-reference/ticketing/tickets/tickets/",
+      "endpoint": "https://{subdomain}.zendesk.com/api/v2/tickets.json",
+      "authentication": "API token or OAuth",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "cURL",
+        "JavaScript",
+        "Python"
+      ],
+      "rateLimit": "Plan-based request limits",
+      "docsUrl": "https://developer.zendesk.com/api-reference/ticketing/tickets/tickets/"
+    }
+  },
+  {
+    "slug": "salesforce-rest-api",
+    "title": "Salesforce REST API",
+    "description": "The Salesforce REST API exposes objects, records and queries over HTTP – the standard way to integrate Salesforce data with other systems.",
+    "category": "CRM & Enterprise",
+    "tags": [
+      "crm",
+      "salesforce",
+      "enterprise",
+      "rest"
+    ],
+    "details": {
+      "provider": "Salesforce",
+      "pricing": "Included with Salesforce editions; API limits vary by edition",
+      "features": [
+        "SOQL queries",
+        "CRUD on standard and custom objects",
+        "Bulk API for large jobs",
+        "OAuth 2.0 authentication"
+      ],
+      "useCase": "Enterprise CRM sync, reporting and workflow automation",
+      "website": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/",
+      "endpoint": "https://{instance}.salesforce.com/services/data/v62.0/sobjects/Account",
+      "authentication": "OAuth 2.0",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "Java",
+        "JavaScript",
+        "Python"
+      ],
+      "rateLimit": "Edition-based API request limits",
+      "docsUrl": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/"
+    }
+  },
+  {
+    "slug": "discord-bot-api",
+    "title": "Discord Bot API",
+    "description": "The Discord API lets bots send messages, manage servers and react to events – ideal for community automation and alerts.",
+    "category": "Community & Messaging",
+    "tags": [
+      "discord",
+      "bots",
+      "community",
+      "messaging"
+    ],
+    "details": {
+      "provider": "Discord",
+      "pricing": "Free for bots; hosting costs separate",
+      "features": [
+        "Send and edit messages",
+        "Slash commands",
+        "Server and role management",
+        "Gateway event streams"
+      ],
+      "useCase": "Community moderation, alerts and interactive bots",
+      "website": "https://discord.com/developers/docs/reference",
+      "endpoint": "https://discord.com/api/v10/channels/{channel.id}/messages",
+      "authentication": "Bot token",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python",
+        "cURL"
+      ],
+      "rateLimit": "Per-route rate limits with buckets",
+      "docsUrl": "https://discord.com/developers/docs/reference"
+    }
+  },
+  {
+    "slug": "telegram-bot-api",
+    "title": "Telegram Bot API",
+    "description": "The Telegram Bot API sends messages, handles commands and manages chats – a lightweight channel for alerts and personal automations.",
+    "category": "Messaging",
+    "tags": [
+      "telegram",
+      "bots",
+      "messaging",
+      "alerts"
+    ],
+    "details": {
+      "provider": "Telegram",
+      "pricing": "Free to use; see Telegram Bot API terms",
+      "features": [
+        "Send text and media messages",
+        "Inline keyboards and commands",
+        "Webhooks and long polling",
+        "Group and channel support"
+      ],
+      "useCase": "Personal alerts, bot workflows and community notifications",
+      "website": "https://core.telegram.org/bots/api",
+      "endpoint": "https://api.telegram.org/bot{token}/sendMessage",
+      "authentication": "Bot token in URL",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "cURL",
+        "Python",
+        "JavaScript"
+      ],
+      "rateLimit": "Broadcasting limits per chat and second",
+      "docsUrl": "https://core.telegram.org/bots/api"
+    }
+  },
+  {
+    "slug": "github-rest-api",
+    "title": "GitHub REST API",
+    "description": "The GitHub REST API manages repositories, issues, pull requests and releases – the foundation for developer automation.",
+    "category": "Developer Tools",
+    "tags": [
+      "github",
+      "devops",
+      "automation",
+      "rest"
+    ],
+    "details": {
+      "provider": "GitHub",
+      "pricing": "Free for public repositories; paid plans for private features",
+      "features": [
+        "Issues and pull requests",
+        "Repository and release management",
+        "Actions workflow triggers",
+        "Fine-grained tokens"
+      ],
+      "useCase": "Release automation, issue triage and repository reporting",
+      "website": "https://docs.github.com/en/rest",
+      "endpoint": "https://api.github.com/repos/{owner}/{repo}/issues",
+      "authentication": "Personal access token or GitHub App",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python",
+        "Go"
+      ],
+      "rateLimit": "5,000 requests per hour for authenticated users",
+      "docsUrl": "https://docs.github.com/en/rest"
+    }
+  },
+  {
+    "slug": "linear-graphql-api",
+    "title": "Linear GraphQL API",
+    "description": "The Linear GraphQL API manages issues, projects and cycles programmatically – built for fast product and engineering workflows.",
+    "category": "Project Management",
+    "tags": [
+      "linear",
+      "graphql",
+      "issues",
+      "productivity"
+    ],
+    "details": {
+      "provider": "Linear",
+      "pricing": "Included with Linear plans; see Linear pricing",
+      "features": [
+        "GraphQL queries and mutations",
+        "Issues, projects and cycles",
+        "Webhooks for updates",
+        "Team and workflow automation"
+      ],
+      "useCase": "Issue automation, sprint reporting and product operations",
+      "website": "https://developers.linear.app/docs/graphql/working-with-the-graphql-api",
+      "endpoint": "https://api.linear.app/graphql",
+      "authentication": "Personal API key or OAuth",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "TypeScript",
+        "cURL"
+      ],
+      "rateLimit": "Per-workspace complexity limits",
+      "docsUrl": "https://developers.linear.app/docs/graphql/working-with-the-graphql-api"
+    }
   }
 ]

@@ -59,7 +59,8 @@ export type TranslationKey =
   | "cta.compare"
   | "footer.tagline"
   | "footer.imprint"
-  | "footer.privacy";
+  | "footer.privacy"
+  | "footer.visitors";
 
 export const translations: Record<string, Record<TranslationKey, string>> = {
   en: {
@@ -101,6 +102,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
       "Curated APIs, alternatives and workflows for modern product and SEO teams.",
     "footer.imprint": "Imprint",
     "footer.privacy": "Privacy",
+    "footer.visitors": "visitors",
   },
   de: {
     "nav.apis": "APIs",
@@ -141,6 +143,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
       "Kuratierte APIs, Alternativen und Workflows für moderne Produkt- und SEO-Teams.",
     "footer.imprint": "Impressum",
     "footer.privacy": "Datenschutz",
+    "footer.visitors": "Besucher",
   },
   fr: {
     "nav.apis": "API",
@@ -181,6 +184,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
       "Des API, alternatives et workflows sélectionnés pour les équipes produit et SEO modernes.",
     "footer.imprint": "Mentions légales",
     "footer.privacy": "Confidentialité",
+    "footer.visitors": "visiteurs",
   },
   es: {
     "nav.apis": "APIs",
@@ -221,6 +225,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
       "APIs, alternativas y flujos de trabajo seleccionados para equipos de producto y SEO modernos.",
     "footer.imprint": "Aviso legal",
     "footer.privacy": "Privacidad",
+    "footer.visitors": "visitantes",
   },
   it: {
     "nav.apis": "API",
@@ -261,6 +266,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
       "API, alternative e workflow selezionati per team di prodotto e SEO moderni.",
     "footer.imprint": "Note legali",
     "footer.privacy": "Privacy",
+    "footer.visitors": "visitatori",
   },
   pt: {
     "nav.apis": "APIs",
@@ -301,6 +307,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
       "APIs, alternativas e fluxos de trabalho selecionados para equipes de produto e SEO modernas.",
     "footer.imprint": "Aviso legal",
     "footer.privacy": "Privacidade",
+    "footer.visitors": "visitantes",
   },
   nl: {
     "nav.apis": "API's",
@@ -341,6 +348,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
       "Gecureerde API's, alternatieven en workflows voor moderne product- en SEO-teams.",
     "footer.imprint": "Colofon",
     "footer.privacy": "Privacy",
+    "footer.visitors": "bezoekers",
   },
   pl: {
     "nav.apis": "API",
@@ -381,6 +389,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
       "Wyselekcjonowane API, alternatywy i workflowy dla nowoczesnych zespołów produktowych i SEO.",
     "footer.imprint": "Nota prawna",
     "footer.privacy": "Prywatność",
+    "footer.visitors": "odwiedzających",
   },
   sv: {
     "nav.apis": "API:er",
@@ -421,6 +430,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
       "Kurerade API:er, alternativ och arbetsflöden för moderna produkt- och SEO-team.",
     "footer.imprint": "Impressum",
     "footer.privacy": "Integritet",
+    "footer.visitors": "besökare",
   },
   tr: {
     "nav.apis": "API'ler",
@@ -461,6 +471,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
       "Modern ürün ve SEO ekipleri için seçkin API'ler, alternatifler ve iş akışları.",
     "footer.imprint": "Künye",
     "footer.privacy": "Gizlilik",
+    "footer.visitors": "ziyaretçi",
   },
   ja: {
     "nav.apis": "API",
@@ -501,6 +512,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
       "現代のプロダクト・SEOチーム向けに厳選されたAPI、代替ツール、ワークフロー。",
     "footer.imprint": "運営者情報",
     "footer.privacy": "プライバシー",
+    "footer.visitors": "訪問者",
   },
   zh: {
     "nav.apis": "API",
@@ -540,5 +552,6 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
       "为现代产品和 SEO 团队精选的 API、替代方案和工作流。",
     "footer.imprint": "法律声明",
     "footer.privacy": "隐私",
+    "footer.visitors": "访客",
   },
 };

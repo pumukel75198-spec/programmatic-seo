@@ -136,7 +136,7 @@ async function callOpenRouter({ workflow, stepTitles, attempt = 1, useJsonMode =
       headers: {
         Authorization: `Bearer ${API_KEY}`,
         "Content-Type": "application/json",
-        "HTTP-Referer": "https://flowmatrix.com",
+        "HTTP-Referer": "https://flowmatrix.dev",
         "X-Title": "FlowMatrix Workflow Enrichment",
       },
       body: JSON.stringify(body),

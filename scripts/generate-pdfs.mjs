@@ -2,14 +2,17 @@
 /**
  * generate-pdfs.mjs
  *
- * Erzeugt für jeden Workflow aus `src/data/workflows.json` ein professionelles
- * Premium-PDF in `public/downloads/`.
+ * Erzeugt für jeden Workflow aus `src/data/workflows.json` ein einfaches,
+ * gut lesbares Premium-PDF in `public/downloads/`.
  *
- * Jedes PDF enthält:
- *   1. Ein sauberes Cover mit "FlowMatrix.dev Premium Workflow"
- *   2. Eine Übersicht mit Difficulty, Dauer und Use Case
- *   3. Ausführliche Step-by-Step-Erklärungen inkl. Dokumentationslinks
- *   4. "Empfohlene Tools & Ressourcen" mit Affiliate-Links aus partner.json
+ * Aufbau jedes PDFs:
+ *   1. Cover
+ *   2. Überblick (Kategorie, Schwierigkeit, Dauer, Use Case, Tools)
+ *   3. Schritt für Schritt: Ziel, "Das musst du tun", "Prüfe am Ende", Ergebnis
+ *   4. Empfohlene Tools & Ressourcen
+ *
+ * Bewusst schlank gehalten: keine Code-Snippets und keine Konfigurations-
+ * tabellen, damit die Anleitung ohne technische Fehler abarbeitbar bleibt.
  *
  * Ausführen:
  *   node scripts/generate-pdfs.mjs
@@ -21,11 +24,17 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import PDFDocument from "pdfkit";
+import { ensurePdfQuality } from "./check-pdf-quality.mjs";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const root = join(__dirname, "..");
+
+const isMain = process.argv[1]
+  ? resolve(process.argv[1]) === resolve(__filename)
+  : false;
 const workflowsFile = join(root, "src", "data", "workflows.json");
 const partnerFile = join(root, "src", "data", "partner.json");
 const monetizationFile = join(root, "src", "data", "monetization.json");
@@ -46,6 +55,8 @@ const COLORS = {
 };
 
 const PAGE = { width: 595.28, height: 841.89, margin: 50 };
+const CONTENT_WIDTH = PAGE.width - PAGE.margin * 2;
+const BOTTOM_LIMIT = PAGE.height - PAGE.margin - 24;
 
 function isNonEmptyString(value) {
   return typeof value === "string" && value.trim() !== "";
@@ -58,9 +69,6 @@ function normalizeStep(step) {
       description: "",
       links: [],
       actions: [],
-      commands: [],
-      config: [],
-      tools: [],
       checklist: [],
       expectedResult: "",
     };
@@ -70,12 +78,25 @@ function normalizeStep(step) {
     description: step?.description ?? "",
     links: Array.isArray(step?.links) ? step.links : [],
     actions: Array.isArray(step?.actions) ? step.actions : [],
-    commands: Array.isArray(step?.commands) ? step.commands : [],
-    config: Array.isArray(step?.config) ? step.config : [],
-    tools: Array.isArray(step?.tools) ? step.tools : [],
     checklist: Array.isArray(step?.checklist) ? step.checklist : [],
     expectedResult: step?.expectedResult ?? "",
   };
+}
+
+function fillPage(doc) {
+  doc.rect(0, 0, PAGE.width, PAGE.height).fill(COLORS.bg);
+  doc.fillColor(COLORS.text);
+}
+
+function addPage(doc) {
+  doc.addPage();
+  fillPage(doc);
+}
+
+function ensureSpace(doc, needed = 60) {
+  if (doc.y + needed > BOTTOM_LIMIT) {
+    addPage(doc);
+  }
 }
 
 function drawCover(doc, workflow, monetization) {
@@ -83,15 +104,13 @@ function drawCover(doc, workflow, monetization) {
 
   doc.rect(0, 0, width, height).fill(COLORS.bg);
 
-  // Accent shapes
+  // Dezente Akzentflächen
   doc.circle(width - 60, 90, 150).fillOpacity(0.12).fill(COLORS.brand);
   doc.circle(40, height - 80, 120).fillOpacity(0.1).fill(COLORS.cyan);
   doc.fillOpacity(1);
 
-  // Brand mark
-  doc
-    .roundedRect(PAGE.margin, 70, 54, 54, 14)
-    .fill(COLORS.brand);
+  // Markenzeichen
+  doc.roundedRect(PAGE.margin, 70, 54, 54, 14).fill(COLORS.brand);
   doc
     .font("Helvetica-Bold")
     .fontSize(20)
@@ -108,15 +127,14 @@ function drawCover(doc, workflow, monetization) {
     .font("Helvetica-Bold")
     .fontSize(34)
     .fillColor(COLORS.white)
-    .text("Premium Workflow", PAGE.margin, 190, { width: width - PAGE.margin * 2 });
+    .text("Premium Workflow", PAGE.margin, 190, { width: CONTENT_WIDTH });
 
   doc
     .font("Helvetica")
     .fontSize(15)
     .fillColor(COLORS.muted)
-    .text("A practical, step-by-step playbook", PAGE.margin, 235);
+    .text("A practical guide – step by step", PAGE.margin, 235);
 
-  // Divider
   doc
     .moveTo(PAGE.margin, 285)
     .lineTo(width - PAGE.margin, 285)
@@ -129,7 +147,7 @@ function drawCover(doc, workflow, monetization) {
     .fontSize(26)
     .fillColor(COLORS.white)
     .text(workflow.title, PAGE.margin, 320, {
-      width: width - PAGE.margin * 2,
+      width: CONTENT_WIDTH,
       lineGap: 4,
     });
 
@@ -138,11 +156,10 @@ function drawCover(doc, workflow, monetization) {
     .fontSize(12)
     .fillColor(COLORS.muted)
     .text(workflow.description, PAGE.margin, doc.y + 14, {
-      width: width - PAGE.margin * 2,
+      width: CONTENT_WIDTH,
       lineGap: 3,
     });
 
-  // Meta pills
   const meta = [
     workflow.category,
     workflow.details?.difficulty,
@@ -177,7 +194,7 @@ function drawCover(doc, workflow, monetization) {
     .fontSize(10)
     .fillColor(COLORS.brandLight)
     .text(`Premium PDF · ${monetization.price}`, PAGE.margin, height - 70, {
-      width: width - PAGE.margin * 2,
+      width: CONTENT_WIDTH,
       align: "right",
       link: monetization.checkoutUrl,
       underline: true,
@@ -185,12 +202,12 @@ function drawCover(doc, workflow, monetization) {
 }
 
 function sectionHeading(doc, text) {
-  if (doc.y > PAGE.height - 140) doc.addPage();
+  ensureSpace(doc, 70);
   doc
     .font("Helvetica-Bold")
     .fontSize(18)
     .fillColor(COLORS.white)
-    .text(text, PAGE.margin, doc.y, { width: PAGE.width - PAGE.margin * 2 });
+    .text(text, PAGE.margin, doc.y, { width: CONTENT_WIDTH });
   doc
     .moveTo(PAGE.margin, doc.y + 6)
     .lineTo(PAGE.width - PAGE.margin, doc.y + 6)
@@ -201,9 +218,7 @@ function sectionHeading(doc, text) {
 }
 
 function drawOverview(doc, workflow) {
-  doc.addPage();
-  doc.rect(0, 0, PAGE.width, PAGE.height).fill(COLORS.bg);
-  doc.fillColor(COLORS.text);
+  addPage(doc);
 
   doc
     .font("Helvetica-Bold")
@@ -215,32 +230,30 @@ function drawOverview(doc, workflow) {
     .font("Helvetica-Bold")
     .fontSize(24)
     .fillColor(COLORS.white)
-    .text(workflow.title, PAGE.margin, doc.y + 8, {
-      width: PAGE.width - PAGE.margin * 2,
-    });
+    .text(workflow.title, PAGE.margin, doc.y + 8, { width: CONTENT_WIDTH });
 
   doc
     .font("Helvetica")
     .fontSize(11)
     .fillColor(COLORS.muted)
     .text(workflow.description, PAGE.margin, doc.y + 12, {
-      width: PAGE.width - PAGE.margin * 2,
+      width: CONTENT_WIDTH,
       lineGap: 3,
     });
 
   doc.moveDown(1.5);
 
-  // At a glance box
+  // Auf-einen-Blick-Box
   const boxY = doc.y;
   const boxHeight = 110;
   doc
-    .roundedRect(PAGE.margin, boxY, PAGE.width - PAGE.margin * 2, boxHeight, 12)
+    .roundedRect(PAGE.margin, boxY, CONTENT_WIDTH, boxHeight, 12)
     .fill(COLORS.surface)
     .strokeColor(COLORS.border)
     .lineWidth(1)
     .stroke();
 
-  const colWidth = (PAGE.width - PAGE.margin * 2 - 40) / 3;
+  const colWidth = (CONTENT_WIDTH - 40) / 3;
   const items = [
     ["Category", workflow.category],
     ["Difficulty", workflow.details?.difficulty ?? "—"],
@@ -268,13 +281,13 @@ function drawOverview(doc, workflow) {
       .font("Helvetica-Bold")
       .fontSize(12)
       .fillColor(COLORS.white)
-      .text("Use case", PAGE.margin, doc.y);
+      .text("What you use it for", PAGE.margin, doc.y);
     doc
       .font("Helvetica")
       .fontSize(11)
       .fillColor(COLORS.muted)
       .text(workflow.details.useCase, PAGE.margin, doc.y + 6, {
-        width: PAGE.width - PAGE.margin * 2,
+        width: CONTENT_WIDTH,
         lineGap: 3,
       });
     doc.moveDown(1.5);
@@ -288,23 +301,15 @@ function drawOverview(doc, workflow) {
       .font("Helvetica-Bold")
       .fontSize(12)
       .fillColor(COLORS.white)
-      .text("Tools used in this workflow", PAGE.margin, doc.y);
+      .text("Tools in this workflow", PAGE.margin, doc.y);
     doc
       .font("Helvetica")
       .fontSize(11)
       .fillColor(COLORS.muted)
       .text(tools.join(" · "), PAGE.margin, doc.y + 6, {
-        width: PAGE.width - PAGE.margin * 2,
+        width: CONTENT_WIDTH,
         lineGap: 3,
       });
-  }
-}
-
-function ensureSpace(doc, needed = 80) {
-  if (doc.y + needed > PAGE.height - 60) {
-    doc.addPage();
-    doc.rect(0, 0, PAGE.width, PAGE.height).fill(COLORS.bg);
-    doc.fillColor(COLORS.text);
   }
 }
 
@@ -317,35 +322,35 @@ function subHeading(doc, text, x, width) {
     .text(text, x, doc.y + 6, { width, characterSpacing: 1 });
 }
 
-function drawSteps(doc, workflow, partner) {
+function drawSteps(doc, workflow) {
   const steps = Array.isArray(workflow.details?.steps)
     ? workflow.details.steps.map(normalizeStep)
     : [];
 
-  doc.addPage();
-  doc.rect(0, 0, PAGE.width, PAGE.height).fill(COLORS.bg);
-  doc.fillColor(COLORS.text);
+  addPage(doc);
 
   doc
     .font("Helvetica-Bold")
     .fontSize(10)
     .fillColor(COLORS.brandLight)
-    .text("STEP BY STEP", PAGE.margin, PAGE.margin, { characterSpacing: 1.5 });
+    .text("STEP BY STEP", PAGE.margin, PAGE.margin, {
+      characterSpacing: 1.5,
+    });
 
   doc
     .font("Helvetica-Bold")
     .fontSize(24)
     .fillColor(COLORS.white)
-    .text("How to build it", PAGE.margin, doc.y + 8);
+    .text("How to implement it", PAGE.margin, doc.y + 8);
 
   doc.moveDown(1.5);
 
   steps.forEach((step, index) => {
-    ensureSpace(doc, 120);
+    ensureSpace(doc, 110);
 
     const startY = doc.y;
 
-    // Number badge
+    // Nummern-Badge
     doc.circle(PAGE.margin + 14, startY + 14, 14).fill(COLORS.brand);
     doc
       .font("Helvetica-Bold")
@@ -376,9 +381,9 @@ function drawSteps(doc, workflow, partner) {
         });
     }
 
-    // Concrete actions
-    if (Array.isArray(step.actions) && step.actions.length > 0) {
-      subHeading(doc, "WAS DU TUST", contentX, contentWidth);
+    // Konkrete Handlungsschritte
+    if (step.actions.length > 0) {
+      subHeading(doc, "WHAT YOU NEED TO DO", contentX, contentWidth);
       step.actions.forEach((action, actionIndex) => {
         ensureSpace(doc, 30);
         doc
@@ -392,68 +397,9 @@ function drawSteps(doc, workflow, partner) {
       });
     }
 
-    // Commands / code snippets
-    if (Array.isArray(step.commands) && step.commands.length > 0) {
-      subHeading(doc, "BEFEHLE & CODE", contentX, contentWidth);
-      for (const command of step.commands) {
-        if (!isNonEmptyString(command?.code)) continue;
-        const code = command.code;
-        const codeHeight = doc
-          .font("Courier")
-          .fontSize(8.5)
-          .heightOfString(code, { width: contentWidth - 20 });
-        ensureSpace(doc, codeHeight + 40);
-        const boxY = doc.y + 4;
-        doc
-          .roundedRect(contentX, boxY, contentWidth, codeHeight + 22, 6)
-          .fill(COLORS.surface)
-          .strokeColor(COLORS.border)
-          .lineWidth(1)
-          .stroke();
-        doc
-          .font("Helvetica-Bold")
-          .fontSize(7.5)
-          .fillColor(COLORS.dim)
-          .text(command.label ?? "Code", contentX + 10, boxY + 6, {
-            width: contentWidth - 20,
-          });
-        doc
-          .font("Courier")
-          .fontSize(8.5)
-          .fillColor(COLORS.text)
-          .text(code, contentX + 10, boxY + 18, {
-            width: contentWidth - 20,
-          });
-        doc.y = boxY + codeHeight + 26;
-      }
-    }
-
-    // Configuration parameters
-    if (Array.isArray(step.config) && step.config.length > 0) {
-      subHeading(doc, "KONFIGURATION", contentX, contentWidth);
-      for (const entry of step.config) {
-        ensureSpace(doc, 30);
-        doc
-          .font("Courier-Bold")
-          .fontSize(9)
-          .fillColor(COLORS.white)
-          .text(entry.key, contentX, doc.y + 2, { width: contentWidth });
-        doc
-          .font("Helvetica")
-          .fontSize(9)
-          .fillColor(COLORS.muted)
-          .text(
-            `${entry.value}${entry.description ? ` – ${entry.description}` : ""}`,
-            contentX,
-            doc.y + 1,
-            { width: contentWidth, lineGap: 2 }
-          );
-      }
-    }
-
-    // Checklist
-    if (Array.isArray(step.checklist) && step.checklist.length > 0) {
-      subHeading(doc, "CHECKLISTE", contentX, contentWidth);
+    // Prüfliste
+    if (step.checklist.length > 0) {
+      subHeading(doc, "CHECK AT THE END", contentX, contentWidth);
       for (const item of step.checklist) {
         ensureSpace(doc, 24);
         doc
@@ -467,9 +413,9 @@ function drawSteps(doc, workflow, partner) {
       }
     }
 
-    // Expected result
+    // Erwartetes Ergebnis
     if (isNonEmptyString(step.expectedResult)) {
-      subHeading(doc, "ERGEBNIS", contentX, contentWidth);
+      subHeading(doc, "RESULT", contentX, contentWidth);
       doc
         .font("Helvetica")
         .fontSize(9.5)
@@ -478,6 +424,26 @@ function drawSteps(doc, workflow, partner) {
           width: contentWidth,
           lineGap: 2,
         });
+    }
+
+    // Ressourcen-Links gehören ausschließlich ins PDF.
+    if (step.links.length > 0) {
+      subHeading(doc, "LINKS", contentX, contentWidth);
+      step.links.forEach((link) => {
+        if (!isNonEmptyString(link?.url)) return;
+        ensureSpace(doc, 30);
+        const label = isNonEmptyString(link.label) ? link.label : link.url;
+        doc
+          .font("Helvetica")
+          .fontSize(9.5)
+          .fillColor(COLORS.brandLight)
+          .text(`${label}: ${link.url}`, contentX, doc.y + 2, {
+            width: contentWidth,
+            lineGap: 2,
+            link: link.url,
+            underline: true,
+          });
+      });
     }
 
     doc.y = Math.max(doc.y, startY + 40) + 18;
@@ -489,9 +455,7 @@ function drawTools(doc, workflow, partner, monetization) {
     ? workflow.details.tools
     : [];
 
-  doc.addPage();
-  doc.rect(0, 0, PAGE.width, PAGE.height).fill(COLORS.bg);
-  doc.fillColor(COLORS.text);
+  addPage(doc);
 
   doc
     .font("Helvetica-Bold")
@@ -505,8 +469,8 @@ function drawTools(doc, workflow, partner, monetization) {
     .font("Helvetica-Bold")
     .fontSize(24)
     .fillColor(COLORS.white)
-    .text("Empfohlene Tools & Ressourcen", PAGE.margin, doc.y + 8, {
-      width: PAGE.width - PAGE.margin * 2,
+    .text("Recommended Tools & Resources", PAGE.margin, doc.y + 8, {
+      width: CONTENT_WIDTH,
     });
 
   doc
@@ -514,38 +478,28 @@ function drawTools(doc, workflow, partner, monetization) {
     .fontSize(10)
     .fillColor(COLORS.muted)
     .text(
-      "Alle benötigten Tools und offiziellen URLs sind hier als Klartext aufgeführt.",
+      "All tools in this workflow with their official website.",
       PAGE.margin,
       doc.y + 8,
-      { width: PAGE.width - PAGE.margin * 2, lineGap: 2 }
+      { width: CONTENT_WIDTH, lineGap: 2 }
     );
 
   doc.moveDown(1.5);
 
   for (const name of toolNames) {
-    if (doc.y > PAGE.height - 110) {
-      doc.addPage();
-      doc.rect(0, 0, PAGE.width, PAGE.height).fill(COLORS.bg);
-      doc.fillColor(COLORS.text);
-    }
+    ensureSpace(doc, 90);
 
     const entry = partner[name] ?? {
       name,
-      url: "https://flowmatrix.com",
-      affiliateUrl: "https://flowmatrix.com",
+      url: "https://flowmatrix.dev",
+      affiliateUrl: "https://flowmatrix.dev",
       sponsored: false,
     };
     const href = entry.affiliateUrl ?? entry.url;
 
     const cardY = doc.y;
     doc
-      .roundedRect(
-        PAGE.margin,
-        cardY,
-        PAGE.width - PAGE.margin * 2,
-        64,
-        10
-      )
+      .roundedRect(PAGE.margin, cardY, CONTENT_WIDTH, 64, 10)
       .fill(COLORS.surface)
       .strokeColor(COLORS.border)
       .lineWidth(1)
@@ -556,7 +510,7 @@ function drawTools(doc, workflow, partner, monetization) {
       .fontSize(12)
       .fillColor(COLORS.white)
       .text(entry.name, PAGE.margin + 16, cardY + 14, {
-        width: PAGE.width - PAGE.margin * 2 - 32,
+        width: CONTENT_WIDTH - 32,
       });
 
     doc
@@ -564,7 +518,7 @@ function drawTools(doc, workflow, partner, monetization) {
       .fontSize(9)
       .fillColor(COLORS.brandLight)
       .text(href, PAGE.margin + 16, cardY + 34, {
-        width: PAGE.width - PAGE.margin * 2 - 32,
+        width: CONTENT_WIDTH - 32,
       });
 
     if (entry.sponsored) {
@@ -572,22 +526,18 @@ function drawTools(doc, workflow, partner, monetization) {
         .font("Helvetica")
         .fontSize(7.5)
         .fillColor(COLORS.dim)
-        .text("Offizielle URL", PAGE.margin + 16, cardY + 48);
+        .text("Official URL", PAGE.margin + 16, cardY + 48);
     }
 
     doc.y = cardY + 64 + 10;
   }
 
-  // Checkout CTA
-  if (doc.y > PAGE.height - 150) {
-    doc.addPage();
-    doc.rect(0, 0, PAGE.width, PAGE.height).fill(COLORS.bg);
-    doc.fillColor(COLORS.text);
-  }
+  // Kauf-CTA
+  ensureSpace(doc, 120);
 
   const ctaY = doc.y + 10;
   doc
-    .roundedRect(PAGE.margin, ctaY, PAGE.width - PAGE.margin * 2, 92, 12)
+    .roundedRect(PAGE.margin, ctaY, CONTENT_WIDTH, 92, 12)
     .fill(COLORS.surface)
     .strokeColor(COLORS.brand)
     .lineWidth(1)
@@ -597,8 +547,8 @@ function drawTools(doc, workflow, partner, monetization) {
     .font("Helvetica-Bold")
     .fontSize(13)
     .fillColor(COLORS.white)
-    .text("Vollversion als Premium-PDF", PAGE.margin + 18, ctaY + 18, {
-      width: PAGE.width - PAGE.margin * 2 - 36,
+    .text("Full version as Premium PDF", PAGE.margin + 18, ctaY + 18, {
+      width: CONTENT_WIDTH - 36,
     });
 
   doc
@@ -606,26 +556,21 @@ function drawTools(doc, workflow, partner, monetization) {
     .fontSize(10)
     .fillColor(COLORS.muted)
     .text(
-      `Alle Schritte, Tools und Ressourcen als PDF – ${monetization.price}.`,
+      `All steps, tools and resources as a PDF – ${monetization.price}.`,
       PAGE.margin + 18,
       ctaY + 40,
-      { width: PAGE.width - PAGE.margin * 2 - 36 }
+      { width: CONTENT_WIDTH - 36 }
     );
 
   doc
     .font("Helvetica-Bold")
     .fontSize(10)
     .fillColor(COLORS.brandLight)
-    .text(
-      `Jetzt kaufen – ${monetization.price}`,
-      PAGE.margin + 18,
-      ctaY + 62,
-      {
-        width: PAGE.width - PAGE.margin * 2 - 36,
-        link: monetization.checkoutUrl,
-        underline: true,
-      }
-    );
+    .text(`Buy now – ${monetization.price}`, PAGE.margin + 18, ctaY + 62, {
+      width: CONTENT_WIDTH - 36,
+      link: monetization.checkoutUrl,
+      underline: true,
+    });
 }
 
 function addFooters(doc) {
@@ -638,16 +583,21 @@ function addFooters(doc) {
 
     if (pageNumber === 1) continue;
 
+    // Fußzeile liegt unterhalb des normalen Seitenrands. Ohne das Setzen der
+    // unteren Margin auf 0 würde PDFKit eine neue (leere) Seite anlegen.
+    const oldBottom = doc.page.margins.bottom;
+    doc.page.margins.bottom = 0;
     doc
       .font("Helvetica")
       .fontSize(8)
       .fillColor(COLORS.dim)
       .text(
-        `FlowMatrix.dev · Premium Workflow · Seite ${pageNumber} von ${total}`,
+        `FlowMatrix.dev · Premium Workflow · Page ${pageNumber} of ${total}`,
         PAGE.margin,
-        PAGE.height - 35,
-        { width: PAGE.width - PAGE.margin * 2, align: "center" }
+        PAGE.height - 30,
+        { width: CONTENT_WIDTH, align: "center", lineBreak: false }
       );
+    doc.page.margins.bottom = oldBottom;
   }
 }
 
@@ -665,8 +615,7 @@ async function generatePdf(workflow, partner, monetization) {
       Subject: workflow.description,
       Keywords: [workflow.category, ...(workflow.tags ?? [])].join(", "),
       Creator: "FlowMatrix.dev PDF Generator",
-      // Fixed timestamps keep generated PDFs byte-for-byte deterministic,
-      // so a rebuild does not dirty the working tree.
+      // Feste Zeitstempel halten die PDFs byte-genau deterministisch.
       CreationDate: new Date("2026-01-01T00:00:00.000Z"),
       ModDate: new Date("2026-01-01T00:00:00.000Z"),
     },
@@ -682,7 +631,8 @@ async function generatePdf(workflow, partner, monetization) {
 
   drawCover(doc, workflow, monetization);
   drawOverview(doc, workflow);
-  drawSteps(doc, workflow, partner);
+  drawSteps(doc, workflow);
+  drawTools(doc, workflow, partner, monetization);
   addFooters(doc);
 
   doc.end();
@@ -692,11 +642,10 @@ async function generatePdf(workflow, partner, monetization) {
   return { fileName, bytes: buffer.length };
 }
 
-async function main() {
+export async function loadInputs() {
   for (const file of [workflowsFile, partnerFile, monetizationFile]) {
     if (!existsSync(file)) {
-      console.error(`✖ Datei nicht gefunden: ${file}`);
-      process.exit(1);
+      throw new Error(`Datei nicht gefunden: ${file}`);
     }
   }
 
@@ -705,24 +654,33 @@ async function main() {
   const monetization = JSON.parse(await readFile(monetizationFile, "utf8"));
 
   if (!Array.isArray(workflows)) {
-    console.error("✖ workflows.json muss ein Array sein.");
-    process.exit(1);
+    throw new Error("workflows.json muss ein Array sein.");
   }
 
-  // Environment overrides the configured checkout URL.
+  // Environment überschreibt die konfigurierte Checkout-URL.
   monetization.checkoutUrl =
     process.env.PUBLIC_LEMON_WORKFLOW_CHECKOUT_URL?.trim() ||
     process.env.PUBLIC_LEMON_CHECKOUT_URL?.trim() ||
     monetization.checkoutUrl;
 
   if (!monetization.checkoutUrl) {
-    console.error("✖ Keine Lemon-Squeezy-Checkout-URL konfiguriert.");
-    process.exit(1);
+    throw new Error("Keine Lemon-Squeezy-Checkout-URL konfiguriert.");
   }
 
+  return { workflows, partner, monetization };
+}
+
+export async function generateAllPdfs({
+  workflows,
+  partner,
+  monetization,
+  quiet = false,
+}) {
   await mkdir(outputDir, { recursive: true });
 
-  console.log(`▶ Generiere ${workflows.length} Premium-PDFs in ${outputDir}`);
+  if (!quiet) {
+    console.log(`▶ Generating ${workflows.length} premium PDFs in ${outputDir}`);
+  }
 
   let totalBytes = 0;
   for (const workflow of workflows) {
@@ -732,17 +690,39 @@ async function main() {
       monetization
     );
     totalBytes += bytes;
+    if (!quiet) {
+      console.log(`  ✓ ${fileName} (${(bytes / 1024).toFixed(1)} KB)`);
+    }
+  }
+
+  if (!quiet) {
     console.log(
-      `  ✓ ${fileName} (${(bytes / 1024).toFixed(1)} KB)`
+      `✔ Fertig: ${workflows.length} PDFs, ${(totalBytes / 1024 / 1024).toFixed(2)} MB gesamt.`
     );
   }
 
-  console.log(
-    `✔ Fertig: ${workflows.length} PDFs, ${(totalBytes / 1024 / 1024).toFixed(2)} MB gesamt.`
-  );
+  return { count: workflows.length, totalBytes };
 }
 
-main().catch((error) => {
-  console.error("✖ PDF-Generierung fehlgeschlagen:", error);
-  process.exit(1);
-});
+async function main() {
+  const inputs = await loadInputs();
+  await generateAllPdfs(inputs);
+
+  if (process.env.PDF_SKIP_QUALITY_GATE === "1") return;
+
+  const result = await ensurePdfQuality({
+    loadData: loadInputs,
+    regenerate: (data) => generateAllPdfs({ ...data, quiet: true }),
+  });
+
+  if (!result.ok) {
+    process.exit(1);
+  }
+}
+
+if (isMain) {
+  main().catch((error) => {
+    console.error("✖ PDF-Generierung fehlgeschlagen:", error);
+    process.exit(1);
+  });
+}

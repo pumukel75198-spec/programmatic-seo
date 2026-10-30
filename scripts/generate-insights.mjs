@@ -291,7 +291,7 @@ function parseFeed(xml, feed) {
 async function fetchFeed(feed) {
   const response = await fetch(feed.url, {
     headers: {
-      "User-Agent": "FlowMatrixBot/1.0 (+https://flowmatrix.com)",
+      "User-Agent": "FlowMatrixBot/1.0 (+https://flowmatrix.dev)",
       Accept: "application/rss+xml, application/atom+xml, application/xml, text/xml",
     },
     signal: AbortSignal.timeout(20_000),
@@ -376,7 +376,7 @@ async function callOpenRouter({ model, item, workflows, lang, attempt = 1, useJs
       headers: {
         Authorization: `Bearer ${API_KEY}`,
         "Content-Type": "application/json",
-        "HTTP-Referer": "https://flowmatrix.com",
+        "HTTP-Referer": "https://flowmatrix.dev",
         "X-Title": "FlowMatrix Insights Generator",
       },
       body: JSON.stringify(body),
@@ -578,6 +578,76 @@ function ensureWorkflowLink(content, workflow, lang) {
 }
 
 // ---------------------------------------------------------------------------
+// 6er-Garantie: Workflow-basierte Evergreen-Themen
+// ---------------------------------------------------------------------------
+
+const FALLBACK_ANGLES = [
+  "A practical implementation guide",
+  "Common pitfalls and how to avoid them",
+  "Tooling and API choices",
+  "Scaling and reliability",
+  "Automation best practices",
+  "A step-by-step playbook",
+];
+
+/**
+ * Erzeugt synthetische "Feed-Items" aus vorhandenen Workflows, damit pro Lauf
+ * immer genügend Artikel entstehen. Die Artikel verlinken garantiert auf einen
+ * existierenden Workflow.
+ */
+function buildFallbackItems({ count, insights, workflows, existingSlugs, slotKey }) {
+  if (count <= 0 || workflows.length === 0) return [];
+
+  const usage = new Map();
+  for (const insight of insights) {
+    const slug = insight?.relatedWorkflow?.slug;
+    if (slug) usage.set(slug, (usage.get(slug) ?? 0) + 1);
+  }
+
+  const ordered = [...workflows].sort(
+    (a, b) => (usage.get(a.slug) ?? 0) - (usage.get(b.slug) ?? 0)
+  );
+
+  const items = [];
+  let attempts = 0;
+  const maxAttempts = count * FALLBACK_ANGLES.length * 2;
+
+  while (items.length < count && attempts < maxAttempts) {
+    const workflow = ordered[attempts % ordered.length];
+    const angle = FALLBACK_ANGLES[attempts % FALLBACK_ANGLES.length];
+    attempts += 1;
+
+    const title = `${workflow.title}: ${angle}`;
+    const predictedSlug = slugify(title);
+    if (existingSlugs.has(predictedSlug)) continue;
+
+    const steps = Array.isArray(workflow.details?.steps)
+      ? workflow.details.steps
+          .map((step) =>
+            typeof step === "string"
+              ? step
+              : step?.title ?? step?.description ?? ""
+          )
+          .filter(Boolean)
+          .join(" ")
+      : "";
+
+    items.push({
+      title,
+      url: `https://flowmatrix.dev/en/workflows/${workflow.slug}`,
+      summary: `${workflow.description ?? ""} ${steps}`.trim(),
+      publishedAt: new Date().toISOString(),
+      guid: `workflow:${workflow.slug}:${slotKey}:${items.length}`,
+      feed: "FlowMatrix Editorial",
+      category: workflow.category,
+      workflowSlug: workflow.slug,
+    });
+  }
+
+  return items;
+}
+
+// ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
 
@@ -670,6 +740,24 @@ async function main() {
 
   const selected = candidates.slice(0, opts.limit);
 
+  // 6er-Garantie: fehlende Slots mit Workflow-basierten Evergreen-Themen füllen.
+  const slotKey = new Date().toISOString().slice(0, 13);
+  if (selected.length < opts.limit) {
+    const fallback = buildFallbackItems({
+      count: opts.limit - selected.length,
+      insights,
+      workflows,
+      existingSlugs: new Set(insights.map((insight) => insight.slug)),
+      slotKey,
+    });
+    if (fallback.length > 0) {
+      console.log(
+        `  ${c.cyan}↳${c.reset} 6er-Garantie: ${fallback.length} Workflow-Themen ergänzt`
+      );
+      selected.push(...fallback);
+    }
+  }
+
   console.log(
     `\n  Neue Kandidaten: ${c.bold}${candidates.length}${c.reset} · ausgewählt: ${c.bold}${selected.length}${c.reset}`
   );
@@ -697,92 +785,128 @@ async function main() {
   const existingSlugs = new Set(insights.map((insight) => insight.slug));
   const created = [];
   const failures = [];
-  let cursor = 0;
 
-  async function worker() {
-    while (cursor < selected.length) {
-      const item = selected[cursor++];
-      console.log(`\n${c.bold}→ ${item.title}${c.reset} ${c.dim}(${item.feed})${c.reset}`);
+  async function generateForItems(items) {
+    const localCreated = [];
+    const localFailures = [];
+    let cursor = 0;
 
-      try {
-        const article = await callOpenRouter({
-          model: opts.model,
-          item,
-          workflows,
-          lang: opts.lang,
-        });
+    async function worker() {
+      while (cursor < items.length) {
+        const item = items[cursor++];
+        console.log(`\n${c.bold}→ ${item.title}${c.reset} ${c.dim}(${item.feed})${c.reset}`);
 
-        const validation = validateArticle(article, workflows, existingSlugs);
-        if (!validation.ok) {
-          throw new Error(`Validierung fehlgeschlagen: ${validation.errors.join(", ")}`);
-        }
+        try {
+          const article = await callOpenRouter({
+            model: opts.model,
+            item,
+            workflows,
+            lang: opts.lang,
+          });
 
-        let workflow = validation.relatedWorkflowSlug
-          ? workflows.find((entry) => entry.slug === validation.relatedWorkflowSlug)
-          : null;
+          const validation = validateArticle(article, workflows, existingSlugs);
+          if (!validation.ok) {
+            throw new Error(`Validierung fehlgeschlagen: ${validation.errors.join(", ")}`);
+          }
 
-        // Deterministischer Fallback, falls das LLM keinen Workflow gewählt hat.
-        if (!workflow) {
-          const matched = matchWorkflowByKeywords(article, workflows);
-          if (matched) {
-            workflow = matched;
+          let workflow = validation.relatedWorkflowSlug
+            ? workflows.find((entry) => entry.slug === validation.relatedWorkflowSlug)
+            : null;
+
+          // Deterministischer Fallback, falls das LLM keinen Workflow gewählt hat.
+          if (!workflow) {
+            const matched = matchWorkflowByKeywords(article, workflows);
+            if (matched) {
+              workflow = matched;
+              console.log(
+                `  ${c.cyan}↳${c.reset} Keyword-Match: ${matched.title}`
+              );
+            }
+          }
+
+          // Bei Workflow-Fallback-Items den vorgegebenen Workflow bevorzugen.
+          if (!workflow && item.workflowSlug) {
+            workflow =
+              workflows.find((entry) => entry.slug === item.workflowSlug) ?? null;
+          }
+
+          const content = ensureWorkflowLink(article.content, workflow, opts.lang);
+
+          const insight = {
+            slug: validation.slug,
+            title: article.title.trim(),
+            excerpt: article.excerpt.trim(),
+            content,
+            category: article.category.trim(),
+            tags: article.tags.map((tag) => String(tag).trim()).filter(Boolean),
+            source: {
+              name: item.feed,
+              url: item.url,
+              guid: item.guid,
+              publishedAt: item.publishedAt,
+            },
+            relatedWorkflow: workflow
+              ? {
+                  slug: workflow.slug,
+                  title: workflow.title,
+                  reason: isNonEmptyString(article.relatedWorkflowReason)
+                    ? article.relatedWorkflowReason.trim()
+                    : "",
+                }
+              : null,
+            publishedAt: item.publishedAt,
+            updatedAt: new Date().toISOString(),
+          };
+
+          existingSlugs.add(insight.slug);
+          localCreated.push(insight);
+
+          console.log(
+            `  ${c.green}✓${c.reset} ${insight.slug} ${c.dim}(${insight.content.length} Zeichen)${c.reset}`
+          );
+          if (workflow) {
             console.log(
-              `  ${c.cyan}↳${c.reset} Keyword-Match: ${matched.title}`
+              `  ${c.green}↳${c.reset} verlinkt mit Workflow: ${workflow.title}`
             );
           }
+        } catch (err) {
+          localFailures.push({ title: item.title, error: err.message });
+          console.error(`${c.red}  ✖ ${err.message}${c.reset}`);
         }
-
-        const content = ensureWorkflowLink(article.content, workflow, opts.lang);
-
-        const insight = {
-          slug: validation.slug,
-          title: article.title.trim(),
-          excerpt: article.excerpt.trim(),
-          content,
-          category: article.category.trim(),
-          tags: article.tags.map((tag) => String(tag).trim()).filter(Boolean),
-          source: {
-            name: item.feed,
-            url: item.url,
-            guid: item.guid,
-            publishedAt: item.publishedAt,
-          },
-          relatedWorkflow: workflow
-            ? {
-                slug: workflow.slug,
-                title: workflow.title,
-                reason: isNonEmptyString(article.relatedWorkflowReason)
-                  ? article.relatedWorkflowReason.trim()
-                  : "",
-              }
-            : null,
-          publishedAt: item.publishedAt,
-          updatedAt: new Date().toISOString(),
-        };
-
-        existingSlugs.add(insight.slug);
-        created.push(insight);
-
-        console.log(
-          `  ${c.green}✓${c.reset} ${insight.slug} ${c.dim}(${insight.content.length} Zeichen)${c.reset}`
-        );
-        if (workflow) {
-          console.log(
-            `  ${c.green}↳${c.reset} verlinkt mit Workflow: ${workflow.title}`
-          );
-        }
-      } catch (err) {
-        failures.push({ title: item.title, error: err.message });
-        console.error(`${c.red}  ✖ ${err.message}${c.reset}`);
       }
     }
+
+    await Promise.all(
+      Array.from({ length: Math.min(opts.concurrency, items.length) }, () =>
+        worker()
+      )
+    );
+
+    return { created: localCreated, failures: localFailures };
   }
 
-  await Promise.all(
-    Array.from({ length: Math.min(opts.concurrency, selected.length) }, () =>
-      worker()
-    )
-  );
+  const firstPass = await generateForItems(selected);
+  created.push(...firstPass.created);
+  failures.push(...firstPass.failures);
+
+  // 6er-Garantie: Falls Artikel fehlschlugen, mit weiteren Workflow-Themen auffüllen.
+  if (created.length < opts.limit) {
+    const extra = buildFallbackItems({
+      count: opts.limit - created.length,
+      insights: [...insights, ...created],
+      workflows,
+      existingSlugs,
+      slotKey: `${slotKey}-retry`,
+    });
+    if (extra.length > 0) {
+      console.log(
+        `\n${c.cyan}↳${c.reset} 6er-Garantie: ${extra.length} weitere Workflow-Themen werden erzeugt`
+      );
+      const secondPass = await generateForItems(extra);
+      created.push(...secondPass.created);
+      failures.push(...secondPass.failures);
+    }
+  }
 
   if (created.length === 0) {
     console.log(

@@ -304,7 +304,7 @@ async function callOpenRouter({
       headers: {
         Authorization: `Bearer ${API_KEY}`,
         "Content-Type": "application/json",
-        "HTTP-Referer": "https://flowmatrix.com",
+        "HTTP-Referer": "https://flowmatrix.dev",
         "X-Title": "FlowMatrix Data Enrichment",
       },
       body: JSON.stringify(body),

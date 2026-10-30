@@ -5,7 +5,7 @@
 export const site = {
   name: "FlowMatrix",
   shortName: "FlowMatrix",
-  url: "https://flowmatrix.com",
+  url: "https://flowmatrix.dev",
   description:
     "Discover APIs, alternatives and workflows – curated for modern developers and SEO teams.",
   lang: "en",

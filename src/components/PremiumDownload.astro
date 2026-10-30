@@ -3,7 +3,7 @@
  * Premium PDF purchase + download unlock.
  *
  * Flow:
- *   1. Visitor sees a locked card with a Lemon Squeezy buy button (4,99 €).
+ *   1. Visitor sees a locked card with a Lemon Squeezy buy button (€4.99).
  *   2. Lemon Squeezy opens the checkout in its overlay.
  *   3. On a successful checkout, Lemon.js emits
  *      `lemon-squeezy:checkout:success`; the component then reveals the
@@ -24,7 +24,7 @@ interface Props {
 const {
   slug,
   title,
-  price = "4,99 €",
+  price = "€4.99",
   checkoutUrl,
 } = Astro.props;
 

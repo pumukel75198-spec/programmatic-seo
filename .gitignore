@@ -6,6 +6,9 @@ dist/
 # local enrichment cache
 .cache/
 
+# wrangler build artifacts
+.wrangler/
+
 # dependencies
 node_modules/
 

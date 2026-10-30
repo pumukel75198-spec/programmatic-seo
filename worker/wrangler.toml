@@ -1,0 +1,18 @@
+# Cloudflare Worker – globaler Besucherzähler
+#
+# Deployment:
+#   1. KV-Namespace anlegen:
+#        npx wrangler kv namespace create VISITOR_COUNTER
+#   2. Die ausgegebene id unten bei `id` eintragen.
+#   3. Worker deployen:
+#        cd worker && npx wrangler deploy
+#   4. Die Worker-URL (z. B. https://flowmatrix-visitor-counter.<subdomain>.workers.dev)
+#      als PUBLIC_VISITOR_COUNTER_URL in der Astro-Umgebung setzen.
+
+name = "flowmatrix-visitor-counter"
+main = "visitor-counter.js"
+compatibility_date = "2025-01-01"
+
+[[kv_namespaces]]
+binding = "VISITOR_COUNTER"
+id = "5fc9009fa4bb4a2697404aa7173d79b1"

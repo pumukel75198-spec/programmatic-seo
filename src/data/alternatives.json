@@ -1810,5 +1810,705 @@
         "Self-hosting with Coolify"
       ]
     }
+  },
+  {
+    "slug": "openai-alternatives",
+    "title": "OpenAI Alternatives",
+    "description": "OpenAI alternatives for chat, reasoning and embeddings – from Anthropic and Google to open-weight models.",
+    "category": "AI & LLM",
+    "tags": [
+      "ai",
+      "llm",
+      "chatgpt",
+      "api"
+    ],
+    "details": {
+      "original": "OpenAI",
+      "alternatives": [
+        {
+          "name": "Anthropic",
+          "description": "Claude models with strong reasoning and long context windows.",
+          "pros": [
+            "Strong reasoning",
+            "Large context window",
+            "Enterprise focus"
+          ],
+          "cons": [
+            "Usage-based pricing",
+            "Fewer model sizes"
+          ],
+          "bestFor": "Teams that need careful reasoning and long documents",
+          "recommended": true,
+          "url": "https://www.anthropic.com/"
+        },
+        {
+          "name": "Google Gemini",
+          "description": "Multimodal Gemini models with a generous free tier for prototyping.",
+          "pros": [
+            "Multimodal input",
+            "Free tier",
+            "Google Cloud integration"
+          ],
+          "cons": [
+            "Quotas vary by region",
+            "API surface changes often"
+          ],
+          "bestFor": "Prototypes that combine text, images and audio",
+          "url": "https://ai.google.dev/"
+        },
+        {
+          "name": "Mistral AI",
+          "description": "Efficient open-weight and hosted models with European data options.",
+          "pros": [
+            "Open-weight options",
+            "Competitive pricing",
+            "EU hosting"
+          ],
+          "cons": [
+            "Smaller ecosystem",
+            "Fewer managed features"
+          ],
+          "bestFor": "Teams that value open models and EU hosting",
+          "url": "https://mistral.ai/"
+        }
+      ],
+      "bestFor": "Teams comparing hosted and open-weight LLMs",
+      "pricing": "Free tiers for testing; usage-based API pricing in production",
+      "features": [
+        "Chat and reasoning models",
+        "Embeddings and tool use",
+        "Open-weight deployment options"
+      ]
+    }
+  },
+  {
+    "slug": "stripe-alternatives",
+    "title": "Stripe Alternatives",
+    "description": "Stripe alternatives for payments, subscriptions and merchant of record billing – including Paddle, Lemon Squeezy and Chargebee.",
+    "category": "Payments",
+    "tags": [
+      "payments",
+      "billing",
+      "subscriptions",
+      "merchant-of-record"
+    ],
+    "details": {
+      "original": "Stripe",
+      "alternatives": [
+        {
+          "name": "Paddle",
+          "description": "Merchant of record with tax handling and subscription billing.",
+          "pros": [
+            "Handles global tax",
+            "Merchant of record",
+            "Subscription tools"
+          ],
+          "cons": [
+            "Higher fees",
+            "Less control over checkout"
+          ],
+          "bestFor": "SaaS teams that want tax compliance handled",
+          "recommended": true,
+          "url": "https://www.paddle.com/"
+        },
+        {
+          "name": "Lemon Squeezy",
+          "description": "Merchant of record focused on digital products and licenses.",
+          "pros": [
+            "Simple setup",
+            "License keys",
+            "Tax handling"
+          ],
+          "cons": [
+            "Fewer enterprise features",
+            "Limited customization"
+          ],
+          "bestFor": "Indie makers selling digital products",
+          "url": "https://www.lemonsqueezy.com/"
+        },
+        {
+          "name": "Chargebee",
+          "description": "Subscription management and revenue operations for growing SaaS.",
+          "pros": [
+            "Advanced billing logic",
+            "Revenue analytics",
+            "Many integrations"
+          ],
+          "cons": [
+            "Pricing for larger teams",
+            "Setup complexity"
+          ],
+          "bestFor": "Subscription businesses with complex billing",
+          "url": "https://www.chargebee.com/"
+        }
+      ],
+      "bestFor": "Teams that want less tax and billing overhead",
+      "pricing": "Usually percentage-based fees or monthly plans",
+      "features": [
+        "Subscription billing",
+        "Tax and compliance",
+        "Checkout and invoicing"
+      ]
+    }
+  },
+  {
+    "slug": "supabase-alternatives",
+    "title": "Supabase Alternatives",
+    "description": "Supabase alternatives for backend, auth and realtime data – including Firebase, Appwrite and PocketBase.",
+    "category": "Backend",
+    "tags": [
+      "backend",
+      "database",
+      "auth",
+      "open-source"
+    ],
+    "details": {
+      "original": "Supabase",
+      "alternatives": [
+        {
+          "name": "Firebase",
+          "description": "Google's managed backend with Firestore, Auth and hosting.",
+          "pros": [
+            "Mature ecosystem",
+            "Managed scaling",
+            "Good mobile SDKs"
+          ],
+          "cons": [
+            "Vendor lock-in",
+            "NoSQL query limits"
+          ],
+          "bestFor": "Mobile apps that want a managed Google backend",
+          "recommended": true,
+          "url": "https://firebase.google.com/"
+        },
+        {
+          "name": "Appwrite",
+          "description": "Open-source backend with auth, databases, storage and functions.",
+          "pros": [
+            "Self-hosting",
+            "Open source",
+            "Unified API"
+          ],
+          "cons": [
+            "Smaller ecosystem",
+            "Fewer managed regions"
+          ],
+          "bestFor": "Teams that want a self-hosted backend",
+          "url": "https://appwrite.io/"
+        },
+        {
+          "name": "PocketBase",
+          "description": "Single-file backend with SQLite, auth and realtime subscriptions.",
+          "pros": [
+            "Tiny footprint",
+            "Easy to self-host",
+            "Simple data model"
+          ],
+          "cons": [
+            "SQLite scale limits",
+            "Smaller feature set"
+          ],
+          "bestFor": "Prototypes and small self-hosted apps",
+          "url": "https://pocketbase.io/"
+        }
+      ],
+      "bestFor": "Teams choosing between managed and self-hosted backends",
+      "pricing": "Free tiers for development; usage-based or self-hosted in production",
+      "features": [
+        "Authentication",
+        "Databases and storage",
+        "Realtime subscriptions"
+      ]
+    }
+  },
+  {
+    "slug": "postman-alternatives",
+    "title": "Postman Alternatives",
+    "description": "Postman alternatives for API testing and collaboration – including Insomnia, Bruno and Hoppscotch.",
+    "category": "Developer Tools",
+    "tags": [
+      "api",
+      "testing",
+      "rest",
+      "collaboration"
+    ],
+    "details": {
+      "original": "Postman",
+      "alternatives": [
+        {
+          "name": "Insomnia",
+          "description": "API client with environments, code generation and team sync.",
+          "pros": [
+            "Clean interface",
+            "GraphQL support",
+            "Plugin ecosystem"
+          ],
+          "cons": [
+            "Some features paid",
+            "Account required for sync"
+          ],
+          "bestFor": "Developers who want a polished desktop client",
+          "recommended": true,
+          "url": "https://insomnia.rest/"
+        },
+        {
+          "name": "Bruno",
+          "description": "Offline-first API client that stores collections as files.",
+          "pros": [
+            "Git-friendly collections",
+            "Offline first",
+            "No cloud lock-in"
+          ],
+          "cons": [
+            "Younger ecosystem",
+            "Fewer integrations"
+          ],
+          "bestFor": "Teams that keep API collections in Git",
+          "url": "https://www.usebruno.com/"
+        },
+        {
+          "name": "Hoppscotch",
+          "description": "Open-source web API client with a fast browser interface.",
+          "pros": [
+            "Runs in the browser",
+            "Open source",
+            "Self-host option"
+          ],
+          "cons": [
+            "Browser limitations",
+            "Fewer advanced features"
+          ],
+          "bestFor": "Quick API tests without installing an app",
+          "url": "https://hoppscotch.io/"
+        }
+      ],
+      "bestFor": "Teams that want Git-friendly or offline API testing",
+      "pricing": "Free tiers available; paid team plans for collaboration",
+      "features": [
+        "REST and GraphQL requests",
+        "Environments and variables",
+        "Team collaboration"
+      ]
+    }
+  },
+  {
+    "slug": "obsidian-alternatives",
+    "title": "Obsidian Alternatives",
+    "description": "Obsidian alternatives for local-first notes and knowledge bases – including Logseq, Joplin and Anytype.",
+    "category": "Productivity",
+    "tags": [
+      "notes",
+      "knowledge-management",
+      "local-first",
+      "markdown"
+    ],
+    "details": {
+      "original": "Obsidian",
+      "alternatives": [
+        {
+          "name": "Logseq",
+          "description": "Outliner and knowledge base with local Markdown files.",
+          "pros": [
+            "Local-first",
+            "Outliner workflow",
+            "Open source"
+          ],
+          "cons": [
+            "Steeper learning curve",
+            "Mobile app less mature"
+          ],
+          "bestFor": "People who think in outlines and daily notes",
+          "recommended": true,
+          "url": "https://logseq.com/"
+        },
+        {
+          "name": "Joplin",
+          "description": "Open-source note app with sync and end-to-end encryption.",
+          "pros": [
+            "E2E encryption",
+            "Many sync targets",
+            "Open source"
+          ],
+          "cons": [
+            "Older interface",
+            "Plugin quality varies"
+          ],
+          "bestFor": "Users who want encrypted sync across devices",
+          "url": "https://joplinapp.org/"
+        },
+        {
+          "name": "Anytype",
+          "description": "Local-first workspace with objects, relations and encrypted sync.",
+          "pros": [
+            "Local-first",
+            "Object-based structure",
+            "Encrypted sync"
+          ],
+          "cons": [
+            "Still evolving",
+            "Smaller community"
+          ],
+          "bestFor": "Teams exploring local-first knowledge tools",
+          "url": "https://anytype.io/"
+        }
+      ],
+      "bestFor": "Users who want local files and Markdown ownership",
+      "pricing": "Mostly free; paid sync or hosting options vary",
+      "features": [
+        "Local Markdown storage",
+        "Backlinks and graph views",
+        "Sync and encryption"
+      ]
+    }
+  },
+  {
+    "slug": "auth0-alternatives",
+    "title": "Auth0 Alternatives",
+    "description": "Auth0 alternatives for authentication and identity – including Clerk, Supabase Auth and Keycloak.",
+    "category": "Auth & Identity",
+    "tags": [
+      "auth",
+      "sso",
+      "identity",
+      "security"
+    ],
+    "details": {
+      "original": "Auth0",
+      "alternatives": [
+        {
+          "name": "Clerk",
+          "description": "Developer-first auth with prebuilt UI and user management.",
+          "pros": [
+            "Fast integration",
+            "Prebuilt components",
+            "Good Next.js support"
+          ],
+          "cons": [
+            "Usage-based pricing",
+            "Less self-hosting"
+          ],
+          "bestFor": "Modern web apps that want auth fast",
+          "recommended": true,
+          "url": "https://clerk.com/"
+        },
+        {
+          "name": "Supabase Auth",
+          "description": "Auth built into the Supabase platform with row-level security.",
+          "pros": [
+            "Open-source core",
+            "Integrated database",
+            "Self-host option"
+          ],
+          "cons": [
+            "Fewer enterprise features",
+            "Tied to Supabase"
+          ],
+          "bestFor": "Teams already using Supabase",
+          "url": "https://supabase.com/auth"
+        },
+        {
+          "name": "Keycloak",
+          "description": "Open-source identity and access management for enterprises.",
+          "pros": [
+            "Self-hosted",
+            "SSO and federation",
+            "Mature standards support"
+          ],
+          "cons": [
+            "Complex setup",
+            "Operational overhead"
+          ],
+          "bestFor": "Enterprises that need self-hosted SSO",
+          "url": "https://www.keycloak.org/"
+        }
+      ],
+      "bestFor": "Teams choosing between managed and self-hosted identity",
+      "pricing": "Free tiers for small projects; usage-based or self-hosted at scale",
+      "features": [
+        "Single sign-on",
+        "User management",
+        "Role-based access"
+      ]
+    }
+  },
+  {
+    "slug": "algolia-alternatives",
+    "title": "Algolia Alternatives",
+    "description": "Algolia alternatives for search and discovery – including Meilisearch, Typesense and Elasticsearch.",
+    "category": "Search",
+    "tags": [
+      "search",
+      "discovery",
+      "open-source",
+      "api"
+    ],
+    "details": {
+      "original": "Algolia",
+      "alternatives": [
+        {
+          "name": "Meilisearch",
+          "description": "Fast open-source search with typo tolerance and simple setup.",
+          "pros": [
+            "Easy self-hosting",
+            "Fast indexing",
+            "Good developer experience"
+          ],
+          "cons": [
+            "Fewer enterprise features",
+            "Smaller ecosystem"
+          ],
+          "bestFor": "Teams that want self-hosted search quickly",
+          "recommended": true,
+          "url": "https://www.meilisearch.com/"
+        },
+        {
+          "name": "Typesense",
+          "description": "Open-source search engine with a focus on performance.",
+          "pros": [
+            "Low latency",
+            "Simple API",
+            "Self-host or cloud"
+          ],
+          "cons": [
+            "Smaller community",
+            "Fewer built-in analytics"
+          ],
+          "bestFor": "Developers who need fast, predictable search",
+          "url": "https://typesense.org/"
+        },
+        {
+          "name": "Elasticsearch",
+          "description": "Mature search and analytics engine for large datasets.",
+          "pros": [
+            "Very flexible",
+            "Strong analytics",
+            "Large ecosystem"
+          ],
+          "cons": [
+            "Operational complexity",
+            "Resource heavy"
+          ],
+          "bestFor": "Enterprises with complex search requirements",
+          "url": "https://www.elastic.co/elasticsearch/"
+        }
+      ],
+      "bestFor": "Teams comparing managed and self-hosted search",
+      "pricing": "Open-source options; managed plans are usage-based",
+      "features": [
+        "Typo-tolerant search",
+        "Facets and filters",
+        "Self-hosting options"
+      ]
+    }
+  },
+  {
+    "slug": "deepgram-alternatives",
+    "title": "Deepgram Alternatives",
+    "description": "Deepgram alternatives for speech-to-text – including AssemblyAI, OpenAI Whisper and Speechmatics.",
+    "category": "AI & Speech",
+    "tags": [
+      "speech-to-text",
+      "transcription",
+      "audio",
+      "ai"
+    ],
+    "details": {
+      "original": "Deepgram",
+      "alternatives": [
+        {
+          "name": "AssemblyAI",
+          "description": "Speech-to-text API with speaker labels and audio intelligence.",
+          "pros": [
+            "Good accuracy",
+            "Speaker diarization",
+            "Simple API"
+          ],
+          "cons": [
+            "Usage-based pricing",
+            "Fewer self-host options"
+          ],
+          "bestFor": "Teams that need transcription plus audio insights",
+          "recommended": true,
+          "url": "https://www.assemblyai.com/"
+        },
+        {
+          "name": "OpenAI Whisper",
+          "description": "Hosted Whisper transcription with broad language support.",
+          "pros": [
+            "Many languages",
+            "Simple endpoint",
+            "Good accuracy"
+          ],
+          "cons": [
+            "File size limits",
+            "No realtime streaming"
+          ],
+          "bestFor": "Batch transcription and multilingual content",
+          "url": "https://platform.openai.com/docs/guides/speech-to-text"
+        },
+        {
+          "name": "Speechmatics",
+          "description": "Speech recognition with strong accuracy for diverse accents.",
+          "pros": [
+            "Accent robustness",
+            "Batch and realtime",
+            "Enterprise options"
+          ],
+          "cons": [
+            "Less developer-focused",
+            "Pricing requires sales contact"
+          ],
+          "bestFor": "Enterprises with difficult audio conditions",
+          "url": "https://www.speechmatics.com/"
+        }
+      ],
+      "bestFor": "Teams choosing a transcription API for production",
+      "pricing": "Usage-based per minute or hour; free tiers vary",
+      "features": [
+        "Batch transcription",
+        "Speaker labels",
+        "Multilingual support"
+      ]
+    }
+  },
+  {
+    "slug": "elevenlabs-alternatives",
+    "title": "ElevenLabs Alternatives",
+    "description": "ElevenLabs alternatives for AI voice generation – including PlayHT, Azure AI Speech and Resemble AI.",
+    "category": "AI & Audio",
+    "tags": [
+      "text-to-speech",
+      "voice",
+      "audio",
+      "ai"
+    ],
+    "details": {
+      "original": "ElevenLabs",
+      "alternatives": [
+        {
+          "name": "PlayHT",
+          "description": "Text-to-speech API with many voices and low-latency streaming.",
+          "pros": [
+            "Many voices",
+            "Streaming support",
+            "Simple API"
+          ],
+          "cons": [
+            "Voice quality varies",
+            "Usage-based costs"
+          ],
+          "bestFor": "Apps that need many voice options",
+          "recommended": true,
+          "url": "https://play.ht/"
+        },
+        {
+          "name": "Azure AI Speech",
+          "description": "Microsoft's speech service with TTS, STT and translation.",
+          "pros": [
+            "Enterprise support",
+            "Many languages",
+            "Azure integration"
+          ],
+          "cons": [
+            "Cloud setup",
+            "Pricing complexity"
+          ],
+          "bestFor": "Teams already on Azure",
+          "url": "https://azure.microsoft.com/en-us/products/ai-services/ai-speech"
+        },
+        {
+          "name": "Resemble AI",
+          "description": "Custom voice cloning and speech generation for brands.",
+          "pros": [
+            "Voice cloning",
+            "Emotion control",
+            "API access"
+          ],
+          "cons": [
+            "Ethical review process",
+            "Higher cost"
+          ],
+          "bestFor": "Brands that need custom synthetic voices",
+          "url": "https://www.resemble.ai/"
+        }
+      ],
+      "bestFor": "Teams comparing voice quality, latency and cost",
+      "pricing": "Subscription or usage-based plans; free tiers vary",
+      "features": [
+        "Text-to-speech",
+        "Voice cloning",
+        "Streaming audio"
+      ]
+    }
+  },
+  {
+    "slug": "pinecone-alternatives",
+    "title": "Pinecone Alternatives",
+    "description": "Pinecone alternatives for vector search – including Qdrant, Weaviate and Milvus.",
+    "category": "Vector Databases",
+    "tags": [
+      "vector-database",
+      "embeddings",
+      "rag",
+      "search"
+    ],
+    "details": {
+      "original": "Pinecone",
+      "alternatives": [
+        {
+          "name": "Qdrant",
+          "description": "Open-source vector database with filtering and hybrid search.",
+          "pros": [
+            "Self-hosting",
+            "Strong filtering",
+            "Good performance"
+          ],
+          "cons": [
+            "Operational overhead",
+            "Smaller managed footprint"
+          ],
+          "bestFor": "Teams that want open-source vector search",
+          "recommended": true,
+          "url": "https://qdrant.tech/"
+        },
+        {
+          "name": "Weaviate",
+          "description": "Vector database with built-in modules and hybrid search.",
+          "pros": [
+            "Hybrid search",
+            "Many integrations",
+            "Managed cloud"
+          ],
+          "cons": [
+            "Resource heavy",
+            "Module complexity"
+          ],
+          "bestFor": "RAG apps that need hybrid search",
+          "url": "https://weaviate.io/"
+        },
+        {
+          "name": "Milvus",
+          "description": "Scalable open-source vector database for large collections.",
+          "pros": [
+            "Scales well",
+            "Open source",
+            "Strong ecosystem"
+          ],
+          "cons": [
+            "Complex deployment",
+            "Heavy operations"
+          ],
+          "bestFor": "Large-scale vector workloads",
+          "url": "https://milvus.io/"
+        }
+      ],
+      "bestFor": "Teams choosing a vector database for RAG",
+      "pricing": "Open-source options; managed plans are usage-based",
+      "features": [
+        "Similarity search",
+        "Metadata filtering",
+        "Self-hosting options"
+      ]
+    }
   }
 ]

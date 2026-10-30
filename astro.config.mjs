@@ -25,7 +25,7 @@ export default defineConfig({
   output: 'static',
 
   // Production domain – used for canonical URLs and the sitemap.
-  site: 'https://flowmatrix.com',
+  site: 'https://flowmatrix.dev',
 
   i18n: {
     defaultLocale: 'en',

@@ -1,10 +1,15 @@
 name: Generate Insights
 
-# Läuft exakt zu 00:00, 06:00, 12:00 und 18:00 Uhr UTC.
-# GitHub Actions interpretiert Cron-Ausdrücke immer in UTC.
+# Ziel: exakt um 00:00, 06:00, 12:00 und 18:00 Uhr Europe/Berlin.
+# GitHub Actions interpretiert Cron-Ausdrücke immer in UTC. Da Deutschland
+# Sommer- (UTC+2) und Winterzeit (UTC+1) hat, laufen beide Varianten; der
+# Gate-Job lässt nur den Lauf durch, der in Berlin auf 00/06/12/18 fällt.
 on:
   schedule:
-    - cron: "0 0,6,12,18 * * *"
+    # Sommerzeit (CEST, UTC+2): 22/04/10/16 UTC = 00/06/12/18 Berlin
+    - cron: "0 22,4,10,16 * * *"
+    # Winterzeit (CET, UTC+1): 23/05/11/17 UTC = 00/06/12/18 Berlin
+    - cron: "0 23,5,11,17 * * *"
   workflow_dispatch:
 
 permissions:
@@ -15,8 +20,30 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  gate:
+    name: Check Berlin time slot
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.check.outputs.run }}
+    steps:
+      - name: Only run at 00/06/12/18 Europe/Berlin
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          HOUR=$(TZ=Europe/Berlin date +%H)
+          echo "Berlin hour: $HOUR"
+          case "$HOUR" in
+            00|06|12|18) echo "run=true" >> "$GITHUB_OUTPUT" ;;
+            *) echo "run=false" >> "$GITHUB_OUTPUT" ;;
+          esac
+
   generate:
-    name: Fetch feeds, generate articles & commit
+    name: Fetch feeds, generate articles, deploy & commit
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
 
     steps:
@@ -45,6 +72,15 @@ jobs:
 
       - name: Build Astro project
         run: npm run build
+
+      # Wichtig: Der Push mit dem Standard-GITHUB_TOKEN löst keine weiteren
+      # Workflows aus. Deshalb deployen wir hier direkt zu Cloudflare Pages.
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=programmatic-seo --branch=main
 
       - name: Commit new insights
         run: |

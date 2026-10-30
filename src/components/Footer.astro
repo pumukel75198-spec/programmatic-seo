@@ -59,5 +59,45 @@ const legalLinks = [
         }
       </nav>
     </div>
+    <div class="mt-6 flex items-center gap-2 text-xs text-slate-600">
+      <span class="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400" aria-hidden="true"></span>
+      <span
+        id="visitor-counter"
+        data-label={t(lang, "footer.visitors")}
+        class="notranslate"
+        translate="no"
+      >
+        {t(lang, "footer.visitors")}
+      </span>
+    </div>
   </div>
 </footer>
+
+<script>
+  const counterEl = document.getElementById("visitor-counter");
+  const endpoint = import.meta.env.PUBLIC_VISITOR_COUNTER_URL;
+
+  if (counterEl) {
+    if (!endpoint) {
+      counterEl.parentElement?.setAttribute("hidden", "");
+    } else {
+      const base = endpoint.replace(/\/$/, "");
+      const storageKey = "fm_visit_counted";
+      const alreadyCounted = sessionStorage.getItem(storageKey) === "1";
+      const url = alreadyCounted ? `${base}/count` : `${base}/hit`;
+      const method = alreadyCounted ? "GET" : "POST";
+
+      fetch(url, { method })
+        .then((res) => (res.ok ? res.json() : Promise.reject(new Error(String(res.status)))))
+        .then((data) => {
+          if (typeof data?.count === "number") {
+            counterEl.textContent = `${data.count.toLocaleString()} ${counterEl.dataset.label ?? ""}`.trim();
+            if (!alreadyCounted) sessionStorage.setItem(storageKey, "1");
+          }
+        })
+        .catch(() => {
+          counterEl.parentElement?.setAttribute("hidden", "");
+        });
+    }
+  }
+</script>
