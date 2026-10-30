@@ -31,6 +31,9 @@ jobs:
         run: npm run validate
 
       - name: Build Astro project
+        env:
+          PUBLIC_VISITOR_COUNTER_URL: ${{ vars.PUBLIC_VISITOR_COUNTER_URL || 'https://flowmatrix-visitor-counter.pumukel75198.workers.dev' }}
+          PUBLIC_CF_ANALYTICS_TOKEN: ${{ vars.PUBLIC_CF_ANALYTICS_TOKEN }}
         run: npm run build
 
       - name: Deploy to Cloudflare Pages
