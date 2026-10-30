@@ -1407,5 +1407,798 @@
       "rateLimit": "Per-workspace complexity limits",
       "docsUrl": "https://developers.linear.app/docs/graphql/working-with-the-graphql-api"
     }
+  },
+  {
+    "slug": "microsoft-graph-api",
+    "title": "Microsoft Graph API",
+    "description": "Access Microsoft cloud service resources with a unified endpoint. It enables integration with Microsoft 365 services.",
+    "category": "Developer Tools",
+    "tags": [
+      "microsoft",
+      "cloud",
+      "api",
+      "integration",
+      "services"
+    ],
+    "details": {
+      "provider": "Microsoft",
+      "pricing": "Free tier available with limits on usage.",
+      "features": [
+        "Access to Microsoft 365 data",
+        "User management",
+        "Secure integration",
+        "Mail and calendar services",
+        "Graph-based queries"
+      ],
+      "useCase": "Ideal for integrating Microsoft 365 services into applications. It allows access to various Microsoft resources.",
+      "website": "https://developer.microsoft.com/en-us/graph",
+      "authentication": "OAuth 2.0 Bearer token",
+      "apiKeyRequired": false,
+      "sdkLanguages": [
+        "JavaScript",
+        "C#",
+        "Python"
+      ],
+      "rateLimit": "Limit varies by endpoint.",
+      "endpoint": "https://graph.microsoft.com/v1.0",
+      "docsUrl": "https://docs.microsoft.com/en-us/graph/api/overview"
+    }
+  },
+  {
+    "slug": "openai-dall-e-api",
+    "title": "OpenAI DALL·E API",
+    "description": "Generate images from text descriptions using advanced AI models. Create unique visuals effortlessly.",
+    "category": "AI & Image",
+    "tags": [
+      "ai",
+      "image-generation",
+      "creativity",
+      "art",
+      "visuals"
+    ],
+    "details": {
+      "provider": "OpenAI",
+      "pricing": "Pay-per-image generated; free tier available",
+      "features": [
+        "Image generation from text prompts",
+        "High-resolution output",
+        "Style customization options"
+      ],
+      "useCase": "This API is used to create images based on user-defined text descriptions. It's great for artists and marketers.",
+      "website": "https://openai.com/dall-e",
+      "authentication": "Bearer API key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python"
+      ],
+      "rateLimit": "20 requests/minute",
+      "endpoint": "https://api.openai.com/v1/dall-e",
+      "docsUrl": "https://platform.openai.com/docs/api-reference/dall-e"
+    }
+  },
+  {
+    "slug": "microsoft-azure-cognitive-services-api",
+    "title": "Microsoft Azure Cognitive Services API",
+    "description": "Access various AI services including vision, speech, and language understanding. Enhance applications with powerful AI capabilities.",
+    "category": "AI & Multimodal",
+    "tags": [
+      "ai",
+      "cognitive-services",
+      "microsoft",
+      "cloud",
+      "api"
+    ],
+    "details": {
+      "provider": "Microsoft",
+      "pricing": "Free tier available, pay-as-you-go pricing model.",
+      "features": [
+        "Image recognition and analysis",
+        "Speech recognition and synthesis",
+        "Natural language processing",
+        "Anomaly detection",
+        "Text analytics"
+      ],
+      "useCase": "Utilize AI services to enhance applications with capabilities like image and speech processing.",
+      "website": "https://azure.microsoft.com/en-us/services/cognitive-services/",
+      "authentication": "Bearer API key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python",
+        "C#",
+        "Java"
+      ],
+      "rateLimit": "Standard limits apply based on service utilized.",
+      "docsUrl": "https://docs.microsoft.com/en-us/azure/cognitive-services/"
+    }
+  },
+  {
+    "slug": "openai-gpt-4-api",
+    "title": "OpenAI GPT-4 API",
+    "description": "The OpenAI GPT-4 API offers advanced natural language processing capabilities for various applications.",
+    "category": "AI & LLM",
+    "tags": [
+      "ai",
+      "nlp",
+      "language-modeling"
+    ],
+    "details": {
+      "provider": "OpenAI",
+      "pricing": "Pay-as-you-go with free tier available.",
+      "features": [
+        "Advanced text generation",
+        "Comprehension of complex prompts",
+        "Support for multiple languages",
+        "Customizable outputs",
+        "Integration with various applications"
+      ],
+      "useCase": "This API is used for tasks like content creation, chatbots, and language understanding.",
+      "website": "https://openai.com/api",
+      "authentication": "Bearer API key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python",
+        "Ruby"
+      ],
+      "rateLimit": "60 requests/minute",
+      "endpoint": "https://api.openai.com/v1/gpt-4",
+      "docsUrl": "https://platform.openai.com/docs/api-reference/gpt-4"
+    }
+  },
+  {
+    "slug": "openai-embeddings-api",
+    "title": "OpenAI Embeddings API",
+    "description": "The OpenAI Embeddings API allows developers to convert text into vector representations. It is useful for various natural language processing tasks.",
+    "category": "AI & Embeddings",
+    "tags": [
+      "embeddings",
+      "nlp",
+      "api"
+    ],
+    "details": {
+      "provider": "OpenAI",
+      "pricing": "Pay-as-you-go based on usage",
+      "features": [
+        "Text to vector conversion",
+        "High-dimensional embeddings",
+        "Support for various languages"
+      ],
+      "useCase": "This API is used for generating embeddings that can be utilized in search and machine learning models.",
+      "website": "https://openai.com/api/embeddings",
+      "authentication": "Bearer API key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python"
+      ],
+      "rateLimit": "60 requests/minute",
+      "endpoint": "https://api.openai.com/v1/embeddings",
+      "docsUrl": "https://platform.openai.com/docs/api-reference/embeddings"
+    }
+  },
+  {
+    "slug": "twitch-api",
+    "title": "Twitch API",
+    "description": "The Twitch API allows developers to access Twitch's features and data to enhance their applications. Integrate streaming, chat, and user information seamlessly.",
+    "category": "Communication",
+    "tags": [
+      "twitch",
+      "streaming",
+      "api"
+    ],
+    "details": {
+      "provider": "Twitch",
+      "pricing": "Free with rate limits",
+      "features": [
+        "Access to Twitch streams",
+        "User authentication",
+        "Chat functionality",
+        "Event subscriptions",
+        "Analytics data"
+      ],
+      "useCase": "The API is used for building applications that interact with Twitch's streaming services and user data.",
+      "website": "https://dev.twitch.tv",
+      "authentication": "Bearer token",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python",
+        "Java"
+      ],
+      "rateLimit": "30 requests/minute",
+      "endpoint": "https://api.twitch.tv/helix",
+      "docsUrl": "https://dev.twitch.tv/docs/api"
+    }
+  },
+  {
+    "slug": "aws-s3-api",
+    "title": "Amazon S3 API",
+    "description": "Amazon S3 API provides scalable object storage with high availability and security.",
+    "category": "Storage",
+    "tags": [
+      "storage",
+      "cloud",
+      "aws"
+    ],
+    "details": {
+      "provider": "Amazon Web Services",
+      "pricing": "Free tier available with limited storage; pay-as-you-go for additional usage.",
+      "features": [
+        "Object storage",
+        "Versioning",
+        "Access control"
+      ],
+      "useCase": "Use the API for storing and retrieving any amount of data from anywhere on the web.",
+      "website": "https://aws.amazon.com/s3/",
+      "authentication": "AWS Signature Version 4",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python"
+      ],
+      "rateLimit": "Unlimited requests, subject to account limits",
+      "endpoint": "https://s3.amazonaws.com",
+      "docsUrl": "https://docs.aws.amazon.com/s3/index.html"
+    }
+  },
+  {
+    "slug": "ibm-watson-text-to-speech-api",
+    "title": "IBM Watson Text to Speech API",
+    "description": "Converts written text into natural-sounding speech in various languages.",
+    "category": "AI & Speech",
+    "tags": [
+      "text-to-speech",
+      "speech",
+      "language"
+    ],
+    "details": {
+      "provider": "IBM",
+      "pricing": "Free tier available, pay-as-you-go pricing.",
+      "features": [
+        "Natural language processing",
+        "Customization of voice",
+        "Supports multiple languages"
+      ],
+      "useCase": "Used for creating applications that need to convert text into speech for accessibility and user interaction.",
+      "website": "https://www.ibm.com/cloud/watson-text-to-speech",
+      "authentication": "Bearer API key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python"
+      ],
+      "rateLimit": "1000 requests/minute",
+      "endpoint": "https://api.us-south.text-to-speech.watson.cloud.ibm.com/instances/123456/v1",
+      "docsUrl": "https://cloud.ibm.com/apidocs/text-to-speech"
+    }
+  },
+  {
+    "slug": "aws-lambda-api",
+    "title": "Amazon AWS Lambda API",
+    "description": "AWS Lambda lets you run code without provisioning or managing servers, enabling serverless computing.",
+    "category": "Backend",
+    "tags": [
+      "serverless",
+      "compute",
+      "aws"
+    ],
+    "details": {
+      "provider": "Amazon",
+      "pricing": "Pay-per-use pricing with a free tier available.",
+      "features": [
+        "Event-driven execution",
+        "Automatic scaling",
+        "Integrated with AWS services"
+      ],
+      "useCase": "Used for running application code in response to events and managing workloads without server management.",
+      "website": "https://aws.amazon.com/lambda/",
+      "authentication": "AWS Signature Version 4",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python",
+        "Java"
+      ],
+      "rateLimit": "1000 requests/second",
+      "endpoint": "https://lambda.amazonaws.com/v1",
+      "docsUrl": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html"
+    }
+  },
+  {
+    "slug": "paypal-payments-api",
+    "title": "PayPal Payments API",
+    "description": "Integrate PayPal payment processing into your applications with ease.",
+    "category": "Payments",
+    "tags": [
+      "payments",
+      "paypal",
+      "transactions"
+    ],
+    "details": {
+      "provider": "PayPal",
+      "pricing": "Transaction fees apply; free tier available.",
+      "features": [
+        "Secure transactions",
+        "Multi-currency support",
+        "Fraud protection"
+      ],
+      "useCase": "Use this API to process payments, manage transactions, and handle refunds efficiently.",
+      "website": "https://developer.paypal.com",
+      "authentication": "Bearer API key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python"
+      ],
+      "rateLimit": "5000 requests per day",
+      "endpoint": "https://api.paypal.com/v1",
+      "docsUrl": "https://developer.paypal.com/docs/api/overview"
+    }
+  },
+  {
+    "slug": "ibm-cloud-object-storage-api",
+    "title": "IBM Cloud Object Storage API",
+    "description": "Reliable cloud object storage for data archiving and app development.",
+    "category": "Storage",
+    "tags": [
+      "cloud",
+      "storage",
+      "ibm"
+    ],
+    "details": {
+      "provider": "IBM",
+      "pricing": "Free tier available with limited storage.",
+      "features": [
+        "Scalable storage",
+        "Data encryption",
+        "Multi-region support"
+      ],
+      "useCase": "Used for storing and retrieving any amount of data anytime, anywhere, providing secure cloud storage for applications.",
+      "website": "https://www.ibm.com/cloud/object-storage",
+      "authentication": "Bearer API key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python"
+      ],
+      "rateLimit": "200 requests/minute",
+      "endpoint": "https://s3.us.cloud-object-storage.appdomain.cloud",
+      "docsUrl": "https://cloud.ibm.com/docs/cloud-object-storage"
+    }
+  },
+  {
+    "slug": "aws-rekognition-api",
+    "title": "Amazon Rekognition API",
+    "description": "Image and video analysis API for face detection, object recognition, and more.",
+    "category": "AI & Vision",
+    "tags": [
+      "image",
+      "video",
+      "analysis"
+    ],
+    "details": {
+      "provider": "Amazon Web Services",
+      "pricing": "Free tier available for 5,000 images per month.",
+      "features": [
+        "Face detection",
+        "Object recognition",
+        "Facial analysis"
+      ],
+      "useCase": "Used for automating image and video analysis tasks like detecting objects, faces, and inappropriate content.",
+      "website": "https://aws.amazon.com/rekognition/",
+      "authentication": "AWS Signature V4",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python"
+      ],
+      "rateLimit": "Up to 10,000 requests per second",
+      "endpoint": "https://rekognition.us-west-2.amazonaws.com",
+      "docsUrl": "https://docs.aws.amazon.com/rekognition/latest/dg/what-is.html"
+    }
+  },
+  {
+    "slug": "aws-ses-api",
+    "title": "Amazon SES API",
+    "description": "Amazon Simple Email Service (SES) provides reliable and scalable email sending capabilities.",
+    "category": "Email",
+    "tags": [
+      "email",
+      "aws",
+      "transactional"
+    ],
+    "details": {
+      "provider": "Amazon",
+      "pricing": "Free tier includes 62,000 emails per month for AWS customers.",
+      "features": [
+        "Email sending",
+        "Bounce tracking",
+        "Email authentication"
+      ],
+      "useCase": "Used for sending transactional and marketing emails with high deliverability rates.",
+      "website": "https://aws.amazon.com/ses/",
+      "authentication": "AWS IAM credentials",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python"
+      ],
+      "rateLimit": "1,000 emails/second",
+      "endpoint": "https://email.us-east-1.amazonaws.com",
+      "docsUrl": "https://docs.aws.amazon.com/ses/latest/APIReference/Welcome.html"
+    }
+  },
+  {
+    "slug": "yelp-fusion-api",
+    "title": "Yelp Fusion API",
+    "description": "Access Yelp's extensive business database for reviews, ratings, and more.",
+    "category": "Geodata",
+    "tags": [
+      "business",
+      "reviews",
+      "geolocation"
+    ],
+    "details": {
+      "provider": "Yelp",
+      "pricing": "Free tier available with limited access.",
+      "features": [
+        "Business search",
+        "Review data",
+        "Geolocation services"
+      ],
+      "useCase": "Use to integrate Yelp's business data, including reviews and ratings, into your applications.",
+      "website": "https://www.yelp.com/developers",
+      "authentication": "Bearer API key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python"
+      ],
+      "rateLimit": "5000 requests per day",
+      "endpoint": "https://api.yelp.com/v3",
+      "docsUrl": "https://www.yelp.com/developers/documentation/v3"
+    }
+  },
+  {
+    "slug": "ibm-watson-language-translator-api",
+    "title": "IBM Watson Language Translator API",
+    "description": "Provides language translation capabilities for multiple languages, powered by AI.",
+    "category": "AI & Speech",
+    "tags": [
+      "translation",
+      "language",
+      "AI"
+    ],
+    "details": {
+      "provider": "IBM",
+      "pricing": "Free tier available with limited translations.",
+      "features": [
+        "Language translation",
+        "Model customization",
+        "Glossary support"
+      ],
+      "useCase": "Used for translating text between different languages, enabling global communication.",
+      "website": "https://www.ibm.com/cloud/watson-language-translator",
+      "authentication": "Bearer API key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python"
+      ],
+      "rateLimit": "1000 requests/day",
+      "endpoint": "https://api.us-south.language-translator.watson.cloud.ibm.com/instances/instance-id",
+      "docsUrl": "https://cloud.ibm.com/apidocs/language-translator"
+    }
+  },
+  {
+    "slug": "ibm-watson-assistant-api",
+    "title": "IBM Watson Assistant API",
+    "description": "Enable natural language processing to build conversational interfaces with the IBM Watson Assistant API.",
+    "category": "AI & LLM",
+    "tags": [
+      "nlp",
+      "conversational",
+      "ai"
+    ],
+    "details": {
+      "provider": "IBM",
+      "pricing": "Free tier available with limited usage.",
+      "features": [
+        "Natural language understanding",
+        "Conversation management",
+        "Multi-channel support"
+      ],
+      "useCase": "Used to create chatbots and virtual assistants for customer support and information retrieval.",
+      "website": "https://www.ibm.com/cloud/watson-assistant",
+      "authentication": "Bearer API key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python"
+      ],
+      "rateLimit": "1000 requests/minute",
+      "endpoint": "https://api.us-south.assistant.watson.cloud.ibm.com/instances/{instance_id}/v2",
+      "docsUrl": "https://cloud.ibm.com/apidocs/assistant"
+    }
+  },
+  {
+    "slug": "ibm-watson-discovery-api",
+    "title": "IBM Watson Discovery API",
+    "description": "Unlock the value of your data with AI-powered search and text analytics.",
+    "category": "AI & ML",
+    "tags": [
+      "ai",
+      "search",
+      "analytics",
+      "ibm"
+    ],
+    "details": {
+      "provider": "IBM",
+      "pricing": "Free tier available with limited usage.",
+      "features": [
+        "AI-powered search",
+        "Natural Language Processing",
+        "Document conversion"
+      ],
+      "useCase": "Used for enhancing search capabilities and extracting insights from large sets of data.",
+      "website": "https://www.ibm.com/cloud/watson-discovery",
+      "authentication": "Bearer API key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python"
+      ],
+      "rateLimit": "1000 requests/minute",
+      "endpoint": "https://api.us-south.discovery.watson.cloud.ibm.com/instances",
+      "docsUrl": "https://cloud.ibm.com/apidocs/discovery"
+    }
+  },
+  {
+    "slug": "azure-face-api",
+    "title": "Microsoft Azure Face API",
+    "description": "Provides facial recognition capabilities for detecting and analyzing human faces in images.",
+    "category": "AI & Vision",
+    "tags": [
+      "facial-recognition",
+      "image-analysis",
+      "azure"
+    ],
+    "details": {
+      "provider": "Microsoft",
+      "pricing": "Free tier available; paid plans based on request volume.",
+      "features": [
+        "Face detection",
+        "Emotion recognition",
+        "Face verification"
+      ],
+      "useCase": "Used for applications requiring facial recognition, such as security systems and user authentication.",
+      "website": "https://azure.microsoft.com/en-us/services/cognitive-services/face/",
+      "authentication": "Bearer API key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python"
+      ],
+      "rateLimit": "20 requests per second",
+      "docsUrl": "https://docs.microsoft.com/en-us/azure/cognitive-services/face/"
+    }
+  },
+  {
+    "slug": "aws-polly-api",
+    "title": "Amazon Polly API",
+    "description": "Amazon Polly converts text into lifelike speech, enabling applications to speak.",
+    "category": "AI & Voice",
+    "tags": [
+      "text-to-speech",
+      "ai",
+      "voice"
+    ],
+    "details": {
+      "provider": "Amazon Web Services",
+      "pricing": "Pay-as-you-go with a free tier of 5 million characters per month.",
+      "features": [
+        "Text-to-speech",
+        "Lifelike voice synthesis",
+        "Multiple languages"
+      ],
+      "useCase": "Used to add speech capabilities to applications, making them more interactive and accessible.",
+      "website": "https://aws.amazon.com/polly/",
+      "authentication": "AWS Signature Version 4",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python"
+      ],
+      "rateLimit": "No specific rate limit, but subject to account limits.",
+      "endpoint": "https://polly.amazonaws.com/",
+      "docsUrl": "https://docs.aws.amazon.com/polly/"
+    }
+  },
+  {
+    "slug": "azure-cosmos-db-api",
+    "title": "Microsoft Azure Cosmos DB API",
+    "description": "A globally distributed, multi-model database service for high-performance applications.",
+    "category": "Databases",
+    "tags": [
+      "database",
+      "distributed",
+      "multi-model"
+    ],
+    "details": {
+      "provider": "Microsoft",
+      "pricing": "Pay-as-you-go with a free tier available.",
+      "features": [
+        "Global distribution",
+        "Multi-model support",
+        "Automatic scaling"
+      ],
+      "useCase": "Used for building highly responsive and always-on applications that require low latency and high throughput.",
+      "website": "https://azure.microsoft.com/en-us/services/cosmos-db/",
+      "authentication": "Bearer API key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python"
+      ],
+      "rateLimit": "Request units per second (RUs/s)",
+      "docsUrl": "https://docs.microsoft.com/en-us/azure/cosmos-db/"
+    }
+  },
+  {
+    "slug": "google-maps-api",
+    "title": "Google Maps API",
+    "description": "Access a variety of location-based services such as maps, routes, and places.",
+    "category": "Geodata",
+    "tags": [
+      "maps",
+      "location",
+      "navigation"
+    ],
+    "details": {
+      "provider": "Google",
+      "pricing": "Pay-as-you-go with free tier up to certain usage.",
+      "features": [
+        "Dynamic Maps",
+        "Street View",
+        "Geocoding"
+      ],
+      "useCase": "Used for integrating maps and location-based services into applications, enhancing user experience with geolocation data.",
+      "website": "https://cloud.google.com/maps-platform",
+      "authentication": "API key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python"
+      ],
+      "rateLimit": "2500 requests per day",
+      "endpoint": "https://maps.googleapis.com/maps/api",
+      "docsUrl": "https://developers.google.com/maps/documentation"
+    }
+  },
+  {
+    "slug": "plaid-financial-api",
+    "title": "Plaid Financial Data API",
+    "description": "Access consumer financial data from various institutions securely and easily.",
+    "category": "Finance",
+    "tags": [
+      "financial-data",
+      "api",
+      "banking"
+    ],
+    "details": {
+      "provider": "Plaid",
+      "pricing": "Free tier available, paid plans start at $500/month.",
+      "features": [
+        "Bank account data access",
+        "Transaction data retrieval",
+        "Secure authentication"
+      ],
+      "useCase": "Used to integrate financial data into applications for budgeting, expense tracking, and more.",
+      "website": "https://plaid.com",
+      "authentication": "OAuth 2.0",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python"
+      ],
+      "rateLimit": "100 requests/minute",
+      "endpoint": "https://api.plaid.com/v1",
+      "docsUrl": "https://plaid.com/docs/"
+    }
+  },
+  {
+    "slug": "twilio-video-api",
+    "title": "Twilio Video API",
+    "description": "Build real-time video applications with Twilio's scalable Video API.",
+    "category": "Communication",
+    "tags": [
+      "video",
+      "real-time",
+      "communication"
+    ],
+    "details": {
+      "provider": "Twilio",
+      "pricing": "Pricing based on usage; free tier available.",
+      "features": [
+        "Real-time video",
+        "Cross-platform support",
+        "Scalable infrastructure"
+      ],
+      "useCase": "Used to integrate real-time video capabilities into web and mobile applications.",
+      "website": "https://www.twilio.com",
+      "authentication": "Bearer API key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python"
+      ],
+      "rateLimit": "Unlimited",
+      "endpoint": "https://video.twilio.com/v1",
+      "docsUrl": "https://www.twilio.com/docs/video"
+    }
+  },
+  {
+    "slug": "sendinblue-email-api",
+    "title": "Sendinblue Email API",
+    "description": "The Sendinblue Email API enables sending and managing email campaigns programmatically.",
+    "category": "Communication",
+    "tags": [
+      "email",
+      "marketing",
+      "automation"
+    ],
+    "details": {
+      "provider": "Sendinblue",
+      "pricing": "Free tier available with limited emails.",
+      "features": [
+        "Transactional emails",
+        "Email templates",
+        "Campaign analytics"
+      ],
+      "useCase": "Used for sending bulk emails, newsletters, and automated transactional emails.",
+      "website": "https://www.sendinblue.com",
+      "authentication": "Bearer API key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python"
+      ],
+      "rateLimit": "300 requests/minute",
+      "endpoint": "https://api.sendinblue.com/v3",
+      "docsUrl": "https://developers.sendinblue.com/docs"
+    }
+  },
+  {
+    "slug": "aws-transcribe-api",
+    "title": "Amazon Transcribe API",
+    "description": "Automatic speech recognition (ASR) service that makes it easy to add speech-to-text capability to applications.",
+    "category": "AI & Speech",
+    "tags": [
+      "speech-to-text",
+      "transcription",
+      "ASR"
+    ],
+    "details": {
+      "provider": "Amazon Web Services",
+      "pricing": "Free tier available; pricing based on usage.",
+      "features": [
+        "Real-time transcription",
+        "Custom vocabulary",
+        "Speaker identification"
+      ],
+      "useCase": "Used for converting audio files into fully searchable text files and subtitling video content.",
+      "website": "https://aws.amazon.com/transcribe/",
+      "authentication": "AWS Signature Version 4",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python"
+      ],
+      "rateLimit": "Standard AWS service limits apply",
+      "endpoint": "https://transcribe.amazonaws.com",
+      "docsUrl": "https://docs.aws.amazon.com/transcribe/latest/dg/what-is-transcribe.html"
+    }
   }
 ]

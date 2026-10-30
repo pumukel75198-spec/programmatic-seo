@@ -145,7 +145,7 @@ VERFÜGBARE TOOLS (nur diese verwenden)
 ${toolList || "—"}
 
 AUFGABE
-Liefere für JEDEN Step eine vollständige, praxisnahe Anleitung. Antworte ausschließlich mit gültigem JSON:
+Liefere für JEDEN Step eine vollständige, praxisnahe Anleitung. Alle generierten Texte (description, actions, checklist, expectedResult) müssen auf ENGLISCH sein – keine deutschen Wörter, keine Umlaute, kein ß. Antworte ausschließlich mit gültigem JSON:
 
 {
   "steps": [

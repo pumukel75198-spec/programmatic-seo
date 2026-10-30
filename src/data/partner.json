@@ -1,8 +1,200 @@
 {
+  "Ably Realtime API": {
+    "name": "Ably Realtime API",
+    "url": "https://ably.com",
+    "affiliateUrl": "https://ably.com",
+    "sponsored": false
+  },
+  "Adobe Sign": {
+    "name": "Adobe Sign",
+    "url": "https://acrobat.adobe.com/us/en/sign.html",
+    "affiliateUrl": "https://acrobat.adobe.com/us/en/sign.html",
+    "sponsored": false
+  },
+  "Adobe XD": {
+    "name": "Adobe XD",
+    "url": "https://www.adobe.com/products/xd.html",
+    "affiliateUrl": "https://www.adobe.com/products/xd.html",
+    "sponsored": false
+  },
+  "Affinity Designer": {
+    "name": "Affinity Designer",
+    "url": "https://affinity.serif.com/en-us/designer/",
+    "affiliateUrl": "https://affinity.serif.com/en-us/designer/",
+    "sponsored": false
+  },
+  "Affinity Photo": {
+    "name": "Affinity Photo",
+    "url": "https://affinity.serif.com/photo/",
+    "affiliateUrl": "https://affinity.serif.com/photo/",
+    "sponsored": false
+  },
+  "Airtable API": {
+    "name": "Airtable API",
+    "url": "https://airtable.com/developers/web/api",
+    "affiliateUrl": "https://airtable.com/developers/web/api",
+    "sponsored": false
+  },
+  "Algolia Search API": {
+    "name": "Algolia Search API",
+    "url": "https://www.algolia.com",
+    "affiliateUrl": "https://www.algolia.com",
+    "sponsored": false
+  },
+  "Amazon AWS Lambda API": {
+    "name": "Amazon AWS Lambda API",
+    "url": "https://aws.amazon.com/lambda/",
+    "affiliateUrl": "https://aws.amazon.com/lambda/",
+    "sponsored": false
+  },
+  "Amazon Polly API": {
+    "name": "Amazon Polly API",
+    "url": "https://aws.amazon.com/polly/",
+    "affiliateUrl": "https://aws.amazon.com/polly/",
+    "sponsored": false
+  },
+  "Amazon Rekognition API": {
+    "name": "Amazon Rekognition API",
+    "url": "https://aws.amazon.com/rekognition/",
+    "affiliateUrl": "https://aws.amazon.com/rekognition/",
+    "sponsored": false
+  },
+  "Amazon S3 API": {
+    "name": "Amazon S3 API",
+    "url": "https://aws.amazon.com/s3/",
+    "affiliateUrl": "https://aws.amazon.com/s3/",
+    "sponsored": false
+  },
+  "Amazon SES API": {
+    "name": "Amazon SES API",
+    "url": "https://aws.amazon.com/ses/",
+    "affiliateUrl": "https://aws.amazon.com/ses/",
+    "sponsored": false
+  },
+  "Amazon Transcribe API": {
+    "name": "Amazon Transcribe API",
+    "url": "https://aws.amazon.com/transcribe/",
+    "affiliateUrl": "https://aws.amazon.com/transcribe/",
+    "sponsored": false
+  },
+  "Anthropic": {
+    "name": "Anthropic",
+    "url": "https://www.anthropic.com/",
+    "affiliateUrl": "https://www.anthropic.com/",
+    "sponsored": false
+  },
+  "Anthropic Claude API": {
+    "name": "Anthropic Claude API",
+    "url": "https://www.anthropic.com",
+    "affiliateUrl": "https://www.anthropic.com",
+    "sponsored": false
+  },
+  "Anytype": {
+    "name": "Anytype",
+    "url": "https://anytype.io/",
+    "affiliateUrl": "https://anytype.io/",
+    "sponsored": false
+  },
+  "AppFlowy": {
+    "name": "AppFlowy",
+    "url": "https://appflowy.io",
+    "affiliateUrl": "https://appflowy.io",
+    "sponsored": false
+  },
+  "Apple Numbers": {
+    "name": "Apple Numbers",
+    "url": "https://www.apple.com/numbers/",
+    "affiliateUrl": "https://www.apple.com/numbers/",
+    "sponsored": false
+  },
+  "Apple Pages": {
+    "name": "Apple Pages",
+    "url": "https://www.apple.com/pages",
+    "affiliateUrl": "https://www.apple.com/pages",
+    "sponsored": false
+  },
+  "Appwrite": {
+    "name": "Appwrite",
+    "url": "https://appwrite.io/",
+    "affiliateUrl": "https://appwrite.io/",
+    "sponsored": false
+  },
+  "Asana": {
+    "name": "Asana",
+    "url": "https://asana.com",
+    "affiliateUrl": "https://asana.com",
+    "sponsored": false
+  },
+  "AssemblyAI": {
+    "name": "AssemblyAI",
+    "url": "https://www.assemblyai.com/",
+    "affiliateUrl": "https://www.assemblyai.com/",
+    "sponsored": false
+  },
   "Astro": {
     "name": "Astro",
     "url": "https://astro.build/",
     "affiliateUrl": "https://astro.build/",
+    "sponsored": false
+  },
+  "Atom": {
+    "name": "Atom",
+    "url": "https://atom.io",
+    "affiliateUrl": "https://atom.io",
+    "sponsored": false
+  },
+  "Auth0 Authentication API": {
+    "name": "Auth0 Authentication API",
+    "url": "https://auth0.com",
+    "affiliateUrl": "https://auth0.com",
+    "sponsored": false
+  },
+  "Avid Media Composer": {
+    "name": "Avid Media Composer",
+    "url": "https://www.avid.com/media-composer",
+    "affiliateUrl": "https://www.avid.com/media-composer",
+    "sponsored": false
+  },
+  "Azure AI Speech": {
+    "name": "Azure AI Speech",
+    "url": "https://azure.microsoft.com/en-us/products/ai-services/ai-speech",
+    "affiliateUrl": "https://azure.microsoft.com/en-us/products/ai-services/ai-speech",
+    "sponsored": false
+  },
+  "Baserow": {
+    "name": "Baserow",
+    "url": "https://baserow.io",
+    "affiliateUrl": "https://baserow.io",
+    "sponsored": false
+  },
+  "BigCommerce": {
+    "name": "BigCommerce",
+    "url": "https://www.bigcommerce.com",
+    "affiliateUrl": "https://www.bigcommerce.com",
+    "sponsored": false
+  },
+  "Bitbucket": {
+    "name": "Bitbucket",
+    "url": "https://bitbucket.org",
+    "affiliateUrl": "https://bitbucket.org",
+    "sponsored": false
+  },
+  "Blender": {
+    "name": "Blender",
+    "url": "https://www.blender.org",
+    "affiliateUrl": "https://www.blender.org",
+    "sponsored": false
+  },
+  "Brevo": {
+    "name": "Brevo",
+    "url": "https://www.brevo.com",
+    "affiliateUrl": "https://www.brevo.com",
+    "sponsored": false
+  },
+  "Bruno": {
+    "name": "Bruno",
+    "url": "https://www.usebruno.com/",
+    "affiliateUrl": "https://www.usebruno.com/",
     "sponsored": false
   },
   "Buffer": {
@@ -11,10 +203,10 @@
     "affiliateUrl": "https://buffer.com/?ref=flowmatrix",
     "sponsored": true
   },
-  "CRM": {
-    "name": "CRM",
-    "url": "https://www.hubspot.com/products/crm",
-    "affiliateUrl": "https://www.hubspot.com/products/crm",
+  "Buttondown": {
+    "name": "Buttondown",
+    "url": "https://buttondown.email",
+    "affiliateUrl": "https://buttondown.email",
     "sponsored": false
   },
   "Cal.com": {
@@ -23,10 +215,76 @@
     "affiliateUrl": "https://cal.com/",
     "sponsored": false
   },
+  "Cap": {
+    "name": "Cap",
+    "url": "https://getcap.co",
+    "affiliateUrl": "https://getcap.co",
+    "sponsored": false
+  },
+  "Capture One": {
+    "name": "Capture One",
+    "url": "https://www.captureone.com",
+    "affiliateUrl": "https://www.captureone.com",
+    "sponsored": false
+  },
+  "Chargebee": {
+    "name": "Chargebee",
+    "url": "https://www.chargebee.com/",
+    "affiliateUrl": "https://www.chargebee.com/",
+    "sponsored": false
+  },
+  "Chatwoot": {
+    "name": "Chatwoot",
+    "url": "https://www.chatwoot.com",
+    "affiliateUrl": "https://www.chatwoot.com",
+    "sponsored": false
+  },
+  "Cisco Webex": {
+    "name": "Cisco Webex",
+    "url": "https://www.webex.com",
+    "affiliateUrl": "https://www.webex.com",
+    "sponsored": false
+  },
+  "Clearbit": {
+    "name": "Clearbit",
+    "url": "https://clearbit.com",
+    "affiliateUrl": "https://clearbit.com",
+    "sponsored": false
+  },
+  "Clerk": {
+    "name": "Clerk",
+    "url": "https://clerk.com/",
+    "affiliateUrl": "https://clerk.com/",
+    "sponsored": false
+  },
+  "Clerk Authentication API": {
+    "name": "Clerk Authentication API",
+    "url": "https://clerk.com",
+    "affiliateUrl": "https://clerk.com",
+    "sponsored": false
+  },
+  "ClickUp": {
+    "name": "ClickUp",
+    "url": "https://clickup.com",
+    "affiliateUrl": "https://clickup.com",
+    "sponsored": false
+  },
+  "Cloudflare Pages": {
+    "name": "Cloudflare Pages",
+    "url": "https://pages.cloudflare.com",
+    "affiliateUrl": "https://pages.cloudflare.com",
+    "sponsored": false
+  },
   "Cloudflare Workers API": {
     "name": "Cloudflare Workers API",
     "url": "https://workers.cloudflare.com/",
     "affiliateUrl": "https://workers.cloudflare.com/",
+    "sponsored": false
+  },
+  "Coda": {
+    "name": "Coda",
+    "url": "https://coda.io",
+    "affiliateUrl": "https://coda.io",
     "sponsored": false
   },
   "Cohere Embed API": {
@@ -35,10 +293,178 @@
     "affiliateUrl": "https://cohere.com/",
     "sponsored": false
   },
+  "Coolify": {
+    "name": "Coolify",
+    "url": "https://coolify.io",
+    "affiliateUrl": "https://coolify.io",
+    "sponsored": false
+  },
+  "CorelCAD": {
+    "name": "CorelCAD",
+    "url": "https://www.coreldraw.com/en/product/corelcad/",
+    "affiliateUrl": "https://www.coreldraw.com/en/product/corelcad/",
+    "sponsored": false
+  },
+  "CorelDRAW": {
+    "name": "CorelDRAW",
+    "url": "https://www.coreldraw.com",
+    "affiliateUrl": "https://www.coreldraw.com",
+    "sponsored": false
+  },
+  "Crisp": {
+    "name": "Crisp",
+    "url": "https://crisp.chat",
+    "affiliateUrl": "https://crisp.chat",
+    "sponsored": false
+  },
+  "CRM": {
+    "name": "CRM",
+    "url": "https://www.hubspot.com/products/crm",
+    "affiliateUrl": "https://www.hubspot.com/products/crm",
+    "sponsored": false
+  },
+  "D&B Hoovers": {
+    "name": "D&B Hoovers",
+    "url": "https://www.dnb.com/products/marketing-sales/dnb-hoovers.html",
+    "affiliateUrl": "https://www.dnb.com/products/marketing-sales/dnb-hoovers.html",
+    "sponsored": false
+  },
+  "DaVinci Resolve": {
+    "name": "DaVinci Resolve",
+    "url": "https://www.blackmagicdesign.com/products/davinciresolve/",
+    "affiliateUrl": "https://www.blackmagicdesign.com/products/davinciresolve/",
+    "sponsored": false
+  },
   "Deepgram Speech API": {
     "name": "Deepgram Speech API",
     "url": "https://deepgram.com/",
     "affiliateUrl": "https://deepgram.com/",
+    "sponsored": false
+  },
+  "DigitalOcean Droplets": {
+    "name": "DigitalOcean Droplets",
+    "url": "https://www.digitalocean.com/products/droplets/",
+    "affiliateUrl": "https://www.digitalocean.com/products/droplets/",
+    "sponsored": false
+  },
+  "Discord": {
+    "name": "Discord",
+    "url": "https://discord.com",
+    "affiliateUrl": "https://discord.com",
+    "sponsored": false
+  },
+  "Discord Bot API": {
+    "name": "Discord Bot API",
+    "url": "https://discord.com/developers/docs/reference",
+    "affiliateUrl": "https://discord.com/developers/docs/reference",
+    "sponsored": false
+  },
+  "Doppler Secrets API": {
+    "name": "Doppler Secrets API",
+    "url": "https://www.doppler.com",
+    "affiliateUrl": "https://www.doppler.com",
+    "sponsored": false
+  },
+  "Dropbox": {
+    "name": "Dropbox",
+    "url": "https://www.dropbox.com",
+    "affiliateUrl": "https://www.dropbox.com",
+    "sponsored": false
+  },
+  "DxO PhotoLab": {
+    "name": "DxO PhotoLab",
+    "url": "https://www.dxo.com",
+    "affiliateUrl": "https://www.dxo.com",
+    "sponsored": false
+  },
+  "Elasticsearch": {
+    "name": "Elasticsearch",
+    "url": "https://www.elastic.co/elasticsearch/",
+    "affiliateUrl": "https://www.elastic.co/elasticsearch/",
+    "sponsored": false
+  },
+  "ElevenLabs Voice API": {
+    "name": "ElevenLabs Voice API",
+    "url": "https://elevenlabs.io",
+    "affiliateUrl": "https://elevenlabs.io",
+    "sponsored": false
+  },
+  "Excalidraw": {
+    "name": "Excalidraw",
+    "url": "https://excalidraw.com",
+    "affiliateUrl": "https://excalidraw.com",
+    "sponsored": false
+  },
+  "Figma": {
+    "name": "Figma",
+    "url": "https://www.figma.com",
+    "affiliateUrl": "https://www.figma.com",
+    "sponsored": false
+  },
+  "Final Cut Pro": {
+    "name": "Final Cut Pro",
+    "url": "https://www.apple.com/final-cut-pro/",
+    "affiliateUrl": "https://www.apple.com/final-cut-pro/",
+    "sponsored": false
+  },
+  "Firebase": {
+    "name": "Firebase",
+    "url": "https://firebase.google.com/",
+    "affiliateUrl": "https://firebase.google.com/",
+    "sponsored": false
+  },
+  "Forgejo": {
+    "name": "Forgejo",
+    "url": "https://forgejo.org",
+    "affiliateUrl": "https://forgejo.org",
+    "sponsored": false
+  },
+  "Foxit PDF Editor": {
+    "name": "Foxit PDF Editor",
+    "url": "https://www.foxit.com/pdf-editor/",
+    "affiliateUrl": "https://www.foxit.com/pdf-editor/",
+    "sponsored": false
+  },
+  "Framer": {
+    "name": "Framer",
+    "url": "https://www.framer.com",
+    "affiliateUrl": "https://www.framer.com",
+    "sponsored": false
+  },
+  "FreshBooks": {
+    "name": "FreshBooks",
+    "url": "https://www.freshbooks.com",
+    "affiliateUrl": "https://www.freshbooks.com",
+    "sponsored": false
+  },
+  "Freshdesk": {
+    "name": "Freshdesk",
+    "url": "https://freshdesk.com",
+    "affiliateUrl": "https://freshdesk.com",
+    "sponsored": false
+  },
+  "Ghost": {
+    "name": "Ghost",
+    "url": "https://ghost.org",
+    "affiliateUrl": "https://ghost.org",
+    "sponsored": false
+  },
+  "GIMP": {
+    "name": "GIMP",
+    "url": "https://www.gimp.org",
+    "affiliateUrl": "https://www.gimp.org",
+    "sponsored": false
+  },
+  "Gitea": {
+    "name": "Gitea",
+    "url": "https://gitea.io",
+    "affiliateUrl": "https://gitea.io",
+    "sponsored": false
+  },
+  "GitHub": {
+    "name": "GitHub",
+    "url": "https://github.com",
+    "affiliateUrl": "https://github.com",
     "sponsored": false
   },
   "GitHub Alternatives": {
@@ -47,10 +473,268 @@
     "affiliateUrl": "https://github.com/",
     "sponsored": false
   },
+  "GitHub REST API": {
+    "name": "GitHub REST API",
+    "url": "https://docs.github.com/en/rest",
+    "affiliateUrl": "https://docs.github.com/en/rest",
+    "sponsored": false
+  },
+  "GitLab": {
+    "name": "GitLab",
+    "url": "https://gitlab.com",
+    "affiliateUrl": "https://gitlab.com",
+    "sponsored": false
+  },
+  "Google Cloud Compute Engine": {
+    "name": "Google Cloud Compute Engine",
+    "url": "https://cloud.google.com/compute",
+    "affiliateUrl": "https://cloud.google.com/compute",
+    "sponsored": false
+  },
+  "Google Docs": {
+    "name": "Google Docs",
+    "url": "https://docs.google.com",
+    "affiliateUrl": "https://docs.google.com",
+    "sponsored": false
+  },
+  "Google Gemini": {
+    "name": "Google Gemini",
+    "url": "https://ai.google.dev/",
+    "affiliateUrl": "https://ai.google.dev/",
+    "sponsored": false
+  },
+  "Google Gemini API": {
+    "name": "Google Gemini API",
+    "url": "https://ai.google.dev",
+    "affiliateUrl": "https://ai.google.dev",
+    "sponsored": false
+  },
+  "Google Maps API": {
+    "name": "Google Maps API",
+    "url": "https://cloud.google.com/maps-platform",
+    "affiliateUrl": "https://cloud.google.com/maps-platform",
+    "sponsored": false
+  },
+  "Google Meet": {
+    "name": "Google Meet",
+    "url": "https://meet.google.com",
+    "affiliateUrl": "https://meet.google.com",
+    "sponsored": false
+  },
   "Google Search Console API": {
     "name": "Google Search Console API",
     "url": "https://developers.google.com/webmaster-tools",
     "affiliateUrl": "https://developers.google.com/webmaster-tools",
+    "sponsored": false
+  },
+  "Google Sheets": {
+    "name": "Google Sheets",
+    "url": "https://www.google.com/sheets/about/",
+    "affiliateUrl": "https://www.google.com/sheets/about/",
+    "sponsored": false
+  },
+  "Google Sheets API": {
+    "name": "Google Sheets API",
+    "url": "https://developers.google.com/sheets/api",
+    "affiliateUrl": "https://developers.google.com/sheets/api",
+    "sponsored": false
+  },
+  "Groq Inference API": {
+    "name": "Groq Inference API",
+    "url": "https://groq.com",
+    "affiliateUrl": "https://groq.com",
+    "sponsored": false
+  },
+  "HelloSign": {
+    "name": "HelloSign",
+    "url": "https://www.hellosign.com",
+    "affiliateUrl": "https://www.hellosign.com",
+    "sponsored": false
+  },
+  "HitFilm Pro": {
+    "name": "HitFilm Pro",
+    "url": "https://fxhome.com/product/hitfilm-pro",
+    "affiliateUrl": "https://fxhome.com/product/hitfilm-pro",
+    "sponsored": false
+  },
+  "Hoppscotch": {
+    "name": "Hoppscotch",
+    "url": "https://hoppscotch.io/",
+    "affiliateUrl": "https://hoppscotch.io/",
+    "sponsored": false
+  },
+  "HubSpot CRM": {
+    "name": "HubSpot CRM",
+    "url": "https://www.hubspot.com/products/crm",
+    "affiliateUrl": "https://www.hubspot.com/products/crm",
+    "sponsored": false
+  },
+  "HubSpot CRM API": {
+    "name": "HubSpot CRM API",
+    "url": "https://developers.hubspot.com/docs/api/crm/contacts",
+    "affiliateUrl": "https://developers.hubspot.com/docs/api/crm/contacts",
+    "sponsored": false
+  },
+  "Hugging Face Inference API": {
+    "name": "Hugging Face Inference API",
+    "url": "https://huggingface.co/inference-api",
+    "affiliateUrl": "https://huggingface.co/inference-api",
+    "sponsored": false
+  },
+  "Hugo": {
+    "name": "Hugo",
+    "url": "https://gohugo.io",
+    "affiliateUrl": "https://gohugo.io",
+    "sponsored": false
+  },
+  "IBM Cloud Object Storage API": {
+    "name": "IBM Cloud Object Storage API",
+    "url": "https://www.ibm.com/cloud/object-storage",
+    "affiliateUrl": "https://www.ibm.com/cloud/object-storage",
+    "sponsored": false
+  },
+  "IBM Watson Assistant API": {
+    "name": "IBM Watson Assistant API",
+    "url": "https://www.ibm.com/cloud/watson-assistant",
+    "affiliateUrl": "https://www.ibm.com/cloud/watson-assistant",
+    "sponsored": false
+  },
+  "IBM Watson Discovery API": {
+    "name": "IBM Watson Discovery API",
+    "url": "https://www.ibm.com/cloud/watson-discovery",
+    "affiliateUrl": "https://www.ibm.com/cloud/watson-discovery",
+    "sponsored": false
+  },
+  "IBM Watson Language Translator API": {
+    "name": "IBM Watson Language Translator API",
+    "url": "https://www.ibm.com/cloud/watson-language-translator",
+    "affiliateUrl": "https://www.ibm.com/cloud/watson-language-translator",
+    "sponsored": false
+  },
+  "IBM Watson Text to Speech API": {
+    "name": "IBM Watson Text to Speech API",
+    "url": "https://www.ibm.com/cloud/watson-text-to-speech",
+    "affiliateUrl": "https://www.ibm.com/cloud/watson-text-to-speech",
+    "sponsored": false
+  },
+  "iCloud Drive": {
+    "name": "iCloud Drive",
+    "url": "https://www.icloud.com",
+    "affiliateUrl": "https://www.icloud.com",
+    "sponsored": false
+  },
+  "Inkscape": {
+    "name": "Inkscape",
+    "url": "https://inkscape.org/",
+    "affiliateUrl": "https://inkscape.org/",
+    "sponsored": false
+  },
+  "Insomnia": {
+    "name": "Insomnia",
+    "url": "https://insomnia.rest/",
+    "affiliateUrl": "https://insomnia.rest/",
+    "sponsored": false
+  },
+  "Instagram Reels": {
+    "name": "Instagram Reels",
+    "url": "https://www.instagram.com",
+    "affiliateUrl": "https://www.instagram.com",
+    "sponsored": false
+  },
+  "JetBrains PyCharm": {
+    "name": "JetBrains PyCharm",
+    "url": "https://www.jetbrains.com/pycharm",
+    "affiliateUrl": "https://www.jetbrains.com/pycharm",
+    "sponsored": false
+  },
+  "Jira": {
+    "name": "Jira",
+    "url": "https://www.atlassian.com/software/jira",
+    "affiliateUrl": "https://www.atlassian.com/software/jira",
+    "sponsored": false
+  },
+  "Joplin": {
+    "name": "Joplin",
+    "url": "https://joplinapp.org/",
+    "affiliateUrl": "https://joplinapp.org/",
+    "sponsored": false
+  },
+  "Keycloak": {
+    "name": "Keycloak",
+    "url": "https://www.keycloak.org/",
+    "affiliateUrl": "https://www.keycloak.org/",
+    "sponsored": false
+  },
+  "Krita": {
+    "name": "Krita",
+    "url": "https://krita.org",
+    "affiliateUrl": "https://krita.org",
+    "sponsored": false
+  },
+  "Kubernetes": {
+    "name": "Kubernetes",
+    "url": "https://kubernetes.io",
+    "affiliateUrl": "https://kubernetes.io",
+    "sponsored": false
+  },
+  "LaunchDarkly Feature API": {
+    "name": "LaunchDarkly Feature API",
+    "url": "https://launchdarkly.com",
+    "affiliateUrl": "https://launchdarkly.com",
+    "sponsored": false
+  },
+  "Lemon Squeezy": {
+    "name": "Lemon Squeezy",
+    "url": "https://www.lemonsqueezy.com/",
+    "affiliateUrl": "https://www.lemonsqueezy.com/",
+    "sponsored": false
+  },
+  "LibreOffice Writer": {
+    "name": "LibreOffice Writer",
+    "url": "https://www.libreoffice.org",
+    "affiliateUrl": "https://www.libreoffice.org",
+    "sponsored": false
+  },
+  "Linear": {
+    "name": "Linear",
+    "url": "https://linear.app",
+    "affiliateUrl": "https://linear.app",
+    "sponsored": false
+  },
+  "Linear GraphQL API": {
+    "name": "Linear GraphQL API",
+    "url": "https://developers.linear.app/docs/graphql/working-with-the-graphql-api",
+    "affiliateUrl": "https://developers.linear.app/docs/graphql/working-with-the-graphql-api",
+    "sponsored": false
+  },
+  "LinkedIn Sales Navigator": {
+    "name": "LinkedIn Sales Navigator",
+    "url": "https://business.linkedin.com/sales-solutions/sales-navigator",
+    "affiliateUrl": "https://business.linkedin.com/sales-solutions/sales-navigator",
+    "sponsored": false
+  },
+  "Liveblocks Collaboration API": {
+    "name": "Liveblocks Collaboration API",
+    "url": "https://liveblocks.io",
+    "affiliateUrl": "https://liveblocks.io",
+    "sponsored": false
+  },
+  "Logseq": {
+    "name": "Logseq",
+    "url": "https://logseq.com/",
+    "affiliateUrl": "https://logseq.com/",
+    "sponsored": false
+  },
+  "Luminar Neo": {
+    "name": "Luminar Neo",
+    "url": "https://skylum.com/luminar",
+    "affiliateUrl": "https://skylum.com/luminar",
+    "sponsored": false
+  },
+  "MailerLite": {
+    "name": "MailerLite",
+    "url": "https://www.mailerlite.com",
+    "affiliateUrl": "https://www.mailerlite.com",
     "sponsored": false
   },
   "Make": {
@@ -65,6 +749,132 @@
     "affiliateUrl": "https://www.mapbox.com/",
     "sponsored": false
   },
+  "Matomo": {
+    "name": "Matomo",
+    "url": "https://matomo.org",
+    "affiliateUrl": "https://matomo.org",
+    "sponsored": false
+  },
+  "Mattermost": {
+    "name": "Mattermost",
+    "url": "https://mattermost.com",
+    "affiliateUrl": "https://mattermost.com",
+    "sponsored": false
+  },
+  "Medusa": {
+    "name": "Medusa",
+    "url": "https://medusajs.com",
+    "affiliateUrl": "https://medusajs.com",
+    "sponsored": false
+  },
+  "Meilisearch": {
+    "name": "Meilisearch",
+    "url": "https://www.meilisearch.com/",
+    "affiliateUrl": "https://www.meilisearch.com/",
+    "sponsored": false
+  },
+  "Microsoft Azure Cognitive Services API": {
+    "name": "Microsoft Azure Cognitive Services API",
+    "url": "https://azure.microsoft.com/en-us/services/cognitive-services/",
+    "affiliateUrl": "https://azure.microsoft.com/en-us/services/cognitive-services/",
+    "sponsored": false
+  },
+  "Microsoft Azure Cosmos DB API": {
+    "name": "Microsoft Azure Cosmos DB API",
+    "url": "https://azure.microsoft.com/en-us/services/cosmos-db/",
+    "affiliateUrl": "https://azure.microsoft.com/en-us/services/cosmos-db/",
+    "sponsored": false
+  },
+  "Microsoft Azure Face API": {
+    "name": "Microsoft Azure Face API",
+    "url": "https://azure.microsoft.com/en-us/services/cognitive-services/face/",
+    "affiliateUrl": "https://azure.microsoft.com/en-us/services/cognitive-services/face/",
+    "sponsored": false
+  },
+  "Microsoft Azure Virtual Machines": {
+    "name": "Microsoft Azure Virtual Machines",
+    "url": "https://azure.microsoft.com/en-us/services/virtual-machines/",
+    "affiliateUrl": "https://azure.microsoft.com/en-us/services/virtual-machines/",
+    "sponsored": false
+  },
+  "Microsoft Graph API": {
+    "name": "Microsoft Graph API",
+    "url": "https://developer.microsoft.com/en-us/graph",
+    "affiliateUrl": "https://developer.microsoft.com/en-us/graph",
+    "sponsored": false
+  },
+  "Microsoft Teams": {
+    "name": "Microsoft Teams",
+    "url": "https://www.microsoft.com/en-us/microsoft-teams",
+    "affiliateUrl": "https://www.microsoft.com/en-us/microsoft-teams",
+    "sponsored": false
+  },
+  "Milvus": {
+    "name": "Milvus",
+    "url": "https://milvus.io/",
+    "affiliateUrl": "https://milvus.io/",
+    "sponsored": false
+  },
+  "Mistral AI": {
+    "name": "Mistral AI",
+    "url": "https://mistral.ai/",
+    "affiliateUrl": "https://mistral.ai/",
+    "sponsored": false
+  },
+  "Mistral AI API": {
+    "name": "Mistral AI API",
+    "url": "https://mistral.ai",
+    "affiliateUrl": "https://mistral.ai",
+    "sponsored": false
+  },
+  "Monday.com": {
+    "name": "Monday.com",
+    "url": "https://monday.com",
+    "affiliateUrl": "https://monday.com",
+    "sponsored": false
+  },
+  "MongoDB Atlas API": {
+    "name": "MongoDB Atlas API",
+    "url": "https://www.mongodb.com/atlas",
+    "affiliateUrl": "https://www.mongodb.com/atlas",
+    "sponsored": false
+  },
+  "n8n": {
+    "name": "n8n",
+    "url": "https://n8n.io/",
+    "affiliateUrl": "https://n8n.io/?ref=flowmatrix",
+    "sponsored": true
+  },
+  "Neon Postgres API": {
+    "name": "Neon Postgres API",
+    "url": "https://neon.tech",
+    "affiliateUrl": "https://neon.tech",
+    "sponsored": false
+  },
+  "Netlify": {
+    "name": "Netlify",
+    "url": "https://www.netlify.com",
+    "affiliateUrl": "https://www.netlify.com",
+    "sponsored": false
+  },
+  "Nextcloud": {
+    "name": "Nextcloud",
+    "url": "https://nextcloud.com",
+    "affiliateUrl": "https://nextcloud.com",
+    "sponsored": false
+  },
+  "Nitro PDF Pro": {
+    "name": "Nitro PDF Pro",
+    "url": "https://www.gonitro.com/pdf-pro",
+    "affiliateUrl": "https://www.gonitro.com/pdf-pro",
+    "sponsored": false
+  },
+  "NocoDB": {
+    "name": "NocoDB",
+    "url": "https://nocodb.com",
+    "affiliateUrl": "https://nocodb.com",
+    "sponsored": false
+  },
   "Notion": {
     "name": "Notion",
     "url": "https://www.notion.so/",
@@ -77,11 +887,125 @@
     "affiliateUrl": "https://www.notion.so/?ref=flowmatrix",
     "sponsored": true
   },
+  "Nuke": {
+    "name": "Nuke",
+    "url": "https://www.foundry.com/products/nuke",
+    "affiliateUrl": "https://www.foundry.com/products/nuke",
+    "sponsored": false
+  },
+  "OBS Studio": {
+    "name": "OBS Studio",
+    "url": "https://obsproject.com",
+    "affiliateUrl": "https://obsproject.com",
+    "sponsored": false
+  },
+  "Obsidian": {
+    "name": "Obsidian",
+    "url": "https://obsidian.md",
+    "affiliateUrl": "https://obsidian.md",
+    "sponsored": false
+  },
+  "Odoo": {
+    "name": "Odoo",
+    "url": "https://www.odoo.com",
+    "affiliateUrl": "https://www.odoo.com",
+    "sponsored": false
+  },
+  "OneDrive": {
+    "name": "OneDrive",
+    "url": "https://onedrive.live.com",
+    "affiliateUrl": "https://onedrive.live.com",
+    "sponsored": false
+  },
   "OpenAI API": {
     "name": "OpenAI API",
     "url": "https://platform.openai.com/",
     "affiliateUrl": "https://platform.openai.com/?ref=flowmatrix",
     "sponsored": true
+  },
+  "OpenAI Batch API": {
+    "name": "OpenAI Batch API",
+    "url": "https://platform.openai.com/docs/guides/batch",
+    "affiliateUrl": "https://platform.openai.com/docs/guides/batch",
+    "sponsored": false
+  },
+  "OpenAI DALL·E API": {
+    "name": "OpenAI DALL·E API",
+    "url": "https://openai.com/dall-e",
+    "affiliateUrl": "https://openai.com/dall-e",
+    "sponsored": false
+  },
+  "OpenAI Embeddings API": {
+    "name": "OpenAI Embeddings API",
+    "url": "https://openai.com/api/embeddings",
+    "affiliateUrl": "https://openai.com/api/embeddings",
+    "sponsored": false
+  },
+  "OpenAI GPT-4 API": {
+    "name": "OpenAI GPT-4 API",
+    "url": "https://openai.com/api",
+    "affiliateUrl": "https://openai.com/api",
+    "sponsored": false
+  },
+  "OpenAI Whisper": {
+    "name": "OpenAI Whisper",
+    "url": "https://platform.openai.com/docs/guides/speech-to-text",
+    "affiliateUrl": "https://platform.openai.com/docs/guides/speech-to-text",
+    "sponsored": false
+  },
+  "OpenAI Whisper API": {
+    "name": "OpenAI Whisper API",
+    "url": "https://platform.openai.com/docs/guides/speech-to-text",
+    "affiliateUrl": "https://platform.openai.com/docs/guides/speech-to-text",
+    "sponsored": false
+  },
+  "OpenShift": {
+    "name": "OpenShift",
+    "url": "https://www.openshift.com",
+    "affiliateUrl": "https://www.openshift.com",
+    "sponsored": false
+  },
+  "OpenWeather Weather API": {
+    "name": "OpenWeather Weather API",
+    "url": "https://openweathermap.org/api",
+    "affiliateUrl": "https://openweathermap.org/api",
+    "sponsored": false
+  },
+  "Paddle": {
+    "name": "Paddle",
+    "url": "https://www.paddle.com/",
+    "affiliateUrl": "https://www.paddle.com/",
+    "sponsored": false
+  },
+  "PandaDoc": {
+    "name": "PandaDoc",
+    "url": "https://www.pandadoc.com",
+    "affiliateUrl": "https://www.pandadoc.com",
+    "sponsored": false
+  },
+  "PayPal Payments API": {
+    "name": "PayPal Payments API",
+    "url": "https://developer.paypal.com",
+    "affiliateUrl": "https://developer.paypal.com",
+    "sponsored": false
+  },
+  "pCloud": {
+    "name": "pCloud",
+    "url": "https://www.pcloud.com",
+    "affiliateUrl": "https://www.pcloud.com",
+    "sponsored": false
+  },
+  "PDFelement": {
+    "name": "PDFelement",
+    "url": "https://pdf.wondershare.com/",
+    "affiliateUrl": "https://pdf.wondershare.com/",
+    "sponsored": false
+  },
+  "Penpot": {
+    "name": "Penpot",
+    "url": "https://penpot.app",
+    "affiliateUrl": "https://penpot.app",
+    "sponsored": false
   },
   "Pinecone Vector API": {
     "name": "Pinecone Vector API",
@@ -89,10 +1013,118 @@
     "affiliateUrl": "https://www.pinecone.io/",
     "sponsored": false
   },
+  "Pipedream": {
+    "name": "Pipedream",
+    "url": "https://pipedream.com",
+    "affiliateUrl": "https://pipedream.com",
+    "sponsored": false
+  },
+  "Pipedrive": {
+    "name": "Pipedrive",
+    "url": "https://www.pipedrive.com",
+    "affiliateUrl": "https://www.pipedrive.com",
+    "sponsored": false
+  },
+  "Pixelmator": {
+    "name": "Pixelmator",
+    "url": "https://www.pixelmator.com",
+    "affiliateUrl": "https://www.pixelmator.com",
+    "sponsored": false
+  },
+  "Plaid Financial Data API": {
+    "name": "Plaid Financial Data API",
+    "url": "https://plaid.com",
+    "affiliateUrl": "https://plaid.com",
+    "sponsored": false
+  },
+  "Plane": {
+    "name": "Plane",
+    "url": "https://plane.com",
+    "affiliateUrl": "https://plane.com",
+    "sponsored": false
+  },
+  "PlanetScale Database API": {
+    "name": "PlanetScale Database API",
+    "url": "https://planetscale.com",
+    "affiliateUrl": "https://planetscale.com",
+    "sponsored": false
+  },
+  "Plausible": {
+    "name": "Plausible",
+    "url": "https://plausible.io",
+    "affiliateUrl": "https://plausible.io",
+    "sponsored": false
+  },
+  "PlayHT": {
+    "name": "PlayHT",
+    "url": "https://play.ht/",
+    "affiliateUrl": "https://play.ht/",
+    "sponsored": false
+  },
+  "PocketBase": {
+    "name": "PocketBase",
+    "url": "https://pocketbase.io/",
+    "affiliateUrl": "https://pocketbase.io/",
+    "sponsored": false
+  },
+  "Podman": {
+    "name": "Podman",
+    "url": "https://podman.io",
+    "affiliateUrl": "https://podman.io",
+    "sponsored": false
+  },
   "PostHog Analytics API": {
     "name": "PostHog Analytics API",
     "url": "https://posthog.com/",
     "affiliateUrl": "https://posthog.com/",
+    "sponsored": false
+  },
+  "Proton Drive": {
+    "name": "Proton Drive",
+    "url": "https://proton.me/drive",
+    "affiliateUrl": "https://proton.me/drive",
+    "sponsored": false
+  },
+  "Qdrant": {
+    "name": "Qdrant",
+    "url": "https://qdrant.tech/",
+    "affiliateUrl": "https://qdrant.tech/",
+    "sponsored": false
+  },
+  "Qdrant Vector API": {
+    "name": "Qdrant Vector API",
+    "url": "https://qdrant.tech",
+    "affiliateUrl": "https://qdrant.tech",
+    "sponsored": false
+  },
+  "Quip": {
+    "name": "Quip",
+    "url": "https://quip.com",
+    "affiliateUrl": "https://quip.com",
+    "sponsored": false
+  },
+  "Rallly": {
+    "name": "Rallly",
+    "url": "https://rallly.co",
+    "affiliateUrl": "https://rallly.co",
+    "sponsored": false
+  },
+  "Render": {
+    "name": "Render",
+    "url": "https://render.com",
+    "affiliateUrl": "https://render.com",
+    "sponsored": false
+  },
+  "Replicate Model API": {
+    "name": "Replicate Model API",
+    "url": "https://replicate.com",
+    "affiliateUrl": "https://replicate.com",
+    "sponsored": false
+  },
+  "Resemble AI": {
+    "name": "Resemble AI",
+    "url": "https://www.resemble.ai/",
+    "affiliateUrl": "https://www.resemble.ai/",
     "sponsored": false
   },
   "Resend API": {
@@ -107,10 +1139,64 @@
     "affiliateUrl": "https://resend.com/?ref=flowmatrix",
     "sponsored": true
   },
+  "Rocket.Chat": {
+    "name": "Rocket.Chat",
+    "url": "https://rocket.chat",
+    "affiliateUrl": "https://rocket.chat",
+    "sponsored": false
+  },
+  "Salesforce REST API": {
+    "name": "Salesforce REST API",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/",
+    "affiliateUrl": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/",
+    "sponsored": false
+  },
+  "Screen Studio": {
+    "name": "Screen Studio",
+    "url": "https://screenstudioapp.com",
+    "affiliateUrl": "https://screenstudioapp.com",
+    "sponsored": false
+  },
+  "SeaTable": {
+    "name": "SeaTable",
+    "url": "https://seatable.io",
+    "affiliateUrl": "https://seatable.io",
+    "sponsored": false
+  },
+  "SendGrid Email API": {
+    "name": "SendGrid Email API",
+    "url": "https://sendgrid.com",
+    "affiliateUrl": "https://sendgrid.com",
+    "sponsored": false
+  },
+  "Sendinblue Email API": {
+    "name": "Sendinblue Email API",
+    "url": "https://www.sendinblue.com",
+    "affiliateUrl": "https://www.sendinblue.com",
+    "sponsored": false
+  },
+  "Sentry Error API": {
+    "name": "Sentry Error API",
+    "url": "https://sentry.io",
+    "affiliateUrl": "https://sentry.io",
+    "sponsored": false
+  },
   "Shopify Admin API": {
     "name": "Shopify Admin API",
     "url": "https://shopify.dev/docs/api/admin",
     "affiliateUrl": "https://shopify.dev/docs/api/admin",
+    "sponsored": false
+  },
+  "Sketch": {
+    "name": "Sketch",
+    "url": "https://www.sketch.com",
+    "affiliateUrl": "https://www.sketch.com",
+    "sponsored": false
+  },
+  "SketchUp": {
+    "name": "SketchUp",
+    "url": "https://www.sketchup.com",
+    "affiliateUrl": "https://www.sketchup.com",
     "sponsored": false
   },
   "Slack": {
@@ -119,10 +1205,46 @@
     "affiliateUrl": "https://slack.com/",
     "sponsored": false
   },
+  "Slack Web API": {
+    "name": "Slack Web API",
+    "url": "https://api.slack.com/web",
+    "affiliateUrl": "https://api.slack.com/web",
+    "sponsored": false
+  },
+  "Snapchat Spotlight": {
+    "name": "Snapchat Spotlight",
+    "url": "https://www.snapchat.com",
+    "affiliateUrl": "https://www.snapchat.com",
+    "sponsored": false
+  },
+  "SolidWorks": {
+    "name": "SolidWorks",
+    "url": "https://www.solidworks.com",
+    "affiliateUrl": "https://www.solidworks.com",
+    "sponsored": false
+  },
+  "Speechmatics": {
+    "name": "Speechmatics",
+    "url": "https://www.speechmatics.com/",
+    "affiliateUrl": "https://www.speechmatics.com/",
+    "sponsored": false
+  },
+  "Stability AI Image API": {
+    "name": "Stability AI Image API",
+    "url": "https://stability.ai",
+    "affiliateUrl": "https://stability.ai",
+    "sponsored": false
+  },
   "Stripe Payments API": {
     "name": "Stripe Payments API",
     "url": "https://stripe.com/",
     "affiliateUrl": "https://stripe.com/",
+    "sponsored": false
+  },
+  "Sublime Text": {
+    "name": "Sublime Text",
+    "url": "https://www.sublimetext.com",
+    "affiliateUrl": "https://www.sublimetext.com",
     "sponsored": false
   },
   "Supabase": {
@@ -131,16 +1253,202 @@
     "affiliateUrl": "https://supabase.com/?ref=flowmatrix",
     "sponsored": true
   },
+  "Supabase Auth": {
+    "name": "Supabase Auth",
+    "url": "https://supabase.com/auth",
+    "affiliateUrl": "https://supabase.com/auth",
+    "sponsored": false
+  },
+  "Supabase Database API": {
+    "name": "Supabase Database API",
+    "url": "https://supabase.com",
+    "affiliateUrl": "https://supabase.com",
+    "sponsored": false
+  },
+  "Telegram Bot API": {
+    "name": "Telegram Bot API",
+    "url": "https://core.telegram.org/bots/api",
+    "affiliateUrl": "https://core.telegram.org/bots/api",
+    "sponsored": false
+  },
+  "tldraw": {
+    "name": "tldraw",
+    "url": "https://tldraw.com",
+    "affiliateUrl": "https://tldraw.com",
+    "sponsored": false
+  },
+  "Together AI API": {
+    "name": "Together AI API",
+    "url": "https://www.together.ai",
+    "affiliateUrl": "https://www.together.ai",
+    "sponsored": false
+  },
+  "Trello": {
+    "name": "Trello",
+    "url": "https://trello.com",
+    "affiliateUrl": "https://trello.com",
+    "sponsored": false
+  },
+  "Triller": {
+    "name": "Triller",
+    "url": "https://www.triller.co",
+    "affiliateUrl": "https://www.triller.co",
+    "sponsored": false
+  },
+  "Twilio Messaging API": {
+    "name": "Twilio Messaging API",
+    "url": "https://www.twilio.com",
+    "affiliateUrl": "https://www.twilio.com",
+    "sponsored": false
+  },
+  "Twilio Video API": {
+    "name": "Twilio Video API",
+    "url": "https://www.twilio.com",
+    "affiliateUrl": "https://www.twilio.com",
+    "sponsored": false
+  },
+  "Twitch API": {
+    "name": "Twitch API",
+    "url": "https://dev.twitch.tv",
+    "affiliateUrl": "https://dev.twitch.tv",
+    "sponsored": false
+  },
+  "Typesense": {
+    "name": "Typesense",
+    "url": "https://typesense.org/",
+    "affiliateUrl": "https://typesense.org/",
+    "sponsored": false
+  },
+  "Umami": {
+    "name": "Umami",
+    "url": "https://umami.is",
+    "affiliateUrl": "https://umami.is",
+    "sponsored": false
+  },
+  "Upstash Redis API": {
+    "name": "Upstash Redis API",
+    "url": "https://upstash.com",
+    "affiliateUrl": "https://upstash.com",
+    "sponsored": false
+  },
+  "Vercel": {
+    "name": "Vercel",
+    "url": "https://vercel.com",
+    "affiliateUrl": "https://vercel.com",
+    "sponsored": false
+  },
+  "Vercel Blob API": {
+    "name": "Vercel Blob API",
+    "url": "https://vercel.com/docs/storage/vercel-blob",
+    "affiliateUrl": "https://vercel.com/docs/storage/vercel-blob",
+    "sponsored": false
+  },
+  "Vikunja": {
+    "name": "Vikunja",
+    "url": "https://vikunja.io",
+    "affiliateUrl": "https://vikunja.io",
+    "sponsored": false
+  },
+  "Visual Studio Code": {
+    "name": "Visual Studio Code",
+    "url": "https://code.visualstudio.com",
+    "affiliateUrl": "https://code.visualstudio.com",
+    "sponsored": false
+  },
+  "Wave": {
+    "name": "Wave",
+    "url": "https://www.waveapps.com",
+    "affiliateUrl": "https://www.waveapps.com",
+    "sponsored": false
+  },
+  "Weaviate": {
+    "name": "Weaviate",
+    "url": "https://weaviate.io/",
+    "affiliateUrl": "https://weaviate.io/",
+    "sponsored": false
+  },
+  "Weaviate Vector API": {
+    "name": "Weaviate Vector API",
+    "url": "https://weaviate.io",
+    "affiliateUrl": "https://weaviate.io",
+    "sponsored": false
+  },
+  "WooCommerce": {
+    "name": "WooCommerce",
+    "url": "https://woocommerce.com",
+    "affiliateUrl": "https://woocommerce.com",
+    "sponsored": false
+  },
+  "Xero": {
+    "name": "Xero",
+    "url": "https://www.xero.com",
+    "affiliateUrl": "https://www.xero.com",
+    "sponsored": false
+  },
+  "Yelp Fusion API": {
+    "name": "Yelp Fusion API",
+    "url": "https://www.yelp.com/developers",
+    "affiliateUrl": "https://www.yelp.com/developers",
+    "sponsored": false
+  },
+  "YouTrack": {
+    "name": "YouTrack",
+    "url": "https://www.jetbrains.com/youtrack/",
+    "affiliateUrl": "https://www.jetbrains.com/youtrack/",
+    "sponsored": false
+  },
+  "YouTube Shorts": {
+    "name": "YouTube Shorts",
+    "url": "https://www.youtube.com",
+    "affiliateUrl": "https://www.youtube.com",
+    "sponsored": false
+  },
+  "Zammad": {
+    "name": "Zammad",
+    "url": "https://zammad.com",
+    "affiliateUrl": "https://zammad.com",
+    "sponsored": false
+  },
+  "Zcal": {
+    "name": "Zcal",
+    "url": "https://zcal.co",
+    "affiliateUrl": "https://zcal.co",
+    "sponsored": false
+  },
   "Zendesk Alternatives": {
     "name": "Zendesk Alternatives",
     "url": "https://www.zendesk.com/",
     "affiliateUrl": "https://www.zendesk.com/",
     "sponsored": false
   },
-  "n8n": {
-    "name": "n8n",
-    "url": "https://n8n.io/",
-    "affiliateUrl": "https://n8n.io/?ref=flowmatrix",
-    "sponsored": true
+  "Zendesk Support API": {
+    "name": "Zendesk Support API",
+    "url": "https://developer.zendesk.com/api-reference/ticketing/tickets/tickets/",
+    "affiliateUrl": "https://developer.zendesk.com/api-reference/ticketing/tickets/tickets/",
+    "sponsored": false
+  },
+  "Zoho Books": {
+    "name": "Zoho Books",
+    "url": "https://www.zoho.com/books",
+    "affiliateUrl": "https://www.zoho.com/books",
+    "sponsored": false
+  },
+  "Zoho CRM": {
+    "name": "Zoho CRM",
+    "url": "https://www.zoho.com/crm/",
+    "affiliateUrl": "https://www.zoho.com/crm/",
+    "sponsored": false
+  },
+  "Zoho Sheet": {
+    "name": "Zoho Sheet",
+    "url": "https://www.zoho.com/sheet/",
+    "affiliateUrl": "https://www.zoho.com/sheet/",
+    "sponsored": false
+  },
+  "Zoom": {
+    "name": "Zoom",
+    "url": "https://zoom.us",
+    "affiliateUrl": "https://zoom.us",
+    "sponsored": false
   }
 }

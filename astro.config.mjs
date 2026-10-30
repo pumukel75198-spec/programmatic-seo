@@ -34,7 +34,8 @@ export default defineConfig({
 
   integrations: [
     sitemap({
-      filter: (page) => !page.includes('/404'),
+      filter: (page) =>
+        !page.includes('/404') && page !== 'https://flowmatrix.dev/',
       // Non-localized pages (e.g. /insights/*) exist only once. Do not emit
       // /de/... alternates for them in the sitemap, otherwise crawlers see
       // hreflang targets that 404.

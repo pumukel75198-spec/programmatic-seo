@@ -254,22 +254,23 @@ Gib ausschließlich gültiges JSON in exakt diesem Schema zurück:
 {
   "alternatives": [
     {
-      "name": "Exakter Tool-Name wie oben",
-      "description": "Ein bis zwei sachliche Sätze auf Deutsch (max. 220 Zeichen).",
-      "pros": ["Vorteil 1", "Vorteil 2", "Vorteil 3"],
-      "cons": ["Nachteil 1", "Nachteil 2"],
-      "bestFor": "Kurze Zielgruppen-/Einsatzbeschreibung auf Deutsch (max. 120 Zeichen).",
-      "url": "https://offizielle-website.example"
+      "name": "Exact tool name as listed above",
+      "description": "One or two factual sentences in English (max. 220 characters).",
+      "pros": ["Advantage 1", "Advantage 2", "Advantage 3"],
+      "cons": ["Drawback 1", "Drawback 2"],
+      "bestFor": "Short target-audience description in English (max. 120 characters).",
+      "url": "https://official-website.example"
     }
   ]
 }
 
-Regeln:
-- Verwende für jedes genannte Tool genau einen Eintrag und behalte den Namen exakt bei.
-- "pros" und "cons" enthalten je 2–4 kurze, konkrete Punkte.
-- "url" ist die offizielle Website des Tools (keine Affiliate- oder Tracking-Links).
-- Keine Erfindungen: Wenn du eine URL nicht sicher kennst, nutze die offizielle Domain des Herstellers.
-- Keine Markdown-Codefences, kein erklärender Text außerhalb des JSON.`;
+Rules:
+- All generated text (description, pros, cons, bestFor) must be in English. No German words, no umlauts, no ß.
+- Use exactly one entry per listed tool and keep the tool name exactly as given.
+- "pros" and "cons" contain 2–4 short, concrete points each.
+- "url" is the official website of the tool (no affiliate or tracking links).
+- Do not invent facts: if you are unsure about a URL, use the manufacturer's official domain.
+- No Markdown code fences, no explanatory text outside the JSON.`;
 }
 
 async function callOpenRouter({
