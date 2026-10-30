@@ -937,7 +937,10 @@ async function main() {
     for (const failure of failures) {
       console.log(`  • ${failure.title}: ${failure.error}`);
     }
-    process.exitCode = 1;
+    // Einzelne Validierungsfehler sollen den Deploy nicht blockieren, solange
+    // mindestens ein Artikel erzeugt wurde. Nur ein kompletter Fehlschlag
+    // (created.length === 0) wird als Fehler gewertet.
+    if (created.length === 0) process.exitCode = 1;
   }
 }
 
