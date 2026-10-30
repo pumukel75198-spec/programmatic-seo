@@ -5,11 +5,11 @@ import DetailBox from "../../../components/DetailBox.astro";
 import CTA from "../../../components/CTA.astro";
 import Badge from "../../../components/Badge.astro";
 import PremiumDownload from "../../../components/PremiumDownload.astro";
-import { workflows, getRelated } from "../../../lib/content";
+import { apis, alternatives, workflows, getRelated, getRelatedByTags } from "../../../lib/content";
 import { breadcrumbSchema, howToSchema } from "../../../lib/schema";
 import { languages } from "../../../i18n/ui";
 import { getLocale, localizedPath, t } from "../../../i18n/utils";
-import { localizeWorkflow } from "../../../i18n/content";
+import { localizeWorkflow, localizeApi, localizeAlternative } from "../../../i18n/content";
 
 export function getStaticPaths() {
   return languages.flatMap((lang) =>
@@ -25,6 +25,14 @@ const workflow = localizeWorkflow(Astro.props.workflow, lang);
 const related = getRelated(workflows, workflow.slug).map((item) =>
   localizeWorkflow(item, lang)
 );
+const relatedApis = getRelatedByTags(apis, Astro.props.workflow, 3).map((item) =>
+  localizeApi(item, lang)
+);
+const relatedAlternatives = getRelatedByTags(
+  alternatives,
+  Astro.props.workflow,
+  3
+).map((item) => localizeAlternative(item, lang));
 
 const pageTitle = `${workflow.title} – ${workflow.category}`;
 const pageDescription = workflow.description;
@@ -101,6 +109,50 @@ const jsonLd = [
         ctaLabel="Request sponsorship"
         ctaHref="mailto:sponsoring@flowmatrix.dev"
       />
+
+      <!-- Related APIs -->
+      {
+        relatedApis.length > 0 && (
+          <section class="mt-12 border-t border-white/5 pt-10">
+            <h2 class="text-xl font-semibold text-white sm:text-2xl">Related APIs</h2>
+            <div class="mt-6 grid gap-4 sm:grid-cols-3">
+              {relatedApis.map((item) => (
+                <a
+                  href={localizedPath(lang, `/apis/${item.slug}`)}
+                  class="group card-hover rounded-xl border border-white/10 bg-surface/50 p-5"
+                >
+                  <p class="text-sm font-semibold text-white group-hover:text-brand-300">
+                    {item.title}
+                  </p>
+                  <p class="mt-1 text-xs text-slate-500">{item.category}</p>
+                </a>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      <!-- Related alternatives -->
+      {
+        relatedAlternatives.length > 0 && (
+          <section class="mt-12 border-t border-white/5 pt-10">
+            <h2 class="text-xl font-semibold text-white sm:text-2xl">Related alternatives</h2>
+            <div class="mt-6 grid gap-4 sm:grid-cols-3">
+              {relatedAlternatives.map((item) => (
+                <a
+                  href={localizedPath(lang, `/alternatives/${item.slug}`)}
+                  class="group card-hover rounded-xl border border-white/10 bg-surface/50 p-5"
+                >
+                  <p class="text-sm font-semibold text-white group-hover:text-cyan-300">
+                    {item.title}
+                  </p>
+                  <p class="mt-1 text-xs text-slate-500">{item.category}</p>
+                </a>
+              ))}
+            </div>
+          </section>
+        )
+      }
 
       <!-- Related workflows -->
       {

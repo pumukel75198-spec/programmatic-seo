@@ -4,7 +4,7 @@ import Breadcrumb from "../../../components/Breadcrumb.astro";
 import DetailBox from "../../../components/DetailBox.astro";
 import CTA from "../../../components/CTA.astro";
 import Badge from "../../../components/Badge.astro";
-import { apis, getRelated } from "../../../lib/content";
+import { apis, workflows, getRelated, getRelatedByTags } from "../../../lib/content";
 import {
   breadcrumbSchema,
   softwareApplicationSchema,
@@ -12,7 +12,7 @@ import {
 import { getToolLink } from "../../../lib/tools";
 import { languages } from "../../../i18n/ui";
 import { getLocale, localizedPath, t } from "../../../i18n/utils";
-import { localizeApi } from "../../../i18n/content";
+import { localizeApi, localizeWorkflow } from "../../../i18n/content";
 
 export function getStaticPaths() {
   return languages.flatMap((lang) =>
@@ -27,6 +27,9 @@ const lang = getLocale(Astro.props.lang);
 const api = localizeApi(Astro.props.api, lang);
 const related = getRelated(apis, api.slug).map((item) =>
   localizeApi(item, lang)
+);
+const relatedWorkflows = getRelatedByTags(workflows, Astro.props.api, 3).map(
+  (item) => localizeWorkflow(item, lang)
 );
 
 const pageTitle = `${api.title} – ${api.category}`;
@@ -246,6 +249,28 @@ const jsonLd = [
         ctaLabel="Request sponsorship"
         ctaHref="mailto:sponsoring@flowmatrix.dev"
       />
+
+      <!-- Related workflows -->
+      {
+        relatedWorkflows.length > 0 && (
+          <section class="mt-12 border-t border-white/5 pt-10">
+            <h2 class="text-xl font-semibold text-white sm:text-2xl">Related workflows</h2>
+            <div class="mt-6 grid gap-4 sm:grid-cols-3">
+              {relatedWorkflows.map((item) => (
+                <a
+                  href={localizedPath(lang, `/workflows/${item.slug}`)}
+                  class="group card-hover rounded-xl border border-white/10 bg-surface/50 p-5"
+                >
+                  <p class="text-sm font-semibold text-white group-hover:text-emerald-300">
+                    {item.title}
+                  </p>
+                  <p class="mt-1 text-xs text-slate-500">{item.category}</p>
+                </a>
+              ))}
+            </div>
+          </section>
+        )
+      }
 
       <!-- Related APIs -->
       {

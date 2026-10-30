@@ -1,27 +1,77 @@
 [
   {
-    "name": "TechCrunch",
-    "url": "https://techcrunch.com/feed/",
-    "category": "Startups & Tech"
+    "name": "Zapier Blog",
+    "url": "https://zapier.com/blog/feeds/latest/",
+    "category": "Automation"
   },
   {
-    "name": "The Verge – AI",
-    "url": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-    "category": "AI"
+    "name": "n8n Blog",
+    "url": "https://n8n.io/blog/rss/",
+    "category": "Automation"
   },
   {
-    "name": "Hacker News",
-    "url": "https://hnrss.org/frontpage",
-    "category": "Development"
+    "name": "Postman Blog",
+    "url": "https://blog.postman.com/feed/",
+    "category": "APIs"
+  },
+  {
+    "name": "Nordic APIs",
+    "url": "https://nordicapis.com/feed/",
+    "category": "APIs"
+  },
+  {
+    "name": "Search Engine Journal",
+    "url": "https://www.searchenginejournal.com/feed/",
+    "category": "SEO"
+  },
+  {
+    "name": "Ahrefs Blog",
+    "url": "https://ahrefs.com/blog/feed/",
+    "category": "SEO"
+  },
+  {
+    "name": "Google Search Central",
+    "url": "https://developers.google.com/search/blog/feed.xml",
+    "category": "SEO"
+  },
+  {
+    "name": "HubSpot Marketing",
+    "url": "https://blog.hubspot.com/marketing/rss.xml",
+    "category": "Marketing Automation"
+  },
+  {
+    "name": "Cloudflare Blog",
+    "url": "https://blog.cloudflare.com/rss/",
+    "category": "Infrastructure & APIs"
+  },
+  {
+    "name": "Vercel Blog",
+    "url": "https://vercel.com/atom",
+    "category": "Developer Platforms"
+  },
+  {
+    "name": "Supabase Blog",
+    "url": "https://supabase.com/rss.xml",
+    "category": "Developer Platforms"
+  },
+  {
+    "name": "Stripe Blog",
+    "url": "https://stripe.com/blog/feed.rss",
+    "category": "Payments & APIs"
+  },
+  {
+    "name": "Product Hunt",
+    "url": "https://www.producthunt.com/feed",
+    "category": "SaaS Products"
+  },
+  {
+    "name": "SaaS Mag",
+    "url": "https://www.saasmag.com/feed/",
+    "category": "SaaS"
   },
   {
     "name": "Smashing Magazine",
     "url": "https://www.smashingmagazine.com/feed/",
-    "category": "Web Development"
-  },
-  {
-    "name": "CSS-Tricks",
-    "url": "https://css-tricks.com/feed/",
     "category": "Web Development"
   },
   {

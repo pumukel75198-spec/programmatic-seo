@@ -37,7 +37,11 @@ const jsonLd = {
   dateModified: insight.updatedAt ?? insight.publishedAt,
   url: new URL(`/insights/${insight.slug}/`, site.url).toString(),
   inLanguage: "en",
-  author: { "@type": "Organization", name: site.name },
+  author: {
+    "@type": "Person",
+    name: "Thorsten Riedel",
+    url: new URL("/en/author/", site.url).toString(),
+  },
   publisher: { "@type": "Organization", name: site.name },
   isBasedOn: insight.source.url,
 };
@@ -79,6 +83,13 @@ const jsonLd = {
           <time datetime={insight.publishedAt}>{formatDate(insight.publishedAt)}</time>
           <span aria-hidden="true">·</span>
           <span>Source: {insight.source.name}</span>
+          <span aria-hidden="true">·</span>
+          <span>
+            By{" "}
+            <a href="/en/author" class="text-brand-300 underline-offset-4 hover:underline">
+              Thorsten Riedel
+            </a>
+          </span>
         </div>
       </div>
     </header>

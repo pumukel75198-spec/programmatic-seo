@@ -117,3 +117,32 @@ export function getRelated<T extends { slug: string }>(
 ): T[] {
   return items.filter((item) => item.slug !== slug).slice(0, limit);
 }
+
+/**
+ * Cross-category related entries based on shared tags and category.
+ * Used to link APIs ↔ alternatives ↔ workflows to each other.
+ */
+export function getRelatedByTags<
+  T extends { slug: string; tags: string[]; category: string }
+>(
+  items: T[],
+  current: { slug: string; tags: string[]; category: string },
+  limit = 3
+): T[] {
+  const tags = new Set((current.tags ?? []).map((tag) => tag.toLowerCase()));
+
+  return items
+    .filter((item) => item.slug !== current.slug)
+    .map((item) => {
+      const shared = (item.tags ?? []).filter((tag) =>
+        tags.has(tag.toLowerCase())
+      ).length;
+      const sameCategory =
+        item.category.toLowerCase() === current.category.toLowerCase() ? 1 : 0;
+      return { item, score: shared * 2 + sameCategory };
+    })
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map(({ item }) => item);
+}
