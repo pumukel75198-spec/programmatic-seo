@@ -62,6 +62,9 @@ const API_KEY = process.env.OPENROUTER_API_KEY;
 
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
+/** Anzahl der dauerhaft angezeigten Insights (Rolling Window). */
+const MAX_INSIGHTS = 6;
+
 const c = {
   reset: "\x1b[0m",
   bold: "\x1b[1m",
@@ -86,10 +89,12 @@ function parseArgs(argv) {
     lang: "en",
     concurrency: 2,
     help: false,
+    selfTest: false,
   };
 
   for (const arg of argv) {
     if (arg === "--dry-run") opts.dryRun = true;
+    else if (arg === "--self-test") opts.selfTest = true;
     else if (arg === "--help" || arg === "-h") opts.help = true;
     else if (arg.startsWith("--limit=")) opts.limit = Number(arg.slice(8));
     else if (arg.startsWith("--feed=")) opts.feed = arg.slice(7);
@@ -330,8 +335,8 @@ ${workflowList}
 
 AUFGABE
 1. Analysiere das Thema und schreibe einen originellen Artikel (ca. 600–900 Wörter). Kein Copy-Paste, keine bloße Zusammenfassung. Erkläre Hintergründe, ordne das Thema ein und gib konkrete, umsetzbare Erkenntnisse.
-2. Wähle GENAU EINEN thematisch passenden Workflow aus der Liste oben. Wenn keiner passt, setze "relatedWorkflowSlug" auf null.
-3. Baue – falls ein Workflow passt – einen natürlichen, kontextbezogenen internen Link im Markdown ein: [Titel des Workflows](/en/workflows/SLUG). Der Link muss inhaltlich Sinn ergeben, nicht nur angehängt wirken.
+2. Prüfe, ob GENAU EIN Workflow aus der Liste thematisch WIRKLICH passt. Ein Workflow passt nur, wenn das Thema des Artikels inhaltlich klar zu Titel, Tags oder Beschreibung des Workflows gehört. Im Zweifel setzt du "relatedWorkflowSlug" auf null. Weise NIEMALS willkürlich einen Workflow zu – lieber kein Link als ein falscher.
+3. Wenn ein Workflow wirklich passt, baue einen natürlichen, kontextbezogenen internen Link im Markdown ein: [Titel des Workflows](/en/workflows/SLUG). Wenn keiner passt, baue KEINEN Workflow-Link ein.
 4. Nutze Markdown mit einer H2-Gliederung (3–5 Abschnitte), kurzen Absätzen und ggf. einer Liste. Keine H1 (der Titel wird separat gerendert).
 
 Antworte ausschließlich mit gültigem JSON in exakt diesem Schema:
@@ -343,12 +348,14 @@ Antworte ausschließlich mit gültigem JSON in exakt diesem Schema:
   "category": "Kurze Kategorie",
   "tags": ["tag1", "tag2", "tag3"],
   "relatedWorkflowSlug": "slug-aus-der-liste-oder-null",
-  "relatedWorkflowReason": "Ein Satz, warum dieser Workflow passt (oder leer)"
+  "relatedWorkflowReason": "Ein Satz, warum dieser Workflow wirklich passt (oder leer)",
+  "relatedWorkflowEvidence": ["begriff1", "begriff2"]
 }
 
 Regeln:
 - "slug" nur aus Kleinbuchstaben, Zahlen und Bindestrichen.
 - "tags" enthält 3–5 kurze Schlagworte.
+- "relatedWorkflowEvidence" enthält 1–3 konkrete Begriffe, die SOWOHL im Artikel ALS AUCH im gewählten Workflow (Titel/Tags/Beschreibung) vorkommen. Bei "relatedWorkflowSlug": null ist es ein leeres Array.
 - Keine Markdown-Codefences um das JSON, kein Text außerhalb des JSON.`;
 }
 
@@ -486,11 +493,18 @@ function validateArticle(article, workflows, existingSlugs) {
     relatedWorkflowSlug = null;
   }
 
+  const relatedWorkflowEvidence = Array.isArray(article.relatedWorkflowEvidence)
+    ? article.relatedWorkflowEvidence
+        .map((term) => String(term ?? "").trim())
+        .filter(Boolean)
+    : [];
+
   return {
     ok: errors.length === 0,
     errors,
     slug,
     relatedWorkflowSlug: relatedWorkflowSlug ?? null,
+    relatedWorkflowEvidence,
   };
 }
 
@@ -501,6 +515,32 @@ const STOPWORDS = new Set([
   "einen", "dem", "den", "des", "ist", "sind", "wird", "werden", "wie", "was",
 ]);
 
+/**
+ * Sehr allgemeine Begriffe, die allein keinen inhaltlichen Match belegen.
+ * Sie werden bei der Workflow-Verifikation nicht als Beleg gewertet.
+ */
+const GENERIC_TERMS = new Set([
+  "ai", "api", "apis", "app", "apps", "application", "applications",
+  "data", "tool", "tools", "service", "services", "platform", "platforms",
+  "system", "systems", "business", "businesses", "company", "companies",
+  "technology", "technologies", "tech", "digital", "online", "software",
+  "developer", "developers", "development", "user", "users", "product",
+  "products", "market", "markets", "solution", "solutions", "process",
+  "processes", "management", "analysis", "strategy", "strategies", "growth",
+  "performance", "quality", "security", "cloud", "server", "servers",
+  "network", "networks", "database", "databases", "model", "models",
+  "llm", "gpt", "new", "news", "report", "reports", "study", "studies",
+  "research", "article", "articles", "post", "posts", "blog", "blogs",
+  "world", "global", "international", "million", "billion", "year", "years",
+  "day", "days", "time", "times", "people", "person", "way", "ways",
+  "thing", "things", "make", "makes", "made", "use", "uses", "used",
+  "using", "get", "gets", "got", "need", "needs", "want", "wants",
+  "like", "just", "now", "today", "week", "month", "customer", "support",
+  "content", "email", "automation", "workflow", "workflows", "monitoring",
+  "pipeline", "integration", "integrations", "analytics", "marketing",
+  "sales", "lead", "leads",
+]);
+
 function tokenize(text) {
   return String(text ?? "")
     .toLowerCase()
@@ -509,49 +549,79 @@ function tokenize(text) {
 }
 
 /**
- * Deterministischer Fallback-Matcher: bewertet Workflows anhand von
- * Tag-, Titel-, Kategorie- und Beschreibungs-Überschneidungen. Wird nur
- * genutzt, wenn das LLM keinen (gültigen) Workflow ausgewählt hat.
+ * Strikte, deterministische Verifikation einer Workflow-Zuordnung.
+ *
+ * Ein Workflow wird nur akzeptiert, wenn
+ *   1. mindestens ein vom LLM genanntes Beleg-Wort (Evidence) sowohl im
+ *      Artikel als auch im Workflow (Titel/Tags/Beschreibung) vorkommt, UND
+ *   2. zusätzlich eine echte inhaltliche Überschneidung existiert
+ *      (gemeinsamer Tag ODER mindestens zwei gemeinsame Schlüsselwörter).
+ *
+ * Dadurch werden willkürliche bzw. halluzinierte Zuordnungen ausgeschlossen.
  */
-function matchWorkflowByKeywords(article, workflows) {
-  const tokens = new Set(
-    tokenize(
-      [
-        article.title,
-        article.excerpt,
-        article.category,
-        ...(Array.isArray(article.tags) ? article.tags : []),
-        article.content,
-      ].join(" ")
+function isStrongWorkflowMatch(article, workflow, evidence) {
+  if (!workflow) return false;
+
+  const articleText = String(
+    [
+      article.title,
+      article.excerpt,
+      ...(Array.isArray(article.tags) ? article.tags : []),
+      article.content,
+    ].join(" ")
+  ).toLowerCase();
+
+  const workflowText = String(
+    [
+      workflow.title,
+      workflow.category,
+      ...(workflow.tags ?? []),
+      workflow.description,
+    ].join(" ")
+  ).toLowerCase();
+
+  const validEvidence = (Array.isArray(evidence) ? evidence : [])
+    .map((term) => String(term ?? "").trim().toLowerCase())
+    .filter(
+      (term) =>
+        term.length >= 4 &&
+        !STOPWORDS.has(term) &&
+        !GENERIC_TERMS.has(term)
+    )
+    .filter((term) => articleText.includes(term) && workflowText.includes(term));
+
+  if (validEvidence.length === 0) return false;
+
+  const articleTags = new Set(
+    (Array.isArray(article.tags) ? article.tags : []).map((tag) =>
+      String(tag ?? "").trim().toLowerCase()
     )
   );
+  const tagOverlap = (workflow.tags ?? []).some((tag) => {
+    const normalized = String(tag ?? "").trim().toLowerCase();
+    return normalized.length >= 4 && !GENERIC_TERMS.has(normalized) && articleTags.has(normalized);
+  });
 
-  let best = null;
-  let bestScore = 0;
-
-  for (const workflow of workflows) {
-    let score = 0;
-
-    for (const tag of workflow.tags ?? []) {
-      if (tokens.has(String(tag).toLowerCase())) score += 3;
-    }
-    for (const word of tokenize(workflow.title)) {
-      if (tokens.has(word)) score += 2;
-    }
-    for (const word of tokenize(workflow.category)) {
-      if (tokens.has(word)) score += 1;
-    }
-    for (const word of tokenize(workflow.description)) {
-      if (tokens.has(word)) score += 1;
-    }
-
-    if (score > bestScore) {
-      bestScore = score;
-      best = workflow;
-    }
+  const articleTokens = new Set(tokenize(articleText));
+  const workflowKeyTokens = new Set([
+    ...tokenize(workflow.title),
+    ...(workflow.tags ?? []).flatMap((tag) => tokenize(tag)),
+  ]);
+  let keywordOverlap = 0;
+  for (const token of workflowKeyTokens) {
+    if (GENERIC_TERMS.has(token)) continue;
+    if (articleTokens.has(token)) keywordOverlap += 1;
   }
 
-  return bestScore >= 4 ? best : null;
+  return tagOverlap || keywordOverlap >= 2;
+}
+
+/** Entfernt alle internen Workflow-Links aus dem Markdown. */
+function stripWorkflowLinks(content) {
+  return String(content ?? "")
+    .replace(/\[([^\]]+)\]\([^)]*\/workflows\/[^)]*\)/gi, "$1")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
 }
 
 /**
@@ -578,73 +648,62 @@ function ensureWorkflowLink(content, workflow, lang) {
 }
 
 // ---------------------------------------------------------------------------
-// 6er-Garantie: Workflow-basierte Evergreen-Themen
+// Selbsttest der strikten Workflow-Verifikation
 // ---------------------------------------------------------------------------
 
-const FALLBACK_ANGLES = [
-  "A practical implementation guide",
-  "Common pitfalls and how to avoid them",
-  "Tooling and API choices",
-  "Scaling and reliability",
-  "Automation best practices",
-  "A step-by-step playbook",
-];
+function runSelfTest() {
+  const workflows = [
+    {
+      slug: "automated-code-review",
+      title: "Automated Code Review",
+      category: "Engineering",
+      tags: ["code-review", "ci-cd"],
+      description: "Automate code review with AI.",
+    },
+    {
+      slug: "customer-support-chatbot",
+      title: "Customer Support Chatbot",
+      category: "Support",
+      tags: ["chatbot", "support"],
+      description: "Build a support chatbot.",
+    },
+  ];
 
-/**
- * Erzeugt synthetische "Feed-Items" aus vorhandenen Workflows, damit pro Lauf
- * immer genügend Artikel entstehen. Die Artikel verlinken garantiert auf einen
- * existierenden Workflow.
- */
-function buildFallbackItems({ count, insights, workflows, existingSlugs, slotKey }) {
-  if (count <= 0 || workflows.length === 0) return [];
+  const related = {
+    title: "Cisco uses AI to rewrite legacy code",
+    excerpt: "Engineers automate code review and refactoring.",
+    tags: ["code-review", "refactoring"],
+    content: "This article covers automated code review and CI/CD pipelines.",
+  };
 
-  const usage = new Map();
-  for (const insight of insights) {
-    const slug = insight?.relatedWorkflow?.slug;
-    if (slug) usage.set(slug, (usage.get(slug) ?? 0) + 1);
+  const unrelated = {
+    title: "Candy corn is made of bug secretions",
+    excerpt: "A curious food fact.",
+    tags: ["food", "candy"],
+    content: "Candy corn contains shellac from insects.",
+  };
+
+  const cases = [
+    ["related + valid evidence", related, workflows[0], ["code review"], true],
+    ["related + no evidence", related, workflows[0], [], false],
+    ["unrelated + hallucinated evidence", unrelated, workflows[1], ["customer", "support"], false],
+    ["unrelated + generic evidence", unrelated, workflows[1], ["data"], false],
+  ];
+
+  let failed = 0;
+  for (const [name, article, workflow, evidence, expected] of cases) {
+    const actual = isStrongWorkflowMatch(article, workflow, evidence);
+    const ok = actual === expected;
+    if (!ok) failed += 1;
+    console.log(`${ok ? "✓" : "✖"} ${name}: erwartet ${expected}, erhalten ${actual}`);
   }
 
-  const ordered = [...workflows].sort(
-    (a, b) => (usage.get(a.slug) ?? 0) - (usage.get(b.slug) ?? 0)
-  );
-
-  const items = [];
-  let attempts = 0;
-  const maxAttempts = count * FALLBACK_ANGLES.length * 2;
-
-  while (items.length < count && attempts < maxAttempts) {
-    const workflow = ordered[attempts % ordered.length];
-    const angle = FALLBACK_ANGLES[attempts % FALLBACK_ANGLES.length];
-    attempts += 1;
-
-    const title = `${workflow.title}: ${angle}`;
-    const predictedSlug = slugify(title);
-    if (existingSlugs.has(predictedSlug)) continue;
-
-    const steps = Array.isArray(workflow.details?.steps)
-      ? workflow.details.steps
-          .map((step) =>
-            typeof step === "string"
-              ? step
-              : step?.title ?? step?.description ?? ""
-          )
-          .filter(Boolean)
-          .join(" ")
-      : "";
-
-    items.push({
-      title,
-      url: `https://flowmatrix.dev/en/workflows/${workflow.slug}`,
-      summary: `${workflow.description ?? ""} ${steps}`.trim(),
-      publishedAt: new Date().toISOString(),
-      guid: `workflow:${workflow.slug}:${slotKey}:${items.length}`,
-      feed: "FlowMatrix Editorial",
-      category: workflow.category,
-      workflowSlug: workflow.slug,
-    });
+  if (failed > 0) {
+    console.error(`${c.red}${failed} Selbsttest(s) fehlgeschlagen.${c.reset}`);
+    process.exitCode = 1;
+  } else {
+    console.log(`${c.green}Alle Selbsttests bestanden.${c.reset}`);
   }
-
-  return items;
 }
 
 // ---------------------------------------------------------------------------
@@ -656,6 +715,11 @@ async function main() {
 
   if (opts.help) {
     printHelp();
+    return;
+  }
+
+  if (opts.selfTest) {
+    runSelfTest();
     return;
   }
 
@@ -740,24 +804,6 @@ async function main() {
 
   const selected = candidates.slice(0, opts.limit);
 
-  // 6er-Garantie: fehlende Slots mit Workflow-basierten Evergreen-Themen füllen.
-  const slotKey = new Date().toISOString().slice(0, 13);
-  if (selected.length < opts.limit) {
-    const fallback = buildFallbackItems({
-      count: opts.limit - selected.length,
-      insights,
-      workflows,
-      existingSlugs: new Set(insights.map((insight) => insight.slug)),
-      slotKey,
-    });
-    if (fallback.length > 0) {
-      console.log(
-        `  ${c.cyan}↳${c.reset} 6er-Garantie: ${fallback.length} Workflow-Themen ergänzt`
-      );
-      selected.push(...fallback);
-    }
-  }
-
   console.log(
     `\n  Neue Kandidaten: ${c.bold}${candidates.length}${c.reset} · ausgewählt: ${c.bold}${selected.length}${c.reset}`
   );
@@ -813,24 +859,30 @@ async function main() {
             ? workflows.find((entry) => entry.slug === validation.relatedWorkflowSlug)
             : null;
 
-          // Deterministischer Fallback, falls das LLM keinen Workflow gewählt hat.
-          if (!workflow) {
-            const matched = matchWorkflowByKeywords(article, workflows);
-            if (matched) {
-              workflow = matched;
-              console.log(
-                `  ${c.cyan}↳${c.reset} Keyword-Match: ${matched.title}`
-              );
-            }
+          // Strikte Verifikation: Workflow nur übernehmen, wenn der vom LLM
+          // genannte Beleg (Evidence) in Artikel UND Workflow nachweisbar ist.
+          // Sonst wird die Zuordnung verworfen – lieber kein Link als ein
+          // falscher. Es gibt bewusst KEINEN willkürlichen Keyword-Fallback.
+          if (
+            workflow &&
+            !isStrongWorkflowMatch(
+              article,
+              workflow,
+              validation.relatedWorkflowEvidence
+            )
+          ) {
+            console.log(
+              `  ${c.yellow}↳${c.reset} Workflow "${workflow.title}" verworfen (kein belastbarer Match)`
+            );
+            workflow = null;
           }
 
-          // Bei Workflow-Fallback-Items den vorgegebenen Workflow bevorzugen.
-          if (!workflow && item.workflowSlug) {
-            workflow =
-              workflows.find((entry) => entry.slug === item.workflowSlug) ?? null;
+          let content = article.content;
+          if (workflow) {
+            content = ensureWorkflowLink(content, workflow, opts.lang);
+          } else {
+            content = stripWorkflowLinks(content);
           }
-
-          const content = ensureWorkflowLink(article.content, workflow, opts.lang);
 
           const insight = {
             slug: validation.slug,
@@ -889,25 +941,6 @@ async function main() {
   created.push(...firstPass.created);
   failures.push(...firstPass.failures);
 
-  // 6er-Garantie: Falls Artikel fehlschlugen, mit weiteren Workflow-Themen auffüllen.
-  if (created.length < opts.limit) {
-    const extra = buildFallbackItems({
-      count: opts.limit - created.length,
-      insights: [...insights, ...created],
-      workflows,
-      existingSlugs,
-      slotKey: `${slotKey}-retry`,
-    });
-    if (extra.length > 0) {
-      console.log(
-        `\n${c.cyan}↳${c.reset} 6er-Garantie: ${extra.length} weitere Workflow-Themen werden erzeugt`
-      );
-      const secondPass = await generateForItems(extra);
-      created.push(...secondPass.created);
-      failures.push(...secondPass.failures);
-    }
-  }
-
   if (created.length === 0) {
     console.log(
       `\n${c.yellow}${c.bold}Keine Artikel erzeugt – Datei bleibt unverändert.${c.reset}`
@@ -916,10 +949,21 @@ async function main() {
     return;
   }
 
-  // 3. Atomar speichern (neueste zuerst)
-  const merged = [...insights, ...created].sort(
-    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-  );
+  // 3. Rolling Window: Neue Artikel haben immer Vorrang und ersetzen die
+  // ältesten bestehenden. Reichen die neuen nicht für MAX_INSIGHTS, bleiben
+  // die neuesten bestehenden Artikel erhalten.
+  const byDateDesc = (a, b) =>
+    new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+  const seenSlugs = new Set();
+  const merged = [...created]
+    .sort(byDateDesc)
+    .concat([...insights].sort(byDateDesc))
+    .filter((insight) => {
+      if (seenSlugs.has(insight.slug)) return false;
+      seenSlugs.add(insight.slug);
+      return true;
+    })
+    .slice(0, MAX_INSIGHTS);
 
   const tmpFile = `${insightsFile}.tmp`;
   await writeFile(tmpFile, `${JSON.stringify(merged, null, 2)}\n`, "utf8");
