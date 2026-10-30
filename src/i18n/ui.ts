@@ -13,19 +13,11 @@ export interface Language {
   name: string;
 }
 
+// Active locales. Additional translations may exist below, but only these
+// locales are built and exposed in the language switcher.
 export const languages: Language[] = [
   { code: "en", country: "GB", flag: "🇬🇧", name: "English" },
   { code: "de", country: "DE", flag: "🇩🇪", name: "Deutsch" },
-  { code: "fr", country: "FR", flag: "🇫🇷", name: "Français" },
-  { code: "es", country: "ES", flag: "🇪🇸", name: "Español" },
-  { code: "it", country: "IT", flag: "🇮🇹", name: "Italiano" },
-  { code: "pt", country: "PT", flag: "🇵🇹", name: "Português" },
-  { code: "nl", country: "NL", flag: "🇳🇱", name: "Nederlands" },
-  { code: "pl", country: "PL", flag: "🇵🇱", name: "Polski" },
-  { code: "sv", country: "SE", flag: "🇸🇪", name: "Svenska" },
-  { code: "tr", country: "TR", flag: "🇹🇷", name: "Türkçe" },
-  { code: "ja", country: "JP", flag: "🇯🇵", name: "日本語" },
-  { code: "zh", country: "CN", flag: "🇨🇳", name: "中文" },
 ];
 
 export type TranslationKey =

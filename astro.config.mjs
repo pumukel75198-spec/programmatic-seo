@@ -4,20 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 /** @type {string[]} */
-const locales = [
-  'en',
-  'de',
-  'fr',
-  'es',
-  'it',
-  'pt',
-  'nl',
-  'pl',
-  'sv',
-  'tr',
-  'ja',
-  'zh',
-];
+const locales = ['en', 'de'];
 
 // https://astro.build/config
 export default defineConfig({
@@ -53,16 +40,6 @@ export default defineConfig({
         locales: {
           en: 'en-US',
           de: 'de-DE',
-          fr: 'fr-FR',
-          es: 'es-ES',
-          it: 'it-IT',
-          pt: 'pt-PT',
-          nl: 'nl-NL',
-          pl: 'pl-PL',
-          sv: 'sv-SE',
-          tr: 'tr-TR',
-          ja: 'ja-JP',
-          zh: 'zh-CN',
         },
       },
     }),

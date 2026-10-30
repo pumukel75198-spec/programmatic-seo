@@ -1,0 +1,11 @@
+# Removed locales -> English equivalent (301)
+/fr/* /en/:splat 301
+/es/* /en/:splat 301
+/it/* /en/:splat 301
+/pt/* /en/:splat 301
+/nl/* /en/:splat 301
+/pl/* /en/:splat 301
+/sv/* /en/:splat 301
+/tr/* /en/:splat 301
+/ja/* /en/:splat 301
+/zh/* /en/:splat 301
