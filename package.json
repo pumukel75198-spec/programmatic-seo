@@ -19,6 +19,7 @@
     "api-scripts:generate": "node scripts/generate-api-scripts.mjs",
     "api-scripts:test": "node scripts/test-api-scripts.mjs",
     "api-scripts:test:offline": "node scripts/test-api-scripts.mjs --offline",
+    "api-scripts:upload": "node scripts/upload-api-scripts.mjs",
     "pdf:generate": "node scripts/generate-pdfs.mjs",
     "pdf:check": "node scripts/check-pdf-quality.mjs",
     "pdf:check:fix": "node scripts/check-pdf-quality.mjs --fix",

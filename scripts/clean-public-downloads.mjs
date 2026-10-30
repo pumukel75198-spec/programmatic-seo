@@ -20,6 +20,10 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
 const publicDownloads = join(root, "public", "downloads");
+const publicApiScripts = join(root, "public", "api-scripts");
 
 await rm(publicDownloads, { recursive: true, force: true });
-console.log("✔ public/downloads entfernt (Premium-PDFs sind jetzt privat).");
+await rm(publicApiScripts, { recursive: true, force: true });
+console.log(
+  "✔ public/downloads und public/api-scripts entfernt (Premium-Inhalte sind jetzt privat)."
+);

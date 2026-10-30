@@ -3,6 +3,7 @@ import Layout from "../../../layouts/Layout.astro";
 import Breadcrumb from "../../../components/Breadcrumb.astro";
 import DetailBox from "../../../components/DetailBox.astro";
 import Badge from "../../../components/Badge.astro";
+import PremiumScriptDownload from "../../../components/PremiumScriptDownload.astro";
 import { apis, workflows, getRelated, getRelatedByTags } from "../../../lib/content";
 import {
   breadcrumbSchema,
@@ -167,37 +168,12 @@ const jsonLd = [
         </div>
       </div>
 
-      <!-- Free Python starter script (auto-generated) -->
-      <div class="mt-6 rounded-2xl border border-white/10 bg-surface/50 p-6">
-        <Badge tone="slate">Free download</Badge>
-        <h2 class="mt-3 text-xl font-semibold text-white">
-          Python starter script
-        </h2>
-        <p class="mt-2 text-sm leading-relaxed text-slate-400">
-          A minimal, dependency-free client for {api.title}. It ships with
-          <code class="rounded bg-white/5 px-1.5 py-0.5 font-mono text-xs text-brand-300">--dry-run</code>,
-          <code class="rounded bg-white/5 px-1.5 py-0.5 font-mono text-xs text-brand-300">--smoke</code> and
-          <code class="rounded bg-white/5 px-1.5 py-0.5 font-mono text-xs text-brand-300">--live</code>
-          modes and only uses the Python standard library.
-        </p>
-        <div class="mt-4 flex flex-wrap gap-3">
-          <a
-            href={`/api-scripts/${api.slug}/${api.slug}.py`}
-            download
-            class="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/30 transition-colors hover:bg-emerald-400"
-          >
-            Download .py
-          </a>
-          <a
-            href={`/api-scripts/${api.slug}/README.md`}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/10"
-          >
-            Read the README
-          </a>
-        </div>
-      </div>
+      <!-- Premium Python starter script (paid via Lemon Squeezy) -->
+      <PremiumScriptDownload
+        slug={api.slug}
+        title={api.title}
+        price="€19.99"
+      />
 
       <!-- Technical details -->
       {

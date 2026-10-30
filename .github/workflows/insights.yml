@@ -74,6 +74,10 @@ jobs:
         env:
           PUBLIC_VISITOR_COUNTER_URL: ${{ vars.PUBLIC_VISITOR_COUNTER_URL || 'https://flowmatrix-visitor-counter.pumukel75198.workers.dev' }}
           PUBLIC_CF_ANALYTICS_TOKEN: ${{ vars.PUBLIC_CF_ANALYTICS_TOKEN }}
+          PUBLIC_DOWNLOAD_GATE_URL: ${{ vars.PUBLIC_DOWNLOAD_GATE_URL || 'https://flowmatrix-download-gate.pumukel75198.workers.dev' }}
+          PUBLIC_LEMON_SCRIPT_CHECKOUT_URL: ${{ vars.PUBLIC_LEMON_SCRIPT_CHECKOUT_URL }}
+          PUBLIC_LEMON_WORKFLOW_CHECKOUT_URL: ${{ vars.PUBLIC_LEMON_WORKFLOW_CHECKOUT_URL }}
+          PUBLIC_LEMON_CHECKOUT_URL: ${{ vars.PUBLIC_LEMON_CHECKOUT_URL }}
         run: npm run build
 
       # Wichtig: Der Push mit dem Standard-GITHUB_TOKEN löst keine weiteren

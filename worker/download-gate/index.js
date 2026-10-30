@@ -343,6 +343,70 @@ export default {
       );
     }
 
+    /* --- Python-Skript ausliefern ----------------------------------------- */
+    if (url.pathname === "/api/script" && request.method === "GET") {
+      if (!env.DOWNLOAD_TOKEN_SECRET) {
+        return json({ error: "Server nicht konfiguriert." }, 500, origin);
+      }
+
+      const token = url.searchParams.get("token");
+      const slug = String(url.searchParams.get("slug") ?? "").trim();
+      const file = String(url.searchParams.get("file") ?? "py").trim();
+
+      if (!slug || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
+        return json({ error: "Ungültiger Slug." }, 400, origin);
+      }
+
+      const allowedFiles = {
+        py: { key: "py", name: `${slug}.py`, type: "text/x-python" },
+        readme: { key: "readme", name: "README.md", type: "text/markdown" },
+        metadata: {
+          key: "metadata",
+          name: "metadata.json",
+          type: "application/json",
+        },
+      };
+      const target = allowedFiles[file];
+      if (!target) {
+        return json({ error: "Ungültiger Dateityp." }, 400, origin);
+      }
+
+      const payload = await verifyToken(env, token);
+      if (!payload) {
+        return json(
+          { error: "Download-Token ist ungültig oder abgelaufen." },
+          401,
+          origin
+        );
+      }
+
+      if (!isSlugAllowed(payload, slug)) {
+        return json(
+          { error: "Diese Lizenz gilt nicht für dieses Skript." },
+          403,
+          origin
+        );
+      }
+
+      const object = await env.PDF_STORE.get(`script:${slug}:${target.key}`, {
+        type: "arrayBuffer",
+      });
+      if (!object) {
+        return json({ error: "Skript nicht gefunden." }, 404, origin);
+      }
+
+      return new Response(object, {
+        status: 200,
+        headers: {
+          "Content-Type": target.type,
+          "Content-Disposition": `attachment; filename="${target.name}"`,
+          "Content-Length": String(object.byteLength ?? ""),
+          "Cache-Control": "private, no-store",
+          ...corsHeaders(origin),
+        },
+      });
+    }
+
     /* --- PDF ausliefern ---------------------------------------------------- */
     if (url.pathname === "/api/download" && request.method === "GET") {
       if (!env.DOWNLOAD_TOKEN_SECRET) {

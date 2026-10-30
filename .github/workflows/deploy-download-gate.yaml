@@ -8,7 +8,11 @@ name: Deploy Download Gate
       - "worker/download-gate/**"
       - "scripts/generate-pdfs.mjs"
       - "scripts/upload-pdfs.mjs"
+      - "scripts/generate-api-scripts.mjs"
+      - "scripts/upload-api-scripts.mjs"
       - "src/data/workflows.json"
+      - "src/data/apis.json"
+      - "src/data/api-endpoints.json"
       - "src/data/partner.json"
       - "src/data/monetization.json"
   workflow_dispatch:
@@ -40,6 +44,9 @@ jobs:
           PUBLIC_LEMON_CHECKOUT_URL: ${{ vars.PUBLIC_LEMON_CHECKOUT_URL }}
         run: npm run pdf:generate
 
+      - name: Generate API starter scripts
+        run: npm run api-scripts:generate
+
       - name: Deploy download-gate worker
         uses: cloudflare/wrangler-action@v3
         with:
@@ -54,3 +61,10 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           PDF_KV_NAMESPACE_ID: 60b777e050ae4134bf22d3ef1b6a5a5e
         run: npm run pdf:upload
+
+      - name: Upload API scripts to KV
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          PDF_KV_NAMESPACE_ID: 60b777e050ae4134bf22d3ef1b6a5a5e
+        run: npm run api-scripts:upload

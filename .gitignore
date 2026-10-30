@@ -1,5 +1,11 @@
 # build output
 dist/
+
+# private premium assets (generated, uploaded to KV)
+private/downloads/
+private/api-scripts/
+public/downloads/
+public/api-scripts/
 # generated types
 .astro/
 

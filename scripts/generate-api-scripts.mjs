@@ -40,7 +40,7 @@ const apisFile = join(root, "src", "data", "apis.json");
 const overridesFile = join(root, "src", "data", "api-endpoints.json");
 const outputDir = process.env.API_SCRIPTS_OUTPUT_DIR
   ? resolve(root, process.env.API_SCRIPTS_OUTPUT_DIR)
-  : join(root, "public", "api-scripts");
+  : join(root, "private", "api-scripts");
 
 const DEFAULT_HEADERS = { Accept: "application/json" };
 
