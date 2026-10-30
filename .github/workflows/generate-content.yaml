@@ -19,6 +19,8 @@ jobs:
   generate:
     name: Generate, validate, deploy & commit
     runs-on: ubuntu-latest
+    # Schutz gegen hängende Läufe: Batch dauert i. d. R. 6–15 Min.
+    timeout-minutes: 45
 
     steps:
       - name: Checkout repository
@@ -66,5 +68,8 @@ jobs:
             echo "No new content to commit."
           else
             git commit -m "chore: auto-generate content batch"
+            # Vor dem Push Remote-Stand einrebase, um Race-Conditions
+            # mit parallelen Pushes zu vermeiden (Auto-Stash schützt lokale Änderungen).
+            git pull --rebase --autostash origin main
             git push
           fi
