@@ -1,0 +1,33 @@
+{
+  "slug": "linear-graphql-api",
+  "title": "Linear GraphQL API",
+  "description": "The Linear GraphQL API manages issues, projects and cycles programmatically – built for fast product and engineering workflows.",
+  "category": "Project Management",
+  "tags": [
+    "linear",
+    "graphql",
+    "issues",
+    "productivity"
+  ],
+  "provider": "Linear",
+  "website": "https://developers.linear.app/docs/graphql/working-with-the-graphql-api",
+  "docsUrl": "https://developers.linear.app/docs/graphql/working-with-the-graphql-api",
+  "endpoint": "https://api.linear.app/graphql",
+  "method": "POST",
+  "authStyle": "bearer",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "LINEAR_API_KEY",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": true
+  },
+  "note": "",
+  "scriptFile": "linear-graphql-api.py",
+  "scriptUrl": "/api-scripts/linear-graphql-api/linear-graphql-api.py",
+  "readmeUrl": "/api-scripts/linear-graphql-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.995Z"
+}

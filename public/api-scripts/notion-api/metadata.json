@@ -1,0 +1,33 @@
+{
+  "slug": "notion-api",
+  "title": "Notion API",
+  "description": "The Notion API connects your workspace to other tools, enabling automated pages, databases and content pipelines.",
+  "category": "Productivity",
+  "tags": [
+    "productivity",
+    "database",
+    "content",
+    "automation"
+  ],
+  "provider": "Notion",
+  "website": "https://developers.notion.com",
+  "docsUrl": "",
+  "endpoint": "https://api.notion.com/v1/users/me",
+  "method": "GET",
+  "authStyle": "bearer",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "NOTION_API_KEY",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": true
+  },
+  "note": "",
+  "scriptFile": "notion-api.py",
+  "scriptUrl": "/api-scripts/notion-api/notion-api.py",
+  "readmeUrl": "/api-scripts/notion-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.978Z"
+}

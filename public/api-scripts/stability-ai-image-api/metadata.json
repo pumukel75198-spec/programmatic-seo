@@ -1,0 +1,33 @@
+{
+  "slug": "stability-ai-image-api",
+  "title": "Stability AI Image API",
+  "description": "The Stability AI API generates and edits images with Stable Diffusion models, including upscaling and inpainting.",
+  "category": "AI & Image",
+  "tags": [
+    "image-generation",
+    "stable-diffusion",
+    "inpainting",
+    "ai"
+  ],
+  "provider": "Stability AI",
+  "website": "https://stability.ai",
+  "docsUrl": "",
+  "endpoint": "https://api.stability.ai/v1/user/account",
+  "method": "GET",
+  "authStyle": "bearer",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "STABILITY_API_KEY",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": true
+  },
+  "note": "",
+  "scriptFile": "stability-ai-image-api.py",
+  "scriptUrl": "/api-scripts/stability-ai-image-api/stability-ai-image-api.py",
+  "readmeUrl": "/api-scripts/stability-ai-image-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.982Z"
+}

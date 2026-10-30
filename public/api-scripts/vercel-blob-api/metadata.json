@@ -1,0 +1,33 @@
+{
+  "slug": "vercel-blob-api",
+  "title": "Vercel Blob API",
+  "description": "Vercel Blob offers simple, scalable object storage with a TypeScript-friendly API for uploads, downloads and public assets.",
+  "category": "Storage",
+  "tags": [
+    "storage",
+    "files",
+    "serverless",
+    "cdn"
+  ],
+  "provider": "Vercel",
+  "website": "https://vercel.com/docs/storage/vercel-blob",
+  "docsUrl": "",
+  "endpoint": "https://blob.vercel-storage.com",
+  "method": "GET",
+  "authStyle": "bearer",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "BLOB_READ_WRITE_TOKEN",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": true
+  },
+  "note": "",
+  "scriptFile": "vercel-blob-api.py",
+  "scriptUrl": "/api-scripts/vercel-blob-api/vercel-blob-api.py",
+  "readmeUrl": "/api-scripts/vercel-blob-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.987Z"
+}

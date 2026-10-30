@@ -1,0 +1,34 @@
+{
+  "slug": "microsoft-azure-cognitive-services-api",
+  "title": "Microsoft Azure Cognitive Services API",
+  "description": "Access various AI services including vision, speech, and language understanding. Enhance applications with powerful AI capabilities.",
+  "category": "AI & Multimodal",
+  "tags": [
+    "ai",
+    "cognitive-services",
+    "microsoft",
+    "cloud",
+    "api"
+  ],
+  "provider": "Microsoft",
+  "website": "https://azure.microsoft.com/en-us/services/cognitive-services/",
+  "docsUrl": "https://docs.microsoft.com/en-us/azure/cognitive-services/",
+  "endpoint": "https://{resource}.cognitiveservices.azure.com",
+  "method": "GET",
+  "authStyle": "header",
+  "authHeader": "Ocp-Apim-Subscription-Key",
+  "authParam": "",
+  "keyEnv": "AZURE_COGNITIVE_SERVICES_KEY",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": true,
+  "testable": {
+    "smoke": false,
+    "live": false
+  },
+  "note": "",
+  "scriptFile": "microsoft-azure-cognitive-services-api.py",
+  "scriptUrl": "/api-scripts/microsoft-azure-cognitive-services-api/microsoft-azure-cognitive-services-api.py",
+  "readmeUrl": "/api-scripts/microsoft-azure-cognitive-services-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.997Z"
+}

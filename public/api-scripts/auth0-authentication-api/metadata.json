@@ -1,0 +1,33 @@
+{
+  "slug": "auth0-authentication-api",
+  "title": "Auth0 Authentication API",
+  "description": "The Auth0 API provides enterprise-grade authentication and authorization with SSO, social logins and fine-grained access control.",
+  "category": "Auth & Identity",
+  "tags": [
+    "auth",
+    "sso",
+    "oauth",
+    "security"
+  ],
+  "provider": "Auth0",
+  "website": "https://auth0.com",
+  "docsUrl": "",
+  "endpoint": "https://{domain}/oauth/token",
+  "method": "POST",
+  "authStyle": "bearer",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "AUTH0_CLIENT_SECRET",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": true,
+  "testable": {
+    "smoke": false,
+    "live": false
+  },
+  "note": "",
+  "scriptFile": "auth0-authentication-api.py",
+  "scriptUrl": "/api-scripts/auth0-authentication-api/auth0-authentication-api.py",
+  "readmeUrl": "/api-scripts/auth0-authentication-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.976Z"
+}

@@ -1,0 +1,34 @@
+{
+  "slug": "openai-dall-e-api",
+  "title": "OpenAI DALL·E API",
+  "description": "Generate images from text descriptions using advanced AI models. Create unique visuals effortlessly.",
+  "category": "AI & Image",
+  "tags": [
+    "ai",
+    "image-generation",
+    "creativity",
+    "art",
+    "visuals"
+  ],
+  "provider": "OpenAI",
+  "website": "https://openai.com/dall-e",
+  "docsUrl": "https://platform.openai.com/docs/api-reference/dall-e",
+  "endpoint": "https://api.openai.com/v1/dall-e",
+  "method": "POST",
+  "authStyle": "bearer",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "OPENAI_API_KEY",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": true
+  },
+  "note": "",
+  "scriptFile": "openai-dall-e-api.py",
+  "scriptUrl": "/api-scripts/openai-dall-e-api/openai-dall-e-api.py",
+  "readmeUrl": "/api-scripts/openai-dall-e-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.996Z"
+}

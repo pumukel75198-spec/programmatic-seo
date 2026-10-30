@@ -1,0 +1,33 @@
+{
+  "slug": "hugging-face-inference-api",
+  "title": "Hugging Face Inference API",
+  "description": "The Hugging Face Inference API gives you hosted access to thousands of open models for text, vision and audio – without managing infrastructure.",
+  "category": "AI & ML",
+  "tags": [
+    "ai",
+    "models",
+    "inference",
+    "open-source"
+  ],
+  "provider": "Hugging Face",
+  "website": "https://huggingface.co/inference-api",
+  "docsUrl": "",
+  "endpoint": "https://router.huggingface.co/v1/chat/completions",
+  "method": "POST",
+  "authStyle": "bearer",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "HUGGINGFACE_API_KEY",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": true
+  },
+  "note": "",
+  "scriptFile": "hugging-face-inference-api.py",
+  "scriptUrl": "/api-scripts/hugging-face-inference-api/hugging-face-inference-api.py",
+  "readmeUrl": "/api-scripts/hugging-face-inference-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.974Z"
+}

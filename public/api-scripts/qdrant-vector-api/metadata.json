@@ -1,0 +1,33 @@
+{
+  "slug": "qdrant-vector-api",
+  "title": "Qdrant Vector API",
+  "description": "Qdrant is a high-performance vector database with REST and gRPC APIs for similarity search and RAG workloads.",
+  "category": "Vector Database",
+  "tags": [
+    "vector-database",
+    "similarity-search",
+    "rag",
+    "rust"
+  ],
+  "provider": "Qdrant",
+  "website": "https://qdrant.tech",
+  "docsUrl": "",
+  "endpoint": "https://api.cloud.qdrant.io",
+  "method": "GET",
+  "authStyle": "header",
+  "authHeader": "api-key",
+  "authParam": "",
+  "keyEnv": "QDRANT_API_KEY",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": true
+  },
+  "note": "",
+  "scriptFile": "qdrant-vector-api.py",
+  "scriptUrl": "/api-scripts/qdrant-vector-api/qdrant-vector-api.py",
+  "readmeUrl": "/api-scripts/qdrant-vector-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.983Z"
+}

@@ -1,0 +1,33 @@
+{
+  "slug": "google-gemini-api",
+  "title": "Google Gemini API",
+  "description": "The Google Gemini API combines text, image and audio in one multimodal model – ideal for vision, analysis and assistant applications.",
+  "category": "AI & Multimodal",
+  "tags": [
+    "llm",
+    "multimodal",
+    "vision",
+    "google"
+  ],
+  "provider": "Google",
+  "website": "https://ai.google.dev",
+  "docsUrl": "https://ai.google.dev/gemini-api/docs",
+  "endpoint": "https://generativelanguage.googleapis.com/v1beta",
+  "method": "GET",
+  "authStyle": "query",
+  "authHeader": "",
+  "authParam": "key",
+  "keyEnv": "GOOGLE_API_KEY",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": true
+  },
+  "note": "",
+  "scriptFile": "google-gemini-api.py",
+  "scriptUrl": "/api-scripts/google-gemini-api/google-gemini-api.py",
+  "readmeUrl": "/api-scripts/google-gemini-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.970Z"
+}

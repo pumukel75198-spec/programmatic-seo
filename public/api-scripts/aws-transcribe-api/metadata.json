@@ -1,0 +1,32 @@
+{
+  "slug": "aws-transcribe-api",
+  "title": "Amazon Transcribe API",
+  "description": "Automatic speech recognition (ASR) service that makes it easy to add speech-to-text capability to applications.",
+  "category": "AI & Speech",
+  "tags": [
+    "speech-to-text",
+    "transcription",
+    "ASR"
+  ],
+  "provider": "Amazon Web Services",
+  "website": "https://aws.amazon.com/transcribe/",
+  "docsUrl": "https://docs.aws.amazon.com/transcribe/latest/dg/what-is-transcribe.html",
+  "endpoint": "https://transcribe.us-east-1.amazonaws.com",
+  "method": "GET",
+  "authStyle": "aws-sigv4",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "AWS_ACCESS_KEY_ID",
+  "supportedLive": false,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": false
+  },
+  "note": "Requires AWS Signature Version 4. Use the official AWS SDK for --live.",
+  "scriptFile": "aws-transcribe-api.py",
+  "scriptUrl": "/api-scripts/aws-transcribe-api/aws-transcribe-api.py",
+  "readmeUrl": "/api-scripts/aws-transcribe-api/README.md",
+  "generatedAt": "2026-10-30T19:21:25.009Z"
+}

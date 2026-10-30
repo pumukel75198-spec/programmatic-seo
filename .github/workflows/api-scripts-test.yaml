@@ -1,0 +1,70 @@
+name: API Scripts
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "src/data/apis.json"
+      - "src/data/api-endpoints.json"
+      - "scripts/generate-api-scripts.mjs"
+      - "scripts/test-api-scripts.mjs"
+      - "src/pages/[lang]/apis/[slug].astro"
+      - ".github/workflows/api-scripts-test.yaml"
+  pull_request:
+    paths:
+      - "src/data/apis.json"
+      - "src/data/api-endpoints.json"
+      - "scripts/generate-api-scripts.mjs"
+      - "scripts/test-api-scripts.mjs"
+      - "src/pages/[lang]/apis/[slug].astro"
+      - ".github/workflows/api-scripts-test.yaml"
+  workflow_dispatch:
+  schedule:
+    # Weekly health check for all reachable API endpoints (Monday 06:00 UTC).
+    - cron: "0 6 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  offline:
+    name: Syntax & dry-run (offline)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate and validate scripts (offline)
+        run: node scripts/test-api-scripts.mjs --offline
+
+  smoke:
+    name: Endpoint reachability (smoke)
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate scripts and test reachable endpoints
+        run: node scripts/test-api-scripts.mjs --timeout=10 --concurrency=6

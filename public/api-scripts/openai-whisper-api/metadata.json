@@ -1,0 +1,33 @@
+{
+  "slug": "openai-whisper-api",
+  "title": "OpenAI Whisper API",
+  "description": "OpenAI's Whisper API transcribes audio to text with high accuracy across 50+ languages – ideal for podcasts, meetings and voice apps.",
+  "category": "AI & Speech",
+  "tags": [
+    "speech-to-text",
+    "transcription",
+    "ai",
+    "audio"
+  ],
+  "provider": "OpenAI",
+  "website": "https://platform.openai.com/docs/guides/speech-to-text",
+  "docsUrl": "https://platform.openai.com/docs/guides/speech-to-text",
+  "endpoint": "https://api.openai.com/v1/audio/transcriptions",
+  "method": "POST",
+  "authStyle": "bearer",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "OPENAI_API_KEY",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": true
+  },
+  "note": "",
+  "scriptFile": "openai-whisper-api.py",
+  "scriptUrl": "/api-scripts/openai-whisper-api/openai-whisper-api.py",
+  "readmeUrl": "/api-scripts/openai-whisper-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.965Z"
+}

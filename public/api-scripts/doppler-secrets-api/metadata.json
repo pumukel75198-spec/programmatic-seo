@@ -1,0 +1,33 @@
+{
+  "slug": "doppler-secrets-api",
+  "title": "Doppler Secrets API",
+  "description": "Doppler centralizes secrets and environment configuration with a secure API and integrations for every major cloud.",
+  "category": "Security",
+  "tags": [
+    "secrets",
+    "security",
+    "devops",
+    "configuration"
+  ],
+  "provider": "Doppler",
+  "website": "https://www.doppler.com",
+  "docsUrl": "",
+  "endpoint": "https://api.doppler.com/v3/configs",
+  "method": "GET",
+  "authStyle": "bearer",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "DOPPLER_API_KEY",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": true
+  },
+  "note": "",
+  "scriptFile": "doppler-secrets-api.py",
+  "scriptUrl": "/api-scripts/doppler-secrets-api/doppler-secrets-api.py",
+  "readmeUrl": "/api-scripts/doppler-secrets-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.990Z"
+}

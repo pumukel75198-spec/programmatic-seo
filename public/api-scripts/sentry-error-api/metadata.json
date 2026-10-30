@@ -1,0 +1,33 @@
+{
+  "slug": "sentry-error-api",
+  "title": "Sentry Error API",
+  "description": "Sentry captures errors, traces and performance data across your stack so teams can find and fix issues faster.",
+  "category": "Observability",
+  "tags": [
+    "monitoring",
+    "errors",
+    "tracing",
+    "performance"
+  ],
+  "provider": "Sentry",
+  "website": "https://sentry.io",
+  "docsUrl": "",
+  "endpoint": "https://sentry.io/api/0/organizations/",
+  "method": "GET",
+  "authStyle": "bearer",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "SENTRY_AUTH_TOKEN",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": true
+  },
+  "note": "",
+  "scriptFile": "sentry-error-api.py",
+  "scriptUrl": "/api-scripts/sentry-error-api/sentry-error-api.py",
+  "readmeUrl": "/api-scripts/sentry-error-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.989Z"
+}

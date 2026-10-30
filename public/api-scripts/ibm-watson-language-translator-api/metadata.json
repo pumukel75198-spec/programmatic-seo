@@ -1,0 +1,32 @@
+{
+  "slug": "ibm-watson-language-translator-api",
+  "title": "IBM Watson Language Translator API",
+  "description": "Provides language translation capabilities for multiple languages, powered by AI.",
+  "category": "AI & Speech",
+  "tags": [
+    "translation",
+    "language",
+    "AI"
+  ],
+  "provider": "IBM",
+  "website": "https://www.ibm.com/cloud/watson-language-translator",
+  "docsUrl": "https://cloud.ibm.com/apidocs/language-translator",
+  "endpoint": "https://api.us-south.language-translator.watson.cloud.ibm.com/instances/{instance_id}",
+  "method": "GET",
+  "authStyle": "bearer",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "IBM_API_KEY",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": true,
+  "testable": {
+    "smoke": false,
+    "live": false
+  },
+  "note": "Use the regional service URL from your IBM Cloud instance. IBM has retired some legacy hosts, so the exact host depends on your account.",
+  "scriptFile": "ibm-watson-language-translator-api.py",
+  "scriptUrl": "/api-scripts/ibm-watson-language-translator-api/ibm-watson-language-translator-api.py",
+  "readmeUrl": "/api-scripts/ibm-watson-language-translator-api/README.md",
+  "generatedAt": "2026-10-30T19:21:25.003Z"
+}

@@ -1,0 +1,33 @@
+{
+  "slug": "anthropic-claude-api",
+  "title": "Anthropic Claude API",
+  "description": "Anthropic's Claude API offers strong reasoning, a large context window and safe agentic workflows for demanding applications.",
+  "category": "AI & LLM",
+  "tags": [
+    "llm",
+    "reasoning",
+    "agents",
+    "safety"
+  ],
+  "provider": "Anthropic",
+  "website": "https://www.anthropic.com",
+  "docsUrl": "https://docs.anthropic.com",
+  "endpoint": "https://api.anthropic.com/v1/messages",
+  "method": "POST",
+  "authStyle": "header",
+  "authHeader": "x-api-key",
+  "authParam": "",
+  "keyEnv": "ANTHROPIC_API_KEY",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": true
+  },
+  "note": "",
+  "scriptFile": "anthropic-claude-api.py",
+  "scriptUrl": "/api-scripts/anthropic-claude-api/anthropic-claude-api.py",
+  "readmeUrl": "/api-scripts/anthropic-claude-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.969Z"
+}

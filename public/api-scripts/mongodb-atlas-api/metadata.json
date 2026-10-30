@@ -1,0 +1,33 @@
+{
+  "slug": "mongodb-atlas-api",
+  "title": "MongoDB Atlas API",
+  "description": "MongoDB Atlas provides a managed document database with a flexible Data API for serverless and app-driven workloads.",
+  "category": "Databases",
+  "tags": [
+    "database",
+    "document-db",
+    "serverless",
+    "api"
+  ],
+  "provider": "MongoDB",
+  "website": "https://www.mongodb.com/atlas",
+  "docsUrl": "",
+  "endpoint": "https://cloud.mongodb.com/api/atlas/v1.0",
+  "method": "GET",
+  "authStyle": "digest",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "MONGODB_ATLAS_PUBLIC_KEY",
+  "supportedLive": false,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": false
+  },
+  "note": "",
+  "scriptFile": "mongodb-atlas-api.py",
+  "scriptUrl": "/api-scripts/mongodb-atlas-api/mongodb-atlas-api.py",
+  "readmeUrl": "/api-scripts/mongodb-atlas-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.984Z"
+}

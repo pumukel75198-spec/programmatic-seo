@@ -1,0 +1,32 @@
+{
+  "slug": "google-maps-api",
+  "title": "Google Maps API",
+  "description": "Access a variety of location-based services such as maps, routes, and places.",
+  "category": "Geodata",
+  "tags": [
+    "maps",
+    "location",
+    "navigation"
+  ],
+  "provider": "Google",
+  "website": "https://cloud.google.com/maps-platform",
+  "docsUrl": "https://developers.google.com/maps/documentation",
+  "endpoint": "https://maps.googleapis.com/maps/api",
+  "method": "GET",
+  "authStyle": "bearer",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "GOOGLE_API_KEY",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": true
+  },
+  "note": "",
+  "scriptFile": "google-maps-api.py",
+  "scriptUrl": "/api-scripts/google-maps-api/google-maps-api.py",
+  "readmeUrl": "/api-scripts/google-maps-api/README.md",
+  "generatedAt": "2026-10-30T19:21:25.007Z"
+}

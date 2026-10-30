@@ -1,0 +1,32 @@
+{
+  "slug": "aws-lambda-api",
+  "title": "Amazon AWS Lambda API",
+  "description": "AWS Lambda lets you run code without provisioning or managing servers, enabling serverless computing.",
+  "category": "Backend",
+  "tags": [
+    "serverless",
+    "compute",
+    "aws"
+  ],
+  "provider": "Amazon",
+  "website": "https://aws.amazon.com/lambda/",
+  "docsUrl": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
+  "endpoint": "https://lambda.us-east-1.amazonaws.com",
+  "method": "GET",
+  "authStyle": "aws-sigv4",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "AWS_ACCESS_KEY_ID",
+  "supportedLive": false,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": false
+  },
+  "note": "Requires AWS Signature Version 4. Use the official AWS SDK for --live.",
+  "scriptFile": "aws-lambda-api.py",
+  "scriptUrl": "/api-scripts/aws-lambda-api/aws-lambda-api.py",
+  "readmeUrl": "/api-scripts/aws-lambda-api/README.md",
+  "generatedAt": "2026-10-30T19:21:25.000Z"
+}

@@ -1,0 +1,33 @@
+{
+  "slug": "salesforce-rest-api",
+  "title": "Salesforce REST API",
+  "description": "The Salesforce REST API exposes objects, records and queries over HTTP – the standard way to integrate Salesforce data with other systems.",
+  "category": "CRM & Enterprise",
+  "tags": [
+    "crm",
+    "salesforce",
+    "enterprise",
+    "rest"
+  ],
+  "provider": "Salesforce",
+  "website": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/",
+  "docsUrl": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/",
+  "endpoint": "https://{instance}.salesforce.com/services/data/v62.0/sobjects/Account",
+  "method": "GET",
+  "authStyle": "bearer",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "SALESFORCE_API_KEY",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": true,
+  "testable": {
+    "smoke": false,
+    "live": false
+  },
+  "note": "",
+  "scriptFile": "salesforce-rest-api.py",
+  "scriptUrl": "/api-scripts/salesforce-rest-api/salesforce-rest-api.py",
+  "readmeUrl": "/api-scripts/salesforce-rest-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.993Z"
+}

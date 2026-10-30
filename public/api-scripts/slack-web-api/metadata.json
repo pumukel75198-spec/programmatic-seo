@@ -1,0 +1,33 @@
+{
+  "slug": "slack-web-api",
+  "title": "Slack Web API",
+  "description": "The Slack Web API sends messages, manages channels and reads workspace data – the fastest way to add Slack notifications to any workflow.",
+  "category": "Communication",
+  "tags": [
+    "slack",
+    "messaging",
+    "notifications",
+    "automation"
+  ],
+  "provider": "Slack",
+  "website": "https://api.slack.com/web",
+  "docsUrl": "https://api.slack.com/methods",
+  "endpoint": "https://slack.com/api/chat.postMessage",
+  "method": "POST",
+  "authStyle": "bot",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "SLACK_API_KEY",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": true
+  },
+  "note": "",
+  "scriptFile": "slack-web-api.py",
+  "scriptUrl": "/api-scripts/slack-web-api/slack-web-api.py",
+  "readmeUrl": "/api-scripts/slack-web-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.992Z"
+}

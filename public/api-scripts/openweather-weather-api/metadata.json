@@ -1,0 +1,33 @@
+{
+  "slug": "openweather-weather-api",
+  "title": "OpenWeather Weather API",
+  "description": "The OpenWeather API provides current weather, forecasts and historical data for any location – ideal for apps and data products.",
+  "category": "Weather",
+  "tags": [
+    "weather",
+    "forecast",
+    "geodata",
+    "api"
+  ],
+  "provider": "OpenWeather",
+  "website": "https://openweathermap.org/api",
+  "docsUrl": "",
+  "endpoint": "https://api.openweathermap.org/data/2.5/weather",
+  "method": "GET",
+  "authStyle": "query",
+  "authHeader": "",
+  "authParam": "appid",
+  "keyEnv": "OPENWEATHER_API_KEY",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": true
+  },
+  "note": "",
+  "scriptFile": "openweather-weather-api.py",
+  "scriptUrl": "/api-scripts/openweather-weather-api/openweather-weather-api.py",
+  "readmeUrl": "/api-scripts/openweather-weather-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.977Z"
+}

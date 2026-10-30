@@ -1,0 +1,32 @@
+{
+  "slug": "openai-gpt-4-api",
+  "title": "OpenAI GPT-4 API",
+  "description": "The OpenAI GPT-4 API offers advanced natural language processing capabilities for various applications.",
+  "category": "AI & LLM",
+  "tags": [
+    "ai",
+    "nlp",
+    "language-modeling"
+  ],
+  "provider": "OpenAI",
+  "website": "https://openai.com/api",
+  "docsUrl": "https://platform.openai.com/docs/api-reference/gpt-4",
+  "endpoint": "https://api.openai.com/v1/gpt-4",
+  "method": "POST",
+  "authStyle": "bearer",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "OPENAI_API_KEY",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": true
+  },
+  "note": "",
+  "scriptFile": "openai-gpt-4-api.py",
+  "scriptUrl": "/api-scripts/openai-gpt-4-api/openai-gpt-4-api.py",
+  "readmeUrl": "/api-scripts/openai-gpt-4-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.997Z"
+}

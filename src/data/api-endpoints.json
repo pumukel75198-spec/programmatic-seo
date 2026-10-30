@@ -1,0 +1,266 @@
+{
+  "_comment": "Optional overrides for scripts/generate-api-scripts.mjs. Keys are API slugs. Values override/augment details from src/data/apis.json. Leave endpoints with {placeholders} if they require a per-tenant value; those scripts are generated but skipped by the smoke test.",
+  "hugging-face-inference-api": {
+    "endpoint": "https://router.huggingface.co/v1/chat/completions",
+    "method": "POST",
+    "auth": "bearer",
+    "keyEnv": "HUGGINGFACE_API_KEY"
+  },
+  "cohere-embed-api": {
+    "endpoint": "https://api.cohere.com/v2/embed",
+    "method": "POST",
+    "auth": "bearer",
+    "keyEnv": "COHERE_API_KEY"
+  },
+  "pinecone-vector-api": {
+    "endpoint": "https://api.pinecone.io",
+    "method": "GET",
+    "auth": "header",
+    "authHeader": "Api-Key",
+    "keyEnv": "PINECONE_API_KEY"
+  },
+  "auth0-authentication-api": {
+    "endpoint": "https://{domain}/oauth/token",
+    "method": "POST",
+    "auth": "bearer",
+    "keyEnv": "AUTH0_CLIENT_SECRET"
+  },
+  "sendgrid-email-api": {
+    "endpoint": "https://api.sendgrid.com/v3/mail/send",
+    "method": "POST",
+    "auth": "bearer",
+    "keyEnv": "SENDGRID_API_KEY"
+  },
+  "algolia-search-api": {
+    "endpoint": "https://{appId}-dsn.algolia.net/1/indexes",
+    "method": "GET",
+    "auth": "header",
+    "authHeader": "X-Algolia-API-Key",
+    "keyEnv": "ALGOLIA_API_KEY"
+  },
+  "openweather-weather-api": {
+    "endpoint": "https://api.openweathermap.org/data/2.5/weather",
+    "method": "GET",
+    "auth": "query",
+    "authParam": "appid",
+    "keyEnv": "OPENWEATHER_API_KEY"
+  },
+  "shopify-admin-api": {
+    "endpoint": "https://{shop}.myshopify.com/admin/api/2024-10/graphql.json",
+    "method": "POST",
+    "auth": "header",
+    "authHeader": "X-Shopify-Access-Token",
+    "keyEnv": "SHOPIFY_ACCESS_TOKEN"
+  },
+  "notion-api": {
+    "endpoint": "https://api.notion.com/v1/users/me",
+    "method": "GET",
+    "auth": "bearer",
+    "keyEnv": "NOTION_API_KEY",
+    "headers": { "Notion-Version": "2022-06-28" }
+  },
+  "airtable-api": {
+    "endpoint": "https://api.airtable.com/v0",
+    "method": "GET",
+    "auth": "bearer",
+    "keyEnv": "AIRTABLE_API_KEY"
+  },
+  "mistral-ai-api": {
+    "endpoint": "https://api.mistral.ai/v1/models",
+    "method": "GET",
+    "auth": "bearer",
+    "keyEnv": "MISTRAL_API_KEY"
+  },
+  "groq-inference-api": {
+    "endpoint": "https://api.groq.com/openai/v1/models",
+    "method": "GET",
+    "auth": "bearer",
+    "keyEnv": "GROQ_API_KEY"
+  },
+  "together-ai-api": {
+    "endpoint": "https://api.together.xyz/v1/models",
+    "method": "GET",
+    "auth": "bearer",
+    "keyEnv": "TOGETHER_API_KEY"
+  },
+  "replicate-model-api": {
+    "endpoint": "https://api.replicate.com/v1/models",
+    "method": "GET",
+    "auth": "bearer",
+    "keyEnv": "REPLICATE_API_TOKEN"
+  },
+  "elevenlabs-voice-api": {
+    "endpoint": "https://api.elevenlabs.io/v1/voices",
+    "method": "GET",
+    "auth": "header",
+    "authHeader": "xi-api-key",
+    "keyEnv": "ELEVENLABS_API_KEY"
+  },
+  "deepgram-speech-api": {
+    "endpoint": "https://api.deepgram.com/v1/projects",
+    "method": "GET",
+    "auth": "token",
+    "keyEnv": "DEEPGRAM_API_KEY"
+  },
+  "stability-ai-image-api": {
+    "endpoint": "https://api.stability.ai/v1/user/account",
+    "method": "GET",
+    "auth": "bearer",
+    "keyEnv": "STABILITY_API_KEY"
+  },
+  "weaviate-vector-api": {
+    "endpoint": "https://{cluster}.weaviate.network/v1",
+    "method": "GET",
+    "auth": "bearer",
+    "keyEnv": "WEAVIATE_API_KEY"
+  },
+  "qdrant-vector-api": {
+    "endpoint": "https://api.cloud.qdrant.io",
+    "method": "GET",
+    "auth": "header",
+    "authHeader": "api-key",
+    "keyEnv": "QDRANT_API_KEY"
+  },
+  "mongodb-atlas-api": {
+    "endpoint": "https://cloud.mongodb.com/api/atlas/v1.0",
+    "method": "GET",
+    "auth": "digest",
+    "keyEnv": "MONGODB_ATLAS_PUBLIC_KEY"
+  },
+  "neon-postgres-api": {
+    "endpoint": "https://console.neon.tech/api/v2/projects",
+    "method": "GET",
+    "auth": "bearer",
+    "keyEnv": "NEON_API_KEY"
+  },
+  "planetscale-database-api": {
+    "endpoint": "https://api.planetscale.com/v1/organizations",
+    "method": "GET",
+    "auth": "bearer",
+    "keyEnv": "PLANETSCALE_API_TOKEN"
+  },
+  "upstash-redis-api": {
+    "endpoint": "https://{endpoint}.upstash.io",
+    "method": "GET",
+    "auth": "bearer",
+    "keyEnv": "UPSTASH_REDIS_REST_TOKEN"
+  },
+  "vercel-blob-api": {
+    "endpoint": "https://blob.vercel-storage.com",
+    "method": "GET",
+    "auth": "bearer",
+    "keyEnv": "BLOB_READ_WRITE_TOKEN"
+  },
+  "liveblocks-collaboration-api": {
+    "endpoint": "https://api.liveblocks.io/v2/rooms",
+    "method": "GET",
+    "auth": "bearer",
+    "keyEnv": "LIVEBLOCKS_SECRET_KEY"
+  },
+  "ably-realtime-api": {
+    "endpoint": "https://rest.ably.io/time",
+    "method": "GET",
+    "auth": "basic",
+    "keyEnv": "ABLY_API_KEY"
+  },
+  "posthog-analytics-api": {
+    "endpoint": "https://us.posthog.com/api/projects/",
+    "method": "GET",
+    "auth": "bearer",
+    "keyEnv": "POSTHOG_API_KEY"
+  },
+  "sentry-error-api": {
+    "endpoint": "https://sentry.io/api/0/organizations/",
+    "method": "GET",
+    "auth": "bearer",
+    "keyEnv": "SENTRY_AUTH_TOKEN"
+  },
+  "launchdarkly-feature-api": {
+    "endpoint": "https://app.launchdarkly.com/api/v2/projects",
+    "method": "GET",
+    "auth": "bearer",
+    "keyEnv": "LAUNCHDARKLY_API_TOKEN"
+  },
+  "doppler-secrets-api": {
+    "endpoint": "https://api.doppler.com/v3/configs",
+    "method": "GET",
+    "auth": "bearer",
+    "keyEnv": "DOPPLER_API_KEY"
+  },
+  "ibm-watson-language-translator-api": {
+    "endpoint": "https://api.us-south.language-translator.watson.cloud.ibm.com/instances/{instance_id}",
+    "method": "GET",
+    "auth": "bearer",
+    "keyEnv": "IBM_API_KEY",
+    "note": "Use the regional service URL from your IBM Cloud instance. IBM has retired some legacy hosts, so the exact host depends on your account."
+  },
+  "microsoft-azure-cognitive-services-api": {
+    "endpoint": "https://{resource}.cognitiveservices.azure.com",
+    "method": "GET",
+    "auth": "header",
+    "authHeader": "Ocp-Apim-Subscription-Key",
+    "keyEnv": "AZURE_COGNITIVE_SERVICES_KEY"
+  },
+  "azure-face-api": {
+    "endpoint": "https://{resource}.cognitiveservices.azure.com/face/v1.0",
+    "method": "GET",
+    "auth": "header",
+    "authHeader": "Ocp-Apim-Subscription-Key",
+    "keyEnv": "AZURE_FACE_KEY"
+  },
+  "azure-cosmos-db-api": {
+    "endpoint": "https://{account}.documents.azure.com",
+    "method": "GET",
+    "auth": "header",
+    "authHeader": "Authorization",
+    "keyEnv": "AZURE_COSMOS_KEY"
+  },
+  "telegram-bot-api": {
+    "auth": "url-token",
+    "keyEnv": "TELEGRAM_BOT_TOKEN"
+  },
+  "google-gemini-api": {
+    "auth": "query",
+    "authParam": "key",
+    "keyEnv": "GOOGLE_API_KEY"
+  },
+  "mapbox-maps-api": {
+    "auth": "query",
+    "authParam": "access_token",
+    "keyEnv": "MAPBOX_ACCESS_TOKEN"
+  },
+  "twilio-messaging-api": {
+    "auth": "basic",
+    "keyEnv": "TWILIO_AUTH",
+    "note": "Set TWILIO_AUTH to ACCOUNT_SID:AUTH_TOKEN (Basic auth)."
+  },
+  "anthropic-claude-api": {
+    "method": "POST",
+    "auth": "header",
+    "authHeader": "x-api-key",
+    "keyEnv": "ANTHROPIC_API_KEY",
+    "headers": { "anthropic-version": "2023-06-01" }
+  },
+  "discord-bot-api": {
+    "method": "POST",
+    "auth": "bot",
+    "keyEnv": "DISCORD_BOT_TOKEN"
+  },
+  "openai-whisper-api": { "method": "POST" },
+  "openai-batch-api": { "method": "POST" },
+  "openai-dall-e-api": { "method": "POST" },
+  "openai-gpt-4-api": { "method": "POST" },
+  "openai-embeddings-api": { "method": "POST" },
+  "resend-email-api": { "method": "POST" },
+  "slack-web-api": { "method": "POST" },
+  "hubspot-crm-api": { "method": "POST" },
+  "linear-graphql-api": { "method": "POST" },
+  "stripe-payments-api": { "method": "GET" },
+  "aws-s3-api": { "auth": "aws-sigv4", "keyEnv": "AWS_ACCESS_KEY_ID", "note": "Requires AWS Signature Version 4. Use the official AWS SDK for --live." },
+  "aws-lambda-api": { "endpoint": "https://lambda.us-east-1.amazonaws.com", "auth": "aws-sigv4", "keyEnv": "AWS_ACCESS_KEY_ID", "note": "Requires AWS Signature Version 4. Use the official AWS SDK for --live." },
+  "aws-rekognition-api": { "auth": "aws-sigv4", "keyEnv": "AWS_ACCESS_KEY_ID", "note": "Requires AWS Signature Version 4. Use the official AWS SDK for --live." },
+  "aws-ses-api": { "auth": "aws-sigv4", "keyEnv": "AWS_ACCESS_KEY_ID", "note": "Requires AWS Signature Version 4. Use the official AWS SDK for --live." },
+  "aws-polly-api": { "endpoint": "https://polly.us-east-1.amazonaws.com", "auth": "aws-sigv4", "keyEnv": "AWS_ACCESS_KEY_ID", "note": "Requires AWS Signature Version 4. Use the official AWS SDK for --live." },
+  "aws-transcribe-api": { "endpoint": "https://transcribe.us-east-1.amazonaws.com", "auth": "aws-sigv4", "keyEnv": "AWS_ACCESS_KEY_ID", "note": "Requires AWS Signature Version 4. Use the official AWS SDK for --live." },
+  "plaid-financial-api": { "endpoint": "https://production.plaid.com", "method": "POST", "auth": "header", "authHeader": "PLAID-CLIENT-ID", "keyEnv": "PLAID_CLIENT_ID", "note": "Plaid also requires a PLAID-SECRET header. Add it in the script or use the official SDK." }
+}

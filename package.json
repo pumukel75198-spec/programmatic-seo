@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "prebuild": "node scripts/clean-public-downloads.mjs && node scripts/generate-og.mjs && node scripts/generate-pdfs.mjs && node scripts/validate-pdfs.mjs",
+    "prebuild": "node scripts/generate-api-scripts.mjs && node scripts/clean-public-downloads.mjs && node scripts/generate-og.mjs && node scripts/generate-pdfs.mjs && node scripts/validate-pdfs.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
@@ -16,6 +16,9 @@
     "enrich:workflows": "node scripts/enrich-workflows.mjs",
     "enrich:workflow-details": "node scripts/enrich-workflow-details.mjs",
     "insights:generate": "node scripts/generate-insights.mjs",
+    "api-scripts:generate": "node scripts/generate-api-scripts.mjs",
+    "api-scripts:test": "node scripts/test-api-scripts.mjs",
+    "api-scripts:test:offline": "node scripts/test-api-scripts.mjs --offline",
     "pdf:generate": "node scripts/generate-pdfs.mjs",
     "pdf:check": "node scripts/check-pdf-quality.mjs",
     "pdf:check:fix": "node scripts/check-pdf-quality.mjs --fix",

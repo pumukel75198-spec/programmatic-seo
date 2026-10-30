@@ -1,0 +1,32 @@
+{
+  "slug": "ibm-cloud-object-storage-api",
+  "title": "IBM Cloud Object Storage API",
+  "description": "Reliable cloud object storage for data archiving and app development.",
+  "category": "Storage",
+  "tags": [
+    "cloud",
+    "storage",
+    "ibm"
+  ],
+  "provider": "IBM",
+  "website": "https://www.ibm.com/cloud/object-storage",
+  "docsUrl": "https://cloud.ibm.com/docs/cloud-object-storage",
+  "endpoint": "https://s3.us.cloud-object-storage.appdomain.cloud",
+  "method": "GET",
+  "authStyle": "bearer",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "IBM_API_KEY",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": true
+  },
+  "note": "",
+  "scriptFile": "ibm-cloud-object-storage-api.py",
+  "scriptUrl": "/api-scripts/ibm-cloud-object-storage-api/ibm-cloud-object-storage-api.py",
+  "readmeUrl": "/api-scripts/ibm-cloud-object-storage-api/README.md",
+  "generatedAt": "2026-10-30T19:21:25.001Z"
+}

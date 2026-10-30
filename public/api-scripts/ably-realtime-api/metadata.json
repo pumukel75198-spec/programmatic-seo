@@ -1,0 +1,33 @@
+{
+  "slug": "ably-realtime-api",
+  "title": "Ably Realtime API",
+  "description": "Ably provides globally distributed realtime messaging with pub/sub channels, presence and reliable delivery at scale.",
+  "category": "Realtime",
+  "tags": [
+    "realtime",
+    "pubsub",
+    "websockets",
+    "messaging"
+  ],
+  "provider": "Ably",
+  "website": "https://ably.com",
+  "docsUrl": "",
+  "endpoint": "https://rest.ably.io/time",
+  "method": "GET",
+  "authStyle": "basic",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "ABLY_API_KEY",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": true
+  },
+  "note": "",
+  "scriptFile": "ably-realtime-api.py",
+  "scriptUrl": "/api-scripts/ably-realtime-api/ably-realtime-api.py",
+  "readmeUrl": "/api-scripts/ably-realtime-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.988Z"
+}

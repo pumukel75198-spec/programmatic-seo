@@ -1,0 +1,33 @@
+{
+  "slug": "cloudflare-workers-api",
+  "title": "Cloudflare Workers API",
+  "description": "The Cloudflare Workers API runs code directly at the edge – for fast, scalable serverless functions without managing your own server.",
+  "category": "Edge Computing",
+  "tags": [
+    "edge",
+    "serverless",
+    "cdn",
+    "performance"
+  ],
+  "provider": "Cloudflare",
+  "website": "https://workers.cloudflare.com",
+  "docsUrl": "https://developers.cloudflare.com/workers/",
+  "endpoint": "https://api.cloudflare.com/client/v4",
+  "method": "GET",
+  "authStyle": "bearer",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "CLOUDFLARE_API_KEY",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": true
+  },
+  "note": "",
+  "scriptFile": "cloudflare-workers-api.py",
+  "scriptUrl": "/api-scripts/cloudflare-workers-api/cloudflare-workers-api.py",
+  "readmeUrl": "/api-scripts/cloudflare-workers-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.972Z"
+}

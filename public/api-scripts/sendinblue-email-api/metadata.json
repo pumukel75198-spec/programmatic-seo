@@ -1,0 +1,32 @@
+{
+  "slug": "sendinblue-email-api",
+  "title": "Sendinblue Email API",
+  "description": "The Sendinblue Email API enables sending and managing email campaigns programmatically.",
+  "category": "Communication",
+  "tags": [
+    "email",
+    "marketing",
+    "automation"
+  ],
+  "provider": "Sendinblue",
+  "website": "https://www.sendinblue.com",
+  "docsUrl": "https://developers.sendinblue.com/docs",
+  "endpoint": "https://api.sendinblue.com/v3",
+  "method": "GET",
+  "authStyle": "bearer",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "SENDINBLUE_API_KEY",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": true
+  },
+  "note": "",
+  "scriptFile": "sendinblue-email-api.py",
+  "scriptUrl": "/api-scripts/sendinblue-email-api/sendinblue-email-api.py",
+  "readmeUrl": "/api-scripts/sendinblue-email-api/README.md",
+  "generatedAt": "2026-10-30T19:21:25.008Z"
+}

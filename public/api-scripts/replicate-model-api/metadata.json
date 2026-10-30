@@ -1,0 +1,33 @@
+{
+  "slug": "replicate-model-api",
+  "title": "Replicate Model API",
+  "description": "Replicate lets you run thousands of open-source models via a simple API, from image generation to speech and language tasks.",
+  "category": "AI & ML",
+  "tags": [
+    "models",
+    "image-generation",
+    "api",
+    "open-source"
+  ],
+  "provider": "Replicate",
+  "website": "https://replicate.com",
+  "docsUrl": "",
+  "endpoint": "https://api.replicate.com/v1/models",
+  "method": "GET",
+  "authStyle": "bearer",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "REPLICATE_API_TOKEN",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": true
+  },
+  "note": "",
+  "scriptFile": "replicate-model-api.py",
+  "scriptUrl": "/api-scripts/replicate-model-api/replicate-model-api.py",
+  "readmeUrl": "/api-scripts/replicate-model-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.981Z"
+}

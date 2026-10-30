@@ -1,0 +1,32 @@
+{
+  "slug": "openai-embeddings-api",
+  "title": "OpenAI Embeddings API",
+  "description": "The OpenAI Embeddings API allows developers to convert text into vector representations. It is useful for various natural language processing tasks.",
+  "category": "AI & Embeddings",
+  "tags": [
+    "embeddings",
+    "nlp",
+    "api"
+  ],
+  "provider": "OpenAI",
+  "website": "https://openai.com/api/embeddings",
+  "docsUrl": "https://platform.openai.com/docs/api-reference/embeddings",
+  "endpoint": "https://api.openai.com/v1/embeddings",
+  "method": "POST",
+  "authStyle": "bearer",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "OPENAI_API_KEY",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": true
+  },
+  "note": "",
+  "scriptFile": "openai-embeddings-api.py",
+  "scriptUrl": "/api-scripts/openai-embeddings-api/openai-embeddings-api.py",
+  "readmeUrl": "/api-scripts/openai-embeddings-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.998Z"
+}

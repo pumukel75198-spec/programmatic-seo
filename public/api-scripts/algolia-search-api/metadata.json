@@ -1,0 +1,33 @@
+{
+  "slug": "algolia-search-api",
+  "title": "Algolia Search API",
+  "description": "The Algolia Search API delivers instant, relevant search and discovery experiences with typo tolerance and faceting out of the box.",
+  "category": "Search",
+  "tags": [
+    "search",
+    "discovery",
+    "relevance",
+    "api"
+  ],
+  "provider": "Algolia",
+  "website": "https://www.algolia.com",
+  "docsUrl": "",
+  "endpoint": "https://{appId}-dsn.algolia.net/1/indexes",
+  "method": "GET",
+  "authStyle": "header",
+  "authHeader": "X-Algolia-API-Key",
+  "authParam": "",
+  "keyEnv": "ALGOLIA_API_KEY",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": true,
+  "testable": {
+    "smoke": false,
+    "live": false
+  },
+  "note": "",
+  "scriptFile": "algolia-search-api.py",
+  "scriptUrl": "/api-scripts/algolia-search-api/algolia-search-api.py",
+  "readmeUrl": "/api-scripts/algolia-search-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.977Z"
+}

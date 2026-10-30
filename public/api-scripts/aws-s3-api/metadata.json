@@ -1,0 +1,32 @@
+{
+  "slug": "aws-s3-api",
+  "title": "Amazon S3 API",
+  "description": "Amazon S3 API provides scalable object storage with high availability and security.",
+  "category": "Storage",
+  "tags": [
+    "storage",
+    "cloud",
+    "aws"
+  ],
+  "provider": "Amazon Web Services",
+  "website": "https://aws.amazon.com/s3/",
+  "docsUrl": "https://docs.aws.amazon.com/s3/index.html",
+  "endpoint": "https://s3.amazonaws.com",
+  "method": "GET",
+  "authStyle": "aws-sigv4",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "AWS_ACCESS_KEY_ID",
+  "supportedLive": false,
+  "hasEndpoint": true,
+  "hasPlaceholders": false,
+  "testable": {
+    "smoke": true,
+    "live": false
+  },
+  "note": "Requires AWS Signature Version 4. Use the official AWS SDK for --live.",
+  "scriptFile": "aws-s3-api.py",
+  "scriptUrl": "/api-scripts/aws-s3-api/aws-s3-api.py",
+  "readmeUrl": "/api-scripts/aws-s3-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.999Z"
+}

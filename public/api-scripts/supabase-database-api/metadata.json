@@ -1,0 +1,33 @@
+{
+  "slug": "supabase-database-api",
+  "title": "Supabase Database API",
+  "description": "Supabase provides an auto-generated REST and GraphQL API on top of PostgreSQL – including auth, storage and realtime subscriptions.",
+  "category": "Backend",
+  "tags": [
+    "postgresql",
+    "backend",
+    "open-source",
+    "auth"
+  ],
+  "provider": "Supabase",
+  "website": "https://supabase.com",
+  "docsUrl": "https://supabase.com/docs/guides/api",
+  "endpoint": "https://<project-ref>.supabase.co/rest/v1",
+  "method": "GET",
+  "authStyle": "bearer",
+  "authHeader": "",
+  "authParam": "",
+  "keyEnv": "SUPABASE_API_KEY",
+  "supportedLive": true,
+  "hasEndpoint": true,
+  "hasPlaceholders": true,
+  "testable": {
+    "smoke": false,
+    "live": false
+  },
+  "note": "",
+  "scriptFile": "supabase-database-api.py",
+  "scriptUrl": "/api-scripts/supabase-database-api/supabase-database-api.py",
+  "readmeUrl": "/api-scripts/supabase-database-api/README.md",
+  "generatedAt": "2026-10-30T19:21:24.968Z"
+}
