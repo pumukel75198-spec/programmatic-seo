@@ -46,13 +46,14 @@ const jsonLd = [
     { name: t(lang, "nav.alternatives"), url: `/${lang}/alternatives/` },
     { name: entry.title, url: `/${lang}/alternatives/${entry.slug}/` },
   ]),
-  articleSchema(entry),
+  articleSchema(entry, lang),
 ];
 ---
 
 <Layout
   title={pageTitle}
   description={pageDescription}
+  image={`/og/alternatives/${entry.slug}.png`}
   type="article"
   keywords={entry.tags}
   jsonLd={jsonLd}

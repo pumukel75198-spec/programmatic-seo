@@ -49,13 +49,14 @@ const jsonLd = [
     { name: t(lang, "nav.workflows"), url: `/${lang}/workflows/` },
     { name: workflow.title, url: `/${lang}/workflows/${workflow.slug}/` },
   ]),
-  howToSchema(workflow),
+  howToSchema(workflow, lang),
 ];
 ---
 
 <Layout
   title={pageTitle}
   description={pageDescription}
+  image={`/og/workflows/${workflow.slug}.png`}
   type="article"
   keywords={workflow.tags}
   jsonLd={jsonLd}

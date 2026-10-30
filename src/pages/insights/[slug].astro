@@ -15,6 +15,7 @@ export function getStaticPaths() {
 }
 
 const { insight } = Astro.props;
+const insightLang = insight.lang ?? "en";
 const related = getRelatedInsights(insight, 3);
 
 const html = marked.parse(insight.content, { async: false }) as string;
@@ -36,7 +37,7 @@ const jsonLd = {
   datePublished: insight.publishedAt,
   dateModified: insight.updatedAt ?? insight.publishedAt,
   url: new URL(`/insights/${insight.slug}/`, site.url).toString(),
-  inLanguage: "en",
+  inLanguage: insightLang,
   author: {
     "@type": "Person",
     name: "Thorsten Riedel",
@@ -50,11 +51,13 @@ const jsonLd = {
 <Layout
   title={insight.title}
   description={insight.excerpt}
+  image={`/og/insights/${insight.slug}.png`}
   type="article"
   keywords={insight.tags}
   publishedTime={insight.publishedAt}
   modifiedTime={insight.updatedAt}
   jsonLd={jsonLd}
+  lang={insightLang}
 >
   <article>
     <header class="relative overflow-hidden border-b border-white/5">

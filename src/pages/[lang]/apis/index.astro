@@ -20,7 +20,10 @@ const localizedApis = apis.map((api) => localizeApi(api, lang));
 
 const jsonLd = itemListSchema(
   "APIs – curated directory",
-  localizedApis.map((api) => ({ name: api.title, url: `/apis/${api.slug}/` }))
+  localizedApis.map((api) => ({
+    name: api.title,
+    url: `/${lang}/apis/${api.slug}/`,
+  }))
 );
 ---
 

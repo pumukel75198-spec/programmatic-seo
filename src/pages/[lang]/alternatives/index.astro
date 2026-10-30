@@ -24,7 +24,7 @@ const jsonLd = itemListSchema(
   "Alternatives – tool comparisons",
   localizedAlternatives.map((entry) => ({
     name: entry.title,
-    url: `/alternatives/${entry.slug}/`,
+    url: `/${lang}/alternatives/${entry.slug}/`,
   }))
 );
 ---

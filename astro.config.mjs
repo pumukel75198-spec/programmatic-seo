@@ -35,6 +35,15 @@ export default defineConfig({
   integrations: [
     sitemap({
       filter: (page) => !page.includes('/404'),
+      // Non-localized pages (e.g. /insights/*) exist only once. Do not emit
+      // /de/... alternates for them in the sitemap, otherwise crawlers see
+      // hreflang targets that 404.
+      serialize(item) {
+        if (item.url.includes('/insights/')) {
+          return { ...item, links: [] };
+        }
+        return item;
+      },
       i18n: {
         defaultLocale: 'en',
         locales: {

@@ -45,7 +45,7 @@ export function breadcrumbSchema(
   };
 }
 
-export function softwareApplicationSchema(api: ApiEntry): JsonLd {
+export function softwareApplicationSchema(api: ApiEntry, lang = "en"): JsonLd {
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -53,7 +53,7 @@ export function softwareApplicationSchema(api: ApiEntry): JsonLd {
     description: api.description,
     applicationCategory: api.category,
     operatingSystem: "Web",
-    url: absolute(`/apis/${api.slug}/`),
+    url: absolute(`/${lang}/apis/${api.slug}/`),
     keywords: api.tags.join(", "),
     offers: {
       "@type": "Offer",
@@ -64,7 +64,7 @@ export function softwareApplicationSchema(api: ApiEntry): JsonLd {
   };
 }
 
-export function articleSchema(entry: AlternativeEntry): JsonLd {
+export function articleSchema(entry: AlternativeEntry, lang = "en"): JsonLd {
   return {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -72,21 +72,22 @@ export function articleSchema(entry: AlternativeEntry): JsonLd {
     description: entry.description,
     articleSection: entry.category,
     keywords: entry.tags.join(", "),
-    url: absolute(`/alternatives/${entry.slug}/`),
-    inLanguage: site.lang,
+    url: absolute(`/${lang}/alternatives/${entry.slug}/`),
+    inLanguage: lang,
     author: { "@type": "Organization", name: site.name },
     publisher: { "@type": "Organization", name: site.name },
   };
 }
 
-export function howToSchema(workflow: WorkflowEntry): JsonLd {
+export function howToSchema(workflow: WorkflowEntry, lang = "en"): JsonLd {
   return {
     "@context": "https://schema.org",
     "@type": "HowTo",
     name: workflow.title,
     description: workflow.description,
     totalTime: workflow.details.duration,
-    inLanguage: site.lang,
+    url: absolute(`/${lang}/workflows/${workflow.slug}/`),
+    inLanguage: lang,
     tool: workflow.details.tools.map((tool) => ({
       "@type": "HowToTool",
       name: tool,

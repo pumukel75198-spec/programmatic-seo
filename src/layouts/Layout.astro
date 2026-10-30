@@ -8,6 +8,7 @@ import { languages } from "../i18n/ui";
 import {
   defaultLocale,
   getLocale,
+  isLocale,
   pathWithoutLocale,
   switchLocalePath,
 } from "../i18n/utils";
@@ -64,12 +65,21 @@ const localeMap: Record<string, string> = {
 };
 const ogLocale = localeMap[lang] ?? "en_US";
 
+// Only pages that actually live under a locale prefix (e.g. /en/..., /de/...)
+// get translated hreflang alternates. Non-localized pages such as /insights/*
+// exist only once, so they must not advertise /de/... variants that 404.
+const firstSegment = Astro.url.pathname.split("/").filter(Boolean)[0];
+const isLocalized = isLocale(firstSegment);
 const cleanPath = pathWithoutLocale(Astro.url.pathname);
-const alternates = languages.map((l) => ({
-  code: l.code,
-  href: new URL(switchLocalePath(Astro.url.pathname, l.code), baseUrl).toString(),
-}));
-const defaultHref = new URL(`/${defaultLocale}${cleanPath}`, baseUrl).toString();
+const alternates = isLocalized
+  ? languages.map((l) => ({
+      code: l.code,
+      href: new URL(switchLocalePath(Astro.url.pathname, l.code), baseUrl).toString(),
+    }))
+  : [{ code: lang, href: canonical }];
+const defaultHref = isLocalized
+  ? new URL(`/${defaultLocale}${cleanPath}`, baseUrl).toString()
+  : canonical;
 ---
 
 <!doctype html>
@@ -93,6 +103,12 @@ const defaultHref = new URL(`/${defaultLocale}${cleanPath}`, baseUrl).toString()
     <meta name="author" content={site.author} />
     <link rel="canonical" href={canonical} />
     <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="FlowMatrix Insights"
+      href="/insights/rss.xml"
+    />
 
     <!-- hreflang alternates -->
     {

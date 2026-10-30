@@ -32,6 +32,8 @@ export interface Insight {
   content: string;
   category: string;
   tags: string[];
+  /** Language the article was generated in (defaults to "en"). */
+  lang?: string;
   source: InsightSource;
   relatedWorkflow?: RelatedWorkflow | null;
   publishedAt: string;

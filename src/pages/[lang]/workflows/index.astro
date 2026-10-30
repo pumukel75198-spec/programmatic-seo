@@ -24,7 +24,7 @@ const jsonLd = itemListSchema(
   "Workflows – automation step by step",
   localizedWorkflows.map((workflow) => ({
     name: workflow.title,
-    url: `/workflows/${workflow.slug}/`,
+    url: `/${lang}/workflows/${workflow.slug}/`,
   }))
 );
 ---

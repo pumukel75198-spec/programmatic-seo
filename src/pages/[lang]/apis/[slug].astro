@@ -56,13 +56,14 @@ const jsonLd = [
     { name: t(lang, "nav.apis"), url: `/${lang}/apis/` },
     { name: api.title, url: `/${lang}/apis/${api.slug}/` },
   ]),
-  softwareApplicationSchema(api),
+  softwareApplicationSchema(api, lang),
 ];
 ---
 
 <Layout
   title={pageTitle}
   description={pageDescription}
+  image={`/og/apis/${api.slug}.png`}
   type="article"
   keywords={api.tags}
   jsonLd={jsonLd}

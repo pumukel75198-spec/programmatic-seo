@@ -46,6 +46,8 @@ const root = join(__dirname, "..");
 const feedsFile = join(root, "src", "data", "feeds.json");
 const insightsFile = join(root, "src", "data", "insights.json");
 const workflowsFile = join(root, "src", "data", "workflows.json");
+const archiveFile = join(root, "src", "data", "insights-archive.json");
+const redirectsFile = join(root, "public", "_redirects");
 
 // Lokale .env laden, falls vorhanden (Node >= 20.6).
 try {
@@ -707,6 +709,77 @@ function runSelfTest() {
 }
 
 // ---------------------------------------------------------------------------
+// Redirects for insights that left the rolling window
+// ---------------------------------------------------------------------------
+
+const REDIRECTS_BEGIN = "# BEGIN insights-redirects";
+const REDIRECTS_END = "# END insights-redirects";
+
+/**
+ * Keeps a permanent archive of every insight slug ever generated and writes
+ * 301 redirects for articles that dropped out of the rolling window, so old
+ * URLs never turn into 404s.
+ */
+async function updateInsightRedirects(previousInsights, mergedInsights) {
+  let archive = [];
+  try {
+    archive = JSON.parse(await readFile(archiveFile, "utf8"));
+  } catch {
+    archive = [];
+  }
+  if (!Array.isArray(archive)) archive = [];
+
+  const archiveSet = new Set(archive.filter(isNonEmptyString));
+  for (const insight of previousInsights) {
+    if (isNonEmptyString(insight?.slug)) archiveSet.add(insight.slug);
+  }
+  for (const insight of mergedInsights) {
+    if (isNonEmptyString(insight?.slug)) archiveSet.add(insight.slug);
+  }
+
+  const mergedSlugs = new Set(mergedInsights.map((insight) => insight.slug));
+  const removed = [...archiveSet]
+    .filter((slug) => !mergedSlugs.has(slug))
+    .sort();
+
+  await writeFile(
+    archiveFile,
+    `${JSON.stringify([...archiveSet].sort(), null, 2)}\n`,
+    "utf8"
+  );
+
+  let content = "";
+  try {
+    content = await readFile(redirectsFile, "utf8");
+  } catch {
+    content = "";
+  }
+
+  const beginIndex = content.indexOf(REDIRECTS_BEGIN);
+  const endIndex = content.indexOf(REDIRECTS_END);
+  if (beginIndex !== -1 && endIndex !== -1 && endIndex > beginIndex) {
+    content = (
+      content.slice(0, beginIndex) +
+      content.slice(endIndex + REDIRECTS_END.length)
+    ).trimEnd();
+  }
+
+  if (removed.length > 0) {
+    const block = [
+      REDIRECTS_BEGIN,
+      ...removed.map((slug) => `/insights/${slug}/* /insights/ 301`),
+      REDIRECTS_END,
+    ].join("\n");
+    content = `${content}\n\n${block}\n`;
+  } else {
+    content = `${content}\n`;
+  }
+
+  await writeFile(redirectsFile, content, "utf8");
+  return removed;
+}
+
+// ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
 
@@ -891,6 +964,7 @@ async function main() {
             content,
             category: article.category.trim(),
             tags: article.tags.map((tag) => String(tag).trim()).filter(Boolean),
+            lang: opts.lang,
             source: {
               name: item.feed,
               url: item.url,
@@ -968,6 +1042,13 @@ async function main() {
   const tmpFile = `${insightsFile}.tmp`;
   await writeFile(tmpFile, `${JSON.stringify(merged, null, 2)}\n`, "utf8");
   await rename(tmpFile, insightsFile);
+
+  const removed = await updateInsightRedirects(insights, merged);
+  if (removed.length > 0) {
+    console.log(
+      `  ${c.dim}${removed.length} entfernte Insight(s) auf /insights/ umgeleitet.${c.reset}`
+    );
+  }
 
   console.log(
     `\n${c.green}${c.bold}✔ Fertig: ${created.length} Artikel erzeugt, ${merged.length} insgesamt.${c.reset}`

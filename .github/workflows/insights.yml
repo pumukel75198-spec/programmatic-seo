@@ -89,7 +89,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src/data/insights.json
+          git add src/data/insights.json src/data/insights-archive.json public/_redirects
           if git diff --cached --quiet; then
             echo "No new insights to commit."
           else
