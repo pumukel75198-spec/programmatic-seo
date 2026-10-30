@@ -87,8 +87,15 @@ const legalLinks = [
       counterEl.parentElement?.setAttribute("hidden", "");
     } else {
       const base = endpoint.replace(/\/$/, "");
-      const storageKey = "fm_visit_counted";
-      const alreadyCounted = sessionStorage.getItem(storageKey) === "1";
+      const storageKey = "fm_visit_counted_at";
+      const DAY = 24 * 60 * 60 * 1000;
+      let lastCounted = 0;
+      try {
+        lastCounted = Number(localStorage.getItem(storageKey)) || 0;
+      } catch (error) {
+        /* localStorage may be unavailable */
+      }
+      const alreadyCounted = Date.now() - lastCounted < DAY;
       const url = alreadyCounted ? `${base}/count` : `${base}/hit`;
       const method = alreadyCounted ? "GET" : "POST";
 
@@ -97,7 +104,13 @@ const legalLinks = [
         .then((data) => {
           if (typeof data?.count === "number") {
             counterEl.textContent = `${data.count.toLocaleString()} ${counterEl.dataset.label ?? ""}`.trim();
-            if (!alreadyCounted) sessionStorage.setItem(storageKey, "1");
+            if (!alreadyCounted) {
+              try {
+                localStorage.setItem(storageKey, String(Date.now()));
+              } catch (error) {
+                /* ignore */
+              }
+            }
           }
         })
         .catch(() => {

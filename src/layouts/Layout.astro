@@ -126,6 +126,18 @@ const defaultHref = new URL(`/${defaultLocale}${cleanPath}`, baseUrl).toString()
 
     <meta name="theme-color" content="#06070d" />
 
+    <!-- Cloudflare Web Analytics (privacy-friendly, no cookies) -->
+    {
+      import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN && (
+        <script
+          is:inline
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={`{"token": "${import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN}"}`}
+        />
+      )
+    }
+
     <!-- Structured data (JSON-LD) -->
     {
       jsonLdItems.map((item) => (
