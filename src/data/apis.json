@@ -2200,5 +2200,107 @@
       "endpoint": "https://transcribe.amazonaws.com",
       "docsUrl": "https://docs.aws.amazon.com/transcribe/latest/dg/what-is-transcribe.html"
     }
+  },
+  {
+    "slug": "notion-automation-api",
+    "title": "Notion Automation API",
+    "description": "Automate and integrate your Notion workspace to enhance productivity and collaboration.",
+    "category": "Productivity",
+    "tags": [
+      "automation",
+      "productivity",
+      "integration"
+    ],
+    "details": {
+      "provider": "Notion Labs, Inc.",
+      "pricing": "Free tier available; paid plans start at $10/month.",
+      "features": [
+        "Create and update pages",
+        "Manage databases",
+        "Real-time synchronization"
+      ],
+      "useCase": "This API is used for automating tasks and workflows within Notion. It enhances user productivity.",
+      "website": "https://www.notion.so",
+      "authentication": "Bearer API key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python"
+      ],
+      "rateLimit": "3 requests/second",
+      "endpoint": "https://api.notion.com/v1",
+      "docsUrl": "https://developers.notion.com/docs"
+    }
+  },
+  {
+    "slug": "github-copilot-api",
+    "title": "GitHub Copilot API",
+    "description": "GitHub Copilot helps developers by providing AI-powered code suggestions in real-time. It enhances productivity through intelligent code completion.",
+    "category": "AI & Automation",
+    "tags": [
+      "ai",
+      "coding",
+      "automation",
+      "developer-tools",
+      "productivity"
+    ],
+    "details": {
+      "provider": "GitHub",
+      "pricing": "Subscription-based with a free trial available",
+      "features": [
+        "Context-aware code suggestions",
+        "Supports multiple programming languages",
+        "Integrates with popular IDEs",
+        "Real-time collaboration",
+        "Customizable settings"
+      ],
+      "useCase": "The API is used to enhance coding efficiency by providing intelligent code suggestions. It is designed for developers seeking to streamline their workflow.",
+      "website": "https://github.com/features/copilot",
+      "authentication": "Bearer API key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python",
+        "Ruby"
+      ],
+      "rateLimit": "60 requests/minute",
+      "endpoint": "https://api.github.com/copilot/v1",
+      "docsUrl": "https://docs.github.com/en/copilot"
+    }
+  },
+  {
+    "slug": "tinkr-api",
+    "title": "Tinkr API",
+    "description": "The Tinkr API enables developers to integrate advanced data visualization into applications. Effortlessly create dynamic charts and graphs.",
+    "category": "Data Visualization",
+    "tags": [
+      "data",
+      "visualization",
+      "charts",
+      "graphs",
+      "api"
+    ],
+    "details": {
+      "provider": "Tinkr",
+      "pricing": "Free tier available with limited features.",
+      "features": [
+        "Dynamic chart creation",
+        "Interactive data exploration",
+        "Real-time updates",
+        "Customizable templates"
+      ],
+      "useCase": "Developers can use the Tinkr API to enhance applications with interactive data visualizations.",
+      "website": "https://tinkr.com",
+      "authentication": "Bearer token",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Ruby",
+        "Python"
+      ],
+      "rateLimit": "60 requests/minute",
+      "endpoint": "https://api.tinkr.com/v1",
+      "docsUrl": "https://docs.tinkr.com"
+    }
   }
 ]

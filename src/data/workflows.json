@@ -10053,5 +10053,467 @@
       ],
       "useCase": "Helps development teams quickly identify and respond to critical application errors, minimizing downtime and improving reliability."
     }
+  },
+  {
+    "slug": "automated-api-versioning-tracking",
+    "title": "Implement API Versioning Tracking for Teams",
+    "description": "Easily track and manage version changes in your APIs using automated tools. Ensure seamless integration and communication within development teams.",
+    "category": "Developer Tools",
+    "tags": [
+      "api",
+      "versioning",
+      "tracking",
+      "automation",
+      "development"
+    ],
+    "details": {
+      "difficulty": "Intermediate",
+      "duration": "45–60 minutes",
+      "tools": [
+        "GitHub",
+        "PostHog Analytics API",
+        "Slack"
+      ],
+      "steps": [
+        {
+          "title": "Set Up Version Control in GitHub",
+          "description": "Create a repository in GitHub for your API project and establish a branching strategy for version management. This allows teams to efficiently track changes and collaborate on the API development.",
+          "links": [],
+          "actions": [
+            "Go to GitHub and log in to your account.",
+            "Click on 'New' to create a new repository.",
+            "Name your repository and select 'Public' or 'Private'.",
+            "Initialize the repository with a README file.",
+            "Set up a branching strategy by creating branches for each version."
+          ],
+          "commands": [],
+          "config": [],
+          "tools": [
+            "GitHub"
+          ],
+          "checklist": [
+            "Repository is created and initialized.",
+            "Branching strategy is documented."
+          ],
+          "expectedResult": "A GitHub repository is set up with an established branching strategy."
+        },
+        {
+          "title": "Implement API Versioning Strategy",
+          "description": "Decide on a versioning scheme, such as semantic versioning, and update your API endpoints to reflect version numbers in the URL. This ensures clarity and consistency in API usage.",
+          "links": [],
+          "actions": [
+            "Choose a versioning scheme (e.g., v1, v2).",
+            "Update your API routes to include the version number (e.g., /api/v1/resource).",
+            "Document the versioning strategy in your API documentation.",
+            "Ensure backward compatibility for existing users."
+          ],
+          "commands": [],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Versioning scheme is selected and implemented.",
+            "API documentation is updated with versioning details."
+          ],
+          "expectedResult": "API endpoints are updated to reflect the chosen versioning strategy."
+        },
+        {
+          "title": "Integrate PostHog for Analytics",
+          "description": "Set up PostHog Analytics in your API project to track user interactions with different API versions. This integration helps gather insights about usage patterns and user behavior.",
+          "links": [],
+          "actions": [
+            "Sign up for a PostHog account and create a new project.",
+            "Install the PostHog SDK in your API project using npm.",
+            "Initialize PostHog in your application with your API key.",
+            "Track events for each API version using PostHog's tracking methods."
+          ],
+          "commands": [
+            {
+              "label": "Install PostHog SDK",
+              "language": "bash",
+              "code": "npm install posthog-node"
+            }
+          ],
+          "config": [
+            {
+              "key": "POSTHOG_API_KEY",
+              "value": "<your_posthog_api_key>",
+              "description": "API key for authenticating with PostHog."
+            }
+          ],
+          "tools": [
+            "PostHog Analytics API"
+          ],
+          "checklist": [
+            "PostHog account and project are created.",
+            "PostHog SDK is installed and initialized."
+          ],
+          "expectedResult": "PostHog is integrated into the API project for analytics tracking."
+        },
+        {
+          "title": "Add Notifications in Slack",
+          "description": "Create a Slack integration to send notifications whenever a new version is deployed or an existing version is deprecated. This keeps the entire team informed about changes.",
+          "links": [],
+          "actions": [
+            "Go to your Slack workspace and create a new app.",
+            "Enable the Incoming Webhooks feature.",
+            "Create a new webhook URL for the channel where notifications will be sent.",
+            "Implement a function in your API to send messages to the Slack webhook on version changes."
+          ],
+          "commands": [],
+          "config": [
+            {
+              "key": "SLACK_WEBHOOK_URL",
+              "value": "<your_slack_webhook_url>",
+              "description": "Webhook URL for sending notifications to Slack."
+            }
+          ],
+          "tools": [
+            "Slack"
+          ],
+          "checklist": [
+            "Slack app is created and webhook is configured.",
+            "Notification function is implemented in the API."
+          ],
+          "expectedResult": "Slack notifications are set up for version deployments and deprecations."
+        },
+        {
+          "title": "Monitor and Review API Usage",
+          "description": "Regularly check the analytics from PostHog to understand how users are interacting with different versions of your API. This helps in making informed decisions on future updates.",
+          "links": [],
+          "actions": [
+            "Log in to your PostHog account and navigate to the project dashboard.",
+            "Select the 'Events' section to view tracked events for each API version.",
+            "Analyze user interaction patterns and identify trends.",
+            "Prepare a report based on the analytics for team discussions."
+          ],
+          "commands": [],
+          "config": [],
+          "tools": [
+            "PostHog Analytics API"
+          ],
+          "checklist": [
+            "Analytics dashboard is accessed and reviewed.",
+            "Trends and patterns are documented for team review."
+          ],
+          "expectedResult": "API usage is monitored and insights are gathered for future updates."
+        }
+      ],
+      "useCase": "This workflow helps teams maintain clarity on API versions and enhances collaboration through automated tracking and notifications."
+    }
+  },
+  {
+    "slug": "api-driven-content-scheduling",
+    "title": "Content Scheduling Using Multiple APIs",
+    "description": "Leverage APIs to automate content scheduling across platforms. This workflow enhances productivity and consistency.",
+    "category": "Productivity & Collaboration",
+    "tags": [
+      "content",
+      "scheduling",
+      "automation"
+    ],
+    "details": {
+      "difficulty": "Intermediate",
+      "duration": "45–60 minutes",
+      "tools": [
+        "Airtable API",
+        "Buffer",
+        "Google Sheets API"
+      ],
+      "steps": [
+        {
+          "title": "Set Up Airtable for Content Planning",
+          "description": "Create a base in Airtable to manage your content calendar effectively. Define fields such as title, publication date, and platform to ensure easy tracking and organization of your content.",
+          "links": [],
+          "actions": [
+            "Log in to your Airtable account and click on 'Add a base'.",
+            "Select 'Start from scratch' and name your base 'Content Calendar'.",
+            "Create fields for 'Title', 'Publication Date', and 'Platform' in your new base."
+          ],
+          "commands": [],
+          "config": [],
+          "tools": [
+            "Airtable API"
+          ],
+          "checklist": [
+            "Airtable base named 'Content Calendar' is created.",
+            "Fields 'Title', 'Publication Date', and 'Platform' are defined."
+          ],
+          "expectedResult": "Airtable base for content planning is set up with necessary fields."
+        },
+        {
+          "title": "Integrate Google Sheets for Data Management",
+          "description": "Utilize the Google Sheets API to pull data from your Airtable base. This integration allows for effective data manipulation and preparation for scheduling across platforms.",
+          "links": [],
+          "actions": [
+            "Create a new Google Sheet and name it 'Content Data'.",
+            "Enable the Google Sheets API in the Google Cloud Console.",
+            "Use the Airtable API to export data to your Google Sheet using a script."
+          ],
+          "commands": [
+            {
+              "label": "Export Airtable Data",
+              "language": "javascript",
+              "code": "fetch('https://api.airtable.com/v0/YOUR_BASE_ID/YOUR_TABLE_NAME', { headers: { Authorization: 'Bearer YOUR_API_KEY' }}).then(response => response.json()).then(data => console.log(data));"
+            }
+          ],
+          "config": [
+            {
+              "key": "YOUR_BASE_ID",
+              "value": "<Airtable Base ID>",
+              "description": "The ID of your Airtable base."
+            },
+            {
+              "key": "YOUR_TABLE_NAME",
+              "value": "<Airtable Table Name>",
+              "description": "The name of the table in your Airtable base."
+            },
+            {
+              "key": "YOUR_API_KEY",
+              "value": "<Airtable API Key>",
+              "description": "Your Airtable API key for authentication."
+            }
+          ],
+          "tools": [
+            "Google Sheets API"
+          ],
+          "checklist": [
+            "Google Sheet named 'Content Data' is created.",
+            "Google Sheets API is enabled in the Google Cloud Console."
+          ],
+          "expectedResult": "Data from Airtable is successfully pulled into Google Sheets."
+        },
+        {
+          "title": "Configure Buffer for Social Media Scheduling",
+          "description": "Set up your Buffer account to schedule posts across various social media platforms. Connect platforms like Instagram and Twitter to streamline your posting process.",
+          "links": [],
+          "actions": [
+            "Log in to your Buffer account and navigate to 'Settings'.",
+            "Select 'Social Accounts' and click on 'Connect a New Account'.",
+            "Choose the platforms you want to connect, such as Instagram and Twitter."
+          ],
+          "commands": [],
+          "config": [],
+          "tools": [
+            "Buffer"
+          ],
+          "checklist": [
+            "Buffer account is logged in and configured.",
+            "Social media accounts are successfully connected."
+          ],
+          "expectedResult": "Buffer is configured to schedule posts on selected social media platforms."
+        },
+        {
+          "title": "Automate Content Upload to Buffer",
+          "description": "Create a script that utilizes the Buffer API to automatically upload your scheduled content from Google Sheets based on the defined publication dates. This automation saves time and ensures consistency.",
+          "links": [],
+          "actions": [
+            "Write a script that reads data from your Google Sheet using Google Sheets API.",
+            "Format the data according to Buffer's API requirements for posting.",
+            "Use the Buffer API to schedule posts by sending a POST request with the formatted data."
+          ],
+          "commands": [
+            {
+              "label": "Schedule Post",
+              "language": "javascript",
+              "code": "fetch('https://api.bufferapp.com/1/updates/create.json', { method: 'POST', body: JSON.stringify({ text: 'Your post content', profile_ids: ['YOUR_PROFILE_ID'], scheduled_at: 'YOUR_SCHEDULED_DATE' }), headers: { 'Authorization': 'Bearer YOUR_BUFFER_ACCESS_TOKEN', 'Content-Type': 'application/json' }});"
+            }
+          ],
+          "config": [
+            {
+              "key": "YOUR_PROFILE_ID",
+              "value": "<Buffer Profile ID>",
+              "description": "The ID of the Buffer profile where the post will be scheduled."
+            },
+            {
+              "key": "YOUR_SCHEDULED_DATE",
+              "value": "<Date in ISO format>",
+              "description": "The date and time when the post should be scheduled."
+            },
+            {
+              "key": "YOUR_BUFFER_ACCESS_TOKEN",
+              "value": "<Buffer Access Token>",
+              "description": "Your Buffer access token for authentication."
+            }
+          ],
+          "tools": [
+            "Buffer",
+            "Google Sheets API"
+          ],
+          "checklist": [
+            "Script successfully reads data from Google Sheets.",
+            "Posts are formatted correctly for Buffer API."
+          ],
+          "expectedResult": "Content is automatically uploaded to Buffer for scheduling."
+        },
+        {
+          "title": "Test and Monitor the Workflow",
+          "description": "Run tests to ensure that the content is being scheduled correctly across all platforms. Monitor the Buffer dashboard for any issues that may arise during the scheduling process.",
+          "links": [],
+          "actions": [
+            "Check the Buffer dashboard for scheduled posts and their statuses.",
+            "Run a test by manually adding a post to Airtable and verifying it appears in Buffer.",
+            "Monitor for any errors or issues in the API responses during the automation."
+          ],
+          "commands": [],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Scheduled posts appear correctly in the Buffer dashboard.",
+            "Test posts from Airtable are successfully scheduled."
+          ],
+          "expectedResult": "The workflow is tested and confirmed to be functioning correctly."
+        }
+      ],
+      "useCase": "This workflow solves the challenge of manually scheduling content on multiple platforms. It ensures consistency and saves time."
+    }
+  },
+  {
+    "slug": "automated-api-health-checks",
+    "title": "API Health Checks Automation Workflow",
+    "description": "Ensure your APIs are functioning correctly with automated health checks. This workflow monitors endpoint availability and response times.",
+    "category": "Analytics & Monitoring",
+    "tags": [
+      "api",
+      "monitoring",
+      "automation"
+    ],
+    "details": {
+      "difficulty": "Intermediate",
+      "duration": "30-45 minutes",
+      "tools": [
+        "PostHog Analytics API",
+        "Twilio Messaging API"
+      ],
+      "steps": [
+        {
+          "title": "Define API Endpoints",
+          "description": "Create a comprehensive list of all API endpoints that need to be monitored. This step is crucial for tracking their performance and availability, ensuring that you have a clear understanding of what needs to be checked.",
+          "links": [],
+          "actions": [
+            "Identify all relevant API endpoints from your application documentation.",
+            "Create a spreadsheet or document to list each endpoint along with its purpose.",
+            "Categorize the endpoints based on their functionality (e.g., user management, data retrieval)."
+          ],
+          "commands": [],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "All API endpoints are listed in a document.",
+            "Endpoints are categorized by functionality."
+          ],
+          "expectedResult": "A complete list of API endpoints ready for monitoring."
+        },
+        {
+          "title": "Set Up Monitoring Tool",
+          "description": "Configure the PostHog Analytics API to monitor the defined endpoints. Ensure it is set to check the endpoints at regular intervals to maintain continuous oversight of their performance.",
+          "links": [],
+          "actions": [
+            "Sign up for a PostHog account and create a new project.",
+            "Navigate to the API settings and generate an API key.",
+            "Use the API key to configure the monitoring settings for your endpoints."
+          ],
+          "commands": [
+            {
+              "label": "PostHog API Key Setup",
+              "language": "bash",
+              "code": "curl -X POST https://app.posthog.com/api/projects/<PROJECT_ID>/api_key -H 'Authorization: <YOUR_API_KEY>'"
+            }
+          ],
+          "config": [
+            {
+              "key": "POSTHOG_API_KEY",
+              "value": "<YOUR_API_KEY>",
+              "description": "API key for authenticating with PostHog."
+            }
+          ],
+          "tools": [
+            "PostHog Analytics API"
+          ],
+          "checklist": [
+            "PostHog project is created and configured.",
+            "API key is generated and stored securely."
+          ],
+          "expectedResult": "PostHog is set up to monitor the defined API endpoints."
+        },
+        {
+          "title": "Implement Alert System",
+          "description": "Use the Twilio Messaging API to set up alerts for your API monitoring. This ensures that you are immediately notified if an API endpoint fails or responds slowly, allowing for quick action.",
+          "links": [],
+          "actions": [
+            "Sign up for a Twilio account and obtain your Account SID and Auth Token.",
+            "Create a new messaging service in Twilio to manage alerts.",
+            "Set up a webhook in PostHog to trigger Twilio alerts based on monitoring results."
+          ],
+          "commands": [
+            {
+              "label": "Twilio Messaging Setup",
+              "language": "bash",
+              "code": "curl -X POST https://api.twilio.com/2010-04-01/Accounts/<ACCOUNT_SID>/Messages.json -u <ACCOUNT_SID>:<AUTH_TOKEN> -d 'To=<YOUR_PHONE_NUMBER>' -d 'From=<TWILIO_PHONE_NUMBER>' -d 'Body=API Alert: An endpoint has failed!'"
+            }
+          ],
+          "config": [
+            {
+              "key": "TWILIO_ACCOUNT_SID",
+              "value": "<ACCOUNT_SID>",
+              "description": "Your Twilio Account SID."
+            },
+            {
+              "key": "TWILIO_AUTH_TOKEN",
+              "value": "<AUTH_TOKEN>",
+              "description": "Your Twilio Auth Token."
+            }
+          ],
+          "tools": [
+            "Twilio Messaging API"
+          ],
+          "checklist": [
+            "Twilio account is created and configured.",
+            "Webhook for alerts is set up in PostHog."
+          ],
+          "expectedResult": "An alert system is in place to notify you of API issues."
+        },
+        {
+          "title": "Run Initial Tests",
+          "description": "Conduct initial tests to ensure that the monitoring system correctly identifies endpoint availability and performance. This step is essential for validating that your setup works as intended.",
+          "links": [],
+          "actions": [
+            "Trigger requests to each API endpoint manually to check their responses.",
+            "Monitor the PostHog dashboard to verify that the endpoints are being tracked.",
+            "Simulate a failure by taking down an endpoint and check if the alert system works."
+          ],
+          "commands": [],
+          "config": [],
+          "tools": [
+            "PostHog Analytics API"
+          ],
+          "checklist": [
+            "All endpoints respond correctly during tests.",
+            "Alerts are triggered as expected for simulated failures."
+          ],
+          "expectedResult": "The monitoring system is validated and functioning correctly."
+        },
+        {
+          "title": "Review and Optimize",
+          "description": "Regularly review the alerts and performance data collected. This step allows you to optimize your checks and notifications based on the data to improve efficiency and reduce false positives.",
+          "links": [],
+          "actions": [
+            "Access the PostHog dashboard to analyze performance data over time.",
+            "Adjust the monitoring frequency based on endpoint performance.",
+            "Refine alert thresholds to minimize unnecessary notifications."
+          ],
+          "commands": [],
+          "config": [],
+          "tools": [
+            "PostHog Analytics API"
+          ],
+          "checklist": [
+            "Performance data is reviewed regularly.",
+            "Alert thresholds are adjusted based on analysis."
+          ],
+          "expectedResult": "The monitoring system is optimized for better performance and efficiency."
+        }
+      ],
+      "useCase": "This workflow helps to maintain API reliability by automating health checks and notifications, ensuring quick responses to issues."
+    }
   }
 ]

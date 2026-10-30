@@ -5,6 +5,12 @@
     "affiliateUrl": "https://ably.com",
     "sponsored": false
   },
+  "Adobe Express": {
+    "name": "Adobe Express",
+    "url": "https://www.adobe.com/express/",
+    "affiliateUrl": "https://www.adobe.com/express/",
+    "sponsored": false
+  },
   "Adobe Sign": {
     "name": "Adobe Sign",
     "url": "https://acrobat.adobe.com/us/en/sign.html",
@@ -183,6 +189,12 @@
     "name": "Blender",
     "url": "https://www.blender.org",
     "affiliateUrl": "https://www.blender.org",
+    "sponsored": false
+  },
+  "Box": {
+    "name": "Box",
+    "url": "https://www.box.com/",
+    "affiliateUrl": "https://www.box.com/",
     "sponsored": false
   },
   "Brevo": {
@@ -389,6 +401,12 @@
     "affiliateUrl": "https://elevenlabs.io",
     "sponsored": false
   },
+  "Evernote": {
+    "name": "Evernote",
+    "url": "https://www.evernote.com",
+    "affiliateUrl": "https://www.evernote.com",
+    "sponsored": false
+  },
   "Excalidraw": {
     "name": "Excalidraw",
     "url": "https://excalidraw.com",
@@ -473,6 +491,12 @@
     "affiliateUrl": "https://github.com/",
     "sponsored": false
   },
+  "GitHub Copilot API": {
+    "name": "GitHub Copilot API",
+    "url": "https://github.com/features/copilot",
+    "affiliateUrl": "https://github.com/features/copilot",
+    "sponsored": false
+  },
   "GitHub REST API": {
     "name": "GitHub REST API",
     "url": "https://docs.github.com/en/rest",
@@ -483,6 +507,12 @@
     "name": "GitLab",
     "url": "https://gitlab.com",
     "affiliateUrl": "https://gitlab.com",
+    "sponsored": false
+  },
+  "GoodNotes": {
+    "name": "GoodNotes",
+    "url": "https://www.goodnotes.com",
+    "affiliateUrl": "https://www.goodnotes.com",
     "sponsored": false
   },
   "Google Cloud Compute Engine": {
@@ -497,6 +527,12 @@
     "affiliateUrl": "https://docs.google.com",
     "sponsored": false
   },
+  "Google Drive": {
+    "name": "Google Drive",
+    "url": "https://www.google.com/drive/",
+    "affiliateUrl": "https://www.google.com/drive/",
+    "sponsored": false
+  },
   "Google Gemini": {
     "name": "Google Gemini",
     "url": "https://ai.google.dev/",
@@ -507,6 +543,12 @@
     "name": "Google Gemini API",
     "url": "https://ai.google.dev",
     "affiliateUrl": "https://ai.google.dev",
+    "sponsored": false
+  },
+  "Google Keep": {
+    "name": "Google Keep",
+    "url": "https://keep.google.com",
+    "affiliateUrl": "https://keep.google.com",
     "sponsored": false
   },
   "Google Maps API": {
@@ -803,6 +845,12 @@
     "affiliateUrl": "https://developer.microsoft.com/en-us/graph",
     "sponsored": false
   },
+  "Microsoft OneNote": {
+    "name": "Microsoft OneNote",
+    "url": "https://www.onenote.com",
+    "affiliateUrl": "https://www.onenote.com",
+    "sponsored": false
+  },
   "Microsoft Teams": {
     "name": "Microsoft Teams",
     "url": "https://www.microsoft.com/en-us/microsoft-teams",
@@ -886,6 +934,12 @@
     "url": "https://developers.notion.com/",
     "affiliateUrl": "https://www.notion.so/?ref=flowmatrix",
     "sponsored": true
+  },
+  "Notion Automation API": {
+    "name": "Notion Automation API",
+    "url": "https://www.notion.so",
+    "affiliateUrl": "https://www.notion.so",
+    "sponsored": false
   },
   "Nuke": {
     "name": "Nuke",
@@ -1217,6 +1271,12 @@
     "affiliateUrl": "https://www.snapchat.com",
     "sponsored": false
   },
+  "Snappa": {
+    "name": "Snappa",
+    "url": "https://snappa.com/",
+    "affiliateUrl": "https://snappa.com/",
+    "sponsored": false
+  },
   "SolidWorks": {
     "name": "SolidWorks",
     "url": "https://www.solidworks.com",
@@ -1227,6 +1287,12 @@
     "name": "Speechmatics",
     "url": "https://www.speechmatics.com/",
     "affiliateUrl": "https://www.speechmatics.com/",
+    "sponsored": false
+  },
+  "Squid": {
+    "name": "Squid",
+    "url": "https://www.squidnotes.com",
+    "affiliateUrl": "https://www.squidnotes.com",
     "sponsored": false
   },
   "Stability AI Image API": {
@@ -1271,6 +1337,12 @@
     "affiliateUrl": "https://core.telegram.org/bots/api",
     "sponsored": false
   },
+  "Tinkr API": {
+    "name": "Tinkr API",
+    "url": "https://tinkr.com",
+    "affiliateUrl": "https://tinkr.com",
+    "sponsored": false
+  },
   "tldraw": {
     "name": "tldraw",
     "url": "https://tldraw.com",
@@ -1287,6 +1359,12 @@
     "name": "Trello",
     "url": "https://trello.com",
     "affiliateUrl": "https://trello.com",
+    "sponsored": false
+  },
+  "Tresorit": {
+    "name": "Tresorit",
+    "url": "https://tresorit.com/",
+    "affiliateUrl": "https://tresorit.com/",
     "sponsored": false
   },
   "Triller": {
@@ -1347,6 +1425,12 @@
     "name": "Vikunja",
     "url": "https://vikunja.io",
     "affiliateUrl": "https://vikunja.io",
+    "sponsored": false
+  },
+  "Visme": {
+    "name": "Visme",
+    "url": "https://www.visme.co/",
+    "affiliateUrl": "https://www.visme.co/",
     "sponsored": false
   },
   "Visual Studio Code": {
