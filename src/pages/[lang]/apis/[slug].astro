@@ -2,7 +2,6 @@
 import Layout from "../../../layouts/Layout.astro";
 import Breadcrumb from "../../../components/Breadcrumb.astro";
 import DetailBox from "../../../components/DetailBox.astro";
-import CTA from "../../../components/CTA.astro";
 import Badge from "../../../components/Badge.astro";
 import { apis, workflows, getRelated, getRelatedByTags } from "../../../lib/content";
 import {
@@ -242,13 +241,6 @@ const jsonLd = [
       <!-- Features & use case -->
       <h2 class="mt-10 text-xl font-semibold text-white sm:text-2xl">Details</h2>
       <DetailBox details={restDetails} />
-
-      <CTA
-        title="Promote an API in this category?"
-        description="Reach developers and SEO teams actively looking for the right APIs. Space available for affiliate and sponsorship links."
-        ctaLabel="Request sponsorship"
-        ctaHref="mailto:Tribun692000@gmx.de"
-      />
 
       <!-- Related workflows -->
       {

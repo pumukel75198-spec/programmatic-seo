@@ -2,7 +2,6 @@
 import Layout from "../../../layouts/Layout.astro";
 import Breadcrumb from "../../../components/Breadcrumb.astro";
 import DetailBox from "../../../components/DetailBox.astro";
-import CTA from "../../../components/CTA.astro";
 import Badge from "../../../components/Badge.astro";
 import { alternatives, workflows, getRelated, getRelatedByTags } from "../../../lib/content";
 import { articleSchema, breadcrumbSchema } from "../../../lib/schema";
@@ -232,13 +231,6 @@ const jsonLd = [
           }
         </div>
       </div>
-
-      <CTA
-        title="Missing an alternative in this comparison?"
-        description="Know a tool that should be here? We welcome suggestions and offer space for affiliate and sponsorship links."
-        ctaLabel="Suggest a tool"
-        ctaHref="mailto:Tribun692000@gmx.de"
-      />
 
       <!-- Related workflows -->
       {
