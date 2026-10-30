@@ -44,7 +44,7 @@ const __dirname = dirname(__filename);
 const root = join(__dirname, "..");
 const outputDir = process.env.API_SCRIPTS_OUTPUT_DIR
   ? resolve(root, process.env.API_SCRIPTS_OUTPUT_DIR)
-  : join(root, "public", "api-scripts");
+  : join(root, "private", "api-scripts");
 const manifestFile = join(outputDir, "index.json");
 const python = process.env.PYTHON || "python3";
 

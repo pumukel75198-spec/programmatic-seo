@@ -280,12 +280,19 @@ def main():
     )
     parser.add_argument("--data", default=None, help="JSON request body")
     parser.add_argument(
+        "--base-url",
+        default=None,
+        help="override the endpoint (required for dynamic endpoints with placeholders)",
+    )
+    parser.add_argument(
         "--timeout", type=float, default=10.0, help="timeout in seconds"
     )
     args = parser.parse_args()
 
     api_key = os.environ.get(KEY_ENV, "").strip() or None
     endpoint = resolve_endpoint(api_key)
+    if args.base_url:
+        endpoint = args.base_url.strip()
     body = args.data if args.data is not None else DEFAULT_BODY
 
     print("API:      " + API_TITLE)
