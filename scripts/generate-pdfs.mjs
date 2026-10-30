@@ -38,7 +38,12 @@ const isMain = process.argv[1]
 const workflowsFile = join(root, "src", "data", "workflows.json");
 const partnerFile = join(root, "src", "data", "partner.json");
 const monetizationFile = join(root, "src", "data", "monetization.json");
-const outputDir = join(root, "public", "downloads");
+// PDFs dürfen NICHT im öffentlichen Build landen. Sie werden nach
+// `private/downloads/` geschrieben und über den Download-Gate-Worker aus R2
+// ausgeliefert. `PDF_OUTPUT_DIR` erlaubt einen abweichenden Pfad (z. B. in CI).
+const outputDir = process.env.PDF_OUTPUT_DIR
+  ? resolve(root, process.env.PDF_OUTPUT_DIR)
+  : join(root, "private", "downloads");
 
 const COLORS = {
   bg: "#06070d",

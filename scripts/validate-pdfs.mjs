@@ -25,7 +25,7 @@
 import { readFile, access } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { PDFParse } from "pdf-parse";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -33,7 +33,9 @@ const root = join(__dirname, "..");
 const workflowsFile = join(root, "src", "data", "workflows.json");
 const partnerFile = join(root, "src", "data", "partner.json");
 const monetizationFile = join(root, "src", "data", "monetization.json");
-const pdfDir = join(root, "public", "downloads");
+const pdfDir = process.env.PDF_OUTPUT_DIR
+  ? resolve(root, process.env.PDF_OUTPUT_DIR)
+  : join(root, "private", "downloads");
 
 const MIN_STEPS = 3;
 const MIN_STEP_DESCRIPTION_LENGTH = 20;

@@ -3,6 +3,11 @@ dist/
 # generated types
 .astro/
 
+# Premium-PDFs: privat, werden über den Download-Gate-Worker aus R2
+# ausgeliefert und dürfen nicht ins Repository oder in den öffentlichen Build.
+private/downloads/
+public/downloads/
+
 # local enrichment cache
 .cache/
 

@@ -42,7 +42,9 @@ const root = join(__dirname, "..");
 const workflowsFile = join(root, "src", "data", "workflows.json");
 const partnerFile = join(root, "src", "data", "partner.json");
 const monetizationFile = join(root, "src", "data", "monetization.json");
-const pdfDir = join(root, "public", "downloads");
+const pdfDir = process.env.PDF_OUTPUT_DIR
+  ? resolve(root, process.env.PDF_OUTPUT_DIR)
+  : join(root, "private", "downloads");
 
 const isMain = process.argv[1]
   ? resolve(process.argv[1]) === resolve(__filename)

@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "prebuild": "node scripts/generate-og.mjs && node scripts/generate-pdfs.mjs && node scripts/validate-pdfs.mjs",
+    "prebuild": "node scripts/clean-public-downloads.mjs && node scripts/generate-og.mjs && node scripts/generate-pdfs.mjs && node scripts/validate-pdfs.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
@@ -20,6 +20,7 @@
     "pdf:check": "node scripts/check-pdf-quality.mjs",
     "pdf:check:fix": "node scripts/check-pdf-quality.mjs --fix",
     "pdf:validate": "node scripts/validate-pdfs.mjs",
+    "pdf:upload": "node scripts/upload-pdfs.mjs",
     "og:generate": "node scripts/generate-og.mjs",
     "deploy:init": "wrangler pages project create programmatic-seo --production-branch=main",
     "deploy": "npm run build && wrangler pages deploy dist --project-name=programmatic-seo",

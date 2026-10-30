@@ -1,0 +1,24 @@
+# Cloudflare Worker – geschütztes Download-Gate für Premium-PDFs
+#
+# Setup (Details siehe README.md):
+#   1. KV-Namespace anlegen:
+#        npx wrangler kv namespace create PDF_STORE
+#   2. Secrets setzen:
+#        npx wrangler secret put DOWNLOAD_TOKEN_SECRET
+#        npx wrangler secret put LEMON_PRODUCT_MAP
+#   3. Worker deployen:
+#        cd worker/download-gate && npx wrangler deploy
+#   4. Worker-URL als PUBLIC_DOWNLOAD_GATE_URL in der Astro-Umgebung setzen.
+
+name = "flowmatrix-download-gate"
+main = "index.js"
+compatibility_date = "2025-01-01"
+
+[[kv_namespaces]]
+binding = "PDF_STORE"
+id = "60b777e050ae4134bf22d3ef1b6a5a5e"
+
+[vars]
+# Nur für die Testphase auf "1" setzen, solange noch keine echten
+# Lemon-Squeezy-Produkt-IDs in LEMON_PRODUCT_MAP hinterlegt sind.
+ALLOW_ALL_ON_VALID = "0"

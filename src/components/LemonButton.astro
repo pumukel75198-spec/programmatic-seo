@@ -111,6 +111,9 @@ const classes = [
 
 <script is:inline>
   (function () {
+    // Nur laden, wenn tatsächlich ein konfigurierter Checkout-Button existiert.
+    // So entsteht auf Seiten ohne Lemon-Squeezy-Button kein externer Request.
+    if (!document.querySelector(".lemonsqueezy-button")) return;
     if (document.querySelector("script[data-lemon-squeezy]")) return;
     var script = document.createElement("script");
     script.src = "https://app.lemonsqueezy.com/js/lemon.js";

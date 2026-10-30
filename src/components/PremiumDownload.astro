@@ -1,16 +1,21 @@
 ---
 /**
- * Premium PDF purchase + download unlock.
+ * Premium PDF purchase + geschützter Download.
  *
- * Flow:
- *   1. Visitor sees a locked card with a Lemon Squeezy buy button (€4.99).
- *   2. Lemon Squeezy opens the checkout in its overlay.
- *   3. On a successful checkout, Lemon.js emits
- *      `lemon-squeezy:checkout:success`; the component then reveals the
- *      download link and remembers the unlock in localStorage.
+ * Ablauf:
+ *   1. Besucher kauft das PDF über Lemon Squeezy (€4.99).
+ *   2. Lemon Squeezy stellt einen Lizenzschlüssel aus (per E-Mail / Checkout).
+ *   3. Der Besucher gibt den Schlüssel hier ein.
+ *   4. Das Frontend ruft den Download-Gate-Worker (`/api/validate`) auf.
+ *      Der Worker prüft den Schlüssel gegen die Lemon-Squeezy-License-API und
+ *      gibt ein kurzlebiges, signiertes Download-Token zurück.
+ *   5. Der Download-Link zeigt auf `/api/download?token=…&slug=…`; der Worker
+ *      streamt das PDF aus dem privaten R2-Bucket.
  *
- * The PDF itself is generated at build time by `scripts/generate-pdfs.mjs`
- * and served from `/downloads/flowmatrix-<slug>.pdf`.
+ * Wichtig: Es gibt bewusst KEINEN clientseitigen „Unlock" mehr. Ohne gültige
+ * Lizenz liefert der Worker kein PDF. Der Lizenzschlüssel wird nur lokal
+ * gespeichert, um ihn beim nächsten Besuch erneut zu validieren – nicht der
+ * Unlock-Status.
  */
 import LemonButton from "./LemonButton.astro";
 
@@ -28,8 +33,7 @@ const {
   checkoutUrl,
 } = Astro.props;
 
-const downloadUrl = `/downloads/flowmatrix-${slug}.pdf`;
-const storageKey = `flowmatrix:unlocked:${slug}`;
+const gateUrl = (import.meta.env.PUBLIC_DOWNLOAD_GATE_URL ?? "").trim();
 const resolvedCheckoutUrl =
   checkoutUrl ??
   import.meta.env.PUBLIC_LEMON_WORKFLOW_CHECKOUT_URL ??
@@ -39,8 +43,8 @@ const resolvedCheckoutUrl =
 <section
   class="mt-10 overflow-hidden rounded-2xl border border-brand-500/30 bg-gradient-to-br from-brand-500/10 via-surface to-cyan-500/5"
   data-premium-download
-  data-storage-key={storageKey}
   data-slug={slug}
+  data-gate-url={gateUrl}
 >
   <div class="p-6 sm:p-8">
     <div class="flex flex-wrap items-center gap-2">
@@ -58,24 +62,58 @@ const resolvedCheckoutUrl =
       und eine kuratierte Liste empfohlener Tools mit direkten Links.
     </p>
 
-    <!-- Locked state -->
+    <!-- Kauf -->
     <div class="mt-6" data-locked>
       <LemonButton
         label={`PDF kaufen – ${price}`}
         price="Einmalzahlung · PDF-Download"
         productName={`${title} – Premium Workflow`}
         checkoutUrl={resolvedCheckoutUrl}
-        note="Sichere Zahlung über Lemon Squeezy · Download wird nach dem Kauf freigeschaltet"
+        note="Sichere Zahlung über Lemon Squeezy · Lizenzschlüssel kommt per E-Mail"
       />
+
+      <div class="mt-6 rounded-xl border border-white/10 bg-white/[0.03] p-4">
+        <p class="text-sm font-medium text-white">Bereits gekauft?</p>
+        <p class="mt-1 text-xs text-slate-400">
+          Gib deinen Lemon-Squeezy-Lizenzschlüssel ein, um das PDF freizuschalten.
+        </p>
+        <form class="mt-3 flex flex-col gap-2 sm:flex-row" data-license-form>
+          <label class="sr-only" for={`license-${slug}`}>Lizenzschlüssel</label>
+          <input
+            id={`license-${slug}`}
+            name="licenseKey"
+            type="text"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="XXXX-XXXX-XXXX-XXXX"
+            class="w-full flex-1 rounded-lg border border-white/10 bg-[#06070d] px-3 py-2.5 font-mono text-sm text-white placeholder:text-slate-600 focus:border-brand-400/60 focus:outline-none focus:ring-2 focus:ring-brand-500/30"
+            data-license-input
+          />
+          <button
+            type="submit"
+            class="inline-flex items-center justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-400 disabled:cursor-not-allowed disabled:opacity-60"
+            data-license-submit
+          >
+            PDF freischalten
+          </button>
+        </form>
+        <p
+          class="mt-2 hidden text-xs text-rose-300"
+          role="alert"
+          data-license-error
+        ></p>
+        <p class="mt-2 hidden text-xs text-slate-400" data-license-status></p>
+      </div>
     </div>
 
-    <!-- Unlocked state -->
+    <!-- Freigeschaltet -->
     <div class="mt-6 hidden" data-unlocked>
       <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
         <a
-          href={downloadUrl}
+          href="#"
           download
           class="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition-colors hover:bg-emerald-400"
+          data-download-link
         >
           <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
             <path d="M10 2a.75.75 0 01.75.75v8.69l2.72-2.72a.75.75 0 111.06 1.06l-4 4a.75.75 0 01-1.06 0l-4-4a.75.75 0 111.06-1.06l2.72 2.72V2.75A.75.75 0 0110 2z" />
@@ -84,7 +122,8 @@ const resolvedCheckoutUrl =
           PDF herunterladen
         </a>
         <p class="text-xs text-slate-500">
-          Kauf bestätigt. Der Download bleibt in diesem Browser freigeschaltet.
+          Lizenz bestätigt. Der Download-Link ist aus Sicherheitsgründen
+          kurzzeitig gültig.
         </p>
       </div>
     </div>
@@ -97,66 +136,153 @@ const resolvedCheckoutUrl =
       var roots = document.querySelectorAll("[data-premium-download]");
       if (!roots.length) return;
 
-      function unlock(root) {
+      roots.forEach(function (root) {
+        var slug = root.dataset.slug;
+        var gateUrl = (root.dataset.gateUrl || "").replace(/\/$/, "");
+        var storageKey = "flowmatrix:license:" + slug;
+
+        var form = root.querySelector("[data-license-form]");
+        var input = root.querySelector("[data-license-input]");
+        var submit = root.querySelector("[data-license-submit]");
+        var errorEl = root.querySelector("[data-license-error]");
+        var statusEl = root.querySelector("[data-license-status]");
         var locked = root.querySelector("[data-locked]");
         var unlocked = root.querySelector("[data-unlocked]");
-        if (locked) locked.classList.add("hidden");
-        if (unlocked) unlocked.classList.remove("hidden");
-      }
+        var downloadLink = root.querySelector("[data-download-link]");
 
-      function isUnlocked(root) {
-        try {
-          return localStorage.getItem(root.dataset.storageKey) === "1";
-        } catch (error) {
-          return false;
+        function showError(message) {
+          if (!errorEl) return;
+          errorEl.textContent = message;
+          errorEl.classList.remove("hidden");
         }
-      }
 
-      function remember(root) {
-        try {
-          localStorage.setItem(root.dataset.storageKey, "1");
-        } catch (error) {
-          /* localStorage may be unavailable */
+        function clearError() {
+          if (!errorEl) return;
+          errorEl.textContent = "";
+          errorEl.classList.add("hidden");
         }
-      }
 
-      roots.forEach(function (root) {
-        if (isUnlocked(root)) unlock(root);
-      });
+        function setStatus(message) {
+          if (!statusEl) return;
+          statusEl.textContent = message || "";
+          statusEl.classList.toggle("hidden", !message);
+        }
 
-      // Lemon Squeezy overlay success event.
-      window.addEventListener("lemon-squeezy:checkout:success", function () {
-        roots.forEach(function (root) {
-          remember(root);
-          unlock(root);
-        });
-      });
+        function setBusy(busy) {
+          if (submit) {
+            submit.disabled = busy;
+            submit.textContent = busy ? "Prüfe Lizenz …" : "PDF freischalten";
+          }
+        }
 
-      // Fallback for postMessage-based integrations.
-      window.addEventListener("message", function (event) {
-        var data = event.data;
-        if (!data) return;
-        var type = typeof data === "string" ? data : data.event || data.type;
-        if (type === "checkout:success" || type === "lemon-squeezy:checkout:success") {
-          roots.forEach(function (root) {
-            remember(root);
-            unlock(root);
+        function unlock(downloadUrl) {
+          if (downloadLink) downloadLink.setAttribute("href", downloadUrl);
+          if (locked) locked.classList.add("hidden");
+          if (unlocked) unlocked.classList.remove("hidden");
+          setStatus("");
+          clearError();
+        }
+
+        function remember(key) {
+          try {
+            localStorage.setItem(storageKey, key);
+          } catch (error) {
+            /* localStorage may be unavailable */
+          }
+        }
+
+        function forget() {
+          try {
+            localStorage.removeItem(storageKey);
+          } catch (error) {
+            /* ignore */
+          }
+        }
+
+        function validate(licenseKey, options) {
+          var silent = options && options.silent;
+          if (!gateUrl) {
+            if (!silent) {
+              showError(
+                "Der Download-Server ist noch nicht konfiguriert. Bitte später erneut versuchen."
+              );
+            }
+            return Promise.resolve(false);
+          }
+
+          if (!silent) {
+            clearError();
+            setBusy(true);
+            setStatus("Lizenz wird geprüft …");
+          }
+
+          return fetch(gateUrl + "/api/validate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ licenseKey: licenseKey, slug: slug }),
+          })
+            .then(function (response) {
+              return response.json().then(function (data) {
+                return { ok: response.ok, data: data };
+              });
+            })
+            .then(function (result) {
+              var data = result.data || {};
+              if (result.ok && data.valid && data.downloadUrl) {
+                remember(licenseKey);
+                unlock(data.downloadUrl);
+                return true;
+              }
+              if (!silent) {
+                showError(
+                  data.error ||
+                    "Lizenzschlüssel ist ungültig oder nicht aktiv."
+                );
+                setStatus("");
+              }
+              return false;
+            })
+            .catch(function () {
+              if (!silent) {
+                showError(
+                  "Lizenzprüfung fehlgeschlagen. Bitte Verbindung prüfen und erneut versuchen."
+                );
+                setStatus("");
+              }
+              return false;
+            })
+            .finally(function () {
+              if (!silent) setBusy(false);
+            });
+        }
+
+        if (form) {
+          form.addEventListener("submit", function (event) {
+            event.preventDefault();
+            var value = (input && input.value ? input.value : "").trim();
+            if (!value) {
+              showError("Bitte einen Lizenzschlüssel eingeben.");
+              return;
+            }
+            validate(value);
+          });
+        }
+
+        // Beim Laden: gespeicherten Schlüssel erneut validieren (nicht den
+        // Unlock-Status vertrauen).
+        var stored = null;
+        try {
+          stored = localStorage.getItem(storageKey);
+        } catch (error) {
+          stored = null;
+        }
+        if (stored) {
+          if (input) input.value = stored;
+          validate(stored, { silent: true }).then(function (ok) {
+            if (!ok) forget();
           });
         }
       });
-
-      // Fallback for redirect-based flows: /workflows/<slug>/?purchased=1
-      try {
-        var params = new URLSearchParams(window.location.search);
-        if (params.get("purchased") === "1" || params.get("order_id")) {
-          roots.forEach(function (root) {
-            remember(root);
-            unlock(root);
-          });
-        }
-      } catch (error) {
-        /* ignore */
-      }
     }
 
     if (document.readyState === "loading") {
