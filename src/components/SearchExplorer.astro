@@ -1,0 +1,393 @@
+---
+import type { SearchItem } from "../lib/search-index";
+import type { DiscoverLabels } from "../i18n/discover";
+
+interface Props {
+  items: SearchItem[];
+  lang: string;
+  labels: DiscoverLabels;
+}
+
+const { items, lang, labels } = Astro.props;
+
+// Escape "<" so a description can never terminate the JSON script tag early.
+const itemsJson = JSON.stringify(items).replace(/</g, "\\u003c");
+const labelsJson = JSON.stringify(labels);
+---
+
+<div
+  class="search-explorer"
+  data-lang={lang}
+  data-labels={labelsJson}
+>
+  <div class="relative">
+    <label for="intent-search" class="sr-only">{labels.searchLabel}</label>
+    <svg
+      class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+        clip-rule="evenodd"
+      />
+    </svg>
+    <input
+      id="intent-search"
+      type="search"
+      autocomplete="off"
+      spellcheck="false"
+      placeholder={labels.placeholder}
+      class="w-full rounded-2xl border border-white/10 bg-surface/70 py-4 pl-12 pr-28 text-base text-white placeholder:text-slate-500 shadow-lg shadow-black/20 outline-none transition focus:border-brand-500/50 focus:ring-2 focus:ring-brand-500/20"
+    />
+    <button
+      id="intent-clear"
+      type="button"
+      class="absolute right-3 top-1/2 hidden -translate-y-1/2 rounded-lg px-3 py-1.5 text-xs font-medium text-slate-400 transition hover:bg-white/5 hover:text-white"
+    >
+      {labels.clear}
+    </button>
+  </div>
+
+  <div class="mt-4 flex flex-wrap items-center gap-2">
+    <span class="text-xs font-medium uppercase tracking-wider text-slate-500">
+      {labels.examplesLabel}
+    </span>
+    {
+      labels.examples.map((example) => (
+        <button
+          type="button"
+          class="intent-example rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-300 transition hover:border-brand-500/40 hover:text-white"
+          data-query={example}
+        >
+          {example}
+        </button>
+      ))
+    }
+  </div>
+
+  <div id="intent-filters" class="mt-6 hidden flex-wrap items-center gap-2">
+    <button
+      type="button"
+      class="intent-filter rounded-full px-3 py-1.5 text-xs font-semibold ring-1 ring-inset transition"
+      data-type="all"
+      data-active="true"
+    >
+      {labels.typeAll}
+    </button>
+    <button
+      type="button"
+      class="intent-filter rounded-full px-3 py-1.5 text-xs font-semibold ring-1 ring-inset transition"
+      data-type="api"
+      data-active="false"
+    >
+      {labels.typeApi}
+    </button>
+    <button
+      type="button"
+      class="intent-filter rounded-full px-3 py-1.5 text-xs font-semibold ring-1 ring-inset transition"
+      data-type="alternative"
+      data-active="false"
+    >
+      {labels.typeAlternative}
+    </button>
+    <button
+      type="button"
+      class="intent-filter rounded-full px-3 py-1.5 text-xs font-semibold ring-1 ring-inset transition"
+      data-type="workflow"
+      data-active="false"
+    >
+      {labels.typeWorkflow}
+    </button>
+  </div>
+
+  <p
+    id="intent-status"
+    class="mt-6 hidden text-sm text-slate-400"
+    aria-live="polite"
+  ></p>
+
+  <div
+    id="intent-results"
+    class="mt-4 grid gap-5 md:grid-cols-2 lg:grid-cols-3"
+    role="list"
+  ></div>
+
+  <div id="intent-start" class="mt-10 rounded-2xl border border-white/10 bg-surface/40 p-8 text-center">
+    <h2 class="text-xl font-semibold text-white">{labels.startTitle}</h2>
+    <p class="mx-auto mt-2 max-w-xl text-sm leading-relaxed text-slate-400">
+      {labels.startText}
+    </p>
+    <div class="mt-6 flex flex-wrap justify-center gap-3">
+      <a
+        href={`/${lang}/apis/`}
+        class="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-brand-500/40 hover:text-white"
+      >
+        {labels.browseApis}
+      </a>
+      <a
+        href={`/${lang}/alternatives/`}
+        class="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-brand-500/40 hover:text-white"
+      >
+        {labels.browseAlternatives}
+      </a>
+      <a
+        href={`/${lang}/workflows/`}
+        class="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-brand-500/40 hover:text-white"
+      >
+        {labels.browseWorkflows}
+      </a>
+    </div>
+  </div>
+
+  <div id="intent-empty" class="mt-10 hidden rounded-2xl border border-white/10 bg-surface/40 p-8 text-center">
+    <h2 class="text-xl font-semibold text-white">{labels.emptyTitle}</h2>
+    <p class="mx-auto mt-2 max-w-xl text-sm leading-relaxed text-slate-400">
+      {labels.emptyText}
+    </p>
+    <div class="mt-6 flex flex-wrap justify-center gap-3">
+      <a
+        href={`/${lang}/apis/`}
+        class="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-brand-500/40 hover:text-white"
+      >
+        {labels.browseApis}
+      </a>
+      <a
+        href={`/${lang}/alternatives/`}
+        class="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-brand-500/40 hover:text-white"
+      >
+        {labels.browseAlternatives}
+      </a>
+      <a
+        href={`/${lang}/workflows/`}
+        class="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-brand-500/40 hover:text-white"
+      >
+        {labels.browseWorkflows}
+      </a>
+    </div>
+  </div>
+
+  <p class="mt-6 text-center text-xs text-slate-600">{labels.hint}</p>
+
+  <script type="application/json" class="intent-data" set:html={itemsJson}></script>
+</div>
+
+<script>
+  const root = document.querySelector(".search-explorer");
+
+  if (root) {
+    const dataEl = root.querySelector(".intent-data");
+    const items = JSON.parse(dataEl?.textContent || "[]");
+    const labels = JSON.parse(root.getAttribute("data-labels") || "{}");
+
+    const input = root.querySelector("#intent-search");
+    const clearBtn = root.querySelector("#intent-clear");
+    const filters = root.querySelector("#intent-filters");
+    const status = root.querySelector("#intent-status");
+    const results = root.querySelector("#intent-results");
+    const start = root.querySelector("#intent-start");
+    const empty = root.querySelector("#intent-empty");
+
+    const TYPE_LABELS = {
+      api: labels.typeApi,
+      alternative: labels.typeAlternative,
+      workflow: labels.typeWorkflow,
+    };
+
+    const TYPE_TONES = {
+      api: "bg-brand-500/10 text-brand-300 ring-brand-500/20",
+      alternative: "bg-cyan-500/10 text-cyan-300 ring-cyan-500/20",
+      workflow: "bg-emerald-500/10 text-emerald-300 ring-emerald-500/20",
+    };
+
+    const ACTIVE_FILTER = ["bg-brand-500/15", "text-brand-200", "ring-brand-500/30"];
+    const INACTIVE_FILTER = ["bg-white/5", "text-slate-400", "ring-white/10"];
+
+    let activeType = "all";
+    let debounceTimer = null;
+
+    const normalize = (value) =>
+      String(value || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9\s-]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+    const escapeHtml = (value) =>
+      String(value || "")
+        .replace(/&/g, "\u0026amp;")
+        .replace(/</g, "\u0026lt;")
+        .replace(/>/g, "\u0026gt;")
+        .replace(/"/g, "\u0026quot;")
+        .replace(/'/g, "\u0026#39;");
+
+    const scoreItem = (item, tokens) => {
+      const title = normalize(item.title);
+      const description = normalize(item.description);
+      const category = normalize(item.category);
+      const tags = (item.tags || []).map(normalize).join(" ");
+
+      let score = 0;
+
+      for (const token of tokens) {
+        let tokenScore = 0;
+
+        if (title === token) tokenScore = 100;
+        else if (title.startsWith(token)) tokenScore = 60;
+        else if (title.includes(token)) tokenScore = 40;
+
+        if (tags.includes(token)) tokenScore = Math.max(tokenScore, 30);
+        if (category.includes(token)) tokenScore = Math.max(tokenScore, 25);
+        if (description.includes(token)) tokenScore = Math.max(tokenScore, 10);
+
+        // Every token must match somewhere (AND semantics).
+        if (tokenScore === 0) return 0;
+        score += tokenScore;
+      }
+
+      return score;
+    };
+
+    const cardHtml = (item) => {
+      const tone = TYPE_TONES[item.type] || TYPE_TONES.api;
+      const typeLabel = TYPE_LABELS[item.type] || item.type;
+      const tags = (item.tags || [])
+        .slice(0, 3)
+        .map(
+          (tag) =>
+            `<span class="inline-flex items-center rounded-full bg-white/5 px-2.5 py-0.5 text-xs font-medium text-slate-300 ring-1 ring-inset ring-white/10">${escapeHtml(tag)}</span>`
+        )
+        .join("");
+
+      return `<a href="${escapeHtml(item.url)}" role="listitem" class="group flex flex-col rounded-2xl border border-white/10 bg-surface/60 p-6 backdrop-blur-sm transition hover:border-brand-500/40 hover:bg-surface/80">
+        <div class="flex items-start justify-between gap-3">
+          <h3 class="text-lg font-semibold text-white transition-colors group-hover:text-brand-300">${escapeHtml(item.title)}</h3>
+          <span class="inline-flex shrink-0 items-center rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset ${tone}">${escapeHtml(typeLabel)}</span>
+        </div>
+        <p class="mt-2 flex-1 text-sm leading-relaxed text-slate-400">${escapeHtml(item.description)}</p>
+        ${tags ? `<div class="mt-4 flex flex-wrap gap-1.5">${tags}</div>` : ""}
+        <div class="mt-5 flex items-center justify-between border-t border-white/5 pt-4">
+          <span class="text-xs font-medium text-slate-500">${escapeHtml(item.meta || item.category)}</span>
+          <span class="inline-flex items-center gap-1 text-sm font-medium text-brand-300 transition-transform group-hover:translate-x-0.5">${escapeHtml(labels.open)} →</span>
+        </div>
+      </a>`;
+    };
+
+    const setFilterState = () => {
+      root.querySelectorAll(".intent-filter").forEach((btn) => {
+        const isActive = btn.getAttribute("data-type") === activeType;
+        btn.setAttribute("data-active", isActive ? "true" : "false");
+        ACTIVE_FILTER.forEach((cls) => btn.classList.toggle(cls, isActive));
+        INACTIVE_FILTER.forEach((cls) => btn.classList.toggle(cls, !isActive));
+      });
+    };
+
+    const syncUrl = (query) => {
+      const url = new URL(window.location.href);
+      if (query) url.searchParams.set("q", query);
+      else url.searchParams.delete("q");
+      window.history.replaceState(null, "", url.toString());
+    };
+
+    const render = () => {
+      const rawQuery = input.value.trim();
+      const tokens = normalize(rawQuery).split(" ").filter(Boolean);
+
+      clearBtn.classList.toggle("hidden", rawQuery.length === 0);
+
+      if (tokens.length === 0) {
+        start.classList.remove("hidden");
+        empty.classList.add("hidden");
+        filters.classList.add("hidden");
+        filters.classList.remove("flex");
+        status.classList.add("hidden");
+        results.innerHTML = "";
+        return;
+      }
+
+      start.classList.add("hidden");
+      filters.classList.remove("hidden");
+      filters.classList.add("flex");
+
+      const matches = items
+        .filter((item) => activeType === "all" || item.type === activeType)
+        .map((item) => ({ item, score: scoreItem(item, tokens) }))
+        .filter((entry) => entry.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 30)
+        .map((entry) => entry.item);
+
+      status.classList.remove("hidden");
+      status.textContent = `${matches.length} ${labels.resultsLabel} "${rawQuery}"`;
+
+      if (matches.length === 0) {
+        empty.classList.remove("hidden");
+        results.innerHTML = "";
+        return;
+      }
+
+      empty.classList.add("hidden");
+      results.innerHTML = matches.map(cardHtml).join("");
+    };
+
+    const scheduleRender = () => {
+      window.clearTimeout(debounceTimer);
+      debounceTimer = window.setTimeout(render, 120);
+    };
+
+    input.addEventListener("input", () => {
+      scheduleRender();
+      syncUrl(input.value.trim());
+    });
+
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        const first = results.querySelector("a");
+        if (first) {
+          event.preventDefault();
+          window.location.href = first.getAttribute("href");
+        }
+      }
+      if (event.key === "Escape") {
+        input.value = "";
+        syncUrl("");
+        render();
+      }
+    });
+
+    clearBtn.addEventListener("click", () => {
+      input.value = "";
+      syncUrl("");
+      input.focus();
+      render();
+    });
+
+    root.querySelectorAll(".intent-example").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        input.value = btn.getAttribute("data-query") || "";
+        syncUrl(input.value.trim());
+        input.focus();
+        render();
+      });
+    });
+
+    root.querySelectorAll(".intent-filter").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        activeType = btn.getAttribute("data-type") || "all";
+        setFilterState();
+        render();
+      });
+    });
+
+    // Restore a shared search from ?q=...
+    const initialQuery = new URLSearchParams(window.location.search).get("q");
+    if (initialQuery) input.value = initialQuery;
+
+    setFilterState();
+    render();
+  }
+</script>

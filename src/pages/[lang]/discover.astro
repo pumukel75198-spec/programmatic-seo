@@ -1,0 +1,64 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import SearchExplorer from "../../components/SearchExplorer.astro";
+import { buildSearchIndex } from "../../lib/search-index";
+import { discoverLabels } from "../../i18n/discover";
+import { languages } from "../../i18n/ui";
+import { getLocale } from "../../i18n/utils";
+import { site } from "../../lib/site";
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({
+    params: { lang: lang.code },
+    props: { lang: lang.code },
+  }));
+}
+
+const lang = getLocale(Astro.props.lang);
+const labels = discoverLabels[lang] ?? discoverLabels.en;
+const items = buildSearchIndex(lang);
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: site.name,
+  url: new URL(`/${lang}/discover/`, site.url).toString(),
+  description: labels.description,
+  inLanguage: lang,
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${new URL(`/${lang}/discover/`, site.url).toString()}?q={search_term_string}`,
+    "query-input": "required name=search_term_string",
+  },
+};
+---
+
+<Layout
+  title={labels.title}
+  description={labels.description}
+  keywords={[
+    "API search",
+    "find API",
+    "alternatives",
+    "workflows",
+    "automation",
+    "intent finder",
+  ]}
+  jsonLd={jsonLd}
+  lang={lang}
+>
+  <PageHeader
+    eyebrow={labels.eyebrow}
+    title={labels.title}
+    description={labels.description}
+  >
+    <p class="text-sm text-slate-500">
+      {items.length} {lang === "de" ? "Einträge durchsuchbar" : "searchable entries"}
+    </p>
+  </PageHeader>
+
+  <section class="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+    <SearchExplorer items={items} lang={lang} labels={labels} />
+  </section>
+</Layout>

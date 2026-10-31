@@ -8,7 +8,10 @@ interface Props {
 
 const lang = Astro.props.lang ?? "en";
 
+const discoverLabel = lang === "de" ? "Entdecken" : "Discover";
+
 const nav = [
+  { href: `/${lang}/discover`, label: discoverLabel },
   { href: `/${lang}/apis`, label: t(lang, "nav.apis") },
   { href: `/${lang}/alternatives`, label: t(lang, "nav.alternatives") },
   { href: `/${lang}/workflows`, label: t(lang, "nav.workflows") },
