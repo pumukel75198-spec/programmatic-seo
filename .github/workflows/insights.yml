@@ -105,5 +105,8 @@ jobs:
             echo "No new insights to commit."
           else
             git commit -m "chore: add generated insights"
+            # Remote-Stand einrebase, um Race-Conditions mit parallelen
+            # Content-/Deploy-Workflows zu vermeiden (wie in den anderen Jobs).
+            git pull --rebase --autostash origin main
             git push
           fi
