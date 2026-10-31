@@ -245,7 +245,9 @@ const HALLUCINATION_PATTERNS = [
   ["Superlativ „führend/weltklasse/revolutionär“", /\b(?:führend|weltklasse|revolutionär)\b/i],
   ["Platzhalter-Domain", /\b(?:example\.(?:com|org|net)|localhost|127\.0\.0\.1|0\.0\.0\.0)\b/i],
   ["Platzhalter-Pfad", /\b(?:path\/to|your[-\s]?domain|ihre[-\s]?domain|deine[-\s]?domain)\b/i],
-  ["Template-Platzhalter", /\{\{|\}\}|<[^>]*(?:insert|todo|placeholder|dein|ihr)[^>]*>/i],
+  // `{{`/`}}` und das HTML-Attribut `placeholder` werden bewusst nicht
+  // geprüft: echte JSON-/HTML-Code-Beispiele sind kein Platzhalter.
+  ["Template-Platzhalter", /<[^>]*(?:insert|todo|dein|ihr)[^>]*>/i],
   ["Junk „Lorem Ipsum“", /lorem\s+ipsum/i],
   ["Junk „TODO“", /\bTODO\b|\bT\s+O\s+D\s+O\b/i],
   ["Junk „TBD“", /\bT\s*B\s*D\b/i],
@@ -286,6 +288,223 @@ function normalizeStep(step) {
     checklist: Array.isArray(step?.checklist) ? step.checklist : [],
     expectedResult: step?.expectedResult ?? "",
   };
+}
+
+/* --------------------------------------------------------------------------
+ * Zusätzliche Qualitätsprüfungen (Abarbeitbarkeit + Zielführung)
+ * ------------------------------------------------------------------------ */
+
+/** Deutsche Wörter/Platzhalter, die in englischen Code-Beispielen nichts zu suchen haben. */
+const GERMAN_COMMAND_PATTERN =
+  /\b(und|oder|der|das|den|dem|des|ein|eine|einen|für|mit|von|zu|im|auf|als|bei|nach|aus|durch|nicht|auch|noch|nur|dann|wenn|dass|wie|was|wer|wo|beim|zur|zum|Daten|Ihr|Ihre|Dein|Deine|Schlüssel|Vorlage|Seite|Inhalt|Thema|Anfrage|Versand|Installation|Übersetzung|Entwurf|Benutzer|Konto|Datei|Pfad|Wert|Größe|Intervall|Prozentsatz|Änderung|Benachrichtigung|Zugriff|öffentlich|anonym|Prozess|Analyse|Beitrag|TRANSKRIBIERTER|Implementierung|Transkription|Signaturüberprüfung|Überprüfung|analysieren|erstellen)\b|[äöüß]/i;
+
+/** Häufige „a“-statt-„an“-Fehler vor Vokalen. */
+const A_VOWEL_ERRORS = [
+  /\ba organized\b/i,
+  /\ba engaging\b/i,
+  /\ba example\b/i,
+  /\ba API\b/,
+  /\ba email\b/i,
+  /\ba error\b/i,
+  /\ba event\b/i,
+  /\ba idea\b/i,
+  /\ba image\b/i,
+  /\ba object\b/i,
+  /\ba option\b/i,
+  /\ba update\b/i,
+  /\ba apple\b/i,
+  /\ba orange\b/i,
+  /\ba hour\b/i,
+];
+
+/** Häufige Tippfehler, die in den Workflow-Texten nicht vorkommen dürfen. */
+const TYPO_PATTERNS = [
+  ["Lode", /\bLode\b/],
+  ["a accessible", /\ba accessible\b/i],
+  ["teh", /\bteh\b/i],
+  ["recieve", /\brecieve\b/i],
+  ["seperate", /\bseperate\b/i],
+  ["occured", /\boccured\b/i],
+  ["adress", /\badress\b/i],
+  ["sucess", /\bsucess\b/i],
+  ["enviroment", /\benviroment\b/i],
+  ["definately", /\bdefinately\b/i],
+  ["Ony", /\bOny\b/],
+];
+
+/** Kategorien, in denen ein Workflow ohne Code-Beispiel nicht abarbeitbar ist. */
+const TECHNICAL_CATEGORIES = new Set(["Developer Tools", "Data & Engineering"]);
+
+function checkCommands(workflow, errors, warnings) {
+  const steps = Array.isArray(workflow.details?.steps)
+    ? workflow.details.steps
+    : [];
+  let commandCount = 0;
+
+  steps.forEach((step, index) => {
+    const commands = Array.isArray(step?.commands) ? step.commands : [];
+    commandCount += commands.length;
+
+    commands.forEach((command, commandIndex) => {
+      const code = String(command?.code ?? "");
+      if (!code) return;
+
+      const german = code.match(GERMAN_COMMAND_PATTERN);
+      if (german) {
+        errors.push(
+          `Schritt ${index + 1}, Code ${commandIndex + 1}: deutscher Text im Code: „${truncate(german[0], 40)}“`
+        );
+      }
+
+      const label = String(command?.label ?? "");
+      const labelGerman = label.match(GERMAN_COMMAND_PATTERN);
+      if (labelGerman) {
+        errors.push(
+          `Schritt ${index + 1}, Code ${commandIndex + 1}: deutscher Text im Code-Label: „${truncate(labelGerman[0], 40)}“`
+        );
+      }
+
+      for (const [label, pattern] of TYPO_PATTERNS) {
+        if (pattern.test(code)) {
+          errors.push(
+            `Schritt ${index + 1}, Code ${commandIndex + 1}: Tippfehler „${label}“`
+          );
+        }
+      }
+    });
+  });
+
+  // Für „extrem gute Zielführung" sollte jeder Workflow mindestens zwei
+  // konkrete Code-Beispiele enthalten – unabhängig von der Kategorie.
+  if (commandCount === 0) {
+    warnings.push(
+      "Workflow ohne Code-Beispiel – für die Abarbeitbarkeit Code ergänzen"
+    );
+  } else if (commandCount === 1) {
+    warnings.push(
+      "Nur ein Code-Beispiel – für bessere Zielführung ein zweites ergänzen"
+    );
+  }
+}
+
+function checkActionCommandConsistency(workflow, errors) {
+  const steps = Array.isArray(workflow.details?.steps)
+    ? workflow.details.steps
+    : [];
+
+  steps.forEach((step, index) => {
+    const actions = (Array.isArray(step?.actions) ? step.actions : []).join(" ");
+    const commands = (Array.isArray(step?.commands) ? step.commands : [])
+      .map((command) => command?.code ?? "")
+      .join(" ");
+
+    if (
+      /resend/i.test(actions) &&
+      /validate/i.test(actions) &&
+      /no built-in verify/i.test(commands)
+    ) {
+      errors.push(
+        `Schritt ${index + 1}: Widerspruch – Action verspricht Resend-Validierung, Code sagt „no built-in verify“`
+      );
+    }
+  });
+}
+
+function checkVagueSteps(workflow, warnings) {
+  const steps = Array.isArray(workflow.details?.steps)
+    ? workflow.details.steps
+    : [];
+
+  steps.forEach((step, index) => {
+    const actions = Array.isArray(step?.actions) ? step.actions : [];
+    actions.forEach((action, actionIndex) => {
+      const text = normalize(action);
+      const words = wordCount(text);
+      // Nur wirklich kurze, generische Aktionen melden. Konkrete Aktionen wie
+      // „Create a new workflow in n8n“ sind abarbeitbar und kein Warnfall.
+      if (/^(Set up|Configure|Use)\b/i.test(text) && words < 5) {
+        warnings.push(
+          `Schritt ${index + 1}, Aktion ${actionIndex + 1}: wirkt vage („${truncate(text, 60)}“)`
+        );
+      }
+    });
+  });
+}
+
+function checkGrammar(workflow, errors) {
+  const fields = [];
+  (workflow.details?.steps ?? []).forEach((step, index) => {
+    (step?.actions ?? []).forEach((action, actionIndex) => {
+      fields.push([`Schritt ${index + 1} Aktion ${actionIndex + 1}`, action]);
+    });
+    fields.push([`Schritt ${index + 1} Ergebnis`, step?.expectedResult]);
+  });
+
+  for (const [label, value] of fields) {
+    const text = normalize(value);
+    if (!text) continue;
+    for (const pattern of A_VOWEL_ERRORS) {
+      const match = text.match(pattern);
+      if (match) {
+        errors.push(`${label}: Grammatikfehler „${match[0]}“ („an“ statt „a“)`);
+      }
+    }
+  }
+}
+
+function checkGermanLinkLabels(workflow, errors) {
+  (workflow.details?.steps ?? []).forEach((step, index) => {
+    (step?.links ?? []).forEach((link, linkIndex) => {
+      const label = normalize(link?.label);
+      if (!label) return;
+      const match = label.match(GERMAN_COMMAND_PATTERN);
+      if (match) {
+        errors.push(
+          `Schritt ${index + 1}, Link ${linkIndex + 1}: deutscher Text im Link-Label: „${truncate(match[0], 40)}“`
+        );
+      }
+    });
+  });
+}
+
+function checkModelTraining(workflow, errors) {
+  (workflow.details?.steps ?? []).forEach((step, index) => {
+    const actions = (step?.actions ?? []).join(" ");
+    if (/train (?:a|the) model/i.test(actions) && /openai/i.test(actions)) {
+      errors.push(
+        `Schritt ${index + 1}: „Train a model“ mit OpenAI API ist irreführend – OpenAI trainiert keine Modelle`
+      );
+    }
+  });
+}
+
+function checkTyposInWorkflow(workflow, errors) {
+  const fields = [
+    ["Titel", workflow.title],
+    ["Beschreibung", workflow.description],
+    ["Use Case", workflow.details?.useCase],
+  ];
+  (workflow.details?.steps ?? []).forEach((step, index) => {
+    fields.push([`Schritt ${index + 1} Titel`, step?.title]);
+    fields.push([`Schritt ${index + 1} Beschreibung`, step?.description]);
+    (step?.actions ?? []).forEach((action, actionIndex) => {
+      fields.push([`Schritt ${index + 1} Aktion ${actionIndex + 1}`, action]);
+    });
+    (step?.checklist ?? []).forEach((item, itemIndex) => {
+      fields.push([`Schritt ${index + 1} Checkliste ${itemIndex + 1}`, item]);
+    });
+    fields.push([`Schritt ${index + 1} Ergebnis`, step?.expectedResult]);
+  });
+
+  for (const [label, value] of fields) {
+    const text = normalize(value);
+    if (!text) continue;
+    for (const [typo, pattern] of TYPO_PATTERNS) {
+      if (pattern.test(text)) {
+        errors.push(`${label}: Tippfehler „${typo}“`);
+      }
+    }
+  }
 }
 
 function checkWorkflowData(workflow, partner, errors, warnings) {
@@ -550,6 +769,15 @@ function checkWorkflowData(workflow, partner, errors, warnings) {
       );
     }
   }
+
+  // Abarbeitbarkeit + Zielführung
+  checkCommands(workflow, errors, warnings);
+  checkActionCommandConsistency(workflow, errors);
+  checkVagueSteps(workflow, warnings);
+  checkTyposInWorkflow(workflow, errors);
+  checkGrammar(workflow, errors);
+  checkGermanLinkLabels(workflow, errors);
+  checkModelTraining(workflow, errors);
 }
 
 /* --------------------------------------------------------------------------
@@ -593,6 +821,43 @@ function checkSections(workflow, text, errors) {
   for (const [label, needle] of sections) {
     if (!compactText.includes(needle)) {
       errors.push(`Pflichtabschnitt fehlt: „${label}“`);
+    }
+  }
+
+  // Anfänger-Sektionen – nur prüfen, wenn sie in den Daten vorhanden sind.
+  if (
+    Array.isArray(workflow.details?.prerequisites) &&
+    workflow.details.prerequisites.length > 0
+  ) {
+    if (!compactText.includes("beforeyoustart")) {
+      errors.push('Pflichtabschnitt fehlt: „BEFORE YOU START“');
+    }
+    for (const item of workflow.details.prerequisites) {
+      checkContains(text, item, "Voraussetzung", errors);
+    }
+  }
+  if (
+    Array.isArray(workflow.details?.glossary) &&
+    workflow.details.glossary.length > 0
+  ) {
+    if (!compactText.includes("glossary")) {
+      errors.push('Pflichtabschnitt fehlt: „GLOSSARY“');
+    }
+    for (const item of workflow.details.glossary) {
+      checkContains(text, item.term, "Glossar-Begriff", errors);
+      checkContains(text, item.definition, "Glossar-Definition", errors);
+    }
+  }
+  if (
+    Array.isArray(workflow.details?.troubleshooting) &&
+    workflow.details.troubleshooting.length > 0
+  ) {
+    if (!compactText.includes("troubleshooting")) {
+      errors.push('Pflichtabschnitt fehlt: „TROUBLESHOOTING“');
+    }
+    for (const item of workflow.details.troubleshooting) {
+      checkContains(text, item.problem, "Troubleshooting-Problem", errors);
+      checkContains(text, item.solution, "Troubleshooting-Lösung", errors);
     }
   }
 
@@ -888,7 +1153,49 @@ const TEXT_FIXES = [
   [/\bundefined\b/gi, "nicht definiert", "„undefined“ ersetzt"],
   [/\bNaN\b/g, "nicht verfügbar", "„NaN“ ersetzt"],
   [/\b100\s*%/gi, "vollständig", "unbelegte „100 %“-Aussage ersetzt"],
+  [
+    /\ba (organized|engaging|example|API|email|error|event|idea|image|object|option|update|apple|orange|hour)\b/gi,
+    "an $1",
+    "Grammatik „a“ → „an“ korrigiert",
+  ],
+  [
+    /\btrain (?:a|the) model\b/gi,
+    "use the model",
+    "irreführendes „train a model“ ersetzt",
+  ],
 ];
+
+/** Häufige deutsche Wörter in Code-/Link-Labels → Englisch. */
+const LABEL_FIXES = [
+  [/\bAnfrage\b/gi, "request"],
+  [/\bDaten\b/gi, "data"],
+  [/\berstellen\b/gi, "create"],
+  [/\bÜbersetzung\b/gi, "translation"],
+  [/\bInhalt\b/gi, "content"],
+  [/\bSeite\b/gi, "page"],
+  [/\bText\b/gi, "text"],
+  [/\bTranskription\b/gi, "transcription"],
+  [/\bImplementierung\b/gi, "implementation"],
+  [/\bSignaturüberprüfung\b/gi, "signature verification"],
+  [/\bÜberprüfung\b/gi, "verification"],
+  [/\banalysieren\b/gi, "analyze"],
+  [/\bBeitrag\b/gi, "post"],
+  [/\bProzess\b/gi, "process"],
+  [/\bAnalyse\b/gi, "analysis"],
+];
+
+function fixLabel(value, label, fixes) {
+  if (typeof value !== "string") return value;
+  let text = fixText(value, label, fixes);
+  for (const [pattern, replacement] of LABEL_FIXES) {
+    if (pattern.test(text)) {
+      text = text.replace(pattern, replacement);
+      fixes.push(`${label}: deutsches Wort ersetzt`);
+    }
+    pattern.lastIndex = 0;
+  }
+  return text;
+}
 
 function fixText(value, label, fixes) {
   if (typeof value !== "string") return value;
@@ -996,6 +1303,26 @@ export function applySafeFixes(workflows) {
             `${stepLabel}: Aktion`,
             fixes
           );
+          if (Array.isArray(step.commands)) {
+            step.commands.forEach((command, commandIndex) => {
+              if (!command || typeof command !== "object") return;
+              command.label = fixLabel(
+                command.label,
+                `${stepLabel}: Code-Label ${commandIndex + 1}`,
+                fixes
+              );
+            });
+          }
+          if (Array.isArray(step.links)) {
+            step.links.forEach((link, linkIndex) => {
+              if (!link || typeof link !== "object") return;
+              link.label = fixLabel(
+                link.label,
+                `${stepLabel}: Link-Label ${linkIndex + 1}`,
+                fixes
+              );
+            });
+          }
           step.checklist = fixArray(
             step.checklist,
             `${stepLabel}: Checkliste`,

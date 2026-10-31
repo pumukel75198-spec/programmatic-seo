@@ -42,9 +42,9 @@
           ],
           "commands": [
             {
-              "label": "API-Anfrage",
+              "label": "API request",
               "language": "bash",
-              "code": "curl -X POST https://api.openai.com/v1/chat/completions -H \"Authorization: Bearer <API_KEY>\" -d '{\"model\": \"gpt-4o-mini\", \"messages\": [{\"role\": \"system\", \"content\": \"Generiere relevante Themen für <Keyword>\"}]}'"
+              "code": "curl -X POST https://api.openai.com/v1/chat/completions -H \"Authorization: Bearer <API_KEY>\" -d '{\"model\": \"gpt-4o-mini\", \"messages\": [{\"role\": \"system\", \"content\": \"Generate relevant topics for <Keyword>\"}]}'"
             }
           ],
           "config": [
@@ -100,7 +100,7 @@
             {
               "label": "Entwurfsgenerierung",
               "language": "bash",
-              "code": "curl -X POST https://api.openai.com/v1/chat/completions -H \"Authorization: Bearer <API_KEY>\" -d '{\"model\": \"gpt-4o-mini\", \"messages\": [{\"role\": \"system\", \"content\": \"Erstelle einen Entwurf für <Thema>\"}]}'"
+              "code": "curl -X POST https://api.openai.com/v1/chat/completions -H \"Authorization: Bearer <API_KEY>\" -d '{\"model\": \"gpt-4o-mini\", \"messages\": [{\"role\": \"system\", \"content\": \"Create a draft for <Topic>\"}]}'"
             }
           ],
           "config": [
@@ -152,15 +152,15 @@
           "actions": [
             "Install Astro with `npm create astro@latest`",
             "Create static pages for approved content",
-            "Set up a CI/CD system with n8n",
+            "Create an n8n workflow that runs `npm run build` and deploys to Cloudflare Pages on approval.",
             "Automate the deployment process on every approved change",
             "Verify successful publication of content"
           ],
           "commands": [
             {
-              "label": "Astro Installation",
+              "label": "Build and deploy",
               "language": "bash",
-              "code": "npm create astro@latest"
+              "code": "npm run build && npx wrangler pages deploy dist --project-name=flowmatrix"
             }
           ],
           "config": [],
@@ -230,7 +230,7 @@
           "description": "Enhance your collected data by adding additional information and verify email addresses to create complete and reliable lead profiles.",
           "links": [],
           "actions": [
-            "Set up the Resend API to validate email addresses.",
+            "Set up an email validation service (e.g. ZeroBounce or NeverBounce) to verify addresses.",
             "Use the OpenAI API to generate additional company information.",
             "Update lead data in CRM with enhanced information."
           ],
@@ -238,7 +238,7 @@
             {
               "label": "E-Mail-Validierung (Beispiel)",
               "language": "bash",
-              "code": "# Resend bietet keine eigene Verify-API. Nutze einen E-Mail-Validierungsdienst wie\n# https://www.zerobounce.net/ oder https://neverbounce.com/"
+              "code": "# Resend has no built-in verify API. Use an email validation service such as\n# https://www.zerobounce.net/ or https://neverbounce.com/"
             }
           ],
           "config": [
@@ -271,7 +271,7 @@
             {
               "label": "Lead-Scoring",
               "language": "bash",
-              "code": "curl -X POST https://api.openai.com/v1/chat/completions -H 'Authorization: Bearer <OPENAI_API_KEY>' -d '{\"model\": \"gpt-4o-mini\", \"messages\": [{\"role\": \"system\", \"content\": \"Score this lead\"}, {\"role\": \"user\", \"content\": \"<Lead-Daten>\"}]}'"
+              "code": "curl -X POST https://api.openai.com/v1/chat/completions -H 'Authorization: Bearer <OPENAI_API_KEY>' -d '{\"model\": \"gpt-4o-mini\", \"messages\": [{\"role\": \"system\", \"content\": \"Score this lead\"}, {\"role\": \"user\", \"content\": \"<Lead-Data>\"}]}'"
             }
           ],
           "config": [],
@@ -315,9 +315,9 @@
           ],
           "commands": [
             {
-              "label": "E-Mail-Versand",
+              "label": "Send email via Resend",
               "language": "bash",
-              "code": "curl -X POST https://api.resend.com/emails -d '{\"to\": \"<email>\", \"template_id\": \"<template_id>\"}'"
+              "code": "curl -X POST https://api.resend.com/emails -H \"Authorization: Bearer <RESEND_API_KEY>\" -H \"Content-Type: application/json\" -d '{\"to\": \"<email>\", \"template_id\": \"<template_id>\"}'"
             }
           ],
           "config": [
@@ -568,11 +568,19 @@
           ],
           "actions": [
             "Create an HTML form with fields for name and email.",
+            "Add a hidden field that stores the consent timestamp.",
             "Integrate the form into your website using Astro.",
             "Set up a confirmation email using the Resend API.",
-            "Create a confirmation page that is displayed after email confirmation."
+            "Create a confirmation page that is displayed after email confirmation.",
+            "Test the form with a real email address."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Minimal signup form",
+              "language": "html",
+              "code": "<form action=\"/api/subscribe\" method=\"POST\">\n  <input type=\"text\" name=\"name\" placeholder=\"Your name\" required />\n  <input type=\"email\" name=\"email\" placeholder=\"you@acme.com\" required />\n  <button type=\"submit\">Subscribe</button>\n</form>"
+            }
+          ],
           "config": [
             {
               "key": "RESEND_API_KEY",
@@ -597,10 +605,18 @@
           "links": [],
           "actions": [
             "Create a new table in Supabase with fields: Name, Email, ConsentStatus.",
+            "Add a unique constraint on the Email column.",
             "Integrate the sign-up form with the Supabase database.",
-            "Ensure data is inserted into the table after confirmation."
+            "Ensure data is inserted into the table after confirmation.",
+            "Check the table in the Supabase dashboard."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Insert a subscriber in Supabase",
+              "language": "javascript",
+              "code": "const { createClient } = require('@supabase/supabase-js');\nconst supabase = createClient('<SUPABASE_URL>', '<SUPABASE_KEY>');\nawait supabase.from('subscribers').insert({ name, email, consent_status: 'confirmed' });"
+            }
+          ],
           "config": [
             {
               "key": "SUPABASE_URL",
@@ -635,18 +651,19 @@
           "actions": [
             "Create a directory for newsletter contents in your project.",
             "Create a Markdown file for each newsletter.",
+            "Add a frontmatter block with title and date.",
             "Use Git for versioning and managing the Markdown files."
           ],
           "commands": [
             {
-              "label": "Initialisiere Git",
+              "label": "Create the content folder",
               "language": "bash",
-              "code": "git init"
+              "code": "mkdir -p newsletter-content && git init"
             },
             {
-              "label": "Erstelle Verzeichnis",
-              "language": "bash",
-              "code": "mkdir newsletter-content"
+              "label": "Example newsletter file",
+              "language": "markdown",
+              "code": "---\ntitle: \"March update\"\ndate: 2026-03-01\n---\n\n# Hello\n\nThis is the newsletter body."
             }
           ],
           "config": [],
@@ -667,13 +684,19 @@
           "actions": [
             "Set up the Resend API in your project.",
             "Create a script that uses the API to send emails.",
+            "Read the Markdown file and convert it to HTML.",
             "Schedule regular email sends with n8n."
           ],
           "commands": [
             {
-              "label": "Installiere Resend API",
+              "label": "Install the Resend SDK",
               "language": "bash",
               "code": "npm install resend"
+            },
+            {
+              "label": "Send a newsletter with Resend",
+              "language": "javascript",
+              "code": "const { Resend } = require('resend');\nconst resend = new Resend('<RESEND_API_KEY>');\nawait resend.emails.send({ from: 'news@acme.com', to: '<email>', subject: 'March update', html: '<p>Hello</p>' });"
             }
           ],
           "config": [
@@ -705,10 +728,17 @@
           ],
           "actions": [
             "Integrate tracking parameters into your email links.",
+            "Enable open and click tracking in Resend.",
             "Set up a dashboard in n8n to monitor metrics.",
             "Regularly analyze collected data."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Add a tracked link",
+              "language": "html",
+              "code": "<a href=\"https://acme.com/blog?utm_source=newsletter&utm_medium=email\">Read more</a>"
+            }
+          ],
           "config": [],
           "tools": [
             "n8n"
@@ -721,7 +751,51 @@
           "expectedResult": "Open and click rates will be successfully tracked and analyzed."
         }
       ],
-      "useCase": "Regular newsletters for blogs, products and communities."
+      "useCase": "Regular newsletters for blogs, products and communities.",
+      "prerequisites": [
+        "A free Resend account (resend.com) and an API key",
+        "A free Supabase account (supabase.com) and a new project",
+        "A free n8n account (n8n.io) or a self-hosted n8n instance",
+        "Node.js 18 or newer and npm installed on your computer",
+        "A code editor such as VS Code and a terminal",
+        "About 2 to 3 hours of time"
+      ],
+      "glossary": [
+        {
+          "term": "API",
+          "definition": "A way for two programs to talk to each other over the internet."
+        },
+        {
+          "term": "API key",
+          "definition": "A secret password that lets your code use a service."
+        },
+        {
+          "term": "Double opt-in",
+          "definition": "The subscriber must confirm their email before being added to the list."
+        },
+        {
+          "term": "Webhook",
+          "definition": "An automatic message one service sends to another when something happens."
+        },
+        {
+          "term": "Markdown",
+          "definition": "A simple text format for writing content with headings and links."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "401 Unauthorized from Resend",
+          "solution": "Check that your API key is correct and starts with 're_'. Never share it publicly."
+        },
+        {
+          "problem": "Emails land in spam",
+          "solution": "Verify your sending domain in Resend and add the SPF and DKIM records."
+        },
+        {
+          "problem": "Supabase insert fails",
+          "solution": "Check the table name and make sure Row Level Security allows inserts."
+        }
+      ]
     }
   },
   {
@@ -763,7 +837,7 @@
             "At least five ideas entered into the database.",
             "Each idea is categorized and prioritized."
           ],
-          "expectedResult": "A organized database with content ideas is created in Notion."
+          "expectedResult": "An organized database with content ideas is created in Notion."
         },
         {
           "title": "Generate and shorten posts with AI",
@@ -777,7 +851,7 @@
           ],
           "commands": [
             {
-              "label": "Beitrag generieren",
+              "label": "Generate post",
               "language": "bash",
               "code": "curl -X POST https://api.openai.com/v1/chat/completions -H 'Authorization: Bearer <API_KEY>' -H 'Content-Type: application/json' -d '{\"model\": \"gpt-4o-mini\", \"messages\": [{\"role\": \"system\", \"content\": \"Create a social media post\"}]}'"
             }
@@ -796,14 +870,14 @@
             "API key successfully created.",
             "Post successfully generated and shortened."
           ],
-          "expectedResult": "A engaging and shortened social media post is created."
+          "expectedResult": "An engaging and shortened social media post is created."
         },
         {
           "title": "Get editorial approval",
           "description": "Ensure that all created content is reviewed and approved by an editor before publication. This ensures the quality and consistency of messages.",
           "links": [
             {
-              "label": "Editorial Approval Prozess",
+              "label": "Editorial Approval Process",
               "url": "https://www.contentmarketinginstitute.com/2020/03/editorial-approval-process/"
             }
           ],
@@ -828,11 +902,17 @@
           "description": "Use Buffer to plan and automatically publish your approved posts. With Buffer, you can select the best times for publication.",
           "links": [],
           "actions": [
-            "Mention yourself at Buffer or create an account",
+            "Create an account at Buffer or log in.",
             "Link your social media account to Buffer.",
             "Plan the approved post for publication at an optimal time."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Schedule a post in Buffer",
+              "language": "bash",
+              "code": "curl -X POST https://api.bufferapp.com/1/updates/create.json -H \"Authorization: Bearer <BUFFER_TOKEN>\" -H \"Content-Type: application/json\" -d '{\"text\":\"<post>\",\"profile_ids\":[\"<PROFILE_ID>\"],\"scheduled_at\":\"<ISO_DATE>\"}'"
+            }
+          ],
           "config": [],
           "tools": [
             "Buffer"
@@ -848,7 +928,7 @@
           "description": "Regularly analyze the performance of your published posts to discover which content works best. This review helps you continuously optimize your strategy.",
           "links": [
             {
-              "label": "Social Media Performance Analyse",
+              "label": "Social Media Performance Analysis",
               "url": "https://sproutsocial.com/insights/data/social-media-metrics/"
             }
           ],
@@ -1123,7 +1203,13 @@
             "Configure the node with the OpenAI API URL and API key.",
             "Connect the nodes to the imported data to perform the enrichment."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Geocode an address with Mapbox",
+              "language": "bash",
+              "code": "curl \"https://api.mapbox.com/geocoding/v5/mapbox.places/<ADDRESS>.json?access_token=<MAPBOX_TOKEN>\""
+            }
+          ],
           "config": [
             {
               "key": "MAPBOX_API_KEY",
@@ -1164,7 +1250,13 @@
             "Test normalization and classification with sample data.",
             "Verify the output for consistency and correctness."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Classify a record with OpenAI",
+              "language": "bash",
+              "code": "curl https://api.openai.com/v1/chat/completions -H 'Authorization: Bearer <API_KEY>' -d '{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Classify this record into one category.\"},{\"role\":\"user\",\"content\":\"<record>\"}]}'"
+            }
+          ],
           "config": [],
           "tools": [
             "n8n",
@@ -1287,7 +1379,7 @@
           ],
           "commands": [
             {
-              "label": "API-Daten abrufen",
+              "label": "Fetch API data",
               "language": "bash",
               "code": "curl -X GET 'https://www.googleapis.com/webmasters/v3/sites/<siteUrl>/searchAnalytics/query' -H 'Authorization: Bearer <access_token>'"
             }
@@ -1461,7 +1553,7 @@
           ],
           "commands": [
             {
-              "label": "Stripe Webhook erstellen",
+              "label": "Create Stripe webhook",
               "language": "bash",
               "code": "stripe listen --forward-to <Webhook-URL>"
             }
@@ -1565,25 +1657,55 @@
         },
         {
           "title": "Sync with accounting",
-          "description": "Sync payment data with your accounting system to ensure all transactions are accurately recorded.",
-          "links": [],
-          "actions": [
-            "Integrate Supabase with your accounting system.",
-            "Set up n8n to regularly synchronize payment data.",
-            "Check synchronization for errors and correct them."
+          "description": "Sync payment data with your accounting system so every transaction is recorded accurately and reconciliation is audit-ready.",
+          "links": [
+            {
+              "label": "QuickBooks API",
+              "url": "https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/invoice"
+            },
+            {
+              "label": "Xero API",
+              "url": "https://developer.xero.com/documentation/api/accounting/invoices"
+            }
           ],
-          "commands": [],
-          "config": [],
+          "actions": [
+            "Choose your accounting system (e.g. QuickBooks, Xero or DATEV) and create API credentials.",
+            "Map Supabase invoice fields (number, amount, tax, customer) to the accounting system's invoice schema.",
+            "Configure n8n to push paid invoices to the accounting system after the payment status changes to paid.",
+            "Store the external accounting ID next to each invoice in Supabase to avoid duplicates.",
+            "Run a daily reconciliation job and log mismatches for manual review."
+          ],
+          "commands": [
+            {
+              "label": "Push invoice to QuickBooks",
+              "language": "bash",
+              "code": "curl -X POST https://quickbooks.api.intuit.com/v3/company/<REALM_ID>/invoice -H \"Authorization: Bearer <ACCESS_TOKEN>\" -H \"Content-Type: application/json\" -d '{\"Line\":[{\"Amount\":199.00,\"DetailType\":\"SalesItemLineDetail\"}]}'"
+            }
+          ],
+          "config": [
+            {
+              "key": "ACCOUNTING_PROVIDER",
+              "value": "quickbooks | xero | datev",
+              "description": "Zielsystem für die Synchronisierung"
+            },
+            {
+              "key": "ACCOUNTING_API_KEY",
+              "value": "<API-Key des Accounting-Systems>",
+              "description": "Authentifizierung"
+            }
+          ],
           "tools": [
             "Supabase",
-            "n8n"
+            "n8n",
+            "QuickBooks API"
           ],
           "checklist": [
-            "Supabase is integrated with the accounting system",
-            "Payment data is regularly synchronized",
-            "No synchronization errors are present"
+            "Accounting provider and API credentials are configured",
+            "Invoice fields are mapped to the accounting schema",
+            "Paid invoices are pushed without duplicates",
+            "Daily reconciliation runs and mismatches are logged"
           ],
-          "expectedResult": "Payment data is synchronized with the accounting system."
+          "expectedResult": "Every paid invoice is mirrored in the accounting system and reconciliation is audit-ready."
         }
       ],
       "useCase": "SaaS and agencies with recurring billing."
@@ -1618,10 +1740,17 @@
             "Navigate to Cal.com and sign in.",
             "Go to 'Settings' and select 'Availability'.",
             "Configure your available time slots and save changes.",
-            "Integrate Cal.com into your website using the provided embed code.",
+            "Copy the embed code from the event type page.",
+            "Paste the embed code into your website.",
             "Test displaying available slots on your website."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Cal.com embed snippet",
+              "language": "html",
+              "code": "<script type=\"text/javascript\" src=\"https://app.cal.com/embed/embed.js\"></script>\n<div class=\"cal-inline\" data-cal-link=\"your-name/30min\"></div>"
+            }
+          ],
           "config": [],
           "tools": [
             "Cal.com"
@@ -1640,10 +1769,17 @@
             "Create a new form on your website.",
             "Add fields for name, email address, and specific requirements.",
             "Ensure all fields are mandatory.",
+            "Add a hidden field for the selected slot.",
             "Integrate the form with your database to store data.",
             "Test the form by performing a test booking."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Booking form",
+              "language": "html",
+              "code": "<form action=\"/api/book\" method=\"POST\">\n  <input name=\"name\" placeholder=\"Your name\" required />\n  <input type=\"email\" name=\"email\" placeholder=\"you@acme.com\" required />\n  <input type=\"hidden\" name=\"slot\" value=\"2026-03-01T10:00\" />\n  <button type=\"submit\">Book</button>\n</form>"
+            }
+          ],
           "config": [],
           "tools": [],
           "checklist": [
@@ -1668,7 +1804,13 @@
             "Integrate the database with your booking form.",
             "Verify data storage by testing a booking."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Store an appointment in Supabase",
+              "language": "javascript",
+              "code": "const { createClient } = require('@supabase/supabase-js');\nconst supabase = createClient('<SUPABASE_URL>', '<SUPABASE_KEY>');\nawait supabase.from('appointments').insert({ name, email, date });"
+            }
+          ],
           "config": [
             {
               "key": "SUPABASE_URL",
@@ -1706,7 +1848,13 @@
             "Configure email sending after successful booking.",
             "Test email delivery by performing a test booking."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Send confirmation with Resend",
+              "language": "bash",
+              "code": "curl -X POST https://api.resend.com/emails -H \"Authorization: Bearer <RESEND_API_KEY>\" -H \"Content-Type: application/json\" -d '{\"from\":\"bookings@acme.com\",\"to\":\"<email>\",\"subject\":\"Booking confirmed\",\"html\":\"<p>Your appointment is confirmed.</p>\"}'"
+            }
+          ],
           "config": [
             {
               "key": "RESEND_API_KEY",
@@ -1734,7 +1882,13 @@
             "Integrate the reminder function with your database.",
             "Test the reminder function by scheduling a test booking."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Reminder email with Resend",
+              "language": "bash",
+              "code": "curl -X POST https://api.resend.com/emails -H \"Authorization: Bearer <RESEND_API_KEY>\" -H \"Content-Type: application/json\" -d '{\"from\":\"bookings@acme.com\",\"to\":\"<email>\",\"subject\":\"Reminder: your appointment\",\"html\":\"<p>See you soon.</p>\"}'"
+            }
+          ],
           "config": [],
           "tools": [
             "n8n"
@@ -1746,7 +1900,47 @@
           "expectedResult": "Customers receive automatic reminders before their appointment."
         }
       ],
-      "useCase": "Consultants, clinics and service businesses."
+      "useCase": "Consultants, clinics and service businesses.",
+      "prerequisites": [
+        "A free Cal.com account (cal.com)",
+        "A free Supabase account and a new project",
+        "A free Resend account and an API key",
+        "A free n8n account or a self-hosted instance",
+        "A website where you can paste HTML",
+        "About 1 to 2 hours of time"
+      ],
+      "glossary": [
+        {
+          "term": "Embed",
+          "definition": "Code that you paste into your website to show a tool."
+        },
+        {
+          "term": "Slot",
+          "definition": "A time window that a customer can book."
+        },
+        {
+          "term": "Reminder",
+          "definition": "An automatic email sent before the appointment."
+        },
+        {
+          "term": "Webhook",
+          "definition": "An automatic message one service sends to another when something happens."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Cal.com embed is not visible",
+          "solution": "Check that the embed script is loaded and the cal-link matches your username and event."
+        },
+        {
+          "problem": "No confirmation email",
+          "solution": "Check the Resend API key and make sure the 'from' domain is verified."
+        },
+        {
+          "problem": "Appointment is not saved",
+          "solution": "Check the Supabase table columns and that Row Level Security allows inserts."
+        }
+      ]
     }
   },
   {
@@ -1855,7 +2049,13 @@
             "Test the workflow with a small data set.",
             "Verify the optimized descriptions for quality and relevance."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Enrich product description with OpenAI",
+              "language": "bash",
+              "code": "curl https://api.openai.com/v1/chat/completions -H 'Authorization: Bearer <API_KEY>' -d '{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Write a concise product description.\"},{\"role\":\"user\",\"content\":\"<product>\"}]}'"
+            }
+          ],
           "config": [
             {
               "key": "OPENAI_API_KEY",
@@ -1889,7 +2089,13 @@
             "Verify publication on marketplaces.",
             "Ensure all product data is displayed correctly."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Publish product to Shopify",
+              "language": "bash",
+              "code": "curl -X POST \"https://<SHOP>.myshopify.com/admin/api/2024-01/products.json\" -H \"X-Shopify-Access-Token: <SHOPIFY_TOKEN>\" -H \"Content-Type: application/json\" -d '{\"product\":{\"title\":\"<title>\",\"body_html\":\"<description>\"}}'"
+            }
+          ],
           "config": [],
           "tools": [
             "Shopify Admin API",
@@ -2139,7 +2345,7 @@
           "actions": [
             "Create a new document with the contents to be translated.",
             "Structure the content into sections and paragraphs.",
-            "Save the document in a accessible format, e.g., JSON or Markdown."
+            "Save the document in an accessible format, e.g., JSON or Markdown."
           ],
           "commands": [],
           "config": [],
@@ -2161,7 +2367,7 @@
           ],
           "commands": [
             {
-              "label": "Übersetzung anfordern",
+              "label": "Request translation",
               "language": "bash",
               "code": "curl https://api.openai.com/v1/chat/completions -H 'Authorization: Bearer <API_KEY>' -d '{\"model\": \"gpt-4o-mini\", \"messages\": [{\"role\": \"system\", \"content\": \"Translate the following content.\"}, {\"role\": \"user\", \"content\": \"<source_content>\"}]}'"
             }
@@ -2187,7 +2393,7 @@
           "description": "In this step, a thorough review of translated content is conducted by language specialists or the team. It is ensured that all translations are correct and contextually accurate before they are approved.",
           "links": [],
           "actions": [
-            "Lode the translated contents into a review tool or document.",
+            "Load the translated contents into a review tool or document.",
             "Have language specialists review the translations.",
             "Approve the translations if they are correct and contextually accurate."
           ],
@@ -2226,14 +2432,14 @@
           "links": [],
           "actions": [
             "Install Astro using the command 'npm create astro@latest'.",
-            "Configure Astro to support language-specific prefixes.",
-            "Use n8n to automate the page creation process."
+            "Add the i18n routing config in astro.config.mjs with locales and defaultLocale.",
+            "Trigger a build and deploy from n8n after each approved translation."
           ],
           "commands": [
             {
-              "label": "Astro installieren",
-              "language": "bash",
-              "code": "npm create astro@latest"
+              "label": "Astro i18n config",
+              "language": "javascript",
+              "code": "// astro.config.mjs\nexport default defineConfig({\n  i18n: { defaultLocale: 'en', locales: ['en', 'de', 'fr', 'es'] }\n});"
             }
           ],
           "config": [],
@@ -2289,7 +2495,7 @@
           ],
           "commands": [
             {
-              "label": "Cloudflare Worker erstellen",
+              "label": "Create Cloudflare Worker",
               "language": "javascript",
               "code": "addEventListener('fetch', event => { event.respondWith(handleRequest(event.request)) })"
             }
@@ -2333,9 +2539,9 @@
           ],
           "commands": [
             {
-              "label": "Signaturüberprüfung",
+              "label": "Signature verification",
               "language": "javascript",
-              "code": "function verifySignature(payload, signature, secret) { /* Implementierung */ }"
+              "code": "function verifySignature(payload, signature, secret) { /* implementation */ }"
             }
           ],
           "config": [
@@ -2350,7 +2556,7 @@
           ],
           "checklist": [
             "Signature verification is implemented and tested.",
-            "Ony payloads with a valid signature are forwarded."
+            "Only payloads with a valid signature are forwarded."
           ],
           "expectedResult": "Only authentic webhook payloads will be allowed for processing."
         },
@@ -2409,7 +2615,7 @@
         },
         {
           "title": "Alert on failures",
-          "description": "Dismiss alarms to notify your team in case of errors during webhook payload processing.",
+          "description": "Set up alarms to notify your team in case of errors during webhook payload processing.",
           "links": [
             {
               "label": "Resend Email API",
@@ -2543,7 +2749,13 @@
             "Provide chunked texts as input for the summary.",
             "Run the workflow to generate summaries."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Summarize a document with OpenAI",
+              "language": "bash",
+              "code": "curl https://api.openai.com/v1/chat/completions -H 'Authorization: Bearer <API_KEY>' -d '{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Summarize the following text in 5 bullet points.\"},{\"role\":\"user\",\"content\":\"<text>\"}]}'"
+            }
+          ],
           "config": [],
           "tools": [
             "n8n",
@@ -2566,7 +2778,13 @@
             "Store summaries and embeddings in the Supabase database.",
             "Verify database entries for completeness."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Upsert embeddings into Pinecone",
+              "language": "bash",
+              "code": "curl -X POST https://<INDEX_HOST>/vectors/upsert -H 'Api-Key: <PINECONE_API_KEY>' -H 'Content-Type: application/json' -d '{\"vectors\":[{\"id\":\"<doc-id>\",\"values\":[0.1,0.2],\"metadata\":{\"summary\":\"<summary>\"}}]}'"
+            }
+          ],
           "config": [],
           "tools": [
             "n8n",
@@ -2676,9 +2894,9 @@
           ],
           "commands": [
             {
-              "label": "Sentiment-Analyse",
+              "label": "Sentiment analysis",
               "language": "python",
-              "code": "from openai import OpenAI\nclient = OpenAI()\nresponse = client.chat.completions.create(\n    model=\"gpt-4o-mini\",\n    messages=[{\"role\": \"user\", \"content\": \"Klassifiziere das Sentiment: <Feedback>\"}],\n)"
+              "code": "from openai import OpenAI\nclient = OpenAI()\nresponse = client.chat.completions.create(\n    model=\"gpt-4o-mini\",\n    messages=[{\"role\": \"user\", \"content\": \"Classify the sentiment: <Feedback>\"}],\n)"
             }
           ],
           "config": [
@@ -2728,7 +2946,13 @@
             "Define tables and fields for storing your insights.",
             "Import the extracted themes and insights into the Supabase database."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Store insights in Supabase",
+              "language": "javascript",
+              "code": "const { createClient } = require('@supabase/supabase-js');\nconst supabase = createClient('<SUPABASE_URL>', '<SUPABASE_KEY>');\nawait supabase.from('feedback_insights').insert({ theme, sentiment, count });"
+            }
+          ],
           "config": [
             {
               "key": "SUPABASE_URL",
@@ -2765,7 +2989,13 @@
             "Integrate email or Slack notifications to send the reports.",
             "Plan the workflow to send reports on a weekly basis."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Send weekly summary to Slack",
+              "language": "bash",
+              "code": "curl -X POST https://slack.com/api/chat.postMessage -H \"Authorization: Bearer <SLACK_TOKEN>\" -H \"Content-Type: application/json\" -d '{\"channel\":\"#feedback\",\"text\":\"Weekly feedback summary: <summary>\"}'"
+            }
+          ],
           "config": [],
           "tools": [
             "n8n"
@@ -2854,7 +3084,13 @@
             "Use the OpenAI API to summarize the retrieved diffs.",
             "Store the summarized diffs in a variable."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Fetch a pull request diff",
+              "language": "bash",
+              "code": "curl -H \"Authorization: Bearer <GITHUB_TOKEN>\" -H \"Accept: application/vnd.github.v3.diff\" https://api.github.com/repos/<OWNER>/<REPO>/pulls/<PR_NUMBER>"
+            }
+          ],
           "config": [
             {
               "key": "REPO_API_URL",
@@ -2893,7 +3129,13 @@
             "Process the API response to mark risky changes.",
             "Store the analysis results in a variable."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Flag risky changes with OpenAI",
+              "language": "bash",
+              "code": "curl https://api.openai.com/v1/chat/completions -H 'Authorization: Bearer <API_KEY>' -d '{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Review this diff and list risky changes.\"},{\"role\":\"user\",\"content\":\"<diff>\"}]}'"
+            }
+          ],
           "config": [
             {
               "key": "RISK_ANALYSIS_PROMPT",
@@ -3006,7 +3248,7 @@
       "steps": [
         {
           "title": "Collect prospect data",
-          "description": "In this step, potential customers are collected from public sources to create a comprehensive list of contacts that could be of interest to the company.",
+          "description": "Collect potential customers from public sources to build a comprehensive contact list for outreach.",
           "links": [],
           "actions": [
             "Open n8n and create a new workflow.",
@@ -3015,7 +3257,13 @@
             "Process the response data with a JSON Node.",
             "Save the data in a Supabase table."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Fetch prospects from a data source",
+              "language": "bash",
+              "code": "curl \"<DATA_SOURCE_URL>\" -H \"Authorization: Bearer <API_KEY>\""
+            }
+          ],
           "config": [
             {
               "key": "SUPABASE_URL",
@@ -3043,7 +3291,7 @@
           "description": "This process collects and normalizes leads, removing duplicates to ensure a clean and efficient lead database.",
           "links": [],
           "actions": [
-            "Fulfillment: Add a Function Node in n8n to normalize the data.",
+            "Add a Function Node in n8n to normalize the data.",
             "Implement duplicate removal logic.",
             "Use another node to update the cleaned data in Supabase.",
             "Run the workflow and review the results."
@@ -3098,7 +3346,7 @@
           "description": "Here, leads are evaluated using AI algorithms to determine the likelihood of a successful sales closure.",
           "links": [],
           "actions": [
-            "Fulfill an HTTP request node in n8n to address the OpenAI API.",
+            "Add an HTTP Request node in n8n to call the OpenAI API.",
             "Configure the node with the Chat Completions endpoint.",
             "Set the method to POST and add required parameters.",
             "Process the response and update lead data with scores."
@@ -3137,7 +3385,13 @@
             "Set the method to POST and transmit lead data.",
             "Verify successful data transmission."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Export lead to CRM",
+              "language": "bash",
+              "code": "curl -X POST \"<CRM_API_URL>/contacts\" -H \"Authorization: Bearer <CRM_TOKEN>\" -H \"Content-Type: application/json\" -d '{\"email\":\"<email>\",\"score\":<score>}'"
+            }
+          ],
           "config": [
             {
               "key": "CRM_API_URL",
@@ -3174,7 +3428,7 @@
       "duration": "About 2 hours setup",
       "tools": [
         "OpenAI API",
-        "Zendesk Alternatives",
+        "Zendesk",
         "n8n",
         "Slack"
       ],
@@ -3193,10 +3447,16 @@
             "Integrate web forms on your website that directly feed tickets into the system.",
             "Use APIs from social media platforms to import messages as tickets."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Fetch new Zendesk tickets",
+              "language": "bash",
+              "code": "curl -u <EMAIL>/token:<ZENDESK_TOKEN> \"https://<SUBDOMAIN>.zendesk.com/api/v2/tickets.json?status=new\""
+            }
+          ],
           "config": [],
           "tools": [
-            "Zendesk Alternatives"
+            "Zendesk"
           ],
           "checklist": [
             "Email inbox is connected to the ticketing system.",
@@ -3278,10 +3538,16 @@
             "Set up routing rules that assign tickets based on tags and priorities.",
             "Test the routing with different ticket scenarios."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Update ticket queue in Zendesk",
+              "language": "bash",
+              "code": "curl -X PUT -u <EMAIL>/token:<ZENDESK_TOKEN> \"https://<SUBDOMAIN>.zendesk.com/api/v2/tickets/<TICKET_ID>.json\" -H \"Content-Type: application/json\" -d '{\"ticket\":{\"group_id\":<GROUP_ID>}}'"
+            }
+          ],
           "config": [],
           "tools": [
-            "Zendesk Alternatives"
+            "Zendesk"
           ],
           "checklist": [
             "Support queues are set up.",
@@ -3351,7 +3617,13 @@
             "Use the Notion API to retrieve the page ID.",
             "Save the page ID for further processing."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Fetch a Notion page",
+              "language": "bash",
+              "code": "curl https://api.notion.com/v1/blocks/<PAGE_ID>/children -H \"Authorization: Bearer <NOTION_API_KEY>\""
+            }
+          ],
           "config": [
             {
               "key": "NOTION_PAGE_ID",
@@ -3380,9 +3652,9 @@
           ],
           "commands": [
             {
-              "label": "Inhalt transformieren",
+              "label": "Transform content",
               "language": "bash",
-              "code": "curl https://api.openai.com/v1/chat/completions -H 'Authorization: Bearer <API_KEY>' -d '{\"model\": \"gpt-4o-mini\", \"messages\": [{\"role\": \"system\", \"content\": \"Transformiere den Inhalt\"}]}'"
+              "code": "curl https://api.openai.com/v1/chat/completions -H 'Authorization: Bearer <API_KEY>' -d '{\"model\": \"gpt-4o-mini\", \"messages\": [{\"role\": \"system\", \"content\": \"Transform the content\"}]}'"
             }
           ],
           "config": [
@@ -3437,7 +3709,13 @@
             "Select optimal publishing times for each channel.",
             "Schedule posts for automatic publication."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Schedule repurposed post in Buffer",
+              "language": "bash",
+              "code": "curl -X POST https://api.bufferapp.com/1/updates/create.json -H \"Authorization: Bearer <BUFFER_TOKEN>\" -H \"Content-Type: application/json\" -d '{\"text\":\"<post>\",\"profile_ids\":[\"<PROFILE_ID>\"]}'"
+            }
+          ],
           "config": [
             {
               "key": "BUFFER_ACCESS_TOKEN",
@@ -3502,7 +3780,7 @@
       "steps": [
         {
           "title": "Collect mentions from channels",
-          "description": "In this step, all mentions of the brand are collected from various social media platforms and online channels to gain a comprehensive understanding of brand perception.",
+          "description": "Collect brand mentions from social media and online channels to understand brand perception.",
           "links": [],
           "actions": [
             "Create a new workflow in n8n",
@@ -3511,7 +3789,13 @@
             "Set filters for relevant keywords and hashtags",
             "Connect the nodes with an HTTP request node to collect data"
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "n8n Twitter search node",
+              "language": "json",
+              "code": "{\n  \"resource\": \"tweet\",\n  \"operation\": \"search\",\n  \"searchText\": \"#yourbrand OR yourbrand\"\n}"
+            }
+          ],
           "config": [
             {
               "key": "TWITTER_API_KEY",
@@ -3545,7 +3829,13 @@
             "Connect the node to the previous HTTP request node",
             "Save the results in a JSON format"
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Sentiment analysis prompt",
+              "language": "bash",
+              "code": "curl https://api.openai.com/v1/chat/completions -H 'Authorization: Bearer <API_KEY>' -d '{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Classify language and sentiment as JSON: {language, sentiment}\"},{\"role\":\"user\",\"content\":\"<mention>\"}]}'"
+            }
+          ],
           "config": [
             {
               "key": "OPENAI_API_KEY",
@@ -3575,7 +3865,13 @@
             "Set parameters for cluster size",
             "Save the cluster results"
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Topic clustering prompt",
+              "language": "bash",
+              "code": "curl https://api.openai.com/v1/chat/completions -H 'Authorization: Bearer <API_KEY>' -d '{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Cluster these mentions into topics. Return JSON.\"},{\"role\":\"user\",\"content\":\"<mentions>\"}]}'"
+            }
+          ],
           "config": [
             {
               "key": "CLUSTER_SIZE",
@@ -3605,7 +3901,13 @@
             "Connect the node to the cluster node",
             "Store the data in the Supabase table"
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Store trend in Supabase",
+              "language": "javascript",
+              "code": "const { createClient } = require('@supabase/supabase-js');\nconst supabase = createClient('<SUPABASE_URL>', '<SUPABASE_KEY>');\nawait supabase.from('trends').insert({ topic, sentiment, count });"
+            }
+          ],
           "config": [
             {
               "key": "SUPABASE_API_KEY",
@@ -3635,7 +3937,13 @@
             "Connect the node to the Supabase node",
             "Send alerts to the Slack channel"
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Send Slack alert",
+              "language": "bash",
+              "code": "curl -X POST https://slack.com/api/chat.postMessage -H 'Authorization: Bearer <SLACK_TOKEN>' -H 'Content-Type: application/json' -d '{\"channel\":\"#social-alerts\",\"text\":\"Mention spike detected!\"}'"
+            }
+          ],
           "config": [
             {
               "key": "SLACK_API_KEY",
@@ -3719,7 +4027,13 @@
             "Add an HTTP Request Node to scrape product pages.",
             "Schedule the workflow to run at regular intervals (e.g. every 24 hours)."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Fetch a competitor page",
+              "language": "bash",
+              "code": "curl -sL \"<COMPETITOR_URL>\" -o page.html"
+            }
+          ],
           "config": [
             {
               "key": "SCRAPE_INTERVAL",
@@ -3745,7 +4059,13 @@
             "Store recognized changes in a Supabase table named 'price_changes'.",
             "Create a report on price changes for later analysis."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Store a price change in Supabase",
+              "language": "javascript",
+              "code": "const { createClient } = require('@supabase/supabase-js');\nconst supabase = createClient('<SUPABASE_URL>', '<SUPABASE_KEY>');\nawait supabase.from('price_history').insert({ sku, old_price, new_price, changed_at: new Date().toISOString() });"
+            }
+          ],
           "config": [],
           "tools": [
             "n8n",
@@ -3869,7 +4189,13 @@
             "Store the new content in a Supabase database.",
             "Scheduling: Plan the workflow to run regularly."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Fetch competitor RSS feed",
+              "language": "bash",
+              "code": "curl -sL \"<COMPETITOR_FEED_URL>\""
+            }
+          ],
           "config": [
             {
               "key": "SUPABASE_URL",
@@ -3908,7 +4234,7 @@
             {
               "label": "OpenAI API Request",
               "language": "bash",
-              "code": "curl https://api.openai.com/v1/chat/completions -H 'Authorization: Bearer <API_KEY>' -d '{\"model\": \"gpt-4o-mini\", \"messages\": [{\"role\": \"system\", \"content\": \"Summarize the following content.\"}, {\"role\": \"user\", \"content\": \"<Inhalt>\"}]}'"
+              "code": "curl https://api.openai.com/v1/chat/completions -H 'Authorization: Bearer <API_KEY>' -d '{\"model\": \"gpt-4o-mini\", \"messages\": [{\"role\": \"system\", \"content\": \"Summarize the following content.\"}, {\"role\": \"user\", \"content\": \"<Content>\"}]}'"
             }
           ],
           "config": [
@@ -3965,7 +4291,13 @@
             "Test the email send to a test address.",
             "Schedule the workflow to send emails weekly."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Send weekly brief with Resend",
+              "language": "bash",
+              "code": "curl -X POST https://api.resend.com/emails -H \"Authorization: Bearer <RESEND_API_KEY>\" -H \"Content-Type: application/json\" -d '{\"from\":\"brief@acme.com\",\"to\":\"<team-email>\",\"subject\":\"Competitor brief\",\"html\":\"<p><brief></p>\"}'"
+            }
+          ],
           "config": [
             {
               "key": "RESEND_API_KEY",
@@ -4075,7 +4407,13 @@
             "Create a workflow in n8n that triggers email sequences for specific user events.",
             "Define email templates in the Resend Email API for different user segments."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Send onboarding email with Resend",
+              "language": "bash",
+              "code": "curl -X POST https://api.resend.com/emails -H \"Authorization: Bearer <RESEND_API_KEY>\" -H \"Content-Type: application/json\" -d '{\"from\":\"hello@acme.com\",\"to\":\"<email>\",\"subject\":\"Welcome\",\"html\":\"<p>Welcome aboard!</p>\"}'"
+            }
+          ],
           "config": [
             {
               "key": "RESEND_API_KEY",
@@ -4107,7 +4445,13 @@
             "Integrate the OpenAI API into your n8n workflow for generating personalized content.",
             "Define parameters for personalization based on user segments."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Personalize email with OpenAI",
+              "language": "bash",
+              "code": "curl https://api.openai.com/v1/chat/completions -H 'Authorization: Bearer <API_KEY>' -d '{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Write a short personalized onboarding email.\"},{\"role\":\"user\",\"content\":\"<user profile>\"}]}'"
+            }
+          ],
           "config": [
             {
               "key": "OPENAI_API_KEY",
@@ -4179,7 +4523,13 @@
             "Use the PostHog Analytics API to capture usage data and import it into the table.",
             "Set up automatic data imports for billing information in Supabase."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Query usage signals from PostHog",
+              "language": "bash",
+              "code": "curl -X POST https://app.posthog.com/api/projects/<PROJECT_ID>/query -H \"Authorization: Bearer <POSTHOG_API_KEY>\" -H \"Content-Type: application/json\" -d '{\"query\":{\"kind\":\"EventsQuery\",\"select\":[\"person_id\",\"count()\"],\"event\":\"login\"}}'"
+            }
+          ],
           "config": [
             {
               "key": "SUPABASE_URL",
@@ -4217,7 +4567,13 @@
             "Define features based on usage frequency and payment information.",
             "Use SQL queries in Supabase to calculate the features from 'usage_signals'."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Build churn features in SQL",
+              "language": "sql",
+              "code": "select account_id, count(*) as logins_30d, sum(case when event = 'payment_failed' then 1 else 0 end) as failed_payments from usage_signals where created_at > now() - interval '30 days' group by account_id;"
+            }
+          ],
           "config": [],
           "tools": [
             "Supabase"
@@ -4234,15 +4590,15 @@
           "description": "Evaluate customer accounts using a predictive model to determine churn probability.",
           "links": [],
           "actions": [
-            "Train a model with 'churn_features' in OpenAI API.",
-            "Use the model to assign a churn probability to each account.",
+            "Send 'churn_features' to the OpenAI API and ask for a churn probability score.",
+            "Parse the returned score and assign a churn probability to each account.",
             "Store the results in a new table 'churn_scores' in Supabase."
           ],
           "commands": [
             {
-              "label": "Churn-Risiko bewerten",
+              "label": "Assess churn risk",
               "language": "python",
-              "code": "from openai import OpenAI\nclient = OpenAI()\nresponse = client.chat.completions.create(\n    model=\"gpt-4o-mini\",\n    messages=[{\"role\": \"user\", \"content\": \"Bewerte das Churn-Risiko: <Features>\"}],\n)"
+              "code": "from openai import OpenAI\nclient = OpenAI()\nresponse = client.chat.completions.create(\n    model=\"gpt-4o-mini\",\n    messages=[{\"role\": \"user\", \"content\": \"Assess the churn risk: <Features>\"}],\n)"
             }
           ],
           "config": [
@@ -4257,7 +4613,7 @@
             "Supabase"
           ],
           "checklist": [
-            "Model is successfully trained",
+            "Churn scores are returned by the API",
             "Churn probabilities are calculated",
             "Results are stored in 'churn_scores'"
           ],
@@ -4374,9 +4730,9 @@
           ],
           "commands": [
             {
-              "label": "Transkription starten",
+              "label": "Start transcription",
               "language": "bash",
-              "code": "curl -X POST 'https://api.deepgram.com/v1/listen' --header 'Authorization: Token <DEEPGRAM_API_KEY>' --header 'Content-Type: audio/mp3' --data-binary @<AUDIO_DATEI>"
+              "code": "curl -X POST 'https://api.deepgram.com/v1/listen' --header 'Authorization: Token <DEEPGRAM_API_KEY>' --header 'Content-Type: audio/mp3' --data-binary @<AUDIO_FILE>"
             }
           ],
           "config": [
@@ -4406,9 +4762,9 @@
           ],
           "commands": [
             {
-              "label": "Text analysieren",
+              "label": "Analyze text",
               "language": "bash",
-              "code": "curl https://api.openai.com/v1/chat/completions -H 'Content-Type: application/json' -H 'Authorization: Bearer <OPENAI_API_KEY>' -d '{\"model\": \"gpt-4o-mini\", \"messages\": [{\"role\": \"user\", \"content\": \"<TRANSKRIBIERTER_TEXT>\"}]}'"
+              "code": "curl https://api.openai.com/v1/chat/completions -H 'Content-Type: application/json' -H 'Authorization: Bearer <OPENAI_API_KEY>' -d '{\"model\": \"gpt-4o-mini\", \"messages\": [{\"role\": \"user\", \"content\": \"<TRANSCRIBED_TEXT>\"}]}'"
             }
           ],
           "config": [
@@ -4438,9 +4794,9 @@
           ],
           "commands": [
             {
-              "label": "Notion Seite erstellen",
+              "label": "Create Notion page",
               "language": "bash",
-              "code": "curl -X POST 'https://api.notion.com/v1/pages' -H 'Authorization: Bearer <NOTION_API_KEY>' -H 'Content-Type: application/json' -d '{\"parent\": {\"database_id\": \"<DATABASE_ID>\"}, \"properties\": {\"title\": {\"title\": [{\"text\": {\"content\": \"<TITEL>\"}}]}}, \"children\": [{\"object\": \"block\", \"type\": \"paragraph\", \"paragraph\": {\"text\": [{\"type\": \"text\", \"text\": {\"content\": \"<INHALT>\"}}]}}]}'"
+              "code": "curl -X POST 'https://api.notion.com/v1/pages' -H 'Authorization: Bearer <NOTION_API_KEY>' -H 'Content-Type: application/json' -d '{\"parent\": {\"database_id\": \"<DATABASE_ID>\"}, \"properties\": {\"title\": {\"title\": [{\"text\": {\"content\": \"<TITLE>\"}}]}}, \"children\": [{\"object\": \"block\", \"type\": \"paragraph\", \"paragraph\": {\"text\": [{\"type\": \"text\", \"text\": {\"content\": \"<CONTENT>\"}}]}}]}'"
             }
           ],
           "config": [
@@ -4501,7 +4857,7 @@
       "difficulty": "Intermediate",
       "duration": "About 2 hours setup",
       "tools": [
-        "Zendesk Alternatives",
+        "Zendesk",
         "OpenAI API",
         "Slack",
         "Supabase"
@@ -4523,10 +4879,16 @@
             "Store ticket id, subject and priority in Supabase.",
             "Log failed requests for later review."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Fetch new Zendesk tickets",
+              "language": "bash",
+              "code": "curl -u <EMAIL>/token:<ZENDESK_TOKEN> \"https://<SUBDOMAIN>.zendesk.com/api/v2/tickets.json?status=new\""
+            }
+          ],
           "config": [],
           "tools": [
-            "Zendesk Alternatives",
+            "Zendesk",
             "Supabase"
           ],
           "checklist": [
@@ -4550,7 +4912,13 @@
             "Reject responses without valid JSON.",
             "Save the classification next to the ticket."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Classify urgency with OpenAI",
+              "language": "bash",
+              "code": "curl https://api.openai.com/v1/chat/completions -H 'Authorization: Bearer <API_KEY>' -d '{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Return JSON with urgency and sentiment.\"},{\"role\":\"user\",\"content\":\"<ticket>\"}]}'"
+            }
+          ],
           "config": [],
           "tools": [
             "OpenAI API",
@@ -4603,7 +4971,13 @@
             "Mention the team channel for high urgency.",
             "Include a direct link to the ticket."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Send Slack alert",
+              "language": "bash",
+              "code": "curl -X POST https://slack.com/api/chat.postMessage -H \"Authorization: Bearer <SLACK_TOKEN>\" -H \"Content-Type: application/json\" -d '{\"channel\":\"#support\",\"text\":\"High urgency ticket: <ticket-id>\"}'"
+            }
+          ],
           "config": [],
           "tools": [
             "Slack"
@@ -4733,7 +5107,13 @@
             "Keep the source and timestamp for each field.",
             "Skip leads that already have fresh data."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Enrich a company via API",
+              "language": "bash",
+              "code": "curl \"https://api.example-data.com/company?domain=<DOMAIN>\" -H \"Authorization: Bearer <API_KEY>\""
+            }
+          ],
           "config": [],
           "tools": [
             "n8n",
@@ -4760,7 +5140,13 @@
             "Ask for a score from 1 to 10 and a reason.",
             "Store the score and reason in Supabase."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Score lead fit with OpenAI",
+              "language": "bash",
+              "code": "curl https://api.openai.com/v1/chat/completions -H 'Authorization: Bearer <API_KEY>' -d '{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Score this lead from 0 to 100.\"},{\"role\":\"user\",\"content\":\"<lead>\"}]}'"
+            }
+          ],
           "config": [],
           "tools": [
             "OpenAI API",
@@ -4839,7 +5225,13 @@
             "Ignore dependency and bot pull requests.",
             "Store the raw list for the next step."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "List merged pull requests",
+              "language": "bash",
+              "code": "curl -H \"Authorization: Bearer <GITHUB_TOKEN>\" \"https://api.github.com/repos/<OWNER>/<REPO>/pulls?state=closed&sort=updated&direction=desc\""
+            }
+          ],
           "config": [],
           "tools": [
             "GitHub Alternatives"
@@ -4891,7 +5283,13 @@
             "Exclude internal changes from the public draft.",
             "Reject drafts with unknown product names."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Draft release notes",
+              "language": "bash",
+              "code": "curl https://api.openai.com/v1/chat/completions -H 'Authorization: Bearer <API_KEY>' -d '{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Write one user-facing sentence per change.\"},{\"role\":\"user\",\"content\":\"<changes>\"}]}'"
+            }
+          ],
           "config": [],
           "tools": [
             "OpenAI API"
@@ -4944,7 +5342,13 @@
             "Link the GitHub tag in the page.",
             "Archive the draft after publishing."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Create Notion release page",
+              "language": "bash",
+              "code": "curl -X POST https://api.notion.com/v1/pages -H \"Authorization: Bearer <NOTION_API_KEY>\" -H \"Content-Type: application/json\" -d '{\"parent\":{\"database_id\":\"<DATABASE_ID>\"},\"properties\":{\"title\":{\"title\":[{\"text\":{\"content\":\"Release <TAG>\"}}]}}}'"
+            }
+          ],
           "config": [],
           "tools": [
             "Slack",
@@ -4996,7 +5400,13 @@
             "Store amount, customer and reason codes.",
             "Ignore events that were already processed."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "List recent Stripe disputes",
+              "language": "bash",
+              "code": "curl https://api.stripe.com/v1/disputes -u <STRIPE_SECRET_KEY>:"
+            }
+          ],
           "config": [],
           "tools": [
             "Stripe Payments API"
@@ -5048,7 +5458,13 @@
             "Limit the summary to five sentences.",
             "Store the summary with the case."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Summarize the case with OpenAI",
+              "language": "bash",
+              "code": "curl https://api.openai.com/v1/chat/completions -H 'Authorization: Bearer <API_KEY>' -d '{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Summarize this dispute and recommend a decision.\"},{\"role\":\"user\",\"content\":\"<dispute>\"}]}'"
+            }
+          ],
           "config": [],
           "tools": [
             "OpenAI API"
@@ -5178,7 +5594,13 @@
             "Record status code and latency in Supabase.",
             "Store the error message when a call fails."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Health-check an endpoint",
+              "language": "bash",
+              "code": "curl -s -o /dev/null -w \"%{http_code} %{time_total}s\" \"<PARTNER_ENDPOINT>\""
+            }
+          ],
           "config": [],
           "tools": [
             "Cloudflare Workers API",
@@ -5232,7 +5654,13 @@
             "Add a link to the PostHog dashboard.",
             "Mention the owning team."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Send incident alert to Slack",
+              "language": "bash",
+              "code": "curl -X POST https://slack.com/api/chat.postMessage -H \"Authorization: Bearer <SLACK_TOKEN>\" -H \"Content-Type: application/json\" -d '{\"channel\":\"#incidents\",\"text\":\"Partner API down: <endpoint>\"}'"
+            }
+          ],
           "config": [],
           "tools": [
             "Slack",
@@ -5311,7 +5739,13 @@
             "Store the transcript in Notion.",
             "Delete the audio after processing."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Transcribe audio with Deepgram",
+              "language": "bash",
+              "code": "curl -X POST 'https://api.deepgram.com/v1/listen?diarize=true' --header 'Authorization: Token <DEEPGRAM_API_KEY>' --header 'Content-Type: audio/mp3' --data-binary @<AUDIO_FILE>"
+            }
+          ],
           "config": [],
           "tools": [
             "Deepgram Speech API",
@@ -5338,7 +5772,13 @@
             "Reject tasks without an owner.",
             "Return the result as structured JSON."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Extract decisions with OpenAI",
+              "language": "bash",
+              "code": "curl https://api.openai.com/v1/chat/completions -H 'Authorization: Bearer <API_KEY>' -d '{\"model\":\"gpt-4o-mini\",\"response_format\":{\"type\":\"json_object\"},\"messages\":[{\"role\":\"system\",\"content\":\"Extract decisions and action items as JSON.\"},{\"role\":\"user\",\"content\":\"<transcript>\"}]}'"
+            }
+          ],
           "config": [],
           "tools": [
             "OpenAI API"
@@ -5364,7 +5804,13 @@
             "Link the page to the meeting summary.",
             "Mark tasks without a due date for review."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Create a Notion task page",
+              "language": "bash",
+              "code": "curl -X POST https://api.notion.com/v1/pages -H \"Authorization: Bearer <NOTION_API_KEY>\" -H \"Content-Type: application/json\" -d '{\"parent\":{\"database_id\":\"<DATABASE_ID>\"},\"properties\":{\"Name\":{\"title\":[{\"text\":{\"content\":\"<task>\"}}]}}}'"
+            }
+          ],
           "config": [],
           "tools": [
             "Notion API"
@@ -5390,7 +5836,13 @@
             "List tasks with owner and due date.",
             "Link to the Notion summary page."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Send summary with Resend",
+              "language": "bash",
+              "code": "curl -X POST https://api.resend.com/emails -H \"Authorization: Bearer <RESEND_API_KEY>\" -H \"Content-Type: application/json\" -d '{\"from\":\"meetings@acme.com\",\"to\":\"<email>\",\"subject\":\"Meeting summary\",\"html\":\"<p>Decisions and tasks attached.</p>\"}'"
+            }
+          ],
           "config": [],
           "tools": [
             "Resend API",
@@ -5417,7 +5869,13 @@
             "Update the task status in Notion.",
             "Archive completed meetings monthly."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Query open tasks in Notion",
+              "language": "bash",
+              "code": "curl -X POST https://api.notion.com/v1/databases/<DATABASE_ID>/query -H \"Authorization: Bearer <NOTION_API_KEY>\" -H \"Content-Type: application/json\" -d '{\"filter\":{\"property\":\"Status\",\"select\":{\"equals\":\"Open\"}}}'"
+            }
+          ],
           "config": [],
           "tools": [
             "Notion API",
@@ -5428,6 +5886,46 @@
             "Completed meetings are archived"
           ],
           "expectedResult": "Follow-ups are completed instead of forgotten."
+        }
+      ],
+      "prerequisites": [
+        "A free Deepgram account and an API key",
+        "An OpenAI account and an API key",
+        "A free Notion account and an integration token",
+        "A free Resend account and an API key",
+        "A meeting recording in MP3 format",
+        "About 2 hours of time"
+      ],
+      "glossary": [
+        {
+          "term": "Transcription",
+          "definition": "Turning audio into text."
+        },
+        {
+          "term": "Speaker labels",
+          "definition": "Marks who said what in a transcript."
+        },
+        {
+          "term": "Action item",
+          "definition": "A task that someone must do after the meeting."
+        },
+        {
+          "term": "Integration token",
+          "definition": "A secret key that lets your code access Notion."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Deepgram returns 401",
+          "solution": "Check the API key and keep the 'Token' prefix in the Authorization header."
+        },
+        {
+          "problem": "OpenAI returns invalid JSON",
+          "solution": "Ask for JSON only and set the response format to JSON."
+        },
+        {
+          "problem": "Notion page is not created",
+          "solution": "Share the target database with your Notion integration."
         }
       ]
     }
@@ -5469,7 +5967,13 @@
             "Assign an owner to every task.",
             "Set a default relative deadline."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Create a Notion launch database",
+              "language": "bash",
+              "code": "curl -X POST https://api.notion.com/v1/databases -H \"Authorization: Bearer <NOTION_API_KEY>\" -H \"Content-Type: application/json\" -d '{\"parent\":{\"page_id\":\"<PAGE_ID>\"},\"title\":[{\"text\":{\"content\":\"Launch Checklist\"}}],\"properties\":{\"Name\":{\"title\":{}}}}'"
+            }
+          ],
           "config": [],
           "tools": [
             "Notion API"
@@ -5495,7 +5999,13 @@
             "Add launch-specific tasks.",
             "Notify owners in Slack."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Notify owners in Slack",
+              "language": "bash",
+              "code": "curl -X POST https://slack.com/api/chat.postMessage -H \"Authorization: Bearer <SLACK_TOKEN>\" -H \"Content-Type: application/json\" -d '{\"channel\":\"#launch\",\"text\":\"Launch plan is ready. Please check your tasks.\"}'"
+            }
+          ],
           "config": [],
           "tools": [
             "Notion API",
@@ -5522,7 +6032,13 @@
             "Send a Slack reminder to the owner.",
             "Skip tasks that are already done."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Send reminder to Slack",
+              "language": "bash",
+              "code": "curl -X POST https://slack.com/api/chat.postMessage -H \"Authorization: Bearer <SLACK_TOKEN>\" -H \"Content-Type: application/json\" -d '{\"channel\":\"#launch\",\"text\":\"Tasks due in 2 days: <tasks>\"}'"
+            }
+          ],
           "config": [],
           "tools": [
             "Make",
@@ -5550,7 +6066,13 @@
             "Show each stage and its owner.",
             "Rebuild the page after status changes."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Fetch launch status in Astro",
+              "language": "javascript",
+              "code": "const res = await fetch('https://api.notion.com/v1/databases/<DATABASE_ID>/query', { method: 'POST', headers: { Authorization: 'Bearer <NOTION_API_KEY>', 'Content-Type': 'application/json' }, body: JSON.stringify({}) });\nconst data = await res.json();"
+            }
+          ],
           "config": [],
           "tools": [
             "Astro",
@@ -5577,7 +6099,13 @@
             "Update the Notion template.",
             "Archive the launch page."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Archive a Notion page",
+              "language": "bash",
+              "code": "curl -X PATCH https://api.notion.com/v1/pages/<PAGE_ID> -H \"Authorization: Bearer <NOTION_API_KEY>\" -H \"Content-Type: application/json\" -d '{\"archived\":true}'"
+            }
+          ],
           "config": [],
           "tools": [
             "Notion API"
@@ -5587,6 +6115,45 @@
             "Template is updated"
           ],
           "expectedResult": "The next launch starts with a better template."
+        }
+      ],
+      "prerequisites": [
+        "A free Notion account and an integration token",
+        "A free Slack workspace and a bot token",
+        "A free Make account (make.com)",
+        "Node.js 18 or newer and npm for Astro",
+        "About 2 hours of time"
+      ],
+      "glossary": [
+        {
+          "term": "Template",
+          "definition": "A reusable starting point for each launch."
+        },
+        {
+          "term": "Stage",
+          "definition": "A phase of the launch, such as content, QA or release."
+        },
+        {
+          "term": "Status page",
+          "definition": "A public page that shows the current launch progress."
+        },
+        {
+          "term": "Bot token",
+          "definition": "A secret key that lets your code post messages in Slack."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Notion returns 401",
+          "solution": "Check the integration token and share the database with the integration."
+        },
+        {
+          "problem": "Slack message is not sent",
+          "solution": "Check the bot token, the channel name and that the bot is invited to the channel."
+        },
+        {
+          "problem": "Astro build fails",
+          "solution": "Run 'npm install' and check that the Notion API response is valid JSON."
         }
       ]
     }
@@ -5628,7 +6195,13 @@
             "List key feature events per account.",
             "Store the metrics in Supabase."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Query usage events from PostHog",
+              "language": "bash",
+              "code": "curl -X POST https://app.posthog.com/api/projects/<PROJECT_ID>/query -H \"Authorization: Bearer <POSTHOG_API_KEY>\" -H \"Content-Type: application/json\" -d '{\"query\":{\"kind\":\"EventsQuery\",\"select\":[\"event\",\"count()\"],\"event\":\"$pageview\"}}'"
+            }
+          ],
           "config": [],
           "tools": [
             "PostHog Analytics API",
@@ -5682,7 +6255,13 @@
             "Calculate the weighted score.",
             "Store the score and its inputs."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Compute health score in SQL",
+              "language": "sql",
+              "code": "select account_id, (0.5 * usage_score + 0.3 * support_score + 0.2 * billing_score) as health_score from account_signals;"
+            }
+          ],
           "config": [],
           "tools": [
             "Supabase"
@@ -5813,7 +6392,13 @@
             "Forbid invented addresses or reviews.",
             "Review the draft before publishing."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Draft local copy with OpenAI",
+              "language": "bash",
+              "code": "curl https://api.openai.com/v1/chat/completions -H 'Authorization: Bearer <API_KEY>' -d '{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Write local SEO copy for this city and service.\"},{\"role\":\"user\",\"content\":\"<city> <service>\"}]}'"
+            }
+          ],
           "config": [],
           "tools": [
             "OpenAI API"
@@ -5839,7 +6424,13 @@
             "Add internal links between nearby locations.",
             "Fail the build on missing required fields."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Generate static pages in Astro",
+              "language": "javascript",
+              "code": "export async function getStaticPaths() {\n  const locations = await loadLocations();\n  return locations.map((loc) => ({ params: { slug: loc.slug }, props: { loc } }));\n}"
+            }
+          ],
           "config": [],
           "tools": [
             "Astro",
@@ -5971,7 +6562,13 @@
             "Flag rows without a match.",
             "Store the match confidence."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Read products from Shopify",
+              "language": "bash",
+              "code": "curl -H \"X-Shopify-Access-Token: <SHOPIFY_TOKEN>\" \"https://<SHOP>.myshopify.com/admin/api/2024-01/products.json?limit=250\""
+            }
+          ],
           "config": [],
           "tools": [
             "Shopify Admin API",
@@ -5998,7 +6595,13 @@
             "Flag changes above your threshold.",
             "Store the change history."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Detect price changes in SQL",
+              "language": "sql",
+              "code": "select sku, old_price, new_price, round((new_price - old_price) / old_price * 100, 2) as change_pct from price_history where changed_at > now() - interval '7 days';"
+            }
+          ],
           "config": [],
           "tools": [
             "Shopify Admin API",
@@ -6127,7 +6730,13 @@
             "Extract key metrics such as clicks, impressions, and average position.",
             "Analyze the data to identify trends and potential issues."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Query Search Console performance",
+              "language": "bash",
+              "code": "curl -X POST \"https://searchconsole.googleapis.com/webmasters/v3/sites/<SITE_URL>/searchAnalytics/query\" -H \"Authorization: Bearer <ACCESS_TOKEN>\" -H \"Content-Type: application/json\" -d '{\"startDate\":\"2026-01-01\",\"endDate\":\"2026-01-31\",\"dimensions\":[\"query\"]}'"
+            }
+          ],
           "config": [
             {
               "key": "DATE_RANGE",
@@ -6183,7 +6792,13 @@
             "Create a new page in Notion with a template for audit findings.",
             "Populate the page with metrics, insights, and improvement suggestions."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Create a Notion audit page",
+              "language": "bash",
+              "code": "curl -X POST https://api.notion.com/v1/pages -H \"Authorization: Bearer <NOTION_API_KEY>\" -H \"Content-Type: application/json\" -d '{\"parent\":{\"database_id\":\"<DATABASE_ID>\"},\"properties\":{\"title\":{\"title\":[{\"text\":{\"content\":\"Website Audit\"}}]}}}'"
+            }
+          ],
           "config": [
             {
               "key": "NOTION_API_KEY",
@@ -6320,11 +6935,17 @@
           "links": [],
           "actions": [
             "Choose a storage solution (e.g., cloud storage or database).",
-            "Configure storage access permissions.",
+            "Configure read/write access for the storage bucket or database.",
             "Implement logic to store reports automatically after generation.",
             "Verify stored reports are accessible and correctly formatted."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Upload coverage report",
+              "language": "bash",
+              "code": "npx wrangler r2 object put coverage-reports/report.json --file=coverage/report.json"
+            }
+          ],
           "config": [
             {
               "key": "STORAGE_PATH",
@@ -6425,7 +7046,13 @@
             "Add columns for 'Endpoint Name', 'URL', 'Method', and 'Description'.",
             "Configure the Notion API integration to allow access to this database."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Fetch an OpenAPI spec",
+              "language": "bash",
+              "code": "curl \"<API_BASE_URL>/openapi.json\" -H \"Authorization: Bearer <API_KEY>\""
+            }
+          ],
           "config": [
             {
               "key": "NOTION_API_KEY",
@@ -6506,7 +7133,13 @@
             "Configure Stripe to send events to your webhook URL.",
             "Implement logic to update the Notion database when relevant events are received."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Regenerate docs on push",
+              "language": "yaml",
+              "code": "on:\n  push:\n    branches: [main]\njobs:\n  docs:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: node scripts/generate-docs.mjs"
+            }
+          ],
           "config": [
             {
               "key": "STRIPE_WEBHOOK_SECRET",
@@ -6579,7 +7212,13 @@
             "4. Configure the script with your API key and project settings.",
             "5. Verify the integration by checking incoming data in your PostHog dashboard."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Initialize PostHog tracking",
+              "language": "javascript",
+              "code": "posthog.init('<POSTHOG_API_KEY>', { api_host: 'https://app.posthog.com' });"
+            }
+          ],
           "config": [
             {
               "key": "POSTHOG_API_KEY",
@@ -6666,7 +7305,13 @@
             "4. Install the Slack app in your workspace.",
             "5. Test the notification setup by simulating a KPI change."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Send KPI alert to Slack",
+              "language": "bash",
+              "code": "curl -X POST https://slack.com/api/chat.postMessage -H \"Authorization: Bearer <SLACK_TOKEN>\" -H \"Content-Type: application/json\" -d '{\"channel\":\"#alerts\",\"text\":\"KPI threshold crossed: <metric>\"}'"
+            }
+          ],
           "config": [
             {
               "key": "SLACK_WEBHOOK_URL",
@@ -6922,7 +7567,13 @@
             "Use the API key to connect your form submissions to PostHog by adding it to the form's backend.",
             "Set up events in PostHog to track form submissions and user interactions."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Capture feedback in PostHog",
+              "language": "javascript",
+              "code": "posthog.capture('feedback_submitted', { rating, comment, page: window.location.pathname });"
+            }
+          ],
           "config": [
             {
               "key": "POSTHOG_API_KEY",
@@ -6950,7 +7601,13 @@
             "Set up an automation script to trigger email sending upon form submission.",
             "Use the Resend API to send personalized thank you emails to users."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Email feedback summary with Resend",
+              "language": "bash",
+              "code": "curl -X POST https://api.resend.com/emails -H \"Authorization: Bearer <RESEND_API_KEY>\" -H \"Content-Type: application/json\" -d '{\"from\":\"feedback@acme.com\",\"to\":\"<team-email>\",\"subject\":\"New feedback\",\"html\":\"<p><feedback></p>\"}'"
+            }
+          ],
           "config": [
             {
               "key": "RESEND_API_KEY",
@@ -7255,7 +7912,13 @@
             "Create a new database in Notion to store content ideas.",
             "Share the database with your integration to grant access."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Create a Notion database entry",
+              "language": "bash",
+              "code": "curl -X POST https://api.notion.com/v1/pages -H \"Authorization: Bearer <NOTION_API_KEY>\" -H \"Content-Type: application/json\" -d '{\"parent\":{\"database_id\":\"<DATABASE_ID>\"},\"properties\":{\"title\":{\"title\":[{\"text\":{\"content\":\"<idea>\"}}]}}}'"
+            }
+          ],
           "config": [
             {
               "key": "NOTION_API_TOKEN",
@@ -7282,7 +7945,13 @@
             "Copy the webhook URL and store it securely.",
             "Set up a script or automation to trigger the webhook when new entries are added to the Notion database."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Notify Slack about new idea",
+              "language": "bash",
+              "code": "curl -X POST https://slack.com/api/chat.postMessage -H \"Authorization: Bearer <SLACK_TOKEN>\" -H \"Content-Type: application/json\" -d '{\"channel\":\"#content\",\"text\":\"New content idea: <idea>\"}'"
+            }
+          ],
           "config": [
             {
               "key": "SLACK_WEBHOOK_URL",
@@ -7684,7 +8353,7 @@
           "actions": [
             "Set up a monitoring system to track AI performance metrics.",
             "Review categorization and prioritization accuracy regularly.",
-            "Adjust GPT-4 parameters or retrain the model if necessary.",
+            "Adjust the prompt or model parameters if necessary.",
             "Gather feedback from the development team to identify areas for improvement."
           ],
           "commands": [],
@@ -8073,7 +8742,13 @@
             "Set up a channel to listen for data changes.",
             "Configure the channel to broadcast events on data updates."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Subscribe to Ably channel",
+              "language": "javascript",
+              "code": "const Ably = require('ably');\nconst client = new Ably.Realtime('<ABLY_API_KEY>');\nconst channel = client.channels.get('data-changes');\nchannel.subscribe((message) => console.log('Change:', message.data));"
+            }
+          ],
           "config": [
             {
               "key": "ABLY_API_KEY",
@@ -8102,7 +8777,13 @@
             "Write a script to append data from Ably to the Google Sheet.",
             "Test the script to ensure data is logged correctly."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Append change to Google Sheets",
+              "language": "javascript",
+              "code": "const { google } = require('googleapis');\nconst sheets = google.sheets({ version: 'v4', auth });\nawait sheets.spreadsheets.values.append({ spreadsheetId: '<SHEET_ID>', range: 'Logs!A1', valueInputOption: 'RAW', requestBody: { values: [[new Date().toISOString(), JSON.stringify(data)]] } });"
+            }
+          ],
           "config": [
             {
               "key": "GOOGLE_SHEETS_ID",
@@ -8131,7 +8812,13 @@
             "Configure the messaging service to trigger on specific data events.",
             "Test the messaging service to ensure alerts are sent correctly."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Send Twilio alert",
+              "language": "javascript",
+              "code": "const twilio = require('twilio')('<ACCOUNT_SID>', '<AUTH_TOKEN>');\nawait twilio.messages.create({ body: 'Critical data change detected', from: '<TWILIO_NUMBER>', to: '<ALERT_NUMBER>' });"
+            }
+          ],
           "config": [
             {
               "key": "TWILIO_ACCOUNT_SID",
@@ -8165,7 +8852,13 @@
             "Implement logic to filter non-critical alerts.",
             "Test the logic with sample data to ensure accuracy."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Conditional alert logic",
+              "language": "javascript",
+              "code": "if (data.value > threshold) {\n  await sendTwilioAlert(data);\n} else {\n  console.log('Below threshold');\n}"
+            }
+          ],
           "config": [],
           "tools": [],
           "checklist": [
@@ -8326,20 +9019,30 @@
         },
         {
           "title": "Analyze Error Patterns",
-          "description": "Use MongoDB to analyze error patterns and identify recurring issues. Set up queries to extract meaningful insights for debugging.",
-          "links": [],
+          "description": "Use MongoDB aggregation pipelines to find recurring errors, rank them by frequency and surface the root causes worth fixing first.",
+          "links": [
+            {
+              "label": "MongoDB Aggregation Pipeline",
+              "url": "https://www.mongodb.com/docs/manual/core/aggregation-pipeline/"
+            }
+          ],
           "actions": [
-            "Access your MongoDB Atlas cluster and open the database containing error logs.",
-            "Create queries to filter and sort error logs by frequency and type.",
-            "Analyze the results to identify common error patterns.",
-            "Document findings and potential causes of recurring errors.",
-            "Share insights with the development team for further action."
+            "Open the error_logs collection in MongoDB Atlas and inspect the document schema.",
+            "Group errors by type and count occurrences with an aggregation pipeline.",
+            "Filter the last 7 days and compare error volume before and after deployments.",
+            "Export the top 10 recurring errors and document their likely root causes.",
+            "Share the ranked list with the development team and create tickets for the top issues."
           ],
           "commands": [
             {
-              "label": "Query Error Logs",
-              "language": "bash",
-              "code": "db.errorLogs.aggregate([{ $group: { _id: \"$errorType\", count: { $sum: 1 } } }, { $sort: { count: -1 } }])"
+              "label": "Top error types",
+              "language": "javascript",
+              "code": "db.errorLogs.aggregate([{ $group: { _id: \"$errorType\", count: { $sum: 1 } } }, { $sort: { count: -1 } }, { $limit: 10 }])"
+            },
+            {
+              "label": "Errors of the last 7 days",
+              "language": "javascript",
+              "code": "db.errorLogs.aggregate([{ $match: { timestamp: { $gte: new Date(Date.now() - 7*24*60*60*1000) } } }, { $group: { _id: \"$errorType\", count: { $sum: 1 } } }, { $sort: { count: -1 } }])"
             }
           ],
           "config": [],
@@ -8347,11 +9050,12 @@
             "MongoDB Atlas API"
           ],
           "checklist": [
-            "Queries created to analyze error logs.",
-            "Common error patterns identified and documented.",
-            "Insights shared with the development team."
+            "Aggregation queries return the top error types",
+            "Last-7-days trend is compared with deployments",
+            "Top 10 errors are documented with root causes",
+            "Tickets are created for the highest-impact issues"
           ],
-          "expectedResult": "Error patterns are analyzed and insights are ready for debugging."
+          "expectedResult": "A ranked list of recurring errors with documented root causes is ready for the team."
         },
         {
           "title": "Review and Optimize",
@@ -8923,7 +9627,13 @@
             "Share the folder with your team by clicking 'Share' and entering their email addresses.",
             "Install Dropbox desktop app and sync the 'Document Version Control' folder to your local machine."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "List Dropbox folder contents",
+              "language": "bash",
+              "code": "curl -X POST https://api.dropboxapi.com/2/files/list_folder -H \"Authorization: Bearer <DROPBOX_TOKEN>\" -H \"Content-Type: application/json\" -d '{\"path\":\"/Documents\"}'"
+            }
+          ],
           "config": [],
           "tools": [
             "Dropbox"
@@ -8974,7 +9684,13 @@
             "Authorize the GitHub app to access your repository.",
             "Configure the app to send notifications to a specific channel for repository updates."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Send Slack notification",
+              "language": "bash",
+              "code": "curl -X POST https://slack.com/api/chat.postMessage -H \"Authorization: Bearer <SLACK_TOKEN>\" -H \"Content-Type: application/json\" -d '{\"channel\":\"#docs\",\"text\":\"New document version pushed\"}'"
+            }
+          ],
           "config": [],
           "tools": [
             "Slack",
@@ -9096,7 +9812,13 @@
             "Share the target Google Sheet with the service account email.",
             "Use the Sheets API to append feedback data to the spreadsheet."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Append feedback to Google Sheets",
+              "language": "bash",
+              "code": "curl -X POST \"https://sheets.googleapis.com/v4/spreadsheets/<SHEET_ID>/values/Feedback!A1:append?valueInputOption=RAW\" -H \"Authorization: Bearer <ACCESS_TOKEN>\" -H \"Content-Type: application/json\" -d '{\"values\":[[\"<date>\",\"<feedback>\"]]}'"
+            }
+          ],
           "config": [
             {
               "key": "GOOGLE_SHEETS_ID",
@@ -9183,7 +9905,13 @@
             "Ensure the message format is clear and highlights key insights.",
             "Test the automation to verify correct operation."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Alert team in Slack",
+              "language": "bash",
+              "code": "curl -X POST https://slack.com/api/chat.postMessage -H \"Authorization: Bearer <SLACK_TOKEN>\" -H \"Content-Type: application/json\" -d '{\"channel\":\"#feedback\",\"text\":\"New insight: <insight>\"}'"
+            }
+          ],
           "config": [
             {
               "key": "SLACK_CHANNEL_ID",
@@ -9235,7 +9963,13 @@
             "Navigate to 'Environments' and click 'Create Environment'.",
             "Define environment variables such as <API_KEY> and <BASE_URL>."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Smoke-test an endpoint",
+              "language": "bash",
+              "code": "curl -X GET \"<BASE_URL>/health\" -H \"Authorization: Bearer <API_KEY>\""
+            }
+          ],
           "config": [
             {
               "key": "API_KEY",
@@ -9298,7 +10032,13 @@
             "Enable logging of test results to a specified location.",
             "Verify automation setup by running a test execution manually."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Run collection from CLI",
+              "language": "bash",
+              "code": "npx @hoppscotch/cli test <COLLECTION_ID> --env <ENV_ID>"
+            }
+          ],
           "config": [
             {
               "key": "LOG_PATH",
@@ -9327,7 +10067,13 @@
             "Implement alerts for test failures or performance issues.",
             "Test notification setup by sending a sample message."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Post test result to Slack",
+              "language": "bash",
+              "code": "curl -X POST https://slack.com/api/chat.postMessage -H \"Authorization: Bearer <SLACK_TOKEN>\" -H \"Content-Type: application/json\" -d '{\"channel\":\"#api-tests\",\"text\":\"API test suite finished\"}'"
+            }
+          ],
           "config": [
             {
               "key": "SLACK_CHANNEL",
@@ -9623,7 +10369,13 @@
             "Set up real-time vector search to identify key topics.",
             "Test the integration to ensure trends are accurately classified."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Query similar trends in Pinecone",
+              "language": "bash",
+              "code": "curl -X POST https://<INDEX_HOST>/query -H 'Api-Key: <PINECONE_API_KEY>' -H 'Content-Type: application/json' -d '{\"vector\":[0.1,0.2],\"topK\":5,\"includeMetadata\":true}'"
+            }
+          ],
           "config": [
             {
               "key": "PINECONE_API_KEY",
@@ -9680,7 +10432,13 @@
             "Test the alert system to ensure notifications are sent correctly.",
             "Adjust alert thresholds as necessary based on team feedback."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Send trend alert to Slack",
+              "language": "bash",
+              "code": "curl -X POST https://slack.com/api/chat.postMessage -H \"Authorization: Bearer <SLACK_TOKEN>\" -H \"Content-Type: application/json\" -d '{\"channel\":\"#social\",\"text\":\"Trend spike detected: <trend>\"}'"
+            }
+          ],
           "config": [
             {
               "key": "ALERT_THRESHOLD",
@@ -10086,7 +10844,13 @@
             "Initialize the repository with a README file.",
             "Set up a branching strategy by creating branches for each version."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Tag a release in Git",
+              "language": "bash",
+              "code": "git tag -a v1.2.0 -m \"Release v1.2.0\" && git push origin v1.2.0"
+            }
+          ],
           "config": [],
           "tools": [
             "GitHub"
@@ -10159,7 +10923,13 @@
             "Create a new webhook URL for the channel where notifications will be sent.",
             "Implement a function in your API to send messages to the Slack webhook on version changes."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Notify Slack about new version",
+              "language": "bash",
+              "code": "curl -X POST https://slack.com/api/chat.postMessage -H \"Authorization: Bearer <SLACK_TOKEN>\" -H \"Content-Type: application/json\" -d '{\"channel\":\"#api\",\"text\":\"New API version released: v1.2.0\"}'"
+            }
+          ],
           "config": [
             {
               "key": "SLACK_WEBHOOK_URL",
@@ -10247,13 +11017,13 @@
           "actions": [
             "Create a new Google Sheet and name it 'Content Data'.",
             "Enable the Google Sheets API in the Google Cloud Console.",
-            "Use the Airtable API to export data to your Google Sheet using a script."
+            "Fetch records from Airtable and append them to your Google Sheet with the Sheets API."
           ],
           "commands": [
             {
-              "label": "Export Airtable Data",
+              "label": "Export Airtable records to Google Sheets",
               "language": "javascript",
-              "code": "fetch('https://api.airtable.com/v0/YOUR_BASE_ID/YOUR_TABLE_NAME', { headers: { Authorization: 'Bearer YOUR_API_KEY' }}).then(response => response.json()).then(data => console.log(data));"
+              "code": "const records = await fetch('https://api.airtable.com/v0/YOUR_BASE_ID/YOUR_TABLE_NAME', { headers: { Authorization: 'Bearer YOUR_API_KEY' } }).then(r => r.json());\nawait sheets.spreadsheets.values.append({ spreadsheetId: 'YOUR_SHEET_ID', range: 'Content Data!A1', valueInputOption: 'RAW', requestBody: { values: records.records.map(r => [r.fields.Title, r.fields['Publication Date'], r.fields.Platform]) } });"
             }
           ],
           "config": [

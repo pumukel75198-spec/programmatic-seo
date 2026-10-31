@@ -1534,5 +1534,11 @@
     "url": "https://zoom.us",
     "affiliateUrl": "https://zoom.us",
     "sponsored": false
+  },
+  "Zendesk": {
+    "name": "Zendesk",
+    "url": "https://www.zendesk.com/",
+    "affiliateUrl": "https://www.zendesk.com/",
+    "sponsored": false
   }
 }

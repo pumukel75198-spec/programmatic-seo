@@ -75,6 +75,8 @@ function normalizeStep(step) {
       description: "",
       links: [],
       actions: [],
+      commands: [],
+      config: [],
       checklist: [],
       expectedResult: "",
     };
@@ -84,6 +86,8 @@ function normalizeStep(step) {
     description: step?.description ?? "",
     links: Array.isArray(step?.links) ? step.links : [],
     actions: Array.isArray(step?.actions) ? step.actions : [],
+    commands: Array.isArray(step?.commands) ? step.commands : [],
+    config: Array.isArray(step?.config) ? step.config : [],
     checklist: Array.isArray(step?.checklist) ? step.checklist : [],
     expectedResult: step?.expectedResult ?? "",
   };
@@ -324,6 +328,169 @@ function drawOverview(doc, workflow) {
   }
 }
 
+/**
+ * Anfänger-Sektion: Was muss vor dem Start eingerichtet werden?
+ */
+function drawPrerequisites(doc, workflow) {
+  const items = Array.isArray(workflow.details?.prerequisites)
+    ? workflow.details.prerequisites
+    : [];
+  if (items.length === 0) return;
+
+  addPage(doc);
+
+  doc
+    .font("Helvetica-Bold")
+    .fontSize(10)
+    .fillColor(COLORS.brandLight)
+    .text("BEFORE YOU START", PAGE.margin, PAGE.margin, { characterSpacing: 1.5 });
+
+  doc
+    .font("Helvetica-Bold")
+    .fontSize(24)
+    .fillColor(COLORS.white)
+    .text("What you need", PAGE.margin, doc.y + 8, { width: CONTENT_WIDTH });
+
+  doc
+    .font("Helvetica")
+    .fontSize(10)
+    .fillColor(COLORS.muted)
+    .text(
+      "Set these up first. Each item is free unless stated otherwise.",
+      PAGE.margin,
+      doc.y + 8,
+      { width: CONTENT_WIDTH, lineGap: 2 }
+    );
+
+  doc.moveDown(1.5);
+
+  for (const item of items) {
+    ensureSpace(doc, 30);
+    doc
+      .font("Helvetica")
+      .fontSize(10.5)
+      .fillColor(COLORS.text)
+      .text(`• ${item}`, PAGE.margin, doc.y + 2, {
+        width: CONTENT_WIDTH,
+        lineGap: 2,
+      });
+  }
+}
+
+/**
+ * Anfänger-Sektion: Fachbegriffe in einfacher Sprache.
+ */
+function drawGlossary(doc, workflow) {
+  const items = Array.isArray(workflow.details?.glossary)
+    ? workflow.details.glossary
+    : [];
+  if (items.length === 0) return;
+
+  addPage(doc);
+
+  doc
+    .font("Helvetica-Bold")
+    .fontSize(10)
+    .fillColor(COLORS.brandLight)
+    .text("GLOSSARY", PAGE.margin, PAGE.margin, { characterSpacing: 1.5 });
+
+  doc
+    .font("Helvetica-Bold")
+    .fontSize(24)
+    .fillColor(COLORS.white)
+    .text("Plain-English terms", PAGE.margin, doc.y + 8, { width: CONTENT_WIDTH });
+
+  doc
+    .font("Helvetica")
+    .fontSize(10)
+    .fillColor(COLORS.muted)
+    .text(
+      "No prior knowledge needed. These are the only terms used in this guide.",
+      PAGE.margin,
+      doc.y + 8,
+      { width: CONTENT_WIDTH, lineGap: 2 }
+    );
+
+  doc.moveDown(1.5);
+
+  for (const item of items) {
+    ensureSpace(doc, 50);
+    doc
+      .font("Helvetica-Bold")
+      .fontSize(11)
+      .fillColor(COLORS.white)
+      .text(item.term, PAGE.margin, doc.y + 2, { width: CONTENT_WIDTH });
+    doc
+      .font("Helvetica")
+      .fontSize(10)
+      .fillColor(COLORS.muted)
+      .text(item.definition, PAGE.margin, doc.y + 2, {
+        width: CONTENT_WIDTH,
+        lineGap: 2,
+      });
+    doc.moveDown(0.6);
+  }
+}
+
+/**
+ * Anfänger-Sektion: Häufige Fehler und Lösungen.
+ */
+function drawTroubleshooting(doc, workflow) {
+  const items = Array.isArray(workflow.details?.troubleshooting)
+    ? workflow.details.troubleshooting
+    : [];
+  if (items.length === 0) return;
+
+  addPage(doc);
+
+  doc
+    .font("Helvetica-Bold")
+    .fontSize(10)
+    .fillColor(COLORS.brandLight)
+    .text("TROUBLESHOOTING", PAGE.margin, PAGE.margin, { characterSpacing: 1.5 });
+
+  doc
+    .font("Helvetica-Bold")
+    .fontSize(24)
+    .fillColor(COLORS.white)
+    .text("If something goes wrong", PAGE.margin, doc.y + 8, {
+      width: CONTENT_WIDTH,
+    });
+
+  doc
+    .font("Helvetica")
+    .fontSize(10)
+    .fillColor(COLORS.muted)
+    .text(
+      "The most common problems and how to fix them.",
+      PAGE.margin,
+      doc.y + 8,
+      { width: CONTENT_WIDTH, lineGap: 2 }
+    );
+
+  doc.moveDown(1.5);
+
+  for (const item of items) {
+    ensureSpace(doc, 60);
+    doc
+      .font("Helvetica-Bold")
+      .fontSize(11)
+      .fillColor(COLORS.white)
+      .text(`Problem: ${item.problem}`, PAGE.margin, doc.y + 2, {
+        width: CONTENT_WIDTH,
+      });
+    doc
+      .font("Helvetica")
+      .fontSize(10)
+      .fillColor(COLORS.emerald)
+      .text(`Fix: ${item.solution}`, PAGE.margin, doc.y + 2, {
+        width: CONTENT_WIDTH,
+        lineGap: 2,
+      });
+    doc.moveDown(0.6);
+  }
+}
+
 function subHeading(doc, text, x, width) {
   ensureSpace(doc, 40);
   doc
@@ -397,15 +564,49 @@ function drawSteps(doc, workflow) {
       subHeading(doc, "WHAT YOU NEED TO DO", contentX, contentWidth);
       step.actions.forEach((action, actionIndex) => {
         ensureSpace(doc, 30);
+        // Manche Daten enthalten bereits eine Nummerierung ("1. …"). Dann keine
+        // zweite Nummer davorsetzen, sonst entsteht "1. 1. …".
+        const prefix = /^\d+\.\s/.test(action) ? "" : `${actionIndex + 1}. `;
         doc
           .font("Helvetica")
           .fontSize(9.5)
           .fillColor(COLORS.text)
-          .text(`${actionIndex + 1}. ${action}`, contentX, doc.y + 2, {
+          .text(`${prefix}${action}`, contentX, doc.y + 2, {
             width: contentWidth,
             lineGap: 2,
           });
       });
+    }
+
+    // Code-Beispiele – echter Mehrwert gegenüber der kostenlosen Web-Version
+    if (step.commands.length > 0) {
+      subHeading(doc, "CODE EXAMPLE", contentX, contentWidth);
+      for (const command of step.commands) {
+        if (!isNonEmptyString(command?.code)) continue;
+        ensureSpace(doc, 70);
+        const codeY = doc.y + 4;
+        doc.font("Courier").fontSize(8);
+        const codeHeight =
+          doc.heightOfString(command.code, {
+            width: contentWidth - 20,
+            lineGap: 1,
+          }) + 16;
+        doc
+          .roundedRect(contentX, codeY, contentWidth, codeHeight, 6)
+          .fill(COLORS.surface)
+          .strokeColor(COLORS.border)
+          .lineWidth(1)
+          .stroke();
+        doc
+          .font("Courier")
+          .fontSize(8)
+          .fillColor(COLORS.text)
+          .text(command.code, contentX + 10, codeY + 8, {
+            width: contentWidth - 20,
+            lineGap: 1,
+          });
+        doc.y = codeY + codeHeight + 6;
+      }
     }
 
     // Prüfliste
@@ -459,6 +660,66 @@ function drawSteps(doc, workflow) {
 
     doc.y = Math.max(doc.y, startY + 40) + 18;
   });
+}
+
+/**
+ * Druckbare Master-Checkliste: sammelt alle Prüfpunkte aller Steps auf einer
+ * Seite, damit der Käufer sie ausdrucken und abhaken kann.
+ */
+function drawChecklist(doc, workflow) {
+  const steps = Array.isArray(workflow.details?.steps)
+    ? workflow.details.steps.map(normalizeStep)
+    : [];
+  const items = [];
+  steps.forEach((step, index) => {
+    step.checklist.forEach((item) => {
+      if (isNonEmptyString(item)) items.push({ step: index + 1, text: item });
+    });
+  });
+  if (items.length === 0) return;
+
+  addPage(doc);
+
+  doc
+    .font("Helvetica-Bold")
+    .fontSize(10)
+    .fillColor(COLORS.brandLight)
+    .text("PRINTABLE CHECKLIST", PAGE.margin, PAGE.margin, {
+      characterSpacing: 1.5,
+    });
+
+  doc
+    .font("Helvetica-Bold")
+    .fontSize(24)
+    .fillColor(COLORS.white)
+    .text("Your implementation checklist", PAGE.margin, doc.y + 8, {
+      width: CONTENT_WIDTH,
+    });
+
+  doc
+    .font("Helvetica")
+    .fontSize(10)
+    .fillColor(COLORS.muted)
+    .text(
+      "Print this page and tick each item as you complete it.",
+      PAGE.margin,
+      doc.y + 8,
+      { width: CONTENT_WIDTH, lineGap: 2 }
+    );
+
+  doc.moveDown(1.5);
+
+  for (const item of items) {
+    ensureSpace(doc, 26);
+    doc
+      .font("Helvetica")
+      .fontSize(10)
+      .fillColor(COLORS.text)
+      .text(`[ ] Step ${item.step}: ${item.text}`, PAGE.margin, doc.y + 2, {
+        width: CONTENT_WIDTH,
+        lineGap: 2,
+      });
+  }
 }
 
 function drawTools(doc, workflow, partner, monetization) {
@@ -548,45 +809,8 @@ function drawTools(doc, workflow, partner, monetization) {
     doc.y = cardY + 64 + 10;
   }
 
-  // Kauf-CTA
-  ensureSpace(doc, 120);
-
-  const ctaY = doc.y + 10;
-  doc
-    .roundedRect(PAGE.margin, ctaY, CONTENT_WIDTH, 92, 12)
-    .fill(COLORS.surface)
-    .strokeColor(COLORS.brand)
-    .lineWidth(1)
-    .stroke();
-
-  doc
-    .font("Helvetica-Bold")
-    .fontSize(13)
-    .fillColor(COLORS.white)
-    .text("Full version as Premium PDF", PAGE.margin + 18, ctaY + 18, {
-      width: CONTENT_WIDTH - 36,
-    });
-
-  doc
-    .font("Helvetica")
-    .fontSize(10)
-    .fillColor(COLORS.muted)
-    .text(
-      `All steps, tools and resources as a PDF – ${priceLabel}.`,
-      PAGE.margin + 18,
-      ctaY + 40,
-      { width: CONTENT_WIDTH - 36 }
-    );
-
-  doc
-    .font("Helvetica-Bold")
-    .fontSize(10)
-    .fillColor(COLORS.brandLight)
-    .text(`Buy now – ${priceLabel}`, PAGE.margin + 18, ctaY + 62, {
-      width: CONTENT_WIDTH - 36,
-      link: checkoutLink,
-      underline: true,
-    });
+  // Kein Kauf-CTA im gekauften PDF: Der Käufer hat bereits bezahlt.
+  // Preis und Checkout-Link bleiben ausschließlich auf dem Cover.
 }
 
 function addFooters(doc) {
@@ -647,7 +871,11 @@ async function generatePdf(workflow, partner, monetization) {
 
   drawCover(doc, workflow, monetization);
   drawOverview(doc, workflow);
+  drawPrerequisites(doc, workflow);
+  drawGlossary(doc, workflow);
   drawSteps(doc, workflow);
+  drawChecklist(doc, workflow);
+  drawTroubleshooting(doc, workflow);
   drawTools(doc, workflow, partner, monetization);
   addFooters(doc);
 

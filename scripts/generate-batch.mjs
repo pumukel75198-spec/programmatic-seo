@@ -119,6 +119,9 @@ node("generate-workflows.mjs", ["--target=9999", `--limit=${counts.workflows}`])
 node("enrich-alternatives.mjs", [], { optional: true });
 node("enrich-workflows.mjs", [], { optional: true });
 node("enrich-workflow-details.mjs", [], { optional: true });
+// Unvollständige Workflows (z. B. wenn die Detail-Anreicherung fehlschlug)
+// entfernen, damit die PDF-Qualitätsprüfung nicht den ganzen Batch blockiert.
+node("prune-incomplete-workflows.mjs");
 node("sync-partners.mjs", [], { optional: true });
 
 // 3) PDFs erzeugen und streng prüfen.
