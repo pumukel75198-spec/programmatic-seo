@@ -11285,5 +11285,295 @@
       ],
       "useCase": "This workflow helps to maintain API reliability by automating health checks and notifications, ensuring quick responses to issues."
     }
+  },
+  {
+    "slug": "automated-design-feedback-loop",
+    "title": "Streamlined Design Feedback Loop for Teams",
+    "description": "Enhance collaboration by automating the design feedback process. Ensure timely reviews and iterations on design projects.",
+    "category": "Productivity & Collaboration",
+    "tags": [
+      "design",
+      "feedback",
+      "automation",
+      "collaboration"
+    ],
+    "details": {
+      "difficulty": "Intermediate",
+      "duration": "45-60 minutes",
+      "tools": [
+        "Figma",
+        "Slack",
+        "Google Drive"
+      ],
+      "steps": [
+        {
+          "title": "Set Up Design File in Figma",
+          "description": "Create a centralized design file in Figma that all team members can access and review. This file will serve as the main source of truth for the project, ensuring everyone is on the same page.",
+          "links": [],
+          "actions": [
+            "Log in to Figma and click on 'New File' to create a new design file.",
+            "Name the file appropriately to reflect the project title.",
+            "Share the file with team members by clicking on the 'Share' button and entering their email addresses."
+          ],
+          "commands": [],
+          "config": [],
+          "tools": [
+            "Figma"
+          ],
+          "checklist": [
+            "Design file is created and named correctly.",
+            "File is shared with all relevant team members."
+          ],
+          "expectedResult": "A centralized design file is set up and accessible to the team."
+        },
+        {
+          "title": "Create Feedback Form in Google Drive",
+          "description": "Build a feedback form in Google Drive to collect comments and suggestions from team members. This form will streamline the feedback collection process and make it easier to manage responses.",
+          "links": [],
+          "actions": [
+            "Log in to Google Drive and click on 'New' > 'Google Forms' to create a new form.",
+            "Add fields for name, email, and feedback comments.",
+            "Set the form to collect email addresses automatically by going to 'Settings' and enabling 'Collect email addresses'."
+          ],
+          "commands": [],
+          "config": [],
+          "tools": [
+            "Google Drive"
+          ],
+          "checklist": [
+            "Feedback form is created with necessary fields.",
+            "Email collection is enabled in the form settings."
+          ],
+          "expectedResult": "A feedback form is created and ready for team members to submit their comments."
+        },
+        {
+          "title": "Integrate Figma with Slack",
+          "description": "Use Figma's integration with Slack to notify team members whenever a design is updated. This integration ensures that everyone stays informed and can provide timely feedback on design changes.",
+          "links": [],
+          "actions": [
+            "Open Figma and go to 'Plugins' > 'Manage Plugins'.",
+            "Search for the Slack integration plugin and install it.",
+            "Follow the prompts to connect your Slack workspace with Figma."
+          ],
+          "commands": [],
+          "config": [],
+          "tools": [
+            "Figma",
+            "Slack"
+          ],
+          "checklist": [
+            "Slack integration plugin is installed in Figma.",
+            "Figma is successfully connected to the Slack workspace."
+          ],
+          "expectedResult": "Figma is integrated with Slack to notify team members of design updates."
+        },
+        {
+          "title": "Automate Feedback Collection",
+          "description": "Set up an automation that collects feedback from the Google Drive form and sends a summary to a designated Slack channel. This will help track comments efficiently and keep the team updated.",
+          "links": [],
+          "actions": [
+            "Use a tool like Zapier to create a new Zap.",
+            "Select Google Forms as the trigger app and set the trigger to 'New Response in Spreadsheet'.",
+            "Choose Slack as the action app and set the action to 'Send Channel Message', selecting the appropriate channel."
+          ],
+          "commands": [],
+          "config": [],
+          "tools": [
+            "Google Drive",
+            "Slack"
+          ],
+          "checklist": [
+            "Zap is created and configured to trigger on new form responses.",
+            "Slack channel is set to receive messages from the automation."
+          ],
+          "expectedResult": "Feedback from the Google Drive form is automatically sent to the designated Slack channel."
+        },
+        {
+          "title": "Review Feedback and Iterate",
+          "description": "Regularly review the collected feedback with the team during scheduled meetings. Use the insights gained to make necessary adjustments to the design and enhance the overall project.",
+          "links": [],
+          "actions": [
+            "Schedule a recurring meeting with the team to discuss feedback.",
+            "Prepare a summary of the feedback collected from the Google Drive form.",
+            "Discuss actionable items and assign tasks for design iterations based on feedback."
+          ],
+          "commands": [],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Regular meetings are scheduled for feedback review.",
+            "Feedback summary is prepared and shared with the team."
+          ],
+          "expectedResult": "Feedback is reviewed, and actionable items for design iterations are identified."
+        }
+      ],
+      "useCase": "This workflow addresses the challenges of collecting and managing design feedback efficiently, fostering better collaboration among team members."
+    }
+  },
+  {
+    "slug": "automated-code-syntax-checking",
+    "title": "Code Syntax Checking Automation Workflow",
+    "description": "Streamline your code review process by automating syntax checks across your development projects. Ensure code quality before deployment.",
+    "category": "Developer Tools",
+    "tags": [
+      "code-review",
+      "automation",
+      "syntax-check",
+      "development"
+    ],
+    "details": {
+      "difficulty": "Intermediate",
+      "duration": "45–60 minutes",
+      "tools": [
+        "GitHub",
+        "GitHub Copilot API",
+        "Slack"
+      ],
+      "steps": [
+        {
+          "title": "Set Up GitHub Repository",
+          "description": "Create a GitHub repository for your project. Ensure you have the necessary permissions to set up webhooks. This repository will serve as the primary workspace for your code and facilitate collaboration.",
+          "links": [],
+          "actions": [
+            "Go to GitHub and log in to your account.",
+            "Click on the '+' icon in the top right corner and select 'New repository'.",
+            "Fill in the repository name, description, and choose visibility (public/private). Click 'Create repository'."
+          ],
+          "commands": [],
+          "config": [],
+          "tools": [
+            "GitHub"
+          ],
+          "checklist": [
+            "Repository is created successfully.",
+            "You have the necessary permissions to set up webhooks."
+          ],
+          "expectedResult": "A new GitHub repository is created and ready for use."
+        },
+        {
+          "title": "Integrate GitHub Copilot API",
+          "description": "Utilize the GitHub Copilot API to enable syntax checking within your development environment. This integration will allow you to analyze your code for syntax errors upon each push.",
+          "links": [],
+          "actions": [
+            "Visit the GitHub Copilot API documentation at https://github.com/features/copilot.",
+            "Follow the instructions to enable Copilot for your repository.",
+            "Configure your development environment to use the Copilot API for syntax checking."
+          ],
+          "commands": [],
+          "config": [
+            {
+              "key": "GITHUB_TOKEN",
+              "value": "<your_github_token>",
+              "description": "Token for authenticating with the GitHub API."
+            }
+          ],
+          "tools": [
+            "GitHub",
+            "GitHub Copilot API"
+          ],
+          "checklist": [
+            "GitHub Copilot is enabled for the repository.",
+            "Development environment is configured to use the Copilot API."
+          ],
+          "expectedResult": "GitHub Copilot API is integrated and ready for syntax checking."
+        },
+        {
+          "title": "Enable Webhooks for Syntax Check",
+          "description": "Set up webhooks in your GitHub repository to trigger the syntax checking process whenever new code is pushed to the main branch. This automation streamlines the checking lifecycle.",
+          "links": [],
+          "actions": [
+            "Navigate to your GitHub repository and click on 'Settings'.",
+            "Select 'Webhooks' from the left sidebar and click 'Add webhook'.",
+            "Enter the payload URL for your syntax checking service and select 'Just the push event'. Click 'Add webhook'."
+          ],
+          "commands": [],
+          "config": [],
+          "tools": [
+            "GitHub"
+          ],
+          "checklist": [
+            "Webhook is created successfully.",
+            "Webhook is configured to trigger on push events."
+          ],
+          "expectedResult": "Webhooks are set up to trigger syntax checks on code pushes."
+        },
+        {
+          "title": "Configure Slack Notifications",
+          "description": "Integrate Slack to receive real-time notifications regarding the results of the syntax checks. This setup ensures that your team is informed about both successful and failed checks.",
+          "links": [],
+          "actions": [
+            "Go to your Slack workspace and create a new app via https://api.slack.com/apps.",
+            "Add the 'Incoming Webhooks' feature and activate it.",
+            "Copy the webhook URL and configure it in your syntax checking service to send notifications."
+          ],
+          "commands": [],
+          "config": [
+            {
+              "key": "SLACK_WEBHOOK_URL",
+              "value": "<your_slack_webhook_url>",
+              "description": "Webhook URL for sending notifications to Slack."
+            }
+          ],
+          "tools": [
+            "Slack"
+          ],
+          "checklist": [
+            "Slack app is created and configured for incoming webhooks.",
+            "Webhook URL is correctly set in the syntax checking service."
+          ],
+          "expectedResult": "Slack notifications are configured to receive syntax check results."
+        },
+        {
+          "title": "Test the Workflow",
+          "description": "Push some sample code to the GitHub repository and verify that the syntax check is triggered correctly. This step ensures that the entire workflow is functioning as intended.",
+          "links": [],
+          "actions": [
+            "Clone your GitHub repository to your local machine using 'git clone <repository_url>'.",
+            "Create a sample file with intentional syntax errors and add it to the repository.",
+            "Commit the changes and push them to the main branch using 'git push origin main'."
+          ],
+          "commands": [
+            {
+              "label": "Clone Repository",
+              "language": "bash",
+              "code": "git clone <repository_url>"
+            },
+            {
+              "label": "Push Changes",
+              "language": "bash",
+              "code": "git push origin main"
+            }
+          ],
+          "config": [],
+          "tools": [
+            "GitHub"
+          ],
+          "checklist": [
+            "Sample code is pushed to the repository.",
+            "Syntax check is triggered and results are sent to Slack."
+          ],
+          "expectedResult": "The workflow is tested and syntax check results are received in Slack."
+        },
+        {
+          "title": "Document the Process",
+          "description": "Create documentation outlining the workflow, including setup instructions and troubleshooting tips. This document will serve as a reference for your team to ensure smooth operation.",
+          "links": [],
+          "actions": [
+            "Open a document editor and create a new document titled 'Code Syntax Checking Automation Workflow'.",
+            "Outline each step of the workflow with detailed instructions and screenshots if necessary.",
+            "Share the document with your team via email or a shared drive."
+          ],
+          "commands": [],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Documentation is created and includes all workflow steps.",
+            "Document is shared with the team for reference."
+          ],
+          "expectedResult": "The workflow is fully documented and accessible to the team."
+        }
+      ],
+      "useCase": "This workflow automates code syntax checks, improving code quality and team efficiency before deployment."
+    }
   }
 ]

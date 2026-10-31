@@ -2302,5 +2302,140 @@
       "endpoint": "https://api.tinkr.com/v1",
       "docsUrl": "https://docs.tinkr.com"
     }
+  },
+  {
+    "slug": "clarifai-api",
+    "title": "Clarifai API",
+    "description": "The Clarifai API offers powerful tools for image and video recognition. It enables developers to integrate advanced AI capabilities into their applications.",
+    "category": "AI & Vision",
+    "tags": [
+      "image-recognition",
+      "video-analysis",
+      "ai"
+    ],
+    "details": {
+      "provider": "Clarifai",
+      "pricing": "Free tier available; paid plans start at $30/month",
+      "features": [
+        "Image tagging",
+        "Object detection",
+        "Face recognition",
+        "Video analysis",
+        "Custom model training"
+      ],
+      "useCase": "Developers use the Clarifai API to enhance applications with image and video recognition capabilities.",
+      "website": "https://www.clarifai.com",
+      "authentication": "Bearer API key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python",
+        "Java"
+      ],
+      "rateLimit": "1000 requests/hour",
+      "endpoint": "https://api.clarifai.com/v2",
+      "docsUrl": "https://docs.clarifai.com"
+    }
+  },
+  {
+    "slug": "notion-forms-api",
+    "title": "Notion Forms API",
+    "description": "Easily create forms and collect data within Notion. Integrate seamlessly with your Notion workspace.",
+    "category": "Productivity",
+    "tags": [
+      "forms",
+      "data-collection",
+      "notion"
+    ],
+    "details": {
+      "provider": "Notion Labs, Inc.",
+      "pricing": "Free Tier available with limited features.",
+      "features": [
+        "Customizable forms",
+        "Real-time data collection",
+        "Integration with Notion pages"
+      ],
+      "useCase": "Use this API to create and manage forms directly in your Notion workspace.",
+      "website": "https://www.notion.so",
+      "authentication": "Bearer API key",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python"
+      ],
+      "rateLimit": "100 requests/minute",
+      "endpoint": "https://api.notion.com/v1/forms",
+      "docsUrl": "https://developers.notion.com/docs/forms-api"
+    }
+  },
+  {
+    "slug": "twitch-api-kraken",
+    "title": "Twitch API Kraken",
+    "description": "The Twitch API Kraken provides a comprehensive interface for developers to access Twitch's platform data, including streams and user information.",
+    "category": "Communication",
+    "tags": [
+      "twitch",
+      "api",
+      "streaming",
+      "developer"
+    ],
+    "details": {
+      "provider": "Twitch",
+      "pricing": "Free with rate limits.",
+      "features": [
+        "Access to live stream data",
+        "User information retrieval",
+        "Channel and video data",
+        "Search functionality",
+        "Webhook support"
+      ],
+      "useCase": "This API is used to build applications that interact with Twitch, providing access to live streams, user profiles, and more.",
+      "website": "https://dev.twitch.tv/docs/api",
+      "authentication": "OAuth 2.0 Bearer Token",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python",
+        "Java"
+      ],
+      "rateLimit": "30 requests/second",
+      "endpoint": "https://api.twitch.tv/kraken",
+      "docsUrl": "https://dev.twitch.tv/docs/api/reference"
+    }
+  },
+  {
+    "slug": "asana-api",
+    "title": "Asana API",
+    "description": "The Asana API allows developers to integrate with Asana to manage tasks, projects, and team collaboration effectively.",
+    "category": "Productivity",
+    "tags": [
+      "tasks",
+      "projects",
+      "collaboration",
+      "api"
+    ],
+    "details": {
+      "provider": "Asana",
+      "pricing": "Free tier available with premium features for paid plans.",
+      "features": [
+        "Task management",
+        "Project tracking",
+        "Team collaboration",
+        "Webhooks for real-time updates",
+        "Custom fields and templates"
+      ],
+      "useCase": "The API is used for managing tasks and projects within Asana, helping teams to stay organized.",
+      "website": "https://asana.com",
+      "authentication": "Bearer token",
+      "apiKeyRequired": true,
+      "sdkLanguages": [
+        "JavaScript",
+        "Python",
+        "Ruby"
+      ],
+      "rateLimit": "60 requests/minute",
+      "endpoint": "https://api.asana.com/v1",
+      "docsUrl": "https://developers.asana.com/docs"
+    }
   }
 ]

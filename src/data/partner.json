@@ -131,6 +131,12 @@
     "affiliateUrl": "https://asana.com",
     "sponsored": false
   },
+  "Asana API": {
+    "name": "Asana API",
+    "url": "https://asana.com",
+    "affiliateUrl": "https://asana.com",
+    "sponsored": false
+  },
   "AssemblyAI": {
     "name": "AssemblyAI",
     "url": "https://www.assemblyai.com/",
@@ -255,6 +261,12 @@
     "name": "Cisco Webex",
     "url": "https://www.webex.com",
     "affiliateUrl": "https://www.webex.com",
+    "sponsored": false
+  },
+  "Clarifai API": {
+    "name": "Clarifai API",
+    "url": "https://www.clarifai.com",
+    "affiliateUrl": "https://www.clarifai.com",
     "sponsored": false
   },
   "Clearbit": {
@@ -581,6 +593,12 @@
     "affiliateUrl": "https://developers.google.com/sheets/api",
     "sponsored": false
   },
+  "GoToWebinar": {
+    "name": "GoToWebinar",
+    "url": "https://www.goto.com/webinar",
+    "affiliateUrl": "https://www.goto.com/webinar",
+    "sponsored": false
+  },
   "Groq Inference API": {
     "name": "Groq Inference API",
     "url": "https://groq.com",
@@ -681,6 +699,12 @@
     "name": "Instagram Reels",
     "url": "https://www.instagram.com",
     "affiliateUrl": "https://www.instagram.com",
+    "sponsored": false
+  },
+  "InVision": {
+    "name": "InVision",
+    "url": "https://www.invisionapp.com",
+    "affiliateUrl": "https://www.invisionapp.com",
     "sponsored": false
   },
   "JetBrains PyCharm": {
@@ -937,6 +961,12 @@
   },
   "Notion Automation API": {
     "name": "Notion Automation API",
+    "url": "https://www.notion.so",
+    "affiliateUrl": "https://www.notion.so",
+    "sponsored": false
+  },
+  "Notion Forms API": {
+    "name": "Notion Forms API",
     "url": "https://www.notion.so",
     "affiliateUrl": "https://www.notion.so",
     "sponsored": false
@@ -1361,6 +1391,12 @@
     "affiliateUrl": "https://trello.com",
     "sponsored": false
   },
+  "Trello API": {
+    "name": "Trello API",
+    "url": "https://developer.atlassian.com/cloud/trello/rest/",
+    "affiliateUrl": "https://developer.atlassian.com/cloud/trello/rest/",
+    "sponsored": false
+  },
   "Tresorit": {
     "name": "Tresorit",
     "url": "https://tresorit.com/",
@@ -1389,6 +1425,12 @@
     "name": "Twitch API",
     "url": "https://dev.twitch.tv",
     "affiliateUrl": "https://dev.twitch.tv",
+    "sponsored": false
+  },
+  "Twitch API Kraken": {
+    "name": "Twitch API Kraken",
+    "url": "https://dev.twitch.tv/docs/api",
+    "affiliateUrl": "https://dev.twitch.tv/docs/api",
     "sponsored": false
   },
   "Typesense": {
@@ -1457,6 +1499,12 @@
     "affiliateUrl": "https://weaviate.io",
     "sponsored": false
   },
+  "Webex": {
+    "name": "Webex",
+    "url": "https://www.webex.com",
+    "affiliateUrl": "https://www.webex.com",
+    "sponsored": false
+  },
   "WooCommerce": {
     "name": "WooCommerce",
     "url": "https://woocommerce.com",
@@ -1499,6 +1547,12 @@
     "affiliateUrl": "https://zcal.co",
     "sponsored": false
   },
+  "Zendesk": {
+    "name": "Zendesk",
+    "url": "https://www.zendesk.com/",
+    "affiliateUrl": "https://www.zendesk.com/",
+    "sponsored": false
+  },
   "Zendesk Alternatives": {
     "name": "Zendesk Alternatives",
     "url": "https://www.zendesk.com/",
@@ -1533,12 +1587,6 @@
     "name": "Zoom",
     "url": "https://zoom.us",
     "affiliateUrl": "https://zoom.us",
-    "sponsored": false
-  },
-  "Zendesk": {
-    "name": "Zendesk",
-    "url": "https://www.zendesk.com/",
-    "affiliateUrl": "https://www.zendesk.com/",
     "sponsored": false
   }
 }
