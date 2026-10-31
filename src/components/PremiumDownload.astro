@@ -18,6 +18,7 @@
  * Unlock-Status.
  */
 import LemonButton from "./LemonButton.astro";
+import { resolveDownloadGate, resolveWorkflowCheckout } from "../lib/monetization";
 
 interface Props {
   slug: string;
@@ -33,19 +34,21 @@ const {
   checkoutUrl,
 } = Astro.props;
 
-const gateUrl = (import.meta.env.PUBLIC_DOWNLOAD_GATE_URL ?? "").trim();
-const resolvedCheckoutUrl =
-  checkoutUrl ??
-  import.meta.env.PUBLIC_LEMON_WORKFLOW_CHECKOUT_URL ??
-  import.meta.env.PUBLIC_LEMON_CHECKOUT_URL;
+const gateUrl = resolveDownloadGate();
+const resolvedCheckoutUrl = resolveWorkflowCheckout(checkoutUrl);
+// Kauf und Lizenz-Unlock sind getrennte Fähigkeiten: Ohne echten Checkout
+// darf kein Kauf-Button erscheinen, ohne Gate kein irreführendes Lizenzfeld.
+const purchaseConfigured = resolvedCheckoutUrl.length > 0;
+const gateConfigured = gateUrl.length > 0;
 ---
 
-<section
-  class="mt-10 overflow-hidden rounded-2xl border border-brand-500/30 bg-gradient-to-br from-brand-500/10 via-surface to-cyan-500/5"
-  data-premium-download
-  data-slug={slug}
-  data-gate-url={gateUrl}
->
+{(purchaseConfigured || gateConfigured) && (
+  <section
+    class="mt-10 overflow-hidden rounded-2xl border border-brand-500/30 bg-gradient-to-br from-brand-500/10 via-surface to-cyan-500/5"
+    data-premium-download
+    data-slug={slug}
+    data-gate-url={gateUrl}
+  >
   <div class="p-6 sm:p-8">
     <div class="flex flex-wrap items-center gap-2">
       <span class="inline-flex items-center rounded-full bg-brand-500/15 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-brand-200 ring-1 ring-inset ring-brand-500/30">
@@ -62,48 +65,63 @@ const resolvedCheckoutUrl =
       und eine kuratierte Liste empfohlener Tools mit direkten Links.
     </p>
 
-    <!-- Kauf -->
+    <!-- Kauf / Lizenz-Unlock -->
     <div class="mt-6" data-locked>
-      <LemonButton
-        label={`PDF kaufen – ${price}`}
-        price="Einmalzahlung · PDF-Download"
-        productName={`${title} – Premium Workflow`}
-        checkoutUrl={resolvedCheckoutUrl}
-        note="Sichere Zahlung über Lemon Squeezy · Lizenzschlüssel kommt per E-Mail"
-      />
-
-      <div class="mt-6 rounded-xl border border-white/10 bg-white/[0.03] p-4">
-        <p class="text-sm font-medium text-white">Bereits gekauft?</p>
-        <p class="mt-1 text-xs text-slate-400">
-          Gib deinen Lemon-Squeezy-Lizenzschlüssel ein, um das PDF freizuschalten.
+      {purchaseConfigured ? (
+        <LemonButton
+          label={`PDF kaufen – ${price}`}
+          price="Einmalzahlung · PDF-Download"
+          productName={`${title} – Premium Workflow`}
+          checkoutUrl={resolvedCheckoutUrl}
+          note="Sichere Zahlung über Lemon Squeezy · Lizenzschlüssel kommt per E-Mail"
+        />
+      ) : (
+        <p class="rounded-xl border border-amber-400/20 bg-amber-400/5 p-4 text-xs leading-relaxed text-amber-200/80">
+          Der Verkauf wird gerade eingerichtet. Wenn du das PDF bereits gekauft
+          hast, kannst du es unten mit deinem Lizenzschlüssel freischalten.
         </p>
-        <form class="mt-3 flex flex-col gap-2 sm:flex-row" data-license-form>
-          <label class="sr-only" for={`license-${slug}`}>Lizenzschlüssel</label>
-          <input
-            id={`license-${slug}`}
-            name="licenseKey"
-            type="text"
-            autocomplete="off"
-            spellcheck="false"
-            placeholder="XXXX-XXXX-XXXX-XXXX"
-            class="w-full flex-1 rounded-lg border border-white/10 bg-[#06070d] px-3 py-2.5 font-mono text-sm text-white placeholder:text-slate-600 focus:border-brand-400/60 focus:outline-none focus:ring-2 focus:ring-brand-500/30"
-            data-license-input
-          />
-          <button
-            type="submit"
-            class="inline-flex items-center justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-400 disabled:cursor-not-allowed disabled:opacity-60"
-            data-license-submit
-          >
-            PDF freischalten
-          </button>
-        </form>
-        <p
-          class="mt-2 hidden text-xs text-rose-300"
-          role="alert"
-          data-license-error
-        ></p>
-        <p class="mt-2 hidden text-xs text-slate-400" data-license-status></p>
-      </div>
+      )}
+
+      {purchaseConfigured && !gateConfigured && (
+        <p class="mt-3 text-xs leading-relaxed text-slate-500">
+          Nach dem Kauf erhältst du den PDF-Download direkt über Lemon Squeezy.
+        </p>
+      )}
+
+      {gateConfigured && (
+        <div class="mt-6 rounded-xl border border-white/10 bg-white/[0.03] p-4">
+          <p class="text-sm font-medium text-white">Bereits gekauft?</p>
+          <p class="mt-1 text-xs text-slate-400">
+            Gib deinen Lemon-Squeezy-Lizenzschlüssel ein, um das PDF freizuschalten.
+          </p>
+          <form class="mt-3 flex flex-col gap-2 sm:flex-row" data-license-form>
+            <label class="sr-only" for={`license-${slug}`}>Lizenzschlüssel</label>
+            <input
+              id={`license-${slug}`}
+              name="licenseKey"
+              type="text"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="XXXX-XXXX-XXXX-XXXX"
+              class="w-full flex-1 rounded-lg border border-white/10 bg-[#06070d] px-3 py-2.5 font-mono text-sm text-white placeholder:text-slate-600 focus:border-brand-400/60 focus:outline-none focus:ring-2 focus:ring-brand-500/30"
+              data-license-input
+            />
+            <button
+              type="submit"
+              class="inline-flex items-center justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-400 disabled:cursor-not-allowed disabled:opacity-60"
+              data-license-submit
+            >
+              PDF freischalten
+            </button>
+          </form>
+          <p
+            class="mt-2 hidden text-xs text-rose-300"
+            role="alert"
+            data-license-error
+          ></p>
+          <p class="mt-2 hidden text-xs text-slate-400" data-license-status></p>
+        </div>
+      )}
     </div>
 
     <!-- Freigeschaltet -->
@@ -128,7 +146,8 @@ const resolvedCheckoutUrl =
       </div>
     </div>
   </div>
-</section>
+  </section>
+)}
 
 <script is:inline>
   (function () {

@@ -45,6 +45,38 @@ export function breadcrumbSchema(
   };
 }
 
+/**
+ * Product/Offer schema for the paid premium assets (PDF, Python script,
+ * Playbook). Only call this when a real checkout URL is configured —
+ * otherwise Google would receive an unusable offer.
+ */
+export function productSchema(input: {
+  name: string;
+  description: string;
+  url: string;
+  price: string;
+  priceCurrency?: string;
+  checkoutUrl: string;
+  category?: string;
+}): JsonLd {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: input.name,
+    description: input.description,
+    category: input.category,
+    url: absolute(input.url),
+    brand: { "@type": "Brand", name: site.name },
+    offers: {
+      "@type": "Offer",
+      url: input.checkoutUrl,
+      price: input.price,
+      priceCurrency: input.priceCurrency ?? "EUR",
+      availability: "https://schema.org/InStock",
+    },
+  };
+}
+
 export function softwareApplicationSchema(api: ApiEntry, lang = "en"): JsonLd {
   return {
     "@context": "https://schema.org",

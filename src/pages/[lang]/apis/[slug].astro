@@ -8,11 +8,13 @@ import { apis, workflows, getRelated, getRelatedByTags } from "../../../lib/cont
 import {
   breadcrumbSchema,
   softwareApplicationSchema,
+  productSchema,
 } from "../../../lib/schema";
 import { getToolLink } from "../../../lib/tools";
 import { languages } from "../../../i18n/ui";
 import { getLocale, localizedPath, t } from "../../../i18n/utils";
 import { localizeApi, localizeWorkflow } from "../../../i18n/content";
+import { resolveScriptCheckout } from "../../../lib/monetization";
 
 export function getStaticPaths() {
   return languages.flatMap((lang) =>
@@ -51,6 +53,7 @@ const providerLink = getToolLink(provider);
 const providerHref = providerLink?.href ?? api.details.website;
 const providerSponsored = providerLink?.sponsored ?? false;
 
+const scriptCheckout = resolveScriptCheckout();
 const jsonLd = [
   breadcrumbSchema([
     { name: "Home", url: `/${lang}/` },
@@ -59,6 +62,20 @@ const jsonLd = [
   ]),
   softwareApplicationSchema(api, lang),
 ];
+
+if (scriptCheckout) {
+  jsonLd.push(
+    productSchema({
+      name: `${api.title} – Python Starter Script`,
+      description: `A dependency-free Python client for ${api.title} with --dry-run, --smoke and --live modes.`,
+      url: `/${lang}/apis/${api.slug}/`,
+      price: "19.99",
+      priceCurrency: "EUR",
+      checkoutUrl: scriptCheckout,
+      category: "Developer Tools",
+    })
+  );
+}
 ---
 
 <Layout

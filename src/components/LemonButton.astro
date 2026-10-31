@@ -10,6 +10,8 @@
  * Lemon Squeezy's overlay script opens the checkout in a modal instead of
  * navigating away. The overlay script is injected once per page.
  */
+import { normalizeCheckoutUrl } from "../lib/monetization";
+
 interface Props {
   checkoutUrl?: string;
   label?: string;
@@ -19,6 +21,10 @@ interface Props {
   variant?: "primary" | "secondary";
   class?: string;
   id?: string;
+  /** Fallback-Ziel, wenn noch kein echter Checkout konfiguriert ist. */
+  fallbackHref?: string;
+  /** Beschriftung für den Fallback-Link. */
+  fallbackLabel?: string;
 }
 
 const {
@@ -30,11 +36,17 @@ const {
   variant = "primary",
   class: className = "",
   id,
+  fallbackHref,
+  fallbackLabel,
 } = Astro.props;
 
 const envUrl = import.meta.env.PUBLIC_LEMON_CHECKOUT_URL;
-const href = (checkoutUrl ?? envUrl ?? "").trim();
+// Platzhalter-URLs werden bewusst verworfen, damit nie ein toter
+// Lemon-Squeezy-Button ausgeliefert wird.
+const href = normalizeCheckoutUrl(checkoutUrl ?? envUrl);
 const isConfigured = href.length > 0;
+const fallbackTarget = (fallbackHref ?? "").trim();
+const hasFallback = fallbackTarget.length > 0;
 
 const baseClasses =
   "group inline-flex items-center justify-center gap-2.5 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#06070d]";
@@ -68,6 +80,32 @@ const classes = [
     >
       <span class="flex flex-col items-start leading-tight">
         <span>{label}</span>
+        {price && (
+          <span class="text-[11px] font-medium text-white/70">{price}</span>
+        )}
+      </span>
+      <svg
+        class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z"
+          clip-rule="evenodd"
+        />
+      </svg>
+    </a>
+  ) : hasFallback ? (
+    <a
+      id={id}
+      href={fallbackTarget}
+      class:list={[baseClasses, variantClasses[variant], className]}
+      rel="noopener noreferrer"
+    >
+      <span class="flex flex-col items-start leading-tight">
+        <span>{fallbackLabel ?? label}</span>
         {price && (
           <span class="text-[11px] font-medium text-white/70">{price}</span>
         )}

@@ -5,10 +5,11 @@ import DetailBox from "../../../components/DetailBox.astro";
 import Badge from "../../../components/Badge.astro";
 import PremiumDownload from "../../../components/PremiumDownload.astro";
 import { apis, alternatives, workflows, getRelated, getRelatedByTags } from "../../../lib/content";
-import { breadcrumbSchema, howToSchema } from "../../../lib/schema";
+import { breadcrumbSchema, howToSchema, productSchema } from "../../../lib/schema";
 import { languages } from "../../../i18n/ui";
 import { getLocale, localizedPath, t } from "../../../i18n/utils";
 import { localizeWorkflow, localizeApi, localizeAlternative } from "../../../i18n/content";
+import { resolveWorkflowCheckout } from "../../../lib/monetization";
 
 export function getStaticPaths() {
   return languages.flatMap((lang) =>
@@ -43,6 +44,7 @@ const difficultyTone =
       ? "amber"
       : "brand";
 
+const premiumCheckout = resolveWorkflowCheckout();
 const jsonLd = [
   breadcrumbSchema([
     { name: "Home", url: `/${lang}/` },
@@ -51,6 +53,21 @@ const jsonLd = [
   ]),
   howToSchema(workflow, lang),
 ];
+
+// Product-Rich-Results nur mit echtem Checkout ausweisen.
+if (premiumCheckout) {
+  jsonLd.push(
+    productSchema({
+      name: `${workflow.title} – Premium Workflow PDF`,
+      description: workflow.description,
+      url: `/${lang}/workflows/${workflow.slug}/`,
+      price: "4.99",
+      priceCurrency: "EUR",
+      checkoutUrl: premiumCheckout,
+      category: workflow.category,
+    })
+  );
+}
 ---
 
 <Layout
