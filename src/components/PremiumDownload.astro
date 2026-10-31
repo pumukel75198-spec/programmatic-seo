@@ -3,7 +3,7 @@
  * Premium PDF purchase + geschützter Download.
  *
  * Ablauf:
- *   1. Besucher kauft das PDF über Lemon Squeezy (€4.99).
+ *   1. Besucher kauft das PDF über Lemon Squeezy (Preis je nach Schwierigkeit).
  *   2. Lemon Squeezy stellt einen Lizenzschlüssel aus (per E-Mail / Checkout).
  *   3. Der Besucher gibt den Schlüssel hier ein.
  *   4. Das Frontend ruft den Download-Gate-Worker (`/api/validate`) auf.
@@ -19,10 +19,12 @@
  */
 import LemonButton from "./LemonButton.astro";
 import { resolveDownloadGate, resolveWorkflowCheckout } from "../lib/monetization";
+import { getWorkflowTier } from "../lib/pricing";
 
 interface Props {
   slug: string;
   title: string;
+  difficulty?: string;
   price?: string;
   checkoutUrl?: string;
 }
@@ -30,12 +32,15 @@ interface Props {
 const {
   slug,
   title,
-  price = "€4.99",
+  difficulty,
+  price,
   checkoutUrl,
 } = Astro.props;
 
+const tier = getWorkflowTier(difficulty);
+const resolvedPrice = price ?? tier.label;
 const gateUrl = resolveDownloadGate();
-const resolvedCheckoutUrl = resolveWorkflowCheckout(checkoutUrl);
+const resolvedCheckoutUrl = resolveWorkflowCheckout(difficulty, checkoutUrl);
 // Kauf und Lizenz-Unlock sind getrennte Fähigkeiten: Ohne echten Checkout
 // darf kein Kauf-Button erscheinen, ohne Gate kein irreführendes Lizenzfeld.
 const purchaseConfigured = resolvedCheckoutUrl.length > 0;
@@ -54,7 +59,7 @@ const gateConfigured = gateUrl.length > 0;
       <span class="inline-flex items-center rounded-full bg-brand-500/15 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-brand-200 ring-1 ring-inset ring-brand-500/30">
         Premium PDF
       </span>
-      <span class="text-xs text-slate-500">Sofort-Download · {price}</span>
+      <span class="text-xs text-slate-500">Sofort-Download · {resolvedPrice}</span>
     </div>
 
     <h2 class="mt-3 text-xl font-semibold text-white sm:text-2xl">
@@ -69,7 +74,7 @@ const gateConfigured = gateUrl.length > 0;
     <div class="mt-6" data-locked>
       {purchaseConfigured ? (
         <LemonButton
-          label={`PDF kaufen – ${price}`}
+          label={`PDF kaufen – ${resolvedPrice}`}
           price="Einmalzahlung · PDF-Download"
           productName={`${title} – Premium Workflow`}
           checkoutUrl={resolvedCheckoutUrl}

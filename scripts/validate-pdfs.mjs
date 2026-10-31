@@ -12,7 +12,7 @@
  *   3. Struktur (mind. 3 Steps, nicht-leere Titel/Beschreibungen,
  *      vollständige Sätze, vorhandene Abschnitte)
  *   4. Link-Integrität (Affiliate-Links aus partner.json + Lemon-Squeezy-
- *      Checkout-Link + Preis €4.99)
+ *      Checkout-Link + Preis je Schwierigkeitsstufe)
  *
  * Läuft automatisch im `prebuild`-Schritt. Bei einem Fehler bricht das
  * Skript mit Exit-Code 1 ab und blockiert damit den Build.
@@ -27,6 +27,7 @@ import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join, resolve } from "node:path";
 import { PDFParse } from "pdf-parse";
+import { loadPricing, tierFor, tierCheckout } from "./pricing.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
@@ -235,15 +236,17 @@ function checkLinks(workflow, text, raw, partner, monetization, errors) {
     errors.push("Keine klickbaren URLs (/URI) im PDF gefunden");
   }
 
+  const tier = tierFor(monetization.pricing, workflow.details?.difficulty);
+  const expectedPrice = tier.label || monetization.price;
   const expectedLink =
-    monetization.checkoutUrl ||
+    tierCheckout(monetization.pricing, workflow.details?.difficulty, monetization.checkoutUrl) ||
     `https://flowmatrix.dev/en/workflows/${workflow.slug}`;
   if (!uriMatches.includes(expectedLink) && !raw.includes(expectedLink)) {
     errors.push(`Checkout-/Workflow-Link fehlt im PDF: ${expectedLink}`);
   }
 
-  if (!lower(text).includes(lower(monetization.price))) {
-    errors.push(`Preis "${monetization.price}" fehlt im PDF-Text`);
+  if (!lower(text).includes(lower(expectedPrice))) {
+    errors.push(`Preis "${expectedPrice}" fehlt im PDF-Text`);
   }
 
   const premiumText = lower(text).replace(/[-\s]+/g, " ");
@@ -345,6 +348,8 @@ async function main() {
     process.env.PUBLIC_LEMON_WORKFLOW_CHECKOUT_URL?.trim() ||
     process.env.PUBLIC_LEMON_CHECKOUT_URL?.trim() ||
     monetization.checkoutUrl;
+
+  monetization.pricing = await loadPricing();
 
   console.log(
     `${c.cyan}${c.bold}▶ Validiere ${workflows.length} Premium-PDFs${c.reset} ${c.dim}(${pdfDir})${c.reset}`

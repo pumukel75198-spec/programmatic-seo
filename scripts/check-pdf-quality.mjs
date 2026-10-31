@@ -34,6 +34,7 @@ import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join, resolve } from "node:path";
 import { PDFParse } from "pdf-parse";
+import { loadPricing, tierFor, tierCheckout } from "./pricing.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -688,8 +689,13 @@ function checkUrls(raw, text, workflow, partner, monetization, allowed, errors) 
   }
 
   const checkout =
-    normalize(monetization?.checkoutUrl) ||
-    `https://flowmatrix.dev/en/workflows/${workflow.slug}`;
+    normalize(
+      tierCheckout(
+        monetization?.pricing,
+        workflow.details?.difficulty,
+        monetization?.checkoutUrl
+      )
+    ) || `https://flowmatrix.dev/en/workflows/${workflow.slug}`;
   if (
     !rawLower.includes(lower(checkout)) &&
     !textMatch.includes(matchNormalize(checkout))
@@ -726,7 +732,8 @@ function checkClaims(text, workflows, monetization, errors) {
     }
   }
 
-  const expectedPrice = compact(monetization?.price ?? "");
+  const tier = tierFor(monetization?.pricing, workflows?.[0]?.details?.difficulty);
+  const expectedPrice = compact(tier.label || monetization?.price || "");
   const amounts = [
     ...text.matchAll(/(?:€\s*\d+[.,]\d{2}|\d+[.,]\d{2}\s*(?:€|EUR))/gi),
   ].map((match) => compact(match[0]).replace("eur", "€"));
@@ -738,7 +745,7 @@ function checkClaims(text, workflows, monetization, errors) {
     }
   }
   if (expectedPrice && !compact(text).includes(expectedPrice)) {
-    errors.push(`Preis „${monetization.price}“ fehlt im PDF-Text`);
+    errors.push(`Preis „${tier.label || monetization?.price}“ fehlt im PDF-Text`);
   }
 
   const allowedPercents = new Set();
@@ -1197,6 +1204,8 @@ async function loadData() {
     process.env.PUBLIC_LEMON_WORKFLOW_CHECKOUT_URL?.trim() ||
     process.env.PUBLIC_LEMON_CHECKOUT_URL?.trim() ||
     monetization.checkoutUrl;
+
+  monetization.pricing = await loadPricing();
 
   return { workflows, partner, monetization };
 }

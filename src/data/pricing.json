@@ -1,0 +1,30 @@
+{
+  "currency": "EUR",
+  "defaultTier": "Intermediate",
+  "workflowTiers": {
+    "Beginner": {
+      "price": 4.99,
+      "label": "€4.99",
+      "envKey": "PUBLIC_LEMON_WORKFLOW_CHECKOUT_BEGINNER"
+    },
+    "Intermediate": {
+      "price": 7.99,
+      "label": "€7.99",
+      "envKey": "PUBLIC_LEMON_WORKFLOW_CHECKOUT_INTERMEDIATE"
+    },
+    "Advanced": {
+      "price": 12.99,
+      "label": "€12.99",
+      "envKey": "PUBLIC_LEMON_WORKFLOW_CHECKOUT_ADVANCED"
+    },
+    "Expert": {
+      "price": 19.99,
+      "label": "€19.99",
+      "envKey": "PUBLIC_LEMON_WORKFLOW_CHECKOUT_EXPERT"
+    }
+  },
+  "script": {
+    "price": 19.99,
+    "label": "€19.99"
+  }
+}

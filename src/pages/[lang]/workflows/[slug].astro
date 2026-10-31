@@ -10,6 +10,7 @@ import { languages } from "../../../i18n/ui";
 import { getLocale, localizedPath, t } from "../../../i18n/utils";
 import { localizeWorkflow, localizeApi, localizeAlternative } from "../../../i18n/content";
 import { resolveWorkflowCheckout } from "../../../lib/monetization";
+import { getWorkflowPriceValue } from "../../../lib/pricing";
 
 export function getStaticPaths() {
   return languages.flatMap((lang) =>
@@ -44,7 +45,7 @@ const difficultyTone =
       ? "amber"
       : "brand";
 
-const premiumCheckout = resolveWorkflowCheckout();
+const premiumCheckout = resolveWorkflowCheckout(workflow.details.difficulty);
 const jsonLd = [
   breadcrumbSchema([
     { name: "Home", url: `/${lang}/` },
@@ -61,7 +62,7 @@ if (premiumCheckout) {
       name: `${workflow.title} – Premium Workflow PDF`,
       description: workflow.description,
       url: `/${lang}/workflows/${workflow.slug}/`,
-      price: "4.99",
+      price: getWorkflowPriceValue(workflow.details.difficulty),
       priceCurrency: "EUR",
       checkoutUrl: premiumCheckout,
       category: workflow.category,
@@ -117,7 +118,7 @@ if (premiumCheckout) {
       <PremiumDownload
         slug={workflow.slug}
         title={workflow.title}
-        price="€4.99"
+        difficulty={workflow.details.difficulty}
       />
 
       <!-- Related APIs -->

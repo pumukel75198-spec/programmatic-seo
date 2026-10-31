@@ -6,6 +6,7 @@
  * Kauf-Link gerendert werden. Das schützt vor toten Buttons und falschen
  * Lemon-Squeezy-Versprechen (E-E-A-T / Vertrauen).
  */
+import { normalizeDifficulty, type Difficulty } from "./pricing";
 
 const PLACEHOLDER_MARKERS = [
   "your-store.lemonsqueezy.com",
@@ -28,10 +29,28 @@ export function normalizeCheckoutUrl(raw?: string | null): string {
   return value;
 }
 
-/** Checkout für das 4,99 € Premium-Workflow-PDF. */
-export function resolveWorkflowCheckout(explicit?: string | null): string {
+/**
+ * Checkout für das Premium-Workflow-PDF – abhängig von der Schwierigkeit.
+ *
+ * Jede Preisstufe hat eine eigene Lemon-Squeezy-Variante. Fällt die
+ * tier-spezifische URL weg, greifen die generischen Fallbacks, damit ein
+ * einzelner Produkt-Checkout weiterhin funktioniert.
+ */
+const TIER_CHECKOUT_ENV: Record<Difficulty, string | undefined> = {
+  Beginner: import.meta.env.PUBLIC_LEMON_WORKFLOW_CHECKOUT_BEGINNER,
+  Intermediate: import.meta.env.PUBLIC_LEMON_WORKFLOW_CHECKOUT_INTERMEDIATE,
+  Advanced: import.meta.env.PUBLIC_LEMON_WORKFLOW_CHECKOUT_ADVANCED,
+  Expert: import.meta.env.PUBLIC_LEMON_WORKFLOW_CHECKOUT_EXPERT,
+};
+
+export function resolveWorkflowCheckout(
+  difficulty?: string | null,
+  explicit?: string | null
+): string {
+  const tierKey = normalizeDifficulty(difficulty);
   return normalizeCheckoutUrl(
     explicit ??
+      TIER_CHECKOUT_ENV[tierKey] ??
       import.meta.env.PUBLIC_LEMON_WORKFLOW_CHECKOUT_URL ??
       import.meta.env.PUBLIC_LEMON_CHECKOUT_URL
   );

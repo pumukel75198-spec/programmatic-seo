@@ -27,6 +27,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join, resolve } from "node:path";
 import PDFDocument from "pdfkit";
 import { ensurePdfQuality } from "./check-pdf-quality.mjs";
+import { loadPricing, tierFor, tierCheckout } from "./pricing.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -106,6 +107,11 @@ function ensureSpace(doc, needed = 60) {
 
 function drawCover(doc, workflow, monetization) {
   const { width, height } = PAGE;
+  const tier = tierFor(monetization.pricing, workflow.details?.difficulty);
+  const priceLabel = tier.label || monetization.price;
+  const checkoutLink =
+    tierCheckout(monetization.pricing, workflow.details?.difficulty, monetization.checkoutUrl) ||
+    `https://flowmatrix.dev/en/workflows/${workflow.slug}`;
 
   doc.rect(0, 0, width, height).fill(COLORS.bg);
 
@@ -198,12 +204,10 @@ function drawCover(doc, workflow, monetization) {
     .font("Helvetica")
     .fontSize(10)
     .fillColor(COLORS.brandLight)
-    .text(`Premium PDF · ${monetization.price}`, PAGE.margin, height - 70, {
+    .text(`Premium PDF · ${priceLabel}`, PAGE.margin, height - 70, {
       width: CONTENT_WIDTH,
       align: "right",
-      link:
-        monetization.checkoutUrl ||
-        `https://flowmatrix.dev/en/workflows/${workflow.slug}`,
+      link: checkoutLink,
       underline: true,
     });
 }
@@ -461,6 +465,11 @@ function drawTools(doc, workflow, partner, monetization) {
   const toolNames = Array.isArray(workflow.details?.tools)
     ? workflow.details.tools
     : [];
+  const tier = tierFor(monetization.pricing, workflow.details?.difficulty);
+  const priceLabel = tier.label || monetization.price;
+  const checkoutLink =
+    tierCheckout(monetization.pricing, workflow.details?.difficulty, monetization.checkoutUrl) ||
+    `https://flowmatrix.dev/en/workflows/${workflow.slug}`;
 
   addPage(doc);
 
@@ -563,7 +572,7 @@ function drawTools(doc, workflow, partner, monetization) {
     .fontSize(10)
     .fillColor(COLORS.muted)
     .text(
-      `All steps, tools and resources as a PDF – ${monetization.price}.`,
+      `All steps, tools and resources as a PDF – ${priceLabel}.`,
       PAGE.margin + 18,
       ctaY + 40,
       { width: CONTENT_WIDTH - 36 }
@@ -573,11 +582,9 @@ function drawTools(doc, workflow, partner, monetization) {
     .font("Helvetica-Bold")
     .fontSize(10)
     .fillColor(COLORS.brandLight)
-    .text(`Buy now – ${monetization.price}`, PAGE.margin + 18, ctaY + 62, {
+    .text(`Buy now – ${priceLabel}`, PAGE.margin + 18, ctaY + 62, {
       width: CONTENT_WIDTH - 36,
-      link:
-        monetization.checkoutUrl ||
-        `https://flowmatrix.dev/en/workflows/${workflow.slug}`,
+      link: checkoutLink,
       underline: true,
     });
 }
@@ -661,6 +668,7 @@ export async function loadInputs() {
   const workflows = JSON.parse(await readFile(workflowsFile, "utf8"));
   const partner = JSON.parse(await readFile(partnerFile, "utf8"));
   const monetization = JSON.parse(await readFile(monetizationFile, "utf8"));
+  const pricing = await loadPricing();
 
   if (!Array.isArray(workflows)) {
     throw new Error("workflows.json muss ein Array sein.");
@@ -671,6 +679,9 @@ export async function loadInputs() {
     process.env.PUBLIC_LEMON_WORKFLOW_CHECKOUT_URL?.trim() ||
     process.env.PUBLIC_LEMON_CHECKOUT_URL?.trim() ||
     monetization.checkoutUrl;
+
+  // Preis-Leiter für die PDF-Erzeugung verfügbar machen.
+  monetization.pricing = pricing;
 
   // Ohne konfigurierte Checkout-URL verlinken die PDFs auf die jeweilige
   // Workflow-Seite (gültiger Fallback statt toter Lemon-URL).
