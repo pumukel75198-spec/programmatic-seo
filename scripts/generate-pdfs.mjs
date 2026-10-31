@@ -201,7 +201,9 @@ function drawCover(doc, workflow, monetization) {
     .text(`Premium PDF · ${monetization.price}`, PAGE.margin, height - 70, {
       width: CONTENT_WIDTH,
       align: "right",
-      link: monetization.checkoutUrl,
+      link:
+        monetization.checkoutUrl ||
+        `https://flowmatrix.dev/en/workflows/${workflow.slug}`,
       underline: true,
     });
 }
@@ -573,7 +575,9 @@ function drawTools(doc, workflow, partner, monetization) {
     .fillColor(COLORS.brandLight)
     .text(`Buy now – ${monetization.price}`, PAGE.margin + 18, ctaY + 62, {
       width: CONTENT_WIDTH - 36,
-      link: monetization.checkoutUrl,
+      link:
+        monetization.checkoutUrl ||
+        `https://flowmatrix.dev/en/workflows/${workflow.slug}`,
       underline: true,
     });
 }
@@ -668,9 +672,8 @@ export async function loadInputs() {
     process.env.PUBLIC_LEMON_CHECKOUT_URL?.trim() ||
     monetization.checkoutUrl;
 
-  if (!monetization.checkoutUrl) {
-    throw new Error("Keine Lemon-Squeezy-Checkout-URL konfiguriert.");
-  }
+  // Ohne konfigurierte Checkout-URL verlinken die PDFs auf die jeweilige
+  // Workflow-Seite (gültiger Fallback statt toter Lemon-URL).
 
   return { workflows, partner, monetization };
 }

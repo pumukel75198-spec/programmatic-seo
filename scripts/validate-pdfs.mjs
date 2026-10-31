@@ -235,15 +235,11 @@ function checkLinks(workflow, text, raw, partner, monetization, errors) {
     errors.push("Keine klickbaren URLs (/URI) im PDF gefunden");
   }
 
-  if (!monetization.checkoutUrl) {
-    errors.push("Keine Lemon-Squeezy-Checkout-URL konfiguriert");
-  } else if (
-    !uriMatches.includes(monetization.checkoutUrl) &&
-    !raw.includes(monetization.checkoutUrl)
-  ) {
-    errors.push(
-      `Lemon-Squeezy-Checkout-Link fehlt im PDF: ${monetization.checkoutUrl}`
-    );
+  const expectedLink =
+    monetization.checkoutUrl ||
+    `https://flowmatrix.dev/en/workflows/${workflow.slug}`;
+  if (!uriMatches.includes(expectedLink) && !raw.includes(expectedLink)) {
+    errors.push(`Checkout-/Workflow-Link fehlt im PDF: ${expectedLink}`);
   }
 
   if (!lower(text).includes(lower(monetization.price))) {

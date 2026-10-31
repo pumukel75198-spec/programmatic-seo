@@ -189,6 +189,12 @@ function buildAllowedUrls(workflows, partner, monetization) {
   collectUrlsFromValue(partner, raw);
   if (monetization?.checkoutUrl) raw.add(monetization.checkoutUrl);
   raw.add("https://flowmatrix.dev");
+  // PDFs verlinken ohne Checkout-URL auf die jeweilige Workflow-Seite.
+  for (const workflow of workflows) {
+    if (workflow?.slug) {
+      raw.add(`https://flowmatrix.dev/en/workflows/${workflow.slug}`);
+    }
+  }
 
   const allowed = new Set();
   for (const url of raw) {
@@ -681,14 +687,14 @@ function checkUrls(raw, text, workflow, partner, monetization, allowed, errors) 
     }
   }
 
-  const checkout = normalize(monetization?.checkoutUrl);
-  if (!checkout) {
-    errors.push("Keine Lemon-Squeezy-Checkout-URL konfiguriert");
-  } else if (
+  const checkout =
+    normalize(monetization?.checkoutUrl) ||
+    `https://flowmatrix.dev/en/workflows/${workflow.slug}`;
+  if (
     !rawLower.includes(lower(checkout)) &&
     !textMatch.includes(matchNormalize(checkout))
   ) {
-    errors.push(`Checkout-Link fehlt im PDF: ${checkout}`);
+    errors.push(`Checkout-/Workflow-Link fehlt im PDF: ${checkout}`);
   }
 }
 
