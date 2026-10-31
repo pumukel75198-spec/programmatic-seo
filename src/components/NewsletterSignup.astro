@@ -1,0 +1,191 @@
+---
+/**
+ * Vollautomatische Newsletter-Anmeldung.
+ *
+ * Postet an den Cloudflare Worker (`PUBLIC_NEWSLETTER_URL`). Der Worker
+ * übernimmt Double-Opt-in, Bot-Schutz und die Übergabe an MailerLite.
+ * Ist der Endpoint nicht konfiguriert, bleibt das Formular sichtbar, zeigt
+ * aber einen klaren Hinweis statt eines Fehlers.
+ */
+interface Props {
+  lang?: string;
+  source?: string;
+  compact?: boolean;
+}
+
+const { lang = "en", source = "flowmatrix", compact = false } = Astro.props;
+const endpoint = (import.meta.env.PUBLIC_NEWSLETTER_URL ?? "").replace(/\/$/, "");
+
+const copy = {
+  en: {
+    title: "Get new APIs & workflows by email",
+    text: "Fresh automation recipes and tooling picks, generated and curated automatically. No spam, unsubscribe anytime.",
+    placeholder: "you@example.com",
+    button: "Subscribe",
+    consent: "I agree to receive the newsletter and accept the privacy policy.",
+    success: "Almost done – please confirm the email we just sent you.",
+    queued: "You're on the list. Confirmation follows shortly.",
+    error: "Something went wrong. Please try again.",
+    unavailable: "Newsletter signup is being set up. Please check back soon.",
+    invalid: "Please enter a valid email address.",
+  },
+  de: {
+    title: "Neue APIs & Workflows per E-Mail",
+    text: "Frische Automatisierungs-Rezepte und Tool-Empfehlungen – automatisch generiert und kuratiert. Kein Spam, jederzeit abbestellbar.",
+    placeholder: "du@beispiel.de",
+    button: "Abonnieren",
+    consent: "Ich möchte den Newsletter erhalten und akzeptiere die Datenschutzerklärung.",
+    success: "Fast fertig – bitte bestätige die E-Mail, die wir dir gerade geschickt haben.",
+    queued: "Du bist auf der Liste. Die Bestätigung folgt in Kürze.",
+    error: "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+    unavailable: "Die Newsletter-Anmeldung wird gerade eingerichtet. Bitte schau bald wieder vorbei.",
+    invalid: "Bitte gib eine gültige E-Mail-Adresse ein.",
+  },
+} as const;
+
+const t = copy[lang === "de" ? "de" : "en"];
+const privacyHref = `/${lang}/privacy`;
+---
+
+<section
+  class:list={[
+    "not-prose rounded-2xl border border-white/10 bg-white/[0.03] p-5",
+    compact ? "sm:p-5" : "sm:p-6",
+  ]}
+  data-newsletter
+  data-endpoint={endpoint}
+  data-source={source}
+  data-msg-success={t.success}
+  data-msg-queued={t.queued}
+  data-msg-error={t.error}
+  data-msg-unavailable={t.unavailable}
+  data-msg-invalid={t.invalid}
+>
+  <div class="flex flex-col gap-1">
+    <h2 class="text-sm font-semibold text-white">{t.title}</h2>
+    <p class="text-xs leading-relaxed text-slate-400">{t.text}</p>
+  </div>
+
+  <form class="mt-4 flex flex-col gap-3" data-newsletter-form novalidate>
+    <div class="flex flex-col gap-2 sm:flex-row">
+      <label class="sr-only" for={`newsletter-email-${source}`}>Email</label>
+      <input
+        id={`newsletter-email-${source}`}
+        type="email"
+        name="email"
+        required
+        autocomplete="email"
+        placeholder={t.placeholder}
+        class="min-w-0 flex-1 rounded-xl border border-white/10 bg-[#0b0d16] px-3.5 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-brand-400/60 focus:outline-none focus:ring-2 focus:ring-brand-400/20"
+      />
+      <button
+        type="submit"
+        class="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-brand-500 to-cyan-500 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-brand-500/20 transition hover:from-brand-400 hover:to-cyan-400 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        {t.button}
+      </button>
+    </div>
+
+    <!-- Honeypot: für Menschen unsichtbar, Bots füllen es aus. -->
+    <div class="hidden" aria-hidden="true">
+      <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+    </div>
+
+    <label class="flex items-start gap-2 text-[11px] leading-relaxed text-slate-500">
+      <input
+        type="checkbox"
+        name="consent"
+        required
+        class="mt-0.5 h-3.5 w-3.5 rounded border-white/20 bg-transparent text-brand-500 focus:ring-brand-400/30"
+      />
+      <span>
+        {t.consent}
+        <a href={privacyHref} class="text-brand-300 underline-offset-2 hover:underline">Privacy</a>
+      </span>
+    </label>
+
+    <p class="hidden text-xs" data-newsletter-status role="status" aria-live="polite"></p>
+  </form>
+</section>
+
+<script is:inline>
+  (function () {
+    var root = document.currentScript && document.currentScript.previousElementSibling;
+    if (!root || !root.matches("[data-newsletter]")) {
+      root = document.querySelector("[data-newsletter]");
+    }
+    if (!root || root.dataset.newsletterReady === "1") return;
+    root.dataset.newsletterReady = "1";
+
+    var form = root.querySelector("[data-newsletter-form]");
+    var status = root.querySelector("[data-newsletter-status]");
+    var endpoint = (root.dataset.endpoint || "").replace(/\/$/, "");
+
+    function show(message, tone) {
+      if (!status) return;
+      status.textContent = message;
+      status.classList.remove("hidden", "text-emerald-400", "text-red-400", "text-slate-400");
+      status.classList.add(
+        tone === "success" ? "text-emerald-400" : tone === "error" ? "text-red-400" : "text-slate-400"
+      );
+    }
+
+    if (!endpoint) {
+      show(root.dataset.msgUnavailable, "muted");
+      var submit = form && form.querySelector('button[type="submit"]');
+      if (submit) submit.disabled = true;
+      return;
+    }
+
+    if (!form) return;
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      var email = form.elements.email.value.trim();
+      var consent = form.elements.consent.checked;
+      var website = form.elements.website ? form.elements.website.value : "";
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+        show(root.dataset.msgInvalid, "error");
+        return;
+      }
+      if (!consent) {
+        show(root.dataset.msgInvalid, "error");
+        return;
+      }
+
+      var button = form.querySelector('button[type="submit"]');
+      if (button) button.disabled = true;
+
+      fetch(endpoint + "/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: email,
+          consent: true,
+          source: root.dataset.source || "website",
+          website: website,
+        }),
+      })
+        .then(function (response) {
+          return response.json().then(function (data) {
+            return { ok: response.ok, data: data };
+          });
+        })
+        .then(function (result) {
+          if (result.ok && result.data && result.data.ok) {
+            show(result.data.queued ? root.dataset.msgQueued : root.dataset.msgSuccess, "success");
+            form.reset();
+          } else {
+            show(root.dataset.msgError, "error");
+          }
+        })
+        .catch(function () {
+          show(root.dataset.msgError, "error");
+        })
+        .finally(function () {
+          if (button) button.disabled = false;
+        });
+    });
+  })();
+</script>

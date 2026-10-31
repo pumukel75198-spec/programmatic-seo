@@ -38,6 +38,7 @@ jobs:
           PUBLIC_LEMON_CHECKOUT_URL: ${{ vars.PUBLIC_LEMON_CHECKOUT_URL }}
           PUBLIC_LEMON_WORKFLOW_CHECKOUT_URL: ${{ vars.PUBLIC_LEMON_WORKFLOW_CHECKOUT_URL }}
           PUBLIC_LEMON_SCRIPT_CHECKOUT_URL: ${{ vars.PUBLIC_LEMON_SCRIPT_CHECKOUT_URL }}
+          PUBLIC_NEWSLETTER_URL: ${{ vars.PUBLIC_NEWSLETTER_URL }}
         run: npm run build
 
       - name: Deploy to Cloudflare Pages
@@ -46,3 +47,9 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=programmatic-seo --branch=main
+
+      - name: Submit URLs to IndexNow
+        env:
+          SITE_URL: https://flowmatrix.dev
+          INDEXNOW_KEY: f7c3a9e2b1d84f6a9c0e5d2b8a4f1c73
+        run: node scripts/indexnow.mjs

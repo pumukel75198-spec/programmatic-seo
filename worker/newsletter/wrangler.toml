@@ -1,0 +1,26 @@
+# Cloudflare Worker – vollautomatische Newsletter-Anmeldung
+#
+# Setup (Details siehe README.md):
+#   1. KV-Namespace anlegen:
+#        npx wrangler kv namespace create NEWSLETTER_KV
+#      Die ausgegebene ID unten eintragen.
+#   2. MailerLite verbinden (optional, aber empfohlen):
+#        npx wrangler secret put MAILERLITE_API_KEY
+#      Gruppen-ID als MAILERLITE_GROUP_ID unten eintragen.
+#   3. Worker deployen:
+#        cd worker/newsletter && npx wrangler deploy
+#   4. Worker-URL als PUBLIC_NEWSLETTER_URL in der Astro-Umgebung setzen.
+
+name = "flowmatrix-newsletter"
+main = "index.js"
+compatibility_date = "2025-01-01"
+
+[[kv_namespaces]]
+binding = "NEWSLETTER_KV"
+id = "24670d9d418e4577a882581ea870688f"
+
+[vars]
+# Kommagetrennte Liste erlaubter Origins. Leer = eingebaute Standardliste.
+ALLOWED_ORIGINS = "https://flowmatrix.dev,https://www.flowmatrix.dev,https://compliance.flowmatrix.dev,http://localhost:4321,http://localhost:3000"
+# MailerLite-Gruppen-ID (Dashboard → Subscribers → Groups).
+MAILERLITE_GROUP_ID = ""
