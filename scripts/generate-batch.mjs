@@ -136,8 +136,11 @@ node("test-api-scripts.mjs", ["--offline"]);
 
 // 5) Premium-Dateien nach KV hochladen (nur wenn Cloudflare-Zugang gesetzt ist).
 if (process.env.CLOUDFLARE_API_TOKEN && process.env.CLOUDFLARE_ACCOUNT_ID) {
-  node("upload-pdfs.mjs");
-  node("upload-api-scripts.mjs");
+  // Uploads sind optional: Ein überschrittenes KV-Tageslimit darf den
+  // restlichen Batch (Build/Deploy/Commit) nicht blockieren. Dank Hash-Cache
+  // werden unveränderte Dateien ohnehin nicht erneut geschrieben.
+  node("upload-pdfs.mjs", [], { optional: true });
+  node("upload-api-scripts.mjs", [], { optional: true });
 } else {
   console.warn(
     `${c.yellow}⚠ CLOUDFLARE_API_TOKEN/ACCOUNT_ID fehlen – KV-Upload übersprungen.${c.reset}`

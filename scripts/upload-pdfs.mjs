@@ -23,6 +23,7 @@ import { readdir, readFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { loadManifest, saveManifest, hashBuffer } from "./kv-cache.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
@@ -62,11 +63,19 @@ console.log(
 );
 
 const baseUrl = `https://api.cloudflare.com/client/v4/accounts/${accountId}/storage/kv/namespaces/${namespaceId}/values`;
+const manifest = await loadManifest();
 
 async function upload(file) {
   const slug = file.replace(/^flowmatrix-/, "").replace(/\.pdf$/i, "");
   const key = `${slug}.pdf`;
   const body = await readFile(join(pdfDir, file));
+  const hash = hashBuffer(body);
+
+  // Unveränderte Dateien nicht erneut schreiben (KV-Tageslimit schonen).
+  if (manifest.pdfs[key] === hash) {
+    console.log(`  ↺ ${key} (unverändert)`);
+    return;
+  }
 
   const response = await fetch(`${baseUrl}/${encodeURIComponent(key)}`, {
     method: "PUT",
@@ -82,6 +91,7 @@ async function upload(file) {
     throw new Error(`${response.status} ${text.slice(0, 200)}`);
   }
 
+  manifest.pdfs[key] = hash;
   console.log(`  ✓ ${key}`);
 }
 
@@ -105,9 +115,11 @@ await Promise.all(
   Array.from({ length: Math.min(concurrency, files.length) }, () => worker())
 );
 
+await saveManifest(manifest);
+
 if (failed > 0) {
   console.error(`✖ ${failed} von ${files.length} Upload(s) fehlgeschlagen.`);
   process.exit(1);
 }
 
-console.log(`✔ Fertig: ${files.length} PDF(s) hochgeladen.`);
+console.log(`✔ Fertig: ${files.length} PDF(s) geprüft, Änderungen hochgeladen.`);
