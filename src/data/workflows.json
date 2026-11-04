@@ -1376,129 +1376,173 @@
       "steps": [
         {
           "title": "Build a knowledge base from FAQs and docs",
-          "description": "Create a centralized knowledge database by collecting frequently asked questions and documentation to provide reliable answers for the chatbot. This step involves structuring the data for efficient retrieval.",
-          "technical_explanation": "This step serves as the foundation for the chatbot, providing the necessary data for answering user queries. The data is collected from various sources and structured in a way that allows for easy access. Edge cases include handling missing data and ensuring that the data format is consistent across all entries.",
-          "code_snippet": "import json\nimport urllib.request\n\ndef build_knowledge_base():\n    # Load FAQs and documentation from a local JSON file\n    with open('faqs.json', 'r') as file:\n        faqs = json.load(file)  # Load the FAQs\n    # Process the FAQs into a structured format\n    knowledge_base = {faq['question']: faq['answer'] for faq in faqs}\n    return knowledge_base\n\nknowledge_base = build_knowledge_base()\n\nresult = build_knowledge_base()\n",
+          "description": "This step involves creating a centralized knowledge database by collecting frequently asked questions and documentation. The data must be structured for efficient retrieval by the chatbot.",
+          "technical_explanation": "The knowledge base serves as the primary source of information for the chatbot, consuming FAQs and documentation. The data structure should allow for quick access and retrieval. Ensure that the data is formatted correctly to avoid issues during the embedding generation process.",
+          "code_snippet": "import json\n\ndef build_knowledge_base(faqs):\n    knowledge_base = {}\n    for faq in faqs:\n        question = faq['question']\n        answer = faq['answer']\n        knowledge_base[question] = answer\n    return knowledge_base\n\nfaqs = [{'question': 'What is your return policy?', 'answer': 'You can return items within 30 days.'}]\nknowledge_base = build_knowledge_base(faqs)",
           "actions": [
-            "Collect FAQs and documentation into a JSON file.",
-            "Ensure the JSON structure is consistent.",
-            "Load the JSON file into the script."
+            "Collect frequently asked questions and documentation.",
+            "Structure the data into a dictionary format.",
+            "Ensure the knowledge base is accessible for embedding generation."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Run knowledge base builder",
+              "language": "bash",
+              "code": "python knowledge_base_builder.py"
+            }
+          ],
           "config": [],
           "tools": [],
           "checklist": [
-            "Knowledge base is populated with FAQs.",
-            "Data structure is consistent and accessible."
+            "Knowledge base is structured as a dictionary.",
+            "All FAQs are included in the knowledge base."
           ],
-          "expectedResult": "A structured knowledge base is created and ready for use.",
+          "expectedResult": "A structured knowledge base containing FAQs and documentation.",
           "links": [
             {
-              "label": "Python JSON Docs",
-              "url": "https://docs.python.org/3/library/json.html"
+              "label": "Python Dictionary Documentation",
+              "url": "https://docs.python.org/3/tutorial/datastructures.html#dictionaries"
             }
           ]
         },
         {
           "title": "Generate embeddings for semantic search",
-          "description": "Create embeddings for the knowledge database to enable semantic search that recognizes similar queries. This step transforms the textual data into numerical vectors.",
-          "technical_explanation": "Embeddings are generated to facilitate semantic search, allowing the chatbot to understand user queries better. The OpenAI API is used to create these embeddings. Edge cases include handling API rate limits and ensuring that the input text is properly formatted.",
-          "code_snippet": "import json\nimport urllib.request\n\nOPENAI_API_KEY = 'your_openai_api_key'\n\ndef generate_embeddings(knowledge_base):\n    embeddings = {}\n    for question in knowledge_base.keys():\n        # Create an embedding for each question using OpenAI API\n        data = json.dumps({'model': 'gpt-4o-mini', 'input': question}).encode('utf-8')\n        req = urllib.request.Request('https://api.openai.com/v1/embeddings', data=data,\n                                      headers={'Authorization': f'Bearer {OPENAI_API_KEY}', 'Content-Type': 'application/json'})\n        with urllib.request.urlopen(req) as response:\n            result = json.loads(response.read())\n            embeddings[question] = result['data'][0]['embedding']\n    return embeddings\n\nembeddings = generate_embeddings(knowledge_base)",
+          "description": "In this step, we will create embeddings for the knowledge base to enable semantic search capabilities. This allows the chatbot to recognize similar queries and provide accurate responses.",
+          "technical_explanation": "Embeddings transform textual data into numerical vectors, which are essential for semantic search. The OpenAI API will be used to generate these embeddings, consuming the structured knowledge base. Be aware of rate limits when generating embeddings for large datasets.",
+          "code_snippet": "import json\nimport urllib.request\n\nAPI_KEY = 'your_openai_api_key'\n\ndef generate_embeddings(knowledge_base):\n    embeddings = {}\n    for question in knowledge_base.keys():\n        data = json.dumps({'model': 'gpt-4o-mini', 'input': question}).encode('utf-8')\n        req = urllib.request.Request('https://api.openai.com/v1/embeddings', data=data)\n        req.add_header('Authorization', f'Bearer {API_KEY}')\n        with urllib.request.urlopen(req) as response:\n            result = json.loads(response.read())\n            embeddings[question] = result['data'][0]['embedding']\n    return embeddings\n\nembeddings = generate_embeddings(knowledge_base)",
           "actions": [
-            "Iterate over each question in the knowledge base.",
-            "Send requests to the OpenAI API to generate embeddings.",
-            "Store the embeddings in a structured format."
+            "Iterate over the knowledge base questions.",
+            "Call the OpenAI API to generate embeddings for each question.",
+            "Store the embeddings in a dictionary for later use."
           ],
-          "commands": [],
-          "config": [],
+          "commands": [
+            {
+              "label": "Run embedding generator",
+              "language": "bash",
+              "code": "python embedding_generator.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "API_KEY",
+              "value": "your_openai_api_key",
+              "description": "Your OpenAI API key for authentication."
+            }
+          ],
           "tools": [
             "OpenAI API"
           ],
           "checklist": [
-            "Embeddings are generated for all questions.",
-            "Embeddings are stored in a retrievable format."
+            "Embeddings are generated for all questions in the knowledge base.",
+            "Embeddings are stored in a dictionary format."
           ],
-          "expectedResult": "Embeddings for the knowledge base are generated and stored.",
+          "expectedResult": "A dictionary of embeddings corresponding to each question in the knowledge base.",
           "links": [
             {
-              "label": "OpenAI Embeddings Docs",
+              "label": "OpenAI API Embeddings Documentation",
               "url": "https://platform.openai.com/docs/api-reference/embeddings"
             }
           ]
         },
         {
           "title": "Implement a chat endpoint with context retrieval",
-          "description": "Set up a chat endpoint that retrieves context information and combines it with user requests to deliver precise answers. This step integrates the chatbot with the knowledge base and embeddings.",
-          "technical_explanation": "The chat endpoint processes user queries, retrieves relevant context from the knowledge base, and formulates responses. It uses the embeddings to find the most relevant answers. Edge cases include handling empty queries and ensuring that the response time is optimized.",
-          "code_snippet": "import json\nimport urllib.request\n\nknowledge_base = {}  # Assume this is populated from the previous step\nembeddings = {}  # Assume this is populated from the previous step\n\n\ndef chat_endpoint(user_query):\n    # Find the closest matching question using embeddings\n    closest_question = find_closest_question(user_query, embeddings)\n    answer = knowledge_base.get(closest_question, 'Sorry, I do not have an answer for that.')\n    return answer\n\n\ndef find_closest_question(user_query, embeddings):\n    # Logic to find the closest question based on embeddings\n    # Placeholder for actual implementation\n    return list(embeddings.keys())[0]  # Return the first question as a placeholder\n\nresponse = chat_endpoint('What is your return policy?')\n\nresult = chat_endpoint()\n",
+          "description": "This step involves setting up a chat endpoint that retrieves context information and combines it with user requests to deliver precise answers. The chatbot will utilize the embeddings for semantic search.",
+          "technical_explanation": "The chat endpoint integrates user queries with the knowledge base and embeddings to provide accurate responses. It consumes user input and retrieves relevant context from the knowledge base based on semantic similarity. Ensure to handle edge cases such as empty queries and rate limits from the OpenAI API.",
+          "code_snippet": "import json\nimport urllib.request\n\nAPI_KEY = 'your_openai_api_key'\n\ndef chat_endpoint(user_query, knowledge_base, embeddings):\n    if not user_query:\n        return 'Please provide a query.'\n    # Logic to find the closest embedding\n    closest_question = find_closest_embedding(user_query, embeddings)\n    return knowledge_base[closest_question]\n\nuser_query = 'What is your return policy?'\nresponse = chat_endpoint(user_query, knowledge_base, embeddings)",
           "actions": [
             "Create a function to handle user queries.",
-            "Implement logic to find the closest matching question.",
+            "Implement logic to find the closest embedding to the user query.",
             "Return the corresponding answer from the knowledge base."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Run chat endpoint",
+              "language": "bash",
+              "code": "python chat_endpoint.py"
+            }
+          ],
           "config": [],
-          "tools": [],
+          "tools": [
+            "OpenAI API"
+          ],
           "checklist": [
-            "Chat endpoint is functional and returns answers.",
-            "Responses are relevant to user queries."
+            "Chat endpoint returns answers based on user queries.",
+            "Embedding retrieval logic is functioning correctly."
           ],
           "expectedResult": "A functional chat endpoint that provides answers based on user queries.",
           "links": [
             {
-              "label": "Python urllib Docs",
-              "url": "https://docs.python.org/3/library/urllib.html"
+              "label": "OpenAI API Chat Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/chat"
             }
           ]
         },
         {
           "title": "Set up escalation to humans via email",
-          "description": "Configure an escalation function that forwards complex requests via email to human support personnel. This step ensures that users receive assistance for queries that cannot be answered by the chatbot.",
-          "technical_explanation": "The escalation function is triggered when the chatbot cannot provide a satisfactory answer. It sends an email to the support team with the user's query. Edge cases include handling email sending failures and ensuring that sensitive information is not exposed.",
-          "code_snippet": "import json\nimport urllib.request\n\nRESEND_API_KEY = 'your_resend_api_key'\n\n\ndef escalate_to_human(user_query):\n    # Prepare the email content\n    email_data = json.dumps({'to': 'support@example.com', 'subject': 'Escalation Needed', 'body': user_query}).encode('utf-8')\n    req = urllib.request.Request('https://api.resend.com/send', data=email_data,\n                                  headers={'Authorization': f'Bearer {RESEND_API_KEY}', 'Content-Type': 'application/json'})\n    with urllib.request.urlopen(req) as response:\n        if response.status == 200:\n            return 'Escalation successful'\n        else:\n            return 'Escalation failed'\n\nresult = escalate_to_human('What is your return policy?')",
+          "description": "In this step, we will configure an escalation function that forwards complex requests via email to human support personnel. This ensures that users receive assistance for queries that cannot be answered by the chatbot.",
+          "technical_explanation": "The escalation function utilizes the Resend API to send emails when the chatbot cannot provide a satisfactory answer. It consumes user queries and sends them to a predefined email address. Ensure to handle potential errors in email sending and validate email addresses.",
+          "code_snippet": "import json\nimport urllib.request\n\nRESEND_API_KEY = 'your_resend_api_key'\n\ndef escalate_to_human(user_query):\n    data = json.dumps({'to': 'support@example.com', 'subject': 'Escalation Request', 'text': user_query}).encode('utf-8')\n    req = urllib.request.Request('https://api.resend.com/send', data=data)\n    req.add_header('Authorization', f'Bearer {RESEND_API_KEY}')\n    with urllib.request.urlopen(req) as response:\n        return response.read().decode('utf-8')\n\nuser_query = 'I have a complex issue.'\nescalation_response = escalate_to_human(user_query)",
           "actions": [
-            "Create a function to send emails using the Resend API.",
-            "Prepare the email content with user query.",
-            "Handle the response from the email API."
+            "Define a function to send escalation emails.",
+            "Use the Resend API to send emails to human support.",
+            "Validate user queries before sending escalations."
           ],
-          "commands": [],
-          "config": [],
+          "commands": [
+            {
+              "label": "Run escalation function",
+              "language": "bash",
+              "code": "python escalation.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "RESEND_API_KEY",
+              "value": "your_resend_api_key",
+              "description": "Your Resend API key for email sending."
+            }
+          ],
           "tools": [
             "Resend API"
           ],
           "checklist": [
-            "Escalation function sends emails correctly.",
-            "Support team receives the user queries."
+            "Escalation emails are sent successfully.",
+            "Email addresses are validated before sending."
           ],
-          "expectedResult": "Complex queries are escalated to human support via email.",
+          "expectedResult": "A functional escalation mechanism that forwards complex queries to human support.",
           "links": [
             {
-              "label": "Resend API Docs",
+              "label": "Resend API Documentation",
               "url": "https://resend.com/docs"
             }
           ]
         },
         {
           "title": "Continuously evaluate answer quality",
-          "description": "Continuously monitor and evaluate the quality of responses to improve the chatbot's performance. This step involves collecting feedback and adjusting the knowledge base as needed.",
-          "technical_explanation": "This step is crucial for maintaining the chatbot's effectiveness. It involves analyzing user interactions and feedback to identify areas for improvement. Edge cases include handling insufficient feedback and ensuring that updates to the knowledge base are made systematically.",
-          "code_snippet": "import json\nimport urllib.request\n\nfeedback_data = []  # Assume this is populated with user feedback\n\n\ndef evaluate_answer_quality(feedback_data):\n    # Analyze feedback to improve answers\n    for feedback in feedback_data:\n        # Logic to evaluate feedback\n        pass  # Placeholder for actual implementation\n    return 'Evaluation complete'\n\nresult = evaluate_answer_quality(feedback_data)",
+          "description": "This final step involves continuously monitoring and evaluating the quality of responses to improve the chatbot's performance. Feedback will be collected and adjustments made to the knowledge base as needed.",
+          "technical_explanation": "Continuous evaluation is essential for maintaining the chatbot's effectiveness. This step involves collecting user feedback and analyzing response accuracy. Implement a feedback loop to update the knowledge base based on user interactions and ensure the chatbot evolves over time.",
+          "code_snippet": "import json\n\nfeedback_data = []\n\ndef collect_feedback(user_query, user_feedback):\n    feedback_data.append({'query': user_query, 'feedback': user_feedback})\n    # Logic to analyze feedback and update knowledge base\n    return feedback_data\n\nuser_query = 'What is your return policy?'\nuser_feedback = 'This answer was helpful.'\nfeedback_response = collect_feedback(user_query, user_feedback)",
           "actions": [
-            "Collect user feedback on chatbot responses.",
-            "Analyze feedback to identify improvement areas.",
-            "Update the knowledge base based on analysis."
+            "Implement a feedback collection mechanism.",
+            "Analyze feedback to identify areas for improvement.",
+            "Update the knowledge base based on user interactions."
           ],
-          "commands": [],
+          "commands": [
+            {
+              "label": "Run feedback collection",
+              "language": "bash",
+              "code": "python feedback_collection.py"
+            }
+          ],
           "config": [],
           "tools": [],
           "checklist": [
-            "Feedback is collected and analyzed.",
-            "Knowledge base is updated based on evaluations."
+            "Feedback is collected and stored successfully.",
+            "Knowledge base is updated based on feedback."
           ],
-          "expectedResult": "The quality of answers is continuously evaluated and improved.",
+          "expectedResult": "A system in place for continuous evaluation and improvement of chatbot responses.",
           "links": [
             {
-              "label": "Python List Docs",
+              "label": "Python List Documentation",
               "url": "https://docs.python.org/3/tutorial/datastructures.html#more-on-lists"
             }
           ]
@@ -1506,42 +1550,41 @@
       ],
       "useCase": "Support teams that want to automate common questions.",
       "prerequisites": [
+        "A collection of frequently asked questions and documentation",
         "An OpenAI API key",
-        "A Supabase project and service-role key",
-        "An Astro project setup",
         "A Resend API key",
         "Python 3.10 or newer (standard library only) and a terminal"
       ],
       "glossary": [
         {
-          "term": "Semantic Search",
-          "definition": "A search technique that retrieves information based on the meaning of the query rather than exact keyword matches."
+          "term": "Knowledge Base",
+          "definition": "A structured repository of information used to provide answers to user queries."
         },
         {
-          "term": "Embeddings",
-          "definition": "Numerical representations of text that capture semantic meaning, enabling similarity comparisons."
+          "term": "Semantic Search",
+          "definition": "A search technique that understands the context and meaning of queries to retrieve relevant information."
         },
         {
           "term": "Escalation",
-          "definition": "The process of forwarding complex queries to human agents for resolution."
+          "definition": "The process of forwarding complex queries to human support personnel for resolution."
         },
         {
-          "term": "Rate-Limit Backoff",
-          "definition": "A strategy to handle API rate limits by delaying requests when limits are reached."
+          "term": "Embedding",
+          "definition": "A numerical representation of text data that captures semantic meaning for improved search and retrieval."
         }
       ],
       "troubleshooting": [
         {
-          "problem": "API key authentication failure",
-          "solution": "Verify that the API keys are correctly set and have the necessary permissions."
+          "problem": "Chatbot fails to retrieve answers",
+          "solution": "Verify the knowledge base structure and ensure embeddings are correctly generated."
         },
         {
-          "problem": "Empty response from the knowledge base",
-          "solution": "Check the data ingestion process to ensure that the knowledge base is populated correctly."
+          "problem": "Escalation emails not sent",
+          "solution": "Check Resend API key and ensure email addresses are correctly configured."
         },
         {
-          "problem": "Rate limit exceeded error",
-          "solution": "Implement exponential backoff to retry requests after a delay."
+          "problem": "Slow response times",
+          "solution": "Monitor API usage and optimize embedding generation for efficiency."
         }
       ],
       "resources": [
@@ -1550,20 +1593,12 @@
           "url": "https://platform.openai.com/?ref=flowmatrix"
         },
         {
-          "label": "Supabase",
-          "url": "https://supabase.com/?ref=flowmatrix"
-        },
-        {
-          "label": "Astro",
-          "url": "https://astro.build/"
-        },
-        {
           "label": "Resend API",
           "url": "https://resend.com/?ref=flowmatrix"
         }
       ]
     },
-    "created_and_verified_at": "2026-11-04 13:59 UTC"
+    "created_and_verified_at": "2026-11-04 14:18 UTC"
   },
   {
     "slug": "data-enrichment-pipeline",
