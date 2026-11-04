@@ -497,20 +497,27 @@ def run_build() -> None:
 
 
 def run_deploy() -> None:
-    subprocess.run(
-        [
-            "npx",
-            "wrangler",
-            "pages",
-            "deploy",
-            "dist",
-            "--project-name=programmatic-seo",
-            "--branch=main",
-            "--commit-dirty=true",
-        ],
-        cwd=str(cfg.ROOT),
-        check=True,
-    )
+    for attempt in range(1, 4):
+        try:
+            subprocess.run(
+                [
+                    "npx",
+                    "wrangler",
+                    "pages",
+                    "deploy",
+                    "dist",
+                    "--project-name=programmatic-seo",
+                    "--branch=main",
+                    "--commit-dirty=true",
+                ],
+                cwd=str(cfg.ROOT),
+                check=True,
+            )
+            return
+        except subprocess.CalledProcessError as error:
+            if attempt == 3:
+                raise
+            print(f"  [WARN] Deploy attempt {attempt} failed ({error}), retrying...")
 
 
 # --------------------------------------------------------------------------- #
