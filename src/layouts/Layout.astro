@@ -1,0 +1,236 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { site } from "../lib/site";
+import type { JsonLd } from "../lib/schema";
+import { organizationSchema, websiteSchema } from "../lib/schema";
+import { languages } from "../i18n/ui";
+import { hasOverride, type ContentKind } from "../i18n/content";
+import {
+  defaultLocale,
+  getLocale,
+  isLocale,
+  pathWithoutLocale,
+  switchLocalePath,
+} from "../i18n/utils";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+  noindex?: boolean;
+  keywords?: string[];
+  publishedTime?: string;
+  modifiedTime?: string;
+  jsonLd?: JsonLd | JsonLd[];
+  lang?: string;
+}
+
+const {
+  title = site.name,
+  description = site.description,
+  image = site.defaultOgImage,
+  type = "website",
+  noindex = false,
+  keywords = [],
+  publishedTime,
+  modifiedTime,
+  jsonLd = [],
+  lang: langProp,
+} = Astro.props;
+
+const lang = getLocale(langProp);
+const fullTitle = title === site.name ? title : `${title} | ${site.name}`;
+const baseUrl = Astro.site ?? new URL(site.url);
+const canonical = new URL(Astro.url.pathname, baseUrl).toString();
+const ogImage = new URL(image, baseUrl).toString();
+
+// Organization + WebSite are emitted on every page. Pages may still pass
+// their own copy (e.g. the homepage); duplicates are removed by @type.
+const providedJsonLd = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
+const seenTypes = new Set<string>();
+const jsonLdItems = [
+  organizationSchema(),
+  websiteSchema(),
+  ...providedJsonLd,
+].filter((item) => {
+  const type = String((item as JsonLd)["@type"] ?? "unknown");
+  if (seenTypes.has(type)) return false;
+  seenTypes.add(type);
+  return true;
+});
+const serializeJsonLd = (value: JsonLd) =>
+  JSON.stringify(value).replace(/</g, "\\u003c");
+
+const localeMap: Record<string, string> = {
+  en: "en_US",
+  de: "de_DE",
+  fr: "fr_FR",
+  es: "es_ES",
+  it: "it_IT",
+  pt: "pt_PT",
+  nl: "nl_NL",
+  pl: "pl_PL",
+  sv: "sv_SE",
+  tr: "tr_TR",
+  ja: "ja_JP",
+  zh: "zh_CN",
+};
+const ogLocale = localeMap[lang] ?? "en_US";
+
+// Only pages that actually live under a locale prefix (e.g. /en/..., /de/...)
+// get translated hreflang alternates. Non-localized pages such as /insights/*
+// exist only once, so they must not advertise /de/... variants that 404.
+const firstSegment = Astro.url.pathname.split("/").filter(Boolean)[0];
+const isLocalized = isLocale(firstSegment);
+const cleanPath = pathWithoutLocale(Astro.url.pathname);
+
+// Data pages only count as translated when a real override exists. Otherwise
+// the German URL would expose the English body while claiming hreflang="de".
+const pathParts = cleanPath.split("/").filter(Boolean);
+const contentType = pathParts[0] as ContentKind;
+const contentSlug = pathParts[1];
+const isDataPage =
+  ["apis", "alternatives", "workflows"].includes(contentType) &&
+  Boolean(contentSlug);
+
+function translationExists(code: string): boolean {
+  if (code === defaultLocale) return true;
+  if (!isDataPage) return true;
+  return hasOverride(contentType, contentSlug, code);
+}
+
+const availableLocales = isLocalized
+  ? languages.filter((l) => translationExists(l.code))
+  : [];
+
+const alternates = isLocalized
+  ? availableLocales.map((l) => ({
+      code: l.code,
+      href: new URL(
+        switchLocalePath(Astro.url.pathname, l.code),
+        baseUrl,
+      ).toString(),
+    }))
+  : [{ code: lang, href: canonical }];
+
+const untranslated =
+  isLocalized && lang !== defaultLocale && !translationExists(lang);
+
+// Untranslated pages canonicalise to the English original and stay out of the
+// index, so they cannot compete with their English counterpart.
+const canonicalHref = untranslated
+  ? new URL(`/${defaultLocale}${cleanPath}`, baseUrl).toString()
+  : canonical;
+const defaultHref = isLocalized
+  ? new URL(`/${defaultLocale}${cleanPath}`, baseUrl).toString()
+  : canonical;
+const robotsContent = noindex
+  ? "noindex, nofollow"
+  : untranslated
+    ? "noindex, follow"
+    : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
+---
+
+<!doctype html>
+<html lang={lang} class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={robotsContent} />
+    {keywords.length > 0 && (
+      <meta name="keywords" content={keywords.join(", ")} />
+    )}
+    <meta name="author" content={site.author} />
+    {import.meta.env.PUBLIC_GSC_VERIFICATION && (
+      <meta
+        name="google-site-verification"
+        content={import.meta.env.PUBLIC_GSC_VERIFICATION}
+      />
+    )}
+    {import.meta.env.PUBLIC_BING_VERIFICATION && (
+      <meta
+        name="msvalidate.01"
+        content={import.meta.env.PUBLIC_BING_VERIFICATION}
+      />
+    )}
+    <link rel="canonical" href={canonicalHref} />
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="FlowMatrix Insights"
+      href="/insights/rss.xml"
+    />
+
+    <!-- hreflang alternates -->
+    {alternates.map((alt) => (
+      <link rel="alternate" hreflang={alt.code} href={alt.href} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={defaultHref} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalHref} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={fullTitle} />
+    {publishedTime && (
+      <meta property="article:published_time" content={publishedTime} />
+    )}
+    {modifiedTime && (
+      <meta property="article:modified_time" content={modifiedTime} />
+    )}
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content={site.twitter} />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={fullTitle} />
+
+    <meta name="theme-color" content="#06070d" />
+
+    <!-- Cloudflare Web Analytics (privacy-friendly, no cookies) -->
+    {import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN && (
+      <script
+        is:inline
+        defer
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon={`{"token": "${import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN}"}`}
+      />
+    )}
+
+    <!-- Structured data (JSON-LD) -->
+    {jsonLdItems.map((item) => (
+      <script type="application/ld+json" set:html={serializeJsonLd(item)} />
+    ))}
+  </head>
+  <body class="min-h-screen bg-[#06070d] text-slate-200 antialiased selection:bg-brand-500/30 selection:text-white">
+    <div class="relative flex min-h-screen flex-col">
+      <div
+        class="pointer-events-none fixed inset-0 -z-10 bg-grid"
+        aria-hidden="true"
+      ></div>
+      <Header lang={lang} />
+      <main class="flex-1">
+        <slot />
+      </main>
+      <Footer lang={lang} />
+    </div>
+  </body>
+</html>

@@ -1,0 +1,815 @@
+[
+  {
+    "index": 9,
+    "slug": "invoice-automation",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: glossary term 'Webhook' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'Stripe Payments API' has no entry in resources",
+      "Workflow: tool 'Stripe Payments API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Resend Email API' has no entry in resources",
+      "Workflow: tool 'Resend Email API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Supabase' has no entry in resources",
+      "Workflow: tool 'n8n' has no entry in resources",
+      "Workflow: tool 'n8n' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 11,
+    "slug": "product-feed-sync",
+    "errors": [
+      "Step 2: PEP 701 f-string (same quote inside an expression) requires Python 3.12+; use different quotes for Python 3.10 compatibility",
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow: tool 'Shopify Admin API' is listed but never used in the steps",
+      "Workflow: tool 'Shopify Admin API' has no entry in resources",
+      "Workflow: tool 'Shopify Admin API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Supabase' has no entry in resources",
+      "Workflow: tool 'n8n' is listed but never used in the steps",
+      "Workflow: tool 'n8n' has no entry in resources",
+      "Workflow: tool 'OpenAI API' has no entry in resources",
+      "Workflow: domain not reachable: api.marketplace.com (URLError: <urlopen error [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1082)>)"
+    ]
+  },
+  {
+    "index": 12,
+    "slug": "knowledge-base-ingestion",
+    "errors": [
+      "Workflow: tool 'Cohere Embed API' has no entry in resources",
+      "Workflow: tool 'Cohere Embed API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Pinecone Vector API' has no entry in resources",
+      "Workflow: tool 'Pinecone Vector API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Supabase' has no entry in resources",
+      "Workflow: tool 'n8n' is listed but never used in the steps",
+      "Workflow: tool 'n8n' has no entry in resources"
+    ]
+  },
+  {
+    "index": 17,
+    "slug": "automated-code-review",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow dry-run timed out after 10s \u2013 remove infinite loops or blocking waits from the step code",
+      "Workflow: glossary term 'Webhook' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'OpenAI API' has no entry in resources",
+      "Workflow: tool 'GitHub Alternatives' has no entry in resources",
+      "Workflow: tool 'GitHub Alternatives' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'n8n' is listed but never used in the steps",
+      "Workflow: tool 'n8n' has no entry in resources",
+      "Workflow: tool 'Slack' has no entry in resources"
+    ]
+  },
+  {
+    "index": 20,
+    "slug": "content-repurposing",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow: tool 'OpenAI API' has no entry in resources",
+      "Workflow: tool 'Notion API' has no entry in resources",
+      "Workflow: tool 'Notion API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Buffer' has no entry in resources",
+      "Workflow: tool 'n8n' is listed but never used in the steps",
+      "Workflow: tool 'n8n' has no entry in resources"
+    ]
+  },
+  {
+    "index": 22,
+    "slug": "price-monitoring",
+    "errors": [
+      "Workflow dry-run timed out after 10s \u2013 remove infinite loops or blocking waits from the step code",
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: glossary term 'Database' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'n8n' has no entry in resources",
+      "Workflow: tool 'Supabase' has no entry in resources",
+      "Workflow: tool 'OpenAI API' is listed but never used in the steps",
+      "Workflow: tool 'OpenAI API' has no entry in resources",
+      "Workflow: tool 'Resend Email API' has no entry in resources"
+    ]
+  },
+  {
+    "index": 24,
+    "slug": "onboarding-email-sequence",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow: tool 'Resend Email API' has no entry in resources",
+      "Workflow: tool 'Resend Email API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Supabase' has no entry in resources",
+      "Workflow: tool 'n8n' is listed but never used in the steps",
+      "Workflow: tool 'n8n' has no entry in resources",
+      "Workflow: tool 'OpenAI API' has no entry in resources"
+    ]
+  },
+  {
+    "index": 25,
+    "slug": "churn-prediction",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow: tool 'OpenAI API' has no entry in resources",
+      "Workflow: tool 'Supabase' has no entry in resources",
+      "Workflow: tool 'PostHog Analytics API' has no entry in resources",
+      "Workflow: tool 'PostHog Analytics API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'n8n' has no entry in resources",
+      "Workflow: domain not reachable: api.posthog.com (DNS error: [Errno 8] nodename nor servname provided, or not known)"
+    ]
+  },
+  {
+    "index": 26,
+    "slug": "meeting-notes-automation",
+    "errors": [
+      "Workflow: glossary term 'Webhook' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'Deepgram Speech API' has no entry in resources",
+      "Workflow: tool 'Deepgram Speech API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'OpenAI API' has no entry in resources",
+      "Workflow: tool 'Notion API' has no entry in resources",
+      "Workflow: tool 'Notion API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'n8n' has no entry in resources"
+    ]
+  },
+  {
+    "index": 27,
+    "slug": "support-escalation-routing",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow dry-run failed: JSONDecodeError: Expecting value: line 1 column 1 (char 0)\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 71, in <module>\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py\", line 298, in load\n    return loads(fp.read(),\n        cls=cls, object_hook=object_hook,\n        parse_float=parse_float, parse_int=parse_int,\n        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py\", line 352, in loads\n    return _default_decoder.decode(s)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 345, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 363, in raw_decode\n    raise JSONDecodeError(\"Expecting value\", s, err.value) from None\njson.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n",
+      "Workflow: tool 'Zendesk' has no entry in resources",
+      "Workflow: tool 'OpenAI API' has no entry in resources",
+      "Workflow: tool 'Slack' has no entry in resources",
+      "Workflow: tool 'Supabase' is listed but never used in the steps",
+      "Workflow: tool 'Supabase' has no entry in resources"
+    ]
+  },
+  {
+    "index": 28,
+    "slug": "sales-pipeline-enrichment",
+    "errors": [
+      "Step 3: PEP 701 f-string (same quote inside an expression) requires Python 3.12+; use different quotes for Python 3.10 compatibility",
+      "Workflow: tool 'Notion API' has no entry in resources",
+      "Workflow: tool 'Notion API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'OpenAI API' has no entry in resources",
+      "Workflow: tool 'n8n' has no entry in resources",
+      "Workflow: tool 'Supabase' has no entry in resources"
+    ]
+  },
+  {
+    "index": 29,
+    "slug": "release-notes-automation",
+    "errors": [
+      "Workflow dry-run failed: TypeError: string indices must be integers, not 'str'\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 9, in <module>\nTypeError: string indices must be integers, not 'str'\n",
+      "Workflow: tool 'GitHub Alternatives' has no entry in resources",
+      "Workflow: tool 'GitHub Alternatives' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'OpenAI API' has no entry in resources",
+      "Workflow: tool 'Slack' has no entry in resources",
+      "Workflow: tool 'Notion API' has no entry in resources",
+      "Workflow: tool 'Notion API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: domain not reachable: api.githubalternatives.com (DNS error: [Errno 8] nodename nor servname provided, or not known)"
+    ]
+  },
+  {
+    "index": 30,
+    "slug": "refund-and-chargeback-triage",
+    "errors": [
+      "Workflow dry-run failed: KeyError: 'type'\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 13, in <module>\nKeyError: 'type'\n",
+      "Workflow: tool 'Stripe Payments API' has no entry in resources",
+      "Workflow: tool 'Stripe Payments API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'OpenAI API' has no entry in resources",
+      "Workflow: tool 'Notion API' is listed but never used in the steps",
+      "Workflow: tool 'Notion API' has no entry in resources",
+      "Workflow: tool 'Notion API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Slack' has no entry in resources"
+    ]
+  },
+  {
+    "index": 31,
+    "slug": "partner-api-monitoring",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow: tool 'Cloudflare Workers API' has no entry in resources",
+      "Workflow: tool 'Cloudflare Workers API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'PostHog Analytics API' is listed but never used in the steps",
+      "Workflow: tool 'PostHog Analytics API' has no entry in resources",
+      "Workflow: tool 'PostHog Analytics API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Slack' has no entry in resources",
+      "Workflow: tool 'Supabase' is listed but never used in the steps",
+      "Workflow: tool 'Supabase' has no entry in resources",
+      "Workflow: domain not reachable: api.partner1.com (URLError: <urlopen error [SSL: TLSV1_UNRECOGNIZED_NAME] tlsv1 unrecognized name (_ssl.c:1082)>)",
+      "Workflow: domain not reachable: api.partner2.com (URLError: <urlopen error [SSL: TLSV1_UNRECOGNIZED_NAME] tlsv1 unrecognized name (_ssl.c:1082)>)"
+    ]
+  },
+  {
+    "index": 32,
+    "slug": "meeting-followup-automation",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'Deepgram Speech API' has no entry in resources",
+      "Workflow: tool 'Deepgram Speech API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'OpenAI API' has no entry in resources",
+      "Workflow: tool 'OpenAI API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Notion API' has no entry in resources",
+      "Workflow: tool 'Notion API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Resend API' has no entry in resources",
+      "Workflow: tool 'Resend API' has no entry in BEFORE YOU START (prerequisites)",
+      "Blacklisted phrase found: 'gpt-3.5-turbo'"
+    ]
+  },
+  {
+    "index": 33,
+    "slug": "product-launch-checklist",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow dry-run failed: KeyError: 'properties'\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 62, in <module>\nKeyError: 'properties'\n",
+      "Workflow: tool 'Notion API' has no entry in resources",
+      "Workflow: tool 'Notion API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Slack' has no entry in resources",
+      "Workflow: tool 'Make' has no entry in resources",
+      "Workflow: tool 'Astro' has no entry in resources",
+      "Workflow: tool 'Astro' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 34,
+    "slug": "customer-health-scoring",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow dry-run failed: TypeError: string indices must be integers, not 'str'\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 16, in <module>\n  File \"workflow.py\", line 16, in <genexpr>\nTypeError: string indices must be integers, not 'str'\n",
+      "Workflow: tool 'PostHog Analytics API' has no entry in resources",
+      "Workflow: tool 'PostHog Analytics API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'OpenAI API' has no entry in resources",
+      "Workflow: tool 'Supabase' has no entry in resources",
+      "Workflow: tool 'Slack' has no entry in resources"
+    ]
+  },
+  {
+    "index": 35,
+    "slug": "local-seo-landing-pages",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow dry-run failed: TypeError: string indices must be integers, not 'str'\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 84, in <module>\n  File \"workflow.py\", line 72, in generate_static_pages\nTypeError: string indices must be integers, not 'str'\n",
+      "Workflow: tool 'Astro' has no entry in resources",
+      "Workflow: tool 'Google Search Console API' has no entry in resources",
+      "Workflow: tool 'Google Search Console API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'OpenAI API' has no entry in resources",
+      "Workflow: tool 'Supabase' has no entry in resources"
+    ]
+  },
+  {
+    "index": 36,
+    "slug": "supplier-price-audit",
+    "errors": [
+      "Step 2: PEP 701 f-string (same quote inside an expression) requires Python 3.12+; use different quotes for Python 3.10 compatibility",
+      "Step 3: PEP 701 f-string (same quote inside an expression) requires Python 3.12+; use different quotes for Python 3.10 compatibility",
+      "Step 4: PEP 701 f-string (same quote inside an expression) requires Python 3.12+; use different quotes for Python 3.10 compatibility",
+      "Step 5: PEP 701 f-string (same quote inside an expression) requires Python 3.12+; use different quotes for Python 3.10 compatibility",
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow dry-run failed: NameError: name 'supabase' is not defined\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 12, in <module>\nNameError: name 'supabase' is not defined\n",
+      "Workflow: glossary term 'Webhook' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'Shopify Admin API' has no entry in resources",
+      "Workflow: tool 'Shopify Admin API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'OpenAI API' is listed but never used in the steps",
+      "Workflow: tool 'OpenAI API' has no entry in resources",
+      "Workflow: tool 'Supabase' has no entry in resources",
+      "Workflow: tool 'Slack' has no entry in resources"
+    ]
+  },
+  {
+    "index": 37,
+    "slug": "automated-website-audit",
+    "errors": [
+      "Workflow dry-run timed out after 10s \u2013 remove infinite loops or blocking waits from the step code",
+      "Workflow: tool 'Google Search Console API' has no entry in resources",
+      "Workflow: tool 'Google Search Console API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'PostHog Analytics API' has no entry in resources",
+      "Workflow: tool 'PostHog Analytics API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Notion' has no entry in resources",
+      "Blacklisted phrase found: 'pip install'"
+    ]
+  },
+  {
+    "index": 38,
+    "slug": "automated-code-coverage-reporting",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow: tool 'Cloudflare Workers API' has no entry in resources",
+      "Workflow: tool 'Cloudflare Workers API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'PostHog Analytics API' has no entry in resources",
+      "Workflow: tool 'PostHog Analytics API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Make' has no entry in resources",
+      "Blacklisted phrase found: 'pip install'",
+      "Workflow: domain not reachable: api.make.com (DNS error: [Errno 8] nodename nor servname provided, or not known)"
+    ]
+  },
+  {
+    "index": 39,
+    "slug": "automated-api-documentation-generation",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow dry-run failed: KeyError: 'text'\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 39, in <module>\nKeyError: 'text'\n",
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: glossary term 'Webhook' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'Notion API' has no entry in resources",
+      "Workflow: tool 'Notion API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'OpenAI API' has no entry in resources",
+      "Workflow: tool 'OpenAI API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Stripe Payments API' has no entry in resources",
+      "Workflow: tool 'Stripe Payments API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 40,
+    "slug": "automated-website-feedback-loop",
+    "errors": [
+      "Workflow dry-run failed: KeyError: 'pageLoadTime'\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 59, in <module>\n  File \"workflow.py\", line 49, in collect_data\nKeyError: 'pageLoadTime'\n",
+      "Workflow: tool 'PostHog Analytics API' has no entry in resources",
+      "Workflow: tool 'PostHog Analytics API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Slack' has no entry in resources",
+      "Workflow: tool 'Cloudflare Workers API' has no entry in resources",
+      "Workflow: tool 'Cloudflare Workers API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 41,
+    "slug": "automated-website-performance-reporting",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow dry-run failed: TypeError: 'set' object is not subscriptable\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 42, in <module>\nTypeError: 'set' object is not subscriptable\n",
+      "Workflow: tool 'Cloudflare Workers API' has no entry in resources",
+      "Workflow: tool 'Cloudflare Workers API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'PostHog Analytics API' has no entry in resources",
+      "Workflow: tool 'PostHog Analytics API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Resend Email API' has no entry in resources",
+      "Workflow: tool 'Resend Email API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 42,
+    "slug": "automated-user-feedback-collection",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: glossary term 'Webhook' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'PostHog Analytics API' has no entry in resources",
+      "Workflow: tool 'PostHog Analytics API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Resend Email API' has no entry in resources",
+      "Workflow: tool 'Resend Email API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 43,
+    "slug": "automated-competitive-pricing-analysis",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow dry-run failed: KeyError: 'spreadsheetId'\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 11, in <module>\nKeyError: 'spreadsheetId'\n",
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: glossary term 'Webhook' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'Google Sheets API' has no entry in resources",
+      "Workflow: tool 'Google Sheets API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Amazon AWS Lambda API' has no entry in resources",
+      "Workflow: tool 'Amazon AWS Lambda API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Airtable API' has no entry in resources",
+      "Workflow: tool 'Airtable API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 44,
+    "slug": "automated-content-curation",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow dry-run failed: JSONDecodeError: Expecting value: line 1 column 1 (char 0)\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 35, in <module>\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py\", line 352, in loads\n    return _default_decoder.decode(s)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 345, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 363, in raw_decode\n    raise JSONDecodeError(\"Expecting value\", s, err.value) from None\njson.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n",
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: glossary term 'JSON' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: glossary term 'Webhook' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'OpenAI GPT-4 API' has no entry in resources",
+      "Workflow: tool 'OpenAI GPT-4 API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Notion API' has no entry in resources",
+      "Workflow: tool 'Notion API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Slack Web API' has no entry in resources",
+      "Workflow: tool 'Slack Web API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 45,
+    "slug": "automated-seo-keyword-research",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow dry-run failed: KeyError: 'text'\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 23, in <module>\nKeyError: 'text'\n",
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'Google Search Console API' has no entry in resources",
+      "Workflow: tool 'Google Search Console API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'OpenAI GPT-4 API' has no entry in resources",
+      "Workflow: tool 'OpenAI GPT-4 API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Airtable API' has no entry in resources",
+      "Workflow: tool 'Airtable API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 46,
+    "slug": "ai-driven-bug-triage",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: glossary term 'Webhook' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'GitHub REST API' has no entry in resources",
+      "Workflow: tool 'GitHub REST API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'OpenAI GPT-4 API' has no entry in resources",
+      "Workflow: tool 'OpenAI GPT-4 API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Slack Web API' has no entry in resources",
+      "Workflow: tool 'Slack Web API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 47,
+    "slug": "automated-release-management",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow: tool 'GitHub REST API' has no entry in resources",
+      "Workflow: tool 'GitHub REST API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Jira' has no entry in resources",
+      "Workflow: tool 'Slack Web API' has no entry in resources",
+      "Workflow: tool 'Slack Web API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 48,
+    "slug": "automated-seo-content-review",
+    "errors": [
+      "Step 2: PEP 701 f-string (same quote inside an expression) requires Python 3.12+; use different quotes for Python 3.10 compatibility",
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow dry-run failed: KeyError: 'rows'\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 30, in <module>\nKeyError: 'rows'\n",
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'OpenAI GPT-4 API' has no entry in resources",
+      "Workflow: tool 'OpenAI GPT-4 API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Google Search Console API' has no entry in resources",
+      "Workflow: tool 'Google Search Console API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Airtable API' has no entry in resources",
+      "Workflow: tool 'Airtable API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 49,
+    "slug": "async-api-trigger-system",
+    "errors": [
+      "Step 3: technical_explanation too short (min 120 chars; cover architecture role, API contract and edge cases)",
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow dry-run failed: NameError: name 'base64' is not defined\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 39, in <module>\nNameError: name 'base64' is not defined. Did you forget to import 'base64'?\n",
+      "Workflow: tool 'Ably Realtime API' has no entry in resources",
+      "Workflow: tool 'Ably Realtime API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Google Sheets API' has no entry in resources",
+      "Workflow: tool 'Google Sheets API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Twilio Messaging API' has no entry in resources",
+      "Workflow: tool 'Twilio Messaging API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 50,
+    "slug": "error-log-management",
+    "errors": [
+      "Step 5: PEP 701 f-string (same quote inside an expression) requires Python 3.12+; use different quotes for Python 3.10 compatibility",
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: glossary term 'Webhook' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'Sentry Error API' has no entry in resources",
+      "Workflow: tool 'Sentry Error API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Slack Web API' has no entry in resources",
+      "Workflow: tool 'Slack Web API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'MongoDB Atlas API' has no entry in resources",
+      "Workflow: tool 'MongoDB Atlas API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 51,
+    "slug": "real-time-user-feedback-dashboard",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow dry-run failed: JSONDecodeError: Expecting value: line 1 column 1 (char 0)\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 10, in <module>\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py\", line 352, in loads\n    return _default_decoder.decode(s)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 345, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 363, in raw_decode\n    raise JSONDecodeError(\"Expecting value\", s, err.value) from None\njson.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n",
+      "Workflow: glossary term 'Webhook' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'Slack Web API' has no entry in resources",
+      "Workflow: tool 'Slack Web API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Google Sheets API' has no entry in resources",
+      "Workflow: tool 'Google Sheets API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 52,
+    "slug": "automated-error-notification-system",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow dry-run failed: NameError: name 'base64' is not defined\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 34, in <module>\nNameError: name 'base64' is not defined. Did you forget to import 'base64'?\n",
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'Sentry Error API' has no entry in resources",
+      "Workflow: tool 'Sentry Error API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Slack Web API' has no entry in resources",
+      "Workflow: tool 'Slack Web API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Twilio Messaging API' has no entry in resources",
+      "Workflow: tool 'Twilio Messaging API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 53,
+    "slug": "cross-platform-development-workflow",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow: tool 'GitHub REST API' has no entry in resources",
+      "Workflow: tool 'GitHub REST API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Appwrite' has no entry in resources",
+      "Workflow: tool 'Firebase' has no entry in resources"
+    ]
+  },
+  {
+    "index": 54,
+    "slug": "automated-document-version-control",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow: glossary term 'Webhook' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'Dropbox' has no entry in resources",
+      "Workflow: tool 'Slack' has no entry in resources",
+      "Workflow: tool 'GitHub' has no entry in resources"
+    ]
+  },
+  {
+    "index": 55,
+    "slug": "real-time-customer-feedback-aggregation",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow: glossary term 'Webhook' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'Slack Web API' has no entry in resources",
+      "Workflow: tool 'Slack Web API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Google Sheets API' has no entry in resources",
+      "Workflow: tool 'Google Sheets API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'OpenAI GPT-4 API' has no entry in resources",
+      "Workflow: tool 'OpenAI GPT-4 API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 56,
+    "slug": "api-integration-testing",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: glossary term 'Webhook' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'Hoppscotch' has no entry in resources",
+      "Workflow: tool 'PostHog Analytics API' has no entry in resources",
+      "Workflow: tool 'Slack Web API' has no entry in resources",
+      "Workflow: tool 'Slack Web API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 57,
+    "slug": "ai-driven-content-optimization",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow dry-run failed: KeyError: 'rows'\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 130, in <module>\nKeyError: 'rows'\n",
+      "Workflow: tool 'OpenAI GPT-4 API' has no entry in resources",
+      "Workflow: tool 'OpenAI GPT-4 API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Google Search Console API' has no entry in resources",
+      "Workflow: tool 'Google Search Console API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Notion' has no entry in resources"
+    ]
+  },
+  {
+    "index": 58,
+    "slug": "real-time-social-media-analytics",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: glossary term 'Webhook' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'Slack' has no entry in resources",
+      "Workflow: tool 'Google Sheets API' has no entry in resources",
+      "Workflow: tool 'Google Sheets API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Pinecone Vector API' has no entry in resources",
+      "Workflow: tool 'Pinecone Vector API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 59,
+    "slug": "continuous-deployment-monitoring",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow dry-run failed: TypeError: string indices must be integers, not 'str'\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 39, in <module>\nTypeError: string indices must be integers, not 'str'\n",
+      "Workflow: glossary term 'Webhook' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'Slack Web API' has no entry in resources",
+      "Workflow: tool 'Slack Web API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'GitHub REST API' has no entry in resources",
+      "Workflow: tool 'GitHub REST API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Sentry Error API' has no entry in resources",
+      "Workflow: tool 'Sentry Error API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 60,
+    "slug": "real-time-error-detection-pipeline",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow dry-run failed: KeyError: 'slug'\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 9, in <module>\nKeyError: 'slug'\n",
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'Sentry Error API' has no entry in resources",
+      "Workflow: tool 'Sentry Error API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Slack Web API' has no entry in resources",
+      "Workflow: tool 'Slack Web API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Twilio Messaging API' has no entry in resources",
+      "Workflow: tool 'Twilio Messaging API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 61,
+    "slug": "api-driven-content-scheduling",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'Airtable API' has no entry in resources",
+      "Workflow: tool 'Airtable API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Buffer' has no entry in resources",
+      "Workflow: tool 'Google Sheets API' has no entry in resources",
+      "Workflow: tool 'Google Sheets API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 62,
+    "slug": "automated-api-health-checks",
+    "errors": [
+      "Step 3: PEP 701 f-string (same quote inside an expression) requires Python 3.12+; use different quotes for Python 3.10 compatibility",
+      "Step 4: PEP 701 f-string (same quote inside an expression) requires Python 3.12+; use different quotes for Python 3.10 compatibility",
+      "Step 5: PEP 701 f-string (same quote inside an expression) requires Python 3.12+; use different quotes for Python 3.10 compatibility",
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow dry-run failed: KeyError: 'status'\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 30, in <module>\nKeyError: 'status'\n",
+      "Workflow: tool 'PostHog Analytics API' has no entry in resources",
+      "Workflow: tool 'PostHog Analytics API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Twilio Messaging API' has no entry in resources",
+      "Workflow: tool 'Twilio Messaging API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 63,
+    "slug": "automated-design-feedback-loop",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow dry-run failed: KeyError: 'responses'\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 78, in <module>\nKeyError: 'responses'\n",
+      "Workflow: glossary term 'Webhook' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'Figma' has no entry in resources",
+      "Workflow: tool 'Slack' has no entry in resources",
+      "Workflow: tool 'Google Drive' has no entry in resources"
+    ]
+  },
+  {
+    "index": 64,
+    "slug": "visual-content-review-workflow",
+    "errors": [
+      "Step 1: technical_explanation too short (min 120 chars; cover architecture role, API contract and edge cases)",
+      "Step 4: technical_explanation too short (min 120 chars; cover architecture role, API contract and edge cases)",
+      "Step 5: technical_explanation too short (min 120 chars; cover architecture role, API contract and edge cases)",
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow dry-run failed: JSONDecodeError: Expecting value: line 1 column 1 (char 0)\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 25, in <module>\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py\", line 352, in loads\n    return _default_decoder.decode(s)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 345, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 363, in raw_decode\n    raise JSONDecodeError(\"Expecting value\", s, err.value) from None\njson.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n",
+      "Workflow: tool 'Adobe Express' has no entry in resources",
+      "Workflow: tool 'Slack' has no entry in resources",
+      "Workflow: tool 'Notion' has no entry in resources"
+    ]
+  },
+  {
+    "index": 65,
+    "slug": "automated-api-documentation-workflow",
+    "errors": [
+      "Workflow: tool 'GitHub' has no entry in resources",
+      "Workflow: tool 'OpenAI API' has no entry in resources",
+      "Workflow: tool 'PostHog Analytics API' has no entry in resources",
+      "Workflow: tool 'PostHog Analytics API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 66,
+    "slug": "automated-api-response-tracking",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow: tool 'Slack' has no entry in resources",
+      "Workflow: tool 'PostHog Analytics API' has no entry in resources",
+      "Workflow: tool 'PostHog Analytics API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Amazon AWS Lambda API' has no entry in resources",
+      "Workflow: tool 'Amazon AWS Lambda API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 67,
+    "slug": "automated-seo-audit-reporting",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow dry-run failed: KeyError: 'rows'\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 14, in <module>\nKeyError: 'rows'\n",
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'Google Search Console API' has no entry in resources",
+      "Workflow: tool 'Asana API' has no entry in resources",
+      "Workflow: tool 'Asana API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Slack' has no entry in resources"
+    ]
+  },
+  {
+    "index": 68,
+    "slug": "seo-keyword-tracking-dashboard",
+    "errors": [
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'Google Search Console API' has no entry in resources",
+      "Workflow: tool 'Google Search Console API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Google Sheets' has no entry in resources",
+      "Workflow: tool 'Notion API' has no entry in resources",
+      "Workflow: tool 'Notion API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 69,
+    "slug": "automated-design-approval-workflow",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow dry-run failed: JSONDecodeError: Expecting value: line 1 column 1 (char 0)\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 34, in <module>\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py\", line 352, in loads\n    return _default_decoder.decode(s)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 345, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 363, in raw_decode\n    raise JSONDecodeError(\"Expecting value\", s, err.value) from None\njson.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n",
+      "Workflow: tool 'Figma' has no entry in resources",
+      "Workflow: tool 'Slack' has no entry in resources",
+      "Workflow: tool 'Zapier' has no entry in resources"
+    ]
+  },
+  {
+    "index": 70,
+    "slug": "automated-website-content-audit",
+    "errors": [
+      "Step 3: PEP 701 f-string (same quote inside an expression) requires Python 3.12+; use different quotes for Python 3.10 compatibility",
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow dry-run failed: KeyError: 'fields'\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 24, in <module>\nKeyError: 'fields'\n",
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'Google Search Console API' has no entry in resources",
+      "Workflow: tool 'Google Search Console API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Contentful Content Management System API' has no entry in resources",
+      "Workflow: tool 'Contentful Content Management System API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Algolia Search API' has no entry in resources",
+      "Workflow: tool 'Algolia Search API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 71,
+    "slug": "automated-website-content-optimization",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'OpenAI API' has no entry in resources",
+      "Workflow: tool 'Google Search Console API' has no entry in resources",
+      "Workflow: tool 'Google Search Console API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Contentful Content Management System API' has no entry in resources",
+      "Workflow: tool 'Contentful Content Management System API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 72,
+    "slug": "automated-api-response-logging",
+    "errors": [
+      "Step 2: technical_explanation too short (min 120 chars; cover architecture role, API contract and edge cases)",
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'Google Cloud Platform' has no entry in resources",
+      "Workflow: tool 'Google Cloud Platform' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Sentry Error API' has no entry in resources",
+      "Workflow: tool 'Sentry Error API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Zapier' has no entry in resources"
+    ]
+  },
+  {
+    "index": 73,
+    "slug": "real-time-website-health-monitoring",
+    "errors": [
+      "Workflow dry-run failed: NameError: name 'e' is not defined\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 547, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 33, in <module>\nNameError: name 'e' is not defined\n",
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'Cloudflare Workers API' has no entry in resources",
+      "Workflow: tool 'Cloudflare Workers API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Slack' has no entry in resources",
+      "Workflow: tool 'Sentry Error API' has no entry in resources",
+      "Workflow: tool 'Sentry Error API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  },
+  {
+    "index": 74,
+    "slug": "code-quality-monitoring-pipeline",
+    "errors": [
+      "Workflow: tool 'GitHub' has no entry in resources",
+      "Workflow: tool 'Sentry Error API' has no entry in resources",
+      "Workflow: tool 'Sentry Error API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Slack' has no entry in resources"
+    ]
+  },
+  {
+    "index": 75,
+    "slug": "automated-api-rate-limiting-management",
+    "errors": [
+      "Workflow: code defines functions but never calls them \u2013 add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end",
+      "Workflow: tool 'Google Cloud Platform' has no entry in resources",
+      "Workflow: tool 'Slack' has no entry in resources",
+      "Workflow: tool 'Zapier' has no entry in resources"
+    ]
+  },
+  {
+    "index": 76,
+    "slug": "automated-api-error-reporting",
+    "errors": [
+      "Workflow: glossary term 'API' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: glossary term 'Webhook' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: glossary term 'JSON' is too trivial \u2013 explain an advanced concept used in this workflow",
+      "Workflow: tool 'Sentry Error API' has no entry in resources",
+      "Workflow: tool 'Sentry Error API' has no entry in BEFORE YOU START (prerequisites)",
+      "Workflow: tool 'Slack API' has no entry in resources",
+      "Workflow: tool 'Slack API' has no entry in BEFORE YOU START (prerequisites)"
+    ]
+  }
+]

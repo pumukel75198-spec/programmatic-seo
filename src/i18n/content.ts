@@ -1,0 +1,453 @@
+/**
+ * Per-locale content overrides for the pSEO data.
+ *
+ * The English base data lives in src/data/*.json. This module provides
+ * optional overrides (title, description, category and tags) per locale.
+ * Missing translations automatically fall back to English.
+ *
+ * Add more locales/records by extending the maps below.
+ */
+import type { AlternativeEntry, ApiEntry, WorkflowEntry } from "../lib/content";
+import generatedOverrides from "./de-overrides.generated.json";
+
+type ApiOverride = Partial<
+  Pick<ApiEntry, "title" | "description" | "category" | "tags">
+>;
+type AlternativeOverride = Partial<
+  Pick<AlternativeEntry, "title" | "description" | "category" | "tags">
+>;
+type WorkflowOverride = Partial<
+  Pick<WorkflowEntry, "title" | "description" | "category" | "tags">
+>;
+
+const manualApiOverrides: Record<string, Record<string, ApiOverride>> = {
+  de: {
+    "openai-whisper-api": {
+      title: "OpenAI Whisper API",
+      description:
+        "Die Whisper API von OpenAI transkribiert Audio mit hoher Genauigkeit in Text – in über 50 Sprachen, ideal für Podcasts, Meetings und Voice-Apps.",
+      category: "KI & Speech",
+      tags: ["speech-to-text", "transkription", "ki", "audio"],
+    },
+    "stripe-payments-api": {
+      title: "Stripe Payments API",
+      description:
+        "Die Stripe Payments API ist die führende Schnittstelle für Online-Zahlungen, Abonnements und Finanzinfrastruktur mit exzellenter Developer Experience.",
+      category: "Finanzen",
+      tags: ["payments", "fintech", "abonnements", "checkout"],
+    },
+    "supabase-database-api": {
+      title: "Supabase Database API",
+      description:
+        "Supabase bietet eine automatisch generierte REST- und GraphQL-API auf Basis von PostgreSQL – inklusive Auth, Storage und Realtime-Subscriptions.",
+      category: "Backend",
+      tags: ["postgresql", "backend", "open-source", "auth"],
+    },
+    "anthropic-claude-api": {
+      title: "Anthropic Claude API",
+      description:
+        "Die Claude API von Anthropic bietet starke Reasoning-Fähigkeiten, ein großes Kontextfenster und sichere Agenten-Workflows für anspruchsvolle Anwendungen.",
+      category: "KI & LLM",
+      tags: ["llm", "reasoning", "agents", "sicherheit"],
+    },
+    "google-gemini-api": {
+      title: "Google Gemini API",
+      description:
+        "Die Google Gemini API verbindet Text, Bild und Audio in einem multimodalen Modell – ideal für Vision-, Analyse- und Assistenz-Anwendungen.",
+      category: "KI & Multimodal",
+      tags: ["llm", "multimodal", "vision", "google"],
+    },
+    "resend-email-api": {
+      title: "Resend E-Mail API",
+      description:
+        "Die Resend API vereinfacht transaktionale E-Mails mit sauberer Dokumentation, React-Email-Templates und zuverlässiger Zustellung.",
+      category: "Kommunikation",
+      tags: ["email", "transaktional", "developer-tools"],
+    },
+    "clerk-authentication-api": {
+      title: "Clerk Authentication API",
+      description:
+        "Die Clerk API liefert fertige Authentifizierung mit SSO, Multi-Faktor-Login und Nutzerverwaltung – schnell integriert in moderne Web-Apps.",
+      category: "Auth & Identity",
+      tags: ["auth", "sso", "user-management", "security"],
+    },
+    "cloudflare-workers-api": {
+      title: "Cloudflare Workers API",
+      description:
+        "Die Cloudflare Workers API führt Code direkt am Edge aus – für schnelle, skalierbare Serverless-Funktionen ohne eigenen Server.",
+      category: "Edge Computing",
+      tags: ["edge", "serverless", "cdn", "performance"],
+    },
+    "mapbox-maps-api": {
+      title: "Mapbox Maps API",
+      description:
+        "Die Mapbox Maps API bietet interaktive Karten, Geocoding und Routing für Web- und Mobile-Anwendungen mit hoher Performance.",
+      category: "Geodaten",
+      tags: ["maps", "geolocation", "routing", "visualisierung"],
+    },
+    "twilio-messaging-api": {
+      title: "Twilio Messaging API",
+      description:
+        "Die Twilio Messaging API versendet SMS, WhatsApp- und RCS-Nachrichten zuverlässig – ideal für Benachrichtigungen und Zwei-Faktor-Authentifizierung.",
+      category: "Kommunikation",
+      tags: ["sms", "whatsapp", "messaging", "notifications"],
+    },
+    "hugging-face-inference-api": {
+      title: "Hugging Face Inference API",
+      description:
+        "Die Hugging Face Inference API bietet gehosteten Zugriff auf tausende offene Modelle für Text, Vision und Audio – ohne eigene Infrastruktur.",
+      category: "KI & ML",
+      tags: ["ki", "modelle", "inference", "open-source"],
+    },
+    "cohere-embed-api": {
+      title: "Cohere Embed API",
+      description:
+        "Die Cohere Embed API wandelt Text in hochwertige Vektor-Embeddings für semantische Suche, Clustering und RAG um.",
+      category: "KI & Embeddings",
+      tags: ["embeddings", "suche", "rag", "nlp"],
+    },
+    "pinecone-vector-api": {
+      title: "Pinecone Vector API",
+      description:
+        "Die Pinecone Vector API ist eine vollständig verwaltete Vektordatenbank für schnelle Ähnlichkeitssuche – ideal für RAG und Empfehlungen.",
+      category: "Vektordatenbank",
+      tags: ["vektordatenbank", "ähnlichkeitssuche", "rag", "ki"],
+    },
+    "auth0-authentication-api": {
+      title: "Auth0 Authentication API",
+      description:
+        "Die Auth0 API bietet Enterprise-Authentifizierung mit SSO, Social Logins und feingranularer Zugriffskontrolle.",
+      category: "Auth & Identity",
+      tags: ["auth", "sso", "oauth", "sicherheit"],
+    },
+    "sendgrid-email-api": {
+      title: "SendGrid Email API",
+      description:
+        "Die SendGrid Email API liefert transaktionale und Marketing-E-Mails zuverlässig in großem Umfang – inklusive Analytics und Templates.",
+      category: "Kommunikation",
+      tags: ["email", "transaktional", "marketing", "zustellbarkeit"],
+    },
+    "algolia-search-api": {
+      title: "Algolia Search API",
+      description:
+        "Die Algolia Search API liefert sofortige, relevante Sucherlebnisse mit Tippfehlertoleranz und Facettierung out of the box.",
+      category: "Suche",
+      tags: ["suche", "discovery", "relevanz", "api"],
+    },
+    "openweather-weather-api": {
+      title: "OpenWeather Weather API",
+      description:
+        "Die OpenWeather API liefert aktuelles Wetter, Vorhersagen und historische Daten für jeden Ort – ideal für Apps und Datenprodukte.",
+      category: "Wetter",
+      tags: ["wetter", "vorhersage", "geodaten", "api"],
+    },
+    "shopify-admin-api": {
+      title: "Shopify Admin API",
+      description:
+        "Die Shopify Admin API verwaltet Produkte, Bestellungen, Kunden und Inventar programmatisch – für E-Commerce-Automatisierung.",
+      category: "E-Commerce",
+      tags: ["ecommerce", "bestellungen", "inventar", "shopify"],
+    },
+    "notion-api": {
+      title: "Notion API",
+      description:
+        "Die Notion API verbindet deinen Workspace mit anderen Tools und ermöglicht automatisierte Seiten, Datenbanken und Content-Pipelines.",
+      category: "Produktivität",
+      tags: ["produktivität", "datenbank", "content", "automatisierung"],
+    },
+    "airtable-api": {
+      title: "Airtable API",
+      description:
+        "Die Airtable API macht aus deinen Bases eine REST-API, sodass du Datensätze, Anhänge und Ansichten aus jeder App lesen und schreiben kannst.",
+      category: "Datenbanken",
+      tags: ["datenbank", "no-code", "rest", "automatisierung"],
+    },
+  },
+};
+
+const manualAlternativeOverrides: Record<
+  string,
+  Record<string, AlternativeOverride>
+> = {
+  de: {
+    "notion-alternatives": {
+      title: "Notion Alternativen",
+      description:
+        "Die besten Notion-Alternativen für Wissensmanagement, Projektplanung und kollaborative Dokumente – von Open Source bis Enterprise.",
+      category: "Produktivität",
+      tags: ["wissensmanagement", "notizen", "kollaboration", "produktivität"],
+    },
+    "zapier-alternatives": {
+      title: "Zapier Alternativen",
+      description:
+        "Zapier-Alternativen für Automatisierung und Integrationen – günstiger, datenschutzfreundlicher oder mit mehr Kontrolle über deine Workflows.",
+      category: "Automatisierung",
+      tags: ["automatisierung", "no-code", "integrationen", "workflows"],
+    },
+    "figma-alternatives": {
+      title: "Figma Alternativen",
+      description:
+        "Figma-Alternativen für UI-Design und Prototyping – inklusive Open-Source- und datenschutzfreundlicher Optionen.",
+      category: "Design",
+      tags: ["design", "ui-ux", "prototyping", "open-source"],
+    },
+    "slack-alternatives": {
+      title: "Slack Alternativen",
+      description:
+        "Slack-Alternativen für Team-Chat und Kommunikation – datenschutzfreundlicher, günstiger oder mit Self-Hosting-Option für mehr Kontrolle.",
+      category: "Kommunikation",
+      tags: ["team-chat", "kommunikation", "kollaboration"],
+    },
+    "airtable-alternatives": {
+      title: "Airtable Alternativen",
+      description:
+        "Airtable-Alternativen für No-Code-Datenbanken und Tabellen – mit Open-Source-Optionen, Self-Hosting und fairer Preisgestaltung.",
+      category: "Datenbanken",
+      tags: ["no-code", "datenbank", "tabellen", "automatisierung"],
+    },
+    "mailchimp-alternatives": {
+      title: "Mailchimp Alternativen",
+      description:
+        "Mailchimp-Alternativen für Newsletter und E-Mail-Marketing – günstiger, DSGVO-freundlicher und ohne komplexe Preisstufen.",
+      category: "Marketing",
+      tags: ["email-marketing", "newsletter", "crm"],
+    },
+    "trello-alternatives": {
+      title: "Trello Alternativen",
+      description:
+        "Trello-Alternativen für Kanban-Boards und Projektmanagement – mit mehr Automatisierung, Open-Source-Optionen und faireren Preisen.",
+      category: "Projektmanagement",
+      tags: ["kanban", "projektmanagement", "aufgaben"],
+    },
+    "google-analytics-alternatives": {
+      title: "Google Analytics Alternativen",
+      description:
+        "Google-Analytics-Alternativen für datenschutzfreundliches Web-Tracking – cookielos, DSGVO-konform und ohne Datenexport in die USA.",
+      category: "Analytics",
+      tags: ["analytics", "datenschutz", "tracking"],
+    },
+    "hubspot-alternatives": {
+      title: "HubSpot Alternativen",
+      description:
+        "HubSpot-Alternativen für CRM und Marketing-Automatisierung – günstiger, datenschutzfreundlicher oder besser für kleine Teams.",
+      category: "CRM & Marketing",
+      tags: ["crm", "marketing", "automatisierung", "sales"],
+    },
+    "asana-alternatives": {
+      title: "Asana Alternativen",
+      description:
+        "Asana-Alternativen für Projekt- und Aufgabenmanagement – mit Open-Source-Optionen, einfacheren Workflows und faireren Preisen.",
+      category: "Projektmanagement",
+      tags: ["projektmanagement", "aufgaben", "teamwork", "kanban"],
+    },
+    "dropbox-alternatives": {
+      title: "Dropbox Alternativen",
+      description:
+        "Dropbox-Alternativen für Cloud-Speicher und Dateisynchronisation – mit mehr Datenschutz, Self-Hosting oder großzügigen Free-Tiers.",
+      category: "Speicher",
+      tags: ["cloud-speicher", "dateisync", "datenschutz", "kollaboration"],
+    },
+    "calendly-alternatives": {
+      title: "Calendly Alternativen",
+      description:
+        "Calendly-Alternativen für Terminplanung und Buchung – Open Source, datenschutzfreundlich und mit mehr Kontrolle über den Kalender.",
+      category: "Terminplanung",
+      tags: ["terminplanung", "buchung", "kalender", "automatisierung"],
+    },
+    "wordpress-alternatives": {
+      title: "WordPress Alternativen",
+      description:
+        "WordPress-Alternativen für Websites und Blogs – schnellere, sicherere und entwicklerfreundlichere CMS-Optionen.",
+      category: "CMS",
+      tags: ["cms", "blogging", "static-site", "publishing"],
+    },
+    "shopify-alternatives": {
+      title: "Shopify Alternativen",
+      description:
+        "Shopify-Alternativen für Online-Shops – Open Source, Headless oder günstigere Plattformen für wachsende E-Commerce-Marken.",
+      category: "E-Commerce",
+      tags: ["ecommerce", "online-shop", "headless", "open-source"],
+    },
+  },
+};
+
+const manualWorkflowOverrides: Record<
+  string,
+  Record<string, WorkflowOverride>
+> = {
+  de: {
+    "content-automation": {
+      title: "Content-Automation mit KI",
+      description:
+        "Ein vollständiger Workflow, um mit KI und APIs Content-Ideen zu recherchieren, zu schreiben und automatisiert zu veröffentlichen.",
+      category: "Content & SEO",
+      tags: ["ki", "content", "seo", "automatisierung"],
+    },
+    "lead-qualification": {
+      title: "Lead-Qualifizierung automatisieren",
+      description:
+        "Eingehende Leads automatisch bewerten, anreichern und an das richtige Team weiterleiten – ohne manuelle Sortierung.",
+      category: "Sales & CRM",
+      tags: ["sales", "crm", "ki", "automatisierung"],
+    },
+    "programmatic-seo-pipeline": {
+      title: "Programmatic-SEO-Pipeline",
+      description:
+        "Der komplette Workflow für tausende SEO-Seiten: Datenquellen, Template-Engine, Build-Prozess und Monitoring.",
+      category: "SEO & Skalierung",
+      tags: ["seo", "astro", "skalierung", "deployment"],
+    },
+    "newsletter-automation": {
+      title: "Newsletter-Automation",
+      description:
+        "Ein Workflow für automatisierte Newsletter: Anmeldungen erfassen, Inhalte aufbereiten und E-Mails zuverlässig über die Resend API versenden.",
+      category: "Marketing & Content",
+      tags: ["newsletter", "email", "automatisierung", "content"],
+    },
+    "social-media-scheduling": {
+      title: "Social-Media-Scheduling",
+      description:
+        "Social-Media-Scheduling automatisieren: Inhalte per KI erstellen, redaktionell freigeben und zeitgesteuert über mehrere Kanäle veröffentlichen.",
+      category: "Marketing & Content",
+      tags: ["social-media", "scheduling", "automatisierung", "content"],
+    },
+    "customer-support-chatbot": {
+      title: "Customer-Support-Chatbot",
+      description:
+        "Ein KI-Chatbot für den Kundensupport: Anfragen verstehen, aus einer Wissensdatenbank beantworten und bei Bedarf an Menschen übergeben.",
+      category: "Support & KI",
+      tags: ["chatbot", "support", "ki", "automatisierung"],
+    },
+    "data-enrichment-pipeline": {
+      title: "Daten-Anreicherungs-Pipeline",
+      description:
+        "Eine Pipeline zur Datenanreicherung: Rohdaten importieren, per API ergänzen, mit KI normalisieren und strukturiert in Supabase speichern.",
+      category: "Daten & Automatisierung",
+      tags: ["daten", "enrichment", "api", "automatisierung"],
+    },
+    "seo-monitoring-dashboard": {
+      title: "SEO-Monitoring-Dashboard",
+      description:
+        "Ein Dashboard für SEO-Monitoring: Rankings, Indexierung und Core Web Vitals automatisch erfassen und übersichtlich visualisieren.",
+      category: "SEO & Analytics",
+      tags: ["seo", "monitoring", "analytics", "dashboard"],
+    },
+    "invoice-automation": {
+      title: "Rechnungs-Automation",
+      description:
+        "Rechnungserstellung, Versand und Abstimmung automatisieren: PDFs erzeugen, versenden und Zahlungsstatus mit der Buchhaltung synchronisieren.",
+      category: "Finance & Ops",
+      tags: ["rechnungen", "finanzen", "automatisierung", "buchhaltung"],
+    },
+    "appointment-booking": {
+      title: "Terminbuchungs-Automation",
+      description:
+        "Einen automatisierten Buchungsablauf bauen: Verfügbarkeit anzeigen, Daten erfassen, Termine bestätigen und Erinnerungen senden.",
+      category: "Sales & Terminplanung",
+      tags: ["buchung", "terminplanung", "automatisierung", "kalender"],
+    },
+    "product-feed-sync": {
+      title: "Produktfeed-Synchronisation",
+      description:
+        "Produktdaten über Shops und Marktplätze synchron halten: Feeds normalisieren, Felder validieren und Updates automatisch veröffentlichen.",
+      category: "E-Commerce",
+      tags: ["ecommerce", "produktfeed", "sync", "automatisierung"],
+    },
+    "knowledge-base-ingestion": {
+      title: "Wissensdatenbank-Ingestion",
+      description:
+        "Dokumente und FAQs in eine durchsuchbare Wissensdatenbank verwandeln: Inhalte chunken, Embeddings erzeugen und semantische Suche ermöglichen.",
+      category: "KI & Support",
+      tags: ["wissensdatenbank", "embeddings", "rag", "support"],
+    },
+    "multi-language-content": {
+      title: "Mehrsprachige Content-Pipeline",
+      description:
+        "Content über Sprachen skalieren: Übersetzungen verwalten, Metadaten lokalisieren und sprachspezifische Seiten automatisch veröffentlichen.",
+      category: "Content & i18n",
+      tags: ["i18n", "content", "lokalisierung", "automatisierung"],
+    },
+    "webhook-event-routing": {
+      title: "Webhook-Event-Routing",
+      description:
+        "Eingehende Webhooks zuverlässig routen: Signaturen prüfen, Events deduplizieren und an die richtigen Services weiterleiten.",
+      category: "Engineering",
+      tags: ["webhooks", "events", "integration", "zuverlässigkeit"],
+    },
+  },
+};
+
+type GeneratedOverrides = {
+  apis?: Record<string, ApiOverride>;
+  alternatives?: Record<string, AlternativeOverride>;
+  workflows?: Record<string, WorkflowOverride>;
+};
+
+const generated = generatedOverrides as GeneratedOverrides;
+
+/**
+ * Manual overrides win over generated ones. This keeps hand-written copy
+ * authoritative while allowing machine-assisted coverage for every record.
+ */
+function mergeGerman<T>(
+  manual: Record<string, Record<string, T>>,
+  generatedMap: Record<string, T> = {},
+): Record<string, Record<string, T>> {
+  const de: Record<string, T> = { ...(manual.de ?? {}) };
+  for (const [slug, override] of Object.entries(generatedMap)) {
+    de[slug] = { ...override, ...(de[slug] ?? {}) };
+  }
+  return { ...manual, de };
+}
+
+export const apiOverrides = mergeGerman(manualApiOverrides, generated.apis);
+export const alternativeOverrides = mergeGerman(
+  manualAlternativeOverrides,
+  generated.alternatives,
+);
+export const workflowOverrides = mergeGerman(
+  manualWorkflowOverrides,
+  generated.workflows,
+);
+
+export type ContentKind = "apis" | "alternatives" | "workflows";
+
+/**
+ * True only when a real per-locale override exists for a data record.
+ * Used by the layout to avoid advertising hreflang targets that would show
+ * English content under a German URL.
+ */
+export function hasOverride(
+  kind: ContentKind,
+  slug: string,
+  lang: string,
+): boolean {
+  const map =
+    kind === "apis"
+      ? apiOverrides
+      : kind === "alternatives"
+        ? alternativeOverrides
+        : workflowOverrides;
+  return Boolean(map[lang]?.[slug]);
+}
+
+export function localizeApi(api: ApiEntry, lang: string): ApiEntry {
+  const override = apiOverrides[lang]?.[api.slug];
+  return override ? { ...api, ...override } : api;
+}
+
+export function localizeAlternative(
+  entry: AlternativeEntry,
+  lang: string,
+): AlternativeEntry {
+  const override = alternativeOverrides[lang]?.[entry.slug];
+  return override ? { ...entry, ...override } : entry;
+}
+
+export function localizeWorkflow(
+  workflow: WorkflowEntry,
+  lang: string,
+): WorkflowEntry {
+  const override = workflowOverrides[lang]?.[workflow.slug];
+  return override ? { ...workflow, ...override } : workflow;
+}

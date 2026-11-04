@@ -1,0 +1,63 @@
+---
+import LanguageSwitcher from "./LanguageSwitcher.astro";
+import { t } from "../i18n/utils";
+
+interface Props {
+  lang?: string;
+}
+
+const lang = Astro.props.lang ?? "en";
+
+const discoverLabel = lang === "de" ? "Entdecken" : "Discover";
+
+const nav = [
+  { href: `/${lang}/discover`, label: discoverLabel },
+  { href: `/${lang}/apis`, label: t(lang, "nav.apis") },
+  { href: `/${lang}/alternatives`, label: t(lang, "nav.alternatives") },
+  { href: `/${lang}/workflows`, label: t(lang, "nav.workflows") },
+  { href: "/insights", label: "Insights" },
+];
+
+const pathname = Astro.url.pathname;
+const isActive = (href: string) =>
+  pathname === href || pathname.startsWith(`${href}/`);
+---
+
+<header class="sticky top-0 z-50 border-b border-white/5 bg-[#06070d]/80 backdrop-blur-xl">
+  <div class="mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-2 px-4 py-2 sm:px-6 lg:px-8">
+    <a
+      href={`/${lang}/`}
+      class="notranslate group flex items-center gap-2.5"
+      translate="no"
+    >
+      <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-cyan-400 text-sm font-bold text-white shadow-lg shadow-brand-500/30">
+        FM
+      </span>
+      <span class="text-sm font-semibold tracking-tight text-white sm:text-base">
+        Flow<span class="text-brand-400">Matrix</span>
+      </span>
+    </a>
+
+    <div class="flex items-center gap-2">
+      <nav
+        class="flex items-center gap-1 sm:gap-2"
+        aria-label="Main navigation"
+      >
+        {nav.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              "rounded-lg px-2.5 py-2 text-sm font-medium transition-colors sm:px-3",
+              isActive(item.href)
+                ? "bg-white/5 text-white"
+                : "text-slate-400 hover:bg-white/5 hover:text-white",
+            ]}
+          >
+            {item.label}
+          </a>
+        ))}
+      </nav>
+      <LanguageSwitcher lang={lang} />
+    </div>
+  </div>
+</header>

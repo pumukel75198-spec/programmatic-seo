@@ -1,0 +1,2302 @@
+{
+  "apis": {
+    "mistral-ai-api": {
+      "title": "Mistral AI API",
+      "description": "Die Mistral AI API bietet schnelle, effiziente Open-Weight-Sprachmodelle für Chat-, Programmier- und Abrufaufgaben zu wettbewerbsfähigen Preisen.",
+      "category": "AI & LLM",
+      "tags": [
+        "llm",
+        "open-weight",
+        "chat",
+        "efficiency"
+      ]
+    },
+    "groq-inference-api": {
+      "title": "Groq Inference API",
+      "description": "Die Groq API bietet extrem schnelle LLM-Inferenz auf maßgeschneiderter Hardware, ideal für Echtzeit-Chat- und Sprachanwendungen.",
+      "category": "AI & Inference",
+      "tags": [
+        "llm",
+        "inference",
+        "speed",
+        "realtime"
+      ]
+    },
+    "together-ai-api": {
+      "title": "Together AI API",
+      "description": "Die Together AI API bietet Zugriff auf eine Vielzahl von Open-Source-Modellen mit Feinabstimmung, Embeddings und serverloser Inferenz.",
+      "category": "AI & LLM",
+      "tags": [
+        "llm",
+        "open-source",
+        "fine-tuning",
+        "inference"
+      ]
+    },
+    "replicate-model-api": {
+      "title": "Replicate Model API",
+      "description": "Replicate ermöglicht das Ausführen von Tausenden von Open-Source-Modellen über eine einfache API, von der Bildgenerierung bis zu Sprach- und Sprachaufgaben.",
+      "category": "AI & ML",
+      "tags": [
+        "models",
+        "image-generation",
+        "api",
+        "open-source"
+      ]
+    },
+    "elevenlabs-voice-api": {
+      "title": "ElevenLabs Voice API",
+      "description": "Die ElevenLabs API erzeugt natürliche, ausdrucksstarke Sprache und klont Stimmen für Apps, Hörbücher und Sprachagenten.",
+      "category": "AI & Voice",
+      "tags": [
+        "text-to-speech",
+        "voice-cloning",
+        "audio",
+        "ai"
+      ]
+    },
+    "deepgram-speech-api": {
+      "title": "Deepgram Speech API",
+      "description": "Deepgram bietet schnelle, präzise Speech-to-Text- und Text-to-Speech-APIs für Echtzeit-Transkription und Sprachschnittstellen.",
+      "category": "AI & Speech",
+      "tags": [
+        "speech-to-text",
+        "transcription",
+        "realtime",
+        "audio"
+      ]
+    },
+    "stability-ai-image-api": {
+      "title": "Stability AI Image API",
+      "description": "Die Stability AI API generiert und bearbeitet Bilder mit Stable Diffusion-Modellen, einschließlich Upscaling und Inpainting.",
+      "category": "AI & Image",
+      "tags": [
+        "image-generation",
+        "stable-diffusion",
+        "inpainting",
+        "ai"
+      ]
+    },
+    "weaviate-vector-api": {
+      "title": "Weaviate Vector API",
+      "description": "Weaviate ist eine Open-Source-Vektordatenbank mit einer GraphQL-API für semantische Suche, hybride Suche und RAG in großem Maßstab.",
+      "category": "Vector Database",
+      "tags": [
+        "vector-database",
+        "semantic-search",
+        "rag",
+        "open-source"
+      ]
+    },
+    "openai-whisper-api": {
+      "title": "OpenAI Whisper API",
+      "description": "Die OpenAI Whisper API transkribiert Audio mit hoher Genauigkeit in über 50 Sprachen – ideal für Podcasts, Meetings und Sprach-Apps.",
+      "category": "AI & Speech",
+      "tags": [
+        "speech-to-text",
+        "transcription",
+        "ai",
+        "audio"
+      ]
+    },
+    "stripe-payments-api": {
+      "title": "Stripe Payments API",
+      "description": "Die Stripe Payments API ist die führende Schnittstelle für Online-Zahlungen, Abonnements und Finanzinfrastruktur mit hervorragender Entwicklererfahrung.",
+      "category": "Finance",
+      "tags": [
+        "payments",
+        "fintech",
+        "subscriptions",
+        "checkout"
+      ]
+    },
+    "supabase-database-api": {
+      "title": "Supabase Database API",
+      "description": "Supabase bietet eine automatisch generierte REST- und GraphQL-API auf PostgreSQL – einschließlich Authentifizierung, Speicherung und Echtzeit-Abonnements.",
+      "category": "Backend",
+      "tags": [
+        "postgresql",
+        "backend",
+        "open-source",
+        "auth"
+      ]
+    },
+    "anthropic-claude-api": {
+      "title": "Anthropic Claude API",
+      "description": "Die Claude API von Anthropic bietet starkes Denken, ein großes Kontextfenster und sichere agentische Workflows für anspruchsvolle Anwendungen.",
+      "category": "AI & LLM",
+      "tags": [
+        "llm",
+        "reasoning",
+        "agents",
+        "safety"
+      ]
+    },
+    "google-gemini-api": {
+      "title": "Google Gemini API",
+      "description": "Die Google Gemini API kombiniert Text, Bild und Audio in einem multimodalen Modell – ideal für Vision, Analyse und Assistenzanwendungen.",
+      "category": "AI & Multimodal",
+      "tags": [
+        "llm",
+        "multimodal",
+        "vision",
+        "google"
+      ]
+    },
+    "resend-email-api": {
+      "title": "Resend Email API",
+      "description": "Die Resend API vereinfacht transaktionale E-Mails mit klarer Dokumentation, React Email-Vorlagen und zuverlässiger Zustellung.",
+      "category": "Communication",
+      "tags": [
+        "email",
+        "transactional",
+        "developer-tools"
+      ]
+    },
+    "clerk-authentication-api": {
+      "title": "Clerk Authentication API",
+      "description": "Die Clerk API bietet sofort einsatzbereite Authentifizierung mit SSO, Multi-Faktor-Login und Benutzerverwaltung – schnell in moderne Web-Apps integriert.",
+      "category": "Auth & Identity",
+      "tags": [
+        "auth",
+        "sso",
+        "user-management",
+        "security"
+      ]
+    },
+    "cloudflare-workers-api": {
+      "title": "Cloudflare Workers API",
+      "description": "Die Cloudflare Workers API führt Code direkt am Edge aus – für schnelle, skalierbare serverlose Funktionen ohne eigenen Server.",
+      "category": "Edge Computing",
+      "tags": [
+        "edge",
+        "serverless",
+        "cdn",
+        "performance"
+      ]
+    },
+    "mapbox-maps-api": {
+      "title": "Mapbox Maps API",
+      "description": "Die Mapbox Maps API bietet interaktive Karten, Geocodierung und Routing für Web- und mobile Anwendungen mit hoher Leistung.",
+      "category": "Geodaten",
+      "tags": [
+        "maps",
+        "geolocation",
+        "routing",
+        "visualization"
+      ]
+    },
+    "twilio-messaging-api": {
+      "title": "Twilio Messaging API",
+      "description": "Die Twilio Messaging API sendet zuverlässig SMS, WhatsApp und RCS-Nachrichten – ideal für Benachrichtigungen und Zwei-Faktor-Authentifizierung.",
+      "category": "Kommunikation",
+      "tags": [
+        "sms",
+        "whatsapp",
+        "messaging",
+        "notifications"
+      ]
+    },
+    "hugging-face-inference-api": {
+      "title": "Hugging Face Inference API",
+      "description": "Die Hugging Face Inference API bietet gehosteten Zugriff auf Tausende von offenen Modellen für Text, Vision und Audio – ohne Infrastrukturverwaltung.",
+      "category": "KI & ML",
+      "tags": [
+        "ai",
+        "models",
+        "inference",
+        "open-source"
+      ]
+    },
+    "cohere-embed-api": {
+      "title": "Cohere Embed API",
+      "description": "Die Cohere Embed API verwandelt Text in hochwertige Vektor-Embeddings für semantische Suche, Clustering und retrieval-augmented generation.",
+      "category": "KI & Embeddings",
+      "tags": [
+        "embeddings",
+        "search",
+        "rag",
+        "nlp"
+      ]
+    },
+    "pinecone-vector-api": {
+      "title": "Pinecone Vector API",
+      "description": "Die Pinecone Vector API ist eine vollständig verwaltete Vektordatenbank für schnelle Ähnlichkeitssuche in großem Maßstab – ideal für RAG und Empfehlungssysteme.",
+      "category": "Vektordatenbank",
+      "tags": [
+        "vector-database",
+        "similarity-search",
+        "rag",
+        "ai"
+      ]
+    },
+    "auth0-authentication-api": {
+      "title": "Auth0 Authentication API",
+      "description": "Die Auth0 API bietet unternehmensgerechte Authentifizierung und Autorisierung mit SSO, sozialen Logins und feingranularer Zugriffskontrolle.",
+      "category": "Auth & Identität",
+      "tags": [
+        "auth",
+        "sso",
+        "oauth",
+        "security"
+      ]
+    },
+    "sendgrid-email-api": {
+      "title": "SendGrid Email API",
+      "description": "Die SendGrid Email API liefert transaktionale und Marketing-E-Mails zuverlässig in großem Maßstab, mit Analysen, Vorlagen und Webhooks.",
+      "category": "Kommunikation",
+      "tags": [
+        "email",
+        "transactional",
+        "marketing",
+        "deliverability"
+      ]
+    },
+    "algolia-search-api": {
+      "title": "Algolia Search API",
+      "description": "Die Algolia Search API bietet sofortige, relevante Such- und Entdeckungserlebnisse mit Tippfehler-Toleranz und Facettierung direkt out of the box.",
+      "category": "Suche",
+      "tags": [
+        "search",
+        "discovery",
+        "relevance",
+        "api"
+      ]
+    },
+    "openweather-weather-api": {
+      "title": "OpenWeather Wetter-API",
+      "description": "Die OpenWeather API bietet aktuelle Wetterdaten, Vorhersagen und historische Daten für jeden Standort.",
+      "category": "Wetter",
+      "tags": [
+        "wetter",
+        "vorhersage",
+        "geodaten",
+        "api"
+      ]
+    },
+    "shopify-admin-api": {
+      "title": "Shopify Admin API",
+      "description": "Die Shopify Admin API ermöglicht die programmgesteuerte Verwaltung von Produkten, Bestellungen, Kunden und Beständen.",
+      "category": "E-Commerce",
+      "tags": [
+        "ecommerce",
+        "bestellungen",
+        "bestand",
+        "shopify"
+      ]
+    },
+    "notion-api": {
+      "title": "Notion API",
+      "description": "Die Notion API verbindet deinen Arbeitsplatz mit anderen Tools und ermöglicht automatisierte Seiten und Datenbanken.",
+      "category": "Produktivität",
+      "tags": [
+        "produktivität",
+        "datenbank",
+        "inhalt",
+        "automatisierung"
+      ]
+    },
+    "airtable-api": {
+      "title": "Airtable API",
+      "description": "Die Airtable API verwandelt deine Basen in eine REST API, um Datensätze und Ansichten aus jeder Anwendung zu lesen und zu schreiben.",
+      "category": "Datenbanken",
+      "tags": [
+        "datenbank",
+        "no-code",
+        "rest",
+        "automatisierung"
+      ]
+    },
+    "qdrant-vector-api": {
+      "title": "Qdrant Vektor-API",
+      "description": "Qdrant ist eine leistungsstarke Vektordatenbank mit REST- und gRPC-APIs für Ähnlichkeitssuche und RAG-Workloads.",
+      "category": "Vektordatenbank",
+      "tags": [
+        "vektordatenbank",
+        "ähnlichkeitssuche",
+        "rag",
+        "rust"
+      ]
+    },
+    "mongodb-atlas-api": {
+      "title": "MongoDB Atlas API",
+      "description": "MongoDB Atlas bietet eine verwaltete Dokumentdatenbank mit einer flexiblen Data API für serverlose Workloads.",
+      "category": "Datenbanken",
+      "tags": [
+        "datenbank",
+        "dokument-db",
+        "serverless",
+        "api"
+      ]
+    },
+    "neon-postgres-api": {
+      "title": "Neon Postgres API",
+      "description": "Neon ist eine serverlose Postgres-Plattform mit Branching, Autoscaling und einer einfachen API für moderne Backends.",
+      "category": "Datenbanken",
+      "tags": [
+        "postgresql",
+        "serverless",
+        "datenbank",
+        "branching"
+      ]
+    },
+    "planetscale-database-api": {
+      "title": "PlanetScale Datenbank-API",
+      "description": "PlanetScale bietet eine MySQL-kompatible serverlose Datenbank mit Branching und einem entwicklerfreundlichen API.",
+      "category": "Datenbanken",
+      "tags": [
+        "mysql",
+        "serverless",
+        "datenbank",
+        "branching"
+      ]
+    },
+    "upstash-redis-api": {
+      "title": "Upstash Redis API",
+      "description": "Upstash bietet serverloses Redis und Kafka mit REST-APIs und nutzungsabhängiger Preisgestaltung für Edge- und serverlose Apps.",
+      "category": "Datenbanken",
+      "tags": [
+        "redis",
+        "serverless",
+        "caching",
+        "rest"
+      ]
+    },
+    "vercel-blob-api": {
+      "title": "Vercel Blob API",
+      "description": "Vercel Blob bietet einfache, skalierbare Objektspeicherung mit einer TypeScript-freundlichen API für Uploads, Downloads und öffentliche Assets.",
+      "category": "Speicher",
+      "tags": [
+        "storage",
+        "files",
+        "serverless",
+        "cdn"
+      ]
+    },
+    "liveblocks-collaboration-api": {
+      "title": "Liveblocks Collaboration API",
+      "description": "Liveblocks fügt Apps Echtzeit-Multiplayer-Zusammenarbeit mit Anwesenheit, Kommentaren, Benachrichtigungen und konfliktfreier Speicherung hinzu.",
+      "category": "Echtzeit",
+      "tags": [
+        "realtime",
+        "collaboration",
+        "presence",
+        "multiplayer"
+      ]
+    },
+    "ably-realtime-api": {
+      "title": "Ably Realtime API",
+      "description": "Ably bietet global verteilte Echtzeit-Messaging mit Pub/Sub-Kanälen, Anwesenheit und zuverlässiger Lieferung in großem Maßstab.",
+      "category": "Echtzeit",
+      "tags": [
+        "realtime",
+        "pubsub",
+        "websockets",
+        "messaging"
+      ]
+    },
+    "posthog-analytics-api": {
+      "title": "PostHog Analytics API",
+      "description": "PostHog kombiniert Produktanalysen, Sitzungswiederholungen, Feature-Flags und Experimente in einer datenschutzfreundlichen Plattform.",
+      "category": "Analytik",
+      "tags": [
+        "analytics",
+        "product",
+        "feature-flags",
+        "session-replay"
+      ]
+    },
+    "sentry-error-api": {
+      "title": "Sentry Error API",
+      "description": "Sentry erfasst Fehler, Traces und Leistungsdaten über deinen Stack, damit Teams Probleme schneller finden und beheben können.",
+      "category": "Überwachung",
+      "tags": [
+        "monitoring",
+        "errors",
+        "tracing",
+        "performance"
+      ]
+    },
+    "launchdarkly-feature-api": {
+      "title": "LaunchDarkly Feature API",
+      "description": "LaunchDarkly ermöglicht es Teams, Funktionen sicher mit Feature-Flags, Zielregeln, Experimenten und schrittweisen Rollouts bereitzustellen.",
+      "category": "DevOps",
+      "tags": [
+        "feature-flags",
+        "devops",
+        "experimentation",
+        "rollouts"
+      ]
+    },
+    "doppler-secrets-api": {
+      "title": "Doppler Secrets API",
+      "description": "Doppler zentralisiert Geheimnisse und Umgebungs-Konfigurationen mit einer sicheren API und Integrationen für alle großen Clouds.",
+      "category": "Sicherheit",
+      "tags": [
+        "secrets",
+        "security",
+        "devops",
+        "configuration"
+      ]
+    },
+    "openai-batch-api": {
+      "title": "OpenAI Batch API",
+      "description": "Die Batch API von OpenAI verarbeitet große Anfragen asynchron zu geringeren Kosten – ideal für Massenklassifizierung, Embeddings und Inhalte.",
+      "category": "KI & Automatisierung",
+      "tags": [
+        "ai",
+        "batch",
+        "async",
+        "openai"
+      ]
+    },
+    "google-sheets-api": {
+      "title": "Google Sheets API",
+      "description": "Die Google Sheets API liest und schreibt Tabellenkalkulationsdaten programmgesteuert – nützlich für Berichterstattung, leichte Datenbanken und Content-Pipelines.",
+      "category": "Produktivität & Daten",
+      "tags": [
+        "spreadsheet",
+        "google",
+        "automation",
+        "data"
+      ]
+    },
+    "slack-web-api": {
+      "title": "Slack Web API",
+      "description": "Die Slack Web API sendet Nachrichten, verwaltet Kanäle und liest Workspace-Daten – der schnellste Weg, Slack-Benachrichtigungen in jeden Workflow einzufügen.",
+      "category": "Kommunikation",
+      "tags": [
+        "slack",
+        "messaging",
+        "notifications",
+        "automation"
+      ]
+    },
+    "hubspot-crm-api": {
+      "title": "HubSpot CRM API",
+      "description": "Die HubSpot CRM API verwaltet Kontakte, Unternehmen, Deals und Tickets programmgesteuert – ideal zum Synchronisieren von Vertriebs- und Marketingdaten.",
+      "category": "CRM & Vertrieb",
+      "tags": [
+        "crm",
+        "sales",
+        "marketing",
+        "hubspot"
+      ]
+    },
+    "zendesk-support-api": {
+      "title": "Zendesk Support API",
+      "description": "Die Zendesk Support API verwaltet Tickets, Benutzer und Kommentare programmgesteuert – nützlich für Supportautomatisierung und Berichterstattung.",
+      "category": "Kundensupport",
+      "tags": [
+        "support",
+        "tickets",
+        "helpdesk",
+        "zendesk"
+      ]
+    },
+    "salesforce-rest-api": {
+      "title": "Salesforce REST API",
+      "description": "Die Salesforce REST API stellt Objekte, Datensätze und Abfragen über HTTP bereit – der Standardweg zur Integration von Salesforce-Daten mit anderen Systemen.",
+      "category": "CRM & Unternehmen",
+      "tags": [
+        "crm",
+        "salesforce",
+        "enterprise",
+        "rest"
+      ]
+    },
+    "discord-bot-api": {
+      "title": "Discord Bot API",
+      "description": "Die Discord API ermöglicht Bots, Nachrichten zu senden, Server zu verwalten und auf Ereignisse zu reagieren – ideal für Community-Automatisierung.",
+      "category": "Community & Messaging",
+      "tags": [
+        "discord",
+        "bots",
+        "community",
+        "messaging"
+      ]
+    },
+    "telegram-bot-api": {
+      "title": "Telegram Bot API",
+      "description": "Die Telegram Bot API sendet Nachrichten, verarbeitet Befehle und verwaltet Chats – ein leichter Kanal für Benachrichtigungen und persönliche Automatisierungen.",
+      "category": "Messaging",
+      "tags": [
+        "telegram",
+        "bots",
+        "messaging",
+        "alerts"
+      ]
+    },
+    "github-rest-api": {
+      "title": "GitHub REST API",
+      "description": "Die GitHub REST API verwaltet Repositories, Issues, Pull-Requests und Releases – die Grundlage für Entwicklerautomatisierung.",
+      "category": "Entwickler-Tools",
+      "tags": [
+        "github",
+        "devops",
+        "automation",
+        "rest"
+      ]
+    },
+    "linear-graphql-api": {
+      "title": "Linear GraphQL API",
+      "description": "Die Linear GraphQL API verwaltet programmatisch Issues, Projekte und Zyklen – entwickelt für schnelle Produkt- und Ingenieur-Workflows.",
+      "category": "Projektmanagement",
+      "tags": [
+        "linear",
+        "graphql",
+        "issues",
+        "productivity"
+      ]
+    },
+    "microsoft-graph-api": {
+      "title": "Microsoft Graph API",
+      "description": "Greife auf Ressourcen von Microsoft Cloud-Diensten über einen einheitlichen Endpunkt zu. Ermöglicht die Integration mit Microsoft 365-Diensten.",
+      "category": "Entwickler-Tools",
+      "tags": [
+        "microsoft",
+        "cloud",
+        "api",
+        "integration",
+        "services"
+      ]
+    },
+    "openai-dall-e-api": {
+      "title": "OpenAI DALL·E API",
+      "description": "Generiere Bilder aus Textbeschreibungen mit fortschrittlichen KI-Modellen. Erstelle mühelos einzigartige Visuals.",
+      "category": "KI & Bild",
+      "tags": [
+        "ai",
+        "image-generation",
+        "creativity",
+        "art",
+        "visuals"
+      ]
+    },
+    "microsoft-azure-cognitive-services-api": {
+      "title": "Microsoft Azure Cognitive Services API",
+      "description": "Greife auf verschiedene KI-Dienste zu, darunter Vision, Sprache und Sprachverständnis. Verbessere Anwendungen mit leistungsstarken KI-Funktionen.",
+      "category": "KI & Multimodal",
+      "tags": [
+        "ai",
+        "cognitive-services",
+        "microsoft",
+        "cloud",
+        "api"
+      ]
+    },
+    "openai-gpt-4-api": {
+      "title": "OpenAI GPT-4 API",
+      "description": "Die OpenAI GPT-4 API bietet fortschrittliche Funktionen zur Verarbeitung natürlicher Sprache für verschiedene Anwendungen.",
+      "category": "KI & LLM",
+      "tags": [
+        "ai",
+        "nlp",
+        "language-modeling"
+      ]
+    },
+    "openai-embeddings-api": {
+      "title": "OpenAI Embeddings API",
+      "description": "Die OpenAI Embeddings API wandelt Text in Vektoren um – ideal für semantische Suche, Clustering, Empfehlungen und RAG-Anwendungen.",
+      "category": "KI & Embeddings",
+      "tags": [
+        "embeddings",
+        "nlp",
+        "api"
+      ]
+    },
+    "twitch-api": {
+      "title": "Twitch API",
+      "description": "Die Twitch API bietet Zugriff auf Streams, Chat und Benutzerdaten – ideal für Integrationen rund um Live-Streaming und Community-Tools.",
+      "category": "Kommunikation",
+      "tags": [
+        "twitch",
+        "streaming",
+        "api"
+      ]
+    },
+    "aws-s3-api": {
+      "title": "Amazon S3 API",
+      "description": "Die Amazon S3 API bietet skalierbaren Objektspeicher mit hoher Verfügbarkeit und Sicherheit.",
+      "category": "Storage",
+      "tags": [
+        "storage",
+        "cloud",
+        "aws"
+      ]
+    },
+    "ibm-watson-text-to-speech-api": {
+      "title": "IBM Watson Text to Speech API",
+      "description": "Konvertiert geschriebenen Text in natürlich klingende Sprache in verschiedenen Sprachen.",
+      "category": "AI & Speech",
+      "tags": [
+        "text-to-speech",
+        "speech",
+        "language"
+      ]
+    },
+    "aws-lambda-api": {
+      "title": "Amazon AWS Lambda API",
+      "description": "AWS Lambda ermöglicht das Ausführen von Code ohne Bereitstellung oder Verwaltung von Servern.",
+      "category": "Backend",
+      "tags": [
+        "serverless",
+        "compute",
+        "aws"
+      ]
+    },
+    "paypal-payments-api": {
+      "title": "PayPal Payments API",
+      "description": "Integriere die PayPal-Zahlungsverarbeitung einfach in deine Anwendungen.",
+      "category": "Payments",
+      "tags": [
+        "payments",
+        "paypal",
+        "transactions"
+      ]
+    },
+    "ibm-cloud-object-storage-api": {
+      "title": "IBM Cloud Object Storage API",
+      "description": "Zuverlässiger Cloud-Objektspeicher für Datenarchivierung und Anwendungsentwicklung.",
+      "category": "Storage",
+      "tags": [
+        "cloud",
+        "storage",
+        "ibm"
+      ]
+    },
+    "aws-rekognition-api": {
+      "title": "Amazon Rekognition API",
+      "description": "API zur Bild- und Videoanalyse für Gesichtserkennung und Objekterkennung.",
+      "category": "AI & Vision",
+      "tags": [
+        "image",
+        "video",
+        "analysis"
+      ]
+    },
+    "aws-ses-api": {
+      "title": "Amazon SES API",
+      "description": "Der Amazon Simple Email Service (SES) bietet zuverlässige und skalierbare E-Mail-Versandmöglichkeiten.",
+      "category": "Email",
+      "tags": [
+        "email",
+        "aws",
+        "transactional"
+      ]
+    },
+    "yelp-fusion-api": {
+      "title": "Yelp Fusion API",
+      "description": "Zugriff auf Yelps umfangreiche Geschäftsdatenbank für Bewertungen, Bewertungen und mehr.",
+      "category": "Geodata",
+      "tags": [
+        "business",
+        "reviews",
+        "geolocation"
+      ]
+    },
+    "ibm-watson-language-translator-api": {
+      "title": "IBM Watson Language Translator API",
+      "description": "Bietet KI-gestützte Übersetzungsfunktionen für mehrere Sprachen.",
+      "category": "AI & Speech",
+      "tags": [
+        "translation",
+        "language",
+        "AI"
+      ]
+    },
+    "ibm-watson-assistant-api": {
+      "title": "IBM Watson Assistant API",
+      "description": "Ermöglicht die Verarbeitung natürlicher Sprache zur Erstellung von Konversationsschnittstellen.",
+      "category": "AI & LLM",
+      "tags": [
+        "nlp",
+        "conversational",
+        "ai"
+      ]
+    },
+    "ibm-watson-discovery-api": {
+      "title": "IBM Watson Discovery API",
+      "description": "Nutze den Wert deiner Daten mit KI-gestützter Suche und Textanalyse.",
+      "category": "AI & ML",
+      "tags": [
+        "ai",
+        "search",
+        "analytics",
+        "ibm"
+      ]
+    },
+    "azure-face-api": {
+      "title": "Microsoft Azure Face API",
+      "description": "Bietet Gesichtserkennung zur Erkennung und Analyse menschlicher Gesichter in Bildern.",
+      "category": "AI & Vision",
+      "tags": [
+        "facial-recognition",
+        "image-analysis",
+        "azure"
+      ]
+    },
+    "aws-polly-api": {
+      "title": "Amazon Polly API",
+      "description": "Amazon Polly wandelt Text in lebensechte Sprache um und ermöglicht Anwendungen das Sprechen.",
+      "category": "AI & Voice",
+      "tags": [
+        "text-to-speech",
+        "ai",
+        "voice"
+      ]
+    },
+    "azure-cosmos-db-api": {
+      "title": "Microsoft Azure Cosmos DB API",
+      "description": "Ein global verteilter, multimodaler Datenbankdienst für leistungsstarke Anwendungen.",
+      "category": "Databases",
+      "tags": [
+        "database",
+        "distributed",
+        "multi-model"
+      ]
+    },
+    "google-maps-api": {
+      "title": "Google Maps API",
+      "description": "Zugriff auf verschiedene standortbasierte Dienste wie Karten, Routen und Orte.",
+      "category": "Geodata",
+      "tags": [
+        "maps",
+        "location",
+        "navigation"
+      ]
+    },
+    "plaid-financial-api": {
+      "title": "Plaid Financial Data API",
+      "description": "Sicherer und einfacher Zugriff auf Verbraucherdaten von verschiedenen Institutionen.",
+      "category": "Finance",
+      "tags": [
+        "financial-data",
+        "api",
+        "banking"
+      ]
+    },
+    "twilio-video-api": {
+      "title": "Twilio Video API",
+      "description": "Erstelle Echtzeit-Videoanwendungen mit Twilios skalierbarer Video-API.",
+      "category": "Kommunikation",
+      "tags": [
+        "video",
+        "real-time",
+        "communication"
+      ]
+    },
+    "sendinblue-email-api": {
+      "title": "Sendinblue Email API",
+      "description": "Die Sendinblue Email API ermöglicht das programmatische Versenden und Verwalten von E-Mail-Kampagnen.",
+      "category": "Kommunikation",
+      "tags": [
+        "email",
+        "marketing",
+        "automation"
+      ]
+    },
+    "aws-transcribe-api": {
+      "title": "Amazon Transcribe API",
+      "description": "Automatischer Spracherkennungsdienst (ASR), der es einfach macht, Sprach-zu-Text-Funktionen in Anwendungen hinzuzufügen.",
+      "category": "KI & Sprache",
+      "tags": [
+        "speech-to-text",
+        "transcription",
+        "ASR"
+      ]
+    },
+    "notion-automation-api": {
+      "title": "Notion Automation API",
+      "description": "Automatisiere und integriere deinen Notion-Arbeitsbereich zur Steigerung von Produktivität und Zusammenarbeit.",
+      "category": "Produktivität",
+      "tags": [
+        "automation",
+        "productivity",
+        "integration"
+      ]
+    },
+    "github-copilot-api": {
+      "title": "GitHub Copilot API",
+      "description": "GitHub Copilot unterstützt Entwickler mit KI-gestützten Codevorschlägen in Echtzeit und verbessert die Produktivität.",
+      "category": "KI & Automatisierung",
+      "tags": [
+        "ai",
+        "coding",
+        "automation",
+        "developer-tools",
+        "productivity"
+      ]
+    },
+    "tinkr-api": {
+      "title": "Tinkr API",
+      "description": "Die Tinkr API ermöglicht Entwicklern, fortschrittliche Datenvisualisierungen in Anwendungen zu integrieren.",
+      "category": "Datenvisualisierung",
+      "tags": [
+        "data",
+        "visualization",
+        "charts",
+        "graphs",
+        "api"
+      ]
+    },
+    "clarifai-api": {
+      "title": "Clarifai API",
+      "description": "Die Clarifai API bietet leistungsstarke Werkzeuge zur Bild- und Videoerkennung und integriert fortschrittliche KI-Funktionen.",
+      "category": "KI & Vision",
+      "tags": [
+        "image-recognition",
+        "video-analysis",
+        "ai"
+      ]
+    },
+    "notion-forms-api": {
+      "title": "Notion Forms API",
+      "description": "Erstelle einfach Formulare und sammle Daten in Notion. Nahtlose Integration in deinen Notion-Arbeitsbereich.",
+      "category": "Produktivität",
+      "tags": [
+        "forms",
+        "data-collection",
+        "notion"
+      ]
+    },
+    "twitch-api-kraken": {
+      "title": "Twitch API Kraken",
+      "description": "Die Twitch API Kraken bietet Entwicklern eine umfassende Schnittstelle für den Zugriff auf Twitch-Daten, einschließlich Streams und Benutzerinformationen.",
+      "category": "Kommunikation",
+      "tags": [
+        "twitch",
+        "api",
+        "streaming",
+        "developer"
+      ]
+    },
+    "asana-api": {
+      "title": "Asana API",
+      "description": "Die Asana API ermöglicht Entwicklern die Integration mit Asana zur effektiven Verwaltung von Aufgaben, Projekten und Teamarbeit.",
+      "category": "Produktivität",
+      "tags": [
+        "tasks",
+        "projects",
+        "collaboration",
+        "api"
+      ]
+    }
+  },
+  "alternatives": {
+    "notion-alternatives": {
+      "title": "Notion Alternativen",
+      "description": "Die besten Notion-Alternativen für Wissensmanagement, Projektplanung und kollaborative Dokumente – von Open Source bis Enterprise.",
+      "category": "Produktivität",
+      "tags": [
+        "knowledge-management",
+        "notes",
+        "collaboration",
+        "productivity"
+      ]
+    },
+    "zapier-alternatives": {
+      "title": "Zapier Alternativen",
+      "description": "Zapier-Alternativen für Automatisierung und Integrationen – günstiger, datenschutzfreundlicher oder mit mehr Kontrolle über deine Workflows.",
+      "category": "Automatisierung",
+      "tags": [
+        "automation",
+        "no-code",
+        "integrations",
+        "workflows"
+      ]
+    },
+    "figma-alternatives": {
+      "title": "Figma Alternativen",
+      "description": "Figma-Alternativen für UI-Design und Prototyping – einschließlich Open-Source- und datenschutzfreundlicher Optionen.",
+      "category": "Design",
+      "tags": [
+        "design",
+        "ui-ux",
+        "prototyping",
+        "open-source"
+      ]
+    },
+    "slack-alternatives": {
+      "title": "Slack Alternativen",
+      "description": "Slack-Alternativen für Team-Chat und Kommunikation – datenschutzfreundlicher, günstiger oder mit Selbsthosting für mehr Kontrolle.",
+      "category": "Kommunikation",
+      "tags": [
+        "team-chat",
+        "communication",
+        "collaboration"
+      ]
+    },
+    "airtable-alternatives": {
+      "title": "Airtable Alternativen",
+      "description": "Airtable-Alternativen für No-Code-Datenbanken und Tabellenkalkulationen – mit Open-Source-Optionen, Selbsthosting und fairen Preisen.",
+      "category": "Datenbanken",
+      "tags": [
+        "no-code",
+        "database",
+        "spreadsheets",
+        "automation"
+      ]
+    },
+    "mailchimp-alternatives": {
+      "title": "Mailchimp Alternativen",
+      "description": "Mailchimp-Alternativen für Newsletter und E-Mail-Marketing – günstiger, DSGVO-freundlich und ohne komplexe Preismodelle.",
+      "category": "Marketing",
+      "tags": [
+        "email-marketing",
+        "newsletter",
+        "crm"
+      ]
+    },
+    "trello-alternatives": {
+      "title": "Trello Alternativen",
+      "description": "Trello-Alternativen für Kanban-Boards und Projektmanagement – mit mehr Automatisierung und faireren Preisen.",
+      "category": "Projektmanagement",
+      "tags": [
+        "kanban",
+        "projektmanagement",
+        "aufgaben"
+      ]
+    },
+    "google-analytics-alternatives": {
+      "title": "Google Analytics Alternativen",
+      "description": "Alternativen zu Google Analytics für datenschutzfreundliches Webtracking – cookieless, DSGVO-konform und ohne Datenübertragungen in die USA.",
+      "category": "Analytik",
+      "tags": [
+        "analytik",
+        "datenschutz",
+        "tracking"
+      ]
+    },
+    "hubspot-alternatives": {
+      "title": "HubSpot Alternativen",
+      "description": "HubSpot-Alternativen für CRM und Marketingautomatisierung – erschwinglicher, datenschutzfreundlicher oder besser für kleine Teams geeignet.",
+      "category": "CRM & Marketing",
+      "tags": [
+        "crm",
+        "marketing",
+        "automatisierung",
+        "vertrieb"
+      ]
+    },
+    "asana-alternatives": {
+      "title": "Asana Alternativen",
+      "description": "Asana-Alternativen für Projekt- und Aufgabenmanagement – mit Open-Source-Optionen und faireren Preisen.",
+      "category": "Projektmanagement",
+      "tags": [
+        "projektmanagement",
+        "aufgaben",
+        "teamarbeit",
+        "kanban"
+      ]
+    },
+    "dropbox-alternatives": {
+      "title": "Dropbox Alternativen",
+      "description": "Alternativen zu Dropbox für Cloud-Speicher und Dateisynchronisation – mit mehr Datenschutz und großzügigen kostenlosen Tarifen.",
+      "category": "Speicher",
+      "tags": [
+        "cloud-storage",
+        "file-sync",
+        "privacy",
+        "collaboration"
+      ]
+    },
+    "calendly-alternatives": {
+      "title": "Calendly Alternativen",
+      "description": "Calendly-Alternativen für Terminplanung und Buchungen – Open-Source, datenschutzfreundlich und mit mehr Kontrolle über deinen Kalender.",
+      "category": "Terminplanung",
+      "tags": [
+        "scheduling",
+        "booking",
+        "calendar",
+        "automation"
+      ]
+    },
+    "wordpress-alternatives": {
+      "title": "WordPress Alternativen",
+      "description": "Alternativen zu WordPress für Websites und Blogs – schnellere, sicherere und entwicklerfreundliche CMS-Optionen.",
+      "category": "CMS",
+      "tags": [
+        "cms",
+        "blogging",
+        "static-site",
+        "publishing"
+      ]
+    },
+    "shopify-alternatives": {
+      "title": "Shopify Alternativen",
+      "description": "Shopify-Alternativen für Online-Shops – Open-Source, headless oder kostengünstigere Plattformen für wachsende E-Commerce-Marken.",
+      "category": "E-Commerce",
+      "tags": [
+        "ecommerce",
+        "online-store",
+        "headless",
+        "open-source"
+      ]
+    },
+    "monday-alternatives": {
+      "title": "Alternativen zu Monday.com",
+      "description": "Alternativen zu Monday.com für das Arbeitsmanagement – einfachere, günstigere oder Open-Source-Optionen für flexible Boards.",
+      "category": "Projektmanagement",
+      "tags": [
+        "work-management",
+        "boards",
+        "project-management",
+        "collaboration"
+      ]
+    },
+    "clickup-alternatives": {
+      "title": "Alternativen zu ClickUp",
+      "description": "Alternativen zu ClickUp für All-in-One-Produktivität – fokussierter, schneller und einfacher für kleine und mittelgroße Teams.",
+      "category": "Produktivität",
+      "tags": [
+        "productivity",
+        "tasks",
+        "project-management",
+        "collaboration"
+      ]
+    },
+    "miro-alternatives": {
+      "title": "Alternativen zu Miro",
+      "description": "Alternativen zu Miro für visuelle Zusammenarbeit und Whiteboarding – Open-Source, selbstgehostete oder einfachere Tools für Workshops.",
+      "category": "Zusammenarbeit",
+      "tags": [
+        "whiteboard",
+        "collaboration",
+        "workshops",
+        "visual"
+      ]
+    },
+    "loom-alternatives": {
+      "title": "Alternativen zu Loom",
+      "description": "Alternativen zu Loom für Bildschirmaufnahme und asynchrone Videos – datenschutzfreundliche, Open-Source- oder kostengünstige Optionen für Teams.",
+      "category": "Kommunikation",
+      "tags": [
+        "screen-recording",
+        "video",
+        "async",
+        "communication"
+      ]
+    },
+    "intercom-alternatives": {
+      "title": "Alternativen zu Intercom",
+      "description": "Alternativen zu Intercom für Kundenkommunikation und Support – KI-fähige, erschwingliche und datenschutzfreundliche Helpdesk-Optionen.",
+      "category": "Support",
+      "tags": [
+        "support",
+        "chat",
+        "helpdesk",
+        "customer-messaging"
+      ]
+    },
+    "zendesk-alternatives": {
+      "title": "Alternativen zu Zendesk",
+      "description": "Alternativen zu Zendesk für den Kundenservice – Open-Source, KI-unterstützte und kostengünstige Helpdesk-Plattformen für wachsende Teams.",
+      "category": "Support",
+      "tags": [
+        "helpdesk",
+        "support",
+        "ticketing",
+        "customer-service"
+      ]
+    },
+    "jira-alternatives": {
+      "title": "Alternativen zu Jira",
+      "description": "Alternativen zu Jira für Issue-Tracking und agile Planung – schnellere, einfachere und entwicklerfreundliche Tools für Softwareteams.",
+      "category": "DevOps",
+      "tags": [
+        "issue-tracking",
+        "agile",
+        "project-management",
+        "developers"
+      ]
+    },
+    "github-alternatives": {
+      "title": "Alternativen zu GitHub",
+      "description": "Alternativen zu GitHub für das Hosting von Quellcode und Zusammenarbeit – selbstgehostete, datenschutzorientierte oder Open-Source-Plattformen.",
+      "category": "DevOps",
+      "tags": [
+        "git",
+        "code-hosting",
+        "devops",
+        "open-source"
+      ]
+    },
+    "gitlab-alternatives": {
+      "title": "GitLab Alternativen",
+      "description": "GitLab Alternativen für DevOps und Code-Hosting – leichtere, selbstgehostete oder Open-Source-Plattformen mit starkem CI/CD.",
+      "category": "DevOps",
+      "tags": [
+        "git",
+        "devops",
+        "ci-cd",
+        "code-hosting"
+      ]
+    },
+    "bitbucket-alternatives": {
+      "title": "Bitbucket Alternativen",
+      "description": "Bitbucket Alternativen für Git-Hosting und CI – Open-Source, selbstgehostete oder eng integrierte Entwicklerplattformen.",
+      "category": "DevOps",
+      "tags": [
+        "git",
+        "code-hosting",
+        "ci-cd",
+        "devops"
+      ]
+    },
+    "netlify-alternatives": {
+      "title": "Netlify Alternativen",
+      "description": "Netlify Alternativen für statisches Hosting und serverlose Deployments – mit mehr Kontrolle, Selbsthosting oder großzügigen kostenlosen Tarifen.",
+      "category": "Hosting",
+      "tags": [
+        "hosting",
+        "static-site",
+        "serverless",
+        "deployment"
+      ]
+    },
+    "vercel-alternatives": {
+      "title": "Vercel Alternativen",
+      "description": "Vercel Alternativen für Frontend-Hosting und serverlos – offen, selbstgehostet oder vorhersehbare Preise für wachsende Projekte.",
+      "category": "Hosting",
+      "tags": [
+        "hosting",
+        "frontend",
+        "serverless",
+        "deployment"
+      ]
+    },
+    "openai-alternatives": {
+      "title": "OpenAI Alternativen",
+      "description": "OpenAI Alternativen für Chat, Logik und Embeddings – von Anthropic und Google bis hin zu Open-Weight-Modellen.",
+      "category": "AI & LLM",
+      "tags": [
+        "ai",
+        "llm",
+        "chatgpt",
+        "api"
+      ]
+    },
+    "stripe-alternatives": {
+      "title": "Stripe Alternativen",
+      "description": "Stripe Alternativen für Zahlungen, Abonnements und Rechnungsstellung – einschließlich Paddle, Lemon Squeezy und Chargebee.",
+      "category": "Payments",
+      "tags": [
+        "payments",
+        "billing",
+        "subscriptions",
+        "merchant-of-record"
+      ]
+    },
+    "supabase-alternatives": {
+      "title": "Supabase Alternativen",
+      "description": "Supabase Alternativen für Backend, Auth und Echtzeitdaten – einschließlich Firebase, Appwrite und PocketBase.",
+      "category": "Backend",
+      "tags": [
+        "backend",
+        "database",
+        "auth",
+        "open-source"
+      ]
+    },
+    "postman-alternatives": {
+      "title": "Postman Alternativen",
+      "description": "Postman Alternativen für API-Tests und Zusammenarbeit – einschließlich Insomnia, Bruno und Hoppscotch.",
+      "category": "Developer Tools",
+      "tags": [
+        "api",
+        "testing",
+        "rest",
+        "collaboration"
+      ]
+    },
+    "obsidian-alternatives": {
+      "title": "Obsidian Alternativen",
+      "description": "Obsidian-Alternativen für lokale Notizen und Wissensdatenbanken – einschließlich Logseq, Joplin und Anytype.",
+      "category": "Produktivität",
+      "tags": [
+        "notes",
+        "knowledge-management",
+        "local-first",
+        "markdown"
+      ]
+    },
+    "auth0-alternatives": {
+      "title": "Auth0 Alternativen",
+      "description": "Auth0-Alternativen für Authentifizierung und Identität – einschließlich Clerk, Supabase Auth und Keycloak.",
+      "category": "Auth & Identität",
+      "tags": [
+        "auth",
+        "sso",
+        "identity",
+        "security"
+      ]
+    },
+    "algolia-alternatives": {
+      "title": "Algolia Alternativen",
+      "description": "Algolia-Alternativen für Suche und Entdeckung – einschließlich Meilisearch, Typesense und Elasticsearch.",
+      "category": "Suche",
+      "tags": [
+        "search",
+        "discovery",
+        "open-source",
+        "api"
+      ]
+    },
+    "deepgram-alternatives": {
+      "title": "Deepgram Alternativen",
+      "description": "Deepgram-Alternativen für Sprache-zu-Text – einschließlich AssemblyAI, OpenAI Whisper und Speechmatics.",
+      "category": "KI & Sprache",
+      "tags": [
+        "speech-to-text",
+        "transcription",
+        "audio",
+        "ai"
+      ]
+    },
+    "elevenlabs-alternatives": {
+      "title": "ElevenLabs Alternativen",
+      "description": "ElevenLabs-Alternativen für KI-Stimmengenerierung – einschließlich PlayHT, Azure AI Speech und Resemble AI.",
+      "category": "KI & Audio",
+      "tags": [
+        "text-to-speech",
+        "voice",
+        "audio",
+        "ai"
+      ]
+    },
+    "pinecone-alternatives": {
+      "title": "Pinecone Alternativen",
+      "description": "Pinecone-Alternativen für Vektorsuche – einschließlich Qdrant, Weaviate und Milvus.",
+      "category": "Vektor-Datenbanken",
+      "tags": [
+        "vector-database",
+        "embeddings",
+        "rag",
+        "search"
+      ]
+    },
+    "adobe-photoshop-alternatives": {
+      "title": "Adobe Photoshop Alternativen",
+      "description": "Entdecke Alternativen zu Adobe Photoshop für Bildbearbeitungsenthusiasten und -profis.",
+      "category": "Design",
+      "tags": [
+        "image editing",
+        "design",
+        "graphics"
+      ]
+    },
+    "zoom-alternatives": {
+      "title": "Zoom Alternativen",
+      "description": "Entdecke die besten Alternativen zu Zoom für Videokonferenzen und Zusammenarbeit.",
+      "category": "Kommunikation",
+      "tags": [
+        "video",
+        "meeting",
+        "collaboration"
+      ]
+    },
+    "salesforce-alternatives": {
+      "title": "Salesforce-Alternativen",
+      "description": "Entdecke die besten Alternativen zu Salesforce für CRM-Bedürfnisse, ideal für Unternehmen, die Flexibilität und Skalierbarkeit suchen.",
+      "category": "CRM & Marketing",
+      "tags": [
+        "CRM",
+        "business",
+        "sales"
+      ]
+    },
+    "google-drive-alternatives": {
+      "title": "Google Drive-Alternativen",
+      "description": "Erforsche Alternativen zu Google Drive für Cloud-Speicher und Dateifreigabe.",
+      "category": "Storage",
+      "tags": [
+        "cloud",
+        "files",
+        "sharing"
+      ]
+    },
+    "microsoft-teams-alternatives": {
+      "title": "Microsoft Teams-Alternativen",
+      "description": "Entdecke Alternativen zu Microsoft Teams für effektive Teamkommunikation und Zusammenarbeit.",
+      "category": "Communication",
+      "tags": [
+        "collaboration",
+        "communication",
+        "teamwork"
+      ]
+    },
+    "adobe-acrobat-alternatives": {
+      "title": "Adobe Acrobat-Alternativen",
+      "description": "Erforsche Alternativen zu Adobe Acrobat für die PDF-Bearbeitung und -Verwaltung.",
+      "category": "Productivity",
+      "tags": [
+        "PDF",
+        "document",
+        "editing"
+      ]
+    },
+    "docusign-alternatives": {
+      "title": "DocuSign-Alternativen",
+      "description": "Entdecke Alternativen zu DocuSign für digitales Dokumentensignieren und -management.",
+      "category": "Productivity",
+      "tags": [
+        "e-signature",
+        "document",
+        "workflow"
+      ]
+    },
+    "visual-studio-code-alternatives": {
+      "title": "Visual Studio Code-Alternativen",
+      "description": "Erforsche Alternativen zu Visual Studio Code für effizientes und flexibles Programmieren.",
+      "category": "Developer Tools",
+      "tags": [
+        "coding",
+        "IDE",
+        "development"
+      ]
+    },
+    "microsoft-excel-alternatives": {
+      "title": "Microsoft Excel-Alternativen",
+      "description": "Entdecke die besten Alternativen zu Microsoft Excel für Datenanalyse und Tabellenverwaltung.",
+      "category": "Productivity",
+      "tags": [
+        "spreadsheets",
+        "data-analysis",
+        "office-tools"
+      ]
+    },
+    "adobe-illustrator-alternatives": {
+      "title": "Adobe Illustrator-Alternativen",
+      "description": "Erforsche die besten Alternativen zu Adobe Illustrator für Vektorgrafikdesign.",
+      "category": "Design",
+      "tags": [
+        "vector",
+        "graphics",
+        "design"
+      ]
+    },
+    "docker-alternatives": {
+      "title": "Docker Alternativen",
+      "description": "Entdecke die besten Alternativen zu Docker für Containerisierung und Anwendungsbereitstellung.",
+      "category": "DevOps",
+      "tags": [
+        "containerization",
+        "deployment",
+        "DevOps"
+      ]
+    },
+    "quickbooks-alternatives": {
+      "title": "QuickBooks Alternativen",
+      "description": "Entdecke Alternativen zu QuickBooks für effiziente Buchhaltung und Finanzmanagement.",
+      "category": "Finance",
+      "tags": [
+        "accounting",
+        "finance",
+        "management"
+      ]
+    },
+    "zoominfo-alternatives": {
+      "title": "ZoomInfo Alternativen",
+      "description": "Entdecke Alternativen zu ZoomInfo für Business Intelligence und Lead-Generierung.",
+      "category": "Marketing",
+      "tags": [
+        "business",
+        "lead-generation",
+        "intelligence"
+      ]
+    },
+    "autodesk-autocad-alternatives": {
+      "title": "Autodesk AutoCAD Alternativen",
+      "description": "Entdecke die besten Alternativen zu Autodesk AutoCAD für Design- und Entwurfsbedürfnisse.",
+      "category": "Design",
+      "tags": [
+        "CAD",
+        "design",
+        "drafting"
+      ]
+    },
+    "dropbox-paper-alternatives": {
+      "title": "Dropbox Paper Alternativen",
+      "description": "Entdecke die besten Alternativen zu Dropbox Paper für kollaborative Dokumentbearbeitung und Projektmanagement.",
+      "category": "Collaboration",
+      "tags": [
+        "collaboration",
+        "document-editing",
+        "project-management"
+      ]
+    },
+    "microsoft-word-alternatives": {
+      "title": "Microsoft Word Alternativen",
+      "description": "Entdecke Alternativen zu Microsoft Word für Dokumentbearbeitung und Zusammenarbeit.",
+      "category": "Productivity",
+      "tags": [
+        "document",
+        "editor",
+        "word-processing"
+      ]
+    },
+    "notepad-plus-plus-alternatives": {
+      "title": "Notepad++ Alternativen",
+      "description": "Entdecke Alternativen zu Notepad++ für fortgeschrittene Textbearbeitung und Programmieraufgaben.",
+      "category": "Developer Tools",
+      "tags": [
+        "text editor",
+        "coding",
+        "programming"
+      ]
+    },
+    "adobe-premiere-pro-alternatives": {
+      "title": "Adobe Premiere Pro Alternativen",
+      "description": "Entdecke die besten Alternativen zu Adobe Premiere Pro für Video-Bearbeitungsbedürfnisse.",
+      "category": "Design",
+      "tags": [
+        "video editing",
+        "software",
+        "creative tools"
+      ]
+    },
+    "adobe-lightroom-alternatives": {
+      "title": "Adobe Lightroom Alternativen",
+      "description": "Entdecke Alternativen zu Adobe Lightroom für Fotobearbeitung und -organisation.",
+      "category": "Design",
+      "tags": [
+        "photo-editing",
+        "design",
+        "organization"
+      ]
+    },
+    "sketch-alternatives": {
+      "title": "Sketch Alternativen",
+      "description": "Entdecke die besten Alternativen zu Sketch für Design- und Prototyping-Bedürfnisse.",
+      "category": "Design",
+      "tags": [
+        "design",
+        "prototyping",
+        "ui"
+      ]
+    },
+    "basecamp-alternatives": {
+      "title": "Basecamp Alternativen",
+      "description": "Entdecke effiziente Projektmanagement-Tools mit ähnlichen Funktionen wie Basecamp, ideal für Teams und Unternehmen.",
+      "category": "Projektmanagement",
+      "tags": [
+        "project management",
+        "team collaboration",
+        "task tracking"
+      ]
+    },
+    "aws-ec2-alternatives": {
+      "title": "AWS EC2 Alternativen",
+      "description": "Entdecke Alternativen zu AWS EC2 für skalierbare Cloud-Computing-Lösungen.",
+      "category": "Hosting",
+      "tags": [
+        "cloud",
+        "hosting",
+        "computing"
+      ]
+    },
+    "adobe-after-effects-alternatives": {
+      "title": "Adobe After Effects Alternativen",
+      "description": "Entdecke die besten Alternativen zu Adobe After Effects für Videobearbeitung und Motion Graphics.",
+      "category": "Design",
+      "tags": [
+        "video editing",
+        "motion graphics",
+        "design"
+      ]
+    },
+    "tiktok-alternatives": {
+      "title": "TikTok Alternativen",
+      "description": "Entdecke beliebte Alternativen zu TikTok für das Teilen von Kurzvideos und kreativen Inhalten.",
+      "category": "Soziale Medien",
+      "tags": [
+        "video",
+        "social",
+        "content"
+      ]
+    },
+    "canva-alternatives": {
+      "title": "Canva Alternativen",
+      "description": "Entdecke verschiedene Alternativen zu Canva für Grafikdesign und Inhaltserstellung. Finde die beste Lösung für deine kreativen Projekte.",
+      "category": "Design",
+      "tags": [
+        "design",
+        "graphics",
+        "content creation"
+      ]
+    },
+    "evernote-alternatives": {
+      "title": "Evernote Alternativen",
+      "description": "Entdecke verschiedene Alternativen zu Evernote für Notizen und Organisation. Finde die perfekte Lösung für deine Produktivitätsbedürfnisse.",
+      "category": "Produktivität",
+      "tags": [
+        "note-taking",
+        "organization",
+        "productivity"
+      ]
+    },
+    "notability-alternatives": {
+      "title": "Notability-Alternativen",
+      "description": "Entdecke Alternativen zu Notability für Notizen und Organisation. Finde Tools zur Steigerung deiner Produktivität.",
+      "category": "Produktivität",
+      "tags": [
+        "notizen",
+        "produktivität",
+        "organisation"
+      ]
+    },
+    "microsoft-onedrive-alternatives": {
+      "title": "Microsoft OneDrive-Alternativen",
+      "description": "Entdecke Alternativen zu Microsoft OneDrive für Cloud-Speicherlösungen. Finde die beste Lösung für deine Bedürfnisse.",
+      "category": "Speicher",
+      "tags": [
+        "cloud",
+        "speicher",
+        "backup",
+        "dateifreigabe"
+      ]
+    },
+    "notion-api-alternatives": {
+      "title": "Notion API-Alternativen",
+      "description": "Entdecke Alternativen zur Notion API für die effektive Integration und Automatisierung deiner Workflows.",
+      "category": "Automatisierung",
+      "tags": [
+        "API",
+        "Integration",
+        "Automatisierung"
+      ]
+    },
+    "figma-plugin-alternatives": {
+      "title": "Figma Plugin-Alternativen",
+      "description": "Entdecke Alternativen zu Figma-Plugins für verbesserte Designfähigkeiten. Finde neue Tools zur Optimierung deines Workflows.",
+      "category": "Design",
+      "tags": [
+        "design",
+        "plugins",
+        "tools"
+      ]
+    },
+    "figma-x-alternatives": {
+      "title": "Figma X-Alternativen",
+      "description": "Entdecke Alternativen zu Figma X, einem leistungsstarken Design-Tool für Zusammenarbeit und Prototyping.",
+      "category": "Design",
+      "tags": [
+        "design",
+        "zusammenarbeit",
+        "prototyping"
+      ]
+    },
+    "clickmeeting-alternatives": {
+      "title": "ClickMeeting-Alternativen",
+      "description": "Entdecke Alternativen zu ClickMeeting für Online-Meetings und Webinare. Finde das richtige Tool für deine Bedürfnisse.",
+      "category": "Kommunikation",
+      "tags": [
+        "webinare",
+        "meetings",
+        "online"
+      ]
+    }
+  },
+  "workflows": {
+    "content-automation": {
+      "title": "AI-Inhaltsautomatisierung",
+      "description": "Ein vollständiger Workflow zur Recherche, Erstellung und automatischen Veröffentlichung von Inhalten mit KI und APIs.",
+      "category": "Inhalt & SEO",
+      "tags": [
+        "ai",
+        "inhalt",
+        "seo",
+        "automatisierung"
+      ]
+    },
+    "lead-qualification": {
+      "title": "Automatisierung der Lead-Qualifizierung",
+      "description": "Automatisches Scoring, Anreichern und Weiterleiten eingehender Leads an das richtige Team – ohne manuelles Sortieren.",
+      "category": "Vertrieb & CRM",
+      "tags": [
+        "vertrieb",
+        "crm",
+        "ai",
+        "automatisierung"
+      ]
+    },
+    "programmatic-seo-pipeline": {
+      "title": "Programmatic SEO Pipeline",
+      "description": "Der vollständige Workflow für tausende von SEO-Seiten: Datenquellen, Template-Engine, Build-Prozess und Monitoring.",
+      "category": "SEO & Skalierung",
+      "tags": [
+        "seo",
+        "astro",
+        "scaling",
+        "deployment"
+      ]
+    },
+    "newsletter-automation": {
+      "title": "Newsletter Automation",
+      "description": "Ein Workflow für automatisierte Newsletter: Anmeldungen erfassen, Inhalte vorbereiten und E-Mails zuverlässig über die Resend API versenden.",
+      "category": "Marketing & Inhalt",
+      "tags": [
+        "newsletter",
+        "email",
+        "automation",
+        "content"
+      ]
+    },
+    "social-media-scheduling": {
+      "title": "Social Media Scheduling",
+      "description": "Automatisiere die Planung von sozialen Medien: Inhalte mit KI erstellen, redaktionelle Genehmigung einholen und pünktlich veröffentlichen.",
+      "category": "Marketing & Inhalt",
+      "tags": [
+        "social-media",
+        "scheduling",
+        "automation",
+        "content"
+      ]
+    },
+    "customer-support-chatbot": {
+      "title": "Customer Support Chatbot",
+      "description": "Ein KI-gestützter Support-Chatbot: Anfragen verstehen, aus einer Wissensdatenbank antworten und bei Bedarf an Menschen übergeben.",
+      "category": "Support & KI",
+      "tags": [
+        "chatbot",
+        "support",
+        "ai",
+        "automation"
+      ]
+    },
+    "data-enrichment-pipeline": {
+      "title": "Data Enrichment Pipeline",
+      "description": "Eine Datenanreicherungs-Pipeline: Rohdaten importieren, über API anreichern, mit KI normalisieren und strukturiert in Supabase speichern.",
+      "category": "Daten & Automatisierung",
+      "tags": [
+        "data",
+        "enrichment",
+        "api",
+        "automation"
+      ]
+    },
+    "seo-monitoring-dashboard": {
+      "title": "SEO Monitoring Dashboard",
+      "description": "Ein Dashboard für SEO-Monitoring: Rankings, Indexierung und Core Web Vitals automatisch sammeln und klar visualisieren.",
+      "category": "SEO & Analytics",
+      "tags": [
+        "seo",
+        "monitoring",
+        "analytics",
+        "dashboard"
+      ]
+    },
+    "invoice-automation": {
+      "title": "Invoice Automation",
+      "description": "Automatisiere die Erstellung, Lieferung und Abstimmung von Rechnungen: PDFs generieren, versenden und Zahlungsstatus synchronisieren.",
+      "category": "Finanzen & Betrieb",
+      "tags": [
+        "invoices",
+        "finance",
+        "automation",
+        "accounting"
+      ]
+    },
+    "appointment-booking": {
+      "title": "Appointment Booking Automation",
+      "description": "Erstelle einen automatisierten Buchungsprozess: Verfügbarkeit anzeigen, Details erfassen, Termine bestätigen und Erinnerungen senden.",
+      "category": "Vertrieb & Planung",
+      "tags": [
+        "booking",
+        "scheduling",
+        "automation",
+        "calendar"
+      ]
+    },
+    "product-feed-sync": {
+      "title": "Produktdaten-Synchronisierung",
+      "description": "Halte Produktdaten über Shops und Marktplätze synchron: Feeds normalisieren, Felder validieren und Updates automatisch veröffentlichen.",
+      "category": "E-Commerce",
+      "tags": [
+        "ecommerce",
+        "product-feed",
+        "sync",
+        "automation"
+      ]
+    },
+    "knowledge-base-ingestion": {
+      "title": "Wissensdatenbank-Ingestion",
+      "description": "Verwandle Dokumente und FAQs in eine durchsuchbare Wissensdatenbank: Inhalte aufteilen, Embeddings generieren und semantische Suche ermöglichen.",
+      "category": "KI & Support",
+      "tags": [
+        "knowledge-base",
+        "embeddings",
+        "rag",
+        "support"
+      ]
+    },
+    "multi-language-content": {
+      "title": "Mehrsprachige Inhalts-Pipeline",
+      "description": "Skaliere Inhalte über Sprachen hinweg: Übersetzungen verwalten, Metadaten lokalisieren und lokal angepasste Seiten automatisch veröffentlichen.",
+      "category": "Inhalt & i18n",
+      "tags": [
+        "i18n",
+        "content",
+        "localization",
+        "automation"
+      ]
+    },
+    "webhook-event-routing": {
+      "title": "Webhook-Ereignis-Routing",
+      "description": "Leite eingehende Webhooks zuverlässig weiter: Signaturen überprüfen, Ereignisse deduplizieren und an die richtigen Dienste weiterleiten.",
+      "category": "Engineering",
+      "tags": [
+        "webhooks",
+        "events",
+        "integration",
+        "reliability"
+      ]
+    },
+    "document-summarization": {
+      "title": "Dokumentenzusammenfassung",
+      "description": "Fasse lange Dokumente automatisch zusammen: PDFs importieren, Inhalte aufteilen, prägnante Zusammenfassungen generieren und für die Suche speichern.",
+      "category": "KI & Inhalt",
+      "tags": [
+        "summarization",
+        "documents",
+        "ai",
+        "automation"
+      ]
+    },
+    "ai-customer-feedback-analysis": {
+      "title": "KI-Kundenfeedback-Analyse",
+      "description": "Analysiere Kundenfeedback in großem Maßstab: Stimmung klassifizieren, Themen extrahieren und Erkenntnisse automatisch an die richtigen Teams weiterleiten.",
+      "category": "Support & KI",
+      "tags": [
+        "feedback",
+        "sentiment",
+        "ai",
+        "analytics"
+      ]
+    },
+    "automated-code-review": {
+      "title": "Automatisierte Code-Überprüfung",
+      "description": "Automatisiere Pull-Request-Überprüfungen: Diffs zusammenfassen, Risiken kennzeichnen und strukturierte Kommentare mit KI-Unterstützung posten.",
+      "category": "Engineering",
+      "tags": [
+        "code-review",
+        "ai",
+        "github",
+        "devops"
+      ]
+    },
+    "lead-scraping-enrichment": {
+      "title": "Lead-Scraping & Anreicherung",
+      "description": "Baue eine Lead-Pipeline auf: Prospects aus öffentlichen Quellen sammeln, Unternehmensdaten anreichern und Leads für die Kontaktaufnahme bewerten.",
+      "category": "Vertrieb & CRM",
+      "tags": [
+        "leads",
+        "scraping",
+        "enrichment",
+        "sales"
+      ]
+    },
+    "support-ticket-triage": {
+      "title": "Support Ticket Triage",
+      "description": "Automatisches Triage von Support-Tickets: Absicht klassifizieren, Priorität setzen und jedes Ticket an die richtige Warteschlange weiterleiten.",
+      "category": "Support & AI",
+      "tags": [
+        "support",
+        "triage",
+        "ai",
+        "automation"
+      ]
+    },
+    "content-repurposing": {
+      "title": "Content Repurposing",
+      "description": "Langform-Inhalte in Social-Media-Posts, Newsletter und Zusammenfassungen umwandeln und dabei die Markenstimme beibehalten.",
+      "category": "Content & SEO",
+      "tags": [
+        "content",
+        "repurposing",
+        "social-media",
+        "ai"
+      ]
+    },
+    "social-listening": {
+      "title": "Social Listening",
+      "description": "Markenmentions und Trends über Kanäle hinweg überwachen: Beiträge sammeln, Sentiment analysieren und das Team bei Anstiegen alarmieren.",
+      "category": "Marketing & Analytics",
+      "tags": [
+        "social-media",
+        "listening",
+        "sentiment",
+        "monitoring"
+      ]
+    },
+    "price-monitoring": {
+      "title": "Price Monitoring",
+      "description": "Wettbewerberpreise automatisch verfolgen: Produktseiten scrapen, Änderungen erkennen und Warnungen oder Preisanpassungsregeln auslösen.",
+      "category": "E-commerce",
+      "tags": [
+        "pricing",
+        "monitoring",
+        "ecommerce",
+        "automation"
+      ]
+    },
+    "competitor-analysis": {
+      "title": "Competitor Analysis",
+      "description": "Wettbewerbsforschung automatisieren: Updates sammeln, Änderungen zusammenfassen und wöchentliche Wettbewerbsanalysen erstellen.",
+      "category": "Marketing & Analytics",
+      "tags": [
+        "competitors",
+        "research",
+        "ai",
+        "automation"
+      ]
+    },
+    "onboarding-email-sequence": {
+      "title": "Onboarding Email Sequence",
+      "description": "Verhaltenbasierte Onboarding-E-Mails durchführen: Sequenzen aus Benutzerereignissen auslösen und Inhalte automatisch personalisieren.",
+      "category": "Marketing & CRM",
+      "tags": [
+        "onboarding",
+        "email",
+        "automation",
+        "lifecycle"
+      ]
+    },
+    "churn-prediction": {
+      "title": "Churn Prediction",
+      "description": "Kundenabwanderung anhand von Nutzungssignalen vorhersagen: Konten bewerten, gefährdete Kunden kennzeichnen und Retentionsstrategien auslösen.",
+      "category": "Analytics & CRM",
+      "tags": [
+        "churn",
+        "prediction",
+        "retention",
+        "analytics"
+      ]
+    },
+    "meeting-notes-automation": {
+      "title": "Meeting Notes Automation",
+      "description": "Meeting-Notizen automatisieren: Anrufe transkribieren, Aktionspunkte extrahieren und Zusammenfassungen mit deinem Arbeitsbereich synchronisieren.",
+      "category": "Productivity & AI",
+      "tags": [
+        "meetings",
+        "transcription",
+        "notes",
+        "ai"
+      ]
+    },
+    "support-escalation-routing": {
+      "title": "Support Escalation Routing",
+      "description": "Leite dringende Support-Tickets mit KI-Triage, SLA-Regeln und Slack-Benachrichtigungen an das richtige Team weiter.",
+      "category": "Kundensupport",
+      "tags": [
+        "support",
+        "triage",
+        "sla",
+        "automation"
+      ]
+    },
+    "sales-pipeline-enrichment": {
+      "title": "Sales Pipeline Enrichment",
+      "description": "Bereichere neue Leads mit Unternehmensdaten, bewerte die Passgenauigkeit und synchronisiere das Ergebnis mit deinem CRM.",
+      "category": "Vertrieb & CRM",
+      "tags": [
+        "sales",
+        "enrichment",
+        "leads",
+        "crm"
+      ]
+    },
+    "release-notes-automation": {
+      "title": "Release Notes Automation",
+      "description": "Verwandle zusammengeführte Pull-Requests in klare Release-Notizen und veröffentliche sie in Slack und Notion.",
+      "category": "Entwicklertools",
+      "tags": [
+        "release",
+        "github",
+        "documentation",
+        "automation"
+      ]
+    },
+    "refund-and-chargeback-triage": {
+      "title": "Refund and Chargeback Triage",
+      "description": "Überprüfe Rückerstattungsanfragen und Chargebacks mit klaren Regeln, KI-Zusammenfassungen und einem schnellen Genehmigungsweg.",
+      "category": "Finanzoperationen",
+      "tags": [
+        "refunds",
+        "chargebacks",
+        "stripe",
+        "automation"
+      ]
+    },
+    "partner-api-monitoring": {
+      "title": "Partner API Monitoring",
+      "description": "Überwache die Gesundheit der Partner-API, erkenne Fehler frühzeitig und benachrichtige das Team mit nützlichem Kontext.",
+      "category": "Engineering",
+      "tags": [
+        "monitoring",
+        "api",
+        "incidents",
+        "alerting"
+      ]
+    },
+    "meeting-followup-automation": {
+      "title": "Meeting Follow-up Automation",
+      "description": "Verwandle Meeting-Aufzeichnungen in Zusammenfassungen, Entscheidungen und Aufgaben ohne manuelle Notizen.",
+      "category": "Produktivität",
+      "tags": [
+        "meetings",
+        "transcription",
+        "tasks",
+        "automation"
+      ]
+    },
+    "product-launch-checklist": {
+      "title": "Product Launch Checklist",
+      "description": "Koordiniere einen Produktlaunch mit einer gemeinsamen Checkliste, automatischen Erinnerungen und einer Live-Statusseite.",
+      "category": "Produktoperationen",
+      "tags": [
+        "launch",
+        "checklist",
+        "project-management",
+        "automation"
+      ]
+    },
+    "customer-health-scoring": {
+      "title": "Customer Health Scoring",
+      "description": "Kombiniere Produktnutzung und Support-Signale zu einem einfachen Kunden-Gesundheitswert.",
+      "category": "Kundenerfolg",
+      "tags": [
+        "customer-success",
+        "retention",
+        "scoring",
+        "analytics"
+      ]
+    },
+    "local-seo-landing-pages": {
+      "title": "Lokale SEO-Landingpages",
+      "description": "Erstelle lokale Landingpages aus strukturierten Daten und halte sie mit Search Console-Daten aktuell.",
+      "category": "Inhalt & SEO",
+      "tags": [
+        "seo",
+        "local",
+        "programmatic",
+        "astro"
+      ]
+    },
+    "supplier-price-audit": {
+      "title": "Lieferantenpreisprüfung",
+      "description": "Verfolge die Preise von Lieferanten, vergleiche sie mit deinen Produktkosten und benachrichtige Käufer über Änderungen.",
+      "category": "E-Commerce-Operationen",
+      "tags": [
+        "ecommerce",
+        "suppliers",
+        "pricing",
+        "automation"
+      ]
+    },
+    "automated-website-audit": {
+      "title": "Automatisierter Website-Audit-Workflow",
+      "description": "Optimiere die Leistungsbewertung deiner Website durch automatisierte Audits. Verbessere SEO und Benutzererfahrung mühelos.",
+      "category": "SEO & Analytics",
+      "tags": [
+        "website",
+        "audit",
+        "seo",
+        "automation",
+        "performance"
+      ]
+    },
+    "automated-code-coverage-reporting": {
+      "title": "Automatisierte Codeabdeckungsberichterstattung",
+      "description": "Optimiere den Prozess der Erstellung von Codeabdeckungsberichten mit automatisierten Workflows. Verbessere die Codequalität und Wartbarkeit.",
+      "category": "Entwickler-Tools",
+      "tags": [
+        "automation",
+        "code-coverage",
+        "development"
+      ]
+    },
+    "automated-api-documentation-generation": {
+      "title": "Automatisierte API-Dokumentationserstellung",
+      "description": "Optimiere deinen API-Dokumentationsprozess mit Automatisierungstools. Erstelle und pflege mühelos aktuelle API-Dokumente.",
+      "category": "Entwickler-Tools",
+      "tags": [
+        "api",
+        "documentation",
+        "automation"
+      ]
+    },
+    "automated-website-feedback-loop": {
+      "title": "Automatisierter Website-Feedbackloop",
+      "description": "Erstelle einen nahtlosen Feedbackloop zur Überwachung der Website-Leistung und Benutzererfahrung. Verbessere deine Website basierend auf Echtzeit-Einblicken.",
+      "category": "Analytics & Monitoring",
+      "tags": [
+        "website",
+        "feedback",
+        "monitoring",
+        "analytics",
+        "automation"
+      ]
+    },
+    "automated-website-performance-reporting": {
+      "title": "Automatisierte Website-Leistungsberichterstattung",
+      "description": "Erstelle und liefere automatisch Leistungsberichte für deine Website. Verfolge Verbesserungen und identifiziere Probleme ohne manuelle Prüfungen.",
+      "category": "SEO & Analytics",
+      "tags": [
+        "website",
+        "performance",
+        "reporting",
+        "automation",
+        "analytics"
+      ]
+    },
+    "automated-user-feedback-collection": {
+      "title": "Automatisierter Workflow zur Sammlung von Benutzerfeedback",
+      "description": "Richte einen Workflow ein, der automatisch Benutzerfeedback sammelt, um Produkte zu verbessern. Dieser Workflow hilft Teams, Erkenntnisse effektiv zu sammeln.",
+      "category": "Analytics & Monitoring",
+      "tags": [
+        "feedback",
+        "automation",
+        "analytics"
+      ]
+    },
+    "automated-competitive-pricing-analysis": {
+      "title": "Automatisierte Wettbewerbsanalyse der Preisgestaltung",
+      "description": "Optimiere Preisstrategien mit Echtzeit-Preistracking von Wettbewerbern.",
+      "category": "E-Commerce",
+      "tags": [
+        "preisgestaltung",
+        "wettbewerbsanalyse",
+        "automatisierung"
+      ]
+    },
+    "automated-content-curation": {
+      "title": "Automatisierte Inhaltskurierung für Entwickler",
+      "description": "Optimiere die Inhaltsentdeckung und -kurierung mit KI-gesteuerter Automatisierung.",
+      "category": "Produktivität & Zusammenarbeit",
+      "tags": [
+        "inhalt",
+        "kurierung",
+        "automatisierung",
+        "entwickler"
+      ]
+    },
+    "automated-seo-keyword-research": {
+      "title": "Automatisierter SEO-Keyword-Recherche-Workflow",
+      "description": "Optimiere die SEO-Keyword-Recherche mit KI-Tools zur Strategieoptimierung.",
+      "category": "SEO & Skalierung",
+      "tags": [
+        "seo",
+        "keyword-recherche",
+        "automatisierung"
+      ]
+    },
+    "ai-driven-bug-triage": {
+      "title": "KI-gesteuerte Fehlertriage für Entwicklungsteams",
+      "description": "Automatisiere die Fehlertriage mit KI zur effizienten Kategorisierung und Priorisierung.",
+      "category": "Entwicklertools",
+      "tags": [
+        "fehler-triage",
+        "ki",
+        "entwicklung"
+      ]
+    },
+    "automated-release-management": {
+      "title": "Automatisierter Release-Management-Workflow",
+      "description": "Optimiere deinen Software-Release-Prozess mit automatisierten Schritten.",
+      "category": "Entwicklertools",
+      "tags": [
+        "release",
+        "automatisierung",
+        "devops"
+      ]
+    },
+    "automated-seo-content-review": {
+      "title": "Automatisierter SEO-Inhaltsprüfungs-Workflow",
+      "description": "Optimiere Prüfprozesse für Inhalte mit KI-Tools zur besseren SEO-Optimierung.",
+      "category": "Inhalt & SEO",
+      "tags": [
+        "seo",
+        "inhalt-prüfung",
+        "automatisierung"
+      ]
+    },
+    "async-api-trigger-system": {
+      "title": "Asynchrones API-Trigger-System für Echtzeitbenachrichtigungen",
+      "description": "Erstelle ein System, das Echtzeitbenachrichtigungen basierend auf API-Datenänderungen auslöst.",
+      "category": "Daten & Engineering",
+      "tags": [
+        "api",
+        "echtzeit",
+        "benachrichtigungen"
+      ]
+    },
+    "error-log-management": {
+      "title": "Optimiertes Fehlerprotokollmanagement für Entwickler",
+      "description": "Automatisiere die Sammlung und Analyse von Fehlerprotokollen zur Verbesserung der Debugging-Effizienz.",
+      "category": "Entwicklertools",
+      "tags": [
+        "fehler-protokolle",
+        "debugging",
+        "automatisierung"
+      ]
+    },
+    "real-time-user-feedback-dashboard": {
+      "title": "Echtzeit-Benutzerfeedback-Dashboard",
+      "description": "Erstelle ein Dashboard für Echtzeit-Benutzerfeedback mit Slack und Google Sheets.",
+      "category": "Analytics & Monitoring",
+      "tags": [
+        "real-time",
+        "feedback",
+        "dashboard"
+      ]
+    },
+    "automated-error-notification-system": {
+      "title": "Echtzeit-Fehlerbenachrichtigungssystem für Teams",
+      "description": "Informiert Entwickler sofort über Fehler und Abstürze in Anwendungen.",
+      "category": "Developer Tools",
+      "tags": [
+        "error-handling",
+        "notifications",
+        "real-time"
+      ]
+    },
+    "cross-platform-development-workflow": {
+      "title": "Optimierung der plattformübergreifenden Entwicklung",
+      "description": "Optimiere die App-Entwicklung mit integrierten Tools über verschiedene Plattformen.",
+      "category": "Developer Tools",
+      "tags": [
+        "development",
+        "cross-platform",
+        "integration",
+        "automation"
+      ]
+    },
+    "automated-document-version-control": {
+      "title": "Vereinfachte Dokumentenversionskontrolle",
+      "description": "Automatisiere die Dokumentenversionierung mit Cloud-Speicher und Kollaborationstools.",
+      "category": "Productivity & Collaboration",
+      "tags": [
+        "versioning",
+        "documents",
+        "collaboration"
+      ]
+    },
+    "real-time-customer-feedback-aggregation": {
+      "title": "Echtzeit-Kundenfeedback-Aggregation",
+      "description": "Aggregiere und analysiere Kundenfeedback in Echtzeit mit KI-Tools.",
+      "category": "Analytics & Monitoring",
+      "tags": [
+        "feedback",
+        "real-time",
+        "aggregation",
+        "ai"
+      ]
+    },
+    "api-integration-testing": {
+      "title": "Effizientes API-Integrations-Testframework",
+      "description": "Richte ein robustes Framework zum Testen von API-Integrationen ein.",
+      "category": "Developer Tools",
+      "tags": [
+        "api",
+        "integration",
+        "testing"
+      ]
+    },
+    "ai-driven-content-optimization": {
+      "title": "KI-gesteuertes Content-Optimierungs-Workflow",
+      "description": "Optimiere Website-Inhalte mit KI zur Verbesserung der SEO-Leistung.",
+      "category": "Content & SEO",
+      "tags": [
+        "ai",
+        "content-optimization",
+        "seo"
+      ]
+    },
+    "real-time-social-media-analytics": {
+      "title": "Echtzeit-Analyse-Dashboard für soziale Medien",
+      "description": "Überwache soziale Medien-Trends in Echtzeit mit Analyse-Dashboards.",
+      "category": "Analytics & Monitoring",
+      "tags": [
+        "social-media",
+        "analytics",
+        "real-time"
+      ]
+    },
+    "continuous-deployment-monitoring": {
+      "title": "Überwachung kontinuierlicher Bereitstellungen mit Slack-Benachrichtigungen",
+      "description": "Überwache kontinuierliche Bereitstellungen und sende Echtzeit-Benachrichtigungen an Slack-Kanäle.",
+      "category": "Entwickler-Tools",
+      "tags": [
+        "deployment",
+        "monitoring",
+        "alerts"
+      ]
+    },
+    "real-time-error-detection-pipeline": {
+      "title": "Echtzeit-Fehlererkennungspipeline",
+      "description": "Identifiziere und reagiere in Echtzeit auf Anwendungsfehler mit robusten APIs.",
+      "category": "Entwickler-Tools",
+      "tags": [
+        "error-detection",
+        "real-time",
+        "automation"
+      ]
+    },
+    "automated-api-versioning-tracking": {
+      "title": "API-Versionierungstracking für Teams implementieren",
+      "description": "Verfolge und verwalte Versionsänderungen in deinen APIs mit automatisierten Tools.",
+      "category": "Entwickler-Tools",
+      "tags": [
+        "api",
+        "versioning",
+        "tracking",
+        "automation",
+        "development"
+      ]
+    },
+    "api-driven-content-scheduling": {
+      "title": "Inhaltsplanung mit mehreren APIs",
+      "description": "Nutze APIs zur Automatisierung der Inhaltsplanung über Plattformen hinweg.",
+      "category": "Produktivität & Zusammenarbeit",
+      "tags": [
+        "content",
+        "scheduling",
+        "automation"
+      ]
+    },
+    "automated-api-health-checks": {
+      "title": "Automatisierung von API-Gesundheitsprüfungen",
+      "description": "Stelle sicher, dass deine APIs korrekt funktionieren, mit automatisierten Gesundheitsprüfungen.",
+      "category": "Analyse & Überwachung",
+      "tags": [
+        "api",
+        "monitoring",
+        "automation"
+      ]
+    },
+    "automated-design-feedback-loop": {
+      "title": "Optimierter Design-Feedback-Prozess für Teams",
+      "description": "Verbessere die Zusammenarbeit durch Automatisierung des Design-Feedback-Prozesses.",
+      "category": "Produktivität & Zusammenarbeit",
+      "tags": [
+        "design",
+        "feedback",
+        "automation",
+        "collaboration"
+      ]
+    },
+    "automated-code-syntax-checking": {
+      "title": "Automatisierung der Code-Syntaxprüfung",
+      "description": "Optimiere deinen Code-Review-Prozess durch automatisierte Syntaxprüfungen.",
+      "category": "Entwickler-Tools",
+      "tags": [
+        "code-review",
+        "automation",
+        "syntax-check",
+        "development"
+      ]
+    }
+  }
+}

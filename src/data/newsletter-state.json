@@ -1,0 +1,75 @@
+{
+  "sentSlugs": {
+    "insights": [
+      "mass-production-ai-data-centers",
+      "openai-math-challenge",
+      "investing-in-ai-promise-perils",
+      "doordash-ai-orders-integration",
+      "neil-stephenson-ai-future"
+    ],
+    "apis": [
+      "sendinblue-sms-api",
+      "contentful-cms-api",
+      "notion-api-for-automation-v2",
+      "tinkr-data-api",
+      "census-api",
+      "braintree-payments-api",
+      "tinkr-automation-api",
+      "tibber-api",
+      "slack-api",
+      "finnhub-stock-api",
+      "asana-automation-api",
+      "twilio-conversations-api",
+      "telescope-nasa-api",
+      "finnhub-crypto-api",
+      "tinkr-api",
+      "notion-api-for-automation",
+      "aiven-kafka-api",
+      "pdf-co-api",
+      "twitch-helix-api",
+      "squarespace-api"
+    ],
+    "workflows": [
+      "seo-keyword-tracking-dashboard",
+      "automated-seo-audit-reporting",
+      "automated-api-response-tracking",
+      "automated-api-documentation-workflow",
+      "api-driven-project-management-integration",
+      "automated-website-content-audit",
+      "web-performance-optimization-checklist",
+      "automated-design-approval-workflow",
+      "automated-api-response-logging",
+      "automated-api-error-reporting",
+      "automated-website-content-optimization",
+      "automated-design-prototyping",
+      "code-quality-monitoring-pipeline",
+      "real-time-website-health-monitoring",
+      "visual-content-review-workflow",
+      "automated-code-syntax-checking",
+      "automated-api-rate-limiting-management",
+      "automated-visual-content-approval",
+      "automated-design-feedback-loop",
+      "automated-api-health-checks"
+    ]
+  },
+  "lastSentAt": "2026-11-02T16:03:24.493Z",
+  "pendingCampaign": {
+    "id": "203046998128985279",
+    "createdAt": "2026-11-02T17:31:48.665Z",
+    "slugs": {
+      "insights": [],
+      "apis": [
+        "weatherapi",
+        "pdf-generator-api",
+        "twelvedata-api",
+        "asana-api"
+      ],
+      "workflows": [
+        "api-driven-content-scheduling",
+        "real-time-error-detection-pipeline",
+        "continuous-deployment-monitoring",
+        "real-time-social-media-analytics"
+      ]
+    }
+  }
+}

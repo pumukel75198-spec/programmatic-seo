@@ -1,0 +1,113 @@
+name: Generate Insights
+
+# Ziel: 2x täglich um 06:00 und 18:00 Uhr Europe/Berlin (Qualität vor Volumen).
+# GitHub Actions interpretiert Cron-Ausdrücke immer in UTC. Da Deutschland
+# Sommer- (UTC+2) und Winterzeit (UTC+1) hat, laufen beide Varianten; der
+# Gate-Job lässt nur den Lauf durch, der in Berlin auf 06/18 fällt.
+on:
+  schedule:
+    # Sommerzeit (CEST, UTC+2): 04/16 UTC = 06/18 Berlin
+    - cron: "0 4,16 * * *"
+    # Winterzeit (CET, UTC+1): 05/17 UTC = 06/18 Berlin
+    - cron: "0 5,17 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: insights-generator
+  cancel-in-progress: false
+
+jobs:
+  gate:
+    name: Check Berlin time slot
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.check.outputs.run }}
+    steps:
+      - name: Only run at 06/18 Europe/Berlin
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          HOUR=$(TZ=Europe/Berlin date +%H)
+          echo "Berlin hour: $HOUR"
+          case "$HOUR" in
+            06|18) echo "run=true" >> "$GITHUB_OUTPUT" ;;
+            *) echo "run=false" >> "$GITHUB_OUTPUT" ;;
+          esac
+
+  generate:
+    name: Fetch feeds, generate articles, deploy & commit
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate insights
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          OPENROUTER_MODEL: ${{ vars.OPENROUTER_MODEL || 'openai/gpt-4o-mini' }}
+        run: npm run insights:generate -- --limit=2
+
+      - name: Build Astro project
+        env:
+          PUBLIC_VISITOR_COUNTER_URL: ${{ vars.PUBLIC_VISITOR_COUNTER_URL || 'https://flowmatrix-visitor-counter.pumukel75198.workers.dev' }}
+          PUBLIC_CF_ANALYTICS_TOKEN: ${{ vars.PUBLIC_CF_ANALYTICS_TOKEN }}
+          PUBLIC_DOWNLOAD_GATE_URL: ${{ vars.PUBLIC_DOWNLOAD_GATE_URL || 'https://flowmatrix-download-gate.pumukel75198.workers.dev' }}
+          PUBLIC_LEMON_SCRIPT_CHECKOUT_URL: ${{ vars.PUBLIC_LEMON_SCRIPT_CHECKOUT_URL }}
+          PUBLIC_LEMON_WORKFLOW_CHECKOUT_URL: ${{ vars.PUBLIC_LEMON_WORKFLOW_CHECKOUT_URL }}
+          PUBLIC_LEMON_WORKFLOW_CHECKOUT_BEGINNER: ${{ vars.PUBLIC_LEMON_WORKFLOW_CHECKOUT_BEGINNER }}
+          PUBLIC_LEMON_WORKFLOW_CHECKOUT_INTERMEDIATE: ${{ vars.PUBLIC_LEMON_WORKFLOW_CHECKOUT_INTERMEDIATE }}
+          PUBLIC_LEMON_WORKFLOW_CHECKOUT_ADVANCED: ${{ vars.PUBLIC_LEMON_WORKFLOW_CHECKOUT_ADVANCED }}
+          PUBLIC_LEMON_WORKFLOW_CHECKOUT_EXPERT: ${{ vars.PUBLIC_LEMON_WORKFLOW_CHECKOUT_EXPERT }}
+          PUBLIC_LEMON_CHECKOUT_URL: ${{ vars.PUBLIC_LEMON_CHECKOUT_URL }}
+          PUBLIC_NEWSLETTER_URL: ${{ vars.PUBLIC_NEWSLETTER_URL }}
+        run: npm run build
+
+      # Wichtig: Der Push mit dem Standard-GITHUB_TOKEN löst keine weiteren
+      # Workflows aus. Deshalb deployen wir hier direkt zu Cloudflare Pages.
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=programmatic-seo --branch=main
+
+      - name: Submit URLs to IndexNow
+        env:
+          SITE_URL: https://flowmatrix.dev
+          INDEXNOW_KEY: f7c3a9e2b1d84f6a9c0e5d2b8a4f1c73
+        run: node scripts/indexnow.mjs
+
+      - name: Commit new insights
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/insights.json src/data/insights-archive.json public/_redirects
+          if git diff --cached --quiet; then
+            echo "No new insights to commit."
+          else
+            git commit -m "chore: add generated insights"
+            # Remote-Stand einrebase, um Race-Conditions mit parallelen
+            # Content-/Deploy-Workflows zu vermeiden (wie in den anderen Jobs).
+            git pull --rebase --autostash origin main
+            git push
+          fi

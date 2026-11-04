@@ -1,0 +1,1201 @@
+ERROR:root:Usage: python script.py <audio_file_path>
+usage: python -m pipeline.run_batch [-h] [--language LANGUAGE] file_path
+python -m pipeline.run_batch: error: unrecognized arguments: --apis --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] [--language LANGUAGE] file_path
+python -m pipeline.run_batch: error: unrecognized arguments: --apis --skip-build --skip-upload --skip-deploy
+ERROR:root:An error occurred: unknown url type: 'payments'
+ERROR:root:An error occurred: unknown url type: 'test-value/payment_intents'
+ERROR:root:An error occurred: unknown url type: 'test-value/payment_intents'
+INFO:root:Starting Supabase API client.
+INFO:root:Starting Supabase API client.
+ERROR:root:An error occurred: unknown url type: 'test-value'
+ERROR:root:An error occurred: unknown url type: 'test-value'
+ERROR:root:Failed to send email: unknown url type: 'test-value'
+usage: python -m pipeline.run_batch [-h] to subject body
+python -m pipeline.run_batch: error: the following arguments are required: subject, body
+usage: python -m pipeline.run_batch [-h] to subject body
+python -m pipeline.run_batch: error: the following arguments are required: subject, body
+usage: python -m pipeline.run_batch [-h] [--create-user EMAIL PASSWORD]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] [--create-user EMAIL PASSWORD]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+INFO:root:Fetching Cloudflare Workers...
+INFO:root:Workers fetched successfully.
+INFO:root:{'ok': True, 'data': []}
+INFO:root:Creating a new Cloudflare Worker...
+INFO:root:Worker created successfully.
+INFO:root:Fetching Cloudflare Workers...
+INFO:root:Workers fetched successfully.
+INFO:root:{'ok': True, 'data': []}
+INFO:root:Creating a new Cloudflare Worker...
+INFO:root:Worker created successfully.
+ERROR:root:An error occurred: unknown url type: 'test-value/styles/v1/mapbox/streets-v11/tiles?access_token=test-value'
+ERROR:root:An error occurred: unknown url type: 'test-value/styles/v1/mapbox/streets-v11/tiles?access_token=test-value'
+usage: python -m pipeline.run_batch [-h] to from_ body
+python -m pipeline.run_batch: error: the following arguments are required: from_, body
+usage: python -m pipeline.run_batch [-h] to from_ body
+python -m pipeline.run_batch: error: the following arguments are required: from_, body
+usage: python -m pipeline.run_batch [-h] texts [texts ...]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis --skip-build --skip-upload --skip-deploy
+ERROR:root:An error occurred: unknown url type: 'test-value'
+ERROR:root:An error occurred: unknown url type: 'test-value'
+usage: python -m pipeline.run_batch [-h] [--validate]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] --domain DOMAIN --client_id CLIENT_ID
+                                    --client_secret CLIENT_SECRET
+                                    --audience AUDIENCE
+python -m pipeline.run_batch: error: the following arguments are required: --domain, --client_id, --client_secret, --audience
+usage: python -m pipeline.run_batch [-h] --domain DOMAIN --client_id CLIENT_ID
+                                    --client_secret CLIENT_SECRET
+                                    --audience AUDIENCE
+python -m pipeline.run_batch: error: the following arguments are required: --domain, --client_id, --client_secret, --audience
+ERROR:root:Failed to send email: unknown url type: 'test-value'
+ERROR:root:Failed to send email: unknown url type: 'test-value'
+INFO:root:Fetched index data: {'ok': True, 'data': []}
+INFO:root:Added object response: {'ok': True, 'data': []}
+usage: python -m pipeline.run_batch [-h] --index INDEX
+python -m pipeline.run_batch: error: the following arguments are required: --index
+usage: python -m pipeline.run_batch [-h] [--query QUERY] [--add ADD]
+                                    [--delete DELETE]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] city
+python -m pipeline.run_batch: error: unrecognized arguments: --apis --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] city
+python -m pipeline.run_batch: error: unrecognized arguments: --apis --skip-build --skip-upload --skip-deploy
+INFO:root:Fetching products...
+INFO:root:Fetching products...
+ERROR:root:An error occurred: 'id'
+ERROR:root:An error occurred: 'id'
+usage: python -m pipeline.run_batch [-h] [--create [CREATE ...]]
+                                    base_id table_name
+python -m pipeline.run_batch: error: the following arguments are required: table_name
+usage: python -m pipeline.run_batch [-h] [--create [CREATE ...]]
+                                    base_id table_name
+python -m pipeline.run_batch: error: the following arguments are required: table_name
+INFO:root:Fetching available models...
+INFO:root:Available models: {'ok': True, 'data': []}
+ERROR:root:An error occurred: unknown url type: 'test-value'
+ERROR:root:An error occurred: unknown url type: 'test-value'
+ERROR:root:An error occurred: unknown url type: 'test-value'
+ERROR:root:An error occurred: unknown url type: 'test-value'
+ERROR:root:An error occurred: unknown url type: 'test-value'
+INFO:root:Fetching models...
+INFO:root:Fetching models...
+INFO:__main__:Fetching models from API...
+ERROR:root:An error occurred: unknown url type: 'test-value'
+ERROR:root:An error occurred: unknown url type: 'test-value'
+INFO:root:Fetching available voices...
+ERROR:root:An error occurred: unknown url type: 'test-value'
+INFO:root:Fetching projects...
+usage: python -m pipeline.run_batch [-h]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+INFO:root:Fetching account information...
+ERROR:root:Error fetching data: unknown url type: 'test-value/YourClassName'
+ERROR:root:Error creating resource: unknown url type: 'test-value/YourClassName'
+ERROR:root:An error occurred: list index out of range
+ERROR:root:Error fetching data: unknown url type: 'objects/YourClassName'
+ERROR:root:Error creating object: unknown url type: 'objects'
+INFO:root:Fetched data: {'ok': True, 'data': []}
+INFO:root:Created resource: {'ok': True, 'data': []}
+INFO:root:Fetched data: {'ok': True, 'data': []}
+INFO:root:Created resource: {'ok': True, 'data': []}
+ERROR:root:An error occurred: unknown url type: 'test-value/collections/your_collection_name/points'
+ERROR:root:An error occurred: unknown url type: 'test-value/collections/your_collection_name/points'
+usage: python -m pipeline.run_batch [-h] --database DATABASE
+                                    --collection COLLECTION
+                                    --action {fetch,create}
+                                    [--document DOCUMENT]
+python -m pipeline.run_batch: error: the following arguments are required: --database, --collection, --action
+INFO:root:Fetching databases...
+ERROR:root:An error occurred: unknown url type: 'test-value/groups/{GROUP-ID}/databases'
+INFO:root:Fetching data...
+ERROR:root:An error occurred: unknown url type: 'test-value/data/v1.0/example_collection'
+usage: python -m pipeline.run_batch [-h] --collection COLLECTION
+                                    --action {fetch,create}
+                                    [--document DOCUMENT]
+python -m pipeline.run_batch: error: the following arguments are required: --collection, --action
+usage: python -m pipeline.run_batch [-h] --collection COLLECTION
+                                    --action {fetch,create}
+                                    [--document DOCUMENT]
+python -m pipeline.run_batch: error: the following arguments are required: --collection, --action
+INFO:root:Fetching projects...
+INFO:root:Projects: {'ok': True, 'data': []}
+INFO:root:Creating a new project...
+INFO:root:Fetching projects...
+ERROR:root:An error occurred: unknown url type: 'test-value'
+INFO:root:Creating a new project...
+ERROR:root:An error occurred: unknown url type: 'test-value'
+INFO:root:Fetching projects...
+ERROR:root:An error occurred: unknown url type: 'test-value'
+INFO:root:Creating a new project...
+ERROR:root:An error occurred: unknown url type: 'test-value'
+ERROR:root:An error occurred: unknown url type: 'test-value/organizations'
+usage: python -m pipeline.run_batch [-h] [--create CREATE]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+INFO:root:Fetching organizations...
+ERROR:root:An error occurred: unknown url type: 'test-value'
+INFO:root:Fetching organizations...
+ERROR:root:An error occurred: unknown url type: 'test-value'
+INFO:root:Setting data...
+ERROR:root:An error occurred: unknown url type: 'test-value/set/example_key'
+ERROR:root:An error occurred: unknown url type: 'test-value/set/example_key'
+usage: python -m pipeline.run_batch [-h] [--upload UPLOAD] [--list]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] [--upload FILE_PATH BLOB_NAME]
+                                    [--list]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] [--upload FILE_PATH BLOB_NAME]
+                                    [--list]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+ERROR:root:An error occurred: unknown url type: 'test-value'
+ERROR:root:An error occurred: unknown url type: 'test-value'
+ERROR:root:Failed to fetch server time: name 'base64' is not defined
+ERROR:root:Failed to fetch server time: name 'base64' is not defined
+INFO:__main__:Fetching projects...
+ERROR:__main__:Failed to fetch projects: unknown url type: 'projects/'
+ERROR:root:An error occurred: unknown url type: 'test-value/projects/'
+ERROR:root:Failed to fetch projects: unknown url type: 'projects/'
+ERROR:root:Failed to create event: unknown url type: 'event/'
+ERROR:root:An error occurred: unknown url type: 'projects/'
+ERROR:__main__:An error occurred: unknown url type: 'test-value'
+usage: python -m pipeline.run_batch [-h] [--list-organizations]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] [--list-organizations]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+ERROR:root:An error occurred: unknown url type: 'test-value'
+ERROR:root:An error occurred: unknown url type: 'test-value'
+ERROR:root:An error occurred: unknown url type: 'test-value'
+ERROR:root:An error occurred: unknown url type: 'test-value/batches'
+ERROR:root:An error occurred: unknown url type: 'test-value/batches'
+usage: python -m pipeline.run_batch [-h] --range RANGE [--values [VALUES ...]]
+                                    {fetch,update}
+python -m pipeline.run_batch: error: argument action: invalid choice: '200' (choose from 'fetch', 'update')
+usage: python -m pipeline.run_batch [-h] [--username USERNAME]
+                                    [--icon_emoji ICON_EMOJI]
+                                    channel text
+python -m pipeline.run_batch: error: the following arguments are required: text
+usage: python -m pipeline.run_batch [-h] [--username USERNAME]
+                                    [--icon_emoji ICON_EMOJI]
+                                    channel text
+python -m pipeline.run_batch: error: the following arguments are required: text
+INFO:root:Fetching contacts...
+INFO:root:Fetching contacts...
+usage: python -m pipeline.run_batch [-h] [--fetch]
+                                    [--create SUBJECT DESCRIPTION]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] [--fetch]
+                                    [--create SUBJECT DESCRIPTION]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+INFO:root:Fetched accounts: {'ok': True, 'data': []}
+INFO:root:Created new account: {'ok': True, 'data': []}
+INFO:root:Fetched accounts: {'ok': True, 'data': []}
+INFO:root:Created new account: {'ok': True, 'data': []}
+usage: python -m pipeline.run_batch [-h] channel_id message_content
+python -m pipeline.run_batch: error: the following arguments are required: message_content
+usage: python -m pipeline.run_batch [-h] channel_id message_content
+python -m pipeline.run_batch: error: the following arguments are required: message_content
+usage: python -m pipeline.run_batch [-h] channel_id message_content
+python -m pipeline.run_batch: error: the following arguments are required: message_content
+usage: python -m pipeline.run_batch [-h] [--parse_mode PARSE_MODE]
+                                    chat_id text
+python -m pipeline.run_batch: error: the following arguments are required: text
+usage: python -m pipeline.run_batch [-h] [--parse_mode PARSE_MODE]
+                                    chat_id text
+python -m pipeline.run_batch: error: the following arguments are required: text
+INFO:root:Fetching issues...
+ERROR:root:An error occurred: unknown url type: 'test-value/repos/octocat/Hello-World/issues'
+usage: python -m pipeline.run_batch [-h] --owner OWNER --repo REPO [--create]
+                                    [--title TITLE] [--body BODY]
+python -m pipeline.run_batch: error: the following arguments are required: --owner, --repo
+usage: python -m pipeline.run_batch [-h] --owner OWNER --repo REPO [--create]
+                                    [--title TITLE] [--body BODY]
+python -m pipeline.run_batch: error: the following arguments are required: --owner, --repo
+usage: python -m pipeline.run_batch [-h] [--fetch]
+                                    [--create TITLE DESCRIPTION]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] [--user_id USER_ID]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+INFO:root:User data: {'ok': True, 'data': []}
+INFO:root:Users data: {'ok': True, 'data': []}
+INFO:root:User data: {'ok': True, 'data': []}
+INFO:root:Users data: {'ok': True, 'data': []}
+ERROR:root:An error occurred: unknown url type: 'test-value/images/generations'
+usage: python -m pipeline.run_batch [-h] prompt
+python -m pipeline.run_batch: error: unrecognized arguments: --apis --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] prompt
+python -m pipeline.run_batch: error: unrecognized arguments: --apis --skip-build --skip-upload --skip-deploy
+INFO:root:Text Analysis Result: {'ok': True, 'data': []}
+INFO:root:Image Analysis Result: {'ok': True, 'data': []}
+ERROR:root:An error occurred: unknown url type: 'test-value/text/analytics/v3.1/languages'
+ERROR:root:An error occurred: unknown url type: 'test-value/text/analytics/v3.1/analyze'
+usage: python -m pipeline.run_batch [-h] text
+python -m pipeline.run_batch: error: unrecognized arguments: --apis --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] text
+python -m pipeline.run_batch: error: unrecognized arguments: --apis --skip-build --skip-upload --skip-deploy
+INFO:root:Generating text for prompt: What are the benefits of using AI in healthcare?
+INFO:root:Generating text for prompt: What are the benefits of using AI in healthcare?
+ERROR:root:An error occurred: unknown url type: 'test-value'
+ERROR:root:An error occurred: unknown url type: 'test-value'
+ERROR:root:An error occurred: unknown url type: 'test-value'
+INFO:root:User Info: {'ok': True, 'data': []}
+INFO:root:Stream Info: {'ok': True, 'data': []}
+INFO:root:User Info: {'ok': True, 'data': []}
+INFO:root:Stream Info: {'ok': True, 'data': []}
+usage: python -m pipeline.run_batch [-h] [--list-buckets]
+                                    [--create-bucket CREATE_BUCKET]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] [--list-buckets]
+                                    [--create-bucket CREATE_BUCKET]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+ERROR:root:An error occurred: unknown url type: 'test-value/v1/synthesize'
+ERROR:root:An error occurred: unknown url type: 'test-value/synthesize'
+usage: python -m pipeline.run_batch [-h] [--invoke INVOKE] [--list]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] [--invoke INVOKE] [--list]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+ERROR:root:An error occurred: 'id'
+usage: python -m pipeline.run_batch [-h] [--create] [--fetch FETCH]
+                                    [--amount AMOUNT] [--currency CURRENCY]
+                                    [--description DESCRIPTION]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] [--create] [--fetch FETCH]
+                                    [--amount AMOUNT] [--currency CURRENCY]
+                                    [--description DESCRIPTION]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] image_path
+python -m pipeline.run_batch: error: unrecognized arguments: --apis --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] image_path
+python -m pipeline.run_batch: error: unrecognized arguments: --apis --skip-build --skip-upload --skip-deploy
+generated_api_script.py:48: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+INFO:root:Email sent successfully: {'ok': True, 'data': []}
+usage: python -m pipeline.run_batch [-h] to_address subject body
+python -m pipeline.run_batch: error: the following arguments are required: subject, body
+usage: python -m pipeline.run_batch [-h] to_address subject body
+python -m pipeline.run_batch: error: the following arguments are required: subject, body
+usage: python -m pipeline.run_batch [-h] [--search term location]
+                                    [--business id]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] [--search term location]
+                                    [--business id]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+ERROR:root:An error occurred: unknown url type: 'test-value/v3/translate?version=2018-05-01'
+ERROR:root:Error during translation: unknown url type: 'test-value/v3/translate?version=2018-05-01'
+ERROR:root:Error during translation: unknown url type: 'test-value/v3/translate?version=2018-05-01'
+ERROR:root:An error occurred: 'session_id'
+INFO:root:Response: {'ok': True, 'data': []}
+INFO:root:Response: {'ok': True, 'data': []}
+usage: python -m pipeline.run_batch [-h] [--fetch FETCH] [--list]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+ERROR:root:An error occurred: unknown url type: 'test-value/v1/collections?version=2020-04-30'
+usage: python -m pipeline.run_batch [-h] [--create CREATE]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] [--fetch] [--create NAME DESCRIPTION]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] [--fetch] [--create NAME DESCRIPTION]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+generated_api_script.py:58: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+generated_api_script.py:58: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+ERROR:root:An error occurred: name 'datetime' is not defined
+ERROR:root:An error occurred: Invalid base64-encoded string: number of data characters (9) cannot be 1 more than a multiple of 4
+ERROR:root:Failed to fetch documents: Invalid base64-encoded string: number of data characters (9) cannot be 1 more than a multiple of 4
+ERROR:root:Failed to create document: Invalid base64-encoded string: number of data characters (9) cannot be 1 more than a multiple of 4
+ERROR:root:Failed to fetch documents: Invalid base64-encoded string: number of data characters (9) cannot be 1 more than a multiple of 4
+ERROR:root:Failed to create document: Invalid base64-encoded string: number of data characters (9) cannot be 1 more than a multiple of 4
+usage: python -m pipeline.run_batch [-h] [--place_id PLACE_ID] [--query QUERY]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] [--place_id PLACE_ID] [--query QUERY]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+ERROR:root:An error occurred: unknown url type: '/transactions/get'
+usage: python -m pipeline.run_batch [-h] [--access_token ACCESS_TOKEN]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] [--access_token ACCESS_TOKEN]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+INFO:root:Fetching video resources...
+ERROR:root:An error occurred: unknown url type: 'test-value/video_resources'
+ERROR:root:An error occurred: unknown url type: 'test-value/Rooms'
+ERROR:root:An error occurred: unknown url type: 'test-value/Rooms'
+usage: python -m pipeline.run_batch [-h] --subject SUBJECT --html HTML
+                                    --to TO [TO ...]
+python -m pipeline.run_batch: error: the following arguments are required: --subject, --html, --to
+usage: python -m pipeline.run_batch [-h] [--create] [--id ID] [--name NAME]
+                                    [--subject SUBJECT] [--content CONTENT]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] [--create] [--id ID] [--name NAME]
+                                    [--subject SUBJECT] [--content CONTENT]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+generated_api_script.py:84: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+ERROR:root:An error occurred: 'TranscriptionJob'
+generated_api_script.py:84: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+ERROR:root:An error occurred: 'TranscriptionJob'
+usage: python -m pipeline.run_batch [-h] [--fetch FETCH]
+                                    [--create-db CREATE_DB]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] database_id
+python -m pipeline.run_batch: error: unrecognized arguments: --apis --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] database_id
+python -m pipeline.run_batch: error: unrecognized arguments: --apis --skip-build --skip-upload --skip-deploy
+INFO:root:Fetching code suggestions...
+INFO:root:Fetching code suggestions...
+usage: python -m pipeline.run_batch [-h] [--create] [--fetch FETCH]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] [--create] [--fetch FETCH]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] [--create] [--fetch FETCH]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] --project_id PROJECT_ID
+                                    --task_name TASK_NAME
+python -m pipeline.run_batch: error: the following arguments are required: --project_id, --task_name
+usage: python -m pipeline.run_batch [-h] --project_id PROJECT_ID
+                                    --task_name TASK_NAME
+python -m pipeline.run_batch: error: the following arguments are required: --project_id, --task_name
+usage: python -m pipeline.run_batch [-h] --project_id PROJECT_ID
+                                    --task_name TASK_NAME
+python -m pipeline.run_batch: error: the following arguments are required: --project_id, --task_name
+usage: python -m pipeline.run_batch [-h] --symbol SYMBOL --interval INTERVAL
+                                    --start_date START_DATE
+                                    --end_date END_DATE
+python -m pipeline.run_batch: error: the following arguments are required: --symbol, --interval, --start_date, --end_date
+ERROR:root:An error occurred: unknown url type: 'test-value/time_series?symbol=AAPL&interval=1day&start_date=2023-01-01&end_date=2023-01-31'
+ERROR:root:Failed to generate PDF: unknown url type: 'test-value'
+ERROR:root:Failed to generate PDF: unknown url type: 'test-value'
+usage: python -m pipeline.run_batch [-h] location
+python -m pipeline.run_batch: error: unrecognized arguments: --apis --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] location
+python -m pipeline.run_batch: error: unrecognized arguments: --apis --skip-build --skip-upload --skip-deploy
+ERROR:root:Failed to fetch database: unknown url type: 'databases/your-database-id'
+ERROR:root:Failed to create page: unknown url type: 'pages'
+INFO:root:Fetched database: {'ok': True, 'data': []}
+INFO:root:Created new page: {'ok': True, 'data': []}
+ERROR:root:Failed to fetch database: unknown url type: 'databases/your_database_id_here'
+ERROR:root:Failed to create page: unknown url type: 'pages'
+ERROR:root:An error occurred: unknown url type: 'databases/your_database_id_here'
+usage: python -m pipeline.run_batch [-h] [--fetch FETCH] [--create CREATE]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] [--create CREATE] [--fetch FETCH]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] [--create CREATE] [--fetch FETCH]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+INFO:root:Fetching tasks...
+ERROR:root:An error occurred: unknown url type: 'test-value/projects/your_project_id_here/tasks'
+usage: python -m pipeline.run_batch [-h] --project_id PROJECT_ID
+                                    --task_name TASK_NAME
+python -m pipeline.run_batch: error: the following arguments are required: --project_id, --task_name
+usage: python -m pipeline.run_batch [-h] --project_id PROJECT_ID
+                                    --task_name TASK_NAME
+python -m pipeline.run_batch: error: the following arguments are required: --project_id, --task_name
+INFO:root:Fetching database...
+ERROR:__main__:Failed to fetch entries: unknown url type: '/spaces/test-value/environments/test-value/entries?content_type=yourContentType'
+ERROR:__main__:Failed to create entry: unknown url type: '/spaces/test-value/environments/test-value/entries'
+INFO:root:Fetching entries of content type 'blogPost'.
+ERROR:root:An error occurred: unknown url type: 'test-value/spaces/test-value/entries?content_type=blogPost'
+INFO:root:Fetching entries of content type 'blogPost'.
+ERROR:root:An error occurred: unknown url type: 'test-value/spaces/test-value/entries?content_type=blogPost'
+usage: python -m pipeline.run_batch [-h] [--send] [--fetch] [--name NAME]
+                                    [--message MESSAGE]
+                                    [--recipients RECIPIENTS [RECIPIENTS ...]]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] sender recipient content
+python -m pipeline.run_batch: error: the following arguments are required: recipient, content
+usage: python -m pipeline.run_batch [-h] sender recipient content
+python -m pipeline.run_batch: error: the following arguments are required: recipient, content
+ERROR:root:An error occurred: unknown url type: 'test-value/energy'
+ERROR:root:An error occurred: unknown url type: 'test-value/energy-data'
+ERROR:root:An error occurred: unknown url type: '/energy-data'
+ERROR:root:An error occurred: unknown url type: 'test-value/v1/payment_methods'
+ERROR:root:An error occurred: unknown url type: 'test-value/v1/payment_methods'
+usage: python -m pipeline.run_batch [-h] state year
+python -m pipeline.run_batch: error: the following arguments are required: year
+usage: python -m pipeline.run_batch [-h] state year
+python -m pipeline.run_batch: error: the following arguments are required: year
+usage: python -m pipeline.run_batch [-h] symbol
+python -m pipeline.run_batch: error: unrecognized arguments: --apis --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] symbol
+python -m pipeline.run_batch: error: unrecognized arguments: --apis --skip-build --skip-upload --skip-deploy
+INFO:root:Fetching channel list...
+usage: python -m pipeline.run_batch [-h] --channel CHANNEL --message MESSAGE
+python -m pipeline.run_batch: error: the following arguments are required: --channel, --message
+usage: python -m pipeline.run_batch [-h] --channel CHANNEL --message MESSAGE
+python -m pipeline.run_batch: error: the following arguments are required: --channel, --message
+usage: python -m pipeline.run_batch [-h] [--fetch FETCH] [--create CREATE]
+                                    [--data DATA]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] [--fetch FETCH] [--create CREATE]
+                                    [--data DATA]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+ERROR:root:Failed to fetch telescope data: unknown url type: 'test-value/observations'
+INFO:root:No telescope data found.
+ERROR:root:Failed to fetch telescope data: unknown url type: 'test-value/observations'
+INFO:root:No telescope data found.
+ERROR:root:Failed to fetch site information: unknown url type: '/sites'
+ERROR:root:Failed to create product: unknown url type: '/products'
+usage: python -m pipeline.run_batch [-h] [--fetch] [--create CREATE]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] [--fetch] [--create CREATE]
+python -m pipeline.run_batch: error: unrecognized arguments: --apis 200 --skip-build --skip-upload --skip-deploy
+ERROR:root:Error fetching users: unknown url type: '/users?login=twitchusername'
+ERROR:root:An error occurred: unknown url type: 'test-value/users'
+ERROR:root:An error occurred: unknown url type: 'test-value/users'
+INFO:root:Creating PDF...
+INFO:root:Creating PDF...
+ERROR:root:An error occurred: unknown url type: 'test-value/kafka'
+ERROR:root:An error occurred: unknown url type: 'test-value/kafka'
+INFO:root:Generating image for prompt: A futuristic city skyline at sunset
+ERROR:root:Failed to generate image.
+INFO:root:Generating image for prompt: A futuristic city skyline at sunset
+ERROR:root:Failed to generate image.
+ERROR:root:An error occurred: unknown url type: 'test-value/projects/your_project_slug/traces/?start=2023-01-01T00%3A00%3A00Z&end=2023-01-02T00%3A00%3A00Z'
+usage: python -m pipeline.run_batch [-h] project_slug
+python -m pipeline.run_batch: error: unrecognized arguments: --apis --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] project_slug
+python -m pipeline.run_batch: error: unrecognized arguments: --apis --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] broadcaster_id video_id
+python -m pipeline.run_batch: error: the following arguments are required: video_id
+usage: python -m pipeline.run_batch [-h] channel_id
+python -m pipeline.run_batch: error: unrecognized arguments: --apis --skip-build --skip-upload --skip-deploy
+usage: python -m pipeline.run_batch [-h] channel_id
+python -m pipeline.run_batch: error: unrecognized arguments: --apis --skip-build --skip-upload --skip-deploy
+========================================================================
+FLOWMATRIX UNIFIED PIPELINE
+========================================================================
+Workflows: 0 | APIs: 104 | Alternatives: 0 | dry-run=False
+
+[API] openai-whisper-api
+  [RETRY] openai-whisper-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> openai-whisper-api.py
+  [OK] API implementation kit -> openai-whisper-api-kit.zip
+
+[API] stripe-payments-api
+  [RETRY] stripe-payments-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> stripe-payments-api.py
+  [OK] API implementation kit -> stripe-payments-api-kit.zip
+
+[API] supabase-database-api
+  [OK] validated after 1 attempt(s) -> supabase-database-api.py
+  [OK] API implementation kit -> supabase-database-api-kit.zip
+
+[API] anthropic-claude-api
+  [OK] validated after 1 attempt(s) -> anthropic-claude-api.py
+  [OK] API implementation kit -> anthropic-claude-api-kit.zip
+
+[API] google-gemini-api
+  [RETRY] google-gemini-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> google-gemini-api.py
+  [OK] API implementation kit -> google-gemini-api-kit.zip
+
+[API] resend-email-api
+  [RETRY] resend-email-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> resend-email-api.py
+  [OK] API implementation kit -> resend-email-api-kit.zip
+
+[API] clerk-authentication-api
+  [OK] validated after 1 attempt(s) -> clerk-authentication-api.py
+  [OK] API implementation kit -> clerk-authentication-api-kit.zip
+
+[API] cloudflare-workers-api
+  [OK] validated after 1 attempt(s) -> cloudflare-workers-api.py
+  [OK] API implementation kit -> cloudflare-workers-api-kit.zip
+
+[API] mapbox-maps-api
+  [OK] validated after 1 attempt(s) -> mapbox-maps-api.py
+  [OK] API implementation kit -> mapbox-maps-api-kit.zip
+
+[API] twilio-messaging-api
+  [RETRY] twilio-messaging-api attempt 1: 1 validator error(s)
+           - API script: SyntaxError: invalid syntax (line 139)
+  [RETRY] twilio-messaging-api attempt 2: 2 validator error(s)
+           - API script: no request timeout found
+           - API script runtime error: NameError: name 'base64' is not defined
+  [OK] validated after 3 attempt(s) -> twilio-messaging-api.py
+  [OK] API implementation kit -> twilio-messaging-api-kit.zip
+
+[API] hugging-face-inference-api
+  [OK] validated after 1 attempt(s) -> hugging-face-inference-api.py
+  [OK] API implementation kit -> hugging-face-inference-api-kit.zip
+
+[API] cohere-embed-api
+  [RETRY] cohere-embed-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> cohere-embed-api.py
+  [OK] API implementation kit -> cohere-embed-api-kit.zip
+
+[API] pinecone-vector-api
+  [RETRY] pinecone-vector-api attempt 1: 1 validator error(s)
+           - API script: expected >=2 top-level functions, found 1
+  [OK] validated after 2 attempt(s) -> pinecone-vector-api.py
+  [OK] API implementation kit -> pinecone-vector-api-kit.zip
+
+[API] auth0-authentication-api
+  [RETRY] auth0-authentication-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> auth0-authentication-api.py
+  [OK] API implementation kit -> auth0-authentication-api-kit.zip
+
+[API] sendgrid-email-api
+  [OK] validated after 1 attempt(s) -> sendgrid-email-api.py
+  [OK] API implementation kit -> sendgrid-email-api-kit.zip
+
+[API] algolia-search-api
+  [RETRY] algolia-search-api attempt 1: 3 validator error(s)
+           - API script: expected >=2 top-level functions, found 1
+           - API script: no request timeout found
+           - API script runtime error: TypeError: AlgoliaClient.__init__() missing 1 required positional argument: 'base_url'
+  [RETRY] algolia-search-api attempt 2: 1 validator error(s)
+           - API script: expected >=2 top-level functions, found 1
+  [RETRY] algolia-search-api attempt 3: 1 validator error(s)
+           - API script: no request timeout found
+  [RETRY] algolia-search-api attempt 4: 1 validator error(s)
+           - API script: expected >=2 top-level functions, found 1
+  [FAIL] algolia-search-api rejected after 4 attempts
+
+[API] openweather-weather-api
+  [OK] validated after 1 attempt(s) -> openweather-weather-api.py
+  [OK] API implementation kit -> openweather-weather-api-kit.zip
+
+[API] shopify-admin-api
+  [OK] validated after 1 attempt(s) -> shopify-admin-api.py
+  [OK] API implementation kit -> shopify-admin-api-kit.zip
+
+[API] notion-api
+  [OK] validated after 1 attempt(s) -> notion-api.py
+  [OK] API implementation kit -> notion-api-kit.zip
+
+[API] airtable-api
+  [OK] validated after 1 attempt(s) -> airtable-api.py
+  [OK] API implementation kit -> airtable-api-kit.zip
+
+[API] mistral-ai-api
+  [RETRY] mistral-ai-api attempt 1: 2 validator error(s)
+           - API script: expected >=2 top-level functions, found 1
+           - API script: no request timeout found
+  [RETRY] mistral-ai-api attempt 2: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 3 attempt(s) -> mistral-ai-api.py
+  [OK] API implementation kit -> mistral-ai-api-kit.zip
+
+[API] groq-inference-api
+  [OK] validated after 1 attempt(s) -> groq-inference-api.py
+  [OK] API implementation kit -> groq-inference-api-kit.zip
+
+[API] together-ai-api
+  [RETRY] together-ai-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> together-ai-api.py
+  [OK] API implementation kit -> together-ai-api-kit.zip
+
+[API] replicate-model-api
+  [RETRY] replicate-model-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> replicate-model-api.py
+  [OK] API implementation kit -> replicate-model-api-kit.zip
+
+[API] elevenlabs-voice-api
+  [RETRY] elevenlabs-voice-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> elevenlabs-voice-api.py
+  [OK] API implementation kit -> elevenlabs-voice-api-kit.zip
+
+[API] deepgram-speech-api
+  [RETRY] deepgram-speech-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> deepgram-speech-api.py
+  [OK] API implementation kit -> deepgram-speech-api-kit.zip
+
+[API] stability-ai-image-api
+  [RETRY] stability-ai-image-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> stability-ai-image-api.py
+  [OK] API implementation kit -> stability-ai-image-api-kit.zip
+
+[API] weaviate-vector-api
+  [RETRY] weaviate-vector-api attempt 1: 2 validator error(s)
+           - API script: expected >=2 top-level functions, found 1
+           - API script: no request timeout found
+  [RETRY] weaviate-vector-api attempt 2: 1 validator error(s)
+           - API script runtime error: NameError: name 'sys' is not defined
+  [RETRY] weaviate-vector-api attempt 3: 2 validator error(s)
+           - API script: expected >=2 top-level functions, found 0
+           - API script: no request timeout found
+  [OK] validated after 4 attempt(s) -> weaviate-vector-api.py
+  [OK] API implementation kit -> weaviate-vector-api-kit.zip
+
+[API] qdrant-vector-api
+  [OK] validated after 1 attempt(s) -> qdrant-vector-api.py
+  [OK] API implementation kit -> qdrant-vector-api-kit.zip
+
+[API] mongodb-atlas-api
+  [RETRY] mongodb-atlas-api attempt 1: 2 validator error(s)
+           - API script: expected >=2 top-level functions, found 0
+           - API script: no request timeout found
+  [RETRY] mongodb-atlas-api attempt 2: 1 validator error(s)
+           - API script runtime error: NameError: name 'sys' is not defined
+  [RETRY] mongodb-atlas-api attempt 3: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 4 attempt(s) -> mongodb-atlas-api.py
+  [OK] API implementation kit -> mongodb-atlas-api-kit.zip
+
+[API] neon-postgres-api
+  [RETRY] neon-postgres-api attempt 1: 2 validator error(s)
+           - API script: no request timeout found
+           - API script runtime error: KeyError: 'id'
+  [OK] validated after 2 attempt(s) -> neon-postgres-api.py
+  [OK] API implementation kit -> neon-postgres-api-kit.zip
+
+[API] planetscale-database-api
+  [RETRY] planetscale-database-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [RETRY] planetscale-database-api attempt 2: 1 validator error(s)
+           - API script runtime error: NameError: name 'sys' is not defined
+  [RETRY] planetscale-database-api attempt 3: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 4 attempt(s) -> planetscale-database-api.py
+  [OK] API implementation kit -> planetscale-database-api-kit.zip
+
+[API] upstash-redis-api
+  [RETRY] upstash-redis-api attempt 1: 2 validator error(s)
+           - API script: expected >=2 top-level functions, found 0
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> upstash-redis-api.py
+  [OK] API implementation kit -> upstash-redis-api-kit.zip
+
+[API] vercel-blob-api
+  [RETRY] vercel-blob-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> vercel-blob-api.py
+  [OK] API implementation kit -> vercel-blob-api-kit.zip
+
+[API] liveblocks-collaboration-api
+  [OK] validated after 1 attempt(s) -> liveblocks-collaboration-api.py
+  [OK] API implementation kit -> liveblocks-collaboration-api-kit.zip
+
+[API] ably-realtime-api
+  [OK] validated after 1 attempt(s) -> ably-realtime-api.py
+  [OK] API implementation kit -> ably-realtime-api-kit.zip
+
+[API] posthog-analytics-api
+  [RETRY] posthog-analytics-api attempt 1: 2 validator error(s)
+           - API script: expected >=2 top-level functions, found 1
+           - API script: no request timeout found
+  [RETRY] posthog-analytics-api attempt 2: 1 validator error(s)
+           - API script: expected >=2 top-level functions, found 1
+  [RETRY] posthog-analytics-api attempt 3: 2 validator error(s)
+           - API script: expected >=2 top-level functions, found 1
+           - API script: no request timeout found
+  [RETRY] posthog-analytics-api attempt 4: 1 validator error(s)
+           - API script: expected >=2 top-level functions, found 1
+  [FAIL] posthog-analytics-api rejected after 4 attempts
+
+[API] sentry-error-api
+  [RETRY] sentry-error-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> sentry-error-api.py
+  [OK] API implementation kit -> sentry-error-api-kit.zip
+
+[API] launchdarkly-feature-api
+  [RETRY] launchdarkly-feature-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> launchdarkly-feature-api.py
+  [OK] API implementation kit -> launchdarkly-feature-api-kit.zip
+
+[API] doppler-secrets-api
+  [RETRY] doppler-secrets-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> doppler-secrets-api.py
+  [OK] API implementation kit -> doppler-secrets-api-kit.zip
+
+[API] openai-batch-api
+  [OK] validated after 1 attempt(s) -> openai-batch-api.py
+  [OK] API implementation kit -> openai-batch-api-kit.zip
+
+[API] google-sheets-api
+  [RETRY] google-sheets-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> google-sheets-api.py
+  [OK] API implementation kit -> google-sheets-api-kit.zip
+
+[API] slack-web-api
+  [OK] validated after 1 attempt(s) -> slack-web-api.py
+  [OK] API implementation kit -> slack-web-api-kit.zip
+
+[API] hubspot-crm-api
+  [OK] validated after 1 attempt(s) -> hubspot-crm-api.py
+  [OK] API implementation kit -> hubspot-crm-api-kit.zip
+
+[API] zendesk-support-api
+  [OK] validated after 1 attempt(s) -> zendesk-support-api.py
+  [OK] API implementation kit -> zendesk-support-api-kit.zip
+
+[API] salesforce-rest-api
+  [OK] validated after 1 attempt(s) -> salesforce-rest-api.py
+  [OK] API implementation kit -> salesforce-rest-api-kit.zip
+
+[API] discord-bot-api
+  [RETRY] discord-bot-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> discord-bot-api.py
+  [OK] API implementation kit -> discord-bot-api-kit.zip
+
+[API] telegram-bot-api
+  [OK] validated after 1 attempt(s) -> telegram-bot-api.py
+  [OK] API implementation kit -> telegram-bot-api-kit.zip
+
+[API] github-rest-api
+  [RETRY] github-rest-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> github-rest-api.py
+  [OK] API implementation kit -> github-rest-api-kit.zip
+
+[API] linear-graphql-api
+  [RETRY] linear-graphql-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> linear-graphql-api.py
+  [OK] API implementation kit -> linear-graphql-api-kit.zip
+
+[API] microsoft-graph-api
+  [RETRY] microsoft-graph-api attempt 1: 2 validator error(s)
+           - API script: expected >=2 top-level functions, found 1
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> microsoft-graph-api.py
+  [OK] API implementation kit -> microsoft-graph-api-kit.zip
+
+[API] openai-dall-e-api
+  [RETRY] openai-dall-e-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> openai-dall-e-api.py
+  [OK] API implementation kit -> openai-dall-e-api-kit.zip
+
+[API] microsoft-azure-cognitive-services-api
+  [RETRY] microsoft-azure-cognitive-services-api attempt 1: 3 validator error(s)
+           - API script: expected >=2 top-level functions, found 0
+           - API script: no request timeout found
+           - API script: base domain not reachable: https://azure.microsoft.com (TimeoutError: The read operation timed out)
+  [RETRY] microsoft-azure-cognitive-services-api attempt 2: 1 validator error(s)
+           - API script: no request timeout found
+  [RETRY] microsoft-azure-cognitive-services-api attempt 3: 1 validator error(s)
+           - API script runtime error: NameError: name 'sys' is not defined
+  [OK] validated after 4 attempt(s) -> microsoft-azure-cognitive-services-api.py
+  [OK] API implementation kit -> microsoft-azure-cognitive-services-api-kit.zip
+
+[API] openai-gpt-4-api
+  [OK] validated after 1 attempt(s) -> openai-gpt-4-api.py
+  [OK] API implementation kit -> openai-gpt-4-api-kit.zip
+
+[API] openai-embeddings-api
+  [RETRY] openai-embeddings-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> openai-embeddings-api.py
+  [OK] API implementation kit -> openai-embeddings-api-kit.zip
+
+[API] twitch-api
+  [OK] validated after 1 attempt(s) -> twitch-api.py
+  [OK] API implementation kit -> twitch-api-kit.zip
+
+[API] aws-s3-api
+  [OK] validated after 1 attempt(s) -> aws-s3-api.py
+  [OK] API implementation kit -> aws-s3-api-kit.zip
+
+[API] ibm-watson-text-to-speech-api
+  [RETRY] ibm-watson-text-to-speech-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [RETRY] ibm-watson-text-to-speech-api attempt 2: 1 validator error(s)
+           - API script runtime error: NameError: name 'sys' is not defined
+  [RETRY] ibm-watson-text-to-speech-api attempt 3: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 4 attempt(s) -> ibm-watson-text-to-speech-api.py
+  [OK] API implementation kit -> ibm-watson-text-to-speech-api-kit.zip
+
+[API] aws-lambda-api
+  [OK] validated after 1 attempt(s) -> aws-lambda-api.py
+  [OK] API implementation kit -> aws-lambda-api-kit.zip
+
+[API] paypal-payments-api
+  [RETRY] paypal-payments-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> paypal-payments-api.py
+  [OK] API implementation kit -> paypal-payments-api-kit.zip
+
+[API] ibm-cloud-object-storage-api
+  [OK] validated after 1 attempt(s) -> ibm-cloud-object-storage-api.py
+  [OK] API implementation kit -> ibm-cloud-object-storage-api-kit.zip
+
+[API] aws-rekognition-api
+  [OK] validated after 1 attempt(s) -> aws-rekognition-api.py
+  [OK] API implementation kit -> aws-rekognition-api-kit.zip
+
+[API] aws-ses-api
+  [RETRY] aws-ses-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> aws-ses-api.py
+  [OK] API implementation kit -> aws-ses-api-kit.zip
+
+[API] yelp-fusion-api
+  [OK] validated after 1 attempt(s) -> yelp-fusion-api.py
+  [OK] API implementation kit -> yelp-fusion-api-kit.zip
+
+[API] ibm-watson-language-translator-api
+  [RETRY] ibm-watson-language-translator-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [RETRY] ibm-watson-language-translator-api attempt 2: 2 validator error(s)
+           - API script runtime error: KeyError: 'translations'
+           - API script: domain not reachable: api.us-south.language-translator.watson.cloud.ibm.com (DNS error: [Errno 8] nodename nor servname provided, or not known)
+  [RETRY] ibm-watson-language-translator-api attempt 3: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 4 attempt(s) -> ibm-watson-language-translator-api.py
+  [OK] API implementation kit -> ibm-watson-language-translator-api-kit.zip
+
+[API] ibm-watson-assistant-api
+  [RETRY] ibm-watson-assistant-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> ibm-watson-assistant-api.py
+  [OK] API implementation kit -> ibm-watson-assistant-api-kit.zip
+
+[API] ibm-watson-discovery-api
+  [RETRY] ibm-watson-discovery-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [RETRY] ibm-watson-discovery-api attempt 2: 1 validator error(s)
+           - API script runtime error: NameError: name 'sys' is not defined
+  [RETRY] ibm-watson-discovery-api attempt 3: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 4 attempt(s) -> ibm-watson-discovery-api.py
+  [OK] API implementation kit -> ibm-watson-discovery-api-kit.zip
+
+[API] azure-face-api
+Usage: python script.py <image_url>
+Usage: python script.py <image_url>
+  [OK] validated after 1 attempt(s) -> azure-face-api.py
+  [OK] API implementation kit -> azure-face-api-kit.zip
+
+[API] aws-polly-api
+  [OK] validated after 1 attempt(s) -> aws-polly-api.py
+  [OK] API implementation kit -> aws-polly-api-kit.zip
+
+[API] azure-cosmos-db-api
+  [RETRY] azure-cosmos-db-api attempt 1: 3 validator error(s)
+           - API script: expected >=2 top-level functions, found 0
+           - API script: no request timeout found
+           - API script: base domain not reachable: https://azure.microsoft.com (TimeoutError: The read operation timed out)
+  [RETRY] azure-cosmos-db-api attempt 2: 1 validator error(s)
+           - API script: base domain not reachable: https://azure.microsoft.com (TimeoutError: The read operation timed out)
+  [RETRY] azure-cosmos-db-api attempt 3: 1 validator error(s)
+           - API script: base domain not reachable: https://azure.microsoft.com (TimeoutError: The read operation timed out)
+  [OK] validated after 4 attempt(s) -> azure-cosmos-db-api.py
+  [OK] API implementation kit -> azure-cosmos-db-api-kit.zip
+
+[API] google-maps-api
+  [OK] validated after 1 attempt(s) -> google-maps-api.py
+  [OK] API implementation kit -> google-maps-api-kit.zip
+
+[API] plaid-financial-api
+  [RETRY] plaid-financial-api attempt 1: 1 validator error(s)
+           - API script: SyntaxError: invalid syntax (line 89)
+  [RETRY] plaid-financial-api attempt 2: 1 validator error(s)
+           - API script: expected >=2 top-level functions, found 0
+  [RETRY] plaid-financial-api attempt 3: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 4 attempt(s) -> plaid-financial-api.py
+  [OK] API implementation kit -> plaid-financial-api-kit.zip
+
+[API] twilio-video-api
+  [RETRY] twilio-video-api attempt 1: 1 validator error(s)
+           - API script: expected >=2 top-level functions, found 1
+  [RETRY] twilio-video-api attempt 2: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 3 attempt(s) -> twilio-video-api.py
+  [OK] API implementation kit -> twilio-video-api-kit.zip
+
+[API] sendinblue-email-api
+  [RETRY] sendinblue-email-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> sendinblue-email-api.py
+  [OK] API implementation kit -> sendinblue-email-api-kit.zip
+
+[API] aws-transcribe-api
+  [OK] validated after 1 attempt(s) -> aws-transcribe-api.py
+  [OK] API implementation kit -> aws-transcribe-api-kit.zip
+
+[API] notion-automation-api
+  [RETRY] notion-automation-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> notion-automation-api.py
+  [OK] API implementation kit -> notion-automation-api-kit.zip
+
+[API] github-copilot-api
+  [OK] validated after 1 attempt(s) -> github-copilot-api.py
+  [OK] API implementation kit -> github-copilot-api-kit.zip
+
+[API] notion-forms-api
+  [RETRY] notion-forms-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> notion-forms-api.py
+  [OK] API implementation kit -> notion-forms-api-kit.zip
+
+[API] twitch-api-kraken
+  [OK] validated after 1 attempt(s) -> twitch-api-kraken.py
+  [OK] API implementation kit -> twitch-api-kraken-kit.zip
+
+[API] asana-api
+  [RETRY] asana-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> asana-api.py
+  [OK] API implementation kit -> asana-api-kit.zip
+
+[API] twelvedata-api
+  [RETRY] twelvedata-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [RETRY] twelvedata-api attempt 2: 1 validator error(s)
+           - API script: expected >=2 top-level functions, found 0
+  [OK] validated after 3 attempt(s) -> twelvedata-api.py
+  [OK] API implementation kit -> twelvedata-api-kit.zip
+
+[API] pdf-generator-api
+  [OK] validated after 1 attempt(s) -> pdf-generator-api.py
+  [OK] API implementation kit -> pdf-generator-api-kit.zip
+
+[API] weatherapi
+  [OK] validated after 1 attempt(s) -> weatherapi.py
+  [OK] API implementation kit -> weatherapi-kit.zip
+
+[API] notion-api-for-automation
+  [RETRY] notion-api-for-automation attempt 1: 2 validator error(s)
+           - API script: expected >=2 top-level functions, found 1
+           - API script: no request timeout found
+  [RETRY] notion-api-for-automation attempt 2: 1 validator error(s)
+           - API script: expected >=2 top-level functions, found 1
+  [RETRY] notion-api-for-automation attempt 3: 2 validator error(s)
+           - API script: expected >=2 top-level functions, found 1
+           - API script: no request timeout found
+  [RETRY] notion-api-for-automation attempt 4: 1 validator error(s)
+           - API script: expected >=2 top-level functions, found 1
+  [FAIL] notion-api-for-automation rejected after 4 attempts
+
+[API] twilio-conversations-api
+  [RETRY] twilio-conversations-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> twilio-conversations-api.py
+  [OK] API implementation kit -> twilio-conversations-api-kit.zip
+
+[API] asana-automation-api
+  [RETRY] asana-automation-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> asana-automation-api.py
+  [OK] API implementation kit -> asana-automation-api-kit.zip
+
+[API] notion-api-for-automation-v2
+  [RETRY] notion-api-for-automation-v2 attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> notion-api-for-automation-v2.py
+  [OK] API implementation kit -> notion-api-for-automation-v2-kit.zip
+
+[API] contentful-cms-api
+  [RETRY] contentful-cms-api attempt 1: 2 validator error(s)
+           - API script: expected >=2 top-level functions, found 1
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> contentful-cms-api.py
+  [OK] API implementation kit -> contentful-cms-api-kit.zip
+
+[API] sendinblue-sms-api
+  [RETRY] sendinblue-sms-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> sendinblue-sms-api.py
+  [OK] API implementation kit -> sendinblue-sms-api-kit.zip
+
+[API] tibber-api
+  [RETRY] tibber-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [RETRY] tibber-api attempt 2: 1 validator error(s)
+           - API script: expected >=2 top-level functions, found 1
+  [RETRY] tibber-api attempt 3: 1 validator error(s)
+           - API script: no request timeout found
+  [RETRY] tibber-api attempt 4: 1 validator error(s)
+           - API script: expected >=2 top-level functions, found 1
+  [FAIL] tibber-api rejected after 4 attempts
+
+[API] braintree-payments-api
+  [OK] validated after 1 attempt(s) -> braintree-payments-api.py
+  [OK] API implementation kit -> braintree-payments-api-kit.zip
+
+[API] census-api
+  [OK] validated after 1 attempt(s) -> census-api.py
+  [OK] API implementation kit -> census-api-kit.zip
+
+[API] finnhub-stock-api
+  [OK] validated after 1 attempt(s) -> finnhub-stock-api.py
+  [OK] API implementation kit -> finnhub-stock-api-kit.zip
+
+[API] slack-api
+  [RETRY] slack-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> slack-api.py
+  [OK] API implementation kit -> slack-api-kit.zip
+
+[API] tinkr-api
+  [RETRY] tinkr-api attempt 1: 1 validator error(s)
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> tinkr-api.py
+  [OK] API implementation kit -> tinkr-api-kit.zip
+
+[API] finnhub-crypto-api
+  [OK] validated after 1 attempt(s) -> finnhub-crypto-api.py
+  [OK] API implementation kit -> finnhub-crypto-api-kit.zip
+
+[API] telescope-nasa-api
+  [OK] validated after 1 attempt(s) -> telescope-nasa-api.py
+  [OK] API implementation kit -> telescope-nasa-api-kit.zip
+
+[API] squarespace-api
+  [RETRY] squarespace-api attempt 1: 2 validator error(s)
+           - API script: expected >=2 top-level functions, found 0
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> squarespace-api.py
+  [OK] API implementation kit -> squarespace-api-kit.zip
+
+[API] twitch-helix-api
+  [RETRY] twitch-helix-api attempt 1: 1 validator error(s)
+           - API script: expected >=2 top-level functions, found 1
+  [OK] validated after 2 attempt(s) -> twitch-helix-api.py
+  [OK] API implementation kit -> twitch-helix-api-kit.zip
+
+[API] pdf-co-api
+  [OK] validated after 1 attempt(s) -> pdf-co-api.py
+  [OK] API implementation kit -> pdf-co-api-kit.zip
+
+[API] aiven-kafka-api
+  [OK] validated after 1 attempt(s) -> aiven-kafka-api.py
+  [OK] API implementation kit -> aiven-kafka-api-kit.zip
+
+[API] api-ai-image-generator
+  [OK] validated after 1 attempt(s) -> api-ai-image-generator.py
+  [OK] API implementation kit -> api-ai-image-generator-kit.zip
+
+[API] sentry-performance-api
+  [RETRY] sentry-performance-api attempt 1: 2 validator error(s)
+           - API script: expected >=2 top-level functions, found 0
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> sentry-performance-api.py
+  [OK] API implementation kit -> sentry-performance-api-kit.zip
+
+[API] twitch-analytics-api
+  [RETRY] twitch-analytics-api attempt 1: 2 validator error(s)
+           - API script: expected >=2 top-level functions, found 1
+           - API script: no request timeout found
+  [OK] validated after 2 attempt(s) -> twitch-analytics-api.py
+  [OK] API implementation kit -> twitch-analytics-api-kit.zip
+
+========================================================================
+VALIDATION PROTOCOL: 100/104 passed
+  [OK] api:openai-whisper-api (attempts=2)
+  [OK] api:stripe-payments-api (attempts=2)
+  [OK] api:supabase-database-api (attempts=1)
+  [OK] api:anthropic-claude-api (attempts=1)
+  [OK] api:google-gemini-api (attempts=2)
+  [OK] api:resend-email-api (attempts=2)
+  [OK] api:clerk-authentication-api (attempts=1)
+  [OK] api:cloudflare-workers-api (attempts=1)
+  [OK] api:mapbox-maps-api (attempts=1)
+  [OK] api:twilio-messaging-api (attempts=3)
+  [OK] api:hugging-face-inference-api (attempts=1)
+  [OK] api:cohere-embed-api (attempts=2)
+  [OK] api:pinecone-vector-api (attempts=2)
+  [OK] api:auth0-authentication-api (attempts=2)
+  [OK] api:sendgrid-email-api (attempts=1)
+  [FAIL] api:algolia-search-api (attempts=4)
+        - API script: expected >=2 top-level functions, found 1
+  [OK] api:openweather-weather-api (attempts=1)
+  [OK] api:shopify-admin-api (attempts=1)
+  [OK] api:notion-api (attempts=1)
+  [OK] api:airtable-api (attempts=1)
+  [OK] api:mistral-ai-api (attempts=3)
+  [OK] api:groq-inference-api (attempts=1)
+  [OK] api:together-ai-api (attempts=2)
+  [OK] api:replicate-model-api (attempts=2)
+  [OK] api:elevenlabs-voice-api (attempts=2)
+  [OK] api:deepgram-speech-api (attempts=2)
+  [OK] api:stability-ai-image-api (attempts=2)
+  [OK] api:weaviate-vector-api (attempts=4)
+  [OK] api:qdrant-vector-api (attempts=1)
+  [OK] api:mongodb-atlas-api (attempts=4)
+  [OK] api:neon-postgres-api (attempts=2)
+  [OK] api:planetscale-database-api (attempts=4)
+  [OK] api:upstash-redis-api (attempts=2)
+  [OK] api:vercel-blob-api (attempts=2)
+  [OK] api:liveblocks-collaboration-api (attempts=1)
+  [OK] api:ably-realtime-api (attempts=1)
+  [FAIL] api:posthog-analytics-api (attempts=4)
+        - API script: expected >=2 top-level functions, found 1
+  [OK] api:sentry-error-api (attempts=2)
+  [OK] api:launchdarkly-feature-api (attempts=2)
+  [OK] api:doppler-secrets-api (attempts=2)
+  [OK] api:openai-batch-api (attempts=1)
+  [OK] api:google-sheets-api (attempts=2)
+  [OK] api:slack-web-api (attempts=1)
+  [OK] api:hubspot-crm-api (attempts=1)
+  [OK] api:zendesk-support-api (attempts=1)
+  [OK] api:salesforce-rest-api (attempts=1)
+  [OK] api:discord-bot-api (attempts=2)
+  [OK] api:telegram-bot-api (attempts=1)
+  [OK] api:github-rest-api (attempts=2)
+  [OK] api:linear-graphql-api (attempts=2)
+  [OK] api:microsoft-graph-api (attempts=2)
+  [OK] api:openai-dall-e-api (attempts=2)
+  [OK] api:microsoft-azure-cognitive-services-api (attempts=4)
+  [OK] api:openai-gpt-4-api (attempts=1)
+  [OK] api:openai-embeddings-api (attempts=2)
+  [OK] api:twitch-api (attempts=1)
+  [OK] api:aws-s3-api (attempts=1)
+  [OK] api:ibm-watson-text-to-speech-api (attempts=4)
+  [OK] api:aws-lambda-api (attempts=1)
+  [OK] api:paypal-payments-api (attempts=2)
+  [OK] api:ibm-cloud-object-storage-api (attempts=1)
+  [OK] api:aws-rekognition-api (attempts=1)
+  [OK] api:aws-ses-api (attempts=2)
+  [OK] api:yelp-fusion-api (attempts=1)
+  [OK] api:ibm-watson-language-translator-api (attempts=4)
+  [OK] api:ibm-watson-assistant-api (attempts=2)
+  [OK] api:ibm-watson-discovery-api (attempts=4)
+  [OK] api:azure-face-api (attempts=1)
+  [OK] api:aws-polly-api (attempts=1)
+  [OK] api:azure-cosmos-db-api (attempts=4)
+  [OK] api:google-maps-api (attempts=1)
+  [OK] api:plaid-financial-api (attempts=4)
+  [OK] api:twilio-video-api (attempts=3)
+  [OK] api:sendinblue-email-api (attempts=2)
+  [OK] api:aws-transcribe-api (attempts=1)
+  [OK] api:notion-automation-api (attempts=2)
+  [OK] api:github-copilot-api (attempts=1)
+  [OK] api:notion-forms-api (attempts=2)
+  [OK] api:twitch-api-kraken (attempts=1)
+  [OK] api:asana-api (attempts=2)
+  [OK] api:twelvedata-api (attempts=3)
+  [OK] api:pdf-generator-api (attempts=1)
+  [OK] api:weatherapi (attempts=1)
+  [FAIL] api:notion-api-for-automation (attempts=4)
+        - API script: expected >=2 top-level functions, found 1
+  [OK] api:twilio-conversations-api (attempts=2)
+  [OK] api:asana-automation-api (attempts=2)
+  [OK] api:notion-api-for-automation-v2 (attempts=2)
+  [OK] api:contentful-cms-api (attempts=2)
+  [OK] api:sendinblue-sms-api (attempts=2)
+  [FAIL] api:tibber-api (attempts=4)
+        - API script: expected >=2 top-level functions, found 1
+  [OK] api:braintree-payments-api (attempts=1)
+  [OK] api:census-api (attempts=1)
+  [OK] api:finnhub-stock-api (attempts=1)
+  [OK] api:slack-api (attempts=2)
+  [OK] api:tinkr-api (attempts=2)
+  [OK] api:finnhub-crypto-api (attempts=1)
+  [OK] api:telescope-nasa-api (attempts=1)
+  [OK] api:squarespace-api (attempts=2)
+  [OK] api:twitch-helix-api (attempts=2)
+  [OK] api:pdf-co-api (attempts=1)
+  [OK] api:aiven-kafka-api (attempts=1)
+  [OK] api:api-ai-image-generator (attempts=1)
+  [OK] api:sentry-performance-api (attempts=2)
+  [OK] api:twitch-analytics-api (attempts=2)
+Protocol written to /Users/tribunus/Desktop/programmatic-seo/pipeline/last_run.json
+
+[FAIL] Batch aborted – not all items passed the hard gate.

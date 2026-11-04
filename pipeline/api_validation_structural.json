@@ -1,0 +1,530 @@
+[
+  {
+    "slug": "ably-realtime-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "airtable-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "aiven-kafka-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "algolia-search-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "anthropic-claude-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "api-ai-image-generator",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "asana-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "asana-automation-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "auth0-authentication-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "aws-lambda-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "aws-polly-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "aws-rekognition-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "aws-s3-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "aws-ses-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "aws-transcribe-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "azure-cosmos-db-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "azure-face-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "braintree-payments-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "census-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "clarifai-api",
+    "ok": false,
+    "errors": [
+      "API script: missing HTTPError/URLError handling",
+      "API script: missing exponential backoff (time.sleep)"
+    ]
+  },
+  {
+    "slug": "clerk-authentication-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "cloudflare-workers-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "cohere-embed-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "contentful-cms-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "deepgram-speech-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "discord-bot-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "doppler-secrets-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "elevenlabs-voice-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "finnhub-crypto-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "finnhub-stock-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "github-copilot-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "github-rest-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "google-gemini-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "google-maps-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "google-sheets-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "groq-inference-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "hubspot-crm-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "hugging-face-inference-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "ibm-cloud-object-storage-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "ibm-watson-assistant-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "ibm-watson-discovery-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "ibm-watson-language-translator-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "ibm-watson-text-to-speech-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "launchdarkly-feature-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "linear-graphql-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "liveblocks-collaboration-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "mapbox-maps-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "microsoft-azure-cognitive-services-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "microsoft-graph-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "mistral-ai-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "mongodb-atlas-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "neon-postgres-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "notion-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "notion-api-for-automation",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "notion-api-for-automation-v2",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "notion-automation-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "notion-forms-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "openai-batch-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "openai-dall-e-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "openai-embeddings-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "openai-gpt-4-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "openai-whisper-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "openweather-weather-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "paypal-payments-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "pdf-co-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "pdf-generator-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "pinecone-vector-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "plaid-financial-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "planetscale-database-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "posthog-analytics-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "qdrant-vector-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "replicate-model-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "resend-email-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "salesforce-rest-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "sendgrid-email-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "sendinblue-email-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "sendinblue-sms-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "sentry-error-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "sentry-performance-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "shopify-admin-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "slack-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "slack-web-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "squarespace-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "stability-ai-image-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "stripe-payments-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "supabase-database-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "telegram-bot-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "telescope-nasa-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "tibber-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "tinkr-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "together-ai-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "twelvedata-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "twilio-conversations-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "twilio-messaging-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "twilio-video-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "twitch-analytics-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "twitch-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "twitch-api-kraken",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "twitch-helix-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "upstash-redis-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "vercel-blob-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "weatherapi",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "weaviate-vector-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "yelp-fusion-api",
+    "ok": true,
+    "errors": []
+  },
+  {
+    "slug": "zendesk-support-api",
+    "ok": true,
+    "errors": []
+  }
+]

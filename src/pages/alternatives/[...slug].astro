@@ -1,0 +1,29 @@
+---
+import { alternatives } from "../../lib/content";
+
+export function getStaticPaths() {
+  return alternatives.map((entry) => ({ params: { slug: entry.slug } }));
+}
+
+const slug = Astro.params.slug;
+const target = new URL(
+  `/en/alternatives/${slug}/`,
+  Astro.site ?? "https://flowmatrix.dev",
+).toString();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, follow" />
+    <meta http-equiv="refresh" content={`0;url=${target}`} />
+    <link rel="canonical" href={target} />
+    <title>Redirecting…</title>
+  </head>
+  <body>
+    <p>
+      Redirecting to <a href={target}>{target}</a>…
+    </p>
+  </body>
+</html>

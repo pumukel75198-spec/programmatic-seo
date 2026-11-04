@@ -1,0 +1,25 @@
+# Cloudflare Worker – geschütztes Download-Gate für Premium-PDFs
+#
+# Setup (Details siehe README.md):
+#   1. R2-Bucket anlegen (einmalig):
+#        npx wrangler r2 bucket create flowmatrix-downloads
+#   2. Secrets setzen:
+#        npx wrangler secret put DOWNLOAD_TOKEN_SECRET
+#        npx wrangler secret put LEMON_PRODUCT_MAP
+#   3. Worker deployen:
+#        cd worker/download-gate && npx wrangler deploy
+#   4. Worker-URL als PUBLIC_DOWNLOAD_GATE_URL in der Astro-Umgebung setzen.
+
+name = "flowmatrix-download-gate"
+main = "index.js"
+compatibility_date = "2025-01-01"
+
+# Premium-PDFs und Python-Skripte liegen in R2 (kein KV-Tageslimit).
+[[r2_buckets]]
+binding = "DOWNLOADS"
+bucket_name = "flowmatrix-downloads"
+
+[vars]
+# Nur für die Testphase auf "1" setzen, solange noch keine echten
+# Lemon-Squeezy-Produkt-IDs in LEMON_PRODUCT_MAP hinterlegt sind.
+ALLOW_ALL_ON_VALID = "0"

@@ -1,0 +1,55 @@
+# build output
+dist/
+
+# private premium assets (generated, uploaded to KV)
+private/downloads/
+private/api-scripts/
+private/kits/
+private/api-kits/
+public/downloads/
+public/api-scripts/
+# generated types
+.astro/
+
+# Premium-PDFs: privat, werden über den Download-Gate-Worker aus R2
+# ausgeliefert und dürfen nicht ins Repository oder in den öffentlichen Build.
+private/downloads/
+public/downloads/
+
+# local enrichment cache
+.cache/
+
+# wrangler build artifacts
+.wrangler/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+# environment variables
+.env
+.env.production
+
+# macOS-specific files
+.DS_Store
+
+# jetbrains setting folder
+.idea/
+
+# test artifacts
+test-results/
+playwright-report/
+.playwright/
+coverage/
+
+# Unified pipeline
+.venv/
+pipeline/__pycache__/
+pipeline/last_run.json
+private/downloads/test-blueprint.pdf

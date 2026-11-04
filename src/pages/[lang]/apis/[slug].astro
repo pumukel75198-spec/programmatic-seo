@@ -1,0 +1,384 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import Breadcrumb from "../../../components/Breadcrumb.astro";
+import DetailBox from "../../../components/DetailBox.astro";
+import Badge from "../../../components/Badge.astro";
+import PremiumScriptDownload from "../../../components/PremiumScriptDownload.astro";
+import {
+  apis,
+  alternatives,
+  workflows,
+  getRelated,
+  getRelatedByTags,
+} from "../../../lib/content";
+import {
+  breadcrumbSchema,
+  softwareApplicationSchema,
+  productSchema,
+} from "../../../lib/schema";
+import { getToolLink } from "../../../lib/tools";
+import { site } from "../../../lib/site";
+import { languages } from "../../../i18n/ui";
+import { getLocale, localizedPath, t } from "../../../i18n/utils";
+import {
+  localizeApi,
+  localizeAlternative,
+  localizeWorkflow,
+} from "../../../i18n/content";
+import { resolveScriptCheckout } from "../../../lib/monetization";
+
+export function getStaticPaths() {
+  return languages.flatMap((lang) =>
+    apis.map((api) => ({
+      params: { lang: lang.code, slug: api.slug },
+      props: { api, lang: lang.code },
+    })),
+  );
+}
+
+const lang = getLocale(Astro.props.lang);
+const api = localizeApi(Astro.props.api, lang);
+const related = getRelated(apis, api.slug).map((item) =>
+  localizeApi(item, lang),
+);
+const relatedWorkflows = getRelatedByTags(
+  workflows,
+  Astro.props.api,
+  3,
+  true,
+).map((item) => localizeWorkflow(item, lang));
+const relatedAlternatives = getRelatedByTags(
+  alternatives,
+  Astro.props.api,
+  3,
+  true,
+).map((item) => localizeAlternative(item, lang));
+
+const pageTitle = `${api.title} – ${api.category}`;
+const pageDescription = api.description;
+
+const {
+  endpoint,
+  authentication,
+  apiKeyRequired,
+  sdkLanguages,
+  rateLimit,
+  docsUrl,
+  provider,
+  pricing,
+  ...restDetails
+} = api.details;
+
+const providerLink = getToolLink(provider);
+const providerHref = providerLink?.href ?? api.details.website;
+const providerSponsored = providerLink?.sponsored ?? false;
+
+const scriptCheckout = resolveScriptCheckout();
+const jsonLd = [
+  breadcrumbSchema([
+    { name: "Home", url: `/${lang}/` },
+    { name: t(lang, "nav.apis"), url: `/${lang}/apis/` },
+    { name: api.title, url: `/${lang}/apis/${api.slug}/` },
+  ]),
+  softwareApplicationSchema(api, lang),
+];
+
+if (scriptCheckout) {
+  jsonLd.push(
+    productSchema({
+      name: `${api.title} – Python Starter Script`,
+      description: `A dependency-free Python client for ${api.title} with --dry-run, --smoke and --live modes.`,
+      url: `/${lang}/apis/${api.slug}/`,
+      price: "29.99",
+      priceCurrency: "EUR",
+      checkoutUrl: scriptCheckout,
+      category: "Developer Tools",
+    }),
+  );
+}
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  image={`/og/apis/${api.slug}.png`}
+  type="article"
+  keywords={api.tags}
+  jsonLd={jsonLd}
+  lang={lang}
+>
+  <article>
+    <!-- Header -->
+    <header class="relative overflow-hidden border-b border-white/5">
+      <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+        <Breadcrumb
+          items={[
+            { label: "Home", href: localizedPath(lang, "/") },
+            { label: t(lang, "nav.apis"), href: localizedPath(lang, "/apis") },
+            { label: api.title },
+          ]}
+        />
+
+        <div class="mt-6 flex flex-wrap gap-2">
+          <Badge tone="brand">{api.category}</Badge>
+          {api.tags.map((tag) => (
+            <Badge tone="slate">{tag}</Badge>
+          ))}
+        </div>
+
+        <h1 class="mt-4 text-balance text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
+          {api.title}
+        </h1>
+        <p class="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-slate-400 sm:text-lg">
+          {api.description}
+        </p>
+        <p class="mt-4 text-xs text-slate-500">
+          {lang === "de"
+            ? "Geprüft vom FlowMatrix-Team"
+            : "Reviewed by the FlowMatrix team"}
+          {" · "}
+          <time datetime={site.contentUpdated}>
+            {lang === "de" ? "Zuletzt aktualisiert" : "Last updated"}{" "}
+            {site.contentUpdated}
+          </time>
+          {api.details.lastVerified && (
+            <>
+              {" · "}
+              <span>
+                {lang === "de" ? "Technisch geprüft" : "Technically verified"}{" "}
+                {api.details.lastVerified}
+              </span>
+            </>
+          )}
+        </p>
+      </div>
+    </header>
+
+    <section class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+      <!-- Quick facts -->
+      <dl class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="rounded-xl border border-white/10 bg-surface/50 p-4">
+          <dt class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+            Provider
+          </dt>
+          <dd class="mt-1 text-sm font-medium text-white">{provider}</dd>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-surface/50 p-4">
+          <dt class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+            Pricing
+          </dt>
+          <dd class="mt-1 text-sm font-medium text-white">{pricing}</dd>
+        </div>
+        {authentication && (
+          <div class="rounded-xl border border-white/10 bg-surface/50 p-4">
+            <dt class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+              Authentication
+            </dt>
+            <dd class="mt-1 text-sm font-medium text-white">
+              {authentication}
+            </dd>
+          </div>
+        )}
+        {apiKeyRequired !== undefined && (
+          <div class="rounded-xl border border-white/10 bg-surface/50 p-4">
+            <dt class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+              API key
+            </dt>
+            <dd class="mt-1 text-sm font-medium text-white">
+              {apiKeyRequired ? "Required" : "Not required"}
+            </dd>
+          </div>
+        )}
+      </dl>
+
+      <!-- Affiliate / provider CTA -->
+      <div class="mt-8 rounded-2xl border border-brand-500/30 bg-gradient-to-br from-brand-500/10 to-transparent p-6">
+        <Badge tone="brand">Get started</Badge>
+        <h2 class="mt-3 text-xl font-semibold text-white">
+          Start building with {provider}
+        </h2>
+        <p class="mt-2 text-sm leading-relaxed text-slate-400">
+          Create an account, get your API key and start integrating {api.title}.
+        </p>
+        <div class="mt-4 flex flex-wrap gap-3">
+          {providerHref && (
+            <a
+              href={providerHref}
+              target="_blank"
+              rel={
+                providerSponsored ? "noopener sponsored" : "noopener noreferrer"
+              }
+              class="inline-flex items-center gap-2 rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-brand-500/30 transition-colors hover:bg-brand-400"
+            >
+              Visit {provider}
+              <svg
+                class="h-4 w-4"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
+                <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+              </svg>
+            </a>
+          )}
+          {docsUrl && (
+            <a
+              href={docsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+            >
+              Read the docs
+            </a>
+          )}
+        </div>
+      </div>
+
+      <!-- Premium Python starter script (paid via Lemon Squeezy) -->
+      <PremiumScriptDownload slug={api.slug} title={api.title} price="€29.99" />
+
+      <!-- Technical details -->
+      {(endpoint || authentication || sdkLanguages || rateLimit || docsUrl) && (
+        <div class="mt-10">
+          <h2 class="text-xl font-semibold text-white sm:text-2xl">
+            Technical details
+          </h2>
+          <dl class="mt-4 divide-y divide-white/5 overflow-hidden rounded-2xl border border-white/10 bg-surface/60">
+            {endpoint && (
+              <div class="flex flex-col gap-1.5 p-5 sm:flex-row sm:gap-6">
+                <dt class="w-full shrink-0 text-sm font-semibold text-slate-400 sm:w-40">
+                  Endpoint
+                </dt>
+                <dd class="flex-1">
+                  <code class="break-all rounded bg-white/5 px-2 py-1 font-mono text-xs text-brand-300">
+                    {endpoint}
+                  </code>
+                </dd>
+              </div>
+            )}
+            {authentication && (
+              <div class="flex flex-col gap-1.5 p-5 sm:flex-row sm:gap-6">
+                <dt class="w-full shrink-0 text-sm font-semibold text-slate-400 sm:w-40">
+                  Authentication
+                </dt>
+                <dd class="flex-1 text-sm text-slate-300">{authentication}</dd>
+              </div>
+            )}
+            {rateLimit && (
+              <div class="flex flex-col gap-1.5 p-5 sm:flex-row sm:gap-6">
+                <dt class="w-full shrink-0 text-sm font-semibold text-slate-400 sm:w-40">
+                  Rate limit
+                </dt>
+                <dd class="flex-1 text-sm text-slate-300">{rateLimit}</dd>
+              </div>
+            )}
+            {sdkLanguages && sdkLanguages.length > 0 && (
+              <div class="flex flex-col gap-1.5 p-5 sm:flex-row sm:gap-6">
+                <dt class="w-full shrink-0 text-sm font-semibold text-slate-400 sm:w-40">
+                  SDKs
+                </dt>
+                <dd class="flex flex-1 flex-wrap gap-1.5">
+                  {sdkLanguages.map((sdk) => (
+                    <span class="rounded-full bg-white/5 px-2.5 py-0.5 text-xs text-slate-300 ring-1 ring-inset ring-white/10">
+                      {sdk}
+                    </span>
+                  ))}
+                </dd>
+              </div>
+            )}
+            {docsUrl && (
+              <div class="flex flex-col gap-1.5 p-5 sm:flex-row sm:gap-6">
+                <dt class="w-full shrink-0 text-sm font-semibold text-slate-400 sm:w-40">
+                  Documentation
+                </dt>
+                <dd class="flex-1">
+                  <a
+                    href={docsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-brand-300 underline decoration-brand-500/30 underline-offset-2 transition-colors hover:text-brand-200"
+                  >
+                    Open official docs
+                  </a>
+                </dd>
+              </div>
+            )}
+          </dl>
+        </div>
+      )}
+
+      <!-- Features & use case -->
+      <h2 class="mt-10 text-xl font-semibold text-white sm:text-2xl">
+        Details
+      </h2>
+      <DetailBox details={restDetails} />
+
+      <!-- Related workflows -->
+      {relatedWorkflows.length > 0 && (
+        <section class="mt-12 border-t border-white/5 pt-10">
+          <h2 class="text-xl font-semibold text-white sm:text-2xl">
+            Related workflows
+          </h2>
+          <div class="mt-6 grid gap-4 sm:grid-cols-3">
+            {relatedWorkflows.map((item) => (
+              <a
+                href={localizedPath(lang, `/workflows/${item.slug}`)}
+                class="group card-hover rounded-xl border border-white/10 bg-surface/50 p-5"
+              >
+                <p class="text-sm font-semibold text-white group-hover:text-emerald-300">
+                  {item.title}
+                </p>
+                <p class="mt-1 text-xs text-slate-500">{item.category}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <!-- Related alternatives -->
+      {relatedAlternatives.length > 0 && (
+        <section class="mt-12 border-t border-white/5 pt-10">
+          <h2 class="text-xl font-semibold text-white sm:text-2xl">
+            Related alternatives
+          </h2>
+          <div class="mt-6 grid gap-4 sm:grid-cols-3">
+            {relatedAlternatives.map((item) => (
+              <a
+                href={localizedPath(lang, `/alternatives/${item.slug}`)}
+                class="group card-hover rounded-xl border border-white/10 bg-surface/50 p-5"
+              >
+                <p class="text-sm font-semibold text-white group-hover:text-cyan-300">
+                  {item.title}
+                </p>
+                <p class="mt-1 text-xs text-slate-500">{item.category}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <!-- Related APIs -->
+      {related.length > 0 && (
+        <section class="mt-12 border-t border-white/5 pt-10">
+          <h2 class="text-xl font-semibold text-white sm:text-2xl">
+            More APIs
+          </h2>
+          <div class="mt-6 grid gap-4 sm:grid-cols-3">
+            {related.map((item) => (
+              <a
+                href={localizedPath(lang, `/apis/${item.slug}`)}
+                class="group card-hover rounded-xl border border-white/10 bg-surface/50 p-5"
+              >
+                <p class="text-sm font-semibold text-white group-hover:text-brand-300">
+                  {item.title}
+                </p>
+                <p class="mt-1 text-xs text-slate-500">{item.category}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+    </section>
+  </article>
+</Layout>

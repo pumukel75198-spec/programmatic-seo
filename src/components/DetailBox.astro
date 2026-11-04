@@ -1,0 +1,170 @@
+---
+import { getToolLink, linkifyTools } from "../lib/tools";
+
+interface Props {
+  details: Record<string, unknown>;
+  labels?: Record<string, string>;
+  lang?: string;
+}
+
+const { details, labels = {}, lang = "en" } = Astro.props;
+
+const defaultLabels: Record<string, string> = {
+  provider: "Provider",
+  pricing: "Pricing",
+  features: "Features",
+  useCase: "Use case",
+  website: "Website",
+  original: "Original",
+  alternatives: "Alternatives",
+  bestFor: "Best for",
+  difficulty: "Difficulty",
+  duration: "Duration",
+  tools: "Tools",
+  steps: "Steps",
+};
+
+const labelFor = (key: string) => labels[key] ?? defaultLabels[key] ?? key;
+
+const entries = Object.entries(details).filter(([, value]) => {
+  if (value === null || value === undefined) return false;
+  if (typeof value === "string" && value.trim() === "") return false;
+  if (Array.isArray(value) && value.length === 0) return false;
+  return true;
+});
+
+const isUrl = (value: unknown): value is string =>
+  typeof value === "string" && /^https?:\/\//i.test(value);
+
+interface StepObject {
+  title: string;
+  description?: string;
+  code_snippet?: string;
+  technical_explanation?: string;
+}
+const asStep = (item: unknown): StepObject =>
+  typeof item === "string" ? { title: item } : (item as StepObject);
+
+const codeHint =
+  lang === "de"
+    ? "🔒 Im PDF enthalten: Komplettes Skript & API-Payload für diesen Schritt"
+    : "🔒 Included in the PDF: complete script & API payload for this step";
+
+const chipClass =
+  "rounded-full bg-white/5 px-2.5 py-0.5 text-xs text-slate-300 ring-1 ring-inset ring-white/10";
+const chipLinkClass =
+  "rounded-full bg-white/5 px-2.5 py-0.5 text-xs text-brand-300 ring-1 ring-inset ring-brand-500/20 transition-colors hover:text-brand-200";
+---
+
+<dl class="mt-6 divide-y divide-white/5 overflow-hidden rounded-2xl border border-white/10 bg-surface/60">
+  {entries.map(([key, value]) => (
+    <div class="flex flex-col gap-1.5 p-5 sm:flex-row sm:gap-6">
+      <dt class="w-full shrink-0 text-sm font-semibold text-slate-400 sm:w-40">
+        {labelFor(key)}
+      </dt>
+      <dd class="flex-1 text-sm leading-relaxed text-slate-300">
+        {Array.isArray(value) ? (
+          key === "steps" ? (
+            <ol class="space-y-4">
+              {value.map((item, index) => {
+                const step = asStep(item);
+                return (
+                  <li class="flex gap-2.5">
+                    <span class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-500/15 text-[11px] font-bold text-brand-300">
+                      {index + 1}
+                    </span>
+                    <div class="space-y-2">
+                      <p class="font-medium text-slate-200">{step.title}</p>
+                      {step.description && (
+                        <p class="text-sm text-slate-400">{step.description}</p>
+                      )}
+                      {index === 0 && step.code_snippet ? (
+                        <pre class="overflow-x-auto rounded-xl border border-white/10 bg-[#06070d] p-3 text-xs leading-relaxed text-slate-200">
+                          <code>{step.code_snippet}</code>
+                        </pre>
+                      ) : index > 0 ? (
+                        <p class="text-xs text-slate-500">{codeHint}</p>
+                      ) : null}
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
+          ) : key === "glossary" ? (
+            <dl class="space-y-2">
+              {value.map((item) => {
+                const entry = item as { term?: string; definition?: string };
+                return (
+                  <div class="flex flex-col gap-0.5 sm:flex-row sm:gap-2">
+                    <dt class="font-medium text-slate-200">{entry.term}</dt>
+                    <dd class="text-slate-400">{entry.definition}</dd>
+                  </div>
+                );
+              })}
+            </dl>
+          ) : key === "troubleshooting" ? (
+            <ul class="space-y-3">
+              {value.map((item) => {
+                const entry = item as { problem?: string; solution?: string };
+                return (
+                  <li class="space-y-0.5">
+                    <p class="font-medium text-slate-200">{entry.problem}</p>
+                    <p class="text-slate-400">{entry.solution}</p>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <div class="flex flex-wrap gap-1.5">
+              {value.map((item) => {
+                const link = key === "tools" ? getToolLink(String(item)) : null;
+                if (link) {
+                  return (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel={
+                        link.sponsored
+                          ? "noopener sponsored"
+                          : "noopener noreferrer"
+                      }
+                      class={chipLinkClass}
+                    >
+                      {String(item)}
+                    </a>
+                  );
+                }
+                return (
+                  <span
+                    class={chipClass}
+                    set:html={linkifyTools(String(item))}
+                  />
+                );
+              })}
+            </div>
+          )
+        ) : key === "provider" && typeof details.website === "string" ? (
+          <a
+            href={details.website}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-brand-300 underline decoration-brand-500/30 underline-offset-2 transition-colors hover:text-brand-200"
+          >
+            {String(value)}
+          </a>
+        ) : isUrl(value) ? (
+          <a
+            href={value}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="break-all text-brand-300 underline decoration-brand-500/30 underline-offset-2 transition-colors hover:text-brand-200"
+          >
+            {value}
+          </a>
+        ) : (
+          <span set:html={linkifyTools(String(value))} />
+        )}
+      </dd>
+    </div>
+  ))}
+</dl>

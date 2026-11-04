@@ -1,0 +1,19 @@
+---
+// Root redirect to the default locale. Astro's i18n routing expects a root
+// index page to build the redirect to /en/.
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content="0;url=/en/" />
+    <link rel="canonical" href="/en/" />
+    <title>FlowMatrix</title>
+  </head>
+  <body>
+    <p>
+      Redirecting to <a href="/en/">English</a>…
+    </p>
+  </body>
+</html>
