@@ -20,7 +20,8 @@
   {
     "slug": "newsletter-automation",
     "type": "workflow",
-    "status": "pending"
+    "status": "done",
+    "completed_at": "2026-11-04 09:42 UTC"
   },
   {
     "slug": "social-media-scheduling",
