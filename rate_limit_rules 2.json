@@ -1,0 +1,1 @@
+{"rules": [{"api": "example_api", "limit": 1000, "time_window": "hour"}, {"api": "another_api", "limit": 500, "time_window": "minute"}]}

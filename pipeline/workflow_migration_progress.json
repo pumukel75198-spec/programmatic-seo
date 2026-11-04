@@ -14,7 +14,8 @@
   {
     "slug": "programmatic-seo-pipeline",
     "type": "workflow",
-    "status": "pending"
+    "status": "done",
+    "completed_at": "2026-11-04 09:31 UTC"
   },
   {
     "slug": "newsletter-automation",
