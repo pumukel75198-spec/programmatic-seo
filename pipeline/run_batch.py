@@ -506,6 +506,7 @@ def run_deploy() -> None:
             "dist",
             "--project-name=programmatic-seo",
             "--branch=main",
+            "--commit-dirty=true",
         ],
         cwd=str(cfg.ROOT),
         check=True,
