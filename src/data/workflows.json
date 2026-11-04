@@ -2188,7 +2188,7 @@
           "title": "Capture billable events",
           "description": "Set up a system to log all billable events relevant for invoicing. This ensures that all income is documented accurately. You can use webhooks or direct API calls to capture these events.",
           "technical_explanation": "Use the Stripe API to capture events by listening to webhooks. The endpoint for webhooks is '/v1/webhooks'. Ensure to handle errors by checking the response status and logging any issues.",
-          "code_snippet": "import urllib.request\nimport json\n\nstripe_api_key = 'your_stripe_api_key'\nurl = 'https://api.stripe.com/v1/events'\nheaders = {'Authorization': f'Bearer {stripe_api_key}'}\nrequest = urllib.request.Request(url, headers=headers)\nwith urllib.request.urlopen(request) as response:\n    data = json.loads(response.read())\n    print(data)",
+          "code_snippet": "import json\nimport urllib.request\n\ndef fetch_events():\n    url = 'https://api.stripe.com/v1/events'\n    headers = {'Authorization': 'Bearer sk_test_123'}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))\n\nevents = fetch_events()",
           "actions": [
             "Set up a webhook endpoint to listen for Stripe events.",
             "Log each event received in your database.",
@@ -2227,7 +2227,7 @@
           "title": "Generate invoice PDFs",
           "description": "Create PDF invoices from the recorded billable events. This involves generating a PDF that includes all necessary information such as invoice number and amounts.",
           "technical_explanation": "Use a PDF generation library or script to create PDFs. Ensure to handle any exceptions during the generation process and validate the input data.",
-          "code_snippet": "import json\nimport urllib.request\n\ninvoice_data = {'invoice_number': '12345', 'amount': 100.00}\npdf_url = 'https://api.example.com/generate_pdf'\nrequest = urllib.request.Request(pdf_url, data=json.dumps(invoice_data).encode('utf-8'), headers={'Content-Type': 'application/json'})\nwith urllib.request.urlopen(request) as response:\n    pdf_response = response.read()\n    with open('invoice_12345.pdf', 'wb') as f:\n        f.write(pdf_response)",
+          "code_snippet": "import json\nimport urllib.request\n\ndef generate_pdf(events):\n    invoices = []\n    for event in events.get('data', []):\n        invoices.append({'id': event.get('id'), 'amount': 100.00})\n    return invoices\n\ninvoices = generate_pdf(events)",
           "actions": [
             "Create a script to generate PDF invoices.",
             "Include necessary invoice details in the PDF.",
@@ -2266,7 +2266,7 @@
           "title": "Send invoices via email",
           "description": "Automatically send the created invoices via email to customers. This improves communication and accelerates the payment process.",
           "technical_explanation": "Use the Resend Email API to send emails with the generated PDF as an attachment. Ensure to handle errors related to email delivery.",
-          "code_snippet": "import urllib.request\nimport json\n\nemail_data = {'to': 'customer@example.com', 'subject': 'Your Invoice', 'body': 'Please find your invoice attached.', 'attachment': 'invoice_12345.pdf'}\nemail_url = 'https://api.resend.com/send'\nrequest = urllib.request.Request(email_url, data=json.dumps(email_data).encode('utf-8'), headers={'Content-Type': 'application/json'})\nwith urllib.request.urlopen(request) as response:\n    email_response = json.loads(response.read())\n    print(email_response)",
+          "code_snippet": "import json\nimport urllib.request\n\ndef send_invoices(invoices):\n    url = 'https://api.resend.com/emails'\n    headers = {'Authorization': 'Bearer re_123', 'Content-Type': 'application/json'}\n    for inv in invoices:\n        data = json.dumps({'to': 'customer@example.com', 'subject': f'Invoice {inv[\"id\"]}', 'html': 'Please pay'}).encode('utf-8')\n        request = urllib.request.Request(url, data=data, headers=headers)\n        with urllib.request.urlopen(request) as response:\n            pass\n    return invoices\n\nsent_invoices = send_invoices(invoices)",
           "actions": [
             "Prepare email content and attach the generated PDF.",
             "Send the email using the Resend Email API.",
@@ -2305,7 +2305,7 @@
           "title": "Track payment status",
           "description": "Monitor the payment status of sent invoices to ensure all invoices are paid. This involves querying the payment API to check the status of each invoice.",
           "technical_explanation": "Use the Stripe API to check the payment status of invoices. The endpoint for retrieving invoice status is '/v1/invoices/{invoice_id}'. Handle errors by checking the response and logging any issues.",
-          "code_snippet": "import urllib.request\nimport json\n\ninvoice_id = 'inv_12345'\nstripe_api_key = 'your_stripe_api_key'\nurl = f'https://api.stripe.com/v1/invoices/{invoice_id}'\nheaders = {'Authorization': f'Bearer {stripe_api_key}'}\nrequest = urllib.request.Request(url, headers=headers)\nwith urllib.request.urlopen(request) as response:\n    invoice_status = json.loads(response.read())\n    print(invoice_status['status'])",
+          "code_snippet": "import json\nimport urllib.request\n\ndef check_status(sent_invoices):\n    url = 'https://api.stripe.com/v1/charges'\n    headers = {'Authorization': 'Bearer sk_test_123'}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))\n\nstatus_data = check_status(sent_invoices)",
           "actions": [
             "Query the Stripe API for each invoice's payment status.",
             "Log the payment status in your database.",
@@ -2344,7 +2344,7 @@
           "title": "Sync with accounting",
           "description": "Sync payment data with your accounting system so every transaction is recorded accurately. This involves updating your database with the latest payment information.",
           "technical_explanation": "Use the Supabase API to update your database with the latest payment information. Ensure to handle errors and confirm successful updates.",
-          "code_snippet": "import urllib.request\nimport json\n\npayment_data = {'invoice_id': 'inv_12345', 'status': 'paid'}\nsupabase_url = 'https://your-supabase-url.supabase.co/rest/v1/payments'\nrequest = urllib.request.Request(supabase_url, data=json.dumps(payment_data).encode('utf-8'), headers={'Content-Type': 'application/json', 'Authorization': 'Bearer your_supabase_key'})\nrequest.get_method = lambda: 'POST'\nwith urllib.request.urlopen(request) as response:\n    sync_response = json.loads(response.read())\n    print(sync_response)",
+          "code_snippet": "import json\nimport urllib.request\n\ndef sync_accounting(status_data):\n    url = 'https://your-project.supabase.co/rest/v1/payments'\n    headers = {'apikey': 'key', 'Authorization': 'Bearer key', 'Content-Type': 'application/json'}\n    data = json.dumps({'status': 'synced'}).encode('utf-8')\n    request = urllib.request.Request(url, data=data, headers=headers)\n    request.get_method = lambda: 'POST'\n    with urllib.request.urlopen(request) as response:\n        return 'ok'\n\nsync_result = sync_accounting(status_data)",
           "actions": [
             "Prepare the payment data to be synced.",
             "Send the payment data to the Supabase API.",
@@ -2446,9 +2446,18 @@
         {
           "label": "n8n",
           "url": "https://example.com/docs/n8n"
+        },
+        {
+          "label": "Stripe API",
+          "url": "https://stripe.com/docs"
+        },
+        {
+          "label": "Resend API",
+          "url": "https://resend.com/docs"
         }
       ]
-    }
+    },
+    "created_and_verified_at": "2026-11-04 18:27 UTC"
   },
   {
     "slug": "appointment-booking",
