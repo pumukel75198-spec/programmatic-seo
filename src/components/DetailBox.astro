@@ -78,12 +78,10 @@ const chipLinkClass =
                       {step.description && (
                         <p class="text-sm text-slate-400">{step.description}</p>
                       )}
-                      {index === 0 && step.code_snippet ? (
+                      {step.code_snippet ? (
                         <pre class="overflow-x-auto rounded-xl border border-white/10 bg-[#06070d] p-3 text-xs leading-relaxed text-slate-200">
                           <code>{step.code_snippet}</code>
                         </pre>
-                      ) : index > 0 ? (
-                        <p class="text-xs text-slate-500">{codeHint}</p>
                       ) : null}
                     </div>
                   </li>
