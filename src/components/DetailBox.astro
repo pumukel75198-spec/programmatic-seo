@@ -78,11 +78,17 @@ const chipLinkClass =
                       {step.description && (
                         <p class="text-sm text-slate-400">{step.description}</p>
                       )}
+                      {step.technical_explanation && (
+                        <p class="text-xs text-slate-400 italic">{step.technical_explanation}</p>
+                      )}
                       {step.code_snippet ? (
-                        <pre class="overflow-x-auto rounded-xl border border-white/10 bg-[#06070d] p-3 text-xs leading-relaxed text-slate-200">
+                        <pre class="overflow-x-auto rounded-xl border border-white/10 bg-[#06070d] p-3 text-xs leading-relaxed text-slate-200 whitespace-pre-wrap">
                           <code>{step.code_snippet}</code>
                         </pre>
                       ) : null}
+                      {step.expectedResult && (
+                        <p class="text-xs text-emerald-400 font-medium">Expected result: {step.expectedResult}</p>
+                      )}
                     </div>
                   </li>
                 );
