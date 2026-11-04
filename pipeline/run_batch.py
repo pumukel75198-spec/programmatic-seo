@@ -497,9 +497,13 @@ def run_build() -> None:
 
 
 def run_deploy() -> None:
+    dist_index = cfg.ROOT / "dist" / "index.html"
+    if not dist_index.exists() or dist_index.stat().st_size == 0:
+        raise RuntimeError("Build output dist/index.html is missing or empty. Cannot deploy.")
     for attempt in range(1, 4):
         try:
-            subprocess.run(
+            print(f"  [DEPLOY] Running wrangler pages deploy (attempt {attempt}/3)...")
+            result = subprocess.run(
                 [
                     "npx",
                     "wrangler",
@@ -512,12 +516,24 @@ def run_deploy() -> None:
                 ],
                 cwd=str(cfg.ROOT),
                 check=True,
+                capture_output=True,
+                text=True,
             )
+            print("  [OK] Cloudflare Pages deployment successful.")
+            if result.stdout:
+                for line in result.stdout.splitlines():
+                    if "success" in line.lower() or "https://" in line:
+                        print(f"       {line.strip()}")
             return
         except subprocess.CalledProcessError as error:
+            print(f"  [WARN] Deploy attempt {attempt} failed:")
+            if error.stdout:
+                print(f"       stdout: {error.stdout}")
+            if error.stderr:
+                print(f"       stderr: {error.stderr}")
             if attempt == 3:
-                raise
-            print(f"  [WARN] Deploy attempt {attempt} failed ({error}), retrying...")
+                raise RuntimeError(f"Cloudflare Pages deployment failed after 3 attempts: {error}") from error
+            print("       Retrying deployment...")
 
 
 # --------------------------------------------------------------------------- #
