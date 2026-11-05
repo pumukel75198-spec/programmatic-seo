@@ -3,7 +3,7 @@
  * Premium Python starter script – Kauf über Lemon Squeezy + geschützter Download.
  *
  * Ablauf:
- *   1. Besucher kauft das Skript-Paket über Lemon Squeezy (19,99 €).
+ *   1. Besucher kauft das Skript-Paket über Lemon Squeezy (29,99 €).
  *   2. Lemon Squeezy stellt einen Lizenzschlüssel aus.
  *   3. Der Besucher gibt den Schlüssel hier ein.
  *   4. Das Frontend ruft den Download-Gate-Worker (`/api/validate`) auf.
@@ -25,7 +25,7 @@ interface Props {
   checkoutUrl?: string;
 }
 
-const { slug, title, price = "€29.99", checkoutUrl } = Astro.props;
+const { slug, title, price = "29,99 €", checkoutUrl } = Astro.props;
 
 const gateUrl = resolveDownloadGate();
 const resolvedCheckoutUrl = resolveScriptCheckout(checkoutUrl);
@@ -152,7 +152,7 @@ const gateConfigured = gateUrl.length > 0;
             class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/10"
             data-download-cheatsheet
           >
-            📄 Download Architecture Blueprint (.pdf)
+            📄 Download API Cheatsheet (.pdf)
           </a>
         </div>
         <p class="mt-3 text-xs text-slate-500">

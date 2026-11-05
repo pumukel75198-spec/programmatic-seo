@@ -213,19 +213,16 @@ class _Doc:
         c.setFillColor(_hex(cfg.COLORS["brand"]))
         c.rect(0, HEIGHT - 10, WIDTH, 10, fill=1, stroke=0)
 
-        c.setFont("Helvetica-Bold", 30)
-        c.setFillColor(_hex(cfg.COLORS["white"]))
-        c.drawString(MARGIN, HEIGHT - 60 - 30, "FM")
-        c.setFont("Helvetica", 8.5)
+        # Clean brand kicker – no overlapping "FM" logo artefact above the H1.
+        c.setFont("Helvetica-Bold", 11)
         c.setFillColor(_hex(cfg.COLORS["brand_light"]))
-        c.drawString(MARGIN, HEIGHT - 95 - 8.5, "F L O W M A T R I X . D E V")
-
+        c.drawString(MARGIN, HEIGHT - 58, "FLOWMATRIX.DEV")
         c.setFont("Helvetica-Bold", 12)
         c.setFillColor(_hex(cfg.COLORS["brand_light"]))
-        c.drawString(MARGIN, HEIGHT - 150 - 12, "Premium Workflow")
+        c.drawString(MARGIN, HEIGHT - 92, "Premium Workflow")
         c.setFont("Helvetica", 11)
         c.setFillColor(_hex(cfg.COLORS["muted"]))
-        c.drawString(MARGIN, HEIGHT - 175 - 11, "A practical guide – step by step")
+        c.drawString(MARGIN, HEIGHT - 114, "A practical guide – step by step")
 
         self.y = 230
         self.heading(workflow.get("title", "Untitled"), size=34)
@@ -338,6 +335,10 @@ class _Doc:
         for action in step.get("actions") or []:
             self.bullet(action, size=9.2)
 
+        # "break-inside: avoid" for the step container: never start the code
+        # snippet at the very bottom of a page where the heading/intro would be
+        # split from the code. Start the snippet on a fresh page instead.
+        self.ensure_space(150)
         self.kicker("Code snippet")
         self.code_block(step.get("code_snippet", ""))
 

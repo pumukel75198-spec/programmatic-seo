@@ -41,6 +41,7 @@ interface StepObject {
   description?: string;
   code_snippet?: string;
   technical_explanation?: string;
+  expectedResult?: string;
 }
 const asStep = (item: unknown): StepObject =>
   typeof item === "string" ? { title: item } : (item as StepObject);

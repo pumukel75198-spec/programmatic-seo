@@ -22,8 +22,9 @@ programmatic-seo/
 │   ├── schemas.py            # Strikte Pydantic-Modelle
 │   ├── prompts.py            # Einzige System-Prompts
 │   ├── llm_client.py         # OpenRouter (Standardbibliothek)
-│   ├── validator.py          # Harter Gatekeeper (AST/Mock/Domains)
-│   ├── pdf_renderer.py       # 10-Seiten-PDF-Blueprint
+│   ├── validator.py          # Harter Gatekeeper (AST/Englisch/Tools/Domains)
+│   ├── pdf_renderer.py       # Dynamischer PDF-Renderer (variable Seitenzahl)
+│   ├── bundle_builder.py     # Implementation-Kits (.zip, PDF + Code)
 │   └── run_batch.py          # Einziger Entry Point
 ├── scripts/                  # Nur noch Build-Infra, Insights, Newsletter
 ├── src/

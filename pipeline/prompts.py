@@ -122,7 +122,7 @@ Return a complete, practical guide for EVERY step. ALL text MUST be in precise t
     {{
       "title": "Exact title as above",
       "description": "Detailed description (2–4 sentences).",
-      "technical_explanation": "MUST cover: (1) architecture role – why this step exists and which data it consumes from the previous step; (2) API contract – exact endpoint, HTTP method, required headers, request payload and JSON response shape; (3) edge cases – rate limits, pagination, empty arrays, type conversion. At least 3 sentences.",
+      "technical_explanation": "MUST cover: (1) architecture role – why this step exists and which data it consumes from the previous step; (2) API contract – exact endpoint, HTTP method, required headers, request payload and JSON response shape; (3) edge cases – rate limits, pagination, empty arrays, type conversion. At least 300 characters and 3 sentences.",
       "code_snippet": "Runnable Python 3 code, at least 10 non-empty lines, standard library only, with precise English inline comments explaining WHY each line is written that way.",
       "actions": ["Concrete technical action 1", "Concrete technical action 2", "Concrete technical action 3"],
       "commands": [{{ "label": "Short title", "language": "bash", "code": "real command" }}],
@@ -145,23 +145,32 @@ HARD RULES
 - "code_snippet": Python standard library ONLY. FORBIDDEN: requests, openai, supabase, httpx, aiohttp, pydantic, pandas, scikit-learn, sklearn, sentry_sdk and ANY other SDK/third-party package. NEVER tell the reader to run "pip install".
 - "code_snippet": FORBIDDEN: "import random", "random.uniform", "# Dummy", "Dummy", and overwriting variables from previous steps. Use a real, deterministic data flow: step 1 defines a structure (e.g. `mentions = fetch_mentions()`), step 2 consumes exactly that variable (e.g. `analyzed = analyze_sentiment(mentions)`), step 3 consumes `analyzed`, and so on. The concatenation of all step snippets MUST form one coherent, runnable script.
 - "code_snippet": syntactically valid Python – correct brackets, quotes and indentation. Check every snippet for balanced brackets before answering.
-- "technical_explanation": MANDATORY, at least 3 sentences covering architecture role, API contract and edge cases.
+- "technical_explanation": MANDATORY, at least 300 characters / 3+ sentences covering architecture role, API contract and edge cases.
 - "actions": 3–6 concrete technical actions. No UI click paths.
 - "checklist": 2–4 verifiable points.
-- "links": ONLY the official documentation link of the API that is programmed in THIS specific step (maximum 1 link). Use the REAL documentation name (e.g. `"X API Search Docs: https://..."`). UNDER `LINKS`, NEVER use the literal sentence `"Official docs for the API used in THIS step"` or similar leak phrases, but always the actual name and URL. For a pure Python step without an API call (e.g. `collections.Counter`), link to the official Python standard library documentation. Never copy the same links into every step.
+- "links": EVERY step MUST contain at least one entry. Use ONLY the official documentation link of the API that is programmed in THIS specific step (maximum 1 link). Use the REAL documentation name (e.g. `"X API Search Docs: https://..."`). UNDER `LINKS`, NEVER use the literal sentence `"Official docs for the API used in THIS step"` or similar leak phrases, but always the actual name and URL. For a pure Python step without an API call (e.g. `collections.Counter`), link to the exact official Python standard library documentation (e.g. `https://docs.python.org/3/library/collections.html`). Never copy the same links into every step.
 - TOOL CONSISTENCY: the tools listed in the workflow, the tools in "prerequisites", the APIs actually called in the code and the "resources" list MUST match 100 %. Never list a tool (e.g. n8n) that does not appear in the code. Never call an API in the code that is missing from the tool list.
+- CREDENTIALS: every secret and every project-specific endpoint MUST be read through `os.environ.get("NAME")` – never hardcode `YOUR_X_API_TOKEN`, `YOUR_OPENAI_API_KEY`, `YOUR_SUPABASE_KEY` or `YOUR_SLACK_WEBHOOK_URL` in runnable code. Use UPPER_SNAKE_CASE names such as `X_API_TOKEN`, `OPENAI_API_KEY`, `SUPABASE_URL`, `SUPABASE_KEY`, `SLACK_WEBHOOK_URL`; the kit's `.env.example` is generated from these names. Keep public API hosts (`https://api.x.com`, `https://api.openai.com`) as constants.
+  * The Supabase URL MUST come from `os.environ.get("SUPABASE_URL")`; never hardcode `https://your-supabase-instance.supabase.co`. Use a concrete table name (e.g. `trends`), never `your_table`.
+- ZERO-VARIANCE GUARD: before computing a Z-score, guard against fewer than 2 values and a standard deviation of zero (`if len(sentiments) < 2 or stdev == 0: return`). Never divide by zero.
+- OPENAI NUMERIC CONTRACT: when OpenAI output is converted with `float(...)`, the user message MUST literally contain `Respond ONLY with a float between -1.0 and 1.0`, and the conversion must handle `ValueError`.
 - CORRECT API PATTERNS & STRICT TYPE SAFETY:
   * GET search endpoints (e.g. `/2/tweets/search/recent`) MUST use real query parameters via `urllib.parse.urlencode({{'query': ...}})`. Import `urllib.parse` explicitly in the code block whenever `urllib.parse.urlencode` is used.
+  * NEVER pass `headers=` to `urllib.request.urlopen()`. Build the request explicitly: `request = urllib.request.Request(url, data=..., headers=headers)` and call `urllib.request.urlopen(request)`. `urlopen(url, headers=...)` is a runtime `TypeError`.
+  * Whenever `float(content)` converts OpenAI output, the OpenAI user message MUST literally contain `Respond ONLY with a float between -1.0 and 1.0`.
   * CLEAN DATA EXTRACTION IN STEP 1: When an API (such as X API `/2/tweets/search/recent`) returns a list of dictionaries (`[{{'id': '1', 'text': '...'}}]`), step 1 MUST directly extract the text strings (`[item['text'] for item in data['data']]`), so subsequent steps do not throw a `TypeError`.
   * STRICT TYPE SAFETY BETWEEN STEPS: If a step (such as OpenAI Sentiment Analysis) produces data that is mathematically calculated in a later step (e.g. with `statistics.mean()` or `statistics.stdev()`), the prompt in code MUST request a number (`"Respond ONLY with a float between -1.0 and 1.0"`) and explicitly convert the result via `float(...)`.
   * The sentiment step MUST return structured records. Build each record as a separate variable, then append it:
     `record = {{'text': mention, 'sentiment': float(content)}}`
     `records.append(record)`
     The clustering step then groups the `text` fields, and the alert step uses the `sentiment` floats. Never discard the mention text.
+  * The alert step MUST iterate over the structured records (`for record in analyzed:`), compute the Z-score from `record['sentiment']`, and call `send_alert(record['text'], z_score)`. Never call `send_alert` with only the sentiment float.
+  * Supabase payload keys MUST be stable and match the generated `schema.sql` (e.g. `keyword` + `mentions`). Never define `count` in the schema while sending `mentions` in the payload.
   * NEVER put dict literals, colons or complex expressions inside f-strings. Use f-strings only for simple text such as `f"Sentiment: {{sentiment}}"`.
   * Supabase REST requests MUST send both `{{'apikey': SUPABASE_KEY}}` and `{{'Authorization': f'Bearer {{SUPABASE_KEY}}'}}`; POST/Upsert inserts MUST set `{{'Prefer': 'return=representation'}}` and check `if response.status not in (200, 201, 204):` instead of just `!= 200` before parsing.
   * Slack webhooks return the plain text "ok", NOT JSON. Never call `json.loads()` on a Slack webhook response; check `response.status == 200` and `response.read().decode('utf-8')`.
   * Alert steps MUST compute a real threshold (e.g. `if spike_count >= THRESHOLD:`) instead of blindly sending a message.
+  * Every step MUST carry at least one real documentation link. Pure Python steps (e.g. `collections.Counter`, `statistics.stdev`) MUST link to the exact Python standard library page.
   * Use current OpenAI models (`gpt-4o-mini` or `gpt-4o`). `gpt-3.5-turbo` is forbidden.
 - Use ONLY real, reachable domains. FORBIDDEN invented domains: api.socialmedia.com, api.coveragetool.com, competitor2.com, api.yourgateway.com.
 - If a step uses n8n, use an n8n webhook placeholder: "https://<your-n8n-instance>/webhook/<name>". Do not invent a generic API domain.
@@ -244,6 +253,28 @@ HARD RULES
 - Syntactically valid: correct brackets, quotes and indentation.
 - Keep the technical intent of the snippet and use only real, reachable domains.
 - All comments in English."""
+
+
+def build_technical_explanation_repair_prompt(step: dict[str, Any]) -> str:
+    """Expand a too-short technical explanation for one step."""
+    return f"""Rewrite the technical explanation for the following workflow step.
+
+TITLE: {step.get('title') or '—'}
+DESCRIPTION: {step.get('description') or '—'}
+CURRENT EXPLANATION:
+{step.get('technical_explanation') or ''}
+
+REQUIREMENTS
+- At least 300 characters and at least 3 full sentences.
+- Cover all three aspects:
+  1. Architecture role: why this step exists and which data it consumes from the previous step.
+  2. API contract: exact endpoint, HTTP method, required headers, request payload shape and JSON response shape.
+  3. Edge cases: rate limits, pagination, empty arrays and type conversion.
+- 100 % technical English. No German words, no umlauts.
+- Do not change or repeat the code.
+
+Answer with valid JSON only:
+{{"technical_explanation": "..."}}"""
 
 
 def build_new_topic_prompt(

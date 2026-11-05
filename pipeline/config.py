@@ -142,6 +142,18 @@ WORKFLOW_FORBIDDEN_IMPORTS: frozenset[str] = FORBIDDEN_IMPORTS | {"random"}
 # Full stdlib set (Python 3.10+). Used by the AST gatekeeper.
 STDLIB_MODULES: frozenset[str] = frozenset(sys.stdlib_module_names) | {"__future__"}
 
+# Modules that generated snippets frequently use. If the code contains e.g.
+# ``os.environ`` but never imports ``os``, the AST gate fails immediately and
+# the self-healing loop repairs that exact snippet.
+FREQUENT_MODULES: frozenset[str] = frozenset(
+    {
+        "os", "json", "urllib", "http", "statistics", "collections", "re",
+        "time", "datetime", "math", "itertools", "functools", "hashlib",
+        "hmac", "base64", "socket", "ssl", "sys", "argparse", "logging",
+        "typing", "dataclasses", "uuid",
+    }
+)
+
 # --------------------------------------------------------------------------- #
 # Content blacklist
 # --------------------------------------------------------------------------- #
@@ -177,6 +189,62 @@ TRIVIAL_GLOSSARY_TERMS: frozenset[str] = frozenset(
     {"api", "database", "webhook", "server", "client", "http", "json"}
 )
 
+# German words that must never appear in generated English content. Umlauts and
+# ß are detected separately, so this list only needs unambiguous German words.
+GERMAN_WORDS: frozenset[str] = frozenset(
+    {
+        "und", "für", "über", "wird", "werden", "nicht", "eine", "einen",
+        "einem", "einer", "ist", "sind", "kann", "muss", "soll", "auch",
+        "oder", "aber", "bei", "nach", "aus", "durch", "unter", "zwischen",
+        "damit", "dass", "weil", "wenn", "dann", "nur", "noch", "bereits",
+        "immer", "alle", "viele", "mehr", "welche", "dieser", "diese",
+        "dieses", "ich", "wir", "sie", "du", "sich", "der", "das", "dem",
+        "den", "des", "zur", "zum", "im", "vom", "beim", "eines", "kein",
+        "keine", "ohne", "gegen", "sehr", "hier", "dort", "jetzt", "schon",
+        "erst",
+    }
+)
+
+# Tool -> markers that prove the tool is actually used in the generated code.
+TOOL_CODE_MARKERS: dict[str, tuple[str, ...]] = {
+    "X API": ("api.x.com", "twitter.com", "tweets/search"),
+    "Twitter API": ("api.x.com", "twitter.com", "tweets/search"),
+    "OpenAI API": ("api.openai.com", "chat/completions"),
+    "Supabase": ("supabase", "rest/v1"),
+    "Slack": ("slack.com", "SLACK_WEBHOOK_URL"),
+    "n8n": ("n8n",),
+    "Stripe": ("stripe.com",),
+    "Resend": ("resend.com",),
+    "PostHog": ("posthog.com",),
+    "Sentry": ("sentry.io",),
+    "GitHub": ("api.github.com", "github.com"),
+    "Notion": ("api.notion.com", "notion.so"),
+    "Airtable": ("api.airtable.com", "airtable.com"),
+    "Twilio": ("twilio.com",),
+    "Google": ("googleapis.com", "google.com"),
+    "Cloudflare": ("cloudflare.com",),
+}
+
+# Tool -> documentation URL markers used for the context-specific LINK check.
+TOOL_LINK_MARKERS: dict[str, tuple[str, ...]] = {
+    "X API": ("x.com", "twitter.com"),
+    "Twitter API": ("x.com", "twitter.com"),
+    "OpenAI API": ("openai.com",),
+    "Supabase": ("supabase.com", "supabase.co"),
+    "Slack": ("slack.com",),
+    "n8n": ("n8n.io",),
+    "Stripe": ("stripe.com",),
+    "Resend": ("resend.com",),
+    "PostHog": ("posthog.com",),
+    "Sentry": ("sentry.io",),
+    "GitHub": ("github.com",),
+    "Notion": ("notion.so", "notion.com"),
+    "Airtable": ("airtable.com",),
+    "Twilio": ("twilio.com",),
+    "Google": ("google.com",),
+    "Cloudflare": ("cloudflare.com",),
+}
+
 # --------------------------------------------------------------------------- #
 # Workflow structure (variable, complexity-driven – no fixed 5-step rule)
 # --------------------------------------------------------------------------- #
@@ -186,7 +254,7 @@ PREREQUISITES_MIN = 4
 GLOSSARY_TERMS_MIN = 4
 TROUBLESHOOTING_MIN = 3
 MIN_CODE_LINES = 8
-MIN_TECHNICAL_EXPLANATION = 120  # characters – didactic depth
+MIN_TECHNICAL_EXPLANATION = 300  # characters – 3+ sentences of didactic depth
 
 FINAL_PREREQUISITE = (
     "Python 3.10 or newer (standard library only) and a terminal"

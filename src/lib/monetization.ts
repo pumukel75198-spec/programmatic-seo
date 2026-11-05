@@ -56,7 +56,7 @@ export function resolveWorkflowCheckout(
   );
 }
 
-/** Checkout für das 19,99 € Python-Starter-Skript. */
+/** Checkout für das 29,99 € API-Script-Kit. */
 export function resolveScriptCheckout(explicit?: string | null): string {
   return normalizeCheckoutUrl(
     explicit ??

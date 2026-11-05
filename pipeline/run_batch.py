@@ -122,6 +122,25 @@ def repair_step_code(
     return None
 
 
+def repair_step_explanation(
+    step: dict[str, Any],
+    max_attempts: int = 2,
+) -> str | None:
+    """Expand a too-short technical explanation for a single step."""
+    for _ in range(max_attempts):
+        try:
+            data = llm_client.chat_json(
+                prompts.CODE_REPAIR_SYSTEM,
+                prompts.build_technical_explanation_repair_prompt(step),
+            )
+        except llm_client.LLMError:
+            continue
+        text = str(data.get("technical_explanation") or "").strip()
+        if len(text) >= cfg.MIN_TECHNICAL_EXPLANATION:
+            return text
+    return None
+
+
 def repair_existing_workflow(
     workflow: dict[str, Any],
 ) -> tuple[dict[str, Any] | None, list[str]]:
@@ -134,10 +153,23 @@ def repair_existing_workflow(
         ast_result = validator.check_python_ast(
             code, "Step", cfg.WORKFLOW_FORBIDDEN_IMPORTS
         )
-        if not ast_result.ok:
-            repaired = repair_step_code(step, "; ".join(ast_result.errors))
+        line_count = len(validator.non_empty_lines(code))
+        if not ast_result.ok or line_count < cfg.MIN_CODE_LINES:
+            feedback = "; ".join(ast_result.errors)
+            if line_count < cfg.MIN_CODE_LINES:
+                feedback = (f"{feedback}; " if feedback else "") + (
+                    f"code_snippet has only {line_count} non-empty lines "
+                    f"(minimum {cfg.MIN_CODE_LINES})"
+                )
+            repaired = repair_step_code(step, feedback)
             if repaired:
                 step["code_snippet"] = repaired
+        if len(
+            str(step.get("technical_explanation") or "").strip()
+        ) < cfg.MIN_TECHNICAL_EXPLANATION:
+            repaired_explanation = repair_step_explanation(step)
+            if repaired_explanation:
+                step["technical_explanation"] = repaired_explanation
 
     result = validator.validate_workflow(candidate)
     if result.ok:
@@ -194,6 +226,32 @@ def generate_workflow(
             candidate_details["glossary"] = data.get("glossary", [])
             candidate_details["troubleshooting"] = data.get("troubleshooting", [])
             candidate_details["resources"] = data.get("resources", [])
+            # Replace known dead documentation URLs with the current live pages.
+            # The hard live-URL gate would otherwise discard the workflow.
+            doc_url_fixes = {
+                "https://api.x.com": "https://developer.x.com/en/docs",
+                "https://api.x.com/docs": (
+                    "https://developer.x.com/en/docs/twitter-api/tweets/search/introduction"
+                ),
+                "https://api.x.com/docs/search": (
+                    "https://developer.x.com/en/docs/twitter-api/tweets/search/introduction"
+                ),
+                "https://supabase.com/docs/reference/rest": (
+                    "https://supabase.com/docs/guides/api"
+                ),
+                "https://supabase.com/docs/reference/javascript": (
+                    "https://supabase.com/docs/guides/api"
+                ),
+            }
+            for resource in candidate_details["resources"]:
+                label = str(resource.get("label") or "").strip().lower()
+                url = str(resource.get("url") or "")
+                if label == "x api" and "developer.twitter.com" in url:
+                    resource["url"] = "https://developer.x.com/en/docs"
+                elif "supabase.com/docs/reference/javascript" in url:
+                    resource["url"] = "https://supabase.com/docs/guides/api"
+                else:
+                    resource["url"] = doc_url_fixes.get(url, url)
 
             generated_steps = data.get("steps") or []
             steps_out: list[dict[str, Any]] = []
@@ -206,11 +264,66 @@ def generate_workflow(
                 links = step.get("links") or []
                 if not links:
                     links = []
+                    resources = candidate_details.get("resources") or []
+                    tool_docs = {
+                        "X API": (
+                            "X API Search Docs",
+                            "https://developer.x.com/en/docs/twitter-api/tweets/search/introduction",
+                        ),
+                        "OpenAI API": (
+                            "OpenAI Chat Completions Docs",
+                            "https://platform.openai.com/docs/api-reference/chat/create",
+                        ),
+                        "Supabase": (
+                            "Supabase REST Docs",
+                            "https://supabase.com/docs/guides/api",
+                        ),
+                        "Slack": (
+                            "Slack Incoming Webhooks",
+                            "https://api.slack.com/messaging/webhooks",
+                        ),
+                    }
                     for tool_name in step.get("tools") or []:
                         tool = partner.get(tool_name) or {}
                         url = tool.get("affiliateUrl") or tool.get("url") or ""
+                        label = tool_name
+                        if not url and tool_name in tool_docs:
+                            label, url = tool_docs[tool_name]
+                        if not url:
+                            for resource in resources:
+                                resource_label = str(
+                                    resource.get("label") or ""
+                                ).strip().lower()
+                                if resource_label == str(tool_name).strip().lower():
+                                    url = str(resource.get("url") or "")
+                                    label = str(resource.get("label") or tool_name)
+                                    break
                         if url:
-                            links.append({"label": tool_name, "url": url})
+                            links.append({"label": label, "url": url})
+                if not links:
+                    code = str(step.get("code_snippet") or "")
+                    stdlib_docs = [
+                        ("collections", "Python collections Docs", "https://docs.python.org/3/library/collections.html"),
+                        ("statistics", "Python statistics Docs", "https://docs.python.org/3/library/statistics.html"),
+                        ("json", "Python json Docs", "https://docs.python.org/3/library/json.html"),
+                        ("re", "Python re Docs", "https://docs.python.org/3/library/re.html"),
+                        ("math", "Python math Docs", "https://docs.python.org/3/library/math.html"),
+                        ("datetime", "Python datetime Docs", "https://docs.python.org/3/library/datetime.html"),
+                        ("itertools", "Python itertools Docs", "https://docs.python.org/3/library/itertools.html"),
+                        ("functools", "Python functools Docs", "https://docs.python.org/3/library/functools.html"),
+                        ("hashlib", "Python hashlib Docs", "https://docs.python.org/3/library/hashlib.html"),
+                        ("hmac", "Python hmac Docs", "https://docs.python.org/3/library/hmac.html"),
+                        ("argparse", "Python argparse Docs", "https://docs.python.org/3/library/argparse.html"),
+                    ]
+                    for module, label, url in stdlib_docs:
+                        if f"import {module}" in code or f"from {module}" in code:
+                            links.append({"label": label, "url": url})
+                            break
+                for link in links:
+                    url = str(link.get("url") or "")
+                    if "supabase.com/docs/reference/javascript" in url:
+                        url = "https://supabase.com/docs/guides/api"
+                    link["url"] = doc_url_fixes.get(url, url)
                 step["links"] = links
                 steps_out.append(step)
             candidate_details["steps"] = steps_out
@@ -244,15 +357,35 @@ def generate_workflow(
                 ast_result = validator.check_python_ast(
                     code, "Step", cfg.WORKFLOW_FORBIDDEN_IMPORTS
                 )
-                if not ast_result.ok:
-                    repaired = repair_step_code(
-                        step, "; ".join(ast_result.errors)
-                    )
+                line_count = len(validator.non_empty_lines(code))
+                if not ast_result.ok or line_count < cfg.MIN_CODE_LINES:
+                    feedback = "; ".join(ast_result.errors)
+                    if line_count < cfg.MIN_CODE_LINES:
+                        feedback = (
+                            f"{feedback}; " if feedback else ""
+                        ) + (
+                            f"code_snippet has only {line_count} non-empty lines "
+                            f"(minimum {cfg.MIN_CODE_LINES})"
+                        )
+                    repaired = repair_step_code(step, feedback)
                     if repaired:
                         step["code_snippet"] = repaired
                         print(
                             f"  [REPAIR] {workflow['slug']}: fixed snippet "
                             f"'{step.get('title', '')[:40]}'"
+                        )
+
+                # Expand shallow explanations instead of rejecting the whole
+                # workflow after an otherwise valid generation.
+                if len(
+                    str(step.get("technical_explanation") or "").strip()
+                ) < cfg.MIN_TECHNICAL_EXPLANATION:
+                    repaired_explanation = repair_step_explanation(step)
+                    if repaired_explanation:
+                        step["technical_explanation"] = repaired_explanation
+                        print(
+                            f"  [REPAIR] {workflow['slug']}: expanded technical "
+                            f"explanation for '{step.get('title', '')[:40]}'"
                         )
 
             result = validator.validate_workflow(candidate)
@@ -264,6 +397,40 @@ def generate_workflow(
                     ignore_slug=workflow.get("slug"),
                 )
             )
+            if not result.ok:
+                # Map "Step N: ..." errors back to the exact snippet and repair
+                # only that step. This fixes content-level issues (dummy data,
+                # overwritten variables, missing top-level calls) without
+                # burning a full workflow regeneration attempt.
+                repaired_steps = False
+                for index, step in enumerate(
+                    candidate_details.get("steps") or [], start=1
+                ):
+                    step_errors = [
+                        message
+                        for message in result.errors
+                        if message.startswith(f"Step {index}:")
+                    ]
+                    if not step_errors:
+                        continue
+                    repaired = repair_step_code(step, "; ".join(step_errors))
+                    if repaired:
+                        step["code_snippet"] = repaired
+                        repaired_steps = True
+                        print(
+                            f"  [REPAIR] {workflow['slug']}: targeted repair "
+                            f"for step {index} '{step.get('title', '')[:40]}'"
+                        )
+                if repaired_steps:
+                    result = validator.validate_workflow(candidate)
+                    result.errors.extend(
+                        validator.check_duplicate(
+                            candidate.get("slug", ""),
+                            candidate.get("title", ""),
+                            workflows_all,
+                            ignore_slug=workflow.get("slug"),
+                        )
+                    )
             if result.ok:
                 return candidate, result.warnings, attempt
 

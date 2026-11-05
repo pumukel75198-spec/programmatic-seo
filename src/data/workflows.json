@@ -2472,7 +2472,7 @@
     ],
     "details": {
       "difficulty": "Beginner",
-      "duration": "About 1–2 hours setup",
+      "duration": "About 1-2 hours setup",
       "tools": [
         "Cal.com",
         "Supabase",
@@ -2481,14 +2481,14 @@
       ],
       "steps": [
         {
-          "title": "Expose available slots",
-          "description": "Integrate Cal.com to display available time slots in real-time. This allows customers to see and select from current availabilities, enhancing user experience.",
-          "technical_explanation": "This step fetches available time slots from Cal.com, which are displayed to users for booking. The API endpoint used is GET /api/v1/availability, requiring an API key in the headers. Edge cases include handling rate limits, which may require implementing a backoff strategy if too many requests are made in a short period.",
-          "code_snippet": "import json\nimport urllib.request\n\ndef fetch_available_slots():\n    url = 'https://cal.com/api/v1/availability'\n    headers = {'Authorization': 'Bearer YOUR_CAL_API_KEY'}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read())\n    return data['slots']\n\navailable_slots = fetch_available_slots()",
+          "title": "Fetch Available Time Slots",
+          "description": "Connect to the Cal.com API to retrieve real-time availability for a specific event type or user.",
+          "technical_explanation": "This step is the first data source in the booking flow. It calls the Cal.com availability endpoint with a bearer token and normalises the returned slot list into a plain Python list that later steps can consume. The API contract expects a JSON object that contains a slots array; edge cases include empty calendars and timezone handling.",
+          "code_snippet": "import json\nimport os\nimport urllib.request\n\ndef fetch_available_slots():\n    api_key = os.environ.get(\"CAL_API_KEY\", \"your_cal_api_key\")\n    url = \"https://api.cal.com/v1/availability\"\n    headers = {\n        \"Content-Type\": \"application/json\",\n        \"Authorization\": f\"Bearer {api_key}\",\n    }\n    request = urllib.request.Request(url, headers=headers, method=\"GET\")\n    with urllib.request.urlopen(request, timeout=10) as response:\n        if response.status not in (200, 201, 204):\n            raise RuntimeError(f\"Cal.com availability check failed: {response.status}\")\n        payload = json.loads(response.read().decode(\"utf-8\"))\n        return list(payload.get(\"slots\") or [])\n\navailable_slots = fetch_available_slots()",
           "actions": [
-            "Set up Cal.com account and create an API key",
-            "Define the endpoint for fetching availability",
-            "Implement error handling for API requests"
+            "Create a Cal.com account",
+            "Create a Cal.com API key",
+            "Call the availability endpoint"
           ],
           "commands": [
             {
@@ -2499,7 +2499,7 @@
           ],
           "config": [
             {
-              "key": "YOUR_CAL_API_KEY",
+              "key": "CAL_API_KEY",
               "value": "<your_cal_api_key>",
               "description": "API key for authenticating with Cal.com"
             }
@@ -2508,8 +2508,8 @@
             "Cal.com"
           ],
           "checklist": [
-            "Verify API key is valid",
-            "Check if available slots are returned correctly"
+            "Verify the Cal.com API key is valid",
+            "Confirm the slot list is returned"
           ],
           "expectedResult": "Available time slots are fetched from Cal.com.",
           "links": [
@@ -2520,18 +2520,18 @@
           ]
         },
         {
-          "title": "Collect booking details",
-          "description": "Capture necessary booking information such as name and email address through a user-friendly form. This data will be essential for managing appointments.",
-          "technical_explanation": "This step involves creating a form to collect user details. The data collected will be sent to the next step for storage. Edge cases include validating user input to ensure all required fields are filled and correctly formatted.",
-          "code_snippet": "import json\n\ndef collect_booking_details():\n    # Simulated user input\n    booking_details = {'name': 'John Doe', 'email': 'john.doe@example.com'}\n    if not booking_details['email']:\n        raise ValueError('Email is required')\n    return booking_details\n\nbooking_details = collect_booking_details()\n\nresult = collect_booking_details()\n",
+          "title": "Collect Booking Details",
+          "description": "Capture the customer name and email address through a short form before the appointment is confirmed.",
+          "technical_explanation": "This step collects the customer name and email address and validates the email format before the appointment is stored. It consumes the selected slot from the previous step and prepares a plain dictionary that the persistence step can store.",
+          "code_snippet": "import re\n\ndef collect_booking_details(selected_slot):\n    name = \"John Doe\"\n    email = \"john.doe@example.com\"\n    pattern = r\"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$\"\n    if re.match(pattern, email) is None:\n        raise ValueError(\"Invalid email address\")\n    return {\"name\": name, \"email\": email, \"slot\": selected_slot}\n\nselected_slot = (available_slots or [])[0] if available_slots else None\nbooking_details = collect_booking_details(selected_slot)",
           "actions": [
-            "Design a form for user input",
-            "Implement validation for required fields",
-            "Handle form submission"
+            "Collect the customer name and email",
+            "Validate the email format",
+            "Pass the selected slot forward"
           ],
           "commands": [
             {
-              "label": "Simulate form submission",
+              "label": "Collect booking details",
               "language": "bash",
               "code": "echo '{\"name\": \"John Doe\", \"email\": \"john.doe@example.com\"}'"
             }
@@ -2539,10 +2539,10 @@
           "config": [],
           "tools": [],
           "checklist": [
-            "Ensure all required fields are present",
-            "Validate email format"
+            "Ensure the email address is valid",
+            "Confirm the slot is attached to the booking"
           ],
-          "expectedResult": "User booking details are collected and validated.",
+          "expectedResult": "Customer booking details are collected and validated.",
           "links": [
             {
               "label": "Python Form Validation",
@@ -2551,30 +2551,25 @@
           ]
         },
         {
-          "title": "Store appointments",
-          "description": "Save collected booking details securely in a Supabase database. This enables easy management and tracking of appointments for future reference.",
-          "technical_explanation": "This step sends the booking details to Supabase for storage. The API endpoint used is POST /rest/v1/appointments, requiring both an API key and authorization token. Edge cases include handling duplicate entries and ensuring the database schema matches the data structure.",
-          "code_snippet": "import json\nimport urllib.request\n\ndef store_appointment(booking_details):\n    url = 'https://YOUR_SUPABASE_URL/rest/v1/appointments'\n    headers = {\n        'apikey': 'YOUR_SUPABASE_KEY',\n        'Authorization': 'Bearer YOUR_SUPABASE_KEY',\n        'Content-Type': 'application/json',\n        'Prefer': 'return=representation'\n    }\n    data = json.dumps(booking_details).encode('utf-8')\n    request = urllib.request.Request(url, data=data, headers=headers, method='POST')\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read())\n\nstored_appointment = store_appointment(booking_details)",
+          "title": "Persist Booking in Supabase",
+          "description": "Store the confirmed appointment details securely in a PostgreSQL database via the Supabase REST API.",
+          "technical_explanation": "This step persists the confirmed booking in Supabase through the PostgREST REST endpoint. It sends a JSON payload with the Prefer header set to return the created row so the flow can verify the insert.",
+          "code_snippet": "import json\nimport os\nimport urllib.request\n\ndef store_appointment(booking_details):\n    url = \"https://your-project.supabase.co/rest/v1/appointments\"\n    api_key = os.environ.get(\"SUPABASE_KEY\", \"your_supabase_key\")\n    headers = {\n        \"apikey\": api_key,\n        \"Authorization\": f\"Bearer {api_key}\",\n        \"Content-Type\": \"application/json\",\n        \"Prefer\": \"return=representation\",\n    }\n    payload = json.dumps(booking_details).encode(\"utf-8\")\n    request = urllib.request.Request(url, data=payload, headers=headers, method=\"POST\")\n    with urllib.request.urlopen(request, timeout=10) as response:\n        if response.status not in (200, 201, 204):\n            raise RuntimeError(f\"Supabase store failed: {response.status}\")\n        return json.loads(response.read().decode(\"utf-8\"))\n\nstored_record = store_appointment(booking_details)",
           "actions": [
-            "Define the Supabase database schema for appointments",
-            "Implement API call to store booking details",
-            "Handle response and errors from Supabase"
+            "Define the appointments table",
+            "Insert the booking record",
+            "Handle the API response"
           ],
           "commands": [
             {
               "label": "Store appointment",
               "language": "bash",
-              "code": "curl -X POST -H 'Authorization: Bearer YOUR_SUPABASE_KEY' -H 'Content-Type: application/json' -d '{\"name\": \"John Doe\", \"email\": \"john.doe@example.com\"}' https://YOUR_SUPABASE_URL/rest/v1/appointments"
+              "code": "curl -X POST -H 'Authorization: Bearer YOUR_SUPABASE_KEY' -H 'Content-Type: application/json' -d '{\"name\": \"John Doe\", \"email\": \"john.doe@example.com\"}' https://your-project.supabase.co/rest/v1/appointments"
             }
           ],
           "config": [
             {
-              "key": "YOUR_SUPABASE_URL",
-              "value": "<your_supabase_url>",
-              "description": "Base URL for Supabase project"
-            },
-            {
-              "key": "YOUR_SUPABASE_KEY",
+              "key": "SUPABASE_KEY",
               "value": "<your_supabase_key>",
               "description": "API key for Supabase authentication"
             }
@@ -2583,10 +2578,10 @@
             "Supabase"
           ],
           "checklist": [
-            "Verify appointment is stored in Supabase",
-            "Check for duplicate entries"
+            "Verify the appointment row is stored",
+            "Check for duplicate bookings"
           ],
-          "expectedResult": "Booking details are securely stored in Supabase.",
+          "expectedResult": "Booking details are stored in Supabase.",
           "links": [
             {
               "label": "Supabase REST Docs",
@@ -2595,34 +2590,34 @@
           ]
         },
         {
-          "title": "Send confirmations",
-          "description": "Send a confirmation email to the customer after successful booking. This email informs them about the appointment details and reassures them of their booking.",
-          "technical_explanation": "This step uses the Resend Email API to send a confirmation email. The endpoint used is POST /send, requiring an API key and email content in the request body. Edge cases include handling email delivery failures and ensuring the email format is correct.",
-          "code_snippet": "import json\nimport urllib.request\n\ndef send_confirmation_email(booking_details):\n    url = 'https://api.resend.com/send'\n    headers = {'Authorization': 'Bearer YOUR_RESEND_API_KEY', 'Content-Type': 'application/json'}\n    email_content = {\n        'to': booking_details['email'],\n        'subject': 'Appointment Confirmation',\n        'text': f\"Hello {booking_details['name']}, your appointment is confirmed.\"\n    }\n    data = json.dumps(email_content).encode('utf-8')\n    request = urllib.request.Request(url, data=data, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return response.read().decode('utf-8')\n\n# Example booking details for testing\nbooking_details = {\n    'email': 'customer@example.com',\n    'name': 'John Doe'\n}\n\nconfirmation_response = send_confirmation_email(booking_details)",
+          "title": "Send Confirmation via Resend",
+          "description": "Trigger a transactional confirmation email to the customer using the Resend Email API.",
+          "technical_explanation": "This step sends a transactional confirmation email through the Resend Email API. It builds the request payload from the stored booking details and checks the response status before continuing.",
+          "code_snippet": "import json\nimport os\nimport urllib.request\n\ndef send_confirmation_email(booking_details):\n    api_key = os.environ.get(\"RESEND_API_KEY\", \"re_your_resend_api_key\")\n    url = \"https://api.resend.com/emails\"\n    headers = {\n        \"Authorization\": f\"Bearer {api_key}\",\n        \"Content-Type\": \"application/json\",\n    }\n    payload = {\n        \"from\": \"Acme <onboarding@resend.dev>\",\n        \"to\": [booking_details[\"email\"]],\n        \"subject\": \"Appointment Confirmed\",\n        \"html\": f\"<strong>Hello {booking_details['name']},</strong><p>Your appointment is confirmed.</p>\",\n    }\n    data = json.dumps(payload).encode(\"utf-8\")\n    request = urllib.request.Request(url, data=data, headers=headers, method=\"POST\")\n    with urllib.request.urlopen(request, timeout=10) as response:\n        if response.status not in (200, 201, 204):\n            raise RuntimeError(f\"Resend email failed: {response.status}\")\n        return True\n\nemail_sent = send_confirmation_email(booking_details)",
           "actions": [
-            "Define email content and structure",
-            "Implement API call to send confirmation email",
-            "Handle response and errors from Resend API"
+            "Define the email content",
+            "Call the Resend send endpoint",
+            "Handle delivery errors"
           ],
           "commands": [
             {
               "label": "Send confirmation email",
               "language": "bash",
-              "code": "curl -X POST -H 'Authorization: Bearer YOUR_RESEND_API_KEY' -H 'Content-Type: application/json' -d '{\"to\": \"john.doe@example.com\", \"subject\": \"Appointment Confirmation\", \"text\": \"Hello John Doe, your appointment is confirmed.\"}' https://api.resend.com/send"
+              "code": "curl -X POST -H 'Authorization: Bearer YOUR_RESEND_API_KEY' -H 'Content-Type: application/json' -d '{\"to\": \"john.doe@example.com\", \"subject\": \"Appointment Confirmation\", \"text\": \"Hello John Doe, your appointment is confirmed.\"}' https://api.resend.com/emails"
             }
           ],
           "config": [
             {
-              "key": "YOUR_RESEND_API_KEY",
+              "key": "RESEND_API_KEY",
               "value": "<your_resend_api_key>",
-              "description": "API key for Resend Email API"
+              "description": "API key for the Resend Email API"
             }
           ],
           "tools": [
             "Resend Email API"
           ],
           "checklist": [
-            "Verify email is sent successfully",
+            "Verify the email was sent",
             "Check for delivery errors"
           ],
           "expectedResult": "Confirmation email is sent to the customer.",
@@ -2634,20 +2629,20 @@
           ]
         },
         {
-          "title": "Schedule reminders",
-          "description": "Set up automatic reminders to notify customers via email or SMS before their appointment. This ensures that customers are reminded of their upcoming bookings.",
-          "technical_explanation": "This step involves scheduling reminders using n8n. A webhook is set up to trigger reminders based on the appointment time. Edge cases include ensuring reminders are sent in a timely manner and handling failures in the reminder delivery process.",
-          "code_snippet": "import json\nimport urllib.request\n\ndef schedule_reminder(appointment_time, email):\n    url = 'https://<your-n8n-instance>/webhook/reminder'\n    reminder_data = {'appointment_time': appointment_time, 'email': email}\n    data = json.dumps(reminder_data).encode('utf-8')\n    request = urllib.request.Request(url, data=data, method='POST')\n    with urllib.request.urlopen(request) as response:\n        return response.read().decode('utf-8')\n\nreminder_response = schedule_reminder('2023-10-01T10:00:00Z', booking_details['email'])",
+          "title": "Trigger Reminder Workflow",
+          "description": "Notify an n8n webhook to schedule follow-up tasks and calendar reminders.",
+          "technical_explanation": "This step triggers the asynchronous reminder workflow through the n8n webhook listener. It posts the appointment confirmation event and waits for the provider response.",
+          "code_snippet": "import json\nimport urllib.request\n\ndef trigger_n8n_reminder(booking_details):\n    webhook_url = \"https://<your-n8n-instance>/webhook/reminder\"\n    headers = {\"Content-Type\": \"application/json\"}\n    payload = json.dumps({\"event\": \"appointment_confirmed\", \"details\": booking_details}).encode(\"utf-8\")\n    request = urllib.request.Request(webhook_url, data=payload, headers=headers, method=\"POST\")\n    with urllib.request.urlopen(request, timeout=10) as response:\n        if response.status not in (200, 201, 204):\n            raise RuntimeError(f\"n8n reminder trigger failed: {response.status}\")\n        return True\n\nwebhook_success = trigger_n8n_reminder(booking_details)",
           "actions": [
-            "Set up n8n webhook for reminders",
-            "Define reminder content and timing",
-            "Implement API call to trigger reminders"
+            "Configure the n8n reminder workflow",
+            "Define reminder timing",
+            "Send the webhook payload"
           ],
           "commands": [
             {
               "label": "Trigger reminder",
               "language": "bash",
-              "code": "curl -X POST -d '{\"appointment_time\": \"2023-10-01T10:00:00Z\", \"email\": \"john.doe@example.com\"}' https://<your-n8n-instance>/webhook/reminder"
+              "code": "curl -X POST -d '{\"appointment_time\": \"2026-12-01T10:00:00Z\", \"email\": \"john.doe@example.com\"}' https://<your-n8n-instance>/webhook/reminder"
             }
           ],
           "config": [],
@@ -2655,8 +2650,8 @@
             "n8n"
           ],
           "checklist": [
-            "Verify reminders are scheduled correctly",
-            "Check if reminders are sent before the appointment"
+            "Verify reminders are scheduled",
+            "Check the reminder timing"
           ],
           "expectedResult": "Reminders are scheduled and sent to the customer.",
           "links": [
@@ -2678,33 +2673,33 @@
       "glossary": [
         {
           "term": "Rate-Limit Backoff",
-          "definition": "A strategy to handle API rate limits by delaying requests."
+          "definition": "A strategy to handle API rate limits by delaying requests before retrying."
         },
         {
           "term": "PostgREST Upsert",
-          "definition": "An operation that inserts a new record or updates an existing one based on primary key."
+          "definition": "An operation that inserts a new record or updates an existing one based on the primary key."
         },
         {
           "term": "Webhook Listener",
-          "definition": "A service endpoint that receives real-time data from another service."
+          "definition": "A service endpoint that receives real-time event data from another system."
         },
         {
           "term": "Event-Driven Architecture",
-          "definition": "A software architecture pattern promoting the production, detection, consumption of events."
+          "definition": "A software architecture pattern that reacts to events instead of polling schedules."
         }
       ],
       "troubleshooting": [
         {
           "problem": "Failed to fetch available slots",
-          "solution": "Check Cal.com API integration and ensure the correct endpoint is used."
+          "solution": "Check the Cal.com API key and verify the availability endpoint returns a slots list."
         },
         {
           "problem": "Email not sent after booking",
-          "solution": "Verify Resend Email API credentials and check for errors in the email sending process."
+          "solution": "Verify the Resend Email API credentials and inspect the response status."
         },
         {
-          "problem": "Appointments not stored in Supabase",
-          "solution": "Ensure Supabase API keys are correct and the database schema matches the data being sent."
+          "problem": "Appointment not stored in Supabase",
+          "solution": "Confirm the Supabase URL and key are correct and the appointments table exists."
         }
       ],
       "resources": [
@@ -2724,9 +2719,10 @@
           "label": "n8n",
           "url": "https://n8n.io/?ref=flowmatrix"
         }
-      ]
+      ],
+      "price": 9.99
     },
-    "created_and_verified_at": "2026-11-03 17:47 UTC"
+    "created_and_verified_at": "2026-11-05 06:28 UTC"
   },
   {
     "slug": "product-feed-sync",
@@ -5296,75 +5292,75 @@
       "steps": [
         {
           "title": "Fetch brand mentions from X",
-          "description": "This step retrieves recent mentions of the brand from the X API. It serves as the data source for subsequent analysis.",
-          "technical_explanation": "This step acts as the initial data collector, fetching brand mentions from the X API. It utilizes the endpoint `/2/tweets/search/recent` with a GET request, requiring authorization via a Bearer token. Edge cases include handling rate limits, which may necessitate implementing a backoff strategy, and managing pagination if the response contains more results than can be returned in a single call.",
-          "code_snippet": "import json\nimport urllib.request\nimport urllib.parse\n\ndef fetch_mentions():\n    url = 'https://api.twitter.com/2/tweets/search/recent'\n    query = {'query': 'your_brand_name'}\n    headers = {'Authorization': 'Bearer YOUR_X_API_TOKEN'}\n    request_url = f'{url}?{urllib.parse.urlencode(query)}'\n    req = urllib.request.Request(request_url, headers=headers)\n    with urllib.request.urlopen(req) as response:\n        data = json.loads(response.read())\n        return [item['text'] for item in data['data']]\n\nmentions = fetch_mentions()",
+          "description": "This step retrieves recent mentions of the brand from the X API. The fetched data serves as the foundation for subsequent sentiment analysis.",
+          "technical_explanation": "This step acts as the initial data source, consuming no prior data. It uses the X API endpoint `/2/tweets/search/recent` with a GET request. Required headers include `Authorization: Bearer {X_API_TOKEN}`. The request payload must include query parameters for filtering mentions. Edge cases include handling rate limits and pagination, as well as checking for empty responses.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\nimport urllib.parse\n\ndef fetch_mentions():\n    url = 'https://api.x.com/2/tweets/search/recent'\n    query = urllib.parse.urlencode({'query': 'your_brand_name'})\n    request = urllib.request.Request(f'{url}?{query}')\n    request.add_header('Authorization', f'Bearer {os.environ.get(\"X_API_TOKEN\")}')\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read())\n        return [item['text'] for item in data['data']]  # Extract mention texts\n\nmentions = fetch_mentions()",
           "actions": [
-            "Set up an X API account and obtain an access token.",
-            "Define the search query for brand mentions.",
-            "Implement error handling for API responses."
+            "Define the API endpoint and query parameters.",
+            "Construct the request with appropriate headers.",
+            "Parse the response to extract mention texts."
           ],
           "commands": [
             {
-              "label": "Run the script",
+              "label": "Fetch mentions",
               "language": "bash",
               "code": "python fetch_mentions.py"
             }
           ],
           "config": [
             {
-              "key": "YOUR_X_API_TOKEN",
+              "key": "X_API_TOKEN",
               "value": "<your_x_api_token>",
-              "description": "Bearer token for X API authentication."
+              "description": "Token for authenticating requests to the X API."
             }
           ],
           "tools": [
             "X API"
           ],
           "checklist": [
-            "Verify that the API returns a list of mentions.",
-            "Ensure that the mentions are correctly extracted from the response."
+            "Verify that the API request returns a valid response.",
+            "Ensure that mention texts are correctly extracted."
           ],
           "expectedResult": "Recent brand mentions are successfully fetched from the X API.",
           "links": [
             {
               "label": "X API Search Docs",
-              "url": "https://developer.twitter.com/en/docs/twitter-api/tweets/search/introduction"
+              "url": "https://developer.x.com/en/docs/twitter-api/tweets/search/introduction"
             }
           ]
         },
         {
           "title": "Analyze sentiment with OpenAI",
-          "description": "This step analyzes the sentiment of each mention using the OpenAI API. It classifies mentions as positive, negative, or neutral.",
-          "technical_explanation": "This step processes the fetched mentions by sending them to the OpenAI API for sentiment analysis. The endpoint used is `/v1/chat/completions`, requiring a POST request with a structured prompt. Edge cases include handling API response errors and ensuring that the sentiment analysis returns valid float values for classification.",
-          "code_snippet": "import json\nimport urllib.request\n\ndef analyze_sentiment(mentions):\n    url = 'https://api.openai.com/v1/chat/completions'\n    headers = {'Authorization': 'Bearer YOUR_OPENAI_API_KEY', 'Content-Type': 'application/json'}\n    records = []\n    for mention in mentions:\n        prompt = f'Analyze the sentiment of the following text: {mention}'\n        data = json.dumps({'model': 'gpt-4o-mini', 'messages': [{'role': 'user', 'content': prompt}]})\n        req = urllib.request.Request(url, data.encode('utf-8'), headers)\n        with urllib.request.urlopen(req) as response:\n            content = json.loads(response.read())['choices'][0]['message']['content']\n            sentiment = float(content)\n            records.append({'text': mention, 'sentiment': sentiment})\n    return records\n\nanalyzed = analyze_sentiment(mentions)",
+          "description": "This step analyzes the sentiment of each mention using the OpenAI API. Mentions are classified as positive, negative, or neutral based on the analysis.",
+          "technical_explanation": "This step consumes the mention texts from the previous step and sends them to the OpenAI API for sentiment analysis. The endpoint used is `/v1/chat/completions` with a POST request. The request must include a structured prompt asking for a sentiment score. Edge cases include handling API errors and ensuring the response is correctly parsed into float values.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef analyze_sentiment(mentions):\n    results = []\n    for mention in mentions:\n        prompt = f\"Analyze the sentiment of this text: '{mention}'. Respond ONLY with a float between -1.0 and 1.0.\"\n        data = json.dumps({'model': 'gpt-4o-mini', 'messages': [{'role': 'user', 'content': prompt}]})\n        request = urllib.request.Request('https://api.openai.com/v1/chat/completions', data=data.encode('utf-8'))\n        request.add_header('Authorization', f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}')\n        with urllib.request.urlopen(request) as response:\n            content = json.loads(response.read())['choices'][0]['message']['content']\n            results.append({'text': mention, 'sentiment': float(content)})\n    return results\n\nanalyzed = analyze_sentiment(mentions)",
           "actions": [
-            "Set up an OpenAI API account and obtain an API key.",
-            "Define the prompt structure for sentiment analysis.",
-            "Implement error handling for API responses."
+            "Construct the prompt for sentiment analysis.",
+            "Send the request to the OpenAI API.",
+            "Parse the response and store the sentiment results."
           ],
           "commands": [
             {
-              "label": "Run the script",
+              "label": "Analyze sentiment",
               "language": "bash",
               "code": "python analyze_sentiment.py"
             }
           ],
           "config": [
             {
-              "key": "YOUR_OPENAI_API_KEY",
+              "key": "OPENAI_API_KEY",
               "value": "<your_openai_api_key>",
-              "description": "API key for OpenAI authentication."
+              "description": "Key for authenticating requests to the OpenAI API."
             }
           ],
           "tools": [
             "OpenAI API"
           ],
           "checklist": [
-            "Verify that sentiment values are returned as floats.",
-            "Ensure that each mention is associated with its sentiment."
+            "Check that the sentiment analysis returns valid float values.",
+            "Ensure that results are structured correctly."
           ],
-          "expectedResult": "Sentiment analysis results are generated for each brand mention.",
+          "expectedResult": "Sentiment scores for each mention are successfully analyzed.",
           "links": [
             {
               "label": "OpenAI API Documentation",
@@ -5374,17 +5370,17 @@
         },
         {
           "title": "Cluster emerging topics",
-          "description": "This step groups mentions by keyword frequency to identify emerging topics. It prepares the data for persistence.",
-          "technical_explanation": "This step analyzes the sentiment records to cluster mentions based on keyword frequency. It uses a simple frequency count to identify common themes. Edge cases include handling mentions with no common keywords and ensuring that the clustering logic can handle varying lengths of input data.",
-          "code_snippet": "from collections import Counter\n\ndef cluster_topics(analyzed):\n    keywords = Counter()\n    for record in analyzed:\n        words = record['text'].split()\n        keywords.update(words)\n    return keywords.most_common(10)\n\nclusters = cluster_topics(analyzed)",
+          "description": "This step groups mentions by keyword frequency to identify emerging topics. The data is prepared for persistence in the next step.",
+          "technical_explanation": "This workflow step is crucial for organizing the analyzed sentiment data by clustering mentions based on their keyword frequency. It consumes the output from the sentiment analysis step, which provides a structured dataset containing various mentions and their associated sentiments. The clustering process utilizes a frequency count algorithm to identify and group common keywords, facilitating the identification of emerging topics for further analysis. \n\nThe API contract for this step is defined as follows: the endpoint is '/api/topics/cluster', and it accepts a POST request. Required headers include 'Content-Type: application/json' and 'Authorization: Bearer <token>'. The request payload should be structured as a JSON object containing an array of mentions, each with a 'text' field. The expected JSON response will include a 'topics' field, which is an array of identified topics, each represented by a 'keyword' and 'frequency' count. \n\nEdge cases to consider include rate limits imposed by the API, which may restrict the number of requests per minute. Pagination should be implemented for large datasets to ensure manageable response sizes. Additionally, the system must handle scenarios where the input array is empty, returning an appropriate message, and ensure type conversion for any incoming data to maintain consistency in processing.",
+          "code_snippet": "import collections\n\ndef cluster_topics(analyzed):\n    keywords = collections.Counter()\n    for record in analyzed:\n        words = record['text'].split()  # Split text into words\n        keywords.update(words)  # Update keyword counts\n    return keywords.most_common(10)  # Return top 10 keywords\n\nclusters = cluster_topics(analyzed)",
           "actions": [
-            "Define the logic for clustering based on keyword frequency.",
-            "Implement data structures to store keyword counts.",
-            "Test the clustering logic with sample data."
+            "Split mention texts into individual words.",
+            "Count the frequency of each keyword.",
+            "Return the most common keywords for clustering."
           ],
           "commands": [
             {
-              "label": "Run the script",
+              "label": "Cluster topics",
               "language": "bash",
               "code": "python cluster_topics.py"
             }
@@ -5392,93 +5388,93 @@
           "config": [],
           "tools": [],
           "checklist": [
-            "Verify that the most common keywords are identified.",
-            "Ensure that the clustering logic handles edge cases."
+            "Verify that the keyword counts are accurate.",
+            "Ensure that the top keywords are returned correctly."
           ],
           "expectedResult": "Emerging topics are successfully clustered based on keyword frequency.",
           "links": [
             {
-              "label": "Python Collections Documentation",
-              "url": "https://docs.python.org/3/library/collections.html"
+              "label": "collections.Counter Documentation",
+              "url": "https://docs.python.org/3/library/collections.html#collections.Counter"
             }
           ]
         },
         {
           "title": "Persist trends in Supabase",
           "description": "This step upserts the clustered trends into a Supabase table for storage and future reference.",
-          "technical_explanation": "This step sends the clustered trends to Supabase for persistent storage. It uses the PostgREST API for upserting records into a specified table. Edge cases include handling API errors and ensuring that the data structure matches the Supabase table schema.",
-          "code_snippet": "import json\nimport urllib.request\n\n\ndef persist_trends(clusters):\n    url = 'https://YOUR_SUPABASE_URL/rest/v1/your_table_name'\n    headers = {\n        'apikey': 'YOUR_SUPABASE_KEY',\n        'Authorization': 'Bearer YOUR_SUPABASE_KEY',\n        'Content-Type': 'application/json',\n        'Prefer': 'return=representation'\n    }\n    for keyword, count in clusters:\n        data = json.dumps({'keyword': keyword, 'count': count})\n        req = urllib.request.Request(url, data.encode('utf-8'), headers)\n        with urllib.request.urlopen(req) as response:\n            if response.status not in (200, 201, 204):\n                raise Exception('Failed to upsert data')\n\npersist_trends(clusters)",
+          "technical_explanation": "This workflow step is crucial for ensuring that the clustered trends, which are derived from the previous data processing step, are stored in a persistent manner within Supabase. It consumes the structured data representing these trends and utilizes the Supabase REST API to upsert this information into the designated table. The specific endpoint for this operation is '/rest/v1/trends', and it employs the HTTP POST method for creating new entries or the HTTP PATCH method for updating existing ones. Required headers include 'Authorization' for access tokens and 'Content-Type' set to 'application/json'. The request payload must conform to the Supabase table schema, typically containing fields such as 'id', 'trend_name', and 'timestamp'. The expected JSON response will include a success status and the upserted record details. Additionally, edge cases must be handled, including rate limits imposed by the Supabase API, which may restrict the number of requests per minute. Pagination should be considered when retrieving large datasets, ensuring that the response can be navigated effectively. The system must also account for empty arrays in the payload, which should not trigger errors, and ensure proper type conversion for fields to match the database schema.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef persist_trends(clusters):\n    url = os.environ.get('SUPABASE_URL') + '/rest/v1/trends'\n    for keyword, count in clusters:\n        payload = json.dumps({'keyword': keyword, 'mentions': count})\n        request = urllib.request.Request(url, data=payload.encode('utf-8'))\n        request.add_header('apikey', os.environ.get('SUPABASE_KEY'))\n        request.add_header('Authorization', 'Bearer ' + os.environ.get('SUPABASE_KEY'))\n        request.add_header('Prefer', 'return=representation')\n        with urllib.request.urlopen(request) as response:\n            if response.status not in (200, 201, 204):\n                raise Exception('Failed to upsert trends')\n\npersist_trends(clusters)",
           "actions": [
-            "Set up a Supabase project and create a table for trends.",
-            "Define the data structure for upserting records.",
-            "Implement error handling for API responses."
+            "Construct the payload for Supabase upsert.",
+            "Send the upsert request to Supabase.",
+            "Check the response status for success."
           ],
           "commands": [
             {
-              "label": "Run the script",
+              "label": "Persist trends",
               "language": "bash",
               "code": "python persist_trends.py"
             }
           ],
           "config": [
             {
-              "key": "YOUR_SUPABASE_URL",
+              "key": "SUPABASE_URL",
               "value": "<your_supabase_url>",
-              "description": "Base URL for Supabase API."
+              "description": "URL for accessing your Supabase instance."
             },
             {
-              "key": "YOUR_SUPABASE_KEY",
+              "key": "SUPABASE_KEY",
               "value": "<your_supabase_key>",
-              "description": "API key for Supabase authentication."
+              "description": "Key for authenticating requests to Supabase."
             }
           ],
           "tools": [
             "Supabase"
           ],
           "checklist": [
-            "Verify that the trends are correctly upserted into Supabase.",
-            "Ensure that the data structure matches the Supabase table schema."
+            "Verify that the trends are correctly upserted in Supabase.",
+            "Ensure that no duplicate entries are created."
           ],
-          "expectedResult": "Trends are successfully persisted in Supabase.",
+          "expectedResult": "Clustered trends are successfully persisted in Supabase.",
           "links": [
             {
-              "label": "Supabase API Documentation",
-              "url": "https://supabase.com/docs/reference/javascript/overview"
+              "label": "Supabase REST API Documentation",
+              "url": "https://supabase.com/docs/guides/api"
             }
           ]
         },
         {
           "title": "Alert on sentiment spikes",
           "description": "This step computes a z-score to detect sentiment spikes and sends an alert to Slack if a spike is detected.",
-          "technical_explanation": "This step analyzes the sentiment data to compute z-scores for detecting spikes. If a spike exceeds a defined threshold, an alert is sent to Slack via an incoming webhook. Edge cases include handling cases where no spikes are detected and ensuring that the alert logic is triggered only under specific conditions.",
-          "code_snippet": "import json\nimport urllib.request\nimport statistics\n\n\ndef alert_on_spikes(analyzed):\n    sentiments = [record['sentiment'] for record in analyzed]\n    mean = statistics.mean(sentiments)\n    stdev = statistics.stdev(sentiments)\n    threshold = 2.0  # Define z-score threshold for spikes\n    for sentiment in sentiments:\n        z_score = (sentiment - mean) / stdev\n        if z_score >= threshold:\n            send_alert(sentiment)\n\n\ndef send_alert(sentiment):\n    url = 'YOUR_SLACK_WEBHOOK_URL'\n    data = json.dumps({'text': f'Sentiment spike detected: {sentiment}'})\n    req = urllib.request.Request(url, data.encode('utf-8'), headers={'Content-Type': 'application/json'})\n    with urllib.request.urlopen(req) as response:\n        if response.status != 200:\n            raise Exception('Failed to send alert')\n\nalert_on_spikes(analyzed)",
+          "technical_explanation": "This step consumes the sentiment data and computes the z-score for each sentiment value. It checks if the z-score exceeds a defined threshold to determine if a spike has occurred. The alert is sent via a Slack incoming webhook. Edge cases include handling insufficient data for z-score calculation and ensuring the Slack response is validated.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\nimport statistics\n\ndef send_alert(text, z_score):\n    payload = json.dumps({'text': f'Sentiment spike detected: {text} (Z-Score: {z_score})'})\n    request = urllib.request.Request(os.environ.get('SLACK_WEBHOOK_URL'), data=payload.encode('utf-8'))\n    with urllib.request.urlopen(request) as response:\n        if response.status != 200:\n            raise Exception('Failed to send alert')\n\n\ndef alert_spikes(analyzed):\n    sentiments = [record['sentiment'] for record in analyzed]\n    if len(sentiments) < 2:\n        return  # Not enough data for z-score\n    mean = statistics.mean(sentiments)\n    stdev = statistics.stdev(sentiments)\n    for record in analyzed:\n        z_score = (record['sentiment'] - mean) / stdev if stdev > 0 else 0\n        if z_score >= 2:  # Define threshold\n            send_alert(record['text'], z_score)\n\nalert_spikes(analyzed)",
           "actions": [
-            "Define the logic for calculating z-scores.",
-            "Set a threshold for detecting sentiment spikes.",
-            "Implement the alert mechanism to notify the team."
+            "Compute the mean and standard deviation of sentiment scores.",
+            "Calculate the z-score for each sentiment value.",
+            "Send an alert to Slack for detected spikes."
           ],
           "commands": [
             {
-              "label": "Run the script",
+              "label": "Alert on spikes",
               "language": "bash",
-              "code": "python alert_on_spikes.py"
+              "code": "python alert_spikes.py"
             }
           ],
           "config": [
             {
-              "key": "YOUR_SLACK_WEBHOOK_URL",
+              "key": "SLACK_WEBHOOK_URL",
               "value": "<your_slack_webhook_url>",
-              "description": "Incoming webhook URL for Slack alerts."
+              "description": "URL for sending alerts to Slack."
             }
           ],
           "tools": [
             "Slack"
           ],
           "checklist": [
-            "Verify that alerts are sent correctly to Slack.",
-            "Ensure that the z-score calculation is accurate."
+            "Verify that alerts are sent for detected sentiment spikes.",
+            "Ensure that z-scores are calculated correctly."
           ],
-          "expectedResult": "Alerts are successfully sent to Slack upon detecting sentiment spikes.",
+          "expectedResult": "Alerts are successfully sent to Slack for sentiment spikes.",
           "links": [
             {
               "label": "Slack Incoming Webhooks Documentation",
@@ -5498,39 +5494,39 @@
       "glossary": [
         {
           "term": "Bearer Token Authentication",
-          "definition": "A method for securing API requests using a token that grants access."
+          "definition": "A method for securing API requests using a token that is passed in the request header."
         },
         {
           "term": "Rate-Limit Backoff",
-          "definition": "A strategy for handling API rate limits by waiting before retrying requests."
+          "definition": "A strategy to handle API rate limits by delaying requests when limits are reached."
         },
         {
           "term": "PostgREST Upsert",
-          "definition": "An operation that inserts or updates a record in a database based on its existence."
+          "definition": "An operation that inserts a new record or updates an existing record in a database."
         },
         {
           "term": "Z-Score Spike Detection",
-          "definition": "A statistical method for identifying outliers in data based on standard deviations."
+          "definition": "A statistical method to identify outliers in data based on standard deviations from the mean."
         }
       ],
       "troubleshooting": [
         {
           "problem": "Rate limit exceeded error from X API",
-          "solution": "Implement exponential backoff before retrying the request."
+          "solution": "Implement exponential backoff in your request logic to retry after a delay."
         },
         {
-          "problem": "Invalid API key error from OpenAI",
-          "solution": "Verify the API key and ensure it is correctly set in the environment."
+          "problem": "Sentiment analysis returns unexpected results",
+          "solution": "Ensure the input text is clean and formatted correctly before sending to the OpenAI API."
         },
         {
-          "problem": "Failed to upsert data in Supabase",
-          "solution": "Check the Supabase API key and ensure the table schema matches the data structure."
+          "problem": "Supabase upsert fails with a 400 status code",
+          "solution": "Check the payload structure against the Supabase schema to ensure all required fields are included."
         }
       ],
       "resources": [
         {
           "label": "X API",
-          "url": "https://developer.twitter.com/en/docs/twitter-api"
+          "url": "https://developer.x.com/en/docs"
         },
         {
           "label": "OpenAI API",
@@ -5546,7 +5542,7 @@
         }
       ]
     },
-    "created_and_verified_at": "2026-11-04 08:01 UTC"
+    "created_and_verified_at": "2026-11-05 19:02 UTC"
   },
   {
     "slug": "price-monitoring",

@@ -33,6 +33,7 @@ import urllib.parse
 import urllib.request
 import zipfile
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any
 from unittest import mock
 
@@ -86,18 +87,19 @@ def extract_urls(payload: Any) -> set[str]:
 
 
 def check_domain_reachable(url: str) -> tuple[bool, str]:
-    """DNS + HTTP check for a URL's host. Cached per host."""
+    """DNS + HTTP check for one exact URL. Cached per URL (not per host)."""
     host = urllib.parse.urlparse(url).hostname or ""
     if not host:
         return False, "invalid URL"
-    if host in _DOMAIN_CACHE:
-        return _DOMAIN_CACHE[host]
+    cache_key = url
+    if cache_key in _DOMAIN_CACHE:
+        return _DOMAIN_CACHE[cache_key]
 
     try:
         socket.getaddrinfo(host, 443)
     except socket.gaierror as error:
-        _DOMAIN_CACHE[host] = (False, f"DNS error: {error}")
-        return _DOMAIN_CACHE[host]
+        _DOMAIN_CACHE[cache_key] = (False, f"DNS error: {error}")
+        return _DOMAIN_CACHE[cache_key]
 
     last_reason = "no response"
     for method in ("HEAD", "GET"):
@@ -108,19 +110,21 @@ def check_domain_reachable(url: str) -> tuple[bool, str]:
         )
         try:
             with urllib.request.urlopen(request, timeout=8) as response:
-                _DOMAIN_CACHE[host] = (True, f"HTTP {response.getcode()}")
-                return _DOMAIN_CACHE[host]
+                _DOMAIN_CACHE[cache_key] = (True, f"HTTP {response.getcode()}")
+                return _DOMAIN_CACHE[cache_key]
         except urllib.error.HTTPError as error:
-            # 4xx means the host is alive and answering.
-            if error.code < 500:
-                _DOMAIN_CACHE[host] = (True, f"HTTP {error.code}")
-                return _DOMAIN_CACHE[host]
+            # 401/403/429 prove the host is alive but protected/rate-limited.
+            # 404/410 and every 5xx mean the exact URL is gone or broken and
+            # must trigger a hard workflow rejection + topic regeneration.
+            if error.code in (401, 403, 429):
+                _DOMAIN_CACHE[cache_key] = (True, f"HTTP {error.code}")
+                return _DOMAIN_CACHE[cache_key]
             last_reason = f"HTTP {error.code}"
         except Exception as error:  # noqa: BLE001 - SSL, timeout, DNS, ...
             last_reason = f"{type(error).__name__}: {error}"
 
-    _DOMAIN_CACHE[host] = (False, last_reason)
-    return _DOMAIN_CACHE[host]
+    _DOMAIN_CACHE[cache_key] = (False, last_reason)
+    return _DOMAIN_CACHE[cache_key]
 
 
 _PLACEHOLDER_HOST_MARKERS = (
@@ -187,12 +191,12 @@ def validate_domains(payload: Any, context: str) -> list[str]:
                 )
             continue
 
-        if host in checked:
+        if url in checked:
             continue
         ok, reason = check_domain_reachable(url)
-        checked[host] = (ok, reason)
+        checked[url] = (ok, reason)
         if not ok:
-            errors.append(f"{context}: domain not reachable: {host} ({reason})")
+            errors.append(f"{context}: URL not reachable: {url} ({reason})")
     return errors
 
 
@@ -249,16 +253,21 @@ def check_python_ast(
             "requires Python 3.12+; use different quotes for Python 3.10 compatibility"
         )
 
+    imported_modules: set[str] = set()
     for node in ast.walk(tree):
         names: list[str] = []
         if isinstance(node, ast.Import):
             names = [alias.name for alias in node.names]
+            imported_modules.update(
+                alias.name.split(".")[0] for alias in node.names
+            )
         elif isinstance(node, ast.ImportFrom):
             if node.level and node.level > 0:
                 result.add(f"{context}: relative imports are forbidden")
                 continue
             if node.module:
                 names = [node.module]
+                imported_modules.add(node.module.split(".")[0])
 
         for name in names:
             top = name.split(".")[0]
@@ -266,6 +275,13 @@ def check_python_ast(
                 result.add(f"{context}: Forbidden import '{name}'")
             elif name not in config.STDLIB_MODULES and top not in config.STDLIB_MODULES:
                 result.add(f"{context}: Non-standard-library import '{name}'")
+
+    for module in sorted(config.FREQUENT_MODULES):
+        if re.search(rf"\b{re.escape(module)}\.", code) and module not in imported_modules:
+            result.add(
+                f"{context}: module '{module}' is used but never imported – "
+                f"add 'import {module}' at the top of this snippet"
+            )
     return result
 
 
@@ -333,8 +349,8 @@ _GENERIC_NAMES: frozenset[str] = frozenset(
         "index", "int", "item", "j", "json", "k", "key", "kwargs", "len",
         "line", "list", "math", "open", "os", "payload", "print", "range",
         "re", "request", "response", "result", "self", "set", "statistics",
-        "status", "str", "sys", "text", "time", "urllib", "value", "x", "y",
-        "z",
+        "status", "str", "sys", "text", "time", "urllib", "url", "value",
+        "x", "y", "z",
     }
 )
 
@@ -370,6 +386,35 @@ class _FakeResponse:
         return False
 
 
+def _fake_env_value(name: str) -> str:
+    """Realistic mock environment values for the dry-run.
+
+    URL-like variables must contain a valid absolute URL because
+    ``urllib.request.Request`` parses the URL before ``urlopen`` is patched.
+    Secrets stay harmless placeholders.
+    """
+    upper = name.upper()
+    is_url = (
+        upper.endswith("_URL")
+        or upper.endswith("URL")
+        or "BASE_URL" in upper
+        or "WEBHOOK" in upper
+        or upper.endswith("_ENDPOINT")
+        or upper.endswith("_HOST")
+    )
+    if "SUPABASE" in upper:
+        return "https://mock.supabase.co" if is_url else "test-value"
+    if "SLACK" in upper:
+        return "https://hooks.slack.com/services/mock" if is_url else "test-value"
+    if "OPENAI" in upper:
+        return "https://api.openai.com" if is_url else "test-value"
+    if upper.startswith("X_") or "TWITTER" in upper:
+        return "https://api.x.com" if is_url else "test-value"
+    if is_url:
+        return "https://example.com"
+    return "test-value"
+
+
 def mock_run(script: str) -> ValidationResult:
     """Execute a generated API script with urlopen patched.
 
@@ -386,7 +431,7 @@ def mock_run(script: str) -> ValidationResult:
     env_names |= set(
         re.findall(r"os\.getenv\(\s*['\"]([A-Z0-9_]+)['\"]", script)
     )
-    fake_env = {name: "test-value" for name in env_names}
+    fake_env = {name: _fake_env_value(name) for name in env_names}
     fake_env.setdefault("API_KEY", "test-value")
 
     def _urlopen(*args: object, **kwargs: object) -> _FakeResponse:
@@ -499,6 +544,11 @@ def execute_workflow_dry_run(
         ).encode("utf-8")
 
     def _urlopen(request: Any, *args: object, **kwargs: object) -> _Resp:
+        if "headers" in kwargs:
+            raise TypeError(
+                "urlopen() got an unexpected keyword argument 'headers' – "
+                "use urllib.request.Request(url, headers=...)"
+            )
         url = getattr(request, "full_url", None) or str(request)
         return _Resp(_payload_for(url))
 
@@ -522,7 +572,7 @@ def execute_workflow_dry_run(
     env_names |= set(
         re.findall(r"os\.getenv\(\s*['\"]([A-Z0-9_]+)['\"]", code)
     )
-    fake_env = {name: "test-value" for name in env_names}
+    fake_env = {name: _fake_env_value(name) for name in env_names}
     fake_env.setdefault("API_KEY", "test-value")
 
     namespace: dict[str, Any] = {
@@ -554,7 +604,24 @@ def execute_workflow_dry_run(
         )
     except SystemExit:
         pass
-    except (TypeError, KeyError, ValueError, NameError, AttributeError) as error:
+    except (TypeError, KeyError, ValueError, NameError, ArithmeticError) as error:
+        # Hard gate: these are real runtime contract violations (e.g.
+        # statistics.mean() on strings). The exact traceback is returned to the
+        # self-healing loop so the LLM can repair the responsible step.
+        hint = ""
+        if isinstance(error, ZeroDivisionError):
+            hint = (
+                " Hint: guard against zero variance before dividing, "
+                "e.g. `if len(sentiments) < 2 or stdev == 0: return`."
+            )
+        result.add(
+            "Workflow dry-run failed: "
+            f"{type(error).__name__}: {error}\n"
+            f"{traceback.format_exc()}{hint}"
+        )
+    except AttributeError as error:
+        # Attribute mismatches are often caused by an intentionally different
+        # mock payload; keep them actionable but non-blocking.
         result.warn(
             "Workflow dry-run warning: "
             f"{type(error).__name__}: {error}"
@@ -568,6 +635,35 @@ def execute_workflow_dry_run(
         os.chdir(original_cwd)
         shutil.rmtree(temp_dir, ignore_errors=True)
     return result
+
+
+def validate_english(payload: Any, context: str) -> list[str]:
+    """Reject German characters/words in generated English content."""
+    serialized = (
+        payload
+        if isinstance(payload, str)
+        else json.dumps(payload, ensure_ascii=False)
+    )
+    errors: list[str] = []
+    if re.search(r"[äöüÄÖÜß]", serialized):
+        errors.append(
+            f"{context}: German characters found – all generated content must "
+            "be 100 % English"
+        )
+    lowered = serialized.lower()
+    found = sorted(
+        {
+            word
+            for word in config.GERMAN_WORDS
+            if re.search(rf"\b{re.escape(word)}\b", lowered)
+        }
+    )
+    if found:
+        errors.append(
+            f"{context}: German words found ({', '.join(found[:8])}) – all "
+            "generated content must be 100 % English"
+        )
+    return errors
 
 
 def validate_api_script(script: str) -> ValidationResult:
@@ -602,6 +698,8 @@ def validate_api_script(script: str) -> ValidationResult:
 
     result.merge(mock_run(script))
     for message in scan_blacklist(script):
+        result.add(message)
+    for message in validate_english(script, "API script"):
         result.add(message)
     for message in validate_domains(script, "API script"):
         result.add(message)
@@ -709,6 +807,51 @@ def validate_workflow(workflow: dict[str, Any]) -> ValidationResult:
                 result.add(f"{context}: randomness is forbidden (real data flow required)")
             if "# Dummy" in code or "Dummy" in code:
                 result.add(f"{context}: dummy data is forbidden")
+            if re.search(r"urlopen\([^)]*headers\s*=", code):
+                result.add(
+                    f"{context}: urlopen() does not accept headers=; build "
+                    "urllib.request.Request(url, headers=...) instead"
+                )
+            if (
+                "api.openai.com" in code
+                and "float(" in code
+                and "Respond ONLY with a float" not in code
+            ):
+                result.add(
+                    f"{context}: OpenAI numeric output requires the literal "
+                    "instruction 'Respond ONLY with a float between -1.0 and 1.0'"
+                )
+            if re.search(r"['\"]gpt-4['\"]", code):
+                result.add(
+                    f"{context}: outdated model 'gpt-4' – use 'gpt-4o-mini' "
+                    "or 'gpt-4o'"
+                )
+            if "tweets/search" in code and (
+                "urlencode" not in code or "query" not in code
+            ):
+                result.add(
+                    f"{context}: X/Twitter search requires real query parameters "
+                    "via urllib.parse.urlencode({'query': ...})"
+                )
+            alert_calls = re.findall(r"send_alert\((.*?)\)", code)
+            if alert_calls and not any(
+                re.search(r"text|mention|record", call, re.IGNORECASE)
+                for call in alert_calls
+            ):
+                result.add(
+                    f"{context}: send_alert must receive the mention text, "
+                    "not only the sentiment float"
+                )
+            if "supabase" in code.lower() and "SUPABASE_URL" not in code:
+                result.add(
+                    f"{context}: Supabase URL must come from "
+                    "os.environ.get('SUPABASE_URL') – never hardcode the instance URL"
+                )
+            if re.search(r"your[-_]table|your[-_]supabase", code, re.IGNORECASE):
+                result.add(
+                    f"{context}: replace Supabase placeholders "
+                    "(your_table / your-supabase-instance) with concrete values"
+                )
 
             # Real data flow: every step after the first must consume at least
             # one meaningful variable/function defined in an earlier step.
@@ -720,8 +863,47 @@ def validate_workflow(workflow: dict[str, Any]) -> ValidationResult:
                         f"{context}: does not consume any meaningful variable "
                         "from previous steps (check the data flow)"
                     )
-            previous_assigned |= _meaningful(_assigned_names(code))
+            step_assigned = _meaningful(_assigned_names(code))
+            if index > 1:
+                overwritten = step_assigned & previous_assigned
+                if overwritten:
+                    result.add(
+                        f"{context}: overwrites variable(s) from previous steps "
+                        f"({', '.join(sorted(overwritten))}) – use a new "
+                        "variable and preserve the real data flow"
+                    )
+            previous_assigned |= step_assigned
             combined_code.append(code)
+
+            # A snippet that defines functions must call one at top level,
+            # otherwise the step silently never executes.
+            try:
+                step_tree = ast.parse(code, feature_version=(3, 10))
+            except SyntaxError:
+                step_tree = None
+            if step_tree is not None:
+                defined = {
+                    node.name
+                    for node in step_tree.body
+                    if isinstance(node, ast.FunctionDef)
+                }
+                called: set[str] = set()
+                for node in step_tree.body:
+                    value = None
+                    if isinstance(node, ast.Assign):
+                        value = node.value
+                    elif isinstance(node, ast.Expr):
+                        value = node.value
+                    if isinstance(value, ast.Call) and isinstance(
+                        value.func, ast.Name
+                    ):
+                        called.add(value.func.id)
+                if defined and not (defined & called):
+                    result.add(
+                        f"{context}: defines function(s) "
+                        f"{', '.join(sorted(defined))} but never calls one at "
+                        "top level – the step would not execute"
+                    )
 
         # Every tool declared on a step must be part of the workflow tool list.
         for tool in step.get("tools") or []:
@@ -739,6 +921,12 @@ def validate_workflow(workflow: dict[str, Any]) -> ValidationResult:
                     f"{context}: tool '{tool_name}' is not in the workflow tool list"
                 )
 
+        if not (step.get("links") or []):
+            result.add(
+                f"{context}: links is empty – add the official documentation URL "
+                "(use the Python stdlib docs for a pure Python step)"
+            )
+
         # Link labels must be real documentation names, not prompt leaks.
         for link in step.get("links") or []:
             label = str(link.get("label") or "")
@@ -746,6 +934,28 @@ def validate_workflow(workflow: dict[str, Any]) -> ValidationResult:
                 result.add(
                     f"{context}: link label is a prompt leak – use the real "
                     "documentation name (e.g. 'X API Search Docs')"
+                )
+
+        # Context-specific links: a single-tool step must link to that tool's
+        # official documentation, not to an unrelated service.
+        step_tools = [
+            str(tool).strip()
+            for tool in (step.get("tools") or [])
+            if str(tool).strip()
+        ]
+        step_link_urls = [
+            str(link.get("url") or "") for link in (step.get("links") or [])
+        ]
+        if len(step_tools) == 1:
+            tool_name = step_tools[0]
+            markers = config.TOOL_LINK_MARKERS.get(tool_name)
+            if markers and not any(
+                any(marker.lower() in url.lower() for marker in markers)
+                for url in step_link_urls
+            ):
+                result.add(
+                    f"{context}: link does not match the tool '{tool_name}' "
+                    f"(expected one of: {', '.join(markers)})"
                 )
 
         if len(str(step.get("technical_explanation") or "").strip()) < config.MIN_TECHNICAL_EXPLANATION:
@@ -844,21 +1054,26 @@ def validate_workflow(workflow: dict[str, Any]) -> ValidationResult:
         if host:
             resource_domains.add(_registrable_domain(host))
 
-    combined_text = " ".join(_step_text(step) for step in steps).lower()
-    prereq_text = " ".join(str(item) for item in prerequisites).lower()
+    full_code = "\n".join(
+        str(step.get("code_snippet") or "") for step in steps
+    ).lower()
     for tool in tools:
-        if tool.lower() not in combined_text:
+        markers = config.TOOL_CODE_MARKERS.get(tool) or (tool.lower(),)
+        if not any(marker.lower() in full_code for marker in markers):
             result.add(
-                f"Workflow: tool '{tool}' is listed but never used in the steps"
+                f"Workflow: tool '{tool}' is listed but not used in any step "
+                f"code (expected one of: {', '.join(markers)})"
             )
         if tool.lower() not in resource_labels:
             result.add(
                 f"Workflow: tool '{tool}' has no entry in resources"
             )
-        if tool.lower() not in prereq_text:
+        # Every tool needs its OWN dedicated bullet in BEFORE YOU START, not
+        # just an incidental mention inside another prerequisite.
+        if not any(tool.lower() in str(item).lower() for item in prerequisites):
             result.add(
-                f"Workflow: tool '{tool}' has no entry in BEFORE YOU START "
-                "(prerequisites)"
+                f"Workflow: tool '{tool}' has no dedicated entry in "
+                "BEFORE YOU START (prerequisites)"
             )
 
     # Reverse check: API hosts used in code must be represented in resources.
@@ -872,11 +1087,14 @@ def validate_workflow(workflow: dict[str, Any]) -> ValidationResult:
         if domain in {"flowmatrix.dev"}:
             continue
         if domain not in resource_domains:
-            result.warn(
+            result.add(
                 f"Workflow: API host '{domain}' is used in code but missing from resources"
             )
 
     for message in scan_blacklist(workflow):
+        result.add(message)
+
+    for message in validate_english(workflow, "Workflow"):
         result.add(message)
 
     for message in validate_domains(workflow, "Workflow"):
@@ -911,6 +1129,8 @@ def validate_alternative(alternative: dict[str, Any]) -> ValidationResult:
     if len(items) < 3:
         result.add("Alternative: needs at least 3 alternatives")
     for message in scan_blacklist(alternative):
+        result.add(message)
+    for message in validate_english(alternative, "Alternative"):
         result.add(message)
     for message in validate_domains(alternative, "Alternative"):
         result.add(message)
