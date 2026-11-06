@@ -1,14 +1,14 @@
 {
   "mongodb-data-pipeline": {
-    "reason": "RuntimeError: Step 4: links is empty – add the official documentation URL (use the Python stdlib docs for a pure Python step); Workflow: API host 'mongodb-api.com' is used in code but missing from resources; Workflow: API host 'mongodb-api.com' is not part of the curated APIs – ungrounded API call",
-    "timestamp": "2026-11-06 17:21 UTC"
+    "reason": "RuntimeError: Workflow dry-run failed: NameError: name 'boto3' is not defined\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 996, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 56, in <module>\n  File \"workflow.py\", line 43, in upload_to_s3\nNameError: name 'boto3' is not defined. Did you mean: 'bool'?\n; Workflow: API host 'mongodb-api.com' is used in code but missing from resources; Workflow: API host 'mongodb-api.com' is not part of the curated APIs – ungrounded API call",
+    "timestamp": "2026-11-06 17:35 UTC"
   },
   "serverless-job-scheduler": {
-    "reason": "RuntimeError: Step 2: defines function(s) invoke_lambda but never calls one at top level – the step would not execute; Step 3: defines function(s) update_job_status but never calls one at top level – the step would not execute; Step 4: defines function(s) report_failure but never calls one at top level – the step would not execute",
-    "timestamp": "2026-11-06 17:24 UTC"
+    "reason": "RuntimeError: Step 2: defines function(s) invoke_lambda but never calls one at top level – the step would not execute; Step 3: defines function(s) update_job_status but never calls one at top level – the step would not execute; Step 4: defines function(s) report_failure but never calls one at top level – the step would not execute; Workflow dry-run failed: KeyError: 'status'\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 996, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 78, in <module>\nKeyError: 'status'\n",
+    "timestamp": "2026-11-06 17:37 UTC"
   },
   "auth0-sso-provisioning": {
-    "reason": "RuntimeError: Workflow dry-run failed: TypeError: 'float' object is not iterable\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 996, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 40, in <module>\n  File \"workflow.py\", line 24, in create_or_update_auth0_users\nTypeError: 'float' object is not iterable\n",
-    "timestamp": "2026-11-06 17:28 UTC"
+    "reason": "RuntimeError: Workflow dry-run failed: TypeError: 'float' object is not iterable\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 996, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 36, in <module>\n  File \"workflow.py\", line 23, in sync_auth0_users\nTypeError: 'float' object is not iterable\n",
+    "timestamp": "2026-11-06 17:39 UTC"
   }
 }
