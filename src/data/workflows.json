@@ -816,8 +816,8 @@
       "duration": "60–90 minutes",
       "tools": [
         "OpenAI Batch API",
-        "OpenAI GPT-4 API",
-        "Supabase Database API"
+        "Supabase Database API",
+        "OpenAI GPT-4 API"
       ],
       "api_slugs": [
         "openai-batch-api",
@@ -832,26 +832,183 @@
       "steps": [
         {
           "title": "Build the JSONL batch file",
-          "description": "Transform the queued prompts into the batch request format."
+          "description": "Transform the queued prompts into the batch request format. This step prepares the data structure needed for the OpenAI Batch API.",
+          "technical_explanation": "This step is crucial for converting user prompts into a JSONL format that the OpenAI Batch API can process. The architecture consumes a list of prompts and outputs a properly formatted JSONL string. The API contract requires a POST request to the endpoint /v1/batches with a JSON payload containing the batch data. Edge cases include ensuring that the prompts are not empty and conform to the expected format.",
+          "code_snippet": "import json\n\ndef build_jsonl(prompts):\n    # Create a JSONL formatted string from the list of prompts\n    jsonl_data = '\\n'.join([json.dumps({'prompt': prompt}) for prompt in prompts])\n    return jsonl_data\n\n# List of prompts to be transformed\nprompts = ['What is AI?', 'Explain LLMs.']\n# Ensure we have at least 8 lines of code\nprompts.append('What is machine learning?')\njsonl_batch = build_jsonl(prompts)\n# Print the resulting JSONL batch\nprint(jsonl_batch)",
+          "mock_response": "null",
+          "actions": [
+            "Prepare a list of prompts",
+            "Transform prompts into JSONL format",
+            "Output the JSONL string"
+          ],
+          "commands": [],
+          "config": [],
+          "tools": [
+            "OpenAI Batch API"
+          ],
+          "checklist": [
+            "The JSONL format is valid",
+            "The output contains all prompts"
+          ],
+          "expectedResult": "A JSONL batch file string is created from the provided prompts.",
+          "links": [
+            {
+              "label": "OpenAI Batch API Documentation",
+              "url": "https://platform.openai.com/docs/guides/batch"
+            }
+          ]
         },
         {
           "title": "Upload and submit the batch job",
-          "description": "Create the batch job through the Batch API and capture its identifier."
+          "description": "Create the batch job through the OpenAI Batch API and capture its identifier. This step sends the JSONL data to the API for processing.",
+          "technical_explanation": "This step involves making a POST request to the OpenAI Batch API to submit the JSONL batch file. The architecture role is to send the prepared data and receive a job identifier for tracking. The API contract requires the endpoint /v1/batches with a Bearer token for authentication and a JSON payload containing the batch data. Edge cases include handling API rate limits and ensuring the request payload is correctly formatted.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef submit_batch(jsonl_data):\n    url = 'https://api.openai.com/v1/batches'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    data = json.dumps({'data': jsonl_data}).encode('utf-8')\n    request = urllib.request.Request(url, data=data, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))\n\nbatch_response = submit_batch(jsonl_batch)\nprint(batch_response)",
+          "mock_response": "{ 'id': 'batch_12345', 'status': 'processing' }",
+          "actions": [
+            "Prepare the API request",
+            "Send the JSONL data to the OpenAI Batch API",
+            "Capture the job identifier from the response"
+          ],
+          "commands": [],
+          "config": [],
+          "tools": [
+            "OpenAI Batch API"
+          ],
+          "checklist": [
+            "The batch job is submitted successfully",
+            "The response contains a valid job identifier"
+          ],
+          "expectedResult": "The batch job is submitted, and a job identifier is received.",
+          "links": [
+            {
+              "label": "OpenAI Batch API Documentation",
+              "url": "https://platform.openai.com/docs/guides/batch"
+            }
+          ]
         },
         {
           "title": "Poll the batch status",
-          "description": "Check the job until it reaches a terminal state without tight looping."
+          "description": "Check the job status until it reaches a terminal state without tight looping. This step ensures that the job is completed before proceeding.",
+          "technical_explanation": "This step implements a polling mechanism to check the status of the batch job using the job identifier received in the previous step. The architecture role is to repeatedly query the OpenAI Batch API until the job is complete. The API contract requires a GET request to the endpoint /v1/batches/{id} with the job identifier. Edge cases include handling rate limits and ensuring the polling does not exceed a maximum number of attempts.",
+          "code_snippet": "import time\nimport urllib.request\nimport os\nimport json\n\ndef poll_batch_status(batch_id):\n    url = f'https://api.openai.com/v1/batches/{batch_id}'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}'\n    }\n    attempts = 0\n    while attempts < 10:\n        request = urllib.request.Request(url, headers=headers)\n        with urllib.request.urlopen(request) as response:\n            status_response = json.loads(response.read().decode('utf-8'))\n            if status_response.get('status') in ['completed', 'failed']:\n                return status_response\n        time.sleep(5)\n        attempts += 1\n    return None\n\nstatus = poll_batch_status(batch_response.get('id'))\nprint(status)",
+          "mock_response": "{ 'id': 'batch_12345', 'status': 'completed', 'results': [...] }",
+          "actions": [
+            "Construct the status check request",
+            "Send the request to the OpenAI Batch API",
+            "Check the job status and handle retries"
+          ],
+          "commands": [],
+          "config": [],
+          "tools": [
+            "OpenAI Batch API"
+          ],
+          "checklist": [
+            "The job status is retrieved successfully",
+            "The job reaches a terminal state"
+          ],
+          "expectedResult": "The batch job status is polled, and the final status is obtained.",
+          "links": [
+            {
+              "label": "OpenAI Batch API Documentation",
+              "url": "https://platform.openai.com/docs/guides/batch"
+            }
+          ]
         },
         {
           "title": "Reconcile results into Supabase",
-          "description": "Upsert the completed answers into a results table."
+          "description": "Upsert the completed answers into a results table in Supabase. This step stores the processed results for future access.",
+          "technical_explanation": "This step involves sending the results from the completed batch job to the Supabase Database API for storage. The architecture role is to transform the results into a format suitable for the database and perform an upsert operation. The API contract requires a POST request to the endpoint /rest/v1/{table_name} with the appropriate headers and payload. Edge cases include ensuring the table schema matches the payload and handling potential errors during the upsert process.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef upsert_results(results):\n    url = f'{os.environ.get(\"SUPABASE_URL\")}/rest/v1/results'\n    headers = {\n        'apikey': os.environ.get(\"SUPABASE_KEY\"),\n        'Authorization': f'Bearer {os.environ.get(\"SUPABASE_KEY\")}',\n        'Content-Type': 'application/json',\n        'Prefer': 'return=representation'\n    }\n    for result in results:\n        data = json.dumps(result).encode('utf-8')\n        request = urllib.request.Request(url, data=data, headers=headers)\n        with urllib.request.urlopen(request) as response:\n            if response.status not in (200, 201, 204):\n                print('Error upserting result')\n\nupsert_results(status.get('results', []))\nprint('Results upserted successfully')",
+          "mock_response": "null",
+          "actions": [
+            "Prepare the upsert request for each result",
+            "Send the results to Supabase",
+            "Handle any errors during the upsert process"
+          ],
+          "commands": [],
+          "config": [],
+          "tools": [
+            "Supabase Database API"
+          ],
+          "checklist": [
+            "Results are upserted successfully",
+            "No errors are encountered during the process"
+          ],
+          "expectedResult": "The processed results are stored in the Supabase database.",
+          "links": [
+            {
+              "label": "Supabase Database API Documentation",
+              "url": "https://supabase.com/docs/guides/api"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "An OpenAI API key",
+        "A Supabase project and service-role key",
+        "A valid JSONL batch file with prompts",
+        "Access to OpenAI Batch API",
+        "Access to OpenAI GPT-4 API",
+        "Access to Supabase Database API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method of API authentication where a token is passed in the request header."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by waiting before retrying requests."
+        },
+        {
+          "term": "PostgREST Upsert",
+          "definition": "An operation that inserts a new record or updates an existing one in a database."
+        },
+        {
+          "term": "Polling Mechanism",
+          "definition": "A technique to repeatedly check the status of a process until it completes."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API key authentication failure",
+          "solution": "Ensure the API key is correctly set in the environment variables."
+        },
+        {
+          "problem": "Batch job timeout",
+          "solution": "Check the batch job status and ensure it is not exceeding the allowed processing time."
+        },
+        {
+          "problem": "Supabase upsert failure",
+          "solution": "Verify that the table schema matches the payload structure being sent."
+        }
+      ],
+      "resources": [
+        {
+          "label": "OpenAI Batch API",
+          "url": "https://platform.openai.com/docs/guides/batch"
+        },
+        {
+          "label": "OpenAI GPT-4 API",
+          "url": "https://platform.openai.com/docs/api-reference/chat/create"
+        },
+        {
+          "label": "Supabase Database API",
+          "url": "https://supabase.com/docs/guides/api"
+        }
+      ],
+      "before_you_start": [
+        "An OpenAI API key",
+        "A Supabase project and service-role key",
+        "A valid JSONL batch file with prompts",
+        "Access to OpenAI Batch API",
+        "Access to OpenAI GPT-4 API",
+        "Access to Supabase Database API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 14:19 UTC"
   },
   {
     "slug": "ai-customer-insights",
@@ -2701,9 +2858,18 @@
           "label": "Vercel Blob API",
           "url": "https://vercel.com/docs/storage/vercel-blob/using-blob-sdk"
         }
+      ],
+      "before_you_start": [
+        "An account with Stability AI and an API key",
+        "An account with DeepAI and an API key",
+        "An account with Vercel and a BLOB_READ_WRITE_TOKEN",
+        "Access to Stability AI Image API",
+        "Access to DeepAI Image Generator API",
+        "Access to Vercel Blob API",
+        "Python 3.10 or newer (standard library only) and a terminal"
       ]
     },
-    "created_and_verified_at": "2026-11-06 13:22 UTC"
+    "created_and_verified_at": "2026-11-06 14:22 UTC"
   },
   {
     "slug": "semantic-search-knowledge-base",
@@ -2989,9 +3155,18 @@
           "label": "Notion API",
           "url": "https://developers.notion.com/reference/intro"
         }
+      ],
+      "before_you_start": [
+        "An OpenAI API key",
+        "A Pinecone project and API key",
+        "A Notion integration token with access to the desired pages",
+        "Access to OpenAI Embeddings API",
+        "Access to Pinecone Vector API",
+        "Access to Notion API",
+        "Python 3.10 or newer (standard library only) and a terminal"
       ]
     },
-    "created_and_verified_at": "2026-11-06 13:23 UTC"
+    "created_and_verified_at": "2026-11-06 14:22 UTC"
   },
   {
     "slug": "hybrid-search-product-catalog",
@@ -3008,9 +3183,9 @@
       "difficulty": "Advanced",
       "duration": "90–120 minutes",
       "tools": [
-        "Algolia Search API",
+        "Shopify Admin API",
         "Cohere Embed API",
-        "Shopify Admin API"
+        "Algolia Search API"
       ],
       "api_slugs": [
         "algolia-search-api",
@@ -3025,26 +3200,273 @@
       "steps": [
         {
           "title": "Fetch products from Shopify",
-          "description": "Page through the Admin API product endpoint and normalise fields."
+          "description": "This step retrieves products from the Shopify Admin API and normalizes the fields for further processing. It ensures that the data structure is consistent for embedding and indexing.",
+          "technical_explanation": "This step acts as the data source for the workflow, consuming product data from Shopify. The API contract involves a GET request to the endpoint https://{shop}.myshopify.com/admin/api/2024-10/products.json with the header X-Shopify-Access-Token. The expected response is a JSON object containing an array of product objects. Edge cases include handling pagination if there are more products than the API returns in a single response.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_products():\n    shop = os.environ.get('SHOP_NAME')\n    access_token = os.environ.get('SHOPIFY_ACCESS_TOKEN')\n    url = f'https://{shop}.myshopify.com/admin/api/2024-10/products.json'\n    headers = {'X-Shopify-Access-Token': access_token}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n        return data.get('products', [])\n\nproducts = fetch_products()",
+          "mock_response": {
+            "products": [
+              {
+                "id": 123456789,
+                "title": "Sample Product",
+                "body_html": "<strong>Good product!</strong>",
+                "vendor": "Vendor Name",
+                "product_type": "Type",
+                "created_at": "2023-01-01T00:00:00Z",
+                "updated_at": "2023-01-01T00:00:00Z"
+              }
+            ]
+          },
+          "actions": [
+            "Set up a Shopify store and obtain an access token.",
+            "Define the environment variable for the Shopify store name.",
+            "Implement error handling for API requests."
+          ],
+          "commands": [
+            {
+              "label": "Run the product fetch script",
+              "language": "bash",
+              "code": "python fetch_products.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SHOP_NAME",
+              "value": "<your_shop_name>",
+              "description": "The name of your Shopify store."
+            },
+            {
+              "key": "SHOPIFY_ACCESS_TOKEN",
+              "value": "<your_access_token>",
+              "description": "The access token for Shopify API."
+            }
+          ],
+          "tools": [
+            "Shopify Admin API"
+          ],
+          "checklist": [
+            "Products are successfully fetched from Shopify.",
+            "The response contains a list of product objects."
+          ],
+          "expectedResult": "A list of products is retrieved from Shopify and ready for embedding.",
+          "links": [
+            {
+              "label": "Shopify Admin API Documentation",
+              "url": "https://shopify.dev/docs/api/admin"
+            }
+          ]
         },
         {
           "title": "Create Cohere embeddings",
-          "description": "Embed product titles and descriptions for semantic ranking."
+          "description": "This step generates embeddings for the product titles and descriptions using the Cohere Embed API. The embeddings will be used for semantic ranking in the search results.",
+          "technical_explanation": "This step enriches the product data by creating embeddings that capture the semantic meaning of product titles and descriptions. The API contract involves a POST request to https://api.cohere.com/v2/embed with a JSON payload containing the texts to embed. The expected response is a JSON object with embeddings for each input text. Edge cases include handling API limits and ensuring that the input text is not empty.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef create_embeddings(products):\n    api_key = os.environ.get('COHERE_API_KEY')\n    url = 'https://api.cohere.com/v2/embed'\n    headers = {'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'}\n    texts = [f\"{product['title']} {product['body_html']}\" for product in products]\n    payload = json.dumps({'texts': texts}).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n        return data.get('embeddings', [])\n\nembeddings = create_embeddings(products)",
+          "mock_response": {
+            "embeddings": [
+              [
+                0.1,
+                0.2,
+                0.3
+              ],
+              [
+                0.4,
+                0.5,
+                0.6
+              ]
+            ]
+          },
+          "actions": [
+            "Set up a Cohere account and obtain an API key.",
+            "Define the environment variable for the Cohere API key.",
+            "Implement error handling for embedding requests."
+          ],
+          "commands": [
+            {
+              "label": "Run the embedding creation script",
+              "language": "bash",
+              "code": "python create_embeddings.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "COHERE_API_KEY",
+              "value": "<your_api_key>",
+              "description": "The API key for Cohere Embed API."
+            }
+          ],
+          "tools": [
+            "Cohere Embed API"
+          ],
+          "checklist": [
+            "Embeddings are successfully created for all products.",
+            "The response contains a list of embeddings."
+          ],
+          "expectedResult": "Embeddings for product titles and descriptions are generated and ready for indexing.",
+          "links": [
+            {
+              "label": "Cohere Embed API Documentation",
+              "url": "https://docs.cohere.com/reference/embed"
+            }
+          ]
         },
         {
           "title": "Index products in Algolia",
-          "description": "Push records with keyword attributes and embedding references."
+          "description": "This step indexes the products along with their embeddings in Algolia. This enables efficient searching and retrieval based on both keyword and semantic criteria.",
+          "technical_explanation": "This step stores the product data in Algolia, allowing for fast search capabilities. The API contract involves a POST request to https://{application_id}.algolia.net/1/indexes/{index_name}/batch with the appropriate headers and a JSON payload containing the products and their embeddings. Edge cases include handling indexing errors and ensuring that the index exists before pushing data.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef index_products(products, embeddings):\n    application_id = os.environ.get('ALGOLIA_APP_ID')\n    api_key = os.environ.get('ALGOLIA_API_KEY')\n    index_name = 'products'\n    url = f'https://{application_id}.algolia.net/1/indexes/{index_name}/batch'\n    headers = {'X-Algolia-API-Key': api_key, 'X-Algolia-Application-Id': application_id, 'Content-Type': 'application/json'}\n    records = [{'objectID': product['id'], 'title': product['title'], 'description': product['body_html'], 'embedding': embedding} for product, embedding in zip(products, embeddings)]\n    payload = json.dumps({'requests': [{'action': 'addObject', 'body': record} for record in records]}).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))\n\nindex_response = index_products(products, embeddings)",
+          "mock_response": {
+            "taskID": "123456789"
+          },
+          "actions": [
+            "Set up an Algolia account and create an index.",
+            "Define the environment variables for Algolia application ID and API key.",
+            "Implement error handling for indexing requests."
+          ],
+          "commands": [
+            {
+              "label": "Run the indexing script",
+              "language": "bash",
+              "code": "python index_products.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "ALGOLIA_APP_ID",
+              "value": "<your_application_id>",
+              "description": "The application ID for Algolia."
+            },
+            {
+              "key": "ALGOLIA_API_KEY",
+              "value": "<your_api_key>",
+              "description": "The API key for Algolia."
+            }
+          ],
+          "tools": [
+            "Algolia Search API"
+          ],
+          "checklist": [
+            "Products are successfully indexed in Algolia.",
+            "The response contains a task ID for the indexing operation."
+          ],
+          "expectedResult": "Products are indexed in Algolia with their embeddings, ready for search queries.",
+          "links": [
+            {
+              "label": "Algolia Search API Documentation",
+              "url": "https://www.algolia.com/doc/rest-api/"
+            }
+          ]
         },
         {
           "title": "Merge keyword and semantic results",
-          "description": "Re-rank Algolia hits with embedding similarity and return the top results."
+          "description": "This step merges the keyword-based search results with the semantic embeddings to provide a more relevant search experience. It re-ranks the results based on embedding similarity.",
+          "technical_explanation": "This step enhances search results by combining keyword matches with semantic relevance. The API contract involves a search request to https://{application_id}.algolia.net/1/indexes/{index_name}/query with the search term in the payload. The expected response is a list of hits that need to be re-ranked based on their embeddings. Edge cases include handling empty search results and ensuring that the search term is valid.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef search_products(query):\n    application_id = os.environ.get('ALGOLIA_APP_ID')\n    api_key = os.environ.get('ALGOLIA_API_KEY')\n    index_name = 'products'\n    url = f'https://{application_id}.algolia.net/1/indexes/{index_name}/query'\n    headers = {'X-Algolia-API-Key': api_key, 'X-Algolia-Application-Id': application_id, 'Content-Type': 'application/json'}\n    payload = json.dumps({'query': query}).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        hits = json.loads(response.read().decode('utf-8')).get('hits', [])\n        return re_rank_results(hits)\n\n\ndef re_rank_results(hits):\n    # Implement your re-ranking logic here\n    return hits\n\nsearch_results = search_products('Sample')",
+          "mock_response": [
+            {
+              "objectID": 123456789,
+              "title": "Sample Product",
+              "description": "<strong>Good product!</strong>",
+              "embedding": [
+                0.1,
+                0.2,
+                0.3
+              ]
+            }
+          ],
+          "actions": [
+            "Define the re-ranking logic based on embeddings.",
+            "Implement error handling for search requests.",
+            "Test the search functionality with various queries."
+          ],
+          "commands": [
+            {
+              "label": "Run the search script",
+              "language": "bash",
+              "code": "python search_products.py"
+            }
+          ],
+          "config": [],
+          "tools": [
+            "Algolia Search API"
+          ],
+          "checklist": [
+            "Search results are successfully retrieved from Algolia.",
+            "Results are re-ranked based on semantic similarity."
+          ],
+          "expectedResult": "Search results are merged and re-ranked, providing a relevant output based on keyword and semantic criteria.",
+          "links": [
+            {
+              "label": "Algolia Search API Documentation",
+              "url": "https://www.algolia.com/doc/rest-api/"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "An Algolia account and application ID",
+        "A Cohere account and API key",
+        "A Shopify store and access token",
+        "Access to Algolia Search API",
+        "Access to Cohere Embed API",
+        "Access to Shopify Admin API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that is sent in the request header."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API request limits by pausing requests when limits are reached."
+        },
+        {
+          "term": "Embedding",
+          "definition": "A numerical representation of text that captures semantic meaning, used for similarity comparisons."
+        },
+        {
+          "term": "Indexing",
+          "definition": "The process of storing data in a search engine to facilitate fast retrieval."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Rate limit exceeded error from Algolia",
+          "solution": "Implement exponential backoff to retry requests after a delay."
+        },
+        {
+          "problem": "Empty product list from Shopify",
+          "solution": "Check the access token and ensure products exist in the Shopify store."
+        },
+        {
+          "problem": "Invalid API key error from Cohere",
+          "solution": "Verify the API key and ensure it is correctly set in the environment."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Algolia Search API",
+          "url": "https://www.algolia.com/doc/rest-api/"
+        },
+        {
+          "label": "Cohere Embed API",
+          "url": "https://docs.cohere.com/reference/embed"
+        },
+        {
+          "label": "Shopify Admin API",
+          "url": "https://shopify.dev/docs/api/admin"
+        }
+      ],
+      "before_you_start": [
+        "An Algolia account and application ID",
+        "A Cohere account and API key",
+        "A Shopify store and access token",
+        "Access to Algolia Search API",
+        "Access to Cohere Embed API",
+        "Access to Shopify Admin API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 14:23 UTC"
   },
   {
     "slug": "rag-document-assistant",
@@ -3267,9 +3689,18 @@
           "label": "OpenAI GPT-4 API",
           "url": "https://platform.openai.com/docs/api-reference/chat/create"
         }
+      ],
+      "before_you_start": [
+        "An OpenAI API key",
+        "A Qdrant project and API key",
+        "Access to the source documents for chunking",
+        "Access to OpenAI Embeddings API",
+        "Access to Qdrant Vector API",
+        "Access to OpenAI GPT-4 API",
+        "Python 3.10 or newer (standard library only) and a terminal"
       ]
     },
-    "created_and_verified_at": "2026-11-06 13:26 UTC"
+    "created_and_verified_at": "2026-11-06 14:23 UTC"
   },
   {
     "slug": "content-similarity-audit",
@@ -3490,9 +3921,18 @@
           "label": "Airtable API",
           "url": "https://airtable.com/developers/web/api/introduction"
         }
+      ],
+      "before_you_start": [
+        "An active Cohere account and API key",
+        "An active Weaviate instance and API key",
+        "An Airtable account and personal access token",
+        "Access to Weaviate Vector API",
+        "Access to Cohere Embed API",
+        "Access to Airtable API",
+        "Python 3.10 or newer (standard library only) and a terminal"
       ]
     },
-    "created_and_verified_at": "2026-11-06 13:27 UTC"
+    "created_and_verified_at": "2026-11-06 14:23 UTC"
   },
   {
     "slug": "transactional-email-delivery",
@@ -3561,9 +4001,9 @@
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
       "tools": [
+        "Airtable API",
         "Sendinblue Email API",
-        "Resend Email API",
-        "Airtable API"
+        "Resend Email API"
       ],
       "api_slugs": [
         "sendinblue-email-api",
@@ -3577,26 +4017,250 @@
       "steps": [
         {
           "title": "Select campaign segments",
-          "description": "Read contacts and segments from the Airtable base."
+          "description": "This step involves fetching contact records from an Airtable base to determine the recipients for the email campaign. The data retrieved will include contact details and any segmentation criteria defined in the Airtable base.",
+          "technical_explanation": "This step serves as the initial data source for the email campaign, consuming data from the Airtable API. The endpoint used is 'https://api.airtable.com/v0/{base_id}/{table_name}', with a GET request. Required headers include 'Authorization' with a Bearer token. The response will be a JSON object containing an array of records. Edge cases include handling pagination if the number of records exceeds the limit and ensuring the API key is valid.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_contacts():\n    base_id = os.environ.get('AIRTABLE_BASE_ID')\n    table_name = os.environ.get('AIRTABLE_TABLE_NAME')\n    url = f'https://api.airtable.com/v0/{base_id}/{table_name}'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"AIRTABLE_API_KEY\")}' }\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    return data.get('records', [])\n\ncontacts = fetch_contacts()",
+          "mock_response": {
+            "records": [
+              {
+                "id": "rec123456",
+                "fields": {
+                  "Name": "John Doe",
+                  "Email": "john.doe@example.com",
+                  "Segment": "Newsletter"
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Retrieve records from the specified Airtable base and table.",
+            "Store the retrieved records in a structured format.",
+            "Handle potential pagination to ensure all records are fetched."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "AIRTABLE_BASE_ID",
+              "value": "<your_base_id>",
+              "description": "The ID of the Airtable base containing contacts."
+            },
+            {
+              "key": "AIRTABLE_TABLE_NAME",
+              "value": "<your_table_name>",
+              "description": "The name of the table in the Airtable base."
+            },
+            {
+              "key": "AIRTABLE_API_KEY",
+              "value": "<your_api_key>",
+              "description": "Your Airtable API key for authentication."
+            }
+          ],
+          "tools": [
+            "Airtable API"
+          ],
+          "checklist": [
+            "Successfully retrieved contact records from Airtable.",
+            "Handled pagination if necessary."
+          ],
+          "expectedResult": "A list of contact records is fetched from Airtable.",
+          "links": [
+            {
+              "label": "Airtable API Documentation",
+              "url": "https://airtable.com/developers/web/api/introduction"
+            }
+          ]
         },
         {
           "title": "Render personalised content",
-          "description": "Merge contact fields into the campaign template deterministically."
+          "description": "In this step, the contact fields retrieved from Airtable are merged into a predefined email template to create personalized content for each recipient. This ensures that each email is tailored to the individual.",
+          "technical_explanation": "This workflow step is crucial for generating personalized email content by merging contact fields retrieved from Airtable into a predefined email template. It consumes the structured data output from the previous step, which includes fields such as name, email address, and any other relevant details necessary for customization. The API contract for this step involves a POST request to the /render-email endpoint, requiring headers like Content-Type: application/json and Authorization: Bearer <token>. The request payload should be a JSON object containing the template ID and the contact fields, while the expected JSON response will include a status code and the rendered email content. Edge cases to consider include adhering to rate limits imposed by the API, managing pagination if the contact list is extensive, handling empty arrays gracefully to avoid rendering errors, and ensuring type conversion for fields to match the expected data types in the email template.",
+          "code_snippet": "import json\n\ndef render_content(contacts):\n    template = 'Hello {name},\\n\\nWelcome to our newsletter!\\nYour email is {email}.\\n'\n    personalized_emails = []\n    for contact in contacts:\n        name = contact['fields'].get('Name', 'Valued Customer')\n        email = contact['fields'].get('Email', 'no-reply@example.com')\n        content = template.format(name=name, email=email)\n        personalized_emails.append({'email': email, 'content': content})\n    return personalized_emails\n\npersonalized_emails = render_content(contacts)",
+          "mock_response": [
+            {
+              "email": "john.doe@example.com",
+              "content": "Hello John Doe,\n\nWelcome to our newsletter!\nYour email is john.doe@example.com.\n"
+            }
+          ],
+          "actions": [
+            "Define a template for the email content.",
+            "Merge contact fields into the template for personalization.",
+            "Store the personalized content in a structured format."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "Personalized email content is generated for each contact.",
+            "Default values are used for missing fields."
+          ],
+          "expectedResult": "Personalized email content is created for each recipient.",
+          "links": [
+            {
+              "label": "Python String Formatting",
+              "url": "https://docs.python.org/3/library/string.html#format"
+            }
+          ]
         },
         {
           "title": "Send the campaign with Sendinblue",
-          "description": "Call the transactional email endpoint for each recipient."
+          "description": "This step involves sending the personalized emails to each recipient using the Sendinblue Email API. Each email is sent individually to ensure tracking of delivery status.",
+          "technical_explanation": "This step is responsible for dispatching the emails to the recipients. It uses the Sendinblue Email API endpoint 'https://api.sendinblue.com/v3/smtp/email' with a POST request. Required headers include 'Content-Type' set to 'application/json' and 'Authorization' with a Bearer token. The request payload must include the email content and recipient details. Edge cases include handling API rate limits and ensuring that the email format is valid.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef send_emails(personalized_emails):\n    url = 'https://api.sendinblue.com/v3/smtp/email'\n    headers = {\n        'Content-Type': 'application/json',\n        'Authorization': f'Bearer {os.environ.get(\"SENDINBLUE_API_KEY\")}'\n    }\n    for email_data in personalized_emails:\n        payload = json.dumps({\n            'sender': {'name': 'Your Company', 'email': 'no-reply@yourcompany.com'},\n            'to': [{'email': email_data['email']}],\n            'subject': 'Welcome to Our Newsletter',\n            'htmlContent': email_data['content']\n        })\n        request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            response_data = json.loads(response.read().decode('utf-8'))\n            print(response_data)\n\nsend_emails(personalized_emails)",
+          "mock_response": {
+            "messageId": "123456789",
+            "status": "sent"
+          },
+          "actions": [
+            "Construct the email payload for each recipient.",
+            "Send the email using the Sendinblue API.",
+            "Log the response for each email sent."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SENDINBLUE_API_KEY",
+              "value": "<your_api_key>",
+              "description": "Your Sendinblue API key for authentication."
+            }
+          ],
+          "tools": [
+            "Sendinblue Email API"
+          ],
+          "checklist": [
+            "Emails are sent to all recipients.",
+            "Responses from the Sendinblue API are logged."
+          ],
+          "expectedResult": "Personalized emails are sent to all recipients.",
+          "links": [
+            {
+              "label": "Sendinblue Email API Documentation",
+              "url": "https://developers.brevo.com/"
+            }
+          ]
         },
         {
           "title": "Update campaign status in Airtable",
-          "description": "Mark sent, skipped and failed recipients."
+          "description": "This step updates the status of each recipient in the Airtable base, marking them as sent, skipped, or failed based on the results from the email sending process.",
+          "technical_explanation": "This step updates the Airtable records to reflect the status of the email campaign. It uses the Airtable API endpoint 'https://api.airtable.com/v0/{base_id}/{table_name}/{record_id}' with a PATCH request. Required headers include 'Authorization' with a Bearer token and 'Content-Type' set to 'application/json'. The request payload must include the updated status. Edge cases include ensuring the record ID exists and handling any errors from the API.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef update_status(record_id, status):\n    base_id = os.environ.get('AIRTABLE_BASE_ID')\n    table_name = os.environ.get('AIRTABLE_TABLE_NAME')\n    url = f'https://api.airtable.com/v0/{base_id}/{table_name}/{record_id}'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"AIRTABLE_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    payload = json.dumps({'fields': {'Status': status}})\n    request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        response_data = json.loads(response.read().decode('utf-8'))\n        print(response_data)\n\n# Example usage\nupdate_status('rec123456', 'sent')",
+          "mock_response": {
+            "id": "rec123456",
+            "fields": {
+              "Status": "sent"
+            }
+          },
+          "actions": [
+            "Prepare the update payload for each recipient's status.",
+            "Send the update request to Airtable.",
+            "Log the response from Airtable."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [],
+          "tools": [
+            "Airtable API"
+          ],
+          "checklist": [
+            "Status of each recipient is updated in Airtable.",
+            "Responses from the Airtable API are logged."
+          ],
+          "expectedResult": "The status of each recipient is updated in Airtable.",
+          "links": [
+            {
+              "label": "Airtable API Documentation",
+              "url": "https://airtable.com/developers/web/api/introduction"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "An Airtable account with a configured base containing contact records.",
+        "A Sendinblue account with an API key for sending emails.",
+        "A Resend account with an API key for email management.",
+        "Access to Sendinblue Email API",
+        "Access to Resend Email API",
+        "Access to Airtable API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access to the API."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by waiting before retrying requests."
+        },
+        {
+          "term": "Transactional Email",
+          "definition": "Emails sent to individuals based on specific actions or events."
+        },
+        {
+          "term": "API Response Structure",
+          "definition": "The format and organization of data returned by an API after a request."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Failed to fetch contacts from Airtable",
+          "solution": "Verify the Airtable API key and ensure the base ID and table name are correct."
+        },
+        {
+          "problem": "Email not sent via Sendinblue",
+          "solution": "Check the Sendinblue API key and ensure the email content complies with Sendinblue's requirements."
+        },
+        {
+          "problem": "Status not updated in Airtable",
+          "solution": "Ensure the Airtable API request is correctly formatted and that the record ID is valid."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Sendinblue Email API",
+          "url": "https://developers.brevo.com/"
+        },
+        {
+          "label": "Resend Email API",
+          "url": "https://resend.com/docs"
+        },
+        {
+          "label": "Airtable API",
+          "url": "https://airtable.com/developers/web/api/introduction"
+        }
+      ],
+      "before_you_start": [
+        "An Airtable account with a configured base containing contact records.",
+        "A Sendinblue account with an API key for sending emails.",
+        "A Resend account with an API key for email management.",
+        "Access to Sendinblue Email API",
+        "Access to Resend Email API",
+        "Access to Airtable API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 14:26 UTC"
   },
   {
     "slug": "sms-alert-system",
@@ -3859,9 +4523,18 @@
           "label": "Supabase Database API",
           "url": "https://supabase.com/docs/guides/api"
         }
+      ],
+      "before_you_start": [
+        "A Twilio account with an active phone number",
+        "A Sendinblue account with SMS capabilities",
+        "A Supabase project with a table for storing delivery receipts",
+        "Access to Twilio Messaging API",
+        "Access to Sendinblue SMS API",
+        "Access to Supabase Database API",
+        "Python 3.10 or newer (standard library only) and a terminal"
       ]
     },
-    "created_and_verified_at": "2026-11-06 13:32 UTC"
+    "created_and_verified_at": "2026-11-06 14:26 UTC"
   },
   {
     "slug": "slack-incident-notifications",
