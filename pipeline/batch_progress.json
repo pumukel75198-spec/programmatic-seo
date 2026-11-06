@@ -62,7 +62,14 @@
     "collaboration-presence-sync": "done",
     "product-analytics-dashboard": "done",
     "error-tracking-alerts": "done",
-    "website-performance-reporting": "done"
+    "website-performance-reporting": "done",
+    "blog-cms-publishing": "done",
+    "social-media-analytics": "done",
+    "shopify-order-automation": "done",
+    "inventory-sync-automation": "done",
+    "weather-driven-ops-alerts": "done",
+    "store-locator-geocoding": "done",
+    "asset-backup-automation": "done"
   },
-  "updated_at": "2026-11-06 16:46 UTC"
+  "updated_at": "2026-11-06 17:07 UTC"
 }

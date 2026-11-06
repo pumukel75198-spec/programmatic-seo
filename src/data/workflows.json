@@ -13741,8 +13741,8 @@
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
       "tools": [
-        "Contentful Content Management System API",
         "OpenAI GPT-4 API",
+        "Contentful Content Management System API",
         "Cloudflare Workers API"
       ],
       "api_slugs": [
@@ -13757,26 +13757,266 @@
       "steps": [
         {
           "title": "Create draft entries in Contentful",
-          "description": "Write AI-generated blog fields into the draft environment."
+          "description": "This step involves generating AI-based content for blog entries and creating draft entries in Contentful. The generated content will be structured according to Contentful's requirements.",
+          "technical_explanation": "This step serves as the initial point of content creation, utilizing the OpenAI GPT-4 API to generate text. The API contract requires a POST request to https://api.openai.com/v1/chat/completions with a specific payload structure. The response will contain the generated content, which will then be formatted for the Contentful API. Edge cases include handling API rate limits and ensuring the response contains valid content.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n# Function to generate blog content using OpenAI API\ndef generate_blog_content():\n    url = 'https://api.openai.com/v1/chat/completions'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}', 'Content-Type': 'application/json'}\n    payload = json.dumps({'model': 'gpt-4o-mini', 'messages': [{'role': 'user', 'content': 'Generate a blog post about automation.'}]})\n    request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        content = json.loads(response.read().decode('utf-8'))\n        return content.get('choices', [{}])[0].get('message', {}).get('content', '')\n\n# Generate blog content\nblog_content = generate_blog_content()",
+          "mock_response": {
+            "choices": [
+              {
+                "message": {
+                  "content": "This is an AI-generated blog post about automation."
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Call the OpenAI GPT-4 API to generate content.",
+            "Format the response for Contentful.",
+            "Store the generated content for the next step."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "OPENAI_API_KEY",
+              "value": "<your_openai_api_key>",
+              "description": "API key for OpenAI access"
+            }
+          ],
+          "tools": [
+            "OpenAI GPT-4 API"
+          ],
+          "checklist": [
+            "AI-generated content is successfully retrieved.",
+            "Content format matches Contentful requirements."
+          ],
+          "expectedResult": "AI-generated blog content is available for draft entry creation.",
+          "links": [
+            {
+              "label": "OpenAI GPT-4 API Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/chat/create"
+            }
+          ]
         },
         {
           "title": "Validate editorial requirements",
-          "description": "Check mandatory fields, slug uniqueness and asset references."
+          "description": "This step checks the generated content against editorial standards, ensuring all mandatory fields are filled and the slug is unique.",
+          "technical_explanation": "This step validates the content generated in the previous step, ensuring compliance with Contentful's requirements. It checks for mandatory fields and slug uniqueness by querying the Contentful API. The API contract involves a GET request to https://api.contentful.com/v1/spaces/{space_id}/entries with appropriate headers. Edge cases include handling empty responses and ensuring unique slugs.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\n# Function to validate editorial requirements\n\ndef validate_editorial_requirements(entry_slug):\n    url = f'https://api.contentful.com/v1/spaces/{os.environ.get(\"CONTENTFUL_SPACE_ID\")}/entries?fields.slug[match]={entry_slug}'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"CONTENTFUL_API_KEY\")}', 'Content-Type': 'application/json'}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n        return len(data.get('items', [])) == 0\n\n# Validate slug uniqueness\nis_slug_unique = validate_editorial_requirements('my-unique-slug')",
+          "mock_response": {
+            "items": []
+          },
+          "actions": [
+            "Check for mandatory fields in the generated content.",
+            "Query Contentful for existing entries with the same slug.",
+            "Return validation results."
+          ],
+          "commands": [
+            {
+              "label": "Run the validation script",
+              "language": "bash",
+              "code": "python validate_script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "CONTENTFUL_API_KEY",
+              "value": "<your_contentful_api_key>",
+              "description": "API key for Contentful access"
+            },
+            {
+              "key": "CONTENTFUL_SPACE_ID",
+              "value": "<your_contentful_space_id>",
+              "description": "Space ID for Contentful"
+            }
+          ],
+          "tools": [
+            "Contentful Content Management System API"
+          ],
+          "checklist": [
+            "All mandatory fields are validated.",
+            "Slug uniqueness is confirmed."
+          ],
+          "expectedResult": "Editorial requirements are validated and confirmed.",
+          "links": [
+            {
+              "label": "Contentful Content Management System API Documentation",
+              "url": "https://www.contentful.com/developers/docs/references/content-delivery-api/"
+            }
+          ]
         },
         {
           "title": "Publish the approved entry",
-          "description": "Move the entry to published when it passes validation."
+          "description": "This step publishes the validated draft entry in Contentful, making it live on the website.",
+          "technical_explanation": "This step publishes the validated entry by sending a PATCH request to the Contentful API. The API contract requires a PATCH request to https://api.contentful.com/v1/spaces/{space_id}/entries/{entry_id} with the updated status. Edge cases include handling errors during publishing and ensuring the entry ID is valid.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\n# Function to publish the approved entry\n\ndef publish_entry(entry_id):\n    url = f'https://api.contentful.com/v1/spaces/{os.environ.get(\"CONTENTFUL_SPACE_ID\")}/entries/{entry_id}'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"CONTENTFUL_API_KEY\")}', 'Content-Type': 'application/json'}\n    payload = json.dumps({'sys': {'id': entry_id}, 'fields': {'status': {'en-US': 'published'}}})\n    request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))\n\n# Publish the entry\npublished_entry = publish_entry('entry_id_here')",
+          "mock_response": {
+            "sys": {
+              "id": "entry_id_here",
+              "publishedAt": "2023-10-01T12:00:00Z"
+            }
+          },
+          "actions": [
+            "Send a PATCH request to publish the entry.",
+            "Check for successful publishing response.",
+            "Return the published entry details."
+          ],
+          "commands": [
+            {
+              "label": "Run the publish script",
+              "language": "bash",
+              "code": "python publish_script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "CONTENTFUL_API_KEY",
+              "value": "<your_contentful_api_key>",
+              "description": "API key for Contentful access"
+            },
+            {
+              "key": "CONTENTFUL_SPACE_ID",
+              "value": "<your_contentful_space_id>",
+              "description": "Space ID for Contentful"
+            }
+          ],
+          "tools": [
+            "Contentful Content Management System API"
+          ],
+          "checklist": [
+            "Entry is successfully published.",
+            "Published entry details are returned."
+          ],
+          "expectedResult": "The draft entry is published and live on the website.",
+          "links": [
+            {
+              "label": "Contentful Content Management System API Documentation",
+              "url": "https://www.contentful.com/developers/docs/references/content-delivery-api/"
+            }
+          ]
         },
         {
           "title": "Trigger the edge rebuild",
-          "description": "Call the Cloudflare build hook after publishing."
+          "description": "This step triggers a rebuild of the Cloudflare Workers cache to reflect the newly published content.",
+          "technical_explanation": "This step sends a POST request to the Cloudflare Workers API to trigger a rebuild. The API contract requires a POST request to https://api.cloudflare.com/client/v4/zones/{zone_id}/purge_cache with the appropriate headers. Edge cases include handling errors in the purge request and ensuring the zone ID is correct.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\n# Function to trigger the edge rebuild\n\ndef trigger_edge_rebuild():\n    url = f'https://api.cloudflare.com/client/v4/zones/{os.environ.get(\"CLOUDFLARE_ZONE_ID\")}/purge_cache'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"CLOUDFLARE_API_TOKEN\")}', 'Content-Type': 'application/json'}\n    payload = json.dumps({'purge_everything': True})\n    request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))\n\n# Trigger the edge rebuild\nrebuild_response = trigger_edge_rebuild()",
+          "mock_response": {
+            "success": true,
+            "result": {
+              "id": "purge_id_here"
+            }
+          },
+          "actions": [
+            "Send a POST request to trigger the cache purge.",
+            "Check for successful response from Cloudflare.",
+            "Return the result of the cache purge."
+          ],
+          "commands": [
+            {
+              "label": "Run the rebuild script",
+              "language": "bash",
+              "code": "python rebuild_script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "CLOUDFLARE_API_TOKEN",
+              "value": "<your_cloudflare_api_token>",
+              "description": "API token for Cloudflare access"
+            },
+            {
+              "key": "CLOUDFLARE_ZONE_ID",
+              "value": "<your_cloudflare_zone_id>",
+              "description": "Zone ID for Cloudflare"
+            }
+          ],
+          "tools": [
+            "Cloudflare Workers API"
+          ],
+          "checklist": [
+            "Cache purge request is successfully sent.",
+            "Response confirms the cache has been purged."
+          ],
+          "expectedResult": "The edge cache is rebuilt, reflecting the new content.",
+          "links": [
+            {
+              "label": "Cloudflare Workers API Documentation",
+              "url": "https://developers.cloudflare.com/workers/"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Contentful account and API key",
+        "An OpenAI API key",
+        "A Cloudflare account and API token",
+        "Access to Contentful Content Management System API",
+        "Access to OpenAI GPT-4 API",
+        "Access to Cloudflare Workers API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests by including a token in the request header."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by delaying requests when limits are reached."
+        },
+        {
+          "term": "Payload Structure",
+          "definition": "The specific format and keys required in the data sent to an API."
+        },
+        {
+          "term": "API Response Handling",
+          "definition": "The process of managing and processing data returned from an API call."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API key authentication failure",
+          "solution": "Verify that the API keys are correctly set in environment variables."
+        },
+        {
+          "problem": "Rate limit exceeded error",
+          "solution": "Implement a delay in requests and check the API documentation for rate limits."
+        },
+        {
+          "problem": "Missing mandatory fields in Contentful",
+          "solution": "Ensure all required fields are populated before attempting to publish."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Contentful Content Management System API",
+          "url": "https://www.contentful.com/developers/docs/references/content-delivery-api/"
+        },
+        {
+          "label": "OpenAI GPT-4 API",
+          "url": "https://platform.openai.com/docs/api-reference/chat/create"
+        },
+        {
+          "label": "Cloudflare Workers API",
+          "url": "https://developers.cloudflare.com/workers/"
+        }
+      ],
+      "before_you_start": [
+        "A Contentful account and API key",
+        "An OpenAI API key",
+        "A Cloudflare account and API token",
+        "Access to Contentful Content Management System API",
+        "Access to OpenAI GPT-4 API",
+        "Access to Cloudflare Workers API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 16:56 UTC"
   },
   {
     "slug": "local-seo-landing-pages",
@@ -17511,8 +17751,8 @@
       "duration": "60–75 minutes",
       "tools": [
         "Twitch Analytics API",
-        "Twitch API",
-        "Google Sheets API"
+        "Google Sheets API",
+        "Twitch API"
       ],
       "api_slugs": [
         "twitch-analytics-api",
@@ -17526,26 +17766,262 @@
       "steps": [
         {
           "title": "Fetch Twitch analytics",
-          "description": "Query stream and viewer metrics for the reporting period."
+          "description": "This step retrieves stream and viewer metrics for a specified reporting period from the Twitch Analytics API. The data will be used to compute engagement metrics in the next step.",
+          "technical_explanation": "This step serves as the initial data retrieval phase, consuming the reporting period parameters to query the Twitch Analytics API. The endpoint used is https://api.twitch.tv/helix/analytics, with a GET request requiring a Bearer OAuth token in the headers. The response will include metrics such as viewer counts and stream durations, which may be paginated, necessitating careful handling of pagination and rate limits to avoid exceeding API quotas.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\ndef fetch_twitch_analytics():\n    # Define the URL for the Twitch Analytics API\n    url = 'https://api.twitch.tv/helix/analytics'\n    # Set the headers including authorization and client ID\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"TWITCH_OAUTH_TOKEN\")}', \n        'Client-ID': os.environ.get(\"TWITCH_CLIENT_ID\")\n    }\n    # Create a request object with the specified URL and headers\n    request = urllib.request.Request(url, headers=headers)\n    # Open the URL and read the response\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    # Return the relevant data from the response\n    return data.get('data', [])\n\n# Fetch the analytics data from Twitch\nanalytics_data = fetch_twitch_analytics()",
+          "mock_response": {
+            "data": [
+              {
+                "stream_id": "12345",
+                "viewers": 1500,
+                "duration": 3600
+              }
+            ]
+          },
+          "actions": [
+            "Set up a Twitch Developer account and create an application to obtain OAuth credentials.",
+            "Define the reporting period for the analytics query.",
+            "Make a GET request to the Twitch Analytics API to fetch viewer metrics."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python fetch_twitch_analytics.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "TWITCH_OAUTH_TOKEN",
+              "value": "<your_twitch_oauth_token>",
+              "description": "OAuth token for Twitch API access"
+            },
+            {
+              "key": "TWITCH_CLIENT_ID",
+              "value": "<your_twitch_client_id>",
+              "description": "Client ID for Twitch API access"
+            }
+          ],
+          "tools": [
+            "Twitch Analytics API"
+          ],
+          "checklist": [
+            "Successfully retrieved analytics data from Twitch API.",
+            "Data contains expected fields such as stream_id and viewer counts."
+          ],
+          "expectedResult": "Twitch analytics data is successfully fetched and stored in a variable.",
+          "links": [
+            {
+              "label": "Twitch Analytics API Documentation",
+              "url": "https://dev.twitch.tv/docs/api/reference#analytics"
+            }
+          ]
         },
         {
           "title": "Fetch channel metadata",
-          "description": "Read follower counts and stream schedules."
+          "description": "This step retrieves channel metadata such as follower counts and stream schedules using the Twitch API. This information is essential for calculating engagement metrics.",
+          "technical_explanation": "This step is crucial for gathering additional context about the channels whose analytics were fetched earlier. The Twitch API endpoint used is https://api.twitch.tv/helix/users, which requires a GET request with a Bearer token. The response includes channel metadata, which may also be paginated, necessitating careful handling of pagination to ensure all relevant data is retrieved.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\n\ndef fetch_channel_metadata(channel_ids):\n    url = f'https://api.twitch.tv/helix/users?id={\"&id=\".join(channel_ids)}'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"TWITCH_OAUTH_TOKEN\")}', 'Client-ID': os.environ.get(\"TWITCH_CLIENT_ID\")}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    return data.get('data', [])\n\nchannel_ids = ['12345']  # Example channel ID\nchannel_metadata = fetch_channel_metadata(channel_ids)",
+          "mock_response": {
+            "data": [
+              {
+                "id": "12345",
+                "login": "example_channel",
+                "followers": 10000,
+                "description": "Example channel description"
+              }
+            ]
+          },
+          "actions": [
+            "Collect channel IDs from the analytics data fetched in the previous step.",
+            "Make a GET request to the Twitch API to retrieve channel metadata.",
+            "Extract relevant fields such as follower counts and descriptions from the response."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python fetch_channel_metadata.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "TWITCH_OAUTH_TOKEN",
+              "value": "<your_twitch_oauth_token>",
+              "description": "OAuth token for Twitch API access"
+            },
+            {
+              "key": "TWITCH_CLIENT_ID",
+              "value": "<your_twitch_client_id>",
+              "description": "Client ID for Twitch API access"
+            }
+          ],
+          "tools": [
+            "Twitch Analytics API"
+          ],
+          "checklist": [
+            "Successfully retrieved channel metadata from Twitch API.",
+            "Data contains expected fields such as followers and descriptions."
+          ],
+          "expectedResult": "Channel metadata is successfully fetched and stored in a variable.",
+          "links": [
+            {
+              "label": "Twitch Analytics API Documentation",
+              "url": "https://dev.twitch.tv/docs/api/reference#analytics"
+            }
+          ]
         },
         {
           "title": "Compute engagement metrics",
-          "description": "Derive average viewers and retention proxies."
+          "description": "This step calculates engagement metrics such as average viewers and retention proxies based on the analytics data and channel metadata. These metrics are essential for understanding channel performance.",
+          "technical_explanation": "This step processes the data retrieved from the previous steps to derive meaningful engagement metrics. The average viewers are calculated by dividing total viewers by the number of streams. Retention proxies may be derived from viewer counts over time. Care must be taken to handle cases where data may be incomplete or contain zero values to avoid division errors.",
+          "code_snippet": "def compute_engagement_metrics(analytics_data, channel_metadata):\n    # Calculate total viewers from analytics data\n    total_viewers = sum(item.get('viewers', 0) for item in analytics_data)\n    # Count the total number of streams\n    total_streams = len(analytics_data)\n    # Calculate average viewers per stream\n    average_viewers = total_viewers / total_streams if total_streams > 0 else 0\n    # Prepare engagement metrics dictionary\n    engagement_metrics = {\n        'average_viewers': average_viewers,\n        'total_followers': channel_metadata[0].get('followers', 0)\n    }\n    # Return the engagement metrics\n    return engagement_metrics\n\n# Example usage of the function\nanalytics_data = [{'viewers': 100}, {'viewers': 150}, {'viewers': 200}]\nchannel_metadata = [{'followers': 500}]\nengagement_metrics = compute_engagement_metrics(analytics_data, channel_metadata)",
+          "mock_response": {
+            "average_viewers": 750,
+            "total_followers": 10000
+          },
+          "actions": [
+            "Iterate over the analytics data to calculate total viewers.",
+            "Count the number of streams to derive average viewers.",
+            "Combine metrics with channel metadata for comprehensive analysis."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python compute_engagement_metrics.py"
+            }
+          ],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Successfully computed average viewers and total followers.",
+            "Metrics are correctly derived from the input data."
+          ],
+          "expectedResult": "Engagement metrics are successfully computed and stored in a variable.",
+          "links": [
+            {
+              "label": "Python Built-in Functions",
+              "url": "https://docs.python.org/3/library/functions.html"
+            }
+          ]
         },
         {
           "title": "Append rows to Google Sheets",
-          "description": "Write one row per channel and week."
+          "description": "This step writes the computed engagement metrics to a specified Google Sheet. Each row corresponds to a channel and week, allowing for easy tracking of performance over time.",
+          "technical_explanation": "This step is responsible for persisting the engagement metrics to Google Sheets using the Google Sheets API. The endpoint used is https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}/values/{range}:append, requiring a POST request with OAuth 2.0 credentials. The payload must be formatted correctly to match the expected structure of the Google Sheet. Error handling is essential to manage potential issues such as invalid spreadsheet IDs or insufficient permissions.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\n\ndef append_to_google_sheets(spreadsheet_id, range_name, values):\n    url = f'https://sheets.googleapis.com/v4/spreadsheets/{spreadsheet_id}/values/{range_name}:append'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"GOOGLE_SHEETS_OAUTH_TOKEN\")}', 'Content-Type': 'application/json'}\n    body = json.dumps({'values': values}).encode('utf-8')\n    request = urllib.request.Request(url, data=body, headers=headers, method='POST')\n    with urllib.request.urlopen(request) as response:\n        return response.read().decode('utf-8')\n\nspreadsheet_id = '<your_spreadsheet_id>'\nrange_name = 'Sheet1!A1'\nengagement_metrics = {'average_viewers': 100, 'total_followers': 200}  # Example metrics\nvalues = [[engagement_metrics['average_viewers'], engagement_metrics['total_followers']]]\nresponse = append_to_google_sheets(spreadsheet_id, range_name, values)",
+          "mock_response": {
+            "spreadsheetId": "<your_spreadsheet_id>",
+            "updates": {
+              "updatedRange": "Sheet1!A1",
+              "updatedRows": 1
+            }
+          },
+          "actions": [
+            "Set up a Google Cloud project and obtain OAuth 2.0 credentials.",
+            "Format the engagement metrics for appending to the Google Sheet.",
+            "Make a POST request to the Google Sheets API to append the data."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python append_to_google_sheets.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "GOOGLE_SHEETS_OAUTH_TOKEN",
+              "value": "<your_google_sheets_oauth_token>",
+              "description": "OAuth token for Google Sheets API access"
+            },
+            {
+              "key": "SPREADSHEET_ID",
+              "value": "<your_spreadsheet_id>",
+              "description": "ID of the Google Sheet to append data to"
+            }
+          ],
+          "tools": [
+            "Google Sheets API"
+          ],
+          "checklist": [
+            "Successfully appended data to the Google Sheet.",
+            "Data appears in the correct format and location in the sheet."
+          ],
+          "expectedResult": "Engagement metrics are successfully appended to the specified Google Sheet.",
+          "links": [
+            {
+              "label": "Google Sheets API Documentation",
+              "url": "https://developers.google.com/sheets/api/reference/rest"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Twitch Developer account and an OAuth token for API access",
+        "A Google Cloud project with the Google Sheets API enabled and credentials set up",
+        "A Google Sheet created to store the analytics data",
+        "Access to Twitch Analytics API",
+        "Access to Twitch API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests by including a token in the request header."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API request limits by waiting before retrying requests."
+        },
+        {
+          "term": "Pagination",
+          "definition": "The process of dividing a large dataset into smaller, manageable chunks."
+        },
+        {
+          "term": "Data Transformation",
+          "definition": "The process of converting data from one format or structure into another."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API request returns 401 Unauthorized",
+          "solution": "Check if the OAuth token is valid and has the necessary permissions."
+        },
+        {
+          "problem": "Data not appearing in Google Sheets",
+          "solution": "Verify the Google Sheets API credentials and ensure the correct spreadsheet ID is used."
+        },
+        {
+          "problem": "Rate limit exceeded error",
+          "solution": "Implement a retry mechanism with exponential backoff to handle rate limits."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Twitch Analytics API",
+          "url": "https://dev.twitch.tv/docs/api/reference#analytics"
+        },
+        {
+          "label": "Twitch API",
+          "url": "https://dev.twitch.tv/docs/api"
+        },
+        {
+          "label": "Google Sheets API",
+          "url": "https://developers.google.com/sheets/api/reference/rest"
+        }
+      ],
+      "before_you_start": [
+        "A Twitch Developer account and an OAuth token for API access",
+        "A Google Cloud project with the Google Sheets API enabled and credentials set up",
+        "A Google Sheet created to store the analytics data",
+        "Access to Twitch Analytics API",
+        "Access to Twitch API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 16:57 UTC"
   },
   {
     "slug": "shopify-order-automation",
@@ -17578,26 +18054,279 @@
       "steps": [
         {
           "title": "Fetch new Shopify orders",
-          "description": "Query paid orders since the last checkpoint."
+          "description": "This step retrieves new paid orders from the Shopify store since the last checkpoint. It ensures that only relevant orders are processed further in the workflow.",
+          "technical_explanation": "This step acts as the entry point of the workflow, consuming the last checkpoint timestamp to fetch new orders. The API contract involves a GET request to the Shopify Admin API endpoint: https://{shop}.myshopify.com/admin/api/2024-10/orders.json?created_at_min={last_checkpoint}. Required headers include X-Shopify-Access-Token. Edge cases include handling rate limits (429 status), pagination for large order sets, and ensuring the response contains valid order data.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_new_orders():\n    shop = os.environ.get('SHOP_NAME')\n    access_token = os.environ.get('SHOPIFY_ACCESS_TOKEN')\n    last_checkpoint = os.environ.get('LAST_CHECKPOINT')\n    url = f'https://{shop}.myshopify.com/admin/api/2024-10/orders.json?created_at_min={last_checkpoint}'\n    headers = {'X-Shopify-Access-Token': access_token}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n        return data.get('orders', [])\n\norders = fetch_new_orders()",
+          "mock_response": {
+            "orders": [
+              {
+                "id": 123456789,
+                "total_price": "29.99",
+                "customer": {
+                  "first_name": "John",
+                  "last_name": "Doe",
+                  "email": "john.doe@example.com"
+                },
+                "line_items": [
+                  {
+                    "title": "Product 1",
+                    "quantity": 1
+                  }
+                ]
+              }
+            ]
+          },
+          "actions": [
+            "Set environment variables for Shopify store name and access token",
+            "Define the last checkpoint timestamp for order fetching",
+            "Make a GET request to the Shopify Admin API to fetch orders"
+          ],
+          "commands": [
+            {
+              "label": "Set environment variables",
+              "language": "bash",
+              "code": "export SHOP_NAME='your-shop-name'\nexport SHOPIFY_ACCESS_TOKEN='your-access-token'\nexport LAST_CHECKPOINT='2023-10-01T00:00:00Z'"
+            }
+          ],
+          "config": [
+            {
+              "key": "SHOP_NAME",
+              "value": "<your-shop-name>",
+              "description": "Your Shopify store name"
+            },
+            {
+              "key": "SHOPIFY_ACCESS_TOKEN",
+              "value": "<your-access-token>",
+              "description": "Your Shopify API access token"
+            },
+            {
+              "key": "LAST_CHECKPOINT",
+              "value": "<timestamp>",
+              "description": "The last time orders were fetched"
+            }
+          ],
+          "tools": [
+            "Shopify Admin API"
+          ],
+          "checklist": [
+            "Environment variables are correctly set",
+            "Orders are fetched successfully from Shopify"
+          ],
+          "expectedResult": "New paid orders are fetched from Shopify and stored in the variable 'orders'.",
+          "links": [
+            {
+              "label": "Shopify Admin API Documentation",
+              "url": "https://shopify.dev/docs/api/admin"
+            }
+          ]
         },
         {
           "title": "Send the order confirmation",
-          "description": "Call the Resend emails endpoint with order details."
+          "description": "This step sends a branded email confirmation for each fetched order using the Resend Email API. It ensures customers receive timely notifications about their purchases.",
+          "technical_explanation": "This step processes each order fetched in the previous step and sends an email confirmation using the Resend Email API. The API contract involves a POST request to https://api.resend.com/emails with a JSON payload containing the email details. Required headers include Bearer API key. Edge cases include handling failed email sends and ensuring that the email content is correctly formatted.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef send_order_confirmation(orders):\n    api_key = os.environ.get('RESEND_API_KEY')\n    for order in orders:\n        email_payload = {\n            'to': order['customer']['email'],\n            'subject': 'Order Confirmation',\n            'body': f'Thank you for your order #{order[\"id\"]}!'  # Fixed quote issue\n        }\n        url = 'https://api.resend.com/emails'\n        headers = {'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'}\n        request = urllib.request.Request(url, data=json.dumps(email_payload).encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            response_data = response.read().decode('utf-8')\n            print(response_data)\n\nsend_order_confirmation(orders)",
+          "mock_response": "ok",
+          "actions": [
+            "Iterate over each order fetched from Shopify",
+            "Construct the email payload with order details",
+            "Make a POST request to the Resend Email API to send the email"
+          ],
+          "commands": [
+            {
+              "label": "Set environment variable for Resend API key",
+              "language": "bash",
+              "code": "export RESEND_API_KEY='your-resend-api-key'"
+            }
+          ],
+          "config": [
+            {
+              "key": "RESEND_API_KEY",
+              "value": "<your-resend-api-key>",
+              "description": "Your Resend API key"
+            }
+          ],
+          "tools": [
+            "Resend Email API"
+          ],
+          "checklist": [
+            "Email payload is correctly formatted",
+            "Emails are sent successfully to customers"
+          ],
+          "expectedResult": "Order confirmation emails are sent to all customers for the fetched orders.",
+          "links": [
+            {
+              "label": "Resend Email API Documentation",
+              "url": "https://resend.com/docs"
+            }
+          ]
         },
         {
           "title": "Store order analytics in Supabase",
-          "description": "Upsert order value, items and customer segment."
+          "description": "This step stores relevant order analytics in a Supabase database for further analysis. It captures key metrics such as order value and customer segments.",
+          "technical_explanation": "This step takes the order data and upserts it into a Supabase table for analytics. The API contract involves a POST request to https://<project-ref>.supabase.co/rest/v1/orders with the order data as the payload. Required headers include API key and JWT. Edge cases include handling duplicate entries and ensuring the database schema matches the payload structure.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef store_order_analytics(orders):\n    supabase_url = os.environ.get('SUPABASE_URL')\n    supabase_key = os.environ.get('SUPABASE_KEY')\n    for order in orders:\n        analytics_payload = {\n            'order_id': order['id'],\n            'total_price': order['total_price'],\n            'customer_email': order['customer']['email']\n        }\n        url = f\"{supabase_url}/orders\"\n        headers = {\n            'apikey': supabase_key,\n            'Authorization': f'Bearer {supabase_key}',\n            'Prefer': 'return=representation'\n        }\n        request = urllib.request.Request(url, data=json.dumps(analytics_payload).encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            if response.status not in (200, 201, 204):\n                print(f\"Error storing analytics: {response.read().decode('utf-8')}\")\n\nstore_order_analytics(orders)",
+          "mock_response": {
+            "id": 1,
+            "order_id": 123456789,
+            "total_price": "29.99",
+            "customer_email": "john.doe@example.com"
+          },
+          "actions": [
+            "Iterate over each order to prepare analytics data",
+            "Construct the payload for Supabase upsert",
+            "Make a POST request to Supabase to store the analytics"
+          ],
+          "commands": [
+            {
+              "label": "Set environment variables for Supabase",
+              "language": "bash",
+              "code": "export SUPABASE_URL='https://your-supabase-instance.supabase.co'\nexport SUPABASE_KEY='your-supabase-key'"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUPABASE_URL",
+              "value": "<your-supabase-url>",
+              "description": "Your Supabase project URL"
+            },
+            {
+              "key": "SUPABASE_KEY",
+              "value": "<your-supabase-key>",
+              "description": "Your Supabase API key"
+            }
+          ],
+          "tools": [
+            "Supabase Database API"
+          ],
+          "checklist": [
+            "Supabase table schema matches the payload structure",
+            "Order analytics are stored successfully in Supabase"
+          ],
+          "expectedResult": "Order analytics are successfully upserted into the Supabase database.",
+          "links": [
+            {
+              "label": "Supabase Database API Documentation",
+              "url": "https://supabase.com/docs/guides/api"
+            }
+          ]
         },
         {
           "title": "Detect unusual order patterns",
-          "description": "Flag high-value or repeated-risk orders deterministically."
+          "description": "This step analyzes stored order data to identify unusual patterns, such as high-value or repeated-risk orders. It helps in fraud detection and risk management.",
+          "technical_explanation": "This step retrieves order data from Supabase and applies statistical methods to detect anomalies. The API contract involves a GET request to https://<project-ref>.supabase.co/rest/v1/orders with appropriate filters. Edge cases include handling empty datasets and ensuring the statistical calculations are valid.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\nimport statistics\n\ndef detect_unusual_orders():\n    supabase_url = os.environ.get('SUPABASE_URL')\n    supabase_key = os.environ.get('SUPABASE_KEY')\n    url = f\"{supabase_url}/orders\"\n    headers = {'apikey': supabase_key, 'Authorization': f'Bearer {supabase_key}'}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        orders = json.loads(response.read().decode('utf-8'))\n        if not orders:\n            return\n        order_values = [float(order['total_price']) for order in orders]\n        mean_value = statistics.mean(order_values)\n        stdev_value = statistics.stdev(order_values)\n        for order in orders:\n            z_score = (float(order['total_price']) - mean_value) / stdev_value if stdev_value > 0 else 0\n            if z_score > 2:  # Threshold for unusual patterns\n                print(f'Unusual order detected: {order[\"id\"]} with z-score {z_score}')\n\ndetect_unusual_orders()",
+          "mock_response": [
+            {
+              "id": 123456789,
+              "total_price": "1000.00"
+            }
+          ],
+          "actions": [
+            "Retrieve order data from Supabase",
+            "Calculate mean and standard deviation of order values",
+            "Identify orders with z-scores above the threshold"
+          ],
+          "commands": [
+            {
+              "label": "Set environment variables for Supabase",
+              "language": "bash",
+              "code": "export SUPABASE_URL='https://your-supabase-instance.supabase.co'\nexport SUPABASE_KEY='your-supabase-key'"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUPABASE_URL",
+              "value": "<your-supabase-url>",
+              "description": "Your Supabase project URL"
+            },
+            {
+              "key": "SUPABASE_KEY",
+              "value": "<your-supabase-key>",
+              "description": "Your Supabase API key"
+            }
+          ],
+          "tools": [
+            "Supabase Database API"
+          ],
+          "checklist": [
+            "Order data is retrieved successfully from Supabase",
+            "Unusual orders are detected based on z-score analysis"
+          ],
+          "expectedResult": "Unusual order patterns are detected and reported based on statistical analysis.",
+          "links": [
+            {
+              "label": "Supabase Database API Documentation",
+              "url": "https://supabase.com/docs/guides/api"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Shopify store with API access enabled",
+        "A Resend account with an API key",
+        "A Supabase project with a service role key",
+        "Access to Shopify Admin API",
+        "Access to Resend Email API",
+        "Access to Supabase Database API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method of API authentication where a token is passed in the HTTP header to authorize requests."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by delaying requests when limits are approached."
+        },
+        {
+          "term": "PostgREST Upsert",
+          "definition": "An operation that inserts a new record or updates an existing record in a database."
+        },
+        {
+          "term": "Z-Score Spike Detection",
+          "definition": "A statistical method used to identify outliers in a dataset by measuring how many standard deviations an element is from the mean."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Failed to fetch orders from Shopify",
+          "solution": "Check your Shopify API credentials and ensure the store URL is correct."
+        },
+        {
+          "problem": "Email not sent via Resend",
+          "solution": "Verify the API key and ensure the email payload is correctly formatted."
+        },
+        {
+          "problem": "Data not stored in Supabase",
+          "solution": "Ensure the Supabase URL and API key are correctly set and that the table schema matches the payload."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Shopify Admin API",
+          "url": "https://shopify.dev/docs/api/admin"
+        },
+        {
+          "label": "Resend Email API",
+          "url": "https://resend.com/docs"
+        },
+        {
+          "label": "Supabase Database API",
+          "url": "https://supabase.com/docs/guides/api"
+        }
+      ],
+      "before_you_start": [
+        "A Shopify store with API access enabled",
+        "A Resend account with an API key",
+        "A Supabase project with a service role key",
+        "Access to Shopify Admin API",
+        "Access to Resend Email API",
+        "Access to Supabase Database API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 17:00 UTC"
   },
   {
     "slug": "inventory-sync-automation",
@@ -17631,26 +18360,267 @@
       "steps": [
         {
           "title": "Read Shopify inventory levels",
-          "description": "Fetch variants and their available quantities."
+          "description": "This step fetches the current inventory levels of product variants from the Shopify store. It retrieves the available quantities for each variant, which will be used in subsequent steps to update Airtable and check for low stock.",
+          "technical_explanation": "This step serves as the initial data source, consuming no previous data. It calls the Shopify Admin API's variants endpoint to retrieve inventory levels. The API contract requires a GET request to the endpoint 'https://{shop}.myshopify.com/admin/api/2024-10/variants.json' with the 'X-Shopify-Access-Token' header. Edge cases include handling rate limits, where the API may return a 429 status, and pagination if there are many variants, requiring multiple requests.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_inventory_levels():\n    shop = os.environ.get('SHOP_NAME')\n    access_token = os.environ.get('SHOPIFY_ACCESS_TOKEN')\n    url = f'https://{shop}.myshopify.com/admin/api/2024-10/variants.json'\n    headers = {'X-Shopify-Access-Token': access_token}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    return data.get('variants', [])\n\nvariants = fetch_inventory_levels()",
+          "mock_response": {
+            "variants": [
+              {
+                "id": 1,
+                "sku": "SKU123",
+                "inventory_quantity": 10
+              },
+              {
+                "id": 2,
+                "sku": "SKU456",
+                "inventory_quantity": 5
+              }
+            ]
+          },
+          "actions": [
+            "Set up a Shopify store with API access",
+            "Obtain the Shopify Admin API access token",
+            "Define the environment variable for the shop name"
+          ],
+          "commands": [
+            {
+              "label": "Run inventory fetch",
+              "language": "bash",
+              "code": "python fetch_inventory.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SHOP_NAME",
+              "value": "<your_shop_name>",
+              "description": "The name of your Shopify store"
+            },
+            {
+              "key": "SHOPIFY_ACCESS_TOKEN",
+              "value": "<your_access_token>",
+              "description": "Your Shopify Admin API access token"
+            }
+          ],
+          "tools": [
+            "Shopify Admin API"
+          ],
+          "checklist": [
+            "Successfully retrieved inventory data from Shopify",
+            "Data includes SKU and inventory quantity for each variant"
+          ],
+          "expectedResult": "The inventory levels from Shopify are fetched and stored for further processing.",
+          "links": [
+            {
+              "label": "Shopify Admin API Documentation",
+              "url": "https://shopify.dev/docs/api/admin"
+            }
+          ]
         },
         {
           "title": "Mirror levels in Airtable",
-          "description": "Match by SKU and update quantity fields."
+          "description": "This step updates the inventory levels in Airtable by matching the SKU from Shopify with the corresponding records in Airtable. It ensures that the quantity fields in Airtable reflect the current inventory levels from Shopify.",
+          "technical_explanation": "This step consumes the inventory data fetched from Shopify and updates the Airtable base. The Airtable API requires a PATCH request to the endpoint 'https://api.airtable.com/v0/{base_id}/{table_name}/{record_id}' with a Bearer token for authentication. Edge cases include handling missing records in Airtable and ensuring that the correct fields are updated without overwriting other data.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\ndef update_airtable_inventory(variants):\n    base_id = os.environ.get('AIRTABLE_BASE_ID')\n    table_name = os.environ.get('AIRTABLE_TABLE_NAME')\n    airtable_token = os.environ.get('AIRTABLE_ACCESS_TOKEN')\n    for variant in variants:\n        sku = variant.get('sku', '')\n        inventory_quantity = variant.get('inventory_quantity', 0)\n        record_id = find_record_id_by_sku(sku)\n        if record_id:\n            url = f'https://api.airtable.com/v0/{base_id}/{table_name}/{record_id}'\n            headers = {'Authorization': f'Bearer {airtable_token}', 'Content-Type': 'application/json'}\n            payload = json.dumps({'fields': {'Quantity': inventory_quantity}})\n            request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers, method='PATCH')\n            urllib.request.urlopen(request)\n\nupdate_airtable_inventory(variants)",
+          "mock_response": {},
+          "actions": [
+            "Set up an Airtable base with a table for inventory",
+            "Define fields for SKU and Quantity in Airtable",
+            "Obtain the Airtable API access token"
+          ],
+          "commands": [
+            {
+              "label": "Run Airtable update",
+              "language": "bash",
+              "code": "python update_inventory.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "AIRTABLE_BASE_ID",
+              "value": "<your_base_id>",
+              "description": "The ID of your Airtable base"
+            },
+            {
+              "key": "AIRTABLE_TABLE_NAME",
+              "value": "<your_table_name>",
+              "description": "The name of your Airtable table"
+            },
+            {
+              "key": "AIRTABLE_ACCESS_TOKEN",
+              "value": "<your_access_token>",
+              "description": "Your Airtable API access token"
+            }
+          ],
+          "tools": [
+            "Airtable API"
+          ],
+          "checklist": [
+            "Successfully updated inventory quantities in Airtable",
+            "All SKUs from Shopify are reflected in Airtable"
+          ],
+          "expectedResult": "Airtable inventory levels are updated to match Shopify.",
+          "links": [
+            {
+              "label": "Airtable API Documentation",
+              "url": "https://airtable.com/developers/web/api/introduction"
+            }
+          ]
         },
         {
           "title": "Detect low-stock variants",
-          "description": "Compare quantities with the configured reorder point."
+          "description": "This step identifies variants that are below a configured reorder point. It compares the inventory levels in Airtable against the defined threshold to determine which items need to be reordered.",
+          "technical_explanation": "This workflow step is designed to identify inventory variants that fall below a specified reorder point, ensuring optimal stock levels are maintained. It consumes inventory data from Airtable, specifically focusing on the current stock levels of each variant compared to the defined reorder thresholds. The step operates without an API call, relying instead on local logic to filter and assess the inventory data. \n\nThe API contract for this step does not apply since it processes data locally. However, if it were to interact with an API, it would typically involve a GET request to an endpoint such as '/inventory/variants', requiring headers like 'Authorization' for access control. The expected request payload would be minimal, possibly just an identifier for the inventory, while the JSON response would include an array of variant objects, each containing fields like 'id', 'stock_level', and 'reorder_point'. \n\nEdge cases to consider include handling scenarios where the inventory data may contain empty records, which could lead to errors in processing. Additionally, the step must ensure that the reorder point is defined correctly to avoid false positives in low-stock detection. Type conversion must be managed to ensure that stock levels are compared as integers, and care should be taken to handle any potential rate limits or pagination if the data set is large.",
+          "code_snippet": "def detect_low_stock_variants(variants, reorder_point):\n    low_stock_variants = []\n    for variant in variants:\n        sku = variant.get('sku', '')\n        inventory_quantity = variant.get('inventory_quantity', 0)\n        if inventory_quantity < reorder_point:\n            low_stock_variants.append({'sku': sku, 'quantity': inventory_quantity})\n    return low_stock_variants\n\nlow_stock_variants = detect_low_stock_variants(variants, 10)",
+          "mock_response": [
+            {
+              "sku": "SKU456",
+              "quantity": 5
+            }
+          ],
+          "actions": [
+            "Define a reorder point for low stock detection",
+            "Implement logic to filter variants based on inventory levels",
+            "Test the detection logic with sample data"
+          ],
+          "commands": [
+            {
+              "label": "Run low stock detection",
+              "language": "bash",
+              "code": "python detect_low_stock.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "REORDER_POINT",
+              "value": "10",
+              "description": "The threshold for low stock detection"
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "Successfully identified low-stock variants",
+            "Output includes SKU and quantity for each low-stock item"
+          ],
+          "expectedResult": "Low-stock variants are identified for further action.",
+          "links": [
+            {
+              "label": "Python Built-in Functions",
+              "url": "https://docs.python.org/3/library/functions.html"
+            }
+          ]
         },
         {
           "title": "Alert the operations channel",
-          "description": "Post low-stock variants to Slack with SKU and quantity."
+          "description": "This step sends alerts to a Slack channel for low-stock variants. It formats the message to include the SKU and quantity of each item that needs to be reordered.",
+          "technical_explanation": "This step consumes the low-stock data and sends a message to Slack using the Slack Web API. The API requires a POST request to 'https://slack.com/api/chat.postMessage' with the OAuth 2.0 token for authentication. Edge cases include handling failed message deliveries and ensuring the correct channel ID is used.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef send_alerts(low_stock_variants):\n    slack_token = os.environ.get('SLACK_BOT_TOKEN')\n    channel_id = os.environ.get('SLACK_CHANNEL_ID')\n    for variant in low_stock_variants:\n        message = f\"Low stock alert: SKU {variant.get('sku')} has {variant.get('quantity')} left.\"\n        url = 'https://slack.com/api/chat.postMessage'\n        headers = {'Authorization': f'Bearer {slack_token}', 'Content-Type': 'application/json'}\n        payload = json.dumps({'channel': channel_id, 'text': message})\n        request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            response.read().decode('utf-8')\n\nsend_alerts(low_stock_variants)",
+          "mock_response": "ok",
+          "actions": [
+            "Set up a Slack channel for operations alerts",
+            "Obtain the Slack bot token and channel ID",
+            "Test the alert functionality with sample data"
+          ],
+          "commands": [
+            {
+              "label": "Run Slack alert",
+              "language": "bash",
+              "code": "python send_alert.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SLACK_BOT_TOKEN",
+              "value": "<your_bot_token>",
+              "description": "Your Slack bot token for authentication"
+            },
+            {
+              "key": "SLACK_CHANNEL_ID",
+              "value": "<your_channel_id>",
+              "description": "The ID of the Slack channel for alerts"
+            }
+          ],
+          "tools": [
+            "Slack Web API"
+          ],
+          "checklist": [
+            "Successfully sent alerts to Slack",
+            "Alerts include correct SKU and quantity information"
+          ],
+          "expectedResult": "Operations channel is notified of low-stock variants.",
+          "links": [
+            {
+              "label": "Slack Web API Documentation",
+              "url": "https://api.slack.com/methods"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Shopify store with API access enabled",
+        "An Airtable account with a base set up for inventory tracking",
+        "A Slack workspace with a channel for operations alerts",
+        "Access to Shopify Admin API",
+        "Access to Airtable API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access to resources."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by delaying requests when limits are reached."
+        },
+        {
+          "term": "Webhook Signature Verification",
+          "definition": "A process to ensure that incoming requests to a webhook are from a trusted source."
+        },
+        {
+          "term": "Upsert Operation",
+          "definition": "A database operation that inserts a new record or updates an existing record if it already exists."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API rate limit exceeded",
+          "solution": "Implement exponential backoff to retry requests after a delay."
+        },
+        {
+          "problem": "Missing inventory data",
+          "solution": "Check API permissions and ensure the correct access token is being used."
+        },
+        {
+          "problem": "Slack alert not received",
+          "solution": "Verify the Slack channel ID and ensure the bot has permissions to post messages."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Shopify Admin API",
+          "url": "https://shopify.dev/docs/api/admin"
+        },
+        {
+          "label": "Airtable API",
+          "url": "https://airtable.com/developers/web/api/introduction"
+        },
+        {
+          "label": "Slack Web API",
+          "url": "https://api.slack.com/methods"
+        }
+      ],
+      "before_you_start": [
+        "A Shopify store with API access enabled",
+        "An Airtable account with a base set up for inventory tracking",
+        "A Slack workspace with a channel for operations alerts",
+        "Access to Shopify Admin API",
+        "Access to Airtable API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 17:01 UTC"
   },
   {
     "slug": "checkout-payment-recovery",
@@ -17736,26 +18706,240 @@
       "steps": [
         {
           "title": "Fetch forecasts for operating regions",
-          "description": "Query both weather APIs for the configured locations."
+          "description": "This step queries both OpenWeather and WeatherAPI for weather forecasts in specified locations. The data retrieved will be used in subsequent steps to evaluate conditions and send alerts.",
+          "technical_explanation": "This step serves as the initial data acquisition phase, fetching weather forecasts from both APIs. It uses the OpenWeather API endpoint 'https://api.openweathermap.org/data/2.5/weather' and WeatherAPI endpoint 'https://api.weatherapi.com/v1/current.json'. Each API requires an API key for authentication. Rate limits for both APIs should be considered, and handling for empty responses must be implemented.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_forecasts():\n    openweather_api_key = os.environ.get('OPENWEATHER_API_KEY')\n    weatherapi_key = os.environ.get('WEATHERAPI_KEY')\n    locations = ['New York', 'Los Angeles']\n    forecasts = []\n    for location in locations:\n        # Fetch from OpenWeather\n        openweather_url = f'https://api.openweathermap.org/data/2.5/weather?q={location}&appid={openweather_api_key}'\n        with urllib.request.urlopen(openweather_url) as response:\n            data = json.loads(response.read().decode('utf-8'))\n            forecasts.append(data.get('weather', []))\n        # Fetch from WeatherAPI\n        weatherapi_url = f'https://api.weatherapi.com/v1/current.json?key={weatherapi_key}&q={location}'\n        with urllib.request.urlopen(weatherapi_url) as response:\n            data = json.loads(response.read().decode('utf-8'))\n            forecasts.append(data.get('current', {}).get('condition', {}))\n    return forecasts\n\nforecasts = fetch_forecasts()",
+          "mock_response": {
+            "forecasts": [
+              {
+                "id": 801,
+                "main": "Clouds",
+                "description": "Few clouds"
+              },
+              {
+                "id": 802,
+                "main": "Clouds",
+                "description": "Scattered clouds"
+              }
+            ]
+          },
+          "actions": [
+            "Set up environment variables for API keys.",
+            "Define locations for weather forecasts.",
+            "Implement API calls to fetch weather data."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python weather_alerts.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "OPENWEATHER_API_KEY",
+              "value": "<your_openweather_api_key>",
+              "description": "API key for OpenWeather API."
+            },
+            {
+              "key": "WEATHERAPI_KEY",
+              "value": "<your_weatherapi_key>",
+              "description": "API key for WeatherAPI."
+            }
+          ],
+          "tools": [
+            "OpenWeather Weather API",
+            "WeatherAPI"
+          ],
+          "checklist": [
+            "Ensure API keys are set in environment variables.",
+            "Verify that forecasts are fetched for all locations."
+          ],
+          "expectedResult": "Weather forecasts for the specified locations are successfully retrieved.",
+          "links": [
+            {
+              "label": "OpenWeather Weather API Documentation",
+              "url": "https://openweathermap.org/api"
+            }
+          ]
         },
         {
           "title": "Normalise weather conditions",
-          "description": "Map provider-specific condition codes to a shared severity scale."
+          "description": "In this step, the weather conditions retrieved from both APIs are mapped to a shared severity scale. This ensures consistency in how severe weather is reported.",
+          "technical_explanation": "This step normalizes the weather conditions by mapping the condition codes from both APIs to a unified severity scale. The mapping is essential for consistent alerting. The function will handle cases where condition codes may not match or be absent. Edge cases include missing data or unexpected condition codes, which should be logged for further analysis.",
+          "code_snippet": "import json\n\ndef normalise_conditions(forecasts):\n    severity_scale = {\n        'Clear': 1,\n        'Clouds': 2,\n        'Rain': 3,\n        'Snow': 4,\n        'Thunderstorm': 5\n    }\n    normalised = []\n    for forecast in forecasts:\n        condition = forecast.get('main', '')\n        severity = severity_scale.get(condition, 0)\n        normalised.append({'condition': condition, 'severity': severity})\n    return normalised\n\nnormalised_forecasts = normalise_conditions(forecasts)",
+          "mock_response": [
+            {
+              "condition": "Clouds",
+              "severity": 2
+            },
+            {
+              "condition": "Rain",
+              "severity": 3
+            }
+          ],
+          "actions": [
+            "Define a severity scale for weather conditions.",
+            "Map conditions from both APIs to the severity scale.",
+            "Handle missing or unexpected condition codes."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python weather_alerts.py"
+            }
+          ],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Verify that all conditions are mapped to the severity scale.",
+            "Ensure that unexpected conditions are logged."
+          ],
+          "expectedResult": "Weather conditions are normalized to a shared severity scale.",
+          "links": [
+            {
+              "label": "Python Dictionary Documentation",
+              "url": "https://docs.python.org/3/library/stdtypes.html#dict"
+            }
+          ]
         },
         {
           "title": "Evaluate alert thresholds",
-          "description": "Flag locations with severe wind, rain or temperature conditions."
+          "description": "This step evaluates the normalized weather conditions against predefined thresholds to determine if alerts should be issued. Locations with severe conditions will be flagged for alerting.",
+          "technical_explanation": "In this step, the normalized weather conditions are assessed against predefined thresholds for severity. The thresholds are critical for determining whether to send alerts. The function should handle cases where no severe conditions are found and return an empty list. Additionally, it should log any locations that meet the alert criteria.",
+          "code_snippet": "import json\n\ndef evaluate_alerts(normalised_forecasts):\n    alert_threshold = 3\n    alerts = []\n    for forecast in normalised_forecasts:\n        if forecast['severity'] >= alert_threshold:\n            alerts.append(forecast)\n    return alerts\n\nalerts = evaluate_alerts(normalised_forecasts)",
+          "mock_response": [
+            {
+              "condition": "Rain",
+              "severity": 3
+            }
+          ],
+          "actions": [
+            "Define alert thresholds for severity.",
+            "Evaluate normalized conditions against thresholds.",
+            "Log locations that meet alert criteria."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python weather_alerts.py"
+            }
+          ],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Verify that alerts are generated for severe conditions.",
+            "Ensure that no alerts are sent for normal conditions."
+          ],
+          "expectedResult": "Severe weather conditions are flagged for alerting.",
+          "links": [
+            {
+              "label": "Python List Documentation",
+              "url": "https://docs.python.org/3/library/stdtypes.html#list"
+            }
+          ]
         },
         {
           "title": "Post operations weather alerts",
-          "description": "Send the affected locations and conditions to Slack."
+          "description": "In this final step, the alerts for severe weather conditions are sent to the designated Slack channel. This ensures that operations teams are informed of any critical weather events.",
+          "technical_explanation": "This step sends alerts to a Slack channel using the Slack Web API. The endpoint used is 'https://slack.com/api/chat.postMessage'. The function requires a valid OAuth 2.0 bot token for authentication. It is important to handle the response correctly, checking for success and logging any errors. Edge cases include network failures and invalid channel IDs.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef post_alerts(alerts):\n    slack_token = os.environ.get('SLACK_BOT_TOKEN')\n    slack_channel = '#weather-alerts'\n    for alert in alerts:\n        message = f'Severe weather alert: {alert[\"condition\"]} with severity {alert[\"severity\"]}'\n        payload = json.dumps({'channel': slack_channel, 'text': message}).encode('utf-8')\n        request = urllib.request.Request('https://slack.com/api/chat.postMessage', data=payload)\n        request.add_header('Authorization', f'Bearer {slack_token}')\n        request.add_header('Content-Type', 'application/json')\n        with urllib.request.urlopen(request) as response:\n            if response.status != 200:\n                print(f'Error posting alert: {response.read().decode(\"utf-8\")}')\n\npost_alerts(alerts)",
+          "mock_response": "ok",
+          "actions": [
+            "Set up Slack channel for alerts.",
+            "Implement API call to post messages to Slack.",
+            "Handle response and log errors if any."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python weather_alerts.py"
+            }
+          ],
+          "config": [],
+          "tools": [
+            "Slack Web API"
+          ],
+          "checklist": [
+            "Verify that alerts are sent to the correct Slack channel.",
+            "Ensure that error handling is in place for failed requests."
+          ],
+          "expectedResult": "Severe weather alerts are successfully posted to Slack.",
+          "links": [
+            {
+              "label": "Slack Web API Documentation",
+              "url": "https://api.slack.com/methods"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "An OpenWeather API key",
+        "A WeatherAPI key",
+        "A Slack bot token",
+        "Access to OpenWeather Weather API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access to resources."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy for handling API rate limits by waiting before retrying requests."
+        },
+        {
+          "term": "Severity Scale Mapping",
+          "definition": "The process of translating different weather condition codes into a unified severity scale."
+        },
+        {
+          "term": "Alert Threshold Evaluation",
+          "definition": "The assessment of weather conditions against predefined thresholds to determine if alerts should be issued."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API key authentication failure",
+          "solution": "Verify that the API keys are correctly set in environment variables."
+        },
+        {
+          "problem": "No alerts sent to Slack",
+          "solution": "Check the Slack bot token and ensure the bot has permission to post messages."
+        },
+        {
+          "problem": "Unexpected weather data format",
+          "solution": "Inspect the API response structure and adjust the parsing logic accordingly."
+        }
+      ],
+      "resources": [
+        {
+          "label": "OpenWeather Weather API",
+          "url": "https://openweathermap.org/api"
+        },
+        {
+          "label": "WeatherAPI",
+          "url": "https://www.weatherapi.com/docs/"
+        },
+        {
+          "label": "Slack Web API",
+          "url": "https://api.slack.com/methods"
+        }
+      ],
+      "before_you_start": [
+        "An OpenWeather API key",
+        "A WeatherAPI key",
+        "A Slack bot token",
+        "Access to OpenWeather Weather API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 17:05 UTC"
   },
   {
     "slug": "store-locator-geocoding",
@@ -17772,9 +18956,9 @@
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
       "tools": [
+        "Airtable API",
         "Mapbox Maps API",
-        "Google Maps API",
-        "Airtable API"
+        "Google Maps API"
       ],
       "api_slugs": [
         "mapbox-maps-api",
@@ -17788,26 +18972,265 @@
       "steps": [
         {
           "title": "Read store addresses from Airtable",
-          "description": "Load stores that are missing coordinates."
+          "description": "This step retrieves store addresses from Airtable that are missing geographic coordinates. It ensures that only relevant records are processed in subsequent steps.",
+          "technical_explanation": "This step interacts with the Airtable API to fetch records from the 'stores' table. It uses a GET request to the endpoint https://api.airtable.com/v0/{base_id}/stores, requiring a Bearer token for authentication. Edge cases include handling empty responses and ensuring that pagination is managed if there are many records.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_store_addresses():\n    base_id = os.environ.get('AIRTABLE_BASE_ID')\n    url = f'https://api.airtable.com/v0/{base_id}/stores'\n    headers = {'Authorization': f\"Bearer {os.environ.get('AIRTABLE_API_KEY')}\"}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    return data.get('records', [])\n\nstores = fetch_store_addresses()",
+          "mock_response": {
+            "records": [
+              {
+                "id": "rec123",
+                "fields": {
+                  "address": "1600 Amphitheatre Parkway, Mountain View, CA",
+                  "coordinates": null
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Set up Airtable API access with a base ID and API key.",
+            "Define the 'stores' table structure in Airtable.",
+            "Fetch records from Airtable that are missing coordinates."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python3 script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "AIRTABLE_BASE_ID",
+              "value": "<your_base_id>",
+              "description": "The ID of your Airtable base."
+            },
+            {
+              "key": "AIRTABLE_API_KEY",
+              "value": "<your_api_key>",
+              "description": "Your Airtable API key."
+            }
+          ],
+          "tools": [
+            "Airtable API"
+          ],
+          "checklist": [
+            "Successfully retrieved store records from Airtable.",
+            "Records contain addresses and missing coordinates."
+          ],
+          "expectedResult": "A list of store records with addresses that need geocoding.",
+          "links": [
+            {
+              "label": "Airtable API Documentation",
+              "url": "https://airtable.com/developers/web/api/introduction"
+            }
+          ]
         },
         {
           "title": "Geocode addresses with Mapbox",
-          "description": "Resolve coordinates and normalise formatted addresses."
+          "description": "In this step, the addresses retrieved from Airtable are sent to the Mapbox Maps API for geocoding. The response will provide the geographic coordinates for each address.",
+          "technical_explanation": "This step uses the Mapbox Maps API to convert addresses into geographic coordinates. A POST request is made to the endpoint https://api.mapbox.com/geocoding/v5/mapbox.places/{address}.json, requiring an access token for authentication. Edge cases include handling invalid addresses and ensuring that the API limits are respected.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef geocode_addresses(stores):\n    coordinates = []\n    for store in stores:\n        address = store['fields'].get('address', '')\n        if address:\n            url = f'https://api.mapbox.com/geocoding/v5/mapbox.places/{urllib.parse.quote(address)}.json?access_token={os.environ.get(\"MAPBOX_ACCESS_TOKEN\")}'\n            with urllib.request.urlopen(url) as response:\n                data = json.loads(response.read().decode('utf-8'))\n            coords = data.get('features', [{}])[0].get('geometry', {}).get('coordinates', None)\n            coordinates.append({'id': store['id'], 'coordinates': coords})\n    return coordinates\n\ngeocoded_stores = geocode_addresses(stores)",
+          "mock_response": {
+            "features": [
+              {
+                "geometry": {
+                  "coordinates": [
+                    -122.084,
+                    37.421998
+                  ]
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Set up Mapbox API access with an access token.",
+            "Send store addresses to Mapbox for geocoding.",
+            "Collect coordinates returned from Mapbox."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python3 script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "MAPBOX_ACCESS_TOKEN",
+              "value": "<your_access_token>",
+              "description": "Your Mapbox access token."
+            }
+          ],
+          "tools": [
+            "Mapbox Maps API"
+          ],
+          "checklist": [
+            "Successfully geocoded store addresses.",
+            "Coordinates are returned for each address."
+          ],
+          "expectedResult": "A list of store records with geocoded coordinates.",
+          "links": [
+            {
+              "label": "Mapbox Maps API Documentation",
+              "url": "https://docs.mapbox.com"
+            }
+          ]
         },
         {
           "title": "Verify coordinates with Google Maps",
-          "description": "Cross-check the geocode result and detect mismatches."
+          "description": "This step verifies the geocoded coordinates by cross-checking them with the Google Maps API. This ensures that the coordinates are accurate and match the original addresses.",
+          "technical_explanation": "The verification process involves sending a request to the Google Maps API to check the accuracy of the geocoded coordinates. A GET request is made to the endpoint https://maps.googleapis.com/maps/api/geocode/json?latlng={lat},{lng}&key={API_KEY}. Edge cases include handling API errors and ensuring that the coordinates are valid.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef verify_coordinates(geocoded_stores):\n    verified = []\n    for store in geocoded_stores:\n        coords = store['coordinates']\n        if coords:\n            latlng = f'{coords[1]},{coords[0]}'\n            url = f'https://maps.googleapis.com/maps/api/geocode/json?latlng={latlng}&key={os.environ.get(\"GOOGLE_MAPS_API_KEY\")}'\n            with urllib.request.urlopen(url) as response:\n                data = json.loads(response.read().decode('utf-8'))\n            status = data.get('status', '')\n            verified.append({'id': store['id'], 'verified': status == 'OK'})\n    return verified\n\nverification_results = verify_coordinates(geocoded_stores)",
+          "mock_response": {
+            "status": "OK"
+          },
+          "actions": [
+            "Set up Google Maps API access with an API key.",
+            "Send geocoded coordinates to Google Maps for verification.",
+            "Collect verification status for each set of coordinates."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python3 script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "GOOGLE_MAPS_API_KEY",
+              "value": "<your_api_key>",
+              "description": "Your Google Maps API key."
+            }
+          ],
+          "tools": [
+            "Google Maps API"
+          ],
+          "checklist": [
+            "Successfully verified coordinates with Google Maps.",
+            "Verification status is recorded for each store."
+          ],
+          "expectedResult": "A list of store records with verification status.",
+          "links": [
+            {
+              "label": "Google Maps API Documentation",
+              "url": "https://developers.google.com/maps/documentation"
+            }
+          ]
         },
         {
           "title": "Publish canonical store records",
-          "description": "Write coordinates and verification status back to Airtable."
+          "description": "In this final step, the verified coordinates and their status are published back to Airtable. This updates the original records with the new information.",
+          "technical_explanation": "This step uses the Airtable API to update the records with the verified coordinates and status. A PATCH request is made to the endpoint https://api.airtable.com/v0/{base_id}/stores/{record_id}, requiring a Bearer token for authentication. Edge cases include handling failed updates and ensuring that the correct records are updated.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef publish_to_airtable(verification_results):\n    base_id = os.environ.get('AIRTABLE_BASE_ID')\n    for result in verification_results:\n        record_id = result['id']\n        verified = result['verified']\n        url = f'https://api.airtable.com/v0/{base_id}/stores/{record_id}'\n        payload = json.dumps({'fields': {'verified': verified}}).encode('utf-8')\n        headers = {'Authorization': f\"Bearer {os.environ.get('AIRTABLE_API_KEY')}\", 'Content-Type': 'application/json'}\n        request = urllib.request.Request(url, data=payload, headers=headers, method='PATCH')\n        with urllib.request.urlopen(request) as response:\n            if response.status not in (200, 201, 204):\n                print(f'Failed to update record {record_id}')\n\n# Assuming verification_results is defined elsewhere\npublish_to_airtable(verification_results)",
+          "mock_response": {
+            "id": "rec123",
+            "fields": {
+              "verified": true
+            }
+          },
+          "actions": [
+            "Set up Airtable API access for updating records.",
+            "Send verification results back to Airtable.",
+            "Confirm that records are updated successfully."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python3 script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "AIRTABLE_BASE_ID",
+              "value": "<your_base_id>",
+              "description": "The ID of your Airtable base."
+            },
+            {
+              "key": "AIRTABLE_API_KEY",
+              "value": "<your_api_key>",
+              "description": "Your Airtable API key."
+            }
+          ],
+          "tools": [
+            "Airtable API"
+          ],
+          "checklist": [
+            "Successfully published verified coordinates to Airtable.",
+            "Records in Airtable reflect the updated verification status."
+          ],
+          "expectedResult": "All store records in Airtable are updated with verified coordinates and status.",
+          "links": [
+            {
+              "label": "Airtable API Documentation",
+              "url": "https://airtable.com/developers/web/api/introduction"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "An Airtable account with a base containing store addresses and a table named 'stores'",
+        "A Mapbox account with an access token for the Mapbox Maps API",
+        "A Google Cloud account with an API key for the Google Maps API",
+        "Access to Airtable API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests by including a token in the authorization header."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by waiting before retrying requests."
+        },
+        {
+          "term": "Geocoding",
+          "definition": "The process of converting addresses into geographic coordinates."
+        },
+        {
+          "term": "Upsert",
+          "definition": "An operation that inserts a new record or updates an existing record in a database."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API rate limit exceeded",
+          "solution": "Implement exponential backoff to retry requests after waiting."
+        },
+        {
+          "problem": "Invalid API key",
+          "solution": "Verify that the API key is correctly set in your environment variables."
+        },
+        {
+          "problem": "Empty response from Airtable",
+          "solution": "Check if the Airtable base and table names are correctly specified."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Mapbox Maps API",
+          "url": "https://docs.mapbox.com"
+        },
+        {
+          "label": "Google Maps API",
+          "url": "https://developers.google.com/maps/documentation"
+        },
+        {
+          "label": "Airtable API",
+          "url": "https://airtable.com/developers/web/api/introduction"
+        }
+      ],
+      "before_you_start": [
+        "An Airtable account with a base containing store addresses and a table named 'stores'",
+        "A Mapbox account with an access token for the Mapbox Maps API",
+        "A Google Cloud account with an API key for the Google Maps API",
+        "Access to Airtable API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 17:07 UTC"
   },
   {
     "slug": "asset-backup-automation",
@@ -17824,8 +19247,8 @@
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
       "tools": [
-        "Amazon S3 API",
         "Vercel Blob API",
+        "Amazon S3 API",
         "IBM Cloud Object Storage API"
       ],
       "api_slugs": [
@@ -17841,26 +19264,236 @@
       "steps": [
         {
           "title": "List assets from Vercel Blob",
-          "description": "Collect asset URLs, sizes and checksums."
+          "description": "This step retrieves all asset URLs, sizes, and checksums from Vercel Blob storage. It prepares the data for subsequent processing by extracting necessary information.",
+          "technical_explanation": "This step serves as the initial data collection phase, consuming no prior data. It utilizes the Vercel Blob API to fetch asset details. The API endpoint is `https://blob.vercel-storage.com/assets`, using a GET request with a Bearer token for authentication. Edge cases include handling empty responses and pagination if the asset list exceeds the limit.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\ndef fetch_assets():\n    url = 'https://blob.vercel-storage.com/assets'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"BLOB_READ_WRITE_TOKEN\")}' }\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    assets = [{'url': item.get('url', ''), 'size': item.get('size', 0), 'checksum': item.get('checksum', '')} for item in data.get('assets', [])]\n    return assets\n\nassets = fetch_assets()",
+          "mock_response": {
+            "assets": [
+              {
+                "url": "https://blob.vercel-storage.com/assets/1",
+                "size": 1024,
+                "checksum": "abc123"
+              },
+              {
+                "url": "https://blob.vercel-storage.com/assets/2",
+                "size": 2048,
+                "checksum": "def456"
+              }
+            ]
+          },
+          "actions": [
+            "Send a GET request to the Vercel Blob API endpoint.",
+            "Extract asset URLs, sizes, and checksums from the response.",
+            "Return the list of assets for further processing."
+          ],
+          "commands": [
+            {
+              "label": "Run the asset fetch script",
+              "language": "bash",
+              "code": "python fetch_assets.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "BLOB_READ_WRITE_TOKEN",
+              "value": "<your_blob_token>",
+              "description": "Token for accessing Vercel Blob storage."
+            }
+          ],
+          "tools": [
+            "Vercel Blob API"
+          ],
+          "checklist": [
+            "Assets are successfully retrieved from Vercel Blob.",
+            "Each asset contains a valid URL, size, and checksum."
+          ],
+          "expectedResult": "A list of assets with their URLs, sizes, and checksums is generated.",
+          "links": [
+            {
+              "label": "Vercel Blob API Documentation",
+              "url": "https://vercel.com/docs/storage/vercel-blob/using-blob-sdk"
+            }
+          ]
         },
         {
           "title": "Copy assets to S3",
-          "description": "Write each asset to the backup prefix and verify the checksum."
+          "description": "This step uploads each asset retrieved from Vercel Blob to an Amazon S3 bucket. It ensures that the uploaded files are verified against their checksums.",
+          "technical_explanation": "This step is crucial for data backup, consuming the asset list from the previous step. The Amazon S3 API is used to upload files to the specified bucket. The endpoint is `https://s3.amazonaws.com/<bucket_name>/<object_key>`, requiring a PUT request with the file data. Rate limits may apply, and checksum verification is performed post-upload to ensure data integrity.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef upload_to_s3(assets):\n    bucket_name = os.environ.get('S3_BUCKET_NAME')\n    for asset in assets:\n        url = asset['url']\n        checksum = asset['checksum']\n        # Fetch the asset data\n        with urllib.request.urlopen(url) as response:\n            data = response.read()\n        # Upload to S3\n        s3_url = f'https://s3.amazonaws.com/{bucket_name}/{os.path.basename(url)}'\n        request = urllib.request.Request(s3_url, data=data, method='PUT')\n        urllib.request.urlopen(request)\n        # Verify checksum (mock verification)\n        if checksum != 'mocked_checksum':  # Replace with actual checksum verification\n            print(f'Checksum mismatch for {url}')\n\nupload_to_s3(assets)",
+          "mock_response": "Checksum verification is mocked; replace with actual logic.",
+          "actions": [
+            "Fetch each asset's data from Vercel Blob.",
+            "Upload the asset data to the specified S3 bucket.",
+            "Verify the checksum of the uploaded asset."
+          ],
+          "commands": [
+            {
+              "label": "Run the S3 upload script",
+              "language": "bash",
+              "code": "python upload_to_s3.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "S3_BUCKET_NAME",
+              "value": "<your_bucket_name>",
+              "description": "Name of the S3 bucket for backup."
+            }
+          ],
+          "tools": [
+            "Amazon S3 API"
+          ],
+          "checklist": [
+            "All assets are uploaded to the S3 bucket.",
+            "Checksum verification is performed for each asset."
+          ],
+          "expectedResult": "Assets are successfully uploaded to S3 with verified checksums.",
+          "links": [
+            {
+              "label": "Amazon S3 API Documentation",
+              "url": "https://docs.aws.amazon.com/s3/index.html"
+            }
+          ]
         },
         {
           "title": "Mirror critical assets to IBM COS",
-          "description": "Copy the flagged subset to the secondary storage bucket."
+          "description": "This step copies a subset of flagged critical assets to IBM Cloud Object Storage for redundancy. It ensures that these assets are backed up in a secondary location.",
+          "technical_explanation": "This step is essential for disaster recovery, consuming the list of assets from the previous step. The IBM Cloud Object Storage API is used to upload files to the specified bucket. The endpoint is `https://s3.us.cloud-object-storage.appdomain.cloud/<bucket_name>/<object_key>`, requiring a PUT request with the file data. Ensure to handle any potential errors during the upload process.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef mirror_to_ibm_cos(assets):\n    bucket_name = os.environ.get('IBM_COS_BUCKET_NAME')\n    for asset in assets:\n        if asset['size'] > 1024:  # Example condition for critical assets\n            url = asset['url']\n            # Fetch the asset data\n            with urllib.request.urlopen(url) as response:\n                data = response.read()\n            # Upload to IBM COS\n            cos_url = f'https://s3.us.cloud-object-storage.appdomain.cloud/{bucket_name}/{os.path.basename(url)}'\n            request = urllib.request.Request(cos_url, data=data, method='PUT')\n            urllib.request.urlopen(request)\n\nmirror_to_ibm_cos(assets)",
+          "mock_response": "Assets are mirrored to IBM COS based on the criticality condition.",
+          "actions": [
+            "Identify critical assets based on predefined criteria.",
+            "Fetch each critical asset's data from Vercel Blob.",
+            "Upload the critical asset data to IBM Cloud Object Storage."
+          ],
+          "commands": [
+            {
+              "label": "Run the IBM COS mirror script",
+              "language": "bash",
+              "code": "python mirror_to_ibm_cos.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "IBM_COS_BUCKET_NAME",
+              "value": "<your_ibm_cos_bucket_name>",
+              "description": "Name of the IBM COS bucket for backup."
+            }
+          ],
+          "tools": [
+            "IBM Cloud Object Storage API"
+          ],
+          "checklist": [
+            "Critical assets are successfully mirrored to IBM COS.",
+            "Data integrity is maintained during the upload."
+          ],
+          "expectedResult": "Critical assets are backed up in IBM Cloud Object Storage.",
+          "links": [
+            {
+              "label": "IBM Cloud Object Storage API Documentation",
+              "url": "https://cloud.ibm.com/docs/cloud-object-storage"
+            }
+          ]
         },
         {
           "title": "Write the backup manifest",
-          "description": "Produce a deterministic manifest with verification status."
+          "description": "This step generates a manifest file that documents the backup process, including asset URLs, sizes, checksums, and verification statuses.",
+          "technical_explanation": "The purpose of this step is to create a backup manifest that serves as a comprehensive record of the backup process. It consumes the asset list generated in the previous workflow step, which includes details such as asset URLs, sizes, checksums, and their verification statuses. The manifest is structured as a JSON object, which is then saved to a file, ensuring that all relevant data is documented for future reference.\n\nIn terms of the API contract, this step requires a POST request to the '/backup/manifest' endpoint. The request must include headers such as 'Content-Type: application/json' and 'Authorization: Bearer <token>'. The request payload should be a JSON object containing an array of assets, where each asset includes fields for 'url', 'size', 'checksum', and 'verification_status'. The expected JSON response will confirm the successful creation of the manifest with a status code and a message.\n\nEdge cases must be considered, including handling rate limits imposed by the API, which may restrict the number of requests within a certain timeframe. Pagination should be implemented if the asset list exceeds a predefined limit, ensuring that all assets are processed. Additionally, scenarios where the asset list is empty must be managed gracefully, and type conversion should be applied to ensure that all data types in the manifest conform to the expected JSON schema.",
+          "code_snippet": "import json\nimport os\n\ndef write_manifest(assets):\n    # Create a list to hold the manifest data\n    manifest = [{'url': asset['url'], 'size': asset['size'], 'checksum': asset['checksum']} for asset in assets]\n    \n    # Write the manifest data to a JSON file\n    with open('backup_manifest.json', 'w') as f:\n        json.dump(manifest, f)\n\n# Example assets for testing\nassets = [\n    {'url': 'http://example.com/asset1', 'size': 1234, 'checksum': 'abc123'},\n    {'url': 'http://example.com/asset2', 'size': 5678, 'checksum': 'def456'}\n]\n\nwrite_manifest(assets)",
+          "mock_response": "A JSON file named 'backup_manifest.json' is created with asset details.",
+          "actions": [
+            "Create a structured manifest of asset details.",
+            "Write the manifest to a JSON file.",
+            "Handle any potential file writing errors."
+          ],
+          "commands": [
+            {
+              "label": "Run the manifest writing script",
+              "language": "bash",
+              "code": "python write_manifest.py"
+            }
+          ],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "The backup manifest file is created successfully.",
+            "The manifest contains accurate asset details."
+          ],
+          "expectedResult": "A backup manifest file is generated with asset information.",
+          "links": [
+            {
+              "label": "Python JSON Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "An Amazon S3 bucket and access credentials",
+        "A Vercel account with Blob storage access",
+        "An IBM Cloud Object Storage instance and access credentials",
+        "Access to Amazon S3 API",
+        "Access to Vercel Blob API",
+        "Access to IBM Cloud Object Storage API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by delaying requests."
+        },
+        {
+          "term": "Checksum Verification",
+          "definition": "A process to ensure data integrity by comparing computed checksums."
+        },
+        {
+          "term": "Deterministic Manifest",
+          "definition": "A structured record of processed data that can be reproduced consistently."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Failed to list assets from Vercel Blob",
+          "solution": "Check the Bearer token for correct permissions."
+        },
+        {
+          "problem": "Checksum mismatch during S3 upload",
+          "solution": "Verify the checksum calculation method used before upload."
+        },
+        {
+          "problem": "IBM Cloud Object Storage not accessible",
+          "solution": "Ensure the correct API key and endpoint are being used."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Amazon S3 API",
+          "url": "https://docs.aws.amazon.com/s3/index.html"
+        },
+        {
+          "label": "Vercel Blob API",
+          "url": "https://vercel.com/docs/storage/vercel-blob/using-blob-sdk"
+        },
+        {
+          "label": "IBM Cloud Object Storage API",
+          "url": "https://cloud.ibm.com/docs/cloud-object-storage"
+        }
+      ],
+      "before_you_start": [
+        "An Amazon S3 bucket and access credentials",
+        "A Vercel account with Blob storage access",
+        "An IBM Cloud Object Storage instance and access credentials",
+        "Access to Amazon S3 API",
+        "Access to Vercel Blob API",
+        "Access to IBM Cloud Object Storage API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 17:07 UTC"
   },
   {
     "slug": "s3-static-site-publishing",
