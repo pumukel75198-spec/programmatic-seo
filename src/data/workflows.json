@@ -2608,26 +2608,233 @@
       "steps": [
         {
           "title": "Start the transcription job",
-          "description": "Submit the recording URI to AWS Transcribe and store the job name."
+          "description": "This step involves submitting a recording URI to AWS Transcribe to initiate the transcription process. The job name returned by the API will be stored for subsequent steps.",
+          "technical_explanation": "This step acts as the entry point for the workflow, initiating the transcription job by sending a request to the Amazon Transcribe API. The API endpoint used is POST /v1/transcription-jobs. Required headers include 'Content-Type' and 'Authorization' for AWS Signature Version 4. The request payload must contain the recording URI and job settings. Edge cases include handling errors if the URI is invalid or if the job name already exists.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef start_transcription_job():\n    url = 'https://transcribe.us-east-1.amazonaws.com/v1/transcription-jobs'\n    headers = {\n        'Content-Type': 'application/json',\n        'Authorization': 'Bearer ' + os.environ.get('AWS_ACCESS_TOKEN')\n    }\n    payload = json.dumps({\n        'TranscriptionJobName': 'MeetingTranscription',\n        'LanguageCode': 'en-US',\n        'Media': {'MediaFileUri': os.environ.get('RECORDING_URI')},\n        'OutputBucketName': os.environ.get('OUTPUT_BUCKET')\n    }).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    response = urllib.request.urlopen(request)\n    return json.loads(response.read().decode('utf-8'))\n\njob_response = start_transcription_job()",
+          "mock_response": {
+            "TranscriptionJob": {
+              "TranscriptionJobName": "MeetingTranscription",
+              "TranscriptionJobStatus": "IN_PROGRESS"
+            }
+          },
+          "actions": [
+            "Prepare the recording URI and output bucket name in environment variables.",
+            "Set up AWS credentials for API access.",
+            "Call the start_transcription_job function to initiate the transcription."
+          ],
+          "commands": [
+            {
+              "label": "Set environment variables",
+              "language": "bash",
+              "code": "export RECORDING_URI='s3://your-bucket/your-recording.mp3'\nexport OUTPUT_BUCKET='your-output-bucket'"
+            }
+          ],
+          "config": [
+            {
+              "key": "RECORDING_URI",
+              "value": "<your-recording-uri>",
+              "description": "URI of the audio file to transcribe."
+            },
+            {
+              "key": "OUTPUT_BUCKET",
+              "value": "<your-output-bucket>",
+              "description": "S3 bucket for storing the transcription output."
+            }
+          ],
+          "tools": [
+            "Amazon Transcribe API"
+          ],
+          "checklist": [
+            "Transcription job name is stored correctly.",
+            "API response indicates job status is IN_PROGRESS."
+          ],
+          "expectedResult": "The transcription job is initiated, and the job name is stored for future reference.",
+          "links": [
+            {
+              "label": "Amazon Transcribe API Documentation",
+              "url": "https://docs.aws.amazon.com/transcribe/latest/dg/what-is-transcribe.html"
+            }
+          ]
         },
         {
           "title": "Poll until the transcript is ready",
-          "description": "Check job status and download the completed transcript."
+          "description": "In this step, the job status is polled until the transcription is complete. Once ready, the completed transcript is downloaded for further processing.",
+          "technical_explanation": "This step continuously checks the status of the transcription job using the Amazon Transcribe API. The endpoint used is GET /v1/transcription-jobs/{jobName}. The job name is obtained from the previous step. The response will indicate whether the job is completed or still in progress. Edge cases include handling timeouts or exceeding the maximum polling attempts.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\nimport time\n\ndef poll_transcription_job(job_name):\n    url = f'https://transcribe.us-east-1.amazonaws.com/v1/transcription-jobs/{job_name}'\n    headers = {\n        'Authorization': 'Bearer ' + os.environ.get('AWS_ACCESS_TOKEN')\n    }\n    for _ in range(10):  # Polling for 10 attempts\n        request = urllib.request.Request(url, headers=headers)\n        response = urllib.request.urlopen(request)\n        job_info = json.loads(response.read().decode('utf-8'))\n        status = job_info.get('TranscriptionJob', {}).get('TranscriptionJobStatus', '')\n        if status == 'COMPLETED':\n            return job_info.get('TranscriptionJob', {}).get('Transcript', {}).get('TranscriptFileUri', '')\n        elif status == 'FAILED':\n            raise Exception('Transcription job failed.')\n        time.sleep(5)  # Wait before polling again\n    raise Exception('Polling exceeded maximum attempts.')\n\ntranscript_uri = poll_transcription_job('MeetingTranscription')",
+          "mock_response": "https://s3.us-east-1.amazonaws.com/your-output-bucket/MeetingTranscription.json",
+          "actions": [
+            "Call the poll_transcription_job function with the job name.",
+            "Handle exceptions for job failures or timeouts.",
+            "Store the transcript URI for the next step."
+          ],
+          "commands": [
+            {
+              "label": "Run the polling script",
+              "language": "bash",
+              "code": "python your_script.py"
+            }
+          ],
+          "config": [],
+          "tools": [
+            "Amazon Transcribe API"
+          ],
+          "checklist": [
+            "Transcript URI is retrieved successfully.",
+            "Polling does not exceed maximum attempts."
+          ],
+          "expectedResult": "The transcript URI is obtained, indicating that the transcription is complete.",
+          "links": [
+            {
+              "label": "Amazon Transcribe API Documentation",
+              "url": "https://docs.aws.amazon.com/transcribe/latest/dg/what-is-transcribe.html"
+            }
+          ]
         },
         {
           "title": "Summarise transcript and action items",
-          "description": "Call the OpenAI chat endpoint and parse the structured summary."
+          "description": "This step involves calling the OpenAI GPT-4 API to generate a structured summary of the transcript. The summary will include key points and action items derived from the meeting.",
+          "technical_explanation": "The OpenAI GPT-4 API is called to summarize the transcript. The endpoint used is POST /v1/chat/completions. The request payload includes the transcript text and a prompt to generate a summary. The response will contain the generated summary. Edge cases include handling API rate limits and ensuring the prompt is clear for effective summarization.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef summarize_transcript(transcript_uri):\n    with urllib.request.urlopen(transcript_uri) as response:\n        transcript_data = json.loads(response.read().decode('utf-8'))\n    transcript_text = transcript_data.get('results', {}).get('transcripts', [{}])[0].get('transcript', '')\n    url = 'https://api.openai.com/v1/chat/completions'\n    headers = {\n        'Authorization': 'Bearer ' + os.environ.get('OPENAI_API_KEY'),\n        'Content-Type': 'application/json'\n    }\n    payload = json.dumps({\n        'model': 'gpt-4o',\n        'messages': [{'role': 'user', 'content': f'Summarize the following transcript: {transcript_text}'}]\n    }).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    response = urllib.request.urlopen(request)\n    summary = json.loads(response.read().decode('utf-8'))\n    return summary.get('choices', [{}])[0].get('message', {}).get('content', '')\n\nsummary = summarize_transcript(transcript_uri)",
+          "mock_response": "Key points: 1. Discussed project timelines. 2. Action items: Assign tasks to team members.",
+          "actions": [
+            "Fetch the transcript using the obtained URI.",
+            "Prepare the prompt for the OpenAI API call.",
+            "Call the summarize_transcript function and store the summary."
+          ],
+          "commands": [
+            {
+              "label": "Run the summarization script",
+              "language": "bash",
+              "code": "python your_script.py"
+            }
+          ],
+          "config": [],
+          "tools": [
+            "OpenAI GPT-4 API"
+          ],
+          "checklist": [
+            "Summary is generated successfully.",
+            "Key points and action items are included in the summary."
+          ],
+          "expectedResult": "A structured summary of the transcript is generated, including key points and action items.",
+          "links": [
+            {
+              "label": "OpenAI GPT-4 API Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/chat/create"
+            }
+          ]
         },
         {
           "title": "Publish the summary to Notion",
-          "description": "Create a page with the summary and action items in the meeting database."
+          "description": "In this final step, the generated summary is published to a Notion page within the specified database. The summary will include the key points and action items.",
+          "technical_explanation": "This step sends a request to the Notion API to create a new page in the database. The endpoint used is POST /v1/pages. The request payload includes the summary and action items formatted according to Notion's database schema. Edge cases include handling errors if the integration token is invalid or if the database ID is incorrect.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef publish_to_notion(summary):\n    url = 'https://api.notion.com/v1/pages'\n    headers = {\n        'Authorization': 'Bearer ' + os.environ.get('NOTION_INTEGRATION_TOKEN'),\n        'Notion-Version': '2022-06-28',\n        'Content-Type': 'application/json'\n    }\n    payload = json.dumps({\n        'parent': {'database_id': os.environ.get('NOTION_DATABASE_ID')},\n        'properties': {\n            'Title': {'title': [{'text': {'content': 'Meeting Summary'}}]},\n            'Summary': {'rich_text': [{'text': {'content': summary}}]}\n        }\n    }).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    response = urllib.request.urlopen(request)\n    return json.loads(response.read().decode('utf-8'))\n\nnotion_response = publish_to_notion(summary)",
+          "mock_response": {
+            "id": "some-page-id",
+            "created_time": "2023-10-01T00:00:00Z",
+            "last_edited_time": "2023-10-01T00:00:00Z"
+          },
+          "actions": [
+            "Prepare the summary for the Notion API call.",
+            "Call the publish_to_notion function with the summary.",
+            "Verify the response to ensure the page was created."
+          ],
+          "commands": [
+            {
+              "label": "Run the Notion publishing script",
+              "language": "bash",
+              "code": "python your_script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "NOTION_DATABASE_ID",
+              "value": "<your-database-id>",
+              "description": "ID of the Notion database to publish the summary."
+            }
+          ],
+          "tools": [
+            "Notion API"
+          ],
+          "checklist": [
+            "Notion page is created successfully.",
+            "Summary and action items are correctly formatted in the page."
+          ],
+          "expectedResult": "The summary is published to a Notion page, making it accessible for team members.",
+          "links": [
+            {
+              "label": "Notion API Documentation",
+              "url": "https://developers.notion.com/reference/intro"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "An AWS account with permissions to use Amazon Transcribe",
+        "An OpenAI API key with access to GPT-4",
+        "A Notion integration token with access to the desired database",
+        "Access to Amazon Transcribe API",
+        "Access to OpenAI GPT-4 API",
+        "Access to Notion API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "AWS Signature Version 4",
+          "definition": "A protocol for authenticating API requests to AWS services."
+        },
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method of API authentication using a token that grants access to resources."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy for handling API rate limits by delaying requests."
+        },
+        {
+          "term": "Structured Summary",
+          "definition": "A concise representation of key points and action items extracted from a transcript."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Transcription job fails to start",
+          "solution": "Verify the recording URI and AWS permissions."
+        },
+        {
+          "problem": "Transcript not ready after polling",
+          "solution": "Check the job status and ensure polling interval is appropriate."
+        },
+        {
+          "problem": "Notion page not created",
+          "solution": "Confirm the integration token and database ID are correct."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Amazon Transcribe API",
+          "url": "https://docs.aws.amazon.com/transcribe/latest/dg/what-is-transcribe.html"
+        },
+        {
+          "label": "OpenAI GPT-4 API",
+          "url": "https://platform.openai.com/docs/api-reference/chat/create"
+        },
+        {
+          "label": "Notion API",
+          "url": "https://developers.notion.com/reference/intro"
+        }
+      ],
+      "before_you_start": [
+        "An AWS account with permissions to use Amazon Transcribe",
+        "An OpenAI API key with access to GPT-4",
+        "A Notion integration token with access to the desired database",
+        "Access to Amazon Transcribe API",
+        "Access to OpenAI GPT-4 API",
+        "Access to Notion API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:28 UTC"
   },
   {
     "slug": "ai-image-generation-pipeline",
@@ -11525,26 +11732,248 @@
       "steps": [
         {
           "title": "Fetch Doppler secret metadata",
-          "description": "List secrets and their last-updated timestamps."
+          "description": "This step retrieves the metadata of secrets stored in Doppler, including their last updated timestamps. This information is essential to determine the age of each secret for rotation purposes.",
+          "technical_explanation": "This step serves as the initial data source for the workflow, consuming no prior data. It calls the Doppler Secrets API at the endpoint https://api.doppler.com/v3/secrets, using the GET method. The required headers include Authorization with a Bearer token. The expected JSON response contains an array of secrets with their metadata. Edge cases include handling rate limits and ensuring the response is not empty, which may occur if no secrets are present.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\ndef fetch_doppler_secrets():\n    # Define the URL for the Doppler API\n    url = 'https://api.doppler.com/v3/secrets'\n    # Set the authorization header using the Doppler token from environment variables\n    headers = {'Authorization': f'Bearer {os.environ.get(\"DOPPLER_TOKEN\")}' }\n    # Create a request object with the specified URL and headers\n    request = urllib.request.Request(url, headers=headers)\n    # Open the URL and read the response\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    # Return the list of secrets from the response\n    return data.get('secrets', [])\n\n# Fetch the secrets and store them in a variable\nsecrets = fetch_doppler_secrets()",
+          "mock_response": {
+            "secrets": [
+              {
+                "name": "API_KEY",
+                "last_updated": "2023-10-01T12:00:00Z"
+              },
+              {
+                "name": "DB_PASSWORD",
+                "last_updated": "2023-09-15T08:30:00Z"
+              }
+            ]
+          },
+          "actions": [
+            "Set up a Doppler account and create secrets.",
+            "Obtain a Bearer token for API access.",
+            "Run the script to fetch secret metadata."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python fetch_doppler_secrets.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "DOPPLER_TOKEN",
+              "value": "<your_doppler_token>",
+              "description": "Bearer token for accessing Doppler API."
+            }
+          ],
+          "tools": [
+            "Doppler Secrets API"
+          ],
+          "checklist": [
+            "Secrets metadata is successfully fetched.",
+            "Last updated timestamps are included."
+          ],
+          "expectedResult": "The metadata of Doppler secrets is retrieved successfully.",
+          "links": [
+            {
+              "label": "Doppler Secrets API Documentation",
+              "url": "https://docs.doppler.com/reference/api"
+            }
+          ]
         },
         {
           "title": "Read the GitHub secret inventory",
-          "description": "List repository secrets that must exist in production."
+          "description": "This step retrieves the list of secrets configured in a specified GitHub repository. This information is crucial for comparing against the Doppler secrets to identify any discrepancies.",
+          "technical_explanation": "This step consumes the output from the previous step by comparing the secrets fetched from Doppler with those in GitHub. It calls the GitHub REST API at the endpoint https://api.github.com/repos/{owner}/{repo}/actions/secrets, using the GET method. Required headers include Authorization with a personal access token. The expected JSON response contains an array of secrets. Edge cases include handling rate limits and ensuring the repository has secrets configured.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_github_secrets(owner, repo):\n    url = f'https://api.github.com/repos/{owner}/{repo}/actions/secrets'\n    headers = {'Authorization': f'token {os.environ.get(\"GITHUB_TOKEN\")}' }\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    return data.get('secrets', [])\n\ngithub_secrets = fetch_github_secrets('your_owner', 'your_repo')",
+          "mock_response": {
+            "secrets": [
+              {
+                "name": "API_KEY"
+              },
+              {
+                "name": "DB_PASSWORD"
+              }
+            ]
+          },
+          "actions": [
+            "Create a GitHub repository with secrets.",
+            "Generate a personal access token with appropriate permissions.",
+            "Run the script to fetch GitHub secrets."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python fetch_github_secrets.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "GITHUB_TOKEN",
+              "value": "<your_github_token>",
+              "description": "Personal access token for GitHub API."
+            }
+          ],
+          "tools": [
+            "GitHub REST API"
+          ],
+          "checklist": [
+            "GitHub secrets are successfully fetched.",
+            "Secrets list matches expected configuration."
+          ],
+          "expectedResult": "The inventory of GitHub repository secrets is retrieved successfully.",
+          "links": [
+            {
+              "label": "GitHub REST API Documentation",
+              "url": "https://docs.github.com/en/rest"
+            }
+          ]
         },
         {
           "title": "Compute rotation age and drift",
-          "description": "Flag secrets older than the policy and inventory mismatches."
+          "description": "This step analyzes the fetched secrets from Doppler and GitHub to compute the age of each secret and identify any mismatches between the two inventories. This is essential for ensuring compliance with security policies.",
+          "technical_explanation": "This step processes the data from the previous two steps, calculating the age of each secret based on its last updated timestamp. It compares the Doppler secrets against the GitHub secrets to identify any discrepancies. The function does not call an external API but performs local computations. Edge cases include handling cases where a secret exists in one inventory but not the other.",
+          "code_snippet": "import json\nimport datetime\n\ndef compute_secret_drift(doppler_secrets, github_secrets):\n    drift = []\n    github_secret_names = {secret['name'] for secret in github_secrets}\n    for secret in doppler_secrets:\n        last_updated = datetime.datetime.fromisoformat(secret['last_updated'].replace('Z', '+00:00'))\n        age_days = (datetime.datetime.now(datetime.timezone.utc) - last_updated).days\n        if secret['name'] not in github_secret_names:\n            drift.append({'name': secret['name'], 'status': 'missing in GitHub', 'age_days': age_days})\n        elif age_days > 30:\n            drift.append({'name': secret['name'], 'status': 'rotation overdue', 'age_days': age_days})\n    return drift\n\nrotation_drift = compute_secret_drift(secrets, github_secrets)",
+          "mock_response": [
+            {
+              "name": "DB_PASSWORD",
+              "status": "rotation overdue",
+              "age_days": 45
+            }
+          ],
+          "actions": [
+            "Ensure the secrets from both sources are available.",
+            "Run the computation to analyze the secrets.",
+            "Review the drift results for discrepancies."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python compute_secret_drift.py"
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "Rotation age and drift are computed correctly.",
+            "Results reflect accurate discrepancies."
+          ],
+          "expectedResult": "The drift analysis of secrets is completed successfully.",
+          "links": [
+            {
+              "label": "Python datetime Documentation",
+              "url": "https://docs.python.org/3/library/datetime.html"
+            }
+          ]
         },
         {
           "title": "Alert the security channel",
-          "description": "Post the audit findings to the security Slack channel."
+          "description": "This step sends the audit findings to a specified Slack channel, notifying the security team of any secrets that are overdue for rotation or missing from the GitHub inventory.",
+          "technical_explanation": "This step utilizes the Slack Web API to send messages to a channel. It consumes the drift analysis results from the previous step. The endpoint used is https://slack.com/api/chat.postMessage, with a POST method. Required headers include Authorization with an OAuth 2.0 bot token. The expected JSON response indicates the success of the message sent. Edge cases include handling errors in sending messages and ensuring the channel ID is valid.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef send_alert_to_slack(drift):\n    url = 'https://slack.com/api/chat.postMessage'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"SLACK_BOT_TOKEN\")}', 'Content-Type': 'application/json'}\n    for item in drift:\n        payload = {'channel': 'your_channel_id', 'text': f'Secret {item[\"name\"]} is {item[\"status\"]} (Age: {item[\"age_days\"]} days)'}\n        request = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            response.read().decode('utf-8')\n\nsend_alert_to_slack(rotation_drift)",
+          "mock_response": "ok",
+          "actions": [
+            "Set up a Slack channel for alerts.",
+            "Obtain an OAuth 2.0 bot token for Slack.",
+            "Run the script to send alerts."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python send_alert_to_slack.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SLACK_BOT_TOKEN",
+              "value": "<your_slack_bot_token>",
+              "description": "OAuth 2.0 bot token for Slack."
+            }
+          ],
+          "tools": [
+            "Slack Web API"
+          ],
+          "checklist": [
+            "Alerts are sent to the Slack channel.",
+            "Messages reflect accurate drift information."
+          ],
+          "expectedResult": "Audit findings are successfully alerted to the security channel.",
+          "links": [
+            {
+              "label": "Slack Web API Documentation",
+              "url": "https://api.slack.com/methods"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Doppler account with access to secrets",
+        "A GitHub repository with secrets configured",
+        "A Slack workspace with a channel for security alerts",
+        "Access to Doppler Secrets API",
+        "Access to GitHub REST API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for accessing secured APIs using a token in the authorization header."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by pausing requests when limits are reached."
+        },
+        {
+          "term": "JSON Response Shape",
+          "definition": "The structure of the data returned by an API in JSON format."
+        },
+        {
+          "term": "OAuth 2.0",
+          "definition": "An authorization framework that allows third-party services to exchange user information without exposing passwords."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Authentication fails with the API",
+          "solution": "Ensure the correct bearer token is set in the environment variable."
+        },
+        {
+          "problem": "Rate limit exceeded error from the API",
+          "solution": "Implement a backoff strategy to pause requests when limits are reached."
+        },
+        {
+          "problem": "Unexpected empty response from GitHub API",
+          "solution": "Verify the repository and permissions for accessing secrets."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Doppler Secrets API",
+          "url": "https://docs.doppler.com/reference/api"
+        },
+        {
+          "label": "GitHub REST API",
+          "url": "https://docs.github.com/en/rest"
+        },
+        {
+          "label": "Slack Web API",
+          "url": "https://api.slack.com/methods"
+        }
+      ],
+      "before_you_start": [
+        "A Doppler account with access to secrets",
+        "A GitHub repository with secrets configured",
+        "A Slack workspace with a channel for security alerts",
+        "Access to Doppler Secrets API",
+        "Access to GitHub REST API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:31 UTC"
   },
   {
     "slug": "serverless-job-scheduler",
@@ -11629,26 +12058,261 @@
       "steps": [
         {
           "title": "Fetch Sentry transaction latency",
-          "description": "Query p95 latency for the monitored API endpoints."
+          "description": "This step retrieves the p95 latency for monitored API endpoints from the Sentry Performance API. It is essential for understanding the performance of your APIs and identifying potential issues.",
+          "technical_explanation": "This step acts as the initial data source for latency metrics, consuming the Sentry Performance API. The endpoint used is '/api/0/projects/{organization_slug}/{project_slug}/performance/transactions/'. The request requires a Bearer token for authentication. Edge cases include handling rate limits, where the API may return a 429 status code, indicating too many requests. In such cases, implement a backoff strategy.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_sentry_latency():\n    url = f'https://sentry.io/api/0/projects/{os.environ.get(\"SENTRY_ORG\")}/{os.environ.get(\"SENTRY_PROJECT\")}/performance/transactions/'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"SENTRY_API_KEY\")}' }\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n        return data.get('latency', [])\n\nlatency_data = fetch_sentry_latency()",
+          "mock_response": {
+            "latency": [
+              {
+                "endpoint": "/api/v1/resource",
+                "p95": 120
+              },
+              {
+                "endpoint": "/api/v1/another_resource",
+                "p95": 200
+              }
+            ]
+          },
+          "actions": [
+            "Set up Sentry project and obtain API key",
+            "Define environment variables for Sentry organization and project",
+            "Run the fetch function to retrieve latency data"
+          ],
+          "commands": [
+            {
+              "label": "Run latency fetch",
+              "language": "bash",
+              "code": "python fetch_latency.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SENTRY_API_KEY",
+              "value": "<your_sentry_api_key>",
+              "description": "API key for Sentry Performance API"
+            },
+            {
+              "key": "SENTRY_ORG",
+              "value": "<your_sentry_org>",
+              "description": "Your Sentry organization slug"
+            },
+            {
+              "key": "SENTRY_PROJECT",
+              "value": "<your_sentry_project>",
+              "description": "Your Sentry project slug"
+            }
+          ],
+          "tools": [
+            "Sentry Performance API"
+          ],
+          "checklist": [
+            "Sentry API key is set correctly",
+            "Latency data is retrieved successfully"
+          ],
+          "expectedResult": "Sentry transaction latency data is fetched and stored.",
+          "links": [
+            {
+              "label": "Sentry Performance API Documentation",
+              "url": "https://docs.sentry.io/api/"
+            }
+          ]
         },
         {
           "title": "Fetch PostHog request volume",
-          "description": "Aggregate request events per endpoint per interval."
+          "description": "This step aggregates request events per endpoint from the PostHog Analytics API. It provides insights into the traffic and usage patterns of your APIs.",
+          "technical_explanation": "This step retrieves request volume data from the PostHog Analytics API, which is crucial for correlating traffic with latency metrics. The endpoint used is '/api/event/'. The request requires a Bearer token for authentication. Edge cases include handling empty responses, which may indicate no events for the specified timeframe.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_posthog_requests():\n    url = f'https://{os.environ.get(\"POSTHOG_HOST\")}/api/event/'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"POSTHOG_API_KEY\")}' }\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n        return data.get('events', [])\n\nrequest_data = fetch_posthog_requests()",
+          "mock_response": {
+            "events": [
+              {
+                "endpoint": "/api/v1/resource",
+                "count": 150
+              },
+              {
+                "endpoint": "/api/v1/another_resource",
+                "count": 300
+              }
+            ]
+          },
+          "actions": [
+            "Set up PostHog project and obtain API key",
+            "Define environment variables for PostHog host and API key",
+            "Run the fetch function to retrieve request volume data"
+          ],
+          "commands": [
+            {
+              "label": "Run request volume fetch",
+              "language": "bash",
+              "code": "python fetch_requests.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "POSTHOG_API_KEY",
+              "value": "<your_posthog_api_key>",
+              "description": "API key for PostHog Analytics API"
+            },
+            {
+              "key": "POSTHOG_HOST",
+              "value": "<your_posthog_host>",
+              "description": "Your PostHog instance host"
+            }
+          ],
+          "tools": [
+            "PostHog Analytics API"
+          ],
+          "checklist": [
+            "PostHog API key is set correctly",
+            "Request volume data is retrieved successfully"
+          ],
+          "expectedResult": "PostHog request volume data is fetched and stored.",
+          "links": [
+            {
+              "label": "PostHog Analytics API Documentation",
+              "url": "https://posthog.com/docs/api"
+            }
+          ]
         },
         {
           "title": "Detect unhealthy windows",
-          "description": "Flag endpoints that breach latency or error thresholds."
+          "description": "This step analyzes the fetched latency and request volume data to identify unhealthy windows where performance thresholds are breached. It is critical for proactive monitoring.",
+          "technical_explanation": "This workflow step serves a crucial role in the overall architecture by analyzing latency data sourced from Sentry and request volume data from PostHog. It identifies unhealthy windows where performance metrics exceed established thresholds, thereby enabling proactive monitoring of system health. The API contract for this step requires a GET request to the '/health-check' endpoint, necessitating headers such as 'Authorization' and 'Content-Type: application/json'. The expected request payload is empty, while the JSON response includes fields for 'status', 'latency', and 'request_volume'. Edge cases must be considered, including rate limits that may restrict the frequency of API calls, pagination for large datasets, handling of empty arrays in the response, and ensuring proper type conversion for numerical values to avoid runtime errors.",
+          "code_snippet": "import json\nimport statistics\n\ndef detect_unhealthy_windows(latency_data, request_data):\n    unhealthy_endpoints = []\n    for latency in latency_data:\n        endpoint = latency.get('endpoint')\n        p95_latency = latency.get('p95', 0)\n        request_count = next((item.get('count', 0) for item in request_data if item.get('endpoint') == endpoint), 0)\n        if p95_latency > 100 and request_count > 100:\n            unhealthy_endpoints.append(endpoint)\n    return unhealthy_endpoints\n\nunhealthy = detect_unhealthy_windows(latency_data, request_data)",
+          "mock_response": [
+            "/api/v1/resource",
+            "/api/v1/another_resource"
+          ],
+          "actions": [
+            "Define latency and request volume thresholds",
+            "Run the detection function with fetched data",
+            "Store unhealthy endpoints for alerting"
+          ],
+          "commands": [
+            {
+              "label": "Run unhealthy detection",
+              "language": "bash",
+              "code": "python detect_unhealthy.py"
+            }
+          ],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Thresholds for latency and request volume are defined",
+            "Unhealthy endpoints are detected correctly"
+          ],
+          "expectedResult": "Unhealthy endpoints are identified based on latency and request volume.",
+          "links": [
+            {
+              "label": "Python Statistics Module",
+              "url": "https://docs.python.org/3/library/statistics.html"
+            }
+          ]
         },
         {
           "title": "Send the health alert",
-          "description": "Post endpoint status and metrics to the on-call Slack channel."
+          "description": "This step sends alerts to a designated Slack channel for any unhealthy endpoints detected. It ensures that the team is informed of performance issues in real-time.",
+          "technical_explanation": "This step is crucial in the workflow as it serves the purpose of notifying the team about any unhealthy endpoints that have been identified in the previous step. It consumes data related to the health status of endpoints, which is formatted to be sent as alerts. The step utilizes the Slack Web API, specifically the endpoint 'https://slack.com/api/chat.postMessage', using the HTTP POST method to send messages. Required headers include 'Authorization' with the OAuth 2.0 bot token for authentication and 'Content-Type' set to 'application/json'. The request payload must include fields such as 'channel', 'text', and optionally 'attachments', all formatted in JSON. The expected JSON response will contain fields like 'ok', 'error', and 'ts', indicating the success of the message send operation. Edge cases to consider include rate limits imposed by the Slack API, which may restrict the number of messages sent in a given timeframe, as well as handling scenarios where the API returns an error status due to invalid tokens or channel IDs. Additionally, it is important to manage pagination for any responses that may return multiple messages, and to ensure that empty arrays are handled gracefully without causing errors in the workflow.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef send_health_alert(unhealthy_endpoints):\n    url = 'https://slack.com/api/chat.postMessage'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"SLACK_BOT_TOKEN\")}', 'Content-Type': 'application/json'}\n    for endpoint in unhealthy_endpoints:\n        payload = {'channel': '#alerts', 'text': f'Unhealthy endpoint detected: {endpoint}'}\n        request = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            if response.status != 200:\n                print(f'Failed to send alert for {endpoint}')\n\nsend_health_alert(unhealthy)",
+          "mock_response": "ok",
+          "actions": [
+            "Set up a Slack channel for alerts",
+            "Define the Slack bot token in environment variables",
+            "Run the alert function with detected unhealthy endpoints"
+          ],
+          "commands": [
+            {
+              "label": "Run health alert",
+              "language": "bash",
+              "code": "python send_alert.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SLACK_BOT_TOKEN",
+              "value": "<your_slack_bot_token>",
+              "description": "OAuth 2.0 bot token for Slack"
+            }
+          ],
+          "tools": [
+            "Slack Web API"
+          ],
+          "checklist": [
+            "Slack bot token is set correctly",
+            "Alerts are sent successfully to Slack"
+          ],
+          "expectedResult": "Health alerts for unhealthy endpoints are sent to Slack.",
+          "links": [
+            {
+              "label": "Slack Web API Documentation",
+              "url": "https://api.slack.com/methods"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Sentry account with access to the Performance API and an API key",
+        "A PostHog account with access to the Analytics API and a personal API key",
+        "A Slack workspace with a bot token for the Slack Web API",
+        "Access to Sentry Performance API",
+        "Access to PostHog Analytics API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by delaying requests."
+        },
+        {
+          "term": "Z-Score Spike Detection",
+          "definition": "A statistical method to identify anomalies in data based on standard deviations."
+        },
+        {
+          "term": "Incoming Webhook Signature Verification",
+          "definition": "A process to ensure that incoming requests to a webhook are from a trusted source."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API key authentication fails",
+          "solution": "Verify that the API keys are correctly set in the environment variables."
+        },
+        {
+          "problem": "Slack message not sent",
+          "solution": "Check the Slack bot token and ensure the bot has permission to post messages."
+        },
+        {
+          "problem": "Data not returned from PostHog",
+          "solution": "Ensure the PostHog API key is valid and the request parameters are correct."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Sentry Performance API",
+          "url": "https://docs.sentry.io/api/"
+        },
+        {
+          "label": "PostHog Analytics API",
+          "url": "https://posthog.com/docs/api"
+        },
+        {
+          "label": "Slack Web API",
+          "url": "https://api.slack.com/methods"
+        }
+      ],
+      "before_you_start": [
+        "A Sentry account with access to the Performance API and an API key",
+        "A PostHog account with access to the Analytics API and a personal API key",
+        "A Slack workspace with a bot token for the Slack Web API",
+        "Access to Sentry Performance API",
+        "Access to PostHog Analytics API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:36 UTC"
   },
   {
     "slug": "linear-roadmap-sync",
@@ -11666,8 +12330,8 @@
       "duration": "75–90 minutes",
       "tools": [
         "Linear GraphQL API",
-        "Notion API",
-        "GitHub REST API"
+        "GitHub REST API",
+        "Notion API"
       ],
       "api_slugs": [
         "linear-graphql-api",
@@ -11682,26 +12346,261 @@
       "steps": [
         {
           "title": "Query Linear projects",
-          "description": "Run the GraphQL query for active projects and their progress."
+          "description": "This step retrieves active projects from Linear using a GraphQL query. It collects project details including their progress, which will be used in subsequent steps to match GitHub milestones and update the Notion roadmap.",
+          "technical_explanation": "This step acts as the data source for the workflow, consuming no previous data. The API contract involves sending a POST request to the Linear GraphQL API endpoint at https://api.linear.app/graphql with a query payload. The expected response is a JSON object containing project details. Edge cases include handling rate limits and ensuring proper pagination if many projects exist.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_linear_projects():\n    url = 'https://api.linear.app/graphql'\n    query = '{ projects { nodes { id name progress } } }'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"LINEAR_API_TOKEN\")}', 'Content-Type': 'application/json'}\n    data = json.dumps({'query': query}).encode('utf-8')\n    request = urllib.request.Request(url, data=data, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8')).get('data', {}).get('projects', {}).get('nodes', [])\n\nprojects = fetch_linear_projects()",
+          "mock_response": {
+            "data": {
+              "projects": {
+                "nodes": [
+                  {
+                    "id": "1",
+                    "name": "Project Alpha",
+                    "progress": 75
+                  },
+                  {
+                    "id": "2",
+                    "name": "Project Beta",
+                    "progress": 50
+                  }
+                ]
+              }
+            }
+          },
+          "actions": [
+            "Construct a GraphQL query to fetch active projects",
+            "Set up the request headers with authorization",
+            "Handle the response and extract project details"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "LINEAR_API_TOKEN",
+              "value": "<your_linear_api_token>",
+              "description": "The API token for authenticating with Linear"
+            }
+          ],
+          "tools": [
+            "Linear GraphQL API"
+          ],
+          "checklist": [
+            "Successfully retrieved project data from Linear",
+            "Response contains project nodes with expected fields"
+          ],
+          "expectedResult": "Active projects from Linear are fetched and stored for further processing.",
+          "links": [
+            {
+              "label": "Linear GraphQL API Documentation",
+              "url": "https://developers.linear.app/docs/graphql/working-with-the-graphql-api"
+            }
+          ]
         },
         {
           "title": "Match GitHub milestones",
-          "description": "Find milestones that belong to each project."
+          "description": "This step identifies GitHub milestones associated with each Linear project. It uses the GitHub REST API to fetch milestones and matches them based on project names.",
+          "technical_explanation": "This step processes data from the previous step, using project names to find corresponding milestones in GitHub. The API contract involves sending a GET request to the GitHub REST API endpoint at https://api.github.com/repos/{owner}/{repo}/milestones. The expected response is a list of milestones. Edge cases include handling empty responses and ensuring that the correct repository is queried.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_github_milestones(owner, repo):\n    url = f'https://api.github.com/repos/{owner}/{repo}/milestones'\n    headers = {'Authorization': f'token {os.environ.get(\"GITHUB_TOKEN\")}' }\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))\n\nmilestones = fetch_github_milestones('your_github_owner', 'your_repo_name')",
+          "mock_response": [
+            {
+              "id": 1,
+              "title": "Milestone 1",
+              "due_on": "2023-12-31T00:00:00Z"
+            },
+            {
+              "id": 2,
+              "title": "Milestone 2",
+              "due_on": "2024-01-15T00:00:00Z"
+            }
+          ],
+          "actions": [
+            "Construct the GitHub API request for milestones",
+            "Set up the request headers with authorization",
+            "Parse the response to extract milestone details"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "GITHUB_TOKEN",
+              "value": "<your_github_token>",
+              "description": "The personal access token for GitHub"
+            }
+          ],
+          "tools": [
+            "GitHub REST API"
+          ],
+          "checklist": [
+            "Successfully retrieved milestones from GitHub",
+            "Response contains milestone details with expected fields"
+          ],
+          "expectedResult": "Milestones from GitHub are fetched and ready for matching with Linear projects.",
+          "links": [
+            {
+              "label": "GitHub REST API Documentation",
+              "url": "https://docs.github.com/en/rest"
+            }
+          ]
         },
         {
           "title": "Update the Notion roadmap",
-          "description": "Create or update roadmap sections with progress and links."
+          "description": "This step updates the Notion roadmap by creating or modifying sections based on the progress of Linear projects. It uses the Notion API to ensure that the roadmap reflects the current project status.",
+          "technical_explanation": "This step takes the project data from Linear and the milestones from GitHub to update the Notion roadmap. The API contract involves sending a POST request to the Notion API endpoint at https://api.notion.com/v1/pages with a structured payload. The expected response is a confirmation of the page creation or update. Edge cases include handling errors in the payload structure and ensuring the Notion integration has the correct permissions.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef update_notion_roadmap(projects):\n    url = 'https://api.notion.com/v1/pages'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"NOTION_TOKEN\")}',\n        'Notion-Version': '2021-05-13',\n        'Content-Type': 'application/json'\n    }\n    for project in projects:\n        payload = {\n            'parent': {'database_id': os.environ.get(\"NOTION_DATABASE_ID\")},\n            'properties': {\n                'Name': {'title': [{'text': {'content': project.get('name', '')}}]},\n                'Progress': {'number': project.get('progress', 0)}\n            }\n        }\n        data = json.dumps(payload).encode('utf-8')\n        request = urllib.request.Request(url, data=data, headers=headers)\n        with urllib.request.urlopen(request) as response:\n            print(response.read().decode('utf-8'))\n\nupdate_notion_roadmap(projects)",
+          "mock_response": {
+            "id": "page_id",
+            "object": "page",
+            "created_time": "2023-10-01T00:00:00Z",
+            "last_edited_time": "2023-10-01T00:00:00Z"
+          },
+          "actions": [
+            "Construct the Notion API request payload",
+            "Set up the request headers with authorization and version",
+            "Send the request to create or update the roadmap section"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "NOTION_TOKEN",
+              "value": "<your_notion_token>",
+              "description": "The integration token for Notion"
+            },
+            {
+              "key": "NOTION_DATABASE_ID",
+              "value": "<your_notion_database_id>",
+              "description": "The database ID for the Notion roadmap"
+            }
+          ],
+          "tools": [
+            "Notion API"
+          ],
+          "checklist": [
+            "Successfully updated the Notion roadmap",
+            "Response confirms the creation or update of pages"
+          ],
+          "expectedResult": "The Notion roadmap is updated with the latest project progress.",
+          "links": [
+            {
+              "label": "Notion API Documentation",
+              "url": "https://developers.notion.com/reference/intro"
+            }
+          ]
         },
         {
           "title": "Write the roadmap changelog",
-          "description": "Record changed project states in a deterministic changelog."
+          "description": "This step records changes made to the project states in a changelog format. It ensures that all updates are documented for future reference.",
+          "technical_explanation": "This step processes the project data and generates a changelog entry for each project that has changed state. It does not consume data from previous steps but is essential for maintaining a history of changes. The output is a text file or log that captures the updates. Edge cases include handling file write permissions and ensuring the changelog format is consistent.",
+          "code_snippet": "import json\nimport os\n\ndef write_changelog(projects):\n    # Open the changelog file in append mode\n    with open('changelog.txt', 'a') as file:\n        # Iterate through each project\n        for project in projects:\n            # Write the project name and progress to the file\n            file.write(f\"Project: {project.get('name', '')}, Progress: {project.get('progress', 0)}\\n\")\n\n# Example projects to demonstrate functionality\nprojects = [\n    {'name': 'Project A', 'progress': 50},\n    {'name': 'Project B', 'progress': 75},\n    {'name': 'Project C', 'progress': 100}\n]\n\n# Call the function to write the changelog\nwrite_changelog(projects)",
+          "mock_response": "Changelog entry written successfully.",
+          "actions": [
+            "Open the changelog file in append mode",
+            "Iterate through projects and write their state",
+            "Ensure the changelog format is consistent"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Changelog file is updated with new entries",
+            "Entries reflect the latest project states"
+          ],
+          "expectedResult": "A changelog is created or updated with the latest project information.",
+          "links": [
+            {
+              "label": "Python File I/O Docs",
+              "url": "https://docs.python.org/3/tutorial/inputoutput.html"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Linear account with access to projects",
+        "A Notion account with a workspace set up",
+        "A GitHub account with repository access",
+        "Access to Linear GraphQL API",
+        "Access to Notion API",
+        "Access to GitHub REST API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method of API authentication using a token in the request header."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by pausing requests when limits are reached."
+        },
+        {
+          "term": "GraphQL Query",
+          "definition": "A request format for APIs that allows clients to specify the structure of the response."
+        },
+        {
+          "term": "Changelog",
+          "definition": "A record of changes made to a project, detailing updates and modifications."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API rate limit exceeded",
+          "solution": "Implement exponential backoff to retry requests after a delay."
+        },
+        {
+          "problem": "Invalid API token",
+          "solution": "Verify the token is correctly set in environment variables and has the required permissions."
+        },
+        {
+          "problem": "Empty response from API",
+          "solution": "Check if the queried resource exists and ensure the API endpoint is correct."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Linear GraphQL API",
+          "url": "https://developers.linear.app/docs/graphql/working-with-the-graphql-api"
+        },
+        {
+          "label": "Notion API",
+          "url": "https://developers.notion.com/reference/intro"
+        },
+        {
+          "label": "GitHub REST API",
+          "url": "https://docs.github.com/en/rest"
+        }
+      ],
+      "before_you_start": [
+        "A Linear account with access to projects",
+        "A Notion account with a workspace set up",
+        "A GitHub account with repository access",
+        "Access to Linear GraphQL API",
+        "Access to Notion API",
+        "Access to GitHub REST API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:36 UTC"
   },
   {
     "slug": "release-notes-generator",
@@ -11734,26 +12633,257 @@
       "steps": [
         {
           "title": "Collect merged pull requests",
-          "description": "List merged PRs since the last release tag."
+          "description": "This step retrieves all merged pull requests from the GitHub repository since the last release tag. It ensures that only relevant changes are included in the changelog.",
+          "technical_explanation": "This step interacts with the GitHub REST API to fetch merged pull requests. The endpoint used is /repos/{owner}/{repo}/issues, with a GET method. Required headers include the Authorization header with a Bearer token. The response will be a list of pull requests, which may be paginated. Handle empty responses and ensure to check for rate limits.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_merged_prs():\n    owner = 'your_github_owner'\n    repo = 'your_repository_name'\n    url = f'https://api.github.com/repos/{owner}/{repo}/issues?state=closed&filter=all'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"GITHUB_TOKEN\")}'}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    merged_prs = [pr for pr in data if pr.get('merged_at')]\n    return merged_prs\n\nmerged_prs = fetch_merged_prs()",
+          "mock_response": [
+            {
+              "id": 1,
+              "title": "Fix issue with API",
+              "merged_at": "2023-10-01T12:00:00Z"
+            },
+            {
+              "id": 2,
+              "title": "Add new feature",
+              "merged_at": "2023-10-02T12:00:00Z"
+            }
+          ],
+          "actions": [
+            "Define the GitHub repository owner and name.",
+            "Construct the API request URL for fetching issues.",
+            "Parse the response to filter merged pull requests."
+          ],
+          "commands": [
+            {
+              "label": "Fetch merged PRs",
+              "language": "bash",
+              "code": "python your_script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "GITHUB_TOKEN",
+              "value": "<your_github_token>",
+              "description": "GitHub personal access token for authentication."
+            }
+          ],
+          "tools": [
+            "GitHub REST API"
+          ],
+          "checklist": [
+            "Merged pull requests are successfully fetched.",
+            "The response contains valid pull request data."
+          ],
+          "expectedResult": "A list of merged pull requests since the last release is retrieved.",
+          "links": [
+            {
+              "label": "GitHub REST API Documentation",
+              "url": "https://docs.github.com/en/rest"
+            }
+          ]
         },
         {
           "title": "Generate the changelog",
-          "description": "Ask OpenAI for categorised, user-facing release notes."
+          "description": "This step utilizes the OpenAI GPT-4 API to generate a user-friendly changelog based on the collected merged pull requests. It categorizes the changes for better readability.",
+          "technical_explanation": "The OpenAI GPT-4 API is called to generate the changelog. The endpoint used is /v1/chat/completions, with a POST method. The request payload includes the merged pull requests formatted as a prompt. The response will contain the generated changelog text. Handle potential errors in the API response and ensure the input is correctly formatted.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef generate_changelog(merged_prs):\n    url = 'https://api.openai.com/v1/chat/completions'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}', 'Content-Type': 'application/json'}\n    prompt = f'Generate a changelog for the following merged pull requests: {json.dumps(merged_prs)}'\n    data = json.dumps({'model': 'gpt-4o-mini', 'messages': [{'role': 'user', 'content': prompt}]})\n    request = urllib.request.Request(url, data=data.encode('utf-8'), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        result = json.loads(response.read().decode('utf-8'))\n    return result.get('choices', [{}])[0].get('message', {}).get('content', '')\n\n# Example usage\nmerged_prs = [{\"title\": \"Fix bug in feature X\", \"url\": \"http://example.com/pr/1\"}, {\"title\": \"Add new feature Y\", \"url\": \"http://example.com/pr/2\"}]\nchangelog = generate_changelog(merged_prs)",
+          "mock_response": {
+            "choices": [
+              {
+                "message": {
+                  "content": "## Changelog\n\n### New Features\n- Add new feature\n\n### Bug Fixes\n- Fix issue with API"
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Format the merged pull requests into a prompt for the API.",
+            "Send the request to the OpenAI API.",
+            "Parse the response to extract the generated changelog."
+          ],
+          "commands": [
+            {
+              "label": "Generate changelog",
+              "language": "bash",
+              "code": "python your_script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "OPENAI_API_KEY",
+              "value": "<your_openai_api_key>",
+              "description": "OpenAI API key for authentication."
+            }
+          ],
+          "tools": [
+            "OpenAI GPT-4 API"
+          ],
+          "checklist": [
+            "Changelog is generated successfully.",
+            "The response contains valid changelog content."
+          ],
+          "expectedResult": "A user-friendly changelog is generated based on the merged pull requests.",
+          "links": [
+            {
+              "label": "OpenAI GPT-4 API Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/chat/create"
+            }
+          ]
         },
         {
           "title": "Publish the GitHub release",
-          "description": "Create a release entry with the generated notes."
+          "description": "This step creates a new release in the GitHub repository using the generated changelog. It ensures that the release is documented and accessible to users.",
+          "technical_explanation": "This workflow step is crucial for maintaining version control and transparency in the software development lifecycle. It consumes the generated changelog from the previous step, which contains the details of changes made since the last release. The GitHub REST API is utilized to create a new release at the endpoint /repos/{owner}/{repo}/releases using the POST method. The request must include headers such as Authorization for authentication and Content-Type set to application/json. The payload should be structured in JSON format, containing fields for tag_name, name, and body, where body includes the changelog. Upon successful execution, the API responds with a JSON object that includes the id, url, and created_at fields of the new release. It is essential to handle edge cases such as rate limits imposed by GitHub, which may restrict the number of requests within a specific timeframe. Additionally, developers should account for pagination when retrieving large sets of data and ensure that the payload does not contain empty arrays or incorrect data types, as this could lead to API errors.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef create_github_release(changelog):\n    owner = 'your_github_owner'\n    repo = 'your_repository_name'\n    url = f'https://api.github.com/repos/{owner}/{repo}/releases'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"GITHUB_TOKEN\")}', 'Content-Type': 'application/json'}\n    data = json.dumps({'tag_name': 'v1.0.0', 'name': 'Release v1.0.0', 'body': changelog})\n    request = urllib.request.Request(url, data=data.encode('utf-8'), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        result = json.loads(response.read().decode('utf-8'))\n    return result.get('id', '')\n\nchangelog = \"This is the changelog for the release.\"\nrelease_id = create_github_release(changelog)",
+          "mock_response": {
+            "id": 123456,
+            "tag_name": "v1.0.0",
+            "name": "Release v1.0.0"
+          },
+          "actions": [
+            "Construct the request payload for creating a release.",
+            "Send the request to the GitHub API.",
+            "Parse the response to confirm the release creation."
+          ],
+          "commands": [
+            {
+              "label": "Publish release",
+              "language": "bash",
+              "code": "python your_script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "GITHUB_TOKEN",
+              "value": "<your_github_token>",
+              "description": "GitHub personal access token for authentication."
+            }
+          ],
+          "tools": [
+            "GitHub REST API"
+          ],
+          "checklist": [
+            "Release is created successfully.",
+            "The response contains the release ID."
+          ],
+          "expectedResult": "A new release is published on GitHub with the changelog.",
+          "links": [
+            {
+              "label": "GitHub REST API Documentation",
+              "url": "https://docs.github.com/en/rest"
+            }
+          ]
         },
         {
           "title": "Email the changelog",
-          "description": "Send the release notes to the subscriber list via Resend."
+          "description": "This step sends the generated changelog to the subscriber list using the Resend Email API. It ensures that all subscribers are notified of the new release.",
+          "technical_explanation": "This workflow step is crucial for maintaining communication with subscribers regarding new releases. It consumes the generated changelog data from the previous step, which includes the release notes and the list of subscribers' email addresses. The Resend Email API is utilized to send this information, specifically targeting the endpoint /emails using the POST method. The request must include headers such as 'Content-Type: application/json' and 'Authorization: Bearer <token>', while the payload should be structured to include 'subject', 'body', and 'recipients' as keys. The expected JSON response will typically include 'status' and 'message' fields to confirm the success or failure of the email dispatch. It is essential to handle edge cases such as rate limits imposed by the API, which may restrict the number of emails sent in a given timeframe. Additionally, pagination must be considered if the subscriber list exceeds the API's limit for a single request, and the implementation should gracefully manage scenarios where the recipient array is empty or contains invalid email formats, ensuring proper type conversion where necessary.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef send_email(changelog):\n    url = 'https://api.resend.com/emails'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"RESEND_API_KEY\")}', 'Content-Type': 'application/json'}\n    data = json.dumps({'to': 'subscribers@example.com', 'subject': 'New Release Available', 'body': changelog})\n    request = urllib.request.Request(url, data=data.encode('utf-8'), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        result = json.loads(response.read().decode('utf-8'))\n    return result.get('id', '')\n\nchangelog = \"This is the changelog for the new release.\"\nemail_id = send_email(changelog)",
+          "mock_response": {
+            "id": "email_123456",
+            "status": "sent"
+          },
+          "actions": [
+            "Construct the email payload with recipients and content.",
+            "Send the request to the Resend API.",
+            "Parse the response to confirm the email was sent."
+          ],
+          "commands": [
+            {
+              "label": "Send email",
+              "language": "bash",
+              "code": "python your_script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "RESEND_API_KEY",
+              "value": "<your_resend_api_key>",
+              "description": "Resend API key for authentication."
+            }
+          ],
+          "tools": [
+            "Resend Email API"
+          ],
+          "checklist": [
+            "Email is sent successfully.",
+            "The response contains the email ID."
+          ],
+          "expectedResult": "The changelog is emailed to the subscribers.",
+          "links": [
+            {
+              "label": "Resend Email API Documentation",
+              "url": "https://resend.com/docs"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A GitHub account with access to the repository",
+        "An OpenAI API key",
+        "A Resend account with an API key",
+        "Access to GitHub REST API",
+        "Access to OpenAI GPT-4 API",
+        "Access to Resend Email API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for accessing APIs using a token that grants permission."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by delaying requests."
+        },
+        {
+          "term": "Changelog",
+          "definition": "A record of all notable changes made to a project."
+        },
+        {
+          "term": "Email Subscription List",
+          "definition": "A collection of email addresses that receive notifications."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API rate limit exceeded",
+          "solution": "Implement exponential backoff to retry after a delay."
+        },
+        {
+          "problem": "Invalid API key",
+          "solution": "Verify that the API key is correct and has the necessary permissions."
+        },
+        {
+          "problem": "No merged pull requests found",
+          "solution": "Check if there are any recent merges or adjust the date range."
+        }
+      ],
+      "resources": [
+        {
+          "label": "GitHub REST API",
+          "url": "https://docs.github.com/en/rest"
+        },
+        {
+          "label": "OpenAI GPT-4 API",
+          "url": "https://platform.openai.com/docs/api-reference/chat/create"
+        },
+        {
+          "label": "Resend Email API",
+          "url": "https://resend.com/docs"
+        }
+      ],
+      "before_you_start": [
+        "A GitHub account with access to the repository",
+        "An OpenAI API key",
+        "A Resend account with an API key",
+        "Access to GitHub REST API",
+        "Access to OpenAI GPT-4 API",
+        "Access to Resend Email API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:37 UTC"
   },
   {
     "slug": "programmatic-seo-pipeline",
@@ -11787,26 +12917,205 @@
       "steps": [
         {
           "title": "Cluster the keyword inventory",
-          "description": "Group raw keywords into deterministic topic clusters."
+          "description": "This step involves grouping raw keywords into deterministic topic clusters based on their semantic similarity. The output will be a structured list of clusters that can be used for generating content.",
+          "technical_explanation": "This step serves as the foundation for the entire pipeline by organizing keywords into clusters. It consumes a list of raw keywords and outputs structured clusters. The architecture relies on Python's built-in data structures for organization. Edge cases include handling empty input lists and ensuring that clusters are meaningful and not empty. The output format should be a list of clusters, each containing related keywords.",
+          "code_snippet": "import json\n\ndef cluster_keywords(raw_keywords):\n    clusters = {}\n    for keyword in raw_keywords:\n        # Simple clustering based on keyword prefix\n        prefix = keyword.split()[0]\n        if prefix not in clusters:\n            clusters[prefix] = []\n        clusters[prefix].append(keyword)\n    return list(clusters.values())\n\nraw_keywords = ['python tutorial', 'python for data science', 'javascript tutorial', 'javascript for beginners']\nclusters = cluster_keywords(raw_keywords)",
+          "mock_response": "[['python tutorial', 'python for data science'], ['javascript tutorial', 'javascript for beginners']]",
+          "actions": [
+            "Define a function to cluster keywords.",
+            "Iterate over the raw keywords.",
+            "Group keywords by their prefix."
+          ],
+          "commands": [
+            {
+              "label": "Run the clustering script",
+              "language": "bash",
+              "code": "python cluster_keywords.py"
+            }
+          ],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Clusters are generated without empty entries.",
+            "Each cluster contains related keywords."
+          ],
+          "expectedResult": "A structured list of keyword clusters is generated.",
+          "links": [
+            {
+              "label": "Python Standard Library - json",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
         },
         {
           "title": "Generate page copy with OpenAI",
-          "description": "Create title, meta description and body copy per cluster."
+          "description": "In this step, we utilize the OpenAI GPT-4 API to generate titles, meta descriptions, and body copy for each keyword cluster. The generated content will be used for creating web pages.",
+          "technical_explanation": "This step leverages the OpenAI GPT-4 API to create content based on the keyword clusters generated in the previous step. It sends a request to the API with the cluster information and receives structured content in response. The API contract requires a POST request to the /v1/chat/completions endpoint, including the necessary headers and payload. Edge cases include handling API rate limits and ensuring the generated content is valid and relevant.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef generate_content(cluster):\n    url = 'https://api.openai.com/v1/chat/completions'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    payload = json.dumps({\n        'model': 'gpt-4o-mini',\n        'messages': [{'role': 'user', 'content': f'Generate a title, meta description, and body copy for: {cluster}'}]\n    }).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))\n\ncluster = ['python tutorial', 'python for data science']\ncontent = generate_content(cluster)",
+          "mock_response": "{'choices': [{'message': {'content': 'Title: Learn Python for Data Science\\nMeta: A comprehensive guide to Python for data science.\\nBody: Python is a versatile language...'}}]}",
+          "actions": [
+            "Define a function to call the OpenAI API.",
+            "Prepare the request payload with the cluster data.",
+            "Handle the API response and extract generated content."
+          ],
+          "commands": [
+            {
+              "label": "Run the content generation script",
+              "language": "bash",
+              "code": "python generate_content.py"
+            }
+          ],
+          "config": [],
+          "tools": [
+            "OpenAI GPT-4 API"
+          ],
+          "checklist": [
+            "Content is generated for each keyword cluster.",
+            "The API response contains valid content."
+          ],
+          "expectedResult": "Titles, meta descriptions, and body copy are generated for each keyword cluster.",
+          "links": [
+            {
+              "label": "OpenAI GPT-4 API Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/chat/create"
+            }
+          ]
         },
         {
           "title": "Store page records in Supabase",
-          "description": "Upsert slugs, titles and generated content."
+          "description": "This step involves upserting the generated content into a Supabase database. Each record will include the slug, title, and content generated from the previous step.",
+          "technical_explanation": "This step uses the Supabase Database API to store the generated content. It constructs a payload for upserting records into the designated table. The API contract requires a POST request to the /rest/v1/{table_name} endpoint with appropriate headers and payload. Edge cases include handling duplicate entries and ensuring the response status indicates a successful operation.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef upsert_to_supabase(records):\n    url = f'{os.environ.get(\"SUPABASE_URL\")}/rest/v1/pages'\n    headers = {\n        'apikey': os.environ.get(\"SUPABASE_KEY\"),\n        'Authorization': f'Bearer {os.environ.get(\"SUPABASE_KEY\")}',\n        'Content-Type': 'application/json',\n        'Prefer': 'return=representation'\n    }\n    for record in records:\n        payload = json.dumps(record).encode('utf-8')\n        request = urllib.request.Request(url, data=payload, headers=headers)\n        with urllib.request.urlopen(request) as response:\n            if response.status not in (200, 201, 204):\n                raise Exception('Error upserting record')\n\nrecords = [{'slug': 'learn-python', 'title': 'Learn Python for Data Science', 'content': 'Python is a versatile language...'}]\nupsert_to_supabase(records)",
+          "mock_response": "{}",
+          "actions": [
+            "Define a function to upsert records to Supabase.",
+            "Prepare the request payload for each record.",
+            "Check the response status for successful upsert."
+          ],
+          "commands": [
+            {
+              "label": "Run the Supabase upsert script",
+              "language": "bash",
+              "code": "python upsert_to_supabase.py"
+            }
+          ],
+          "config": [],
+          "tools": [
+            "Supabase Database API"
+          ],
+          "checklist": [
+            "Records are successfully upserted into Supabase.",
+            "No errors are returned from the API."
+          ],
+          "expectedResult": "Generated content is stored in the Supabase database.",
+          "links": [
+            {
+              "label": "Supabase Database API Documentation",
+              "url": "https://supabase.com/docs/guides/api"
+            }
+          ]
         },
         {
           "title": "Index published pages in Algolia",
-          "description": "Push searchable page records with keywords and URLs."
+          "description": "In this final step, we push the stored page records to Algolia for indexing. This allows the generated pages to be searchable through Algolia's search capabilities.",
+          "technical_explanation": "This step utilizes the Algolia Search API to index the page records. It constructs a payload containing the records to be indexed and sends a POST request to the /1/indexes/{index_name}/batch endpoint. The API contract requires specific headers and a structured payload. Edge cases include handling indexing errors and ensuring that the records are correctly formatted for Algolia.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef index_in_algolia(records):\n    url = f'https://{os.environ.get(\"ALGOLIA_APP_ID\")}.algolia.net/1/indexes/pages/batch'\n    headers = {\n        'X-Algolia-API-Key': os.environ.get(\"ALGOLIA_API_KEY\"),\n        'X-Algolia-Application-Id': os.environ.get(\"ALGOLIA_APP_ID\"),\n        'Content-Type': 'application/json'\n    }\n    payload = json.dumps({'requests': [{'action': 'addObject', 'body': record} for record in records]}).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        if response.status != 200:\n            raise Exception('Error indexing records')\n\nrecords = [{'slug': 'learn-python', 'title': 'Learn Python for Data Science', 'content': 'Python is a versatile language...'}]\nindex_in_algolia(records)",
+          "mock_response": "{}",
+          "actions": [
+            "Define a function to index records in Algolia.",
+            "Prepare the request payload for Algolia indexing.",
+            "Check the response status for successful indexing."
+          ],
+          "commands": [
+            {
+              "label": "Run the Algolia indexing script",
+              "language": "bash",
+              "code": "python index_in_algolia.py"
+            }
+          ],
+          "config": [],
+          "tools": [
+            "Algolia Search API"
+          ],
+          "checklist": [
+            "Records are successfully indexed in Algolia.",
+            "No errors are returned from the API."
+          ],
+          "expectedResult": "Page records are indexed in Algolia and searchable.",
+          "links": [
+            {
+              "label": "Algolia Search API Documentation",
+              "url": "https://www.algolia.com/doc/rest-api/"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "An OpenAI API key",
+        "A Supabase project and service-role key",
+        "An Algolia application ID and API key",
+        "Access to OpenAI GPT-4 API",
+        "Access to Supabase Database API",
+        "Access to Algolia Search API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access."
+        },
+        {
+          "term": "PostgREST Upsert",
+          "definition": "An operation that inserts or updates a record in a database table."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by pausing requests for a specified duration."
+        },
+        {
+          "term": "Token-Bucket Pagination",
+          "definition": "A method for managing API response pagination by controlling the rate of requests."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API key authentication fails",
+          "solution": "Verify that the API keys are correctly set in environment variables."
+        },
+        {
+          "problem": "Rate limit exceeded",
+          "solution": "Implement rate-limit backoff by pausing requests when receiving a 429 status code."
+        },
+        {
+          "problem": "Empty response from Supabase",
+          "solution": "Check the database connection and ensure the table exists with the correct schema."
+        }
+      ],
+      "resources": [
+        {
+          "label": "OpenAI GPT-4 API",
+          "url": "https://platform.openai.com/docs/api-reference/chat/create"
+        },
+        {
+          "label": "Supabase Database API",
+          "url": "https://supabase.com/docs/guides/api"
+        },
+        {
+          "label": "Algolia Search API",
+          "url": "https://www.algolia.com/doc/rest-api/"
+        }
+      ],
+      "before_you_start": [
+        "An OpenAI API key",
+        "A Supabase project and service-role key",
+        "An Algolia application ID and API key",
+        "Access to OpenAI GPT-4 API",
+        "Access to Supabase Database API",
+        "Access to Algolia Search API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:38 UTC"
   },
   {
     "slug": "ai-content-automation",
@@ -11823,8 +13132,8 @@
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
       "tools": [
-        "OpenAI GPT-4 API",
         "Notion API",
+        "OpenAI GPT-4 API",
         "Resend Email API"
       ],
       "api_slugs": [
@@ -11840,26 +13149,289 @@
       "steps": [
         {
           "title": "Read briefs from Notion",
-          "description": "Query the briefs database for items waiting for a draft."
+          "description": "This step retrieves briefs from the Notion database that are pending a draft. It queries the database to find items marked as needing attention.",
+          "technical_explanation": "This step serves as the initial data retrieval phase, consuming the database structure from Notion. The API contract requires a GET request to the Notion API endpoint for retrieving database content. The request must include the integration token in the headers and specify the Notion version. Edge cases include handling empty responses and ensuring the database ID is correct.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_briefs():\n    notion_url = 'https://api.notion.com/v1/databases/YOUR_DATABASE_ID/query'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"NOTION_INTEGRATION_TOKEN\")}',\n        'Notion-Version': '2022-06-28'\n    }\n    request = urllib.request.Request(notion_url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n        briefs = [item.get('properties', {}).get('Name', {}).get('title', [{}])[0].get('text', {}).get('content', '') for item in data.get('results', [])]\n    return briefs\n\nbriefs = fetch_briefs()",
+          "mock_response": {
+            "results": [
+              {
+                "properties": {
+                  "Name": {
+                    "title": [
+                      {
+                        "text": {
+                          "content": "Draft Article 1"
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "Name": {
+                    "title": [
+                      {
+                        "text": {
+                          "content": "Draft Article 2"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Construct the Notion API request URL with the database ID.",
+            "Set the required headers for authentication and versioning.",
+            "Parse the response to extract the titles of the briefs."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "NOTION_INTEGRATION_TOKEN",
+              "value": "<your_notion_integration_token>",
+              "description": "Token for authenticating with the Notion API."
+            }
+          ],
+          "tools": [
+            "Notion API"
+          ],
+          "checklist": [
+            "Successfully retrieved briefs from the Notion database.",
+            "Briefs contain expected titles."
+          ],
+          "expectedResult": "A list of briefs retrieved from the Notion database.",
+          "links": [
+            {
+              "label": "Notion API Documentation",
+              "url": "https://developers.notion.com/reference/intro"
+            }
+          ]
         },
         {
           "title": "Draft the article with OpenAI",
-          "description": "Generate the article body and a suggested title."
+          "description": "This step generates the article content using the OpenAI GPT-4 API based on the retrieved briefs. It creates a draft and suggests a title.",
+          "technical_explanation": "This workflow step exists to generate article content by leveraging the OpenAI GPT-4 API, consuming the briefs retrieved from the previous step as input data. The API contract requires a POST request to the endpoint 'https://api.openai.com/v1/engines/gpt-4/completions', with headers including 'Authorization' for the API key and 'Content-Type' set to 'application/json'. The request payload must include fields such as 'prompt', 'max_tokens', and 'temperature', while the JSON response will typically contain 'id', 'object', 'created', 'model', and 'choices' arrays with generated text.\n\nEdge cases to consider include handling rate limits imposed by the API, which may require implementing retry logic. Additionally, pagination must be managed if the response includes multiple pages of data, and scenarios where the API returns empty arrays should be accounted for in the logic. Type conversion may also be necessary to ensure that the data types in the payload and response match expected formats.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef draft_article(brief):\n    openai_url = 'https://api.openai.com/v1/chat/completions'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    payload = {\n        'model': 'gpt-4o-mini',\n        'messages': [{'role': 'user', 'content': f'Write an article based on the following brief: {brief}'}]\n    }\n    request = urllib.request.Request(openai_url, data=json.dumps(payload).encode('utf-8'), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        result = json.loads(response.read().decode('utf-8'))\n        article_content = result.get('choices', [{}])[0].get('message', {}).get('content', '')\n    return article_content\n\nbriefs = [\"Sample brief for article generation.\"]\narticle = draft_article(briefs[0])",
+          "mock_response": {
+            "choices": [
+              {
+                "message": {
+                  "content": "This is a draft article based on the brief provided."
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Construct the OpenAI API request with the brief content.",
+            "Set the required headers for authentication.",
+            "Parse the response to extract the generated article content."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "OPENAI_API_KEY",
+              "value": "<your_openai_api_key>",
+              "description": "Key for authenticating with the OpenAI API."
+            }
+          ],
+          "tools": [
+            "OpenAI GPT-4 API"
+          ],
+          "checklist": [
+            "Successfully generated article content from the OpenAI API.",
+            "Article content matches the expected format."
+          ],
+          "expectedResult": "An article draft generated based on the brief.",
+          "links": [
+            {
+              "label": "OpenAI GPT-4 API Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/chat/create"
+            }
+          ]
         },
         {
           "title": "Create the Notion review page",
-          "description": "Write the draft into the review database with status review."
+          "description": "This step writes the generated article draft into the Notion review database, marking its status as 'review'.",
+          "technical_explanation": "This step involves sending a POST request to the Notion API to create a new page in the review database. The API contract requires specific properties to be set in the payload, including the article content and status. Edge cases include handling errors during page creation and ensuring the correct database ID is used.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef create_review_page(article):\n    notion_url = 'https://api.notion.com/v1/pages'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"NOTION_INTEGRATION_TOKEN\")}',\n        'Notion-Version': '2022-06-28',\n        'Content-Type': 'application/json'\n    }\n    payload = {\n        'parent': {'database_id': 'YOUR_REVIEW_DATABASE_ID'},\n        'properties': {\n            'Status': {'select': {'name': 'Review'}},\n            'Content': {'rich_text': [{'text': {'content': article}}]}\n        }\n    }\n    request = urllib.request.Request(notion_url, data=json.dumps(payload).encode('utf-8'), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        result = json.loads(response.read().decode('utf-8'))\n    return result\n\nreview_page = create_review_page(article)",
+          "mock_response": {
+            "id": "page_id",
+            "properties": {
+              "Status": {
+                "select": {
+                  "name": "Review"
+                }
+              },
+              "Content": {
+                "rich_text": [
+                  {
+                    "text": {
+                      "content": "This is a draft article based on the brief provided."
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "actions": [
+            "Construct the Notion API request for creating a new page.",
+            "Set the required headers for authentication.",
+            "Parse the response to confirm the page creation."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "NOTION_INTEGRATION_TOKEN",
+              "value": "<your_notion_integration_token>",
+              "description": "Token for authenticating with the Notion API."
+            }
+          ],
+          "tools": [
+            "Notion API"
+          ],
+          "checklist": [
+            "Successfully created a new review page in Notion.",
+            "Review page contains the correct article content and status."
+          ],
+          "expectedResult": "A new review page created in the Notion database.",
+          "links": [
+            {
+              "label": "Notion API Documentation",
+              "url": "https://developers.notion.com/reference/intro"
+            }
+          ]
         },
         {
           "title": "Notify reviewers by email",
-          "description": "Send the review link to the editorial distribution list."
+          "description": "This step sends an email notification to the editorial team with a link to the newly created review page.",
+          "technical_explanation": "This workflow step exists to facilitate communication with the editorial team by sending email notifications regarding newly created review pages. It consumes data from the previous step, specifically the details of the article draft and the list of reviewers who need to be notified. The email notification is sent using the Resend API, which requires a POST request to the endpoint 'https://api.resend.com/send'. The request must include headers such as 'Authorization' with the API key and 'Content-Type' set to 'application/json'. The payload should contain a JSON object with 'to', 'subject', and 'body' fields. The expected JSON response includes a 'status' field indicating success or failure and a 'message' field for additional information. Edge cases to consider include handling rate limits imposed by the API, ensuring that pagination is correctly managed if the recipient list is extensive, addressing scenarios where the recipient array may be empty, and performing necessary type conversions for the email addresses to ensure they are in the correct format.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef notify_reviewers(review_page_id):\n    resend_url = 'https://api.resend.com/emails'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"RESEND_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    payload = {\n        'to': 'editorial_team@example.com',\n        'subject': 'New Article for Review',\n        'html': f'<p>A new article has been drafted. Review it <a href=\"https://www.notion.so/{review_page_id}\">here</a>.</p>'\n    }\n    request = urllib.request.Request(resend_url, data=json.dumps(payload).encode('utf-8'), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        result = json.loads(response.read().decode('utf-8'))\n    return result\n\nemail_response = notify_reviewers(review_page.get('id', ''))",
+          "mock_response": {
+            "id": "email_id",
+            "status": "sent"
+          },
+          "actions": [
+            "Construct the Resend API request for sending an email.",
+            "Set the required headers for authentication.",
+            "Parse the response to confirm the email was sent."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "RESEND_API_KEY",
+              "value": "<your_resend_api_key>",
+              "description": "Key for authenticating with the Resend API."
+            }
+          ],
+          "tools": [
+            "Resend Email API"
+          ],
+          "checklist": [
+            "Successfully sent an email notification to reviewers.",
+            "Email contains the correct link to the review page."
+          ],
+          "expectedResult": "An email notification sent to the editorial team.",
+          "links": [
+            {
+              "label": "Resend Email API Documentation",
+              "url": "https://resend.com/docs"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "An OpenAI API key",
+        "A Notion integration token with access to the briefs database",
+        "A Resend API key for sending emails",
+        "Access to OpenAI GPT-4 API",
+        "Access to Notion API",
+        "Access to Resend Email API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access to the API."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy for handling API rate limits by pausing requests when limits are reached."
+        },
+        {
+          "term": "JSON Response Shape",
+          "definition": "The structure of the data returned by an API in JSON format, defining keys and value types."
+        },
+        {
+          "term": "Integration Token",
+          "definition": "A unique token used to authenticate API requests to services like Notion."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API key is invalid",
+          "solution": "Verify that the API key is correct and has the necessary permissions."
+        },
+        {
+          "problem": "Rate limit exceeded",
+          "solution": "Implement a backoff strategy to pause requests and retry after a delay."
+        },
+        {
+          "problem": "Empty response from Notion",
+          "solution": "Check the database ID and ensure there are items available in the briefs database."
+        }
+      ],
+      "resources": [
+        {
+          "label": "OpenAI GPT-4 API",
+          "url": "https://platform.openai.com/docs/api-reference/chat/create"
+        },
+        {
+          "label": "Notion API",
+          "url": "https://developers.notion.com/reference/intro"
+        },
+        {
+          "label": "Resend Email API",
+          "url": "https://resend.com/docs"
+        }
+      ],
+      "before_you_start": [
+        "An OpenAI API key",
+        "A Notion integration token with access to the briefs database",
+        "A Resend API key for sending emails",
+        "Access to OpenAI GPT-4 API",
+        "Access to Notion API",
+        "Access to Resend Email API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:39 UTC"
   },
   {
     "slug": "seo-content-audit",
@@ -11892,26 +13464,267 @@
       "steps": [
         {
           "title": "Export indexed pages from Algolia",
-          "description": "Page through records and extract titles, slugs and keywords."
+          "description": "This step involves retrieving indexed pages from Algolia's search service. The data extracted includes titles, slugs, and keywords, which will be used in subsequent steps for analysis.",
+          "technical_explanation": "This step serves as the initial data extraction phase, consuming no prior data. It uses the Algolia Search API to fetch indexed records. The endpoint is `https://{APPLICATION_ID}.algolia.net/1/indexes/{INDEX_NAME}/query`, using the POST method with necessary headers for authentication. Edge cases include handling pagination for large datasets and ensuring that the response is not empty.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_indexed_pages():\n    application_id = os.environ.get('ALGOLIA_APPLICATION_ID')\n    api_key = os.environ.get('ALGOLIA_API_KEY')\n    url = f'https://{application_id}.algolia.net/1/indexes/YOUR_INDEX_NAME/query'\n    headers = {\n        'X-Algolia-API-Key': api_key,\n        'X-Algolia-Application-Id': application_id,\n        'Content-Type': 'application/json'\n    }\n    data = json.dumps({\"params\": \"hitsPerPage=1000\"}).encode('utf-8')\n    request = urllib.request.Request(url, data=data, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8')).get('hits', [])\n\nindexed_pages = fetch_indexed_pages()",
+          "mock_response": [
+            {
+              "title": "Page 1",
+              "slug": "page-1",
+              "keywords": [
+                "keyword1",
+                "keyword2"
+              ]
+            },
+            {
+              "title": "Page 2",
+              "slug": "page-2",
+              "keywords": [
+                "keyword3",
+                "keyword4"
+              ]
+            }
+          ],
+          "actions": [
+            "Set up Algolia account and create an index.",
+            "Retrieve the application ID and API key from Algolia.",
+            "Define the index name in the code."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "APPLICATION_ID",
+              "value": "your_algolia_application_id",
+              "description": "Your Algolia application ID."
+            },
+            {
+              "key": "API_KEY",
+              "value": "your_algolia_api_key",
+              "description": "Your Algolia API key."
+            }
+          ],
+          "tools": [
+            "Algolia Search API"
+          ],
+          "checklist": [
+            "Indexed pages are successfully retrieved.",
+            "Response contains the expected fields: title, slug, and keywords."
+          ],
+          "expectedResult": "Indexed pages are exported from Algolia successfully.",
+          "links": [
+            {
+              "label": "Algolia Search API Documentation",
+              "url": "https://www.algolia.com/doc/rest-api/"
+            }
+          ]
         },
         {
           "title": "Read target keywords from Google Sheets",
-          "description": "Load the keyword universe and priority tiers."
+          "description": "In this step, the target keywords are loaded from a specified Google Sheets document. This data will be compared against the indexed pages to identify gaps and opportunities.",
+          "technical_explanation": "This step reads data from Google Sheets, consuming the indexed pages data from the previous step. It uses the Google Sheets API to access a specific spreadsheet. The endpoint is `https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}/values/{range}`, using the GET method with OAuth 2.0 for authentication. Edge cases include handling empty sheets and ensuring the correct range is specified.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef read_target_keywords():\n    spreadsheet_id = os.environ.get('SPREADSHEET_ID')\n    range_name = 'Sheet1!A1:A100'\n    url = f'https://sheets.googleapis.com/v4/spreadsheets/{spreadsheet_id}/values/{range_name}'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"GOOGLE_SHEETS_API_KEY\")}'\n    }\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8')).get('values', [])\n\ntarget_keywords = read_target_keywords()",
+          "mock_response": [
+            [
+              "keyword1"
+            ],
+            [
+              "keyword2"
+            ],
+            [
+              "keyword3"
+            ]
+          ],
+          "actions": [
+            "Set up a Google Sheets document with keywords.",
+            "Retrieve the spreadsheet ID and range for keywords.",
+            "Ensure the Google Sheets API is enabled for your project."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SPREADSHEET_ID",
+              "value": "your_spreadsheet_id",
+              "description": "Your Google Sheets spreadsheet ID."
+            },
+            {
+              "key": "GOOGLE_SHEETS_API_KEY",
+              "value": "your_google_sheets_api_key",
+              "description": "Your Google Sheets API key."
+            }
+          ],
+          "tools": [
+            "Google Sheets API"
+          ],
+          "checklist": [
+            "Target keywords are successfully retrieved.",
+            "Response contains the expected keyword values."
+          ],
+          "expectedResult": "Target keywords are read from Google Sheets successfully.",
+          "links": [
+            {
+              "label": "Google Sheets API Documentation",
+              "url": "https://developers.google.com/sheets/api/reference/rest"
+            }
+          ]
         },
         {
           "title": "Score keyword coverage",
-          "description": "Detect missing and cannibalised keywords deterministically."
+          "description": "This step analyzes the indexed pages against the target keywords to identify missing and cannibalized keywords. The analysis will provide insights into keyword coverage.",
+          "technical_explanation": "This step processes the indexed pages and target keywords to score coverage. It consumes data from the previous two steps. The scoring logic is implemented in Python, ensuring that keywords are compared correctly. Edge cases include handling duplicates and ensuring that comparisons are case-insensitive.",
+          "code_snippet": "def score_keyword_coverage(indexed_pages, target_keywords):\n    indexed_keywords = set()\n    for page in indexed_pages:\n        indexed_keywords.update(page.get('keywords', []))\n    target_keywords_set = set(keyword[0] for keyword in target_keywords)\n    missing_keywords = target_keywords_set - indexed_keywords\n    cannibalized_keywords = indexed_keywords & target_keywords_set\n    return missing_keywords, cannibalized_keywords\n\nmissing, cannibalized = score_keyword_coverage(indexed_pages, target_keywords)",
+          "mock_response": {
+            "missing": [
+              "keyword4"
+            ],
+            "cannibalized": [
+              "keyword1"
+            ]
+          },
+          "actions": [
+            "Implement the scoring logic in Python.",
+            "Ensure that keyword comparisons are case-insensitive.",
+            "Handle duplicates in the indexed keywords."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Missing keywords are identified correctly.",
+            "Cannibalized keywords are flagged accurately."
+          ],
+          "expectedResult": "Keyword coverage is scored successfully.",
+          "links": [
+            {
+              "label": "Python Standard Library Documentation",
+              "url": "https://docs.python.org/3/library/collections.html"
+            }
+          ]
         },
         {
           "title": "Generate SEO recommendations",
-          "description": "Ask OpenAI for prioritised, page-level actions."
+          "description": "In this final step, SEO recommendations are generated based on the analysis of keyword coverage. The OpenAI GPT-4 API will be used to provide actionable insights.",
+          "technical_explanation": "This step utilizes the OpenAI GPT-4 API to generate recommendations based on the missing and cannibalized keywords. It consumes the results from the previous step. The endpoint is `https://api.openai.com/v1/chat/completions`, using the POST method with Bearer Token Authentication. Edge cases include handling API rate limits and ensuring that the response is valid.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef generate_recommendations(missing, cannibalized):\n    url = 'https://api.openai.com/v1/chat/completions'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    prompt = f'Generate SEO recommendations for missing keywords: {missing} and cannibalized keywords: {cannibalized}'\n    data = json.dumps({\"model\": \"gpt-4o-mini\", \"messages\": [{\"role\": \"user\", \"content\": prompt}]}).encode('utf-8')\n    request = urllib.request.Request(url, data=data, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8')).get('choices', [{}])[0].get('message', {}).get('content', '')\n\nmissing = \"example_keyword_1, example_keyword_2\"\ncannibalized = \"example_keyword_3\"\nrecommendations = generate_recommendations(missing, cannibalized)",
+          "mock_response": "Consider adding more content around keyword4 and optimizing for keyword1.",
+          "actions": [
+            "Set up OpenAI account and retrieve API key.",
+            "Define the prompt structure for generating recommendations.",
+            "Handle potential API rate limits."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "OPENAI_API_KEY",
+              "value": "your_openai_api_key",
+              "description": "Your OpenAI API key."
+            }
+          ],
+          "tools": [
+            "OpenAI GPT-4 API"
+          ],
+          "checklist": [
+            "Recommendations are generated successfully.",
+            "Response contains actionable insights."
+          ],
+          "expectedResult": "SEO recommendations are generated successfully.",
+          "links": [
+            {
+              "label": "OpenAI GPT-4 API Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/chat/create"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "An Algolia account and API key",
+        "A Google Sheets account and API credentials",
+        "An OpenAI account and API key",
+        "Access to Algolia Search API",
+        "Access to Google Sheets API",
+        "Access to OpenAI GPT-4 API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by delaying requests."
+        },
+        {
+          "term": "Token-Bucket Pagination",
+          "definition": "A method for managing API responses that allows for controlled data retrieval."
+        },
+        {
+          "term": "Structured Data Extraction",
+          "definition": "The process of retrieving specific data points from a larger dataset."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API key authentication failure",
+          "solution": "Verify that the API keys are correctly set in environment variables."
+        },
+        {
+          "problem": "Empty response from Algolia",
+          "solution": "Check the application ID and ensure that indexed pages exist."
+        },
+        {
+          "problem": "Google Sheets API quota exceeded",
+          "solution": "Reduce the frequency of API calls or optimize the data retrieval process."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Algolia Search API",
+          "url": "https://www.algolia.com/doc/rest-api/"
+        },
+        {
+          "label": "Google Sheets API",
+          "url": "https://developers.google.com/sheets/api/reference/rest"
+        },
+        {
+          "label": "OpenAI GPT-4 API",
+          "url": "https://platform.openai.com/docs/api-reference/chat/create"
+        }
+      ],
+      "before_you_start": [
+        "An Algolia account and API key",
+        "A Google Sheets account and API credentials",
+        "An OpenAI account and API key",
+        "Access to Algolia Search API",
+        "Access to Google Sheets API",
+        "Access to OpenAI GPT-4 API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:40 UTC"
   },
   {
     "slug": "blog-cms-publishing",

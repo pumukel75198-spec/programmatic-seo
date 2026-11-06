@@ -41,7 +41,15 @@
     "google-sheets-reporting-hub": "done",
     "github-issue-triage": "done",
     "deployment-monitoring-alerts": "done",
-    "feature-flag-rollout": "done"
+    "feature-flag-rollout": "done",
+    "meeting-transcription-summaries": "done",
+    "secrets-rotation-audit": "done",
+    "api-health-monitoring": "done",
+    "linear-roadmap-sync": "done",
+    "release-notes-generator": "done",
+    "programmatic-seo-pipeline": "done",
+    "ai-content-automation": "done",
+    "seo-content-audit": "done"
   },
-  "updated_at": "2026-11-06 15:22 UTC"
+  "updated_at": "2026-11-06 15:40 UTC"
 }
