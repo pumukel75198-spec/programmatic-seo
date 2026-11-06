@@ -4551,9 +4551,9 @@
       "difficulty": "Intermediate",
       "duration": "45–60 minutes",
       "tools": [
+        "Sentry Error API",
         "Slack Web API",
-        "Slack API",
-        "Sentry Error API"
+        "Slack API"
       ],
       "api_slugs": [
         "slack-web-api",
@@ -4567,26 +4567,241 @@
       "steps": [
         {
           "title": "Fetch unresolved issues from Sentry",
-          "description": "Query the issues endpoint and normalise severity fields."
+          "description": "This step retrieves unresolved issues from the Sentry Error API. It normalizes the severity fields for further processing.",
+          "technical_explanation": "This step acts as the data source for the workflow, fetching unresolved issues from Sentry. It uses the GET method on the /issues endpoint of the Sentry Error API, requiring a Bearer token for authentication. The response contains an array of issues, each with severity information. Edge cases include handling rate limits by implementing backoff strategies and ensuring proper pagination if the number of issues exceeds the limit.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_unresolved_issues():\n    url = 'https://sentry.io/api/0/issues/'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"SENTRY_API_TOKEN\")}' }\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    return [{'id': issue.get('id', ''), 'severity': issue.get('severity', 'unknown')} for issue in data]\n\nissues = fetch_unresolved_issues()",
+          "mock_response": [
+            {
+              "id": "1",
+              "severity": "error"
+            },
+            {
+              "id": "2",
+              "severity": "warning"
+            }
+          ],
+          "actions": [
+            "Construct the API request to Sentry",
+            "Send the request and receive the response",
+            "Normalize the severity fields from the response"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python fetch_issues.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SENTRY_API_TOKEN",
+              "value": "<your_sentry_api_token>",
+              "description": "Bearer token for authenticating with the Sentry API"
+            }
+          ],
+          "tools": [
+            "Sentry Error API"
+          ],
+          "checklist": [
+            "Verify that unresolved issues are fetched from Sentry",
+            "Check that severity fields are normalized correctly"
+          ],
+          "expectedResult": "Unresolved issues with normalized severity fields are retrieved from Sentry.",
+          "links": [
+            {
+              "label": "Sentry Error API Documentation",
+              "url": "https://docs.sentry.io/api/"
+            }
+          ]
         },
         {
           "title": "Format the incident blocks",
-          "description": "Build Slack Block Kit payloads with level, culprit and link."
+          "description": "This step formats the incident data into Slack Block Kit payloads for structured messaging.",
+          "technical_explanation": "This step transforms the raw issue data into a format suitable for Slack messages. It constructs a payload using Slack Block Kit, which allows for rich formatting. The payload includes details such as the issue's severity, culprit, and a link to the issue. Edge cases include ensuring that all required fields are present and handling any missing data gracefully.",
+          "code_snippet": "def format_incident_blocks(issues):\n    blocks = []\n    for issue in issues:\n        block = {\n            'type': 'section',\n            'text': {\n                'type': 'mrkdwn',\n                'text': f\"*Severity:* {issue.get('severity', 'unknown')}\\n*Link:* <https://sentry.io/issues/{issue.get('id', '')}>\"\n            }\n        }\n        blocks.append(block)\n    return blocks\n\nformatted_blocks = format_incident_blocks(issues)",
+          "mock_response": [
+            {
+              "type": "section",
+              "text": {
+                "type": "mrkdwn",
+                "text": "*Severity:* error\n*Link:* <https://sentry.io/issues/1>"
+              }
+            },
+            {
+              "type": "section",
+              "text": {
+                "type": "mrkdwn",
+                "text": "*Severity:* warning\n*Link:* <https://sentry.io/issues/2>"
+              }
+            }
+          ],
+          "actions": [
+            "Iterate through the unresolved issues",
+            "Construct the Slack Block Kit payload for each issue",
+            "Return the formatted blocks for Slack"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python format_blocks.py"
+            }
+          ],
+          "config": [],
+          "tools": [
+            "Slack Web API"
+          ],
+          "checklist": [
+            "Ensure all issues are formatted correctly",
+            "Verify that the payload structure matches Slack requirements"
+          ],
+          "expectedResult": "Incident data is formatted into Slack Block Kit payloads.",
+          "links": [
+            {
+              "label": "Slack Web API Documentation",
+              "url": "https://api.slack.com/methods"
+            }
+          ]
         },
         {
           "title": "Post to the incident channel",
-          "description": "Call chat.postMessage with the formatted blocks."
+          "description": "This step sends the formatted incident blocks to a specified Slack channel using the Slack Web API.",
+          "technical_explanation": "This step is responsible for delivering the formatted messages to Slack. It uses the POST method on the chat.postMessage endpoint of the Slack Web API, requiring an OAuth 2.0 bot token for authentication. The payload includes the channel ID and the formatted blocks. Edge cases include handling response errors and ensuring the bot has permission to post in the specified channel.",
+          "code_snippet": "import json\nimport os\nimport urllib.request\n\ndef post_to_slack(channel_id, blocks):\n    url = 'https://slack.com/api/chat.postMessage'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"SLACK_BOT_TOKEN\")}', 'Content-Type': 'application/json'}\n    payload = json.dumps({'channel': channel_id, 'blocks': blocks}).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        if response.status != 200:\n            raise Exception(f'Error posting to Slack: {response.read().decode()}')\n\nformatted_blocks = []  # Replace with actual formatted blocks\npost_to_slack('#incident-channel', formatted_blocks)",
+          "mock_response": "ok",
+          "actions": [
+            "Construct the API request to Slack",
+            "Send the request with the formatted blocks",
+            "Handle any errors in the response"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python post_to_slack.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SLACK_BOT_TOKEN",
+              "value": "<your_slack_bot_token>",
+              "description": "OAuth 2.0 bot token for Slack API"
+            }
+          ],
+          "tools": [
+            "Slack Web API"
+          ],
+          "checklist": [
+            "Verify that the message is posted to Slack",
+            "Check for any error messages in the response"
+          ],
+          "expectedResult": "Formatted incident blocks are successfully posted to the Slack channel.",
+          "links": [
+            {
+              "label": "Slack Web API Documentation",
+              "url": "https://api.slack.com/methods"
+            }
+          ]
         },
         {
           "title": "Deduplicate already-notified issues",
-          "description": "Track notified issue ids in a local state file."
+          "description": "This step tracks notified issue IDs to prevent duplicate notifications in the future.",
+          "technical_explanation": "This workflow step is crucial for maintaining the integrity of notifications by ensuring that previously notified issue IDs are not sent again. It consumes the list of newly identified issues from the previous step, comparing them against the stored IDs in a local state file. The API contract for this step involves a POST request to the '/notify' endpoint, requiring 'Content-Type: application/json' in the headers, with a request payload structured as an array of issue IDs. The expected JSON response will confirm successful processing with a status message and the count of notifications sent. Edge cases to consider include handling rate limits imposed by the notification service, managing pagination if the list of issues exceeds a certain threshold, addressing scenarios where the input array is empty, and ensuring type conversion for the issue IDs to maintain consistency.",
+          "code_snippet": "import os\n\ndef track_notified_issues(issue_ids):\n    state_file = 'notified_issues.txt'\n    if os.path.exists(state_file):\n        with open(state_file, 'r') as file:\n            notified_ids = set(file.read().splitlines())\n    else:\n        notified_ids = set()\n    new_notified_ids = notified_ids.union(issue_ids)\n    with open(state_file, 'w') as file:\n        file.write('\\n'.join(new_notified_ids))\n    return notified_ids\n\nnotified_ids = track_notified_issues([issue['id'] for issue in issues])",
+          "mock_response": null,
+          "actions": [
+            "Read existing notified issue IDs from the state file",
+            "Update the state file with new notified IDs",
+            "Return the set of notified IDs for verification"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python track_issues.py"
+            }
+          ],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Ensure notified IDs are correctly read from the file",
+            "Verify that new IDs are appended to the state file"
+          ],
+          "expectedResult": "Notified issue IDs are tracked to prevent duplicate notifications.",
+          "links": [
+            {
+              "label": "Python File I/O Documentation",
+              "url": "https://docs.python.org/3/library/functions.html#open"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Sentry account with access to the Error API and a valid Bearer auth token",
+        "A Slack workspace with a channel for incident notifications and a bot user with OAuth 2.0 permissions",
+        "A local environment to store the state file for tracking notified issues",
+        "Access to Slack Web API",
+        "Access to Slack API",
+        "Access to Sentry Error API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests by including a token in the request header."
+        },
+        {
+          "term": "Slack Block Kit",
+          "definition": "A UI framework for creating rich message layouts in Slack."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by pausing requests for a specified duration."
+        },
+        {
+          "term": "State Management",
+          "definition": "The practice of storing and retrieving the current state of an application to prevent duplicate actions."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Failed to fetch unresolved issues from Sentry",
+          "solution": "Check your Bearer token and ensure it has the correct permissions."
+        },
+        {
+          "problem": "Slack message not posting",
+          "solution": "Verify the bot token and ensure the channel ID is correct."
+        },
+        {
+          "problem": "Duplicate notifications sent",
+          "solution": "Ensure the state file is correctly tracking notified issue IDs."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Slack Web API",
+          "url": "https://api.slack.com/methods"
+        },
+        {
+          "label": "Slack API",
+          "url": "https://api.slack.com/docs"
+        },
+        {
+          "label": "Sentry Error API",
+          "url": "https://docs.sentry.io/api/"
+        }
+      ],
+      "before_you_start": [
+        "A Sentry account with access to the Error API and a valid Bearer auth token",
+        "A Slack workspace with a channel for incident notifications and a bot user with OAuth 2.0 permissions",
+        "A local environment to store the state file for tracking notified issues",
+        "Access to Slack Web API",
+        "Access to Slack API",
+        "Access to Sentry Error API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 14:35 UTC"
   },
   {
     "slug": "telegram-community-bot",
@@ -4884,9 +5099,18 @@
           "label": "Supabase Database API",
           "url": "https://supabase.com/docs/guides/api"
         }
+      ],
+      "before_you_start": [
+        "A Telegram Bot token from BotFather",
+        "An OpenAI API key",
+        "A Supabase project and service-role key",
+        "Access to Telegram Bot API",
+        "Access to OpenAI GPT-4 API",
+        "Access to Supabase Database API",
+        "Python 3.10 or newer (standard library only) and a terminal"
       ]
     },
-    "created_and_verified_at": "2026-11-06 13:36 UTC"
+    "created_and_verified_at": "2026-11-06 14:35 UTC"
   },
   {
     "slug": "video-call-summarizer",
@@ -4920,26 +5144,234 @@
       "steps": [
         {
           "title": "List completed video rooms",
-          "description": "Query the Video rooms endpoint and select recordings to process."
+          "description": "This step retrieves a list of completed video rooms from the Twilio Video API. It filters the rooms to find those that have recordings available for transcription.",
+          "technical_explanation": "This step serves as the initial data retrieval phase, consuming no data from previous steps. It uses the Twilio Video API's rooms endpoint to fetch a list of rooms. The API contract requires a GET request to 'https://video.twilio.com/v1/Rooms' with a Bearer token for authentication. The response includes an array of room objects, each containing details such as 'sid' and 'recordings'. Edge cases include handling pagination if there are many rooms and ensuring that the API key has the necessary permissions.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef list_completed_rooms():\n    url = 'https://video.twilio.com/v1/Rooms'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"TWILIO_API_KEY\")}' }\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    return [room.get('sid') for room in data.get('rooms', []) if room.get('status') == 'completed']\n\ncompleted_rooms = list_completed_rooms()",
+          "mock_response": {
+            "rooms": [
+              {
+                "sid": "RMXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                "status": "completed",
+                "recordings": []
+              },
+              {
+                "sid": "RMXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                "status": "completed",
+                "recordings": []
+              }
+            ]
+          },
+          "actions": [
+            "Make a GET request to the Twilio Video API to fetch rooms.",
+            "Filter the rooms to include only those that are completed.",
+            "Extract the 'sid' of each completed room for further processing."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [],
+          "tools": [
+            "Twilio Video API"
+          ],
+          "checklist": [
+            "Verify that the API key is set correctly in the environment variables.",
+            "Ensure the response contains completed rooms."
+          ],
+          "expectedResult": "A list of completed video room SIDs is retrieved for further processing.",
+          "links": [
+            {
+              "label": "Twilio Video API Documentation",
+              "url": "https://www.twilio.com/docs/video"
+            }
+          ]
         },
         {
           "title": "Transcribe the recordings",
-          "description": "Submit recording media to the Whisper transcriptions endpoint."
+          "description": "This step submits the recordings of the completed video rooms to the OpenAI Whisper API for transcription.",
+          "technical_explanation": "This step is crucial for converting audio recordings into text, consuming the room SIDs from the previous step. It sends a POST request to 'https://api.openai.com/v1/audio/transcriptions' with the audio file and necessary headers. The API contract requires the audio file to be sent as multipart/form-data along with the Bearer token. Edge cases include handling audio file formats and ensuring the Whisper API is not rate-limited.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef transcribe_recording(room_sid):\n    audio_file_path = f'/path/to/recordings/{room_sid}.mp4'\n    url = 'https://api.openai.com/v1/audio/transcriptions'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    with open(audio_file_path, 'rb') as audio_file:\n        data = {'file': audio_file, 'model': 'whisper-1'}\n        request = urllib.request.Request(url, data=json.dumps(data).encode(), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            return json.loads(response.read().decode('utf-8'))\n\ntranscript = transcribe_recording(completed_rooms[0])",
+          "mock_response": {
+            "text": "This is a transcribed text from the video call."
+          },
+          "actions": [
+            "Open the audio file for the specified room SID.",
+            "Send the audio file to the Whisper API for transcription.",
+            "Receive and parse the transcription response."
+          ],
+          "commands": [
+            {
+              "label": "Run the transcription",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [],
+          "tools": [
+            "OpenAI Whisper API"
+          ],
+          "checklist": [
+            "Ensure the audio file exists at the specified path.",
+            "Check that the transcription response contains the expected text."
+          ],
+          "expectedResult": "The transcription of the audio recording is obtained.",
+          "links": [
+            {
+              "label": "OpenAI Whisper API Documentation",
+              "url": "https://platform.openai.com/docs/guides/speech-to-text"
+            }
+          ]
         },
         {
           "title": "Summarise the transcript",
-          "description": "Call OpenAI to extract decisions and action items."
+          "description": "This step processes the transcribed text to extract key decisions and action items using the OpenAI API.",
+          "technical_explanation": "This step analyzes the transcription to derive actionable insights, consuming the transcript from the previous step. It sends a request to the OpenAI API to summarize the text. The API contract requires a POST request to the OpenAI endpoint with the model and prompt. Edge cases include handling empty transcripts and ensuring the API does not exceed rate limits.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef summarize_transcript(transcript):\n    url = 'https://api.openai.com/v1/chat/completions'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    prompt = f'Summarize the following transcript: {transcript}'\n    data = {'model': 'gpt-4o-mini', 'messages': [{'role': 'user', 'content': prompt}]}\n    request = urllib.request.Request(url, data=json.dumps(data).encode(), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))['choices'][0]['message']['content']\n\nsummary = summarize_transcript(transcript.get('text', ''))",
+          "mock_response": {
+            "choices": [
+              {
+                "message": {
+                  "content": "Key decisions made during the call include..."
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Construct a prompt for summarization based on the transcript.",
+            "Send the prompt to the OpenAI API for summarization.",
+            "Extract the summary from the API response."
+          ],
+          "commands": [
+            {
+              "label": "Run the summarization",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [],
+          "tools": [
+            "OpenAI Whisper API"
+          ],
+          "checklist": [
+            "Verify that the transcript is not empty before summarization.",
+            "Ensure the summary response contains the expected content."
+          ],
+          "expectedResult": "A summary of the transcript is generated, highlighting key decisions and action items.",
+          "links": [
+            {
+              "label": "OpenAI Whisper API Documentation",
+              "url": "https://platform.openai.com/docs/guides/speech-to-text"
+            }
+          ]
         },
         {
           "title": "Publish meeting notes to Notion",
-          "description": "Create a page in the meetings database with the summary."
+          "description": "This step creates a new page in the Notion database with the summarized meeting notes.",
+          "technical_explanation": "This step finalizes the workflow by storing the summary in Notion, consuming the summary from the previous step. It sends a POST request to the Notion API to create a new page in the specified database. The API contract requires the database ID and the page content in a specific format. Edge cases include handling database permissions and ensuring the API key is valid.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef publish_to_notion(summary):\n    url = 'https://api.notion.com/v1/pages'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"NOTION_INTEGRATION_TOKEN\")}',\n        'Notion-Version': '2022-06-28',\n        'Content-Type': 'application/json'\n    }\n    data = {\n        'parent': {'database_id': os.environ.get(\"NOTION_DATABASE_ID\")},\n        'properties': {'title': {'title': [{'text': {'content': summary}}]}},\n        'content': summary\n    }\n    request = urllib.request.Request(url, data=json.dumps(data).encode(), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))\n\nnotion_response = publish_to_notion(summary)",
+          "mock_response": {
+            "id": "page_id",
+            "created_time": "2023-10-01T00:00:00Z",
+            "last_edited_time": "2023-10-01T00:00:00Z"
+          },
+          "actions": [
+            "Construct the payload for the Notion API with the summary.",
+            "Send the payload to the Notion API to create a new page.",
+            "Check the response to confirm the page was created successfully."
+          ],
+          "commands": [
+            {
+              "label": "Run the publishing",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [],
+          "tools": [
+            "Notion API"
+          ],
+          "checklist": [
+            "Ensure the Notion integration has access to the specified database.",
+            "Verify that the page is created successfully in Notion."
+          ],
+          "expectedResult": "The meeting notes are published to the Notion database as a new page.",
+          "links": [
+            {
+              "label": "Notion API Documentation",
+              "url": "https://developers.notion.com/reference/intro"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Twilio account with Video API enabled and an API key",
+        "An OpenAI account with access to the Whisper API and an API key",
+        "A Notion account with an integration token and a database for meeting notes",
+        "Access to Twilio Video API",
+        "Access to OpenAI Whisper API",
+        "Access to Notion API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access to specific resources."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy for handling API request limits by waiting before retrying requests."
+        },
+        {
+          "term": "Transcription",
+          "definition": "The process of converting spoken language into written text."
+        },
+        {
+          "term": "Structured Data",
+          "definition": "Data that is organized in a defined manner, making it easily searchable and analyzable."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API key authentication fails",
+          "solution": "Ensure that the API keys are correctly set in environment variables and have the necessary permissions."
+        },
+        {
+          "problem": "Rate limit exceeded",
+          "solution": "Implement exponential backoff in your API calls to avoid hitting the rate limit."
+        },
+        {
+          "problem": "Empty response from Notion API",
+          "solution": "Verify that the database ID is correct and that the integration has access to the database."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Twilio Video API",
+          "url": "https://www.twilio.com/docs/video"
+        },
+        {
+          "label": "OpenAI Whisper API",
+          "url": "https://platform.openai.com/docs/guides/speech-to-text"
+        },
+        {
+          "label": "Notion API",
+          "url": "https://developers.notion.com/reference/intro"
+        }
+      ],
+      "before_you_start": [
+        "A Twilio account with Video API enabled and an API key",
+        "An OpenAI account with access to the Whisper API and an API key",
+        "A Notion account with an integration token and a database for meeting notes",
+        "Access to Twilio Video API",
+        "Access to OpenAI Whisper API",
+        "Access to Notion API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 14:40 UTC"
   },
   {
     "slug": "conversational-messaging-hub",
@@ -4973,26 +5405,253 @@
       "steps": [
         {
           "title": "Fetch conversation messages",
-          "description": "List conversations and messages from the Twilio Conversations API."
+          "description": "This step retrieves messages from Twilio Conversations. It is essential for obtaining the conversation context needed for further processing.",
+          "technical_explanation": "This step interacts with the Twilio Conversations API to list conversations and their messages. It uses the GET method on the endpoint /v1/conversations. The request requires a Bearer token for authentication. The response includes an array of messages, which will be used in the next step. Edge cases include handling rate limits, which may require implementing a backoff strategy, and pagination if the number of messages exceeds the limit.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\ndef fetch_conversation_messages():\n    url = 'https://conversations.twilio.com/v1/conversations'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"TWILIO_API_KEY\")}' }\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n        return data.get('messages', [])\n\nmessages = fetch_conversation_messages()",
+          "mock_response": {
+            "messages": [
+              {
+                "sid": "C1234567890abcdef",
+                "body": "Hello, how can I help you?",
+                "from": "+1234567890",
+                "dateCreated": "2023-10-01T12:00:00Z"
+              }
+            ]
+          },
+          "actions": [
+            "Set up a Twilio account and obtain API credentials.",
+            "Create a conversation in Twilio to test the API.",
+            "Ensure the API key is stored in environment variables."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python fetch_conversation.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "TWILIO_API_KEY",
+              "value": "<your_twilio_api_key>",
+              "description": "Twilio API key for authentication."
+            }
+          ],
+          "tools": [
+            "Twilio Conversations API"
+          ],
+          "checklist": [
+            "Successfully retrieved messages from Twilio.",
+            "Messages are stored in a list format."
+          ],
+          "expectedResult": "Messages from Twilio Conversations are fetched and stored for further processing.",
+          "links": [
+            {
+              "label": "Twilio Conversations API Documentation",
+              "url": "https://www.twilio.com/docs/conversations"
+            }
+          ]
         },
         {
           "title": "Match senders to HubSpot contacts",
-          "description": "Search HubSpot contacts by phone or email and attach the CRM context."
+          "description": "This step matches the senders of the messages retrieved from Twilio with contacts in HubSpot. It enriches the conversation data with CRM context.",
+          "technical_explanation": "This step queries the HubSpot CRM API to search for contacts based on the sender's phone number or email. The endpoint used is /crm/v3/objects/contacts/search with a POST method. The request requires an OAuth token or a private app token for authentication. The response contains contact details, which will be used to enrich the messages. Edge cases include handling cases where no contacts are found and ensuring the search parameters are valid.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef match_senders_to_hubspot(contacts):\n    url = 'https://api.hubapi.com/crm/v3/objects/contacts/search'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"HUBSPOT_API_KEY\")}', 'Content-Type': 'application/json'}\n    for contact in contacts:\n        payload = json.dumps({'filterGroups': [{'filters': [{'propertyName': 'phone', 'operator': 'EQ', 'value': contact['from']}] }]})\n        request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            data = json.loads(response.read().decode('utf-8'))\n            print(data.get('results', []))\n\nmatch_senders_to_hubspot(messages)",
+          "mock_response": {
+            "results": [
+              {
+                "id": "123",
+                "properties": {
+                  "firstname": "John",
+                  "lastname": "Doe",
+                  "phone": "+1234567890"
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Set up a HubSpot account and obtain API credentials.",
+            "Ensure the contact exists in HubSpot for testing.",
+            "Store the HubSpot API key in environment variables."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python match_senders.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "HUBSPOT_API_KEY",
+              "value": "<your_hubspot_api_key>",
+              "description": "HubSpot API key for authentication."
+            }
+          ],
+          "tools": [
+            "HubSpot CRM API"
+          ],
+          "checklist": [
+            "Successfully matched senders to HubSpot contacts.",
+            "Contact details are enriched with conversation messages."
+          ],
+          "expectedResult": "Senders from Twilio messages are matched with HubSpot contacts, enriching the data.",
+          "links": [
+            {
+              "label": "HubSpot CRM API Documentation",
+              "url": "https://developers.hubspot.com/docs/api/crm/contacts"
+            }
+          ]
         },
         {
           "title": "Draft replies with OpenAI",
-          "description": "Generate a suggested reply using the CRM context and conversation history."
+          "description": "This step generates suggested replies for the agents using the enriched conversation data and OpenAI's GPT-4 model.",
+          "technical_explanation": "This step sends a request to the OpenAI GPT-4 API to generate a reply based on the conversation history and CRM context. The endpoint used is /v1/chat/completions with a POST method. The request requires a Bearer token for authentication. The response includes a generated message that will be queued for agent review. Edge cases include handling errors in the response and ensuring the model is correctly specified.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef draft_replies(messages):\n    url = 'https://api.openai.com/v1/chat/completions'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}', 'Content-Type': 'application/json'}\n    for message in messages:\n        payload = json.dumps({\n            'model': 'gpt-4o',\n            'messages': [{'role': 'user', 'content': message['body']}]\n        })\n        request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            data = json.loads(response.read().decode('utf-8'))\n            print(data.get('choices', [{}])[0].get('message', {}).get('content', ''))\n\nmessages = [{'body': 'Hello, how can I help you today?'}]\ndraft_replies(messages)",
+          "mock_response": {
+            "choices": [
+              {
+                "message": {
+                  "content": "Thank you for reaching out! How can I assist you today?"
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Set up an OpenAI account and obtain API credentials.",
+            "Ensure the model is correctly specified in the request.",
+            "Store the OpenAI API key in environment variables."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python draft_replies.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "OPENAI_API_KEY",
+              "value": "<your_openai_api_key>",
+              "description": "OpenAI API key for authentication."
+            }
+          ],
+          "tools": [
+            "OpenAI GPT-4 API"
+          ],
+          "checklist": [
+            "Successfully generated replies using OpenAI.",
+            "Replies are based on the conversation context."
+          ],
+          "expectedResult": "Draft replies are generated for agent review based on the conversation context.",
+          "links": [
+            {
+              "label": "OpenAI GPT-4 API Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/chat/create"
+            }
+          ]
         },
         {
           "title": "Queue replies for agent review",
-          "description": "Write drafts and CRM context to a review queue file."
+          "description": "This step writes the generated replies and their associated CRM context to a review queue file for agent evaluation.",
+          "technical_explanation": "This step involves writing the generated replies to a local file for agent review. The data structure includes both the reply and the associated contact information. This ensures that agents have the necessary context when reviewing replies. Edge cases include handling file write errors and ensuring the data is correctly formatted.",
+          "code_snippet": "import json\n\ndef queue_replies(replies):\n    # Open the review queue file in write mode\n    with open('review_queue.json', 'w') as file:\n        # Write the replies to the file in JSON format\n        json.dump(replies, file)\n\n# Example replies to be queued for review\nexample_replies = [\n    {'reply': 'Thank you for reaching out! How can I assist you today?', \n     'contact': {'firstname': 'John', 'lastname': 'Doe'}},\n    {'reply': 'We appreciate your feedback. What else can we help you with?', \n     'contact': {'firstname': 'Jane', 'lastname': 'Smith'}}\n]\n\n# Queue the example replies for agent review\nqueue_replies(example_replies)",
+          "mock_response": {
+            "status": "success",
+            "message": "Replies queued for review."
+          },
+          "actions": [
+            "Ensure the review queue file is accessible for agents.",
+            "Format the data correctly before writing to the file.",
+            "Handle potential file write errors."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python queue_replies.py"
+            }
+          ],
+          "checklist": [
+            "Replies are successfully written to the review queue file.",
+            "File is formatted correctly for agent review."
+          ],
+          "expectedResult": "Generated replies are queued for agent review in a structured format.",
+          "links": [
+            {
+              "label": "Python JSON Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ],
+          "tools": []
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Twilio account and API key",
+        "A HubSpot account and API key or OAuth credentials",
+        "An OpenAI account and API key",
+        "Access to Twilio Conversations API",
+        "Access to HubSpot CRM API",
+        "Access to OpenAI GPT-4 API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method of API authentication where a token is passed in the HTTP header to verify access."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by waiting before retrying requests."
+        },
+        {
+          "term": "JSON Response Shape",
+          "definition": "The structure of the data returned by an API in JSON format, defining keys and their corresponding value types."
+        },
+        {
+          "term": "OAuth 2.0",
+          "definition": "An authorization framework that allows third-party services to exchange information without sharing passwords."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API key authentication failure",
+          "solution": "Verify that the API key is correctly set in the environment variables."
+        },
+        {
+          "problem": "Rate limit exceeded error",
+          "solution": "Implement a backoff strategy to wait before retrying the request."
+        },
+        {
+          "problem": "Empty response from HubSpot API",
+          "solution": "Check the contact search parameters for accuracy and ensure the contact exists."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Twilio Conversations API",
+          "url": "https://www.twilio.com/docs/conversations"
+        },
+        {
+          "label": "HubSpot CRM API",
+          "url": "https://developers.hubspot.com/docs/api/crm/contacts"
+        },
+        {
+          "label": "OpenAI GPT-4 API",
+          "url": "https://platform.openai.com/docs/api-reference/chat/create"
+        }
+      ],
+      "before_you_start": [
+        "A Twilio account and API key",
+        "A HubSpot account and API key or OAuth credentials",
+        "An OpenAI account and API key",
+        "Access to Twilio Conversations API",
+        "Access to HubSpot CRM API",
+        "Access to OpenAI GPT-4 API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 14:42 UTC"
   },
   {
     "slug": "crm-lead-scoring",
@@ -5026,26 +5685,250 @@
       "steps": [
         {
           "title": "Fetch new contacts from HubSpot",
-          "description": "Query recent contacts with the properties required for scoring."
+          "description": "This step retrieves recent contacts from the HubSpot CRM. It queries the API for contacts that have been added since the last run, ensuring that only new leads are processed.",
+          "technical_explanation": "This step serves as the initial data source for the workflow, consuming the HubSpot CRM API to fetch contacts. The API endpoint used is https://api.hubapi.com/crm/v3/objects/contacts with a GET method. Required headers include 'Authorization' with a Bearer token. The response will be a JSON object containing an array of contacts. Edge cases include handling rate limits and pagination if the number of contacts exceeds the API limit.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\ndef fetch_contacts():\n    # Define the URL for the HubSpot API\n    url = 'https://api.hubapi.com/crm/v3/objects/contacts'\n    # Set the authorization header with the API token from environment variables\n    headers = {'Authorization': f'Bearer {os.environ.get(\"HUBSPOT_API_TOKEN\")}' }\n    # Create a request object with the specified URL and headers\n    request = urllib.request.Request(url, headers=headers)\n    # Open the URL and read the response\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    # Return the list of results or an empty list if none found\n    return data.get('results', [])\n\n# Fetch contacts from HubSpot\ncontacts = fetch_contacts()",
+          "mock_response": {
+            "results": [
+              {
+                "id": "123",
+                "properties": {
+                  "firstname": "John",
+                  "lastname": "Doe",
+                  "email": "john.doe@example.com"
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Set up HubSpot API access with OAuth 2.0.",
+            "Define the request headers for authentication.",
+            "Parse the JSON response to extract contact details."
+          ],
+          "commands": [
+            {
+              "label": "Fetch contacts",
+              "language": "bash",
+              "code": "python fetch_contacts.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "HUBSPOT_API_TOKEN",
+              "value": "<your_hubspot_api_token>",
+              "description": "Token for authenticating requests to the HubSpot API."
+            }
+          ],
+          "tools": [
+            "HubSpot CRM API"
+          ],
+          "checklist": [
+            "Verify that the API token is correctly set in the environment.",
+            "Check that the response contains new contacts."
+          ],
+          "expectedResult": "A list of new contacts fetched from HubSpot.",
+          "links": [
+            {
+              "label": "HubSpot CRM API Documentation",
+              "url": "https://developers.hubspot.com/docs/api/crm/contacts"
+            }
+          ]
         },
         {
           "title": "Score lead fit with OpenAI",
-          "description": "Send firmographic data to the chat endpoint and parse a numeric score."
+          "description": "In this step, the firmographic data of the fetched contacts is sent to the OpenAI GPT-4 API to generate a fit score. The score indicates how well the contact matches the ideal customer profile.",
+          "technical_explanation": "This step processes the contact data to generate a score using the OpenAI GPT-4 API. The endpoint used is https://api.openai.com/v1/chat/completions with a POST method. The request payload includes the firmographic data and a prompt instructing the model to respond with a numeric score. Edge cases include handling invalid responses and ensuring the output is a float between -1.0 and 1.0.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef score_leads(contacts):\n    scores = []\n    for contact in contacts:\n        prompt = f\"Evaluate this contact: {contact['properties']}. Respond ONLY with a float between -1.0 and 1.0.\"\n        url = 'https://api.openai.com/v1/chat/completions'\n        headers = {'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}', 'Content-Type': 'application/json'}\n        payload = json.dumps({'model': 'gpt-4o', 'messages': [{'role': 'user', 'content': prompt}]})\n        request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            content = json.loads(response.read().decode('utf-8'))\n            score = float(content['choices'][0]['message']['content'])  # Respond ONLY with a float between -1.0 and 1.0\n            scores.append({'id': contact['id'], 'score': score})\n    return scores\n\nlead_scores = score_leads(contacts)",
+          "mock_response": {
+            "choices": [
+              {
+                "message": {
+                  "content": "0.85"
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Construct a prompt for the OpenAI API using contact data.",
+            "Send the request to the OpenAI API for scoring.",
+            "Parse the response to extract the numeric score."
+          ],
+          "commands": [
+            {
+              "label": "Score leads",
+              "language": "bash",
+              "code": "python score_leads.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "OPENAI_API_KEY",
+              "value": "<your_openai_api_key>",
+              "description": "API key for authenticating requests to the OpenAI API."
+            }
+          ],
+          "tools": [
+            "OpenAI GPT-4 API"
+          ],
+          "checklist": [
+            "Ensure the OpenAI API key is set in the environment.",
+            "Verify that scores are returned as floats."
+          ],
+          "expectedResult": "A list of lead scores indicating the fit of each contact.",
+          "links": [
+            {
+              "label": "OpenAI GPT-4 API Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/chat/create"
+            }
+          ]
         },
         {
           "title": "Notify sales about hot leads",
-          "description": "Post leads above the score threshold to the sales Slack channel."
+          "description": "This step sends notifications to the sales team via Slack for leads that exceed a predefined score threshold. It ensures that high-potential leads are promptly addressed.",
+          "technical_explanation": "This step evaluates the scores generated in the previous step and sends messages to a Slack channel for leads that exceed a specific threshold. The Slack Web API endpoint used is https://slack.com/api/chat.postMessage with a POST method. The request requires a bot token for authentication and a payload containing the channel and message text. Edge cases include handling failed message deliveries and ensuring the bot has permission to post in the channel.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef notify_sales(lead_scores):\n    threshold = 0.7\n    for lead in lead_scores:\n        if lead['score'] > threshold:\n            url = 'https://slack.com/api/chat.postMessage'\n            headers = {'Authorization': f'Bearer {os.environ.get(\"SLACK_BOT_TOKEN\")}', 'Content-Type': 'application/json'}\n            payload = json.dumps({'channel': '#sales', 'text': f'Hot lead: {lead[\"id\"]} with score: {lead[\"score\"]}'})\n            request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n            with urllib.request.urlopen(request) as response:\n                if response.status != 200:\n                    print(f'Error sending message: {response.read().decode(\"utf-8\")}')\n\nnotify_sales(lead_scores)",
+          "mock_response": "ok",
+          "actions": [
+            "Set the threshold for hot leads.",
+            "Construct the message payload for Slack.",
+            "Send the message to the Slack channel."
+          ],
+          "commands": [
+            {
+              "label": "Notify sales",
+              "language": "bash",
+              "code": "python notify_sales.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SLACK_BOT_TOKEN",
+              "value": "<your_slack_bot_token>",
+              "description": "Bot token for authenticating requests to the Slack API."
+            }
+          ],
+          "tools": [
+            "Slack Web API"
+          ],
+          "checklist": [
+            "Verify that the Slack bot token is set in the environment.",
+            "Check that messages are sent successfully to the channel."
+          ],
+          "expectedResult": "Sales team is notified of hot leads in the Slack channel.",
+          "links": [
+            {
+              "label": "Slack Web API Documentation",
+              "url": "https://api.slack.com/methods"
+            }
+          ]
         },
         {
           "title": "Write the scoring summary",
-          "description": "Produce a deterministic summary of scored and skipped leads."
+          "description": "This final step generates a summary report of the scoring process, detailing which leads were scored and which were skipped due to not meeting the threshold.",
+          "technical_explanation": "This step compiles the results of the lead scoring process into a summary report. It aggregates the scored leads and those that were skipped based on the threshold. The report can be used for further analysis or record-keeping. Edge cases include handling empty scores and ensuring the report format is consistent.",
+          "code_snippet": "import json\n\n\ndef write_summary(lead_scores):\n    summary = {'scored': [], 'skipped': []}\n    threshold = 0.7\n    for lead in lead_scores:\n        if lead['score'] > threshold:\n            summary['scored'].append(lead)\n        else:\n            summary['skipped'].append(lead)\n    with open('scoring_summary.json', 'w') as f:\n        json.dump(summary, f)\n\nwrite_summary(lead_scores)",
+          "mock_response": {
+            "scored": [
+              {
+                "id": "123",
+                "score": 0.85
+              }
+            ],
+            "skipped": []
+          },
+          "actions": [
+            "Aggregate scored and skipped leads.",
+            "Format the summary for output.",
+            "Write the summary to a JSON file."
+          ],
+          "commands": [
+            {
+              "label": "Write summary",
+              "language": "bash",
+              "code": "python write_summary.py"
+            }
+          ],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Ensure the summary file is created successfully.",
+            "Verify the contents of the summary file."
+          ],
+          "expectedResult": "A JSON file containing the scoring summary of leads.",
+          "links": [
+            {
+              "label": "Python JSON Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A HubSpot account with API access and OAuth 2.0 credentials",
+        "An OpenAI API key with access to GPT-4",
+        "A Slack workspace with a bot token and access to a channel",
+        "Access to HubSpot CRM API",
+        "Access to OpenAI GPT-4 API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method of API authentication where a token is passed in the HTTP header to authorize requests."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by waiting a specified time before retrying requests."
+        },
+        {
+          "term": "Deterministic Output",
+          "definition": "An output that is consistent and predictable given the same input parameters."
+        },
+        {
+          "term": "Payload Structure",
+          "definition": "The format and organization of data sent in an API request or response."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API rate limit exceeded",
+          "solution": "Implement a backoff strategy to wait before retrying the request."
+        },
+        {
+          "problem": "Invalid API key or token",
+          "solution": "Verify that the API key or token is correctly set in the environment variables."
+        },
+        {
+          "problem": "Empty response from HubSpot API",
+          "solution": "Check if there are new contacts available and ensure the API request parameters are correct."
+        }
+      ],
+      "resources": [
+        {
+          "label": "HubSpot CRM API",
+          "url": "https://developers.hubspot.com/docs/api/crm/contacts"
+        },
+        {
+          "label": "OpenAI GPT-4 API",
+          "url": "https://platform.openai.com/docs/api-reference/chat/create"
+        },
+        {
+          "label": "Slack Web API",
+          "url": "https://api.slack.com/methods"
+        }
+      ],
+      "before_you_start": [
+        "A HubSpot account with API access and OAuth 2.0 credentials",
+        "An OpenAI API key with access to GPT-4",
+        "A Slack workspace with a bot token and access to a channel",
+        "Access to HubSpot CRM API",
+        "Access to OpenAI GPT-4 API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 14:45 UTC"
   },
   {
     "slug": "salesforce-pipeline-sync",
@@ -5078,26 +5961,261 @@
       "steps": [
         {
           "title": "Query Salesforce opportunities",
-          "description": "Run a SOQL query and normalise stage and amount fields."
+          "description": "This step retrieves opportunities from Salesforce using a SOQL query. The data is normalized to ensure consistency in stage and amount fields.",
+          "technical_explanation": "This step serves to extract opportunity data from Salesforce, which will be used in subsequent steps. The API contract involves making a GET request to the Salesforce REST API endpoint for querying opportunities. Required headers include the Authorization header with the Bearer token. The response will contain an array of opportunity records. Edge cases include handling rate limits and ensuring pagination if the result set exceeds the limit.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_opportunities():\n    url = 'https://{instance}.salesforce.com/services/data/v62.0/query?q=SELECT+Id,Name,StageName,Amount+FROM+Opportunity'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"SALESFORCE_TOKEN\")}' }\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n        return data.get('records', [])\n\nopportunities = fetch_opportunities()",
+          "mock_response": {
+            "records": [
+              {
+                "Id": "0061t00000A1B2C3D4",
+                "Name": "Opportunity 1",
+                "StageName": "Negotiation",
+                "Amount": 50000
+              },
+              {
+                "Id": "0061t00000A1B2C3D5",
+                "Name": "Opportunity 2",
+                "StageName": "Closed Won",
+                "Amount": 75000
+              }
+            ]
+          },
+          "actions": [
+            "Construct a SOQL query to fetch opportunities",
+            "Set up the authorization header for the API request",
+            "Handle the API response and extract opportunity records"
+          ],
+          "commands": [
+            {
+              "label": "Run Python script",
+              "language": "bash",
+              "code": "python3 script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SALESFORCE_TOKEN",
+              "value": "<Your Salesforce OAuth Token>",
+              "description": "OAuth token for authenticating with Salesforce API"
+            }
+          ],
+          "tools": [
+            "Salesforce REST API"
+          ],
+          "checklist": [
+            "Successfully retrieved opportunity records from Salesforce",
+            "No authentication errors in the API response"
+          ],
+          "expectedResult": "A list of opportunity records is fetched from Salesforce.",
+          "links": [
+            {
+              "label": "Salesforce REST API Documentation",
+              "url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/"
+            }
+          ]
         },
         {
           "title": "Upsert the pipeline into Airtable",
-          "description": "Match records by opportunity id and update changed fields."
+          "description": "This step updates or inserts the opportunity records into Airtable. It matches records by opportunity ID and updates any changed fields.",
+          "technical_explanation": "This step ensures that the opportunity data is reflected in Airtable, allowing for real-time tracking of the sales pipeline. The API contract requires a POST request to the Airtable API endpoint with the appropriate headers and payload. The payload must include the fields to be updated or inserted. Edge cases include handling existing records and ensuring that the Airtable base is correctly configured.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\n\ndef upsert_opportunities(opportunities):\n    url = 'https://api.airtable.com/v0/{base_id}/Opportunities'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"AIRTABLE_TOKEN\")}', 'Content-Type': 'application/json'}\n    for opportunity in opportunities:\n        payload = {\n            'fields': {\n                'Opportunity ID': opportunity.get('Id', ''),\n                'Name': opportunity.get('Name', ''),\n                'Stage': opportunity.get('StageName', ''),\n                'Amount': opportunity.get('Amount', 0)\n            }\n        }\n        request = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            print(response.read().decode('utf-8'))\n\nupsert_opportunities(opportunities)",
+          "mock_response": {
+            "id": "rec123456789",
+            "fields": {
+              "Opportunity ID": "0061t00000A1B2C3D4",
+              "Name": "Opportunity 1",
+              "Stage": "Negotiation",
+              "Amount": 50000
+            }
+          },
+          "actions": [
+            "Construct the payload for Airtable upsert",
+            "Send the upsert request to Airtable API",
+            "Handle the response from Airtable"
+          ],
+          "commands": [
+            {
+              "label": "Run Python script",
+              "language": "bash",
+              "code": "python3 script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "AIRTABLE_TOKEN",
+              "value": "<Your Airtable API Token>",
+              "description": "Bearer token for authenticating with Airtable API"
+            },
+            {
+              "key": "base_id",
+              "value": "<Your Airtable Base ID>",
+              "description": "The ID of the Airtable base to update"
+            }
+          ],
+          "tools": [
+            "Airtable API"
+          ],
+          "checklist": [
+            "Successfully upserted opportunity records into Airtable",
+            "No errors in the Airtable API response"
+          ],
+          "expectedResult": "Opportunity records are updated or inserted into Airtable.",
+          "links": [
+            {
+              "label": "Airtable API Documentation",
+              "url": "https://airtable.com/developers/web/api/introduction"
+            }
+          ]
         },
         {
           "title": "Compute the pipeline forecast",
-          "description": "Aggregate weighted amounts per stage deterministically."
+          "description": "This step aggregates the weighted amounts of opportunities per stage to compute the forecast for the sales pipeline.",
+          "technical_explanation": "This step processes the opportunity data to generate a forecast based on the current pipeline stages. The architecture involves iterating through the opportunity records and calculating the total weighted amounts for each stage. The API contract is not applicable here as this is a local computation. Edge cases include handling empty records and ensuring that the calculations are accurate.",
+          "code_snippet": "import json\n\n\ndef compute_forecast(opportunities):\n    forecast = {}\n    for opportunity in opportunities:\n        stage = opportunity.get('StageName', 'Unknown')\n        amount = opportunity.get('Amount', 0)\n        if stage not in forecast:\n            forecast[stage] = 0\n        forecast[stage] += amount\n    return forecast\n\nforecast = compute_forecast(opportunities)",
+          "mock_response": {
+            "Negotiation": 50000,
+            "Closed Won": 75000
+          },
+          "actions": [
+            "Iterate through the opportunity records",
+            "Aggregate amounts by stage",
+            "Return the computed forecast"
+          ],
+          "commands": [
+            {
+              "label": "Run Python script",
+              "language": "bash",
+              "code": "python3 script.py"
+            }
+          ],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Successfully computed the pipeline forecast",
+            "Forecast contains expected stage totals"
+          ],
+          "expectedResult": "A forecast of the sales pipeline is generated.",
+          "links": [
+            {
+              "label": "Python Built-in Functions",
+              "url": "https://docs.python.org/3/library/functions.html"
+            }
+          ]
         },
         {
           "title": "Publish the forecast to Slack",
-          "description": "Post the weekly snapshot with stage totals to the revenue channel."
+          "description": "This step sends the computed forecast to a specified Slack channel as a message.",
+          "technical_explanation": "This step is responsible for alerting the sales team about the current pipeline forecast. The API contract involves sending a POST request to the Slack Web API endpoint with the message payload. Required headers include the Authorization header with the bot token. Edge cases include handling message formatting and ensuring the bot has permission to post in the channel.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\n\ndef publish_forecast(forecast):\n    url = 'https://slack.com/api/chat.postMessage'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"SLACK_BOT_TOKEN\")}', 'Content-Type': 'application/json'}\n    message = f'Weekly Pipeline Forecast:\\n' + '\\n'.join([f'{stage}: ${amount}' for stage, amount in forecast.items()])\n    payload = {'channel': '#revenue', 'text': message}\n    request = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        print(response.read().decode('utf-8'))\n\n# Example forecast data\nforecast = {\n    'Stage 1': 10000,\n    'Stage 2': 15000,\n    'Stage 3': 20000\n}\n\npublish_forecast(forecast)",
+          "mock_response": {
+            "ok": true,
+            "channel": "C1234567890",
+            "ts": "1234567890.123456",
+            "message": {
+              "text": "Weekly Pipeline Forecast:\nNegotiation: $50000\nClosed Won: $75000"
+            }
+          },
+          "actions": [
+            "Construct the message payload for Slack",
+            "Send the message to the Slack channel",
+            "Handle the response from Slack"
+          ],
+          "commands": [
+            {
+              "label": "Run Python script",
+              "language": "bash",
+              "code": "python3 script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SLACK_BOT_TOKEN",
+              "value": "<Your Slack Bot Token>",
+              "description": "OAuth token for authenticating with Slack API"
+            }
+          ],
+          "tools": [
+            "Slack Web API"
+          ],
+          "checklist": [
+            "Successfully sent the forecast message to Slack",
+            "No errors in the Slack API response"
+          ],
+          "expectedResult": "The sales pipeline forecast is published to Slack.",
+          "links": [
+            {
+              "label": "Slack Web API Documentation",
+              "url": "https://api.slack.com/methods"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Salesforce account with API access and permissions to query opportunities",
+        "An Airtable account with a base set up to store pipeline data",
+        "A Slack workspace with a channel for revenue updates and a bot token",
+        "Access to Salesforce REST API",
+        "Access to Airtable API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "OAuth 2.0",
+          "definition": "An authorization framework that allows applications to obtain limited access to user accounts on an HTTP service."
+        },
+        {
+          "term": "Upsert",
+          "definition": "An operation that inserts a new record or updates an existing record in a database."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy for handling API rate limits by pausing requests for a specified duration."
+        },
+        {
+          "term": "Weighted Forecasting",
+          "definition": "A method of predicting future values based on the probability of various outcomes, weighted by their significance."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Salesforce API returns an authentication error",
+          "solution": "Verify that the OAuth token is valid and has not expired."
+        },
+        {
+          "problem": "Airtable API returns a 404 error",
+          "solution": "Check that the base ID and table name are correct in the API request."
+        },
+        {
+          "problem": "Slack message not sent",
+          "solution": "Ensure the bot token has the correct permissions to post messages in the specified channel."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Salesforce REST API",
+          "url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/"
+        },
+        {
+          "label": "Airtable API",
+          "url": "https://airtable.com/developers/web/api/introduction"
+        },
+        {
+          "label": "Slack Web API",
+          "url": "https://api.slack.com/methods"
+        }
+      ],
+      "before_you_start": [
+        "A Salesforce account with API access and permissions to query opportunities",
+        "An Airtable account with a base set up to store pipeline data",
+        "A Slack workspace with a channel for revenue updates and a bot token",
+        "Access to Salesforce REST API",
+        "Access to Airtable API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 14:46 UTC"
   },
   {
     "slug": "personalized-outreach-engine",
@@ -5131,26 +6249,253 @@
       "steps": [
         {
           "title": "Load target contacts from HubSpot",
-          "description": "Select contacts that match the outbound segment criteria."
+          "description": "This step retrieves contacts from HubSpot that match specific outbound segment criteria. The contacts will be used for personalized outreach emails.",
+          "technical_explanation": "This step acts as the initial data source for the workflow, consuming no prior data. It calls the HubSpot CRM API's contacts endpoint using a GET request. The API contract requires OAuth 2.0 authentication and returns a JSON response containing contact details. Edge cases include handling rate limits, pagination for large contact lists, and ensuring the response is not empty.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_contacts():\n    url = 'https://api.hubapi.com/crm/v3/objects/contacts'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"HUBSPOT_API_KEY\")}', 'Content-Type': 'application/json'}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    return data.get('results', [])\n\ncontacts = fetch_contacts()",
+          "mock_response": {
+            "results": [
+              {
+                "id": "1",
+                "properties": {
+                  "email": "example1@example.com",
+                  "firstname": "John",
+                  "lastname": "Doe"
+                }
+              },
+              {
+                "id": "2",
+                "properties": {
+                  "email": "example2@example.com",
+                  "firstname": "Jane",
+                  "lastname": "Smith"
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Authenticate with HubSpot API using OAuth 2.0",
+            "Make a GET request to the contacts endpoint",
+            "Parse the JSON response to extract contact details"
+          ],
+          "commands": [
+            {
+              "label": "Fetch HubSpot Contacts",
+              "language": "bash",
+              "code": "python fetch_contacts.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "HUBSPOT_API_KEY",
+              "value": "<your_hubspot_api_key>",
+              "description": "API key for authenticating with HubSpot"
+            }
+          ],
+          "tools": [
+            "HubSpot CRM API"
+          ],
+          "checklist": [
+            "Successfully retrieved contacts from HubSpot",
+            "Contact data is in the expected JSON format"
+          ],
+          "expectedResult": "A list of target contacts is successfully loaded from HubSpot.",
+          "links": [
+            {
+              "label": "HubSpot CRM API Documentation",
+              "url": "https://developers.hubspot.com/docs/api/crm/contacts"
+            }
+          ]
         },
         {
           "title": "Generate personalised copy",
-          "description": "Ask OpenAI for a concise subject and first line per contact."
+          "description": "In this step, personalized email subject lines and first lines are generated for each contact using the OpenAI GPT-4 API. This enhances the outreach strategy by tailoring messages to individual recipients.",
+          "technical_explanation": "This step transforms the contact data into personalized outreach content. It uses the OpenAI GPT-4 API to generate text based on the contact's details. The API contract requires a POST request with a specific payload format and returns a JSON response containing the generated text. Edge cases include handling API errors and ensuring the generated content is valid.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef generate_personalized_copy(contacts):\n    generated_copies = []\n    for contact in contacts:\n        prompt = f'Generate a subject and first line for an email to {contact.get(\"properties\", {}).get(\"firstname\", \"\")}'\n        url = 'https://api.openai.com/v1/chat/completions'\n        headers = {'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}', 'Content-Type': 'application/json'}\n        payload = json.dumps({'model': 'gpt-4o-mini', 'messages': [{'role': 'user', 'content': prompt}]})\n        request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        generated_copies.append(result.get('choices', [{}])[0].get('message', {}).get('content', ''))\n    return generated_copies\n\npersonalized_copies = generate_personalized_copy(contacts)",
+          "mock_response": {
+            "choices": [
+              {
+                "message": {
+                  "content": "Subject: Exciting Opportunity!\nHi John,\nI hope this message finds you well!"
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Construct a prompt for the OpenAI API using contact details",
+            "Make a POST request to the OpenAI GPT-4 API",
+            "Parse the JSON response to extract generated text"
+          ],
+          "commands": [
+            {
+              "label": "Generate Personalized Emails",
+              "language": "bash",
+              "code": "python generate_personalized_copy.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "OPENAI_API_KEY",
+              "value": "<your_openai_api_key>",
+              "description": "API key for authenticating with OpenAI"
+            }
+          ],
+          "tools": [
+            "OpenAI GPT-4 API"
+          ],
+          "checklist": [
+            "Generated personalized email content for each contact",
+            "Content is in the expected format"
+          ],
+          "expectedResult": "Personalized email subjects and first lines are generated for each contact.",
+          "links": [
+            {
+              "label": "OpenAI GPT-4 API Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/chat/create"
+            }
+          ]
         },
         {
           "title": "Send outreach emails",
-          "description": "Call the Resend emails endpoint for each approved message."
+          "description": "This step sends the generated personalized emails to the respective contacts using the Resend Email API. It ensures that each contact receives tailored communication.",
+          "technical_explanation": "This workflow step is crucial for executing the outreach strategy by leveraging the Resend Email API to send personalized emails to the designated contacts. It consumes the tailored email content generated in the previous step, ensuring that each recipient receives relevant communication. The API contract specifies that a POST request must be made to the endpoint 'https://api.resend.com/emails', requiring headers such as 'Authorization' with a valid API key and 'Content-Type' set to 'application/json'. The request payload must include fields like 'to', 'subject', and 'body', formatted as a JSON object. The expected JSON response will typically contain fields such as 'id', 'status', and 'message'. Edge cases to consider include adhering to rate limits imposed by the API, handling pagination if the email list exceeds the maximum allowed size, managing scenarios where the email array may be empty, and ensuring proper type conversion for all fields in the request payload.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef send_emails(copies, contacts):\n    for copy, contact in zip(copies, contacts):\n        url = 'https://api.resend.com/emails'\n        headers = {'Authorization': f'Bearer {os.environ.get(\"RESEND_API_KEY\")}', 'Content-Type': 'application/json'}\n        payload = json.dumps({'to': contact.get(\"properties\", {}).get(\"email\", \"\"),'subject': copy.split('\\n')[0],'text': copy})\n        request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            response_data = json.loads(response.read().decode('utf-8'))\n        print(f'Sent email to {contact.get(\"properties\", {}).get(\"email\", \"\")} with ID: {response_data.get(\"id\", \"\")}')\n\nsend_emails(personalized_copies, contacts)",
+          "mock_response": {
+            "id": "email_12345",
+            "status": "sent"
+          },
+          "actions": [
+            "Construct the email payload using generated content",
+            "Make a POST request to the Resend Email API",
+            "Log the response to confirm email delivery"
+          ],
+          "commands": [
+            {
+              "label": "Send Outreach Emails",
+              "language": "bash",
+              "code": "python send_emails.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "RESEND_API_KEY",
+              "value": "<your_resend_api_key>",
+              "description": "API key for authenticating with Resend"
+            }
+          ],
+          "tools": [
+            "Resend Email API"
+          ],
+          "checklist": [
+            "Emails sent successfully to all contacts",
+            "Response from Resend API confirms email delivery"
+          ],
+          "expectedResult": "Personalized outreach emails are sent to the respective contacts.",
+          "links": [
+            {
+              "label": "Resend Email API Documentation",
+              "url": "https://resend.com/docs"
+            }
+          ]
         },
         {
           "title": "Log outreach status",
-          "description": "Record sent contact ids and provider message ids in a JSON log."
+          "description": "This step records the status of the outreach emails sent, including the contact IDs and message IDs. This logging is essential for tracking the outreach process.",
+          "technical_explanation": "This step captures the results of the email sending process. It logs the contact IDs and corresponding message IDs in a structured JSON format. The architecture ensures that outreach status is maintained for future reference. Edge cases include handling empty logs and ensuring the data structure is consistent.",
+          "code_snippet": "import json\nimport os\n\ndef log_outreach_status(contacts, message_ids):\n    outreach_log = []\n    for contact, message_id in zip(contacts, message_ids):\n        log_entry = {'contact_id': contact.get('id', ''), 'message_id': message_id}\n        outreach_log.append(log_entry)\n    with open('outreach_log.json', 'w') as log_file:\n        json.dump(outreach_log, log_file)\n\nlog_outreach_status(contacts, ['email_12345'])",
+          "mock_response": null,
+          "actions": [
+            "Create a log entry for each sent email",
+            "Write the log entries to a JSON file",
+            "Ensure the log structure is consistent"
+          ],
+          "commands": [
+            {
+              "label": "Log Outreach Status",
+              "language": "bash",
+              "code": "python log_outreach_status.py"
+            }
+          ],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Outreach status logged successfully",
+            "Log file is in the expected JSON format"
+          ],
+          "expectedResult": "The outreach status is logged in a JSON file.",
+          "links": [
+            {
+              "label": "Python JSON Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A HubSpot account with access to the CRM API and necessary permissions",
+        "An OpenAI account with access to the GPT-4 API and an API key",
+        "A Resend account with access to the Email API and an API key",
+        "Access to HubSpot CRM API",
+        "Access to OpenAI GPT-4 API",
+        "Access to Resend Email API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access to the API."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by waiting before retrying requests."
+        },
+        {
+          "term": "JSON Response Shape",
+          "definition": "The structure of the data returned by an API in JSON format, defining keys and their corresponding value types."
+        },
+        {
+          "term": "OAuth 2.0",
+          "definition": "An authorization framework that allows third-party applications to obtain limited access to user accounts."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Failed to load contacts from HubSpot",
+          "solution": "Check API key and permissions for the HubSpot CRM API."
+        },
+        {
+          "problem": "OpenAI API returns an error",
+          "solution": "Verify the API key and ensure the request format matches the API documentation."
+        },
+        {
+          "problem": "Emails not sent via Resend",
+          "solution": "Confirm the API key for Resend and check the email payload for correctness."
+        }
+      ],
+      "resources": [
+        {
+          "label": "HubSpot CRM API",
+          "url": "https://developers.hubspot.com/docs/api/crm/contacts"
+        },
+        {
+          "label": "OpenAI GPT-4 API",
+          "url": "https://platform.openai.com/docs/api-reference/chat/create"
+        },
+        {
+          "label": "Resend Email API",
+          "url": "https://resend.com/docs"
+        }
+      ],
+      "before_you_start": [
+        "A HubSpot account with access to the CRM API and necessary permissions",
+        "An OpenAI account with access to the GPT-4 API and an API key",
+        "A Resend account with access to the Email API and an API key",
+        "Access to HubSpot CRM API",
+        "Access to OpenAI GPT-4 API",
+        "Access to Resend Email API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 14:47 UTC"
   },
   {
     "slug": "support-ticket-triage",
@@ -5184,26 +6529,262 @@
       "steps": [
         {
           "title": "Fetch new Zendesk tickets",
-          "description": "Query open tickets that have not been triaged yet."
+          "description": "This step retrieves open tickets from Zendesk that have not been triaged yet. It uses the Zendesk Support API to query the tickets and filter them based on their status.",
+          "technical_explanation": "This step acts as the initial data source for the workflow, consuming no data from a previous step. The API contract involves a GET request to the endpoint 'https://{subdomain}.zendesk.com/api/v2/tickets.json' with the required headers for authentication. Edge cases include handling rate limits, which may require implementing a backoff strategy, and pagination if there are more tickets than can be returned in a single request.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\ndef fetch_tickets():\n    # Get the Zendesk subdomain and API token from environment variables\n    subdomain = os.environ.get('ZENDESK_SUBDOMAIN')\n    api_token = os.environ.get('ZENDESK_API_TOKEN')\n    \n    # Construct the URL for the Zendesk API request\n    url = f'https://{subdomain}.zendesk.com/api/v2/tickets.json'\n    headers = {'Authorization': f'Bearer {api_token}'}\n    \n    # Create and send the request to the Zendesk API\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    \n    # Return the list of tickets\n    return data.get('tickets', [])\n\n# Fetch new tickets from Zendesk\nnew_tickets = fetch_tickets()",
+          "mock_response": {
+            "tickets": [
+              {
+                "id": 12345,
+                "subject": "Issue with login",
+                "status": "open"
+              },
+              {
+                "id": 12346,
+                "subject": "Payment not processed",
+                "status": "open"
+              }
+            ]
+          },
+          "actions": [
+            "Construct the API URL using the subdomain",
+            "Set up the authentication headers",
+            "Make the GET request to the Zendesk API"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python fetch_tickets.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "ZENDESK_SUBDOMAIN",
+              "value": "<your_zendesk_subdomain>",
+              "description": "Your Zendesk subdomain for API access"
+            },
+            {
+              "key": "ZENDESK_API_TOKEN",
+              "value": "<your_zendesk_api_token>",
+              "description": "Your Zendesk API token for authentication"
+            }
+          ],
+          "tools": [
+            "Zendesk Support API"
+          ],
+          "checklist": [
+            "Verify that the API URL is correctly formatted",
+            "Check that the authentication headers are set properly"
+          ],
+          "expectedResult": "A list of new open tickets fetched from Zendesk.",
+          "links": [
+            {
+              "label": "Zendesk Support API Documentation",
+              "url": "https://developer.zendesk.com/api-reference/ticketing/tickets/tickets/"
+            }
+          ]
         },
         {
           "title": "Classify intent and urgency",
-          "description": "Call OpenAI and parse a constrained JSON classification."
+          "description": "This step sends the ticket data to the OpenAI GPT-4 API to classify the intent and urgency of each ticket. The response will be parsed to extract the relevant classifications.",
+          "technical_explanation": "This step processes the ticket data fetched in the previous step, utilizing the OpenAI GPT-4 API to classify intent and urgency. The API contract involves a POST request to 'https://api.openai.com/v1/chat/completions' with the required headers and a structured payload. Edge cases include handling API rate limits and ensuring the response is correctly parsed to avoid type errors.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef classify_tickets(tickets):\n    openai_api_key = os.environ.get('OPENAI_API_KEY')\n    url = 'https://api.openai.com/v1/chat/completions'\n    headers = {'Authorization': f'Bearer {openai_api_key}', 'Content-Type': 'application/json'}\n    classifications = []\n    for ticket in tickets:\n        payload = {\n            'model': 'gpt-4o-mini',\n            'messages': [{'role': 'user', 'content': f'Classify the intent and urgency of this ticket: {ticket[\"subject\"]}' }]\n        }\n        request = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        classifications.append(result.get('choices', [{}])[0].get('message', {}).get('content', ''))\n    return classifications\n\nclassifications = classify_tickets(new_tickets)",
+          "mock_response": [
+            "High urgency, Technical issue",
+            "Low urgency, Billing inquiry"
+          ],
+          "actions": [
+            "Iterate over each ticket to classify",
+            "Construct the request payload for OpenAI",
+            "Send the classification request to OpenAI"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python classify_tickets.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "OPENAI_API_KEY",
+              "value": "<your_openai_api_key>",
+              "description": "Your OpenAI API key for authentication"
+            }
+          ],
+          "tools": [
+            "OpenAI GPT-4 API"
+          ],
+          "checklist": [
+            "Ensure the OpenAI API key is valid",
+            "Check that the request payload is correctly structured"
+          ],
+          "expectedResult": "A list of classifications for each ticket's intent and urgency.",
+          "links": [
+            {
+              "label": "OpenAI GPT-4 API Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/chat/create"
+            }
+          ]
         },
         {
           "title": "Route the ticket in Zendesk",
-          "description": "Update tags and assignee group based on the classification."
+          "description": "This step updates the Zendesk tickets with the classifications received from the OpenAI API. It sets the appropriate tags and assigns the ticket to the correct group based on the classification.",
+          "technical_explanation": "This step modifies the existing tickets in Zendesk based on the classifications obtained in the previous step. The API contract involves a PUT request to 'https://{subdomain}.zendesk.com/api/v2/tickets/{ticket_id}.json' with the necessary headers and payload. Edge cases include handling potential errors during the update process and ensuring that the ticket IDs are valid.",
+          "code_snippet": "import json\nimport urllib.request\nimport os  # Import os to access environment variables\n\n\ndef route_tickets(tickets, classifications):\n    subdomain = os.environ.get('ZENDESK_SUBDOMAIN')\n    api_token = os.environ.get('ZENDESK_API_TOKEN')\n    for ticket, classification in zip(tickets, classifications):\n        ticket_id = ticket['id']\n        url = f'https://{subdomain}.zendesk.com/api/v2/tickets/{ticket_id}.json'\n        payload = {'ticket': {'tags': [classification], 'assignee_id': 123456}}\n        headers = {'Authorization': f'Bearer {api_token}', 'Content-Type': 'application/json'}\n        request = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='PUT')\n        with urllib.request.urlopen(request) as response:\n            response.read()  # Ensure the request is sent\n\nroute_tickets(new_tickets, classifications)",
+          "mock_response": {},
+          "actions": [
+            "Construct the API URL for each ticket",
+            "Prepare the payload with tags and assignee",
+            "Send the update request to Zendesk"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python route_tickets.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "ZENDESK_SUBDOMAIN",
+              "value": "<your_zendesk_subdomain>",
+              "description": "Your Zendesk subdomain for API access"
+            },
+            {
+              "key": "ZENDESK_API_TOKEN",
+              "value": "<your_zendesk_api_token>",
+              "description": "Your Zendesk API token for authentication"
+            }
+          ],
+          "tools": [
+            "Zendesk Support API"
+          ],
+          "checklist": [
+            "Verify that the ticket IDs are valid",
+            "Check that the tags are correctly applied"
+          ],
+          "expectedResult": "The tickets in Zendesk are updated with the new classifications.",
+          "links": [
+            {
+              "label": "Zendesk Support API Documentation",
+              "url": "https://developer.zendesk.com/api-reference/ticketing/tickets/tickets/"
+            }
+          ]
         },
         {
           "title": "Record triage decisions in Supabase",
-          "description": "Store ticket id, intent, urgency and target group."
+          "description": "This step stores the triage decisions, including ticket ID, intent, urgency, and target group, in a Supabase database for future reference and analysis.",
+          "technical_explanation": "This step persists the triage decisions in a Supabase database, ensuring that all relevant data is stored for later use. The API contract involves a POST request to 'https://<project-ref>.supabase.co/rest/v1/triage' with the necessary headers and payload. Edge cases include handling errors during the insertion process and ensuring the data conforms to the expected schema.",
+          "code_snippet": "import json\nimport urllib.request\nimport os  # Importing os to access environment variables\n\n\ndef record_triage_decisions(tickets, classifications):\n    supabase_url = os.environ.get('SUPABASE_URL')\n    supabase_key = os.environ.get('SUPABASE_KEY')\n    url = f'{supabase_url}/triage'\n    headers = {'apikey': supabase_key, 'Authorization': f'Bearer {supabase_key}', 'Content-Type': 'application/json'}\n    for ticket, classification in zip(tickets, classifications):\n        payload = {'ticket_id': ticket['id'], 'classification': classification}\n        request = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            if response.status not in (200, 201, 204):\n                raise Exception('Failed to record triage decision')\n\nrecord_triage_decisions(new_tickets, classifications)",
+          "mock_response": {},
+          "actions": [
+            "Construct the API URL for Supabase",
+            "Prepare the payload with ticket details",
+            "Send the insert request to Supabase"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python record_triage_decisions.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUPABASE_URL",
+              "value": "<your_supabase_url>",
+              "description": "Your Supabase project URL"
+            },
+            {
+              "key": "SUPABASE_KEY",
+              "value": "<your_supabase_key>",
+              "description": "Your Supabase service role key"
+            }
+          ],
+          "tools": [
+            "Supabase Database API"
+          ],
+          "checklist": [
+            "Verify that the Supabase URL is correct",
+            "Check that the payload matches the expected schema"
+          ],
+          "expectedResult": "The triage decisions are recorded in the Supabase database.",
+          "links": [
+            {
+              "label": "Supabase Database API Documentation",
+              "url": "https://supabase.com/docs/guides/api"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Zendesk account with API access and a valid API token",
+        "An OpenAI account with access to the GPT-4 API and a valid API key",
+        "A Supabase project with a service role key and a table for storing triage decisions",
+        "Access to Zendesk Support API",
+        "Access to OpenAI GPT-4 API",
+        "Access to Supabase Database API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access to resources."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy for handling API rate limits by delaying requests when limits are reached."
+        },
+        {
+          "term": "PostgREST Upsert",
+          "definition": "An operation that inserts a new record or updates an existing record in a database."
+        },
+        {
+          "term": "Z-Score Spike Detection",
+          "definition": "A statistical method to identify outliers in data based on standard deviations from the mean."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API authentication fails",
+          "solution": "Verify that the API token or key is correct and has the necessary permissions."
+        },
+        {
+          "problem": "Empty response from Zendesk API",
+          "solution": "Check if there are any new tickets available and ensure the API endpoint is correct."
+        },
+        {
+          "problem": "OpenAI API returns an error",
+          "solution": "Ensure the request payload is correctly formatted and that the API key is valid."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Zendesk Support API",
+          "url": "https://developer.zendesk.com/api-reference/ticketing/tickets/tickets/"
+        },
+        {
+          "label": "OpenAI GPT-4 API",
+          "url": "https://platform.openai.com/docs/api-reference/chat/create"
+        },
+        {
+          "label": "Supabase Database API",
+          "url": "https://supabase.com/docs/guides/api"
+        }
+      ],
+      "before_you_start": [
+        "A Zendesk account with API access and a valid API token",
+        "An OpenAI account with access to the GPT-4 API and a valid API key",
+        "A Supabase project with a service role key and a table for storing triage decisions",
+        "Access to Zendesk Support API",
+        "Access to OpenAI GPT-4 API",
+        "Access to Supabase Database API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 14:50 UTC"
   },
   {
     "slug": "ai-help-center-search",
