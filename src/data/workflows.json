@@ -18637,8 +18637,8 @@
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
       "tools": [
-        "Stripe Payments API",
         "Shopify Admin API",
+        "Stripe Payments API",
         "Resend Email API"
       ],
       "api_slugs": [
@@ -18654,26 +18654,248 @@
       "steps": [
         {
           "title": "Detect failed Shopify checkouts",
-          "description": "List abandoned checkouts with a failed payment state."
+          "description": "This step retrieves abandoned checkouts from Shopify that have a failed payment state. It sets the foundation for further actions by identifying which checkouts need recovery emails.",
+          "technical_explanation": "This step interacts with the Shopify Admin API to fetch abandoned checkouts. The endpoint used is /admin/api/2024-10/checkouts.json, which returns a list of checkouts. The response is filtered to only include those with a failed payment state. Edge cases include handling empty responses and ensuring pagination is managed if there are many checkouts.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_abandoned_checkouts():\n    shop = os.environ.get('SHOP_NAME')\n    url = f'https://{shop}.myshopify.com/admin/api/2024-10/checkouts.json'\n    headers = {'X-Shopify-Access-Token': os.environ.get('SHOPIFY_ACCESS_TOKEN')}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n        return [checkout for checkout in data.get('checkouts', []) if checkout.get('payment_state') == 'failed']\n\nabandoned_checkouts = fetch_abandoned_checkouts()",
+          "mock_response": {
+            "checkouts": [
+              {
+                "id": 123456789,
+                "payment_state": "failed",
+                "email": "customer@example.com"
+              }
+            ]
+          },
+          "actions": [
+            "Construct the API request to Shopify",
+            "Parse the response to filter failed checkouts",
+            "Return a list of abandoned checkouts"
+          ],
+          "commands": [
+            {
+              "label": "Fetch abandoned checkouts",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SHOP_NAME",
+              "value": "<your_shop_name>",
+              "description": "Your Shopify store name"
+            },
+            {
+              "key": "SHOPIFY_ACCESS_TOKEN",
+              "value": "<your_access_token>",
+              "description": "Access token for Shopify Admin API"
+            }
+          ],
+          "tools": [
+            "Shopify Admin API"
+          ],
+          "checklist": [
+            "Successfully retrieved abandoned checkouts",
+            "Filtered checkouts with failed payment state"
+          ],
+          "expectedResult": "A list of abandoned checkouts with failed payment states is obtained.",
+          "links": [
+            {
+              "label": "Shopify Admin API Documentation",
+              "url": "https://shopify.dev/docs/api/admin"
+            }
+          ]
         },
         {
           "title": "Verify payment state in Stripe",
-          "description": "Look up the payment intent and capture the failure reason."
+          "description": "This step checks the payment intent status in Stripe for each abandoned checkout. It ensures that the payment failure reason is captured for recovery emails.",
+          "technical_explanation": "This step uses the Stripe Payments API to verify the payment intent associated with each abandoned checkout. The endpoint used is /v1/payment_intents/{payment_intent_id}. The response includes the status and failure reason. Edge cases include handling non-existent payment intents and ensuring the API rate limits are respected.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef verify_payment_state(payment_intent_id):\n    url = f'https://api.stripe.com/v1/payment_intents/{payment_intent_id}'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"STRIPE_SECRET_KEY\")}'}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))\n\npayment_intent = verify_payment_state('pi_1Fxxxxxx')",
+          "mock_response": {
+            "id": "pi_1Fxxxxxx",
+            "status": "requires_payment_method",
+            "last_payment_error": {
+              "message": "Card was declined"
+            }
+          },
+          "actions": [
+            "Construct the API request to Stripe",
+            "Parse the response for payment status",
+            "Return payment intent details"
+          ],
+          "commands": [
+            {
+              "label": "Verify payment state",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "STRIPE_SECRET_KEY",
+              "value": "<your_secret_key>",
+              "description": "Secret key for Stripe Payments API"
+            }
+          ],
+          "tools": [
+            "Stripe Payments API"
+          ],
+          "checklist": [
+            "Successfully verified payment state",
+            "Captured failure reason if applicable"
+          ],
+          "expectedResult": "Payment intent status and failure reason are retrieved.",
+          "links": [
+            {
+              "label": "Stripe Payments API Documentation",
+              "url": "https://stripe.com/docs/api"
+            }
+          ]
         },
         {
           "title": "Send the recovery email",
-          "description": "Call Resend with a checkout recovery link."
+          "description": "This step sends a recovery email to the customer using the Resend Email API. It includes a link to complete the checkout process.",
+          "technical_explanation": "This workflow step is crucial for facilitating the recovery process for customers who may have encountered issues during checkout. It consumes the customer's email address and the recovery link generated in the previous step. The step interacts with the Resend Email API by making a POST request to the /emails endpoint, requiring headers such as 'Authorization' with a valid API key and 'Content-Type' set to 'application/json'. The request payload must include the recipient's email and the recovery link in JSON format. The expected JSON response will confirm the status of the email delivery. Additionally, edge cases must be considered, including rate limits imposed by the API, which may restrict the number of requests in a given timeframe, and handling scenarios where the email address is invalid or improperly formatted. It is also important to manage pagination if the API returns large datasets and to ensure type conversion is correctly handled for all input data.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef send_recovery_email(email, recovery_link):\n    url = 'https://api.resend.com/emails'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"RESEND_API_KEY\")}'}\n    payload = json.dumps({'to': email, 'subject': 'Complete your purchase', 'html': f'<a href=\"{recovery_link}\">Complete your purchase</a>'})\n    request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))\n\nemail_response = send_recovery_email('customer@example.com', 'https://checkout.com/recover')",
+          "mock_response": {
+            "id": "email_1Fxxxxxx",
+            "status": "sent"
+          },
+          "actions": [
+            "Construct the email payload",
+            "Send the email via Resend API",
+            "Handle the response from the email API"
+          ],
+          "commands": [
+            {
+              "label": "Send recovery email",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "RESEND_API_KEY",
+              "value": "<your_api_key>",
+              "description": "API key for Resend Email API"
+            }
+          ],
+          "tools": [
+            "Resend Email API"
+          ],
+          "checklist": [
+            "Email sent successfully",
+            "Email contains the correct recovery link"
+          ],
+          "expectedResult": "A recovery email is sent to the customer.",
+          "links": [
+            {
+              "label": "Resend Email API Documentation",
+              "url": "https://resend.com/docs"
+            }
+          ]
         },
         {
           "title": "Track recovery outcomes",
-          "description": "Record sent and recovered counts in a deterministic report."
+          "description": "This step records the outcomes of the recovery emails sent, including counts of sent and recovered checkouts. This data is useful for analyzing the effectiveness of the recovery process.",
+          "technical_explanation": "The 'Track recovery outcomes' step serves a critical role in the overall architecture by capturing and recording the results of recovery emails sent in the previous step. It consumes data such as the number of emails dispatched and the count of successfully recovered checkouts, which are essential for evaluating the recovery process's effectiveness. The API contract for this step involves a POST request to the endpoint '/api/recovery/outcomes', requiring headers such as 'Content-Type: application/json' and 'Authorization: Bearer {token}'. The request payload should include a JSON object with fields for 'sent_count' and 'recovered_count', while the expected JSON response will confirm the successful logging of the data with a status message. Edge cases must be considered, including adherence to rate limits to prevent excessive API calls, managing pagination if the data set is large, handling scenarios where the counts may return empty arrays, and ensuring type conversion for numerical values to maintain data integrity.",
+          "code_snippet": "import json\nimport os\n\n\ndef track_recovery_outcomes(sent_count, recovered_count):\n    # Create a report dictionary with sent and recovered counts\n    report = {'sent_count': sent_count, 'recovered_count': recovered_count}\n    \n    # Check if the report file already exists\n    if os.path.exists('recovery_report.json'):\n        # Load existing data\n        with open('recovery_report.json', 'r') as f:\n            existing_report = json.load(f)\n            # Update counts\n            report['sent_count'] += existing_report.get('sent_count', 0)\n            report['recovered_count'] += existing_report.get('recovered_count', 0)\n    \n    # Write the updated report to the file\n    with open('recovery_report.json', 'w') as f:\n        json.dump(report, f)\n\ntrack_recovery_outcomes(1, 0)",
+          "mock_response": {
+            "sent_count": 1,
+            "recovered_count": 0
+          },
+          "actions": [
+            "Aggregate counts of sent and recovered emails",
+            "Store the results in a report",
+            "Handle potential errors in file writing"
+          ],
+          "commands": [
+            {
+              "label": "Track recovery outcomes",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Recovery outcomes recorded successfully",
+            "Report file is created or updated"
+          ],
+          "expectedResult": "The recovery outcomes are recorded in a report.",
+          "links": [
+            {
+              "label": "Python JSON Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Shopify store with access to the Admin API",
+        "A Stripe account with access to the Payments API",
+        "A Resend account with access to the Email API",
+        "Access to Stripe Payments API",
+        "Access to Shopify Admin API",
+        "Access to Resend Email API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Payment Intent",
+          "definition": "An object representing a payment that can be confirmed, canceled, or failed."
+        },
+        {
+          "term": "Abandoned Checkout",
+          "definition": "A checkout session that was initiated but not completed, often due to payment failure."
+        },
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method of API authentication where a token is passed in the Authorization header."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by waiting before retrying requests."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Failed to retrieve abandoned checkouts",
+          "solution": "Check Shopify API credentials and ensure the store has abandoned checkouts."
+        },
+        {
+          "problem": "Payment state not found in Stripe",
+          "solution": "Verify the payment intent ID and ensure it corresponds to a valid payment in Stripe."
+        },
+        {
+          "problem": "Email not sent via Resend",
+          "solution": "Check Resend API key and ensure the email format is valid."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Stripe Payments API",
+          "url": "https://stripe.com/docs/api"
+        },
+        {
+          "label": "Shopify Admin API",
+          "url": "https://shopify.dev/docs/api/admin"
+        },
+        {
+          "label": "Resend Email API",
+          "url": "https://resend.com/docs"
+        }
+      ],
+      "before_you_start": [
+        "A Shopify store with access to the Admin API",
+        "A Stripe account with access to the Payments API",
+        "A Resend account with access to the Email API",
+        "Access to Stripe Payments API",
+        "Access to Shopify Admin API",
+        "Access to Resend Email API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 17:25 UTC"
   },
   {
     "slug": "weather-driven-ops-alerts",
@@ -19527,26 +19749,245 @@
       "steps": [
         {
           "title": "Upload build artifacts to S3",
-          "description": "Sync the build directory and set content types and cache headers."
+          "description": "This step involves syncing the build directory to an S3 bucket, setting appropriate content types and cache headers. This ensures that the static site is served correctly from S3.",
+          "technical_explanation": "This step uploads the build artifacts to the specified S3 bucket using the Amazon S3 API. The API contract requires a PUT request to the bucket URL with the appropriate headers for content type and cache control. Edge cases include handling rate limits imposed by S3 and ensuring that the correct permissions are set for the IAM user performing the upload.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef upload_to_s3():\n    bucket_name = os.environ.get('S3_BUCKET_NAME')\n    file_path = 'path/to/build/artifact'\n    url = f'https://{bucket_name}.s3.amazonaws.com/artifact'\n    headers = {\n        'Content-Type': 'text/html',\n        'Cache-Control': 'max-age=3600'\n    }\n    with open(file_path, 'rb') as file:\n        request = urllib.request.Request(url, data=file, method='PUT', headers=headers)\n        response = urllib.request.urlopen(request)\n        return json.loads(response.read().decode('utf-8'))\n\nupload_response = upload_to_s3()",
+          "mock_response": {
+            "ETag": "\"abc123def456\"",
+            "Location": "https://mybucket.s3.amazonaws.com/artifact"
+          },
+          "actions": [
+            "Prepare the build artifact for upload",
+            "Set the correct content type for the file",
+            "Configure cache headers for optimal performance"
+          ],
+          "commands": [
+            {
+              "label": "Upload build artifacts",
+              "language": "bash",
+              "code": "python upload_script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "S3_BUCKET_NAME",
+              "value": "<your-bucket-name>",
+              "description": "The name of the S3 bucket where artifacts will be uploaded."
+            }
+          ],
+          "tools": [
+            "Amazon S3 API"
+          ],
+          "checklist": [
+            "Build artifacts are uploaded successfully",
+            "Correct content type and cache headers are set"
+          ],
+          "expectedResult": "The build artifacts are successfully uploaded to the S3 bucket.",
+          "links": [
+            {
+              "label": "Amazon S3 API Documentation",
+              "url": "https://docs.aws.amazon.com/s3/index.html"
+            }
+          ]
         },
         {
           "title": "Purge the Cloudflare cache",
-          "description": "Call the Workers cache purge for the changed asset paths."
+          "description": "This step triggers a cache purge in Cloudflare for the updated assets. This ensures that users receive the latest version of the site without stale content.",
+          "technical_explanation": "The Cloudflare Workers API is used to send a DELETE request to purge the cache for specific asset paths. The API contract requires the asset paths to be included in the request body. Edge cases include handling API rate limits and ensuring the API token has the necessary permissions for cache management.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef purge_cache():\n    url = 'https://api.cloudflare.com/client/v4/zones/<zone_id>/purge_cache'\n    headers = {\n        'Authorization': f\"Bearer {os.environ.get('CLOUDFLARE_API_TOKEN')}\",\n        'Content-Type': 'application/json'\n    }\n    data = json.dumps({'files': ['https://example.com/artifact']}).encode('utf-8')\n    request = urllib.request.Request(url, data=data, method='DELETE', headers=headers)\n    response = urllib.request.urlopen(request)\n    return json.loads(response.read().decode('utf-8'))\n\npurge_response = purge_cache()",
+          "mock_response": {
+            "success": true,
+            "result": {
+              "id": "abc123",
+              "files_purged": [
+                "https://example.com/artifact"
+              ]
+            }
+          },
+          "actions": [
+            "Identify the asset paths that need to be purged",
+            "Construct the API request for cache purging",
+            "Send the request and handle the response"
+          ],
+          "commands": [
+            {
+              "label": "Purge Cloudflare cache",
+              "language": "bash",
+              "code": "python purge_cache_script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "CLOUDFLARE_API_TOKEN",
+              "value": "<your-api-token>",
+              "description": "The API token for authenticating with Cloudflare."
+            }
+          ],
+          "tools": [
+            "Cloudflare Workers API"
+          ],
+          "checklist": [
+            "Cache purge request is sent successfully",
+            "Response indicates successful cache purge"
+          ],
+          "expectedResult": "The Cloudflare cache is purged for the specified assets.",
+          "links": [
+            {
+              "label": "Cloudflare Workers API Documentation",
+              "url": "https://developers.cloudflare.com/workers/"
+            }
+          ]
         },
         {
           "title": "Verify deployment health",
-          "description": "Fetch the published entry point and check the expected checksum."
+          "description": "This step checks the health of the deployment by fetching the published entry point and verifying its checksum. This ensures that the deployed site is functioning as expected.",
+          "technical_explanation": "The Verify deployment health step is crucial in the overall architecture as it ensures the integrity and functionality of the deployed application by consuming the published entry point URL from the previous step. This step involves sending a GET request to the specified endpoint, which must adhere to the API contract that requires the inclusion of specific headers such as 'Authorization' and 'Content-Type'. The expected JSON response should contain a 'checksum' field that is compared against the calculated checksum of the fetched content to confirm that the deployment is healthy. Additionally, edge cases must be handled, including rate limits imposed by the API, potential pagination in the response data, scenarios where the response may include empty arrays, and ensuring proper type conversion for the checksum verification process.",
+          "code_snippet": "import json\nimport urllib.request\nimport hashlib\nimport os\n\ndef verify_deployment():\n    url = 'https://example.com/artifact'\n    response = urllib.request.urlopen(url)\n    content = response.read()\n    checksum = hashlib.sha256(content).hexdigest()\n    expected_checksum = os.environ.get('EXPECTED_CHECKSUM')\n    return checksum == expected_checksum\n\nis_verified = verify_deployment()",
+          "mock_response": true,
+          "actions": [
+            "Fetch the published entry point content",
+            "Calculate the checksum of the content",
+            "Compare the calculated checksum with the expected value"
+          ],
+          "commands": [
+            {
+              "label": "Verify deployment health",
+              "language": "bash",
+              "code": "python verify_deployment_script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "EXPECTED_CHECKSUM",
+              "value": "<expected-checksum>",
+              "description": "The expected checksum for the deployed artifact."
+            }
+          ],
+          "tools": [
+            "Amazon S3 API"
+          ],
+          "checklist": [
+            "Deployment content is fetched successfully",
+            "Checksum verification is successful"
+          ],
+          "expectedResult": "The deployment health is verified successfully.",
+          "links": [
+            {
+              "label": "Amazon S3 API Documentation",
+              "url": "https://docs.aws.amazon.com/s3/index.html"
+            }
+          ]
         },
         {
           "title": "Report deployment health",
-          "description": "Send a deployment event and alert on failed verification."
+          "description": "This step sends a deployment event to Sentry, reporting the health of the deployment. This allows for tracking and alerting on deployment issues.",
+          "technical_explanation": "The 'Report deployment health' step is crucial in the deployment workflow as it communicates the status of the deployment to Sentry, utilizing deployment event data generated in the previous step. This step consumes the deployment event details, which include identifiers, timestamps, and status codes, ensuring that the deployment's health is accurately reported. The Sentry Error API endpoint for this operation is '/api/deployments/', and it requires a POST request with specific headers, including 'Authorization' for the API token and 'Content-Type' set to 'application/json'. The request payload must conform to the expected JSON structure, which includes fields such as 'environment', 'version', and 'url'. Upon successful submission, the API responds with a JSON object indicating the status of the request, typically containing a 'success' boolean and a 'message' field. It is essential to handle edge cases such as rate limits imposed by the Sentry API, which may restrict the number of requests within a given timeframe. Additionally, the implementation should account for pagination in case of large datasets, manage empty arrays gracefully, and ensure proper type conversion for all fields in the request payload to avoid data integrity issues.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef report_health():\n    url = 'https://sentry.io/api/0/projects/<organization>/<project>/deploys/'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"SENTRY_API_TOKEN\")}',\n        'Content-Type': 'application/json'\n    }\n    data = json.dumps({'environment': 'production', 'version': '1.0.0'}).encode('utf-8')\n    request = urllib.request.Request(url, data=data, method='POST', headers=headers)\n    response = urllib.request.urlopen(request)\n    return json.loads(response.read().decode('utf-8'))\n\nreport_response = report_health()",
+          "mock_response": {
+            "id": "abc123",
+            "status": "ok"
+          },
+          "actions": [
+            "Prepare the deployment event data",
+            "Construct the API request for reporting",
+            "Send the request and handle the response"
+          ],
+          "commands": [
+            {
+              "label": "Report deployment health",
+              "language": "bash",
+              "code": "python report_health_script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SENTRY_API_TOKEN",
+              "value": "<your-api-token>",
+              "description": "The API token for authenticating with Sentry."
+            }
+          ],
+          "tools": [
+            "Sentry Error API"
+          ],
+          "checklist": [
+            "Deployment event is sent successfully",
+            "Response indicates successful reporting"
+          ],
+          "expectedResult": "The deployment health is reported to Sentry successfully.",
+          "links": [
+            {
+              "label": "Sentry Error API Documentation",
+              "url": "https://docs.sentry.io/api/"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "An Amazon S3 bucket configured for static website hosting",
+        "A Cloudflare account with a configured domain",
+        "A Sentry project set up for error tracking",
+        "Access to Amazon S3 API",
+        "Access to Cloudflare Workers API",
+        "Access to Sentry Error API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "AWS Signature Version 4",
+          "definition": "A protocol for signing API requests to AWS services, ensuring secure access."
+        },
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method of API authentication where a token is passed in the request header to authorize access."
+        },
+        {
+          "term": "Cache Purge",
+          "definition": "The process of clearing stored data in a cache to ensure that fresh data is served."
+        },
+        {
+          "term": "Deployment Health Check",
+          "definition": "A verification process to ensure that the deployed application is functioning as expected."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "S3 upload fails with access denied",
+          "solution": "Check the IAM user permissions and ensure the correct bucket policy is applied."
+        },
+        {
+          "problem": "Cloudflare cache purge returns an error",
+          "solution": "Verify the API token and ensure it has permissions for cache management."
+        },
+        {
+          "problem": "Sentry reports deployment health check failure",
+          "solution": "Check the checksum of the deployed file and ensure it matches the expected value."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Amazon S3 API",
+          "url": "https://docs.aws.amazon.com/s3/index.html"
+        },
+        {
+          "label": "Cloudflare Workers API",
+          "url": "https://developers.cloudflare.com/workers/"
+        },
+        {
+          "label": "Sentry Error API",
+          "url": "https://docs.sentry.io/api/"
+        }
+      ],
+      "before_you_start": [
+        "An Amazon S3 bucket configured for static website hosting",
+        "A Cloudflare account with a configured domain",
+        "A Sentry project set up for error tracking",
+        "Access to Amazon S3 API",
+        "Access to Cloudflare Workers API",
+        "Access to Sentry Error API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 17:26 UTC"
   },
   {
     "slug": "auth0-sso-provisioning",
@@ -19616,8 +20057,8 @@
       "duration": "60–75 minutes",
       "tools": [
         "Clerk Authentication API",
-        "Resend Email API",
-        "Supabase Database API"
+        "Supabase Database API",
+        "Resend Email API"
       ],
       "api_slugs": [
         "clerk-authentication-api",
@@ -19631,25 +20072,253 @@
       "steps": [
         {
           "title": "Read new Clerk users",
-          "description": "List users created since the last onboarding checkpoint."
+          "description": "This step retrieves users created since the last onboarding checkpoint. It is essential for identifying new users who need to be onboarded.",
+          "technical_explanation": "This step interacts with the Clerk Authentication API to fetch users created after a specific timestamp. The API endpoint used is '/v1/users', with a GET method. Required headers include 'Authorization' with the Bearer token. The response is expected to be a JSON object containing user details. Edge cases include handling rate limits and ensuring pagination if the user count exceeds the limit.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_new_users():\n    last_checkpoint = os.environ.get('LAST_CHECKPOINT')\n    url = f'https://api.clerk.com/v1/users?created_at[gt]={last_checkpoint}'\n    request = urllib.request.Request(url)\n    request.add_header('Authorization', f'Bearer {os.environ.get(\"CLERK_API_KEY\")}')\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n        return data.get('users', [])\n\nnew_users = fetch_new_users()",
+          "mock_response": {
+            "users": [
+              {
+                "id": "user_1",
+                "email": "user1@example.com",
+                "created_at": "2023-10-01T12:00:00Z"
+              },
+              {
+                "id": "user_2",
+                "email": "user2@example.com",
+                "created_at": "2023-10-01T13:00:00Z"
+              }
+            ]
+          },
+          "actions": [
+            "Set the LAST_CHECKPOINT environment variable to the last processed timestamp.",
+            "Call the Clerk Authentication API to fetch new users.",
+            "Store the fetched user data for further processing."
+          ],
+          "commands": [
+            {
+              "label": "Fetch new Clerk users",
+              "language": "bash",
+              "code": "python fetch_new_users.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "CLERK_API_KEY",
+              "value": "<your_clerk_api_key>",
+              "description": "API key for authenticating with Clerk."
+            },
+            {
+              "key": "LAST_CHECKPOINT",
+              "value": "<timestamp>",
+              "description": "Timestamp of the last processed user."
+            }
+          ],
+          "tools": [
+            "Clerk Authentication API"
+          ],
+          "checklist": [
+            "Verify that new users are fetched correctly.",
+            "Ensure the response contains user details."
+          ],
+          "expectedResult": "New Clerk users are successfully fetched and stored for onboarding.",
+          "links": [
+            {
+              "label": "Clerk Authentication API Documentation",
+              "url": "https://clerk.com/docs"
+            }
+          ]
         },
         {
           "title": "Create profile records in Supabase",
-          "description": "Upsert user id, email and onboarding status."
+          "description": "This step upserts the user profile records into the Supabase database, ensuring that existing users are updated and new users are added.",
+          "technical_explanation": "The Supabase Database API is used to upsert user profiles. The endpoint is '/rest/v1/users', with a POST method. Required headers include 'apikey' and 'Authorization' with the Bearer token. The request payload contains user ID, email, and onboarding status. Edge cases include handling duplicate entries and ensuring the payload matches the database schema.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef upsert_user_profiles(users):\n    url = f\"{os.environ.get('SUPABASE_URL')}/rest/v1/users\"\n    headers = {\n        'apikey': os.environ.get('SUPABASE_KEY'),\n        'Authorization': f\"Bearer {os.environ.get('SUPABASE_KEY')}\",\n        'Prefer': 'return=representation'\n    }\n    for user in users:\n        payload = {\n            'id': user['id'],\n            'email': user['email'],\n            'onboarding_status': 'pending'\n        }\n        request = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            response_data = json.loads(response.read().decode('utf-8'))\n            print(response_data)\n\nnew_users = []  # Replace with actual user data\nupsert_user_profiles(new_users)",
+          "mock_response": {
+            "id": "user_1",
+            "email": "user1@example.com",
+            "onboarding_status": "pending"
+          },
+          "actions": [
+            "Prepare the user data for upsert operation.",
+            "Call the Supabase Database API to upsert user profiles.",
+            "Log the response from the Supabase API."
+          ],
+          "commands": [
+            {
+              "label": "Upsert user profiles",
+              "language": "bash",
+              "code": "python upsert_user_profiles.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUPABASE_URL",
+              "value": "<your_supabase_url>",
+              "description": "Base URL for Supabase API."
+            },
+            {
+              "key": "SUPABASE_KEY",
+              "value": "<your_supabase_key>",
+              "description": "API key for authenticating with Supabase."
+            }
+          ],
+          "tools": [
+            "Supabase Database API"
+          ],
+          "checklist": [
+            "Verify that user profiles are upserted correctly.",
+            "Ensure the response contains the updated user details."
+          ],
+          "expectedResult": "User profiles are successfully upserted into the Supabase database.",
+          "links": [
+            {
+              "label": "Supabase Database API Documentation",
+              "url": "https://supabase.com/docs/guides/api"
+            }
+          ]
         },
         {
           "title": "Send the welcome email",
-          "description": "Call the Resend emails endpoint with onboarding steps."
+          "description": "This step sends a welcome email to the newly onboarded users using the Resend Email API.",
+          "technical_explanation": "The Resend Email API is called to send welcome emails. The endpoint is '/emails', with a POST method. Required headers include 'Authorization' with the Bearer token. The request payload contains the recipient's email and the email content. Edge cases include handling invalid email addresses and ensuring the email template is correctly set up.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef send_welcome_email(users):\n    url = 'https://api.resend.com/emails'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"RESEND_API_KEY\")}'\n    }\n    for user in users:\n        payload = {\n            'to': user['email'],\n            'subject': 'Welcome to Our Service',\n            'body': 'Thank you for joining us!'\n        }\n        request = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            response_data = json.loads(response.read().decode('utf-8'))\n            print(response_data)\n\nnew_users = [{'email': 'user1@example.com'}, {'email': 'user2@example.com'}]\nsend_welcome_email(new_users)",
+          "mock_response": {
+            "id": "email_1",
+            "status": "sent"
+          },
+          "actions": [
+            "Prepare the email content for each user.",
+            "Call the Resend Email API to send welcome emails.",
+            "Log the response from the Resend API."
+          ],
+          "commands": [
+            {
+              "label": "Send welcome emails",
+              "language": "bash",
+              "code": "python send_welcome_email.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "RESEND_API_KEY",
+              "value": "<your_resend_api_key>",
+              "description": "API key for authenticating with Resend."
+            }
+          ],
+          "tools": [
+            "Resend Email API"
+          ],
+          "checklist": [
+            "Verify that welcome emails are sent successfully.",
+            "Ensure the response indicates successful email delivery."
+          ],
+          "expectedResult": "Welcome emails are successfully sent to the new users.",
+          "links": [
+            {
+              "label": "Resend Email API Documentation",
+              "url": "https://resend.com/docs"
+            }
+          ]
         },
         {
           "title": "Update the onboarding checkpoint",
-          "description": "Persist the latest processed timestamp."
+          "description": "This step updates the onboarding checkpoint to the current timestamp, ensuring that the next run only processes new users.",
+          "technical_explanation": "The purpose of this step is to update the onboarding checkpoint, which plays a crucial role in the workflow architecture by ensuring that only new users are processed in subsequent executions. This step consumes the output from the previous step, specifically the timestamp indicating the last processed user. The API contract for this operation involves sending a PUT request to the '/update-checkpoint' endpoint, requiring headers such as 'Authorization' and 'Content-Type: application/json'. The request payload must include a JSON object with a 'timestamp' field formatted as an ISO 8601 string. The expected JSON response should confirm the update with a 'status' field indicating success or failure. Edge cases to consider include adhering to rate limits imposed by the API, handling pagination if the user list exceeds predefined limits, managing scenarios where the response may contain empty arrays, and ensuring proper type conversion for the timestamp to avoid errors.",
+          "code_snippet": "import os\nimport time\n\ndef update_checkpoint():\n    # Get the current timestamp in the specified format\n    current_timestamp = time.strftime('%Y-%m-%dT%H:%M:%SZ')\n    # Update the environment variable with the current timestamp\n    os.environ['LAST_CHECKPOINT'] = current_timestamp\n    # Print the updated checkpoint for confirmation\n    print(f'Updated LAST_CHECKPOINT to {current_timestamp}')\n\n# Call the function to update the checkpoint\nupdate_checkpoint()\n\n# Ensure the function runs correctly by printing the current checkpoint\nprint(f'Current LAST_CHECKPOINT is {os.environ.get(\"LAST_CHECKPOINT\")}')",
+          "mock_response": {
+            "LAST_CHECKPOINT": "2023-10-01T14:00:00Z"
+          },
+          "actions": [
+            "Get the current timestamp.",
+            "Update the LAST_CHECKPOINT environment variable.",
+            "Log the updated checkpoint."
+          ],
+          "commands": [
+            {
+              "label": "Update onboarding checkpoint",
+              "language": "bash",
+              "code": "python update_checkpoint.py"
+            }
+          ],
+          "checklist": [
+            "Verify that the LAST_CHECKPOINT is updated correctly.",
+            "Ensure the timestamp format is valid."
+          ],
+          "expectedResult": "Onboarding checkpoint is successfully updated to the current timestamp.",
+          "links": [
+            {
+              "label": "Python Time Module Documentation",
+              "url": "https://docs.python.org/3/library/time.html"
+            }
+          ],
+          "tools": []
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Clerk account with API access",
+        "A Supabase project with a configured database",
+        "A Resend account with API access",
+        "Access to Clerk Authentication API",
+        "Access to Resend Email API",
+        "Access to Supabase Database API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that is included in the request header."
+        },
+        {
+          "term": "PostgREST Upsert",
+          "definition": "An operation that inserts a new record or updates an existing record in a database table."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy for handling API rate limits by delaying requests when a limit is reached."
+        },
+        {
+          "term": "Timestamp Checkpointing",
+          "definition": "A method of tracking the last processed time to avoid reprocessing data."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Failed to read new Clerk users",
+          "solution": "Check your Clerk API key and ensure you have the correct permissions."
+        },
+        {
+          "problem": "Supabase upsert operation fails",
+          "solution": "Verify the Supabase table schema matches the payload structure."
+        },
+        {
+          "problem": "Welcome email not sent",
+          "solution": "Ensure the Resend API key is valid and the email template is correctly configured."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Clerk Authentication API",
+          "url": "https://clerk.com/docs"
+        },
+        {
+          "label": "Resend Email API",
+          "url": "https://resend.com/docs"
+        },
+        {
+          "label": "Supabase Database API",
+          "url": "https://supabase.com/docs/guides/api"
+        }
+      ],
+      "before_you_start": [
+        "A Clerk account with API access",
+        "A Supabase project with a configured database",
+        "A Resend account with API access",
+        "Access to Clerk Authentication API",
+        "Access to Resend Email API",
+        "Access to Supabase Database API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 17:29 UTC"
   }
 ]
