@@ -24,7 +24,16 @@
     "crm-lead-scoring": "done",
     "salesforce-pipeline-sync": "done",
     "personalized-outreach-engine": "done",
-    "support-ticket-triage": "done"
+    "support-ticket-triage": "done",
+    "transactional-email-delivery": "done",
+    "ai-help-center-search": "done",
+    "csat-feedback-analysis": "done",
+    "subscription-billing-automation": "done",
+    "invoice-reconciliation": "done",
+    "paypal-payout-monitoring": "done",
+    "stock-market-alerts": "done",
+    "crypto-portfolio-tracker": "done",
+    "bank-transaction-enrichment": "done"
   },
-  "updated_at": "2026-11-06 14:50 UTC"
+  "updated_at": "2026-11-06 15:06 UTC"
 }

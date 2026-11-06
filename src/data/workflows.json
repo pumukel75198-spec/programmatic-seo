@@ -3965,26 +3965,205 @@
       "steps": [
         {
           "title": "Load the outbound email queue",
-          "description": "Validate recipients and template identifiers from a deterministic queue."
+          "description": "This step retrieves the queued emails that need to be sent. It validates the recipients and template identifiers to ensure they are correct before proceeding.",
+          "technical_explanation": "This step serves as the foundation for the workflow by loading the email queue from a predetermined source. It consumes the queue data to validate email addresses and template identifiers. The API contract is not applicable here as this is a local operation, but edge cases include handling empty queues and malformed email addresses.",
+          "code_snippet": "import json\n\ndef load_email_queue():\n    # Simulate loading an email queue from a local source\n    email_queue = [\n        {'recipient': 'user@example.com', 'template_id': 'welcome'},\n        {'recipient': 'invalid-email', 'template_id': 'welcome'}\n    ]\n    # Validate email addresses\n    valid_emails = [email for email in email_queue if validate_email(email['recipient'])]\n    return valid_emails\n\n\ndef validate_email(email):\n    # Simple email validation\n    return '@' in email\n\n# Load the email queue\nemails = load_email_queue()",
+          "mock_response": "[{'recipient': 'user@example.com', 'template_id': 'welcome'}]",
+          "actions": [
+            "Define a function to load the email queue",
+            "Implement email validation logic",
+            "Return a list of valid emails"
+          ],
+          "commands": [
+            {
+              "label": "Run email queue loader",
+              "language": "bash",
+              "code": "python load_email_queue.py"
+            }
+          ],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Email queue is loaded successfully",
+            "Invalid emails are filtered out"
+          ],
+          "expectedResult": "The valid email queue is loaded and ready for processing.",
+          "links": [
+            {
+              "label": "Python json Docs",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
         },
         {
           "title": "Send through Resend",
-          "description": "Call the emails endpoint and capture the provider message id."
+          "description": "This step sends the queued emails using the Resend Email API. It captures the provider message ID for tracking purposes.",
+          "technical_explanation": "This step is crucial for delivering emails to recipients. It consumes the validated email queue from the previous step and sends each email using the Resend API. The API contract requires a POST request to the /emails endpoint with the appropriate headers and payload. Edge cases include handling API rate limits and failed requests.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef send_email_through_resend(emails):\n    url = 'https://api.resend.com/emails'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"RESEND_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    for email in emails:\n        payload = json.dumps({\n            'to': email['recipient'],\n            'template_id': email['template_id']\n        }).encode('utf-8')\n        request = urllib.request.Request(url, data=payload, headers=headers)\n        response = urllib.request.urlopen(request)\n        response_data = json.loads(response.read().decode('utf-8'))\n        print(f\"Sent to {email['recipient']}, Message ID: {response_data.get('id', '')}\")\n\n# Send emails through Resend\nsend_email_through_resend(emails)",
+          "mock_response": "{ 'id': 'msg_12345' }",
+          "actions": [
+            "Construct the API request to Resend",
+            "Send the email and capture the response",
+            "Log the message ID for tracking"
+          ],
+          "commands": [
+            {
+              "label": "Send emails",
+              "language": "bash",
+              "code": "python send_email.py"
+            }
+          ],
+          "config": [],
+          "tools": [
+            "Resend Email API"
+          ],
+          "checklist": [
+            "Emails are sent successfully",
+            "Message IDs are logged correctly"
+          ],
+          "expectedResult": "Emails are sent through Resend, and message IDs are captured.",
+          "links": [
+            {
+              "label": "Resend Email API Documentation",
+              "url": "https://resend.com/docs"
+            }
+          ]
         },
         {
           "title": "Retry through SendGrid",
-          "description": "Fall back to the SendGrid mail send endpoint for failed messages."
+          "description": "In case of failure with Resend, this step attempts to send the emails using the SendGrid Email API.",
+          "technical_explanation": "This step provides a fallback mechanism for email delivery. It consumes the failed email attempts from the previous step and sends them using the SendGrid API. The API contract requires a POST request to the /v3/mail/send endpoint with the necessary headers and payload. Edge cases include handling SendGrid-specific errors and ensuring proper logging.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef send_email_through_sendgrid(failed_emails):\n    url = 'https://api.sendgrid.com/v3/mail/send'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"SENDGRID_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    for email in failed_emails:\n        payload = json.dumps({\n            'personalizations': [{ 'to': [{'email': email['recipient']}] }],\n            'from': {'email': 'noreply@example.com'},\n            'subject': 'Your Subject',\n            'content': [{'type': 'text/plain', 'value': 'Email content here.'}]\n        }).encode('utf-8')\n        request = urllib.request.Request(url, data=payload, headers=headers)\n        response = urllib.request.urlopen(request)\n        print(f\"Sent to {email['recipient']} via SendGrid\")\n\n# Retry sending failed emails through SendGrid\nfailed_emails = [{'recipient': 'user@example.com', 'template_id': 'welcome'}]\nsend_email_through_sendgrid(failed_emails)",
+          "mock_response": "{}",
+          "actions": [
+            "Construct the API request to SendGrid",
+            "Send the email and log the result",
+            "Handle any errors that occur during sending"
+          ],
+          "commands": [
+            {
+              "label": "Retry sending emails",
+              "language": "bash",
+              "code": "python send_email_retry.py"
+            }
+          ],
+          "config": [],
+          "tools": [
+            "SendGrid Email API"
+          ],
+          "checklist": [
+            "Emails are retried successfully",
+            "SendGrid responses are logged"
+          ],
+          "expectedResult": "Failed emails are retried through SendGrid.",
+          "links": [
+            {
+              "label": "SendGrid Email API Documentation",
+              "url": "https://docs.sendgrid.com/api-reference"
+            }
+          ]
         },
         {
           "title": "Record delivery outcomes in Supabase",
-          "description": "Insert one row per attempt with status and provider."
+          "description": "This step records the outcomes of the email delivery attempts in the Supabase database for tracking and analysis.",
+          "technical_explanation": "This step is essential for maintaining a record of email delivery attempts. It consumes the results from the previous steps and inserts them into a Supabase table. The API contract requires a POST request to the Supabase REST endpoint with the appropriate headers and payload. Edge cases include handling duplicate entries and ensuring data integrity.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef record_delivery_outcome(email, status):\n    url = f'{os.environ.get(\"SUPABASE_URL\")}/emails'\n    headers = {\n        'apikey': os.environ.get(\"SUPABASE_KEY\"),\n        'Authorization': f'Bearer {os.environ.get(\"SUPABASE_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    payload = json.dumps({\n        'recipient': email['recipient'],\n        'template_id': email['template_id'],\n        'status': status\n    }).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    response = urllib.request.urlopen(request)\n    if response.status not in (200, 201, 204):\n        print(f\"Failed to record outcome for {email['recipient']}\")\n\n# Record delivery outcomes\nrecord_delivery_outcome({'recipient': 'user@example.com', 'template_id': 'welcome'}, 'sent')",
+          "mock_response": "{}",
+          "actions": [
+            "Construct the API request to Supabase",
+            "Insert the delivery outcome into the database",
+            "Handle any errors during the insertion"
+          ],
+          "commands": [
+            {
+              "label": "Record outcomes",
+              "language": "bash",
+              "code": "python record_outcomes.py"
+            }
+          ],
+          "config": [],
+          "tools": [
+            "Supabase Database API"
+          ],
+          "checklist": [
+            "Delivery outcomes are recorded successfully",
+            "No duplicate entries are created"
+          ],
+          "expectedResult": "Delivery outcomes are stored in Supabase.",
+          "links": [
+            {
+              "label": "Supabase Database API Documentation",
+              "url": "https://supabase.com/docs/guides/api"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "An account with Resend and an API key",
+        "An account with SendGrid and an API key",
+        "A Supabase project and service-role key",
+        "Access to Resend Email API",
+        "Access to SendGrid Email API",
+        "Access to Supabase Database API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A security mechanism where a token is used to authenticate API requests."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by waiting before retrying requests."
+        },
+        {
+          "term": "PostgREST Upsert",
+          "definition": "An operation that inserts a new record or updates an existing record in a database."
+        },
+        {
+          "term": "Error Handling",
+          "definition": "The process of responding to and managing errors that occur during execution."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Failed to send email through Resend",
+          "solution": "Check API key validity and ensure the email format is correct."
+        },
+        {
+          "problem": "Supabase insertion fails",
+          "solution": "Verify that the Supabase URL and API key are correctly set in environment variables."
+        },
+        {
+          "problem": "SendGrid fallback not triggered",
+          "solution": "Ensure that error handling is correctly implemented to catch failures from Resend."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Resend Email API",
+          "url": "https://resend.com/docs"
+        },
+        {
+          "label": "SendGrid Email API",
+          "url": "https://docs.sendgrid.com/api-reference"
+        },
+        {
+          "label": "Supabase Database API",
+          "url": "https://supabase.com/docs/guides/api"
+        }
+      ],
+      "before_you_start": [
+        "An account with Resend and an API key",
+        "An account with SendGrid and an API key",
+        "A Supabase project and service-role key",
+        "Access to Resend Email API",
+        "Access to SendGrid Email API",
+        "Access to Supabase Database API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 14:57 UTC"
   },
   {
     "slug": "email-campaign-automation",
@@ -7058,9 +7237,18 @@
           "label": "Pinecone Vector API",
           "url": "https://docs.pinecone.io/reference/api/introduction"
         }
+      ],
+      "before_you_start": [
+        "A Notion account with access to the help center articles",
+        "An OpenAI API key with access to the Embeddings API",
+        "A Pinecone account with a created index",
+        "Access to Notion API",
+        "Access to OpenAI Embeddings API",
+        "Access to Pinecone Vector API",
+        "Python 3.10 or newer (standard library only) and a terminal"
       ]
     },
-    "created_and_verified_at": "2026-11-06 13:53 UTC"
+    "created_and_verified_at": "2026-11-06 14:57 UTC"
   },
   {
     "slug": "csat-feedback-analysis",
@@ -7078,8 +7266,8 @@
       "duration": "60–75 minutes",
       "tools": [
         "Zendesk Support API",
-        "Google Sheets API",
-        "OpenAI GPT-4 API"
+        "OpenAI GPT-4 API",
+        "Google Sheets API"
       ],
       "api_slugs": [
         "zendesk-support-api",
@@ -7094,26 +7282,274 @@
       "steps": [
         {
           "title": "Collect CSAT responses from Zendesk",
-          "description": "Query satisfaction ratings with their comments."
+          "description": "This step retrieves customer satisfaction (CSAT) ratings and their associated comments from the Zendesk Support API. The data collected will be used for sentiment analysis in the next step.",
+          "technical_explanation": "This step serves as the initial data collection point, consuming no prior data. The API contract involves sending a GET request to the endpoint 'https://{subdomain}.zendesk.com/api/v2/tickets.json' with appropriate authentication headers. The response will include ticket data, which may be paginated, requiring careful handling of pagination to ensure all responses are collected.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\nSUBDOMAIN = os.environ.get('ZENDESK_SUBDOMAIN')\nAPI_TOKEN = os.environ.get('ZENDESK_API_TOKEN')\n\n# Function to fetch CSAT responses\n\ndef fetch_csat_responses():\n    url = f'https://{SUBDOMAIN}.zendesk.com/api/v2/tickets.json'\n    headers = {'Authorization': f'Bearer {API_TOKEN}'}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n        return data.get('tickets', [])\n\ncsat_responses = fetch_csat_responses()",
+          "mock_response": {
+            "tickets": [
+              {
+                "id": 1,
+                "subject": "Feedback on Service",
+                "description": "Great service!",
+                "custom_fields": [
+                  {
+                    "id": 12345,
+                    "value": 5
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "subject": "Feedback on Service",
+                "description": "Could be better.",
+                "custom_fields": [
+                  {
+                    "id": 12345,
+                    "value": 3
+                  }
+                ]
+              }
+            ]
+          },
+          "actions": [
+            "Set up a Zendesk account and generate an API token.",
+            "Identify the subdomain for your Zendesk instance.",
+            "Prepare environment variables for API credentials."
+          ],
+          "commands": [
+            {
+              "label": "Run the script to fetch CSAT responses",
+              "language": "bash",
+              "code": "python fetch_csat.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "ZENDESK_SUBDOMAIN",
+              "value": "<your_subdomain>",
+              "description": "Your Zendesk account subdomain."
+            },
+            {
+              "key": "ZENDESK_API_TOKEN",
+              "value": "<your_api_token>",
+              "description": "Your Zendesk API token."
+            }
+          ],
+          "tools": [
+            "Zendesk Support API"
+          ],
+          "checklist": [
+            "Verify that the API token is correctly set in environment variables.",
+            "Check that the fetched data contains CSAT responses."
+          ],
+          "expectedResult": "CSAT responses are successfully retrieved from Zendesk.",
+          "links": [
+            {
+              "label": "Zendesk Support API Documentation",
+              "url": "https://developer.zendesk.com/api-reference/ticketing/tickets/tickets/"
+            }
+          ]
         },
         {
           "title": "Classify feedback sentiment",
-          "description": "Send comments to OpenAI and parse sentiment and theme labels."
+          "description": "In this step, the comments from the CSAT responses are sent to the OpenAI GPT-4 API for sentiment classification. The results will include sentiment scores and themes.",
+          "technical_explanation": "This step processes the comments collected from the previous step, sending them to the OpenAI API for sentiment analysis. The API contract requires a POST request to 'https://api.openai.com/v1/chat/completions' with a JSON payload containing the messages. The response will include sentiment scores, which must be handled carefully to avoid errors due to unexpected formats.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\nOPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')\n\n# Function to classify sentiment\n\ndef classify_sentiment(comments):\n    url = 'https://api.openai.com/v1/chat/completions'\n    headers = {'Authorization': f'Bearer {OPENAI_API_KEY}', 'Content-Type': 'application/json'}\n    records = []\n    for comment in comments:\n        payload = {\n            'model': 'gpt-4o-mini',\n            'messages': [{'role': 'user', 'content': f'Analyze the sentiment of this feedback: {comment}. Respond ONLY with a float between -1.0 and 1.0.'}]\n        }\n        request = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            result = json.loads(response.read().decode('utf-8'))\n            sentiment = float(result.get('choices', [{}])[0].get('message', {}).get('content', 0))\n            records.append({'text': comment, 'sentiment': sentiment})\n    return records\n\nsentiment_records = classify_sentiment([response['description'] for response in csat_responses])",
+          "mock_response": {
+            "choices": [
+              {
+                "message": {
+                  "content": "0.8"
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Set up an OpenAI account and generate an API key.",
+            "Prepare environment variables for the OpenAI API key.",
+            "Ensure comments are formatted correctly for the API request."
+          ],
+          "commands": [
+            {
+              "label": "Run the script to classify sentiment",
+              "language": "bash",
+              "code": "python classify_sentiment.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "OPENAI_API_KEY",
+              "value": "<your_api_key>",
+              "description": "Your OpenAI API key."
+            }
+          ],
+          "tools": [
+            "OpenAI GPT-4 API"
+          ],
+          "checklist": [
+            "Verify that the OpenAI API key is correctly set in environment variables.",
+            "Check that sentiment records are generated with correct sentiment scores."
+          ],
+          "expectedResult": "Sentiment scores for each CSAT comment are successfully classified.",
+          "links": [
+            {
+              "label": "OpenAI GPT-4 API Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/chat/create"
+            }
+          ]
         },
         {
           "title": "Append summaries to Google Sheets",
-          "description": "Write one row per theme with counts and example comments."
+          "description": "This step takes the sentiment records and appends a summary of the sentiments to a Google Sheet. Each row will represent a theme with counts and example comments.",
+          "technical_explanation": "This step aggregates the sentiment records and sends them to the Google Sheets API for storage. The API contract involves a POST request to 'https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}' with a JSON payload containing the data to be appended. Care must be taken to format the data correctly and handle any errors that may arise during the API call.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\nSPREADSHEET_ID = os.environ.get('SPREADSHEET_ID')\nGOOGLE_SHEET_API_KEY = os.environ.get('GOOGLE_SHEET_API_KEY')\n\n# Function to append summaries to Google Sheets\n\ndef append_to_google_sheets(records):\n    url = f'https://sheets.googleapis.com/v4/spreadsheets/{SPREADSHEET_ID}/values/Sheet1:append?valueInputOption=RAW&key={GOOGLE_SHEET_API_KEY}'\n    headers = {'Content-Type': 'application/json'}\n    values = [[record['text'], record['sentiment']] for record in records]\n    payload = {'values': values}\n    request = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        if response.status not in (200, 201, 204):\n            raise Exception('Failed to append data to Google Sheets')\n\nappend_to_google_sheets(sentiment_records)",
+          "mock_response": {
+            "spreadsheetId": "1A2B3C4D5E6F7G8H9I0J",
+            "updates": {
+              "spreadsheetId": "1A2B3C4D5E6F7G8H9I0J",
+              "updatedRange": "Sheet1!A1:B2",
+              "updatedRows": 2
+            }
+          },
+          "actions": [
+            "Set up a Google Sheets document and obtain the spreadsheet ID.",
+            "Prepare environment variables for Google Sheets API credentials.",
+            "Ensure the data format matches the expected structure for Google Sheets."
+          ],
+          "commands": [
+            {
+              "label": "Run the script to append summaries",
+              "language": "bash",
+              "code": "python append_to_google_sheets.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SPREADSHEET_ID",
+              "value": "<your_spreadsheet_id>",
+              "description": "The ID of your Google Sheets document."
+            },
+            {
+              "key": "GOOGLE_SHEET_API_KEY",
+              "value": "<your_api_key>",
+              "description": "Your Google Sheets API key."
+            }
+          ],
+          "tools": [
+            "Google Sheets API"
+          ],
+          "checklist": [
+            "Verify that the Google Sheets API key is correctly set in environment variables.",
+            "Check that data is appended correctly in the Google Sheets document."
+          ],
+          "expectedResult": "Sentiment summaries are successfully appended to Google Sheets.",
+          "links": [
+            {
+              "label": "Google Sheets API Documentation",
+              "url": "https://developers.google.com/sheets/api/reference/rest"
+            }
+          ]
         },
         {
           "title": "Detect negative feedback spikes",
-          "description": "Compare weekly negative ratios and flag significant increases."
+          "description": "This step analyzes the sentiment records to detect significant spikes in negative feedback. If a spike is detected, appropriate actions can be taken.",
+          "technical_explanation": "This step processes the sentiment records to compute the Z-scores for negative sentiments. The Z-score is calculated to identify spikes based on historical data. Care must be taken to ensure that there are enough data points to compute the Z-score, and to handle cases where the standard deviation is zero.",
+          "code_snippet": "import json\nimport statistics\nimport os\n\n# Function to detect negative feedback spikes\n\ndef detect_negative_spikes(records):\n    sentiments = [record['sentiment'] for record in records if record['sentiment'] < 0]\n    if len(sentiments) < 2:\n        return 'Not enough data to analyze spikes'\n    mean = statistics.mean(sentiments)\n    stdev = statistics.stdev(sentiments)\n    for sentiment in sentiments:\n        if stdev == 0:\n            continue\n        z_score = (sentiment - mean) / stdev\n        if z_score < -2:\n            print(f'Spike detected for sentiment: {sentiment}')\n\ndetect_negative_spikes(sentiment_records)",
+          "mock_response": "Spike detected for sentiment: -0.9",
+          "actions": [
+            "Review historical sentiment data to establish baseline metrics.",
+            "Implement alerting mechanisms for detected spikes.",
+            "Ensure sufficient data is collected for accurate analysis."
+          ],
+          "commands": [
+            {
+              "label": "Run the script to detect spikes",
+              "language": "bash",
+              "code": "python detect_negative_spikes.py"
+            }
+          ],
+          "tools": [
+            "OpenAI GPT-4 API"
+          ],
+          "checklist": [
+            "Verify that sentiment records contain sufficient data for analysis.",
+            "Check that spikes are correctly identified and logged."
+          ],
+          "expectedResult": "Negative feedback spikes are successfully detected and logged.",
+          "links": [
+            {
+              "label": "OpenAI GPT-4 API Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/chat/create"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Zendesk account with API access and an API token",
+        "A Google account with access to Google Sheets and API credentials",
+        "An OpenAI account with API access and an API key",
+        "Access to Zendesk Support API",
+        "Access to Google Sheets API",
+        "Access to OpenAI GPT-4 API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method of API authentication that uses a token to verify the identity of the requester."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by pausing requests for a specified duration before retrying."
+        },
+        {
+          "term": "Z-Score Spike Detection",
+          "definition": "A statistical method to identify significant deviations from the mean in a dataset."
+        },
+        {
+          "term": "Token-Bucket Pagination",
+          "definition": "A technique for managing API request limits by allowing a fixed number of requests over time."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API authentication fails",
+          "solution": "Verify that the API token or key is correctly set in environment variables."
+        },
+        {
+          "problem": "Empty responses from Zendesk API",
+          "solution": "Check if there are any CSAT responses available in the specified date range."
+        },
+        {
+          "problem": "Google Sheets API returns an error",
+          "solution": "Ensure that the spreadsheet ID is correct and that the API credentials have write access."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Zendesk Support API",
+          "url": "https://developer.zendesk.com/api-reference/ticketing/tickets/tickets/"
+        },
+        {
+          "label": "Google Sheets API",
+          "url": "https://developers.google.com/sheets/api/reference/rest"
+        },
+        {
+          "label": "OpenAI GPT-4 API",
+          "url": "https://platform.openai.com/docs/api-reference/chat/create"
+        }
+      ],
+      "before_you_start": [
+        "A Zendesk account with API access and an API token",
+        "A Google account with access to Google Sheets and API credentials",
+        "An OpenAI account with API access and an API key",
+        "Access to Zendesk Support API",
+        "Access to Google Sheets API",
+        "Access to OpenAI GPT-4 API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 14:58 UTC"
   },
   {
     "slug": "subscription-billing-automation",
@@ -7146,26 +7582,247 @@
       "steps": [
         {
           "title": "Create or fetch Stripe customers",
-          "description": "Resolve the customer by email and create it when missing."
+          "description": "This step resolves a customer by their email address and creates a new customer in Stripe if none exists. It ensures that the subscription process can be linked to a valid customer.",
+          "technical_explanation": "This step serves to establish a customer record in Stripe, which is essential for managing subscriptions. The API contract involves a POST request to /v1/customers with headers for authentication and a payload containing the customer's email. Edge cases include handling existing customers and ensuring the email format is valid.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef create_or_fetch_customer(email):\n    url = 'https://api.stripe.com/v1/customers'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"STRIPE_API_KEY\")}' }\n    payload = json.dumps({'email': email}).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))\n\ncustomer = create_or_fetch_customer('customer@example.com')",
+          "mock_response": {
+            "id": "cus_123456789",
+            "object": "customer",
+            "email": "customer@example.com"
+          },
+          "actions": [
+            "Retrieve customer by email from Stripe",
+            "Create a new customer if not found",
+            "Return the customer object"
+          ],
+          "commands": [
+            {
+              "label": "Run customer creation",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "STRIPE_API_KEY",
+              "value": "<your_stripe_api_key>",
+              "description": "API key for authenticating with Stripe"
+            }
+          ],
+          "tools": [
+            "Stripe Payments API"
+          ],
+          "checklist": [
+            "Customer is created or fetched successfully",
+            "Response contains customer ID"
+          ],
+          "expectedResult": "A Stripe customer record is created or retrieved successfully.",
+          "links": [
+            {
+              "label": "Stripe Payments API Documentation",
+              "url": "https://stripe.com/docs/api"
+            }
+          ]
         },
         {
           "title": "Start the subscription",
-          "description": "Create a subscription with the configured price identifier."
+          "description": "This step creates a subscription for the customer using a predefined price identifier. It links the customer to a subscription plan.",
+          "technical_explanation": "The 'Start the subscription' step is essential for establishing a billing relationship between the customer and the subscription plan. It consumes the customer ID and price identifier generated in the previous workflow step, ensuring that the correct pricing model is applied. The API contract requires a POST request to the endpoint /v1/subscriptions, necessitating headers such as Authorization for authentication and Content-Type set to application/json. The request payload must include a JSON object containing the customer ID and price identifier, while the expected JSON response will typically include the subscription ID and status. Edge cases to consider include adhering to rate limits imposed by the API to prevent excessive requests, handling pagination if the response includes multiple subscriptions, managing scenarios where the request returns empty arrays, and ensuring proper type conversion for the customer ID and price identifier to avoid data type mismatches.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef start_subscription(customer_id, price_id):\n    url = 'https://api.stripe.com/v1/subscriptions'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"STRIPE_API_KEY\")}' }\n    payload = json.dumps({'customer': customer_id, 'items': [{'price': price_id}]}).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))\n\nsubscription = start_subscription(customer.get('id', ''), 'price_123456789')",
+          "mock_response": {
+            "id": "sub_123456789",
+            "object": "subscription",
+            "status": "active"
+          },
+          "actions": [
+            "Create a subscription for the customer",
+            "Link the subscription to a price identifier",
+            "Return the subscription object"
+          ],
+          "commands": [
+            {
+              "label": "Run subscription creation",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "STRIPE_API_KEY",
+              "value": "<your_stripe_api_key>",
+              "description": "API key for authenticating with Stripe"
+            }
+          ],
+          "tools": [
+            "Stripe Payments API"
+          ],
+          "checklist": [
+            "Subscription is created successfully",
+            "Response contains subscription ID"
+          ],
+          "expectedResult": "A subscription is created for the customer in Stripe.",
+          "links": [
+            {
+              "label": "Stripe Payments API Documentation",
+              "url": "https://stripe.com/docs/api"
+            }
+          ]
         },
         {
           "title": "Send the receipt email",
-          "description": "Call the Resend emails endpoint with the invoice summary."
+          "description": "This step sends a receipt email to the customer using the Resend API. It includes the invoice summary for the subscription.",
+          "technical_explanation": "The 'Send the receipt email' step plays a crucial role in the overall architecture by facilitating post-purchase communication with customers. It consumes the customer's email address and the invoice summary generated in the previous step, ensuring that the customer receives a detailed receipt for their subscription. The API contract for this step involves making a POST request to the /emails endpoint, requiring headers such as 'Content-Type: application/json' and 'Authorization: Bearer <token>'. The request payload must include a JSON object with 'to' for the recipient's email and 'invoice' for the invoice details. The expected JSON response shape includes fields such as 'status' and 'message' to confirm the email was sent successfully. Edge cases to consider include adhering to rate limits imposed by the Resend API, handling pagination if multiple emails are sent in a batch, managing scenarios where the invoice array may be empty, and ensuring proper type conversion for the email address to validate its format before sending.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef send_receipt_email(customer_email, invoice_summary):\n    url = 'https://api.resend.com/emails'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"RESEND_API_KEY\")}' }\n    payload = json.dumps({'to': customer_email, 'subject': 'Your Subscription Receipt', 'body': invoice_summary}).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return response.read().decode('utf-8')\n\nresult = send_receipt_email('customer@example.com', 'Invoice Summary: Subscription activated.')",
+          "mock_response": "ok",
+          "actions": [
+            "Prepare the email content",
+            "Send the email to the customer",
+            "Confirm email was sent successfully"
+          ],
+          "commands": [
+            {
+              "label": "Run email sending",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "RESEND_API_KEY",
+              "value": "<your_resend_api_key>",
+              "description": "API key for authenticating with Resend"
+            }
+          ],
+          "tools": [
+            "Resend Email API"
+          ],
+          "checklist": [
+            "Email is sent successfully",
+            "Response confirms email delivery"
+          ],
+          "expectedResult": "A receipt email is sent to the customer.",
+          "links": [
+            {
+              "label": "Resend Email API Documentation",
+              "url": "https://resend.com/docs"
+            }
+          ]
         },
         {
           "title": "Reconcile billing state",
-          "description": "Upsert subscription status and renewal dates into Supabase."
+          "description": "This step updates the subscription status and renewal dates in the Supabase database. It ensures that the subscription state is accurately reflected in the system.",
+          "technical_explanation": "The 'Reconcile billing state' step plays a crucial role in the overall architecture by ensuring that the subscription status and renewal dates are accurately updated in the Supabase database. This step consumes data from the previous workflow step, which provides the necessary subscription details, including the current status and renewal information. The API contract for this operation involves a POST request to the endpoint /rest/v1/subscriptions, requiring appropriate headers such as Authorization and Content-Type. The request payload must adhere to a specific JSON structure that includes fields like subscription_id, status, and renewal_date. The expected JSON response should confirm the successful update of the subscription details. Additionally, this step must account for edge cases such as rate limits imposed by the API, which may restrict the number of requests in a given timeframe. It should also handle pagination if the subscription data is extensive, manage scenarios where empty arrays are returned, and ensure proper type conversion for fields to match the database schema.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef reconcile_billing_state(subscription_id, status):\n    url = f'{os.environ.get(\"SUPABASE_URL\")}/rest/v1/subscriptions'\n    headers = {\n        'apikey': os.environ.get(\"SUPABASE_KEY\"),\n        'Authorization': f'Bearer {os.environ.get(\"SUPABASE_KEY\")}',\n        'Prefer': 'return=representation'\n    }\n    payload = json.dumps({'id': subscription_id, 'status': status}).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))\n\nresult = reconcile_billing_state('sub_123456789', 'active')",
+          "mock_response": {
+            "id": "sub_123456789",
+            "status": "active"
+          },
+          "actions": [
+            "Prepare the subscription data for Supabase",
+            "Upsert the subscription status",
+            "Confirm the data is stored correctly"
+          ],
+          "commands": [
+            {
+              "label": "Run reconciliation",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUPABASE_URL",
+              "value": "<your_supabase_url>",
+              "description": "URL for Supabase instance"
+            },
+            {
+              "key": "SUPABASE_KEY",
+              "value": "<your_supabase_key>",
+              "description": "API key for authenticating with Supabase"
+            }
+          ],
+          "tools": [
+            "Supabase Database API"
+          ],
+          "checklist": [
+            "Subscription status is updated in Supabase",
+            "Response confirms the update"
+          ],
+          "expectedResult": "The subscription state is reconciled in Supabase.",
+          "links": [
+            {
+              "label": "Supabase Database API Documentation",
+              "url": "https://supabase.com/docs/guides/api"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Stripe account with API keys",
+        "A Resend account with API keys",
+        "A Supabase project with API keys",
+        "Access to Stripe Payments API",
+        "Access to Resend Email API",
+        "Access to Supabase Database API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access."
+        },
+        {
+          "term": "PostgREST Upsert",
+          "definition": "An operation that inserts a new record or updates an existing record in a database."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by waiting before retrying requests."
+        },
+        {
+          "term": "JSON Response Shape",
+          "definition": "The structure and format of data returned by an API in JSON format."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Failed to create Stripe customer",
+          "solution": "Check if the email is already associated with an existing customer."
+        },
+        {
+          "problem": "Receipt email not sent",
+          "solution": "Verify the Resend API key and ensure the email template is correctly configured."
+        },
+        {
+          "problem": "Supabase upsert fails",
+          "solution": "Ensure the payload matches the expected schema and check for valid API keys."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Stripe Payments API",
+          "url": "https://stripe.com/docs/api"
+        },
+        {
+          "label": "Resend Email API",
+          "url": "https://resend.com/docs"
+        },
+        {
+          "label": "Supabase Database API",
+          "url": "https://supabase.com/docs/guides/api"
+        }
+      ],
+      "before_you_start": [
+        "A Stripe account with API keys",
+        "A Resend account with API keys",
+        "A Supabase project with API keys",
+        "Access to Stripe Payments API",
+        "Access to Resend Email API",
+        "Access to Supabase Database API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 14:59 UTC"
   },
   {
     "slug": "invoice-reconciliation",
@@ -7199,26 +7856,259 @@
       "steps": [
         {
           "title": "List paid Stripe invoices",
-          "description": "Page through invoices and normalise amounts and customer ids."
+          "description": "This step retrieves all paid invoices from the Stripe Payments API. The invoices are then normalized to ensure consistent formatting of amounts and customer IDs for further processing.",
+          "technical_explanation": "This step serves as the foundation for the workflow by fetching paid invoices from Stripe. It utilizes the endpoint /v1/invoices and requires the Secret API key for authorization. The response will include a list of invoices, which may be paginated, necessitating careful handling of pagination to ensure all invoices are retrieved. The expected response is a JSON object containing an array of invoice objects.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_paid_invoices():\n    url = 'https://api.stripe.com/v1/invoices'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"STRIPE_API_KEY\")}' }\n    request = urllib.request.Request(url, headers=headers)\n    response = urllib.request.urlopen(request)\n    data = json.loads(response.read().decode('utf-8'))\n    invoices = data.get('data', [])\n    return [{'id': inv.get('id', ''), 'amount': inv.get('amount_paid', 0), 'customer_id': inv.get('customer', '')} for inv in invoices if inv.get('status') == 'paid']\n\npaid_invoices = fetch_paid_invoices()",
+          "mock_response": {
+            "data": [
+              {
+                "id": "in_1J2Y3Z2eZvKYlo2C5Q1gD4e5",
+                "amount_paid": 1500,
+                "customer": "cus_J2Y3Z2eZvKYlo2"
+              },
+              {
+                "id": "in_1J2Y3Z2eZvKYlo2C5Q1gD4e6",
+                "amount_paid": 2500,
+                "customer": "cus_J2Y3Z2eZvKYlo3"
+              }
+            ]
+          },
+          "actions": [
+            "Set up a Stripe account and obtain the API key",
+            "Ensure invoices are marked as paid in Stripe",
+            "Run the Python script to fetch paid invoices"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python fetch_invoices.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "STRIPE_API_KEY",
+              "value": "<your_stripe_api_key>",
+              "description": "The API key for authenticating requests to the Stripe Payments API"
+            }
+          ],
+          "tools": [
+            "Stripe Payments API"
+          ],
+          "checklist": [
+            "Verify that the API key is set correctly",
+            "Check that the response contains paid invoices"
+          ],
+          "expectedResult": "A list of paid invoices is retrieved from Stripe.",
+          "links": [
+            {
+              "label": "Stripe Payments API Documentation",
+              "url": "https://stripe.com/docs/api"
+            }
+          ]
         },
         {
           "title": "Read the Google Sheets ledger",
-          "description": "Fetch ledger rows and index them by invoice number."
+          "description": "This step fetches ledger rows from a specified Google Sheets document. The rows are indexed by invoice number to facilitate comparison with the fetched Stripe invoices.",
+          "technical_explanation": "This step retrieves ledger data from Google Sheets using the /v4/spreadsheets/{spreadsheetId}/values/{range} endpoint. It requires OAuth 2.0 authentication to access the spreadsheet. The response will include the rows of the specified range, which must be indexed by invoice number for accurate reconciliation. Handling of empty responses and authorization errors is crucial.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef read_google_sheet(spreadsheet_id, range_name):\n    url = f'https://sheets.googleapis.com/v4/spreadsheets/{spreadsheet_id}/values/{range_name}'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"GOOGLE_SHEETS_TOKEN\")}' }\n    request = urllib.request.Request(url, headers=headers)\n    response = urllib.request.urlopen(request)\n    data = json.loads(response.read().decode('utf-8'))\n    return {row[0]: {'amount': float(row[1])} for row in data.get('values', [])}\n\nledger = read_google_sheet(os.environ.get(\"SPREADSHEET_ID\"), 'Sheet1!A:B')",
+          "mock_response": {
+            "values": [
+              [
+                "in_1J2Y3Z2eZvKYlo2C5Q1gD4e5",
+                "1500"
+              ],
+              [
+                "in_1J2Y3Z2eZvKYlo2C5Q1gD4e6",
+                "2500"
+              ]
+            ]
+          },
+          "actions": [
+            "Create a Google Sheets document with ledger data",
+            "Set up OAuth 2.0 credentials for Google Sheets API",
+            "Run the Python script to fetch ledger data"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python read_ledger.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "GOOGLE_SHEETS_TOKEN",
+              "value": "<your_google_sheets_token>",
+              "description": "The OAuth 2.0 token for accessing Google Sheets"
+            },
+            {
+              "key": "SPREADSHEET_ID",
+              "value": "<your_spreadsheet_id>",
+              "description": "The ID of the Google Sheets document containing the ledger"
+            }
+          ],
+          "tools": [
+            "Google Sheets API"
+          ],
+          "checklist": [
+            "Verify that the spreadsheet ID is correct",
+            "Check that the response contains ledger rows"
+          ],
+          "expectedResult": "Ledger rows are indexed by invoice number.",
+          "links": [
+            {
+              "label": "Google Sheets API Documentation",
+              "url": "https://developers.google.com/sheets/api/reference/rest"
+            }
+          ]
         },
         {
           "title": "Detect reconciliation mismatches",
-          "description": "Compare amounts and dates deterministically."
+          "description": "This step compares the amounts and dates of the invoices fetched from Stripe with the corresponding entries in the Google Sheets ledger. Any discrepancies are identified for further analysis.",
+          "technical_explanation": "This step performs a deterministic comparison between the lists of invoices and ledger entries. It checks for mismatches in amounts and dates, which are critical for reconciliation. The comparison logic must handle cases where invoices or ledger entries may be missing, ensuring robustness against incomplete data.",
+          "code_snippet": "def detect_mismatches(paid_invoices, ledger):\n    mismatches = []\n    for invoice in paid_invoices:\n        ledger_entry = ledger.get(invoice['id'], {})\n        if ledger_entry:\n            if ledger_entry['amount'] != invoice['amount']:\n                mismatches.append({'invoice_id': invoice['id'], 'stripe_amount': invoice['amount'], 'ledger_amount': ledger_entry['amount']})\n    return mismatches\n\nmismatches = detect_mismatches(paid_invoices, ledger)",
+          "mock_response": [
+            {
+              "invoice_id": "in_1J2Y3Z2eZvKYlo2C5Q1gD4e5",
+              "stripe_amount": 1500,
+              "ledger_amount": 1600
+            }
+          ],
+          "actions": [
+            "Ensure both paid invoices and ledger data are available",
+            "Run the Python script to detect mismatches",
+            "Review the output for discrepancies"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python detect_mismatches.py"
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "Verify that the mismatch detection logic is correct",
+            "Check that the output contains identified mismatches"
+          ],
+          "expectedResult": "Discrepancies between invoices and ledger entries are identified.",
+          "links": [
+            {
+              "label": "Python Standard Library - Data Structures",
+              "url": "https://docs.python.org/3/tutorial/datastructures.html"
+            }
+          ]
         },
         {
           "title": "Explain mismatches with OpenAI",
-          "description": "Generate a short explanation and suggested action per mismatch."
+          "description": "This step utilizes the OpenAI GPT-4 API to generate explanations for the identified mismatches. Each mismatch is sent to the API, which returns a suggested action to resolve the discrepancy.",
+          "technical_explanation": "This step leverages the OpenAI GPT-4 API to provide contextual explanations for each mismatch detected in the previous step. The API is called using the /v1/chat/completions endpoint, requiring a Bearer token for authentication. The response will include generated text that explains the mismatch and suggests actions. Care must be taken to handle potential errors in API responses and ensure that the prompts are clear.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef explain_mismatches(mismatches):\n    explanations = []\n    for mismatch in mismatches:\n        prompt = f'Explain the discrepancy between Stripe amount {mismatch[\"stripe_amount\"]} and ledger amount {mismatch[\"ledger_amount\"]} for invoice {mismatch[\"invoice_id\"]}. Suggest an action.'\n        url = 'https://api.openai.com/v1/chat/completions'\n        headers = {'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}', 'Content-Type': 'application/json'}\n        data = json.dumps({'model': 'gpt-4o', 'messages': [{'role': 'user', 'content': prompt}]})\n        request = urllib.request.Request(url, data=data.encode('utf-8'), headers=headers)\n        response = urllib.request.urlopen(request)\n        result = json.loads(response.read().decode('utf-8'))\n        explanations.append(result.get('choices', [{}])[0].get('message', {}).get('content', ''))\n    return explanations\n\nmismatches = []  # Placeholder for mismatches input\nexplanations = explain_mismatches(mismatches)",
+          "mock_response": [
+            "The Stripe amount of 1500 does not match the ledger amount of 1600. Please verify the invoice details."
+          ],
+          "actions": [
+            "Ensure that mismatches are detected before this step",
+            "Run the Python script to generate explanations",
+            "Review the suggested actions provided by OpenAI"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python explain_mismatches.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "OPENAI_API_KEY",
+              "value": "<your_openai_api_key>",
+              "description": "The API key for authenticating requests to the OpenAI GPT-4 API"
+            }
+          ],
+          "tools": [
+            "OpenAI GPT-4 API"
+          ],
+          "checklist": [
+            "Verify that the OpenAI API key is set correctly",
+            "Check that the response contains explanations for all mismatches"
+          ],
+          "expectedResult": "Explanations for discrepancies are generated and available for review.",
+          "links": [
+            {
+              "label": "OpenAI GPT-4 API Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/chat/create"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Stripe account with access to the Payments API and API key",
+        "A Google account with access to Google Sheets and OAuth 2.0 credentials",
+        "An OpenAI account with access to the GPT-4 API and API key",
+        "Access to Stripe Payments API",
+        "Access to Google Sheets API",
+        "Access to OpenAI GPT-4 API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by waiting before retrying requests."
+        },
+        {
+          "term": "Token-Bucket Pagination",
+          "definition": "A method for managing API response pagination by controlling the flow of requests."
+        },
+        {
+          "term": "Deterministic Comparison",
+          "definition": "A method of comparing values based on fixed rules to identify discrepancies."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API rate limit exceeded",
+          "solution": "Implement exponential backoff and retry logic."
+        },
+        {
+          "problem": "Empty response from Google Sheets API",
+          "solution": "Check spreadsheet ID and permissions."
+        },
+        {
+          "problem": "Discrepancies not explained by OpenAI",
+          "solution": "Ensure the prompt is clear and includes all necessary context."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Stripe Payments API",
+          "url": "https://stripe.com/docs/api"
+        },
+        {
+          "label": "Google Sheets API",
+          "url": "https://developers.google.com/sheets/api/reference/rest"
+        },
+        {
+          "label": "OpenAI GPT-4 API",
+          "url": "https://platform.openai.com/docs/api-reference/chat/create"
+        }
+      ],
+      "before_you_start": [
+        "A Stripe account with access to the Payments API and API key",
+        "A Google account with access to Google Sheets and OAuth 2.0 credentials",
+        "An OpenAI account with access to the GPT-4 API and API key",
+        "Access to Stripe Payments API",
+        "Access to Google Sheets API",
+        "Access to OpenAI GPT-4 API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:00 UTC"
   },
   {
     "slug": "paypal-payout-monitoring",
@@ -7236,8 +8126,8 @@
       "duration": "75–90 minutes",
       "tools": [
         "PayPal Payments API",
-        "Slack Web API",
-        "Airtable API"
+        "Airtable API",
+        "Slack Web API"
       ],
       "api_slugs": [
         "paypal-payments-api",
@@ -7252,26 +8142,262 @@
       "steps": [
         {
           "title": "Fetch payout batches",
-          "description": "List recent payout batches and their item statuses."
+          "description": "This step retrieves the recent payout batches from the PayPal Payments API. It lists each batch along with the status of its items, allowing for further processing.",
+          "technical_explanation": "This step serves as the initial data source for the workflow, consuming no prior data. It calls the PayPal Payments API at the endpoint /v1/payments/payouts to fetch recent payout batches. The request requires a Bearer token for authentication. The response includes an array of payout items, each containing details like receiver, amount, and status. Edge cases include handling rate limits and pagination if the number of batches exceeds the API limit.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\ndef fetch_payout_batches():\n    # Define the URL for the PayPal API\n    url = 'https://api.paypal.com/v1/payments/payouts'\n    # Set up the authorization header with the API token\n    headers = {'Authorization': f'Bearer {os.environ.get(\"PAYPAL_API_TOKEN\")}' }\n    # Create a request object\n    request = urllib.request.Request(url, headers=headers)\n    # Open the URL and read the response\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    # Return the list of items from the response\n    return data.get('items', [])\n\n# Fetch the payout batches\npayout_batches = fetch_payout_batches()",
+          "mock_response": {
+            "items": [
+              {
+                "batch_id": "12345",
+                "items": [
+                  {
+                    "recipient_type": "EMAIL",
+                    "email": "recipient@example.com",
+                    "amount": {
+                      "value": "10.00",
+                      "currency": "USD"
+                    },
+                    "status": "SUCCESS"
+                  }
+                ]
+              }
+            ]
+          },
+          "actions": [
+            "Construct the API request to PayPal",
+            "Send the request and receive the response",
+            "Extract payout items from the response"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python fetch_payout_batches.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "PAYPAL_API_TOKEN",
+              "value": "<your_paypal_api_token>",
+              "description": "Bearer token for PayPal API authentication"
+            }
+          ],
+          "tools": [
+            "PayPal Payments API"
+          ],
+          "checklist": [
+            "Verify that the API request returns a 200 status code",
+            "Ensure that the response contains payout items"
+          ],
+          "expectedResult": "The recent payout batches are fetched successfully.",
+          "links": [
+            {
+              "label": "PayPal Payments API Documentation",
+              "url": "https://developer.paypal.com/docs/api/overview"
+            }
+          ]
         },
         {
           "title": "Normalise payout items",
-          "description": "Map receiver, amount and status fields into stable records."
+          "description": "This step processes the fetched payout items, mapping relevant fields into a stable format for further use. It ensures that each item has consistent attributes.",
+          "technical_explanation": "This step transforms the raw payout item data into a structured format. It consumes the output from the previous step, specifically the array of payout items. Each item is normalized to include fields like receiver, amount, and status. This is crucial for maintaining data integrity in subsequent steps. Edge cases include handling missing fields and ensuring consistent data types.",
+          "code_snippet": "def normalise_payout_items(payout_batches):\n    normalized_items = []\n    for batch in payout_batches:\n        for item in batch.get('items', []):\n            normalized_item = {\n                'receiver': item.get('email', ''),\n                'amount': float(item.get('amount', {}).get('value', 0)),\n                'status': item.get('status', '')\n            }\n            normalized_items.append(normalized_item)\n    return normalized_items\n\nnormalized_items = normalise_payout_items(payout_batches)",
+          "mock_response": [
+            {
+              "receiver": "recipient@example.com",
+              "amount": 10.0,
+              "status": "SUCCESS"
+            }
+          ],
+          "actions": [
+            "Iterate over each payout batch",
+            "Extract relevant fields from each payout item",
+            "Append normalized items to a list"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python normalise_payout_items.py"
+            }
+          ],
+          "config": [],
+          "tools": [
+            "PayPal Payments API"
+          ],
+          "checklist": [
+            "Verify that normalized items contain expected fields",
+            "Ensure data types are consistent"
+          ],
+          "expectedResult": "Payout items are normalized into a structured format.",
+          "links": [
+            {
+              "label": "PayPal Payments API Documentation",
+              "url": "https://developer.paypal.com/docs/api/overview"
+            }
+          ]
         },
         {
           "title": "Record payouts in Airtable",
-          "description": "Upsert one row per payout item."
+          "description": "This step upserts the normalized payout items into an Airtable table. Each item is recorded as a new row or updated if it already exists.",
+          "technical_explanation": "This step integrates with Airtable to store the normalized payout items. It consumes the normalized items from the previous step and sends them to the Airtable API at the endpoint /v0/{base_id}/{table_name}. The request requires a Bearer token for authentication and a specific payload structure. Edge cases include handling API limits and ensuring that the correct base ID and table name are used.",
+          "code_snippet": "import json\nimport os\nimport urllib.request\n\ndef record_payouts_in_airtable(normalized_items):\n    url = f'https://api.airtable.com/v0/{os.environ.get(\"AIRTABLE_BASE_ID\")}/Payouts'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"AIRTABLE_API_KEY\")}', 'Content-Type': 'application/json'}\n    for item in normalized_items:\n        payload = {'fields': item}\n        request = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)\n        try:\n            with urllib.request.urlopen(request) as response:\n                if response.status not in (200, 201, 204):\n                    print('Error recording item:', item)\n        except urllib.error.URLError as e:\n            print('Failed to record item:', item, 'Error:', e)\n\nrecord_payouts_in_airtable(normalized_items)",
+          "mock_response": {},
+          "actions": [
+            "Construct the API request to Airtable",
+            "Send each normalized item as a payload",
+            "Handle response status for success or failure"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python record_payouts_in_airtable.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "AIRTABLE_API_KEY",
+              "value": "<your_airtable_api_key>",
+              "description": "Bearer token for Airtable API authentication"
+            },
+            {
+              "key": "AIRTABLE_BASE_ID",
+              "value": "<your_airtable_base_id>",
+              "description": "Base ID for the Airtable table"
+            }
+          ],
+          "tools": [
+            "Airtable API"
+          ],
+          "checklist": [
+            "Verify that items are recorded in Airtable",
+            "Check for any error messages during the upsert"
+          ],
+          "expectedResult": "Normalized payout items are recorded in Airtable.",
+          "links": [
+            {
+              "label": "Airtable API Documentation",
+              "url": "https://airtable.com/developers/web/api/introduction"
+            }
+          ]
         },
         {
           "title": "Alert finance about failures",
-          "description": "Post failed and returned items to the finance Slack channel."
+          "description": "This step sends alerts to the finance team via Slack for any payout items that failed or were returned. It ensures timely communication of issues.",
+          "technical_explanation": "This step utilizes the Slack Web API to send messages about failed payout items. It consumes the normalized items and checks their status. If an item has a status indicating failure, a message is constructed and sent to a specified Slack channel. The request requires an OAuth 2.0 bot token for authentication. Edge cases include handling network errors and ensuring the message format is correct.",
+          "code_snippet": "import json\nimport os\nimport urllib.request\n\ndef alert_finance_about_failures(normalized_items):\n    url = 'https://slack.com/api/chat.postMessage'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"SLACK_BOT_TOKEN\")}', 'Content-Type': 'application/json'}\n    for item in normalized_items:\n        if item['status'] in ['FAILED', 'RETURNED']:\n            payload = {'channel': '#finance', 'text': f'Alert: Payout to {item[\"receiver\"]} failed with status {item[\"status\"]}.'}\n            request = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)\n            try:\n                with urllib.request.urlopen(request) as response:\n                    if response.status != 200:\n                        print('Error sending alert:', item)\n            except urllib.error.URLError as e:\n                print('Failed to send alert due to URL error:', e)\n\nalert_finance_about_failures(normalized_items)",
+          "mock_response": {
+            "ok": true,
+            "channel": "C1234567890",
+            "ts": "1234567890.123456",
+            "message": {
+              "text": "Alert: Payout to recipient@example.com failed with status FAILED.",
+              "user": "U1234567890",
+              "ts": "1234567890.123456"
+            }
+          },
+          "actions": [
+            "Construct the message payload for Slack",
+            "Send the message to the finance channel",
+            "Handle response status for success or failure"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python alert_finance_about_failures.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SLACK_BOT_TOKEN",
+              "value": "<your_slack_bot_token>",
+              "description": "OAuth 2.0 token for Slack API authentication"
+            }
+          ],
+          "tools": [
+            "Slack Web API"
+          ],
+          "checklist": [
+            "Verify that alerts are sent to the Slack channel",
+            "Check for any error messages during alerting"
+          ],
+          "expectedResult": "Finance team is alerted about payout failures.",
+          "links": [
+            {
+              "label": "Slack Web API Documentation",
+              "url": "https://api.slack.com/methods"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A PayPal developer account and API credentials",
+        "A Slack workspace and bot token",
+        "An Airtable account and API key",
+        "Access to PayPal Payments API",
+        "Access to Slack Web API",
+        "Access to Airtable API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for accessing secured APIs using a token that is included in the request header."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy for managing API request limits by delaying requests when limits are approached."
+        },
+        {
+          "term": "Upsert Operation",
+          "definition": "An operation that inserts a new record or updates an existing record in a database."
+        },
+        {
+          "term": "Payload Structure",
+          "definition": "The specific format and content of data sent in an API request."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Failed to fetch payout batches",
+          "solution": "Check API credentials and ensure the PayPal Payments API is correctly configured."
+        },
+        {
+          "problem": "Slack alerts not received",
+          "solution": "Verify the Slack bot token and ensure the bot has permissions to post in the specified channel."
+        },
+        {
+          "problem": "Airtable records not updating",
+          "solution": "Ensure the Airtable API key is correct and the base ID and table name are properly configured."
+        }
+      ],
+      "resources": [
+        {
+          "label": "PayPal Payments API",
+          "url": "https://developer.paypal.com/docs/api/overview"
+        },
+        {
+          "label": "Slack Web API",
+          "url": "https://api.slack.com/methods"
+        },
+        {
+          "label": "Airtable API",
+          "url": "https://airtable.com/developers/web/api/introduction"
+        }
+      ],
+      "before_you_start": [
+        "A PayPal developer account and API credentials",
+        "A Slack workspace and bot token",
+        "An Airtable account and API key",
+        "Access to PayPal Payments API",
+        "Access to Slack Web API",
+        "Access to Airtable API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:03 UTC"
   },
   {
     "slug": "stock-market-alerts",
@@ -7304,26 +8430,241 @@
       "steps": [
         {
           "title": "Fetch the watchlist quotes",
-          "description": "Request quotes from Finnhub for the configured tickers."
+          "description": "This step retrieves stock quotes for a predefined list of tickers from the Finnhub Stock API. The fetched data will be used in subsequent steps to check for price movements.",
+          "technical_explanation": "This step serves as the initial data source for stock quotes, consuming the configured tickers. The API contract requires a GET request to the endpoint '/quote', with the ticker symbol as a query parameter. The expected response includes current price, high, low, and volume. Edge cases include handling rate limits and ensuring the response contains valid data, as empty responses may lead to errors in later steps.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\ndef fetch_quotes():\n    tickers = ['AAPL', 'GOOGL', 'MSFT']  # List of stock tickers\n    quotes = []\n    for ticker in tickers:\n        url = f'https://finnhub.io/api/v1/quote?symbol={ticker}&token={os.environ.get(\"FINNHUB_API_KEY\")}'\n        with urllib.request.urlopen(url) as response:\n            data = json.loads(response.read().decode('utf-8'))\n            quotes.append(data.get('c', 0))  # Current price\n    return quotes\n\nquotes = fetch_quotes()",
+          "mock_response": {
+            "c": 150.0,
+            "h": 155.0,
+            "l": 148.0,
+            "pc": 149.0
+          },
+          "actions": [
+            "Define a list of stock tickers to monitor.",
+            "Construct the API request URL for each ticker.",
+            "Fetch the current stock price from Finnhub."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python fetch_quotes.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "FINNHUB_API_KEY",
+              "value": "<your_finnhub_api_key>",
+              "description": "API key for accessing Finnhub Stock API."
+            }
+          ],
+          "tools": [
+            "Finnhub Stock API"
+          ],
+          "checklist": [
+            "Verify that the quotes list is populated with current prices.",
+            "Ensure that no API errors occurred during the fetch."
+          ],
+          "expectedResult": "The current stock prices for the predefined tickers are retrieved successfully.",
+          "links": [
+            {
+              "label": "Finnhub Stock API Documentation",
+              "url": "https://finnhub.io/docs/api"
+            }
+          ]
         },
         {
           "title": "Cross-check with Twelve Data",
-          "description": "Fetch time series values for the same tickers."
+          "description": "In this step, we fetch historical time series data for the same tickers from the Twelve Data API to analyze price movements over time.",
+          "technical_explanation": "This step complements the previous one by providing historical context for the current prices. The API contract requires a GET request to the '/time_series' endpoint, specifying the ticker and the desired interval. The response includes historical prices, which are essential for evaluating price thresholds. Edge cases include handling empty responses and ensuring the correct time series data is returned.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef fetch_time_series():\n    tickers = ['AAPL', 'GOOGL', 'MSFT']\n    time_series_data = {}\n    for ticker in tickers:\n        url = f'https://api.twelvedata.com/time_series?symbol={ticker}&interval=1day&apikey={os.environ.get(\"TWELVEDATA_API_KEY\")}'\n        with urllib.request.urlopen(url) as response:\n            data = json.loads(response.read().decode('utf-8'))\n            time_series_data[ticker] = data.get('values', [])  # Historical prices\n    return time_series_data\n\ntime_series = fetch_time_series()",
+          "mock_response": {
+            "values": [
+              {
+                "datetime": "2023-10-01",
+                "close": 150.0
+              },
+              {
+                "datetime": "2023-10-02",
+                "close": 152.0
+              }
+            ]
+          },
+          "actions": [
+            "Construct the API request URL for each ticker.",
+            "Fetch historical price data from Twelve Data.",
+            "Store the time series data for further analysis."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python fetch_time_series.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "TWELVEDATA_API_KEY",
+              "value": "<your_twelvedata_api_key>",
+              "description": "API key for accessing Twelve Data API."
+            }
+          ],
+          "tools": [
+            "Twelve Data API"
+          ],
+          "checklist": [
+            "Verify that the time series data is populated for each ticker.",
+            "Ensure that no API errors occurred during the fetch."
+          ],
+          "expectedResult": "The historical time series data for the predefined tickers is retrieved successfully.",
+          "links": [
+            {
+              "label": "Twelve Data API Documentation",
+              "url": "https://twelvedata.com/docs"
+            }
+          ]
         },
         {
           "title": "Evaluate price thresholds",
-          "description": "Compare daily change and volume against configured thresholds."
+          "description": "This step evaluates the fetched data against predefined price thresholds to determine if alerts should be triggered.",
+          "technical_explanation": "This step analyzes the current and historical data to identify significant price movements. It compares the current price from Finnhub with the historical prices from Twelve Data. The evaluation criteria include daily changes and volume thresholds. Edge cases involve ensuring that sufficient historical data is available for comparison and handling cases where no significant changes are detected.",
+          "code_snippet": "import statistics\n\ndef evaluate_thresholds(quotes, time_series):\n    alerts = []\n    for ticker, current_price in zip(['AAPL', 'GOOGL', 'MSFT'], quotes):\n        historical_prices = [float(item['close']) for item in time_series.get(ticker, [])]\n        if len(historical_prices) < 2:\n            continue  # Not enough data to evaluate\n        average_price = statistics.mean(historical_prices)\n        if current_price > average_price * 1.05:  # Trigger if price exceeds 5% of average\n            alerts.append(ticker)\n    return alerts\n\nalerts = evaluate_thresholds(quotes, time_series)",
+          "mock_response": [
+            "AAPL"
+          ],
+          "actions": [
+            "Calculate the average historical price for each ticker.",
+            "Compare the current price against the average.",
+            "Store tickers that exceed the threshold for alerts."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python evaluate_thresholds.py"
+            }
+          ],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Verify that the alerts list contains tickers exceeding the threshold.",
+            "Ensure that the evaluation logic correctly identifies significant price changes."
+          ],
+          "expectedResult": "The system identifies which tickers have crossed the defined price thresholds.",
+          "links": [
+            {
+              "label": "Python Statistics Library",
+              "url": "https://docs.python.org/3/library/statistics.html"
+            }
+          ]
         },
         {
           "title": "Send Slack market alerts",
-          "description": "Post a formatted alert for every triggered ticker."
+          "description": "In the final step, alerts for the identified tickers are sent to a specified Slack channel using the Slack Web API.",
+          "technical_explanation": "This step is responsible for notifying users of significant price movements. It constructs a message for each ticker that has crossed the threshold and sends it via a POST request to the Slack Web API. The API contract requires the use of the '/chat.postMessage' endpoint with a payload containing the channel and message text. Edge cases include handling failed message deliveries and ensuring that the Slack bot has the necessary permissions.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef send_alerts(alerts):\n    for ticker in alerts:\n        message = f'{ticker} has crossed the price threshold!'\n        url = 'https://slack.com/api/chat.postMessage'\n        payload = json.dumps({\"channel\": \"#alerts\", \"text\": message})\n        request = urllib.request.Request(url, data=payload.encode('utf-8'), headers={\n            'Content-Type': 'application/json',\n            'Authorization': f'Bearer {os.environ.get(\"SLACK_BOT_TOKEN\")}'\n        })\n        with urllib.request.urlopen(request) as response:\n            if response.status != 200:\n                print(f'Error sending alert for {ticker}')  # Log error\n\nalerts = ['AAPL', 'GOOGL', 'AMZN']  # Example alerts\nsend_alerts(alerts)",
+          "mock_response": "ok",
+          "actions": [
+            "Construct the alert message for each ticker.",
+            "Send the alert message to the specified Slack channel.",
+            "Log any errors encountered during the alert sending process."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python send_alerts.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SLACK_BOT_TOKEN",
+              "value": "<your_slack_bot_token>",
+              "description": "OAuth token for accessing Slack Web API."
+            }
+          ],
+          "tools": [
+            "Slack Web API"
+          ],
+          "checklist": [
+            "Verify that alerts are sent to the Slack channel.",
+            "Ensure that the Slack bot has permission to post messages."
+          ],
+          "expectedResult": "Alerts for tickers that crossed thresholds are successfully sent to Slack.",
+          "links": [
+            {
+              "label": "Slack Web API Documentation",
+              "url": "https://api.slack.com/methods"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Finnhub account and API key",
+        "A Twelve Data account and API key",
+        "A Slack account and OAuth 2.0 bot token",
+        "Access to Finnhub Stock API",
+        "Access to Twelve Data API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access to the API."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by pausing requests until the limit resets."
+        },
+        {
+          "term": "Payload Structure",
+          "definition": "The format and content of data sent in API requests or responses."
+        },
+        {
+          "term": "Threshold Evaluation",
+          "definition": "The process of comparing data against predefined limits to trigger actions."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API key is invalid",
+          "solution": "Verify that the API key is correctly set in environment variables."
+        },
+        {
+          "problem": "Rate limit exceeded",
+          "solution": "Implement a backoff strategy to wait before retrying API requests."
+        },
+        {
+          "problem": "Slack message not sent",
+          "solution": "Check the OAuth token and channel permissions for the Slack bot."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Finnhub Stock API",
+          "url": "https://finnhub.io/docs/api"
+        },
+        {
+          "label": "Twelve Data API",
+          "url": "https://twelvedata.com/docs"
+        },
+        {
+          "label": "Slack Web API",
+          "url": "https://api.slack.com/methods"
+        }
+      ],
+      "before_you_start": [
+        "A Finnhub account and API key",
+        "A Twelve Data account and API key",
+        "A Slack account and OAuth 2.0 bot token",
+        "Access to Finnhub Stock API",
+        "Access to Twelve Data API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:04 UTC"
   },
   {
     "slug": "crypto-portfolio-tracker",
@@ -7340,8 +8681,8 @@
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
       "tools": [
-        "Finnhub Crypto API",
         "Google Sheets API",
+        "Finnhub Crypto API",
         "Telegram Bot API"
       ],
       "api_slugs": [
@@ -7356,26 +8697,244 @@
       "steps": [
         {
           "title": "Read holdings from Google Sheets",
-          "description": "Load symbol and amount rows from the portfolio sheet."
+          "description": "This step retrieves the portfolio holdings from a specified Google Sheet. It extracts the symbols and amounts of cryptocurrencies held in the portfolio for further processing.",
+          "technical_explanation": "This step serves as the initial data source for the workflow, consuming the Google Sheets API to read the portfolio data. The API endpoint used is https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}/values/{range}, requiring OAuth 2.0 authentication. The expected response is a JSON object containing the values in the specified range. Edge cases include handling empty responses and ensuring proper authorization scopes are set.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\ndef read_holdings():\n    spreadsheet_id = os.environ.get('SPREADSHEET_ID')\n    range_name = 'Portfolio!A2:B'\n    url = f'https://sheets.googleapis.com/v4/spreadsheets/{spreadsheet_id}/values/{range_name}'\n    request = urllib.request.Request(url)\n    response = urllib.request.urlopen(request)\n    data = json.loads(response.read().decode('utf-8'))\n    holdings = data.get('values', [])\n    return [{'symbol': row[0], 'amount': float(row[1])} for row in holdings]\n\nholdings = read_holdings()",
+          "mock_response": {
+            "range": "Portfolio!A2:B",
+            "majorDimension": "ROWS",
+            "values": [
+              [
+                "BTC",
+                "0.5"
+              ],
+              [
+                "ETH",
+                "2.0"
+              ]
+            ]
+          },
+          "actions": [
+            "Set up Google Cloud project and enable Google Sheets API",
+            "Create a service account and obtain credentials",
+            "Share the Google Sheet with the service account email"
+          ],
+          "commands": [
+            {
+              "label": "Set environment variables",
+              "language": "bash",
+              "code": "export SPREADSHEET_ID='your_spreadsheet_id'"
+            }
+          ],
+          "config": [
+            {
+              "key": "SPREADSHEET_ID",
+              "value": "<your_spreadsheet_id>",
+              "description": "The ID of the Google Sheet containing the portfolio"
+            }
+          ],
+          "tools": [
+            "Google Sheets API"
+          ],
+          "checklist": [
+            "Successfully retrieved holdings from Google Sheets",
+            "Holdings contain both symbol and amount"
+          ],
+          "expectedResult": "The portfolio holdings are successfully read from Google Sheets.",
+          "links": [
+            {
+              "label": "Google Sheets API Documentation",
+              "url": "https://developers.google.com/sheets/api/reference/rest"
+            }
+          ]
         },
         {
           "title": "Price holdings with Finnhub Crypto",
-          "description": "Fetch current prices and compute position values."
+          "description": "This step fetches the current market prices for the cryptocurrencies listed in the portfolio. It computes the total value of each holding based on the latest prices.",
+          "technical_explanation": "This step interacts with the Finnhub Crypto API to obtain the latest prices for the specified cryptocurrency symbols. The endpoint used is https://api.finnhub.io/v1/quote, requiring a Bearer token for authentication. The response includes current price data, which is then used to calculate the value of each holding. Edge cases include handling API rate limits and ensuring valid symbols are queried.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\ndef price_holdings(holdings):\n    prices = {}\n    for holding in holdings:\n        symbol = holding['symbol']\n        url = f'https://api.finnhub.io/v1/quote?symbol={symbol}&token={os.environ.get(\"FINNHUB_API_KEY\")}'\n        request = urllib.request.Request(url)\n        response = urllib.request.urlopen(request)\n        data = json.loads(response.read().decode('utf-8'))\n        prices[symbol] = data.get('c', 0)  # Current price\n    return prices\n\nprices = price_holdings(holdings)",
+          "mock_response": {
+            "c": 45000.0,
+            "h": 46000.0,
+            "l": 44000.0,
+            "o": 44500.0,
+            "pc": 44000.0
+          },
+          "actions": [
+            "Obtain Finnhub API key and set it in environment variables",
+            "Iterate through each holding to fetch current prices",
+            "Store prices in a dictionary for further calculations"
+          ],
+          "commands": [
+            {
+              "label": "Set environment variable",
+              "language": "bash",
+              "code": "export FINNHUB_API_KEY='your_finnhub_api_key'"
+            }
+          ],
+          "config": [
+            {
+              "key": "FINNHUB_API_KEY",
+              "value": "<your_finnhub_api_key>",
+              "description": "Your Finnhub API key for authentication"
+            }
+          ],
+          "tools": [
+            "Finnhub Crypto API"
+          ],
+          "checklist": [
+            "Successfully fetched current prices for all holdings",
+            "Prices are stored in a dictionary with symbols as keys"
+          ],
+          "expectedResult": "Current prices for the portfolio holdings are successfully retrieved.",
+          "links": [
+            {
+              "label": "Finnhub Crypto API Documentation",
+              "url": "https://finnhub.io/docs/api"
+            }
+          ]
         },
         {
           "title": "Update the portfolio sheet",
-          "description": "Write valuation and change columns back to the sheet."
+          "description": "This step writes the computed valuations and changes back to the Google Sheet. It updates the portfolio with the latest values based on the current market prices.",
+          "technical_explanation": "This step updates the Google Sheet with the calculated values for each holding. The endpoint used is https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}/values/{range}:update, requiring OAuth 2.0 authentication. The request payload includes the updated values for valuation and change. Edge cases include handling write permissions and ensuring the correct range is specified.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\ndef update_portfolio(holdings, prices):\n    spreadsheet_id = os.environ.get('SPREADSHEET_ID')\n    range_name = 'Portfolio!C2:D'\n    values = [[holding['amount'] * prices[holding['symbol']], prices[holding['symbol']]] for holding in holdings]\n    body = {'values': values}\n    url = f'https://sheets.googleapis.com/v4/spreadsheets/{spreadsheet_id}/values/{range_name}:update?valueInputOption=USER_ENTERED'\n    request = urllib.request.Request(url, data=json.dumps(body).encode('utf-8'))\n    request.add_header('Content-Type', 'application/json')\n    response = urllib.request.urlopen(request)\n    return response.read().decode('utf-8')\n\nupdate_response = update_portfolio(holdings, prices)",
+          "mock_response": "Update successful",
+          "actions": [
+            "Prepare the updated values for valuation and change",
+            "Send the update request to the Google Sheets API",
+            "Handle response to confirm successful update"
+          ],
+          "commands": [],
+          "config": [],
+          "tools": [
+            "Google Sheets API"
+          ],
+          "checklist": [
+            "Successfully updated the portfolio sheet with valuations",
+            "Changes are reflected in the specified range"
+          ],
+          "expectedResult": "The portfolio sheet is updated with the latest valuations and changes.",
+          "links": [
+            {
+              "label": "Google Sheets API Documentation",
+              "url": "https://developers.google.com/sheets/api/reference/rest"
+            }
+          ]
         },
         {
           "title": "Send the Telegram valuation update",
-          "description": "Post the total value and top movers to the portfolio chat."
+          "description": "This step sends a message to a specified Telegram chat with the total portfolio value and the top movers. It alerts the user of the current status of their investments.",
+          "technical_explanation": "This step utilizes the Telegram Bot API to send a message containing the total portfolio value and top movers. The endpoint used is https://api.telegram.org/bot{token}/sendMessage, requiring the bot token in the URL. The message is formatted as a string. Edge cases include handling message length limits and ensuring the bot has permission to send messages to the chat.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\ndef send_telegram_update(total_value, top_movers):\n    chat_id = os.environ.get('TELEGRAM_CHAT_ID')\n    bot_token = os.environ.get('TELEGRAM_BOT_TOKEN')\n    message = f'Total Portfolio Value: ${total_value}\\nTop Movers: {\", \".join(top_movers)}'\n    url = f'https://api.telegram.org/bot{bot_token}/sendMessage'\n    payload = {'chat_id': chat_id, 'text': message}\n    request = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'))\n    request.add_header('Content-Type', 'application/json')\n    response = urllib.request.urlopen(request)\n    return response.read().decode('utf-8')\n\n# Example usage\ntotal_value = 10000.50  # Replace with actual total value\ntop_movers = ['Stock A', 'Stock B', 'Stock C']  # Replace with actual top movers\ntelegram_response = send_telegram_update(total_value, top_movers)",
+          "mock_response": "Message sent successfully",
+          "actions": [
+            "Format the message with total value and top movers",
+            "Send the message to the Telegram chat",
+            "Confirm message delivery"
+          ],
+          "commands": [
+            {
+              "label": "Set environment variable",
+              "language": "bash",
+              "code": "export TELEGRAM_BOT_TOKEN='your_telegram_bot_token'"
+            },
+            {
+              "label": "Set environment variable",
+              "language": "bash",
+              "code": "export TELEGRAM_CHAT_ID='your_chat_id'"
+            }
+          ],
+          "config": [
+            {
+              "key": "TELEGRAM_BOT_TOKEN",
+              "value": "<your_telegram_bot_token>",
+              "description": "Your Telegram bot token for authentication"
+            },
+            {
+              "key": "TELEGRAM_CHAT_ID",
+              "value": "<your_chat_id>",
+              "description": "The chat ID where the message will be sent"
+            }
+          ],
+          "tools": [
+            "Telegram Bot API"
+          ],
+          "checklist": [
+            "Message sent successfully to the Telegram chat",
+            "Total value and top movers are correctly formatted"
+          ],
+          "expectedResult": "A Telegram message with the portfolio valuation is sent successfully.",
+          "links": [
+            {
+              "label": "Telegram Bot API Documentation",
+              "url": "https://core.telegram.org/bots/api"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Google Cloud project with the Google Sheets API enabled and credentials set up",
+        "A Finnhub account with a valid API key for the Finnhub Crypto API",
+        "A Telegram bot created with a valid bot token",
+        "Access to Telegram Bot API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests by including a token in the request header."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by pausing requests when limits are reached."
+        },
+        {
+          "term": "OAuth 2.0",
+          "definition": "An authorization framework that allows third-party services to exchange information without sharing passwords."
+        },
+        {
+          "term": "JSON Response Shape",
+          "definition": "The structure of the data returned by an API in JSON format, defining keys and value types."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API key is invalid",
+          "solution": "Verify that the API key is correctly set in your environment variables."
+        },
+        {
+          "problem": "Google Sheets API returns 403 Forbidden",
+          "solution": "Ensure that the service account has access to the Google Sheet."
+        },
+        {
+          "problem": "Telegram bot not sending messages",
+          "solution": "Check that the bot token is correct and that the bot is added to the chat."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Finnhub Crypto API",
+          "url": "https://finnhub.io/docs/api"
+        },
+        {
+          "label": "Google Sheets API",
+          "url": "https://developers.google.com/sheets/api/reference/rest"
+        },
+        {
+          "label": "Telegram Bot API",
+          "url": "https://core.telegram.org/bots/api"
+        }
+      ],
+      "before_you_start": [
+        "A Google Cloud project with the Google Sheets API enabled and credentials set up",
+        "A Finnhub account with a valid API key for the Finnhub Crypto API",
+        "A Telegram bot created with a valid bot token",
+        "Access to Telegram Bot API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:05 UTC"
   },
   {
     "slug": "bank-transaction-enrichment",
@@ -7408,26 +8967,265 @@
       "steps": [
         {
           "title": "Fetch transactions from Plaid",
-          "description": "Sync transactions for the configured access token."
+          "description": "This step retrieves transaction data from the Plaid Financial Data API using a configured access token. The fetched data will be used in subsequent steps for enrichment and storage.",
+          "technical_explanation": "This step serves as the initial data source for the workflow, consuming the access token to authenticate with the Plaid API. The endpoint used is POST /transactions/get, requiring headers for authentication and a request payload containing the access token and date range. Edge cases include handling rate limits and ensuring the response contains valid transaction data, which may require pagination if the number of transactions exceeds the limit.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_transactions():\n    url = 'https://production.plaid.com/transactions/get'\n    headers = {\n        'Content-Type': 'application/json',\n        'Authorization': f'Bearer {os.environ.get(\"PLAID_ACCESS_TOKEN\")}'\n    }\n    payload = json.dumps({\n        'client_id': os.environ.get('PLAID_CLIENT_ID'),\n        'secret': os.environ.get('PLAID_SECRET'),\n        'access_token': os.environ.get('PLAID_ACCESS_TOKEN'),\n        'start_date': '2023-01-01',\n        'end_date': '2023-12-31'\n    }).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8')).get('transactions', [])\n\ntransactions = fetch_transactions()",
+          "mock_response": {
+            "transactions": [
+              {
+                "id": "transaction_id_1",
+                "amount": 100.0,
+                "date": "2023-01-15",
+                "merchant_name": "Merchant A"
+              },
+              {
+                "id": "transaction_id_2",
+                "amount": 50.0,
+                "date": "2023-01-16",
+                "merchant_name": "Merchant B"
+              }
+            ]
+          },
+          "actions": [
+            "Set up a Plaid account and obtain access credentials.",
+            "Define the date range for transaction retrieval.",
+            "Implement error handling for API requests."
+          ],
+          "commands": [
+            {
+              "label": "Run the transaction fetch script",
+              "language": "bash",
+              "code": "python fetch_transactions.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "PLAID_ACCESS_TOKEN",
+              "value": "<your_access_token>",
+              "description": "The access token for authenticating with the Plaid API."
+            },
+            {
+              "key": "PLAID_CLIENT_ID",
+              "value": "<your_client_id>",
+              "description": "The client ID for your Plaid application."
+            },
+            {
+              "key": "PLAID_SECRET",
+              "value": "<your_secret>",
+              "description": "The secret for your Plaid application."
+            }
+          ],
+          "tools": [
+            "Plaid Financial Data API"
+          ],
+          "checklist": [
+            "Verify that the access token is valid.",
+            "Check that the response contains transaction data."
+          ],
+          "expectedResult": "Transactions are successfully fetched from the Plaid API.",
+          "links": [
+            {
+              "label": "Plaid Financial Data API Documentation",
+              "url": "https://plaid.com/docs/"
+            }
+          ]
         },
         {
           "title": "Categorise merchants with OpenAI",
-          "description": "Classify merchant names into a fixed category set."
+          "description": "This step uses the OpenAI GPT-4 API to classify merchant names into predefined categories. The enriched data will be used for reporting and analysis.",
+          "technical_explanation": "This step enriches the transaction data by categorizing merchants based on their names. It consumes the list of transactions fetched in the previous step and sends each merchant name to the OpenAI API for classification. The endpoint used is POST /v1/chat/completions, requiring a structured request payload and handling potential errors in the response. Edge cases include managing API rate limits and ensuring that the response is valid and contains the expected category data.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef categorize_merchants(transactions):\n    url = 'https://api.openai.com/v1/chat/completions'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    categories = []\n    for transaction in transactions:\n        payload = json.dumps({\n            'model': 'gpt-4o',\n            'messages': [\n                {'role': 'user', 'content': f'Categorize the merchant: {transaction.get(\"merchant_name\", \"\")}'},\n            ]\n        }).encode('utf-8')\n        request = urllib.request.Request(url, data=payload, headers=headers)\n        with urllib.request.urlopen(request) as response:\n            category = json.loads(response.read().decode('utf-8')).get('choices', [{}])[0].get('message', {}).get('content', '')\n            categories.append({'id': transaction.get('id'), 'category': category})\n    return categories\n\ncategorized_merchants = categorize_merchants(transactions)",
+          "mock_response": [
+            {
+              "id": "transaction_id_1",
+              "category": "Dining"
+            },
+            {
+              "id": "transaction_id_2",
+              "category": "Groceries"
+            }
+          ],
+          "actions": [
+            "Set up an OpenAI account and obtain an API key.",
+            "Define the merchant categories for classification.",
+            "Implement error handling for API responses."
+          ],
+          "commands": [
+            {
+              "label": "Run the merchant categorization script",
+              "language": "bash",
+              "code": "python categorize_merchants.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "OPENAI_API_KEY",
+              "value": "<your_api_key>",
+              "description": "The API key for authenticating with the OpenAI API."
+            }
+          ],
+          "tools": [
+            "OpenAI GPT-4 API"
+          ],
+          "checklist": [
+            "Verify that the OpenAI API key is valid.",
+            "Check that the response contains valid categories."
+          ],
+          "expectedResult": "Merchant names are successfully categorized using the OpenAI API.",
+          "links": [
+            {
+              "label": "OpenAI GPT-4 API Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/chat/create"
+            }
+          ]
         },
         {
           "title": "Upsert enriched rows into Airtable",
-          "description": "Match by transaction id and update category fields."
+          "description": "This step updates or inserts enriched transaction data into Airtable. The enriched data includes categorized merchant information.",
+          "technical_explanation": "This step persists the enriched transaction data into Airtable, matching existing records by transaction ID. The endpoint used is POST /v0/{baseId}/{tableName}, requiring authentication headers and a structured request payload. Edge cases include handling duplicate entries and ensuring that the Airtable base and table names are correctly specified. The response should confirm successful upserts.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef upsert_to_airtable(categorized_merchants):\n    url = f'https://api.airtable.com/v0/{os.environ.get(\"AIRTABLE_BASE_ID\")}/transactions'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"AIRTABLE_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    for merchant in categorized_merchants:\n        payload = json.dumps({\n            'fields': {\n                'Transaction ID': merchant.get('id'),\n                'Category': merchant.get('category')\n            }\n        }).encode('utf-8')\n        request = urllib.request.Request(url, data=payload, headers=headers)\n        with urllib.request.urlopen(request) as response:\n            if response.status not in (200, 201, 204):\n                print(f'Error upserting: {response.read().decode(\"utf-8\")}')\n    return 'Upsert complete'\n\nresult = upsert_to_airtable(categorized_merchants)",
+          "mock_response": "Upsert complete",
+          "actions": [
+            "Set up an Airtable account and obtain a personal access token.",
+            "Define the Airtable base and table for storing transactions.",
+            "Implement error handling for Airtable responses."
+          ],
+          "commands": [
+            {
+              "label": "Run the Airtable upsert script",
+              "language": "bash",
+              "code": "python upsert_to_airtable.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "AIRTABLE_API_KEY",
+              "value": "<your_api_key>",
+              "description": "The API key for authenticating with the Airtable API."
+            },
+            {
+              "key": "AIRTABLE_BASE_ID",
+              "value": "<your_base_id>",
+              "description": "The base ID for the Airtable database."
+            }
+          ],
+          "tools": [
+            "Airtable API"
+          ],
+          "checklist": [
+            "Verify that the Airtable API key is valid.",
+            "Check that the upsert operation completes successfully."
+          ],
+          "expectedResult": "Enriched transaction data is successfully upserted into Airtable.",
+          "links": [
+            {
+              "label": "Airtable API Documentation",
+              "url": "https://airtable.com/developers/web/api/introduction"
+            }
+          ]
         },
         {
           "title": "Summarise monthly spending",
-          "description": "Aggregate spend per category deterministically."
+          "description": "This step aggregates spending per category for reporting purposes. It processes the enriched transaction data stored in Airtable.",
+          "technical_explanation": "This step calculates the total spending for each category by iterating through the enriched transaction data. It consumes the categorized merchant data from the previous step and computes the total amounts. Edge cases include handling empty data sets and ensuring that categories are correctly summed. The results can be used for financial reporting.",
+          "code_snippet": "import json\nimport os\n\ndef summarize_spending(categorized_merchants):\n    spending_summary = {}\n    for merchant in categorized_merchants:\n        category = merchant.get('category', 'Uncategorized')\n        amount = merchant.get('amount', 0)\n        if category in spending_summary:\n            spending_summary[category] += amount\n        else:\n            spending_summary[category] = amount\n    return spending_summary\n\nsummary = summarize_spending(categorized_merchants)",
+          "mock_response": {
+            "Dining": 250.0,
+            "Groceries": 150.0
+          },
+          "actions": [
+            "Define the categories for spending summary.",
+            "Implement aggregation logic for total spending.",
+            "Prepare the summary for reporting."
+          ],
+          "commands": [
+            {
+              "label": "Run the spending summary script",
+              "language": "bash",
+              "code": "python summarize_spending.py"
+            }
+          ],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Verify that the spending summary is accurate.",
+            "Check that all categories are represented."
+          ],
+          "expectedResult": "Monthly spending is successfully summarized by category.",
+          "links": [
+            {
+              "label": "Python JSON Module Docs",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "An active Plaid account and access token",
+        "An OpenAI API key",
+        "An Airtable account and personal access token",
+        "Access to Plaid Financial Data API",
+        "Access to OpenAI GPT-4 API",
+        "Access to Airtable API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method of API authentication using a token that is passed in the Authorization header."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by waiting before retrying requests."
+        },
+        {
+          "term": "PostgREST Upsert",
+          "definition": "An operation that inserts a new record or updates an existing record in a database."
+        },
+        {
+          "term": "Token-Bucket Pagination",
+          "definition": "A method of handling API responses that may be paginated, allowing for controlled retrieval of data."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API rate limit exceeded",
+          "solution": "Implement exponential backoff to retry requests after a delay."
+        },
+        {
+          "problem": "Invalid access token",
+          "solution": "Verify that the access token is correct and has not expired."
+        },
+        {
+          "problem": "Empty transaction list",
+          "solution": "Check the Plaid account for recent transactions and ensure the access token is valid."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Plaid Financial Data API",
+          "url": "https://plaid.com/docs/"
+        },
+        {
+          "label": "OpenAI GPT-4 API",
+          "url": "https://platform.openai.com/docs/api-reference/chat/create"
+        },
+        {
+          "label": "Airtable API",
+          "url": "https://airtable.com/developers/web/api/introduction"
+        }
+      ],
+      "before_you_start": [
+        "An active Plaid account and access token",
+        "An OpenAI API key",
+        "An Airtable account and personal access token",
+        "Access to Plaid Financial Data API",
+        "Access to OpenAI GPT-4 API",
+        "Access to Airtable API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:06 UTC"
   },
   {
     "slug": "supabase-realtime-dashboard",

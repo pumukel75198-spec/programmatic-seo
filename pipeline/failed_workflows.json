@@ -1,10 +1,6 @@
 {
   "meeting-transcription-summaries": {
     "reason": "RuntimeError: Workflow dry-run timed out after 10s – remove infinite loops or blocking waits from the step code",
-    "timestamp": "2026-11-06 14:30 UTC"
-  },
-  "transactional-email-delivery": {
-    "reason": "RuntimeError: Step 2: defines function(s) send_email_resend but never calls one at top level – the step would not execute; Step 3: defines function(s) send_email_sendgrid but never calls one at top level – the step would not execute",
-    "timestamp": "2026-11-06 14:32 UTC"
+    "timestamp": "2026-11-06 14:55 UTC"
   }
 }
