@@ -1,6 +1,10 @@
 {
   "meeting-transcription-summaries": {
     "reason": "RuntimeError: Workflow dry-run timed out after 10s – remove infinite loops or blocking waits from the step code",
-    "timestamp": "2026-11-06 14:55 UTC"
+    "timestamp": "2026-11-06 15:11 UTC"
+  },
+  "mongodb-data-pipeline": {
+    "reason": "RuntimeError: Step 4: links is empty – add the official documentation URL (use the Python stdlib docs for a pure Python step); Workflow: API host 'mongodb-api.com' is used in code but missing from resources; Workflow: API host 'mongodb-api.com' is not part of the curated APIs – ungrounded API call",
+    "timestamp": "2026-11-06 15:15 UTC"
   }
 }

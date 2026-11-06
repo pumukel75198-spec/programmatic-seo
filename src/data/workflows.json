@@ -9242,8 +9242,8 @@
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
       "tools": [
-        "Supabase Database API",
         "PostHog Analytics API",
+        "Supabase Database API",
         "Vercel Blob API"
       ],
       "api_slugs": [
@@ -9258,26 +9258,218 @@
       "steps": [
         {
           "title": "Aggregate PostHog events",
-          "description": "Query event counts per hour and normalise the metric shape."
+          "description": "This step retrieves event counts from PostHog and normalizes the metric shape for further processing. It serves as the foundation for the metrics that will be stored in Supabase.",
+          "technical_explanation": "This step aggregates event data from the PostHog Analytics API. It consumes event data and outputs a normalized structure for hourly metrics. The API contract requires a GET request to the appropriate endpoint with a Bearer token for authentication. Be aware of rate limits imposed by PostHog, which may restrict the number of requests per minute.",
+          "code_snippet": "import json\nimport urllib.request\nimport urllib.parse\nimport os\n\ndef aggregate_posthog_events():\n    url = 'https://your-posthog-instance/api/event'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"POSTHOG_API_KEY\")}' }\n    request = urllib.request.Request(url, headers=headers)\n    response = urllib.request.urlopen(request)\n    data = json.loads(response.read().decode('utf-8'))\n    hourly_metrics = []\n    for event in data.get('results', []):\n        hourly_metrics.append({'event': event['event'], 'count': event['count']})\n    return hourly_metrics\n\naggregated_events = aggregate_posthog_events()",
+          "mock_response": {
+            "results": [
+              {
+                "event": "page_view",
+                "count": 150
+              },
+              {
+                "event": "button_click",
+                "count": 75
+              }
+            ]
+          },
+          "actions": [
+            "Set up PostHog account and create a project.",
+            "Obtain the personal API key from PostHog.",
+            "Define the endpoint to fetch event data."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [],
+          "tools": [
+            "PostHog Analytics API"
+          ],
+          "checklist": [
+            "Verify that the PostHog API key is set in environment variables.",
+            "Check that the event data is correctly aggregated."
+          ],
+          "expectedResult": "Event counts are successfully aggregated from PostHog.",
+          "links": [
+            {
+              "label": "PostHog Analytics API Documentation",
+              "url": "https://posthog.com/docs/api"
+            }
+          ]
         },
         {
           "title": "Upsert hourly metrics into Supabase",
-          "description": "Write one row per metric and hour with conflict handling."
+          "description": "This step takes the aggregated metrics from PostHog and upserts them into the Supabase database. It ensures that existing records are updated and new records are inserted as needed.",
+          "technical_explanation": "This step utilizes the Supabase Database API to upsert hourly metrics. It consumes the aggregated metrics from the previous step and sends them to Supabase. The API contract requires a POST request to the '/rest/v1/metrics' endpoint with appropriate headers for authentication. Ensure that the payload structure matches the Supabase table schema to avoid errors.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef upsert_hourly_metrics(metrics):\n    url = f'{os.environ.get(\"SUPABASE_URL\")}/rest/v1/metrics'\n    headers = {\n        'apikey': os.environ.get('SUPABASE_KEY'),\n        'Authorization': f'Bearer {os.environ.get(\"SUPABASE_KEY\")}',\n        'Prefer': 'return=representation'\n    }\n    for metric in metrics:\n        payload = json.dumps(metric).encode('utf-8')\n        request = urllib.request.Request(url, data=payload, headers=headers)\n        response = urllib.request.urlopen(request)\n        if response.status not in (200, 201, 204):\n            raise Exception('Failed to upsert metrics')\n\nupsert_hourly_metrics(aggregated_events)",
+          "mock_response": {},
+          "actions": [
+            "Define the Supabase table schema for metrics.",
+            "Set up environment variables for Supabase credentials.",
+            "Implement error handling for API responses."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [],
+          "tools": [
+            "Supabase Database API"
+          ],
+          "checklist": [
+            "Confirm that metrics are correctly upserted in Supabase.",
+            "Check for any error messages during the upsert process."
+          ],
+          "expectedResult": "Hourly metrics are successfully upserted into Supabase.",
+          "links": [
+            {
+              "label": "Supabase Database API Documentation",
+              "url": "https://supabase.com/docs/guides/api"
+            }
+          ]
         },
         {
           "title": "Render the chart snapshot",
-          "description": "Build a deterministic SVG summary from the metric rows."
+          "description": "This step generates a visual representation of the metrics stored in Supabase. It creates an SVG chart snapshot that summarizes the data for easy interpretation.",
+          "technical_explanation": "The Render the chart snapshot step is a critical component of the data visualization architecture, responsible for transforming raw metrics data stored in Supabase into a visually interpretable SVG format. It consumes the upserted metrics data from the previous step, specifically targeting the endpoint '/api/metrics/render', using the POST HTTP method. The request requires headers such as 'Content-Type: application/json' and 'Authorization: Bearer <token>', with a payload structure that includes 'metrics' as an array of objects containing 'id', 'value', and 'timestamp'. The expected JSON response shape is an object with a single key 'svg' containing the generated SVG string. This step must also account for edge cases, including handling rate limits imposed by the Supabase API, managing pagination for large datasets, and gracefully processing empty arrays to prevent errors. Additionally, type conversion should be implemented to ensure that all metric values are correctly formatted for SVG generation.",
+          "code_snippet": "import json\n\n\ndef render_chart_snapshot(metrics):\n    svg_content = '<svg width=\"400\" height=\"200\">'\n    for metric in metrics:\n        svg_content += f'<rect width=\"{metric[\"count\"]}\" height=\"20\" fill=\"blue\" />'\n    svg_content += '</svg>'\n    return svg_content\n\nchart_snapshot = render_chart_snapshot(aggregated_events)",
+          "mock_response": "<svg width=\"400\" height=\"200\"><rect width=\"150\" height=\"20\" fill=\"blue\" /><rect width=\"75\" height=\"20\" fill=\"blue\" /></svg>",
+          "actions": [
+            "Implement SVG generation logic.",
+            "Test the SVG output with sample data.",
+            "Ensure the SVG format is valid."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Verify that the SVG output is correctly formatted.",
+            "Check that the chart accurately represents the metrics."
+          ],
+          "expectedResult": "An SVG chart snapshot is generated from the metrics.",
+          "links": [
+            {
+              "label": "Python json Docs",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
         },
         {
           "title": "Upload the snapshot to Vercel Blob",
-          "description": "Store the rendered chart and record its public URL."
+          "description": "This step uploads the generated SVG snapshot to Vercel Blob storage. It stores the snapshot and retrieves its public URL for future access.",
+          "technical_explanation": "This step uses the Vercel Blob API to upload the SVG snapshot. It consumes the SVG string from the previous step and sends it to the Blob storage. The API contract requires a POST request to the appropriate endpoint with a Bearer token for authentication. Ensure that the upload handles potential errors and retrieves the public URL correctly.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\n\ndef upload_snapshot_to_vercel(svg_content):\n    url = 'https://blob.vercel-storage.com/upload'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"BLOB_READ_WRITE_TOKEN\")}'}\n    payload = json.dumps({'data': svg_content}).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    response = urllib.request.urlopen(request)\n    if response.status != 200:\n        raise Exception('Failed to upload snapshot')\n    return json.loads(response.read().decode('utf-8'))['url']\n\npublic_url = upload_snapshot_to_vercel(chart_snapshot)",
+          "mock_response": {
+            "url": "https://blob.vercel-storage.com/snapshot.svg"
+          },
+          "actions": [
+            "Set up Vercel account and obtain the BLOB_READ_WRITE_TOKEN.",
+            "Define the endpoint for uploading to Vercel Blob.",
+            "Implement error handling for the upload process."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [],
+          "tools": [
+            "Vercel Blob API"
+          ],
+          "checklist": [
+            "Verify that the SVG snapshot is uploaded successfully.",
+            "Check that the public URL is accessible."
+          ],
+          "expectedResult": "The SVG snapshot is uploaded to Vercel Blob and a public URL is retrieved.",
+          "links": [
+            {
+              "label": "Vercel Blob API Documentation",
+              "url": "https://vercel.com/docs/storage/vercel-blob/using-blob-sdk"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Supabase project and service-role key",
+        "A PostHog account and personal API key",
+        "A Vercel account and BLOB_READ_WRITE_TOKEN",
+        "Access to Supabase Database API",
+        "Access to PostHog Analytics API",
+        "Access to Vercel Blob API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access."
+        },
+        {
+          "term": "PostgREST Upsert",
+          "definition": "An operation that inserts a new record or updates an existing record in a database."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API request limits by delaying subsequent requests."
+        },
+        {
+          "term": "Z-Score Spike Detection",
+          "definition": "A statistical method to identify anomalies in data based on standard deviations."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API key authentication fails",
+          "solution": "Ensure the API keys are correctly set in environment variables."
+        },
+        {
+          "problem": "Data not appearing in Supabase",
+          "solution": "Check the Supabase table schema and ensure the upsert payload matches."
+        },
+        {
+          "problem": "Vercel Blob upload fails",
+          "solution": "Verify the BLOB_READ_WRITE_TOKEN and ensure the correct endpoint is used."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Supabase Database API",
+          "url": "https://supabase.com/docs/guides/api"
+        },
+        {
+          "label": "PostHog Analytics API",
+          "url": "https://posthog.com/docs/api"
+        },
+        {
+          "label": "Vercel Blob API",
+          "url": "https://vercel.com/docs/storage/vercel-blob/using-blob-sdk"
+        }
+      ],
+      "before_you_start": [
+        "A Supabase project and service-role key",
+        "A PostHog account and personal API key",
+        "A Vercel account and BLOB_READ_WRITE_TOKEN",
+        "Access to Supabase Database API",
+        "Access to PostHog Analytics API",
+        "Access to Vercel Blob API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:12 UTC"
   },
   {
     "slug": "airtable-content-sync",
@@ -9311,26 +9503,275 @@
       "steps": [
         {
           "title": "Read approved rows from Airtable",
-          "description": "Filter records by the approved status and normalise fields."
+          "description": "This step retrieves approved content rows from Airtable, filtering by the approved status and normalizing the fields for further processing.",
+          "technical_explanation": "This step acts as the data source for the workflow, consuming the Airtable API to fetch records. The API contract involves a GET request to the endpoint 'https://api.airtable.com/v0/{base_id}/{table_name}', requiring a Bearer token for authentication. Edge cases include handling rate limits and pagination if the number of records exceeds the limit set by Airtable.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_approved_rows():\n    base_id = os.environ.get('AIRTABLE_BASE_ID')\n    table_name = os.environ.get('AIRTABLE_TABLE_NAME')\n    url = f'https://api.airtable.com/v0/{base_id}/{table_name}?filterByFormula={{approved}}'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"AIRTABLE_API_KEY\")}'}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        response_data = json.loads(response.read().decode('utf-8'))\n        return response_data.get('records', [])\n\napproved_rows = fetch_approved_rows()",
+          "mock_response": {
+            "records": [
+              {
+                "id": "rec123",
+                "fields": {
+                  "title": "Sample Title",
+                  "content": "Sample content for Notion",
+                  "approved": true
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Define base ID and table name as environment variables.",
+            "Construct the API request URL with the filter for approved rows.",
+            "Send the GET request and parse the JSON response."
+          ],
+          "commands": [
+            {
+              "label": "Fetch approved rows from Airtable",
+              "language": "bash",
+              "code": "python fetch_approved_rows.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "AIRTABLE_BASE_ID",
+              "value": "<your_base_id>",
+              "description": "The ID of the Airtable base containing the content."
+            },
+            {
+              "key": "AIRTABLE_TABLE_NAME",
+              "value": "<your_table_name>",
+              "description": "The name of the table in Airtable."
+            },
+            {
+              "key": "AIRTABLE_API_KEY",
+              "value": "<your_api_key>",
+              "description": "Your Airtable API key for authentication."
+            }
+          ],
+          "tools": [
+            "Airtable API"
+          ],
+          "checklist": [
+            "Successfully retrieved records from Airtable.",
+            "Filtered records by approved status."
+          ],
+          "expectedResult": "A list of approved content rows from Airtable is retrieved.",
+          "links": [
+            {
+              "label": "Airtable API Documentation",
+              "url": "https://airtable.com/developers/web/api/introduction"
+            }
+          ]
         },
         {
           "title": "Create or update Notion pages",
-          "description": "Match by external id and update the page body."
+          "description": "This step creates or updates Notion pages based on the approved content retrieved from Airtable, matching them by external ID.",
+          "technical_explanation": "This step transforms the data from Airtable into a format suitable for Notion. It utilizes the Notion API to either create new pages or update existing ones based on the external ID. The API contract involves a POST request to 'https://api.notion.com/v1/pages' for creation and a PATCH request for updates, both requiring a Bearer token and the Notion-Version header. Edge cases include handling the absence of external IDs and ensuring the correct page properties are set.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef create_or_update_notion_pages(approved_rows):\n    notion_url = 'https://api.notion.com/v1/pages'\n    notion_version = '2022-06-28'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"NOTION_API_KEY\")}',\n        'Notion-Version': notion_version\n    }\n    for row in approved_rows:\n        external_id = row.get('id', '')\n        page_data = {\n            'parent': {'database_id': os.environ.get('NOTION_DATABASE_ID')},\n            'properties': {\n                'Title': {'title': [{'text': {'content': row['fields'].get('title', '')}}]},\n                'Content': {'rich_text': [{'text': {'content': row['fields'].get('content', '')}}]}\n            }\n        }\n        request = urllib.request.Request(notion_url, data=json.dumps(page_data).encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            response_data = json.loads(response.read().decode('utf-8'))\n            print(f'Page created/updated: {response_data.get(\"id\", \"\")}')  \n\ncreate_or_update_notion_pages(approved_rows)",
+          "mock_response": {
+            "id": "page123",
+            "object": "page",
+            "created_time": "2023-10-01T12:00:00.000Z",
+            "last_edited_time": "2023-10-01T12:00:00.000Z",
+            "properties": {
+              "Title": {
+                "id": "title",
+                "type": "title",
+                "title": [
+                  {
+                    "type": "text",
+                    "text": {
+                      "content": "Sample Title"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "actions": [
+            "Iterate over approved rows to create or update Notion pages.",
+            "Construct the page data according to Notion's API requirements.",
+            "Send the API request and handle the response."
+          ],
+          "commands": [
+            {
+              "label": "Create or update Notion pages",
+              "language": "bash",
+              "code": "python create_or_update_notion_pages.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "NOTION_API_KEY",
+              "value": "<your_notion_api_key>",
+              "description": "Your Notion API key for authentication."
+            },
+            {
+              "key": "NOTION_DATABASE_ID",
+              "value": "<your_database_id>",
+              "description": "The ID of the Notion database where pages will be created."
+            }
+          ],
+          "tools": [
+            "Notion API"
+          ],
+          "checklist": [
+            "Successfully created or updated pages in Notion.",
+            "Pages contain the correct title and content."
+          ],
+          "expectedResult": "Notion pages are created or updated based on the approved content.",
+          "links": [
+            {
+              "label": "Notion API Documentation",
+              "url": "https://developers.notion.com/reference/intro"
+            }
+          ]
         },
         {
           "title": "Send author notifications",
-          "description": "Call the Resend emails endpoint for every published item."
+          "description": "This step sends email notifications to authors about the newly published items using the Resend Email API.",
+          "technical_explanation": "This step utilizes the Resend Email API to notify authors of newly published content. The API contract involves a POST request to 'https://api.resend.com/emails', requiring a Bearer token and a JSON payload containing the email details. Edge cases include handling invalid email addresses and ensuring the email content is correctly formatted.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef send_author_notifications(approved_rows):\n    resend_url = 'https://api.resend.com/emails'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"RESEND_API_KEY\")}'}\n    for row in approved_rows:\n        author_email = row['fields'].get('author_email', '')\n        if author_email:\n            email_data = {\n                'to': author_email,\n                'subject': 'Your content has been published!',\n                'text': f'Your content titled \"{row[\"fields\"].get(\"title\", \"\")}\" has been published.'\n            }\n            request = urllib.request.Request(resend_url, data=json.dumps(email_data).encode('utf-8'), headers=headers)\n            with urllib.request.urlopen(request) as response:\n                response_data = json.loads(response.read().decode('utf-8'))\n                print(f'Notification sent to: {author_email}')  \n\nsend_author_notifications(approved_rows)",
+          "mock_response": {
+            "id": "email123",
+            "status": "sent",
+            "to": "author@example.com",
+            "subject": "Your content has been published!"
+          },
+          "actions": [
+            "Extract author email addresses from approved rows.",
+            "Construct the email payload for each author.",
+            "Send the email notification using the Resend API."
+          ],
+          "commands": [
+            {
+              "label": "Send author notifications",
+              "language": "bash",
+              "code": "python send_author_notifications.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "RESEND_API_KEY",
+              "value": "<your_resend_api_key>",
+              "description": "Your Resend API key for authentication."
+            }
+          ],
+          "tools": [
+            "Resend Email API"
+          ],
+          "checklist": [
+            "Successfully sent notifications to authors.",
+            "Emails contain the correct subject and body."
+          ],
+          "expectedResult": "Authors are notified about their newly published content.",
+          "links": [
+            {
+              "label": "Resend Email API Documentation",
+              "url": "https://resend.com/docs"
+            }
+          ]
         },
         {
           "title": "Log the sync result",
-          "description": "Write a deterministic sync report with created and updated counts."
+          "description": "This step logs the results of the synchronization process, detailing the number of created and updated items.",
+          "technical_explanation": "This step generates a deterministic sync report that summarizes the results of the previous steps. It records the number of pages created and updated in Notion and can be used for auditing purposes. Edge cases include handling scenarios where no pages were created or updated, ensuring the log is accurate.",
+          "code_snippet": "import json\n\n\ndef log_sync_result(created_count, updated_count):\n    log_data = {\n        'created': created_count,\n        'updated': updated_count\n    }\n    with open('sync_report.json', 'w') as log_file:\n        json.dump(log_data, log_file)\n    print('Sync report logged.')\n\nlog_sync_result(5, 2)",
+          "mock_response": {
+            "created": 5,
+            "updated": 2
+          },
+          "actions": [
+            "Count the number of created and updated pages.",
+            "Construct a log entry with the counts.",
+            "Write the log entry to a JSON file."
+          ],
+          "commands": [
+            {
+              "label": "Log sync result",
+              "language": "bash",
+              "code": "python log_sync_result.py"
+            }
+          ],
+          "checklist": [
+            "Successfully logged the sync results.",
+            "Log file contains accurate counts of created and updated items."
+          ],
+          "expectedResult": "A sync report is generated and saved as a JSON file.",
+          "links": [
+            {
+              "label": "Python JSON Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ],
+          "tools": []
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "An Airtable account with a base containing approved content rows",
+        "A Notion account with a database to store mirrored pages",
+        "A Resend account to send email notifications",
+        "Access to Airtable API",
+        "Access to Notion API",
+        "Access to Resend Email API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access to resources."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to manage API request limits by delaying requests when limits are reached."
+        },
+        {
+          "term": "Deterministic Sync Report",
+          "definition": "A report that consistently reflects the results of a synchronization process, detailing created and updated items."
+        },
+        {
+          "term": "Upsert Operation",
+          "definition": "An operation that inserts a new record or updates an existing record if it already exists."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Failed to read records from Airtable",
+          "solution": "Check the Airtable API key and ensure the base ID and table name are correct."
+        },
+        {
+          "problem": "Notion page not updating",
+          "solution": "Verify that the external ID matches and that the Notion integration has the necessary permissions."
+        },
+        {
+          "problem": "Email notifications not sent",
+          "solution": "Ensure the Resend API key is valid and that the email addresses are correctly formatted."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Airtable API",
+          "url": "https://airtable.com/developers/web/api/introduction"
+        },
+        {
+          "label": "Notion API",
+          "url": "https://developers.notion.com/reference/intro"
+        },
+        {
+          "label": "Resend Email API",
+          "url": "https://resend.com/docs"
+        }
+      ],
+      "before_you_start": [
+        "An Airtable account with a base containing approved content rows",
+        "A Notion account with a database to store mirrored pages",
+        "A Resend account to send email notifications",
+        "Access to Airtable API",
+        "Access to Notion API",
+        "Access to Resend Email API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:13 UTC"
   },
   {
     "slug": "mongodb-data-pipeline",
@@ -9400,8 +9841,8 @@
       "duration": "75–90 minutes",
       "tools": [
         "Neon Postgres API",
-        "Slack Web API",
-        "Google Sheets API"
+        "Google Sheets API",
+        "Slack Web API"
       ],
       "api_slugs": [
         "neon-postgres-api",
@@ -9415,26 +9856,260 @@
       "steps": [
         {
           "title": "Collect Neon backup metadata",
-          "description": "Query the backups endpoint and normalise timestamps and sizes."
+          "description": "This step involves querying the Neon Postgres backups API to retrieve metadata about the backups. The data includes timestamps and sizes, which are then normalized for further processing.",
+          "technical_explanation": "This step serves as the initial data collection phase, consuming no previous data. The API contract involves making a GET request to the backups endpoint of the Neon Postgres API. Required headers include the authorization token. The expected JSON response contains an array of backup objects with properties such as 'timestamp' and 'size'. Edge cases include handling rate limits and ensuring that the response is not empty.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef collect_backup_metadata():\n    url = f\"postgresql://{{user}}:{{password}}@{{project}}.neon.tech/backups\"\n    request = urllib.request.Request(url)\n    response = urllib.request.urlopen(request)\n    data = json.loads(response.read().decode('utf-8'))\n    backups = [{'timestamp': item.get('timestamp', ''), 'size': item.get('size', 0)} for item in data.get('backups', [])]\n    return backups\n\nbackups = collect_backup_metadata()",
+          "mock_response": {
+            "backups": [
+              {
+                "timestamp": "2023-10-01T12:00:00Z",
+                "size": 2048
+              },
+              {
+                "timestamp": "2023-10-08T12:00:00Z",
+                "size": 2048
+              }
+            ]
+          },
+          "actions": [
+            "Query the Neon Postgres backups API",
+            "Normalize backup timestamps and sizes",
+            "Store backup metadata in a structured format"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python3 script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "USER",
+              "value": "<your_user>",
+              "description": "Postgres user for authentication"
+            },
+            {
+              "key": "PASSWORD",
+              "value": "<your_password>",
+              "description": "Postgres password for authentication"
+            },
+            {
+              "key": "PROJECT",
+              "value": "<your_project>",
+              "description": "Neon project name"
+            }
+          ],
+          "tools": [
+            "Neon Postgres API"
+          ],
+          "checklist": [
+            "Backup metadata is retrieved successfully",
+            "Response contains expected fields"
+          ],
+          "expectedResult": "Backup metadata is collected and structured for further processing.",
+          "links": [
+            {
+              "label": "Neon Postgres API Documentation",
+              "url": "https://neon.tech/docs/reference/api-reference"
+            }
+          ]
         },
         {
           "title": "Append health rows to Google Sheets",
-          "description": "Write one row per backup with age and status."
+          "description": "In this step, the collected backup metadata is written to a Google Sheets document. Each backup is recorded with its age and status, allowing for easy tracking of backup health.",
+          "technical_explanation": "This step processes the backup metadata collected in the previous step. The Google Sheets API is used to append rows to a specified spreadsheet. The API contract requires a POST request to the spreadsheets endpoint with the appropriate authorization headers. The request payload includes the data to be appended. Edge cases include handling quota limits and ensuring the correct spreadsheet ID is used.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef append_to_google_sheets(backups):\n    spreadsheet_id = os.environ.get('SPREADSHEET_ID')\n    url = f\"https://sheets.googleapis.com/v4/spreadsheets/{spreadsheet_id}/values/Sheet1:append?valueInputOption=RAW\"\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"GOOGLE_SHEETS_TOKEN\")}',\n        'Content-Type': 'application/json'\n    }\n    values = [[backup['timestamp'], backup['size']] for backup in backups]\n    body = {'values': values}\n    request = urllib.request.Request(url, data=json.dumps(body).encode('utf-8'), headers=headers)\n    response = urllib.request.urlopen(request)\n    return response.read().decode('utf-8')\n\nresult = append_to_google_sheets(backups)",
+          "mock_response": "ok",
+          "actions": [
+            "Prepare the data for Google Sheets",
+            "Make a POST request to append data",
+            "Handle the response from Google Sheets"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python3 script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SPREADSHEET_ID",
+              "value": "<your_spreadsheet_id>",
+              "description": "ID of the Google Sheets document"
+            },
+            {
+              "key": "GOOGLE_SHEETS_TOKEN",
+              "value": "<your_google_sheets_token>",
+              "description": "OAuth token for Google Sheets API"
+            }
+          ],
+          "tools": [
+            "Google Sheets API"
+          ],
+          "checklist": [
+            "Data is appended to Google Sheets successfully",
+            "Response indicates successful write operation"
+          ],
+          "expectedResult": "Backup metadata is appended to the specified Google Sheets document.",
+          "links": [
+            {
+              "label": "Google Sheets API Documentation",
+              "url": "https://developers.google.com/sheets/api/reference/rest"
+            }
+          ]
         },
         {
           "title": "Evaluate backup freshness",
-          "description": "Flag backups older than the configured retention window."
+          "description": "This step evaluates the age of each backup and flags those that are older than a configured retention window. This helps in identifying backups that may need attention.",
+          "technical_explanation": "The Evaluate backup freshness step serves a critical role in the overall architecture by consuming backup metadata generated in the previous step. This metadata includes timestamps that indicate when each backup was created. The step evaluates these timestamps against a configurable retention window to identify backups that exceed the defined age, thus flagging them for potential review. The API contract for this step requires a POST request to the endpoint '/api/backups/evaluate_freshness', with headers including 'Content-Type: application/json' and 'Authorization: Bearer <token>'. The request payload should contain a JSON object with the structure {\"retention_window\": \"<duration>\"}, while the response will be a JSON object with the shape {\"flags\": [{\"backup_id\": \"<id>\", \"status\": \"<status>\"}]} indicating which backups are flagged. Edge cases to consider include adhering to rate limits imposed by the API, handling pagination if the number of backups exceeds the limit per request, managing scenarios where the response may return empty arrays if no backups are flagged, and ensuring proper type conversion for timestamps to maintain consistency across different time zones.",
+          "code_snippet": "import json\nimport datetime\n\ndef evaluate_backup_freshness(backups, retention_days):\n    current_time = datetime.datetime.utcnow()\n    retention_period = datetime.timedelta(days=retention_days)\n    flagged_backups = []\n    for backup in backups:\n        backup_time = datetime.datetime.fromisoformat(backup['timestamp'].replace('Z', '+00:00'))\n        if current_time - backup_time > retention_period:\n            flagged_backups.append(backup)\n    return flagged_backups\n\nflagged_backups = evaluate_backup_freshness(backups, 7)",
+          "mock_response": [
+            {
+              "timestamp": "2023-09-24T12:00:00Z",
+              "size": 2048
+            }
+          ],
+          "actions": [
+            "Calculate the age of each backup",
+            "Flag backups older than the retention window",
+            "Return flagged backups for further processing"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python3 script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "RETENTION_DAYS",
+              "value": "7",
+              "description": "Number of days to retain backups"
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "Freshness evaluation is completed",
+            "Flagged backups are returned correctly"
+          ],
+          "expectedResult": "Backups older than the retention window are flagged for review.",
+          "links": [
+            {
+              "label": "Python datetime documentation",
+              "url": "https://docs.python.org/3/library/datetime.html"
+            }
+          ]
         },
         {
           "title": "Post the weekly backup report",
-          "description": "Send the summary to the operations Slack channel."
+          "description": "In this final step, a summary of the backup status is posted to a Slack channel. This provides visibility to the operations team regarding the health of the backups.",
+          "technical_explanation": "This step utilizes the Slack Web API to send a message to a specified channel. The API contract requires a POST request to the chat.postMessage endpoint with the appropriate headers. The message content includes the summary of flagged backups. Edge cases include handling message length limits and ensuring the bot has permission to post in the channel.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef post_to_slack(message):\n    url = 'https://slack.com/api/chat.postMessage'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"SLACK_BOT_TOKEN\")}',\n        'Content-Type': 'application/json'\n    }\n    payload = {'channel': '#backup-reports', 'text': message}\n    request = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)\n    response = urllib.request.urlopen(request)\n    return response.read().decode('utf-8')\n\nmessage = 'Weekly Backup Report: No flagged backups.'\nresult = post_to_slack(message)",
+          "mock_response": "ok",
+          "actions": [
+            "Prepare the message content",
+            "Make a POST request to Slack API",
+            "Handle the response from Slack"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python3 script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SLACK_BOT_TOKEN",
+              "value": "<your_slack_bot_token>",
+              "description": "OAuth token for Slack API"
+            }
+          ],
+          "tools": [
+            "Slack Web API"
+          ],
+          "checklist": [
+            "Message is posted to Slack successfully",
+            "Response indicates successful post operation"
+          ],
+          "expectedResult": "Weekly backup report is posted to the designated Slack channel.",
+          "links": [
+            {
+              "label": "Slack Web API Documentation",
+              "url": "https://api.slack.com/methods"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Neon Postgres project with access to the backups API",
+        "A Slack workspace with a bot token for posting messages",
+        "A Google Sheets document with edit access",
+        "Access to Neon Postgres API",
+        "Access to Slack Web API",
+        "Access to Google Sheets API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access to the API."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by pausing requests when limits are reached."
+        },
+        {
+          "term": "PostgreSQL Connection String",
+          "definition": "A string that contains the information needed to connect to a PostgreSQL database."
+        },
+        {
+          "term": "OAuth 2.0",
+          "definition": "An authorization framework that allows third-party services to exchange information without sharing passwords."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API returns 403 Forbidden error",
+          "solution": "Check if the API token has the necessary permissions and is correctly set in the environment variables."
+        },
+        {
+          "problem": "Google Sheets API returns 404 Not Found",
+          "solution": "Verify that the spreadsheet ID is correct and that the API service account has access to the spreadsheet."
+        },
+        {
+          "problem": "Slack message not posting",
+          "solution": "Ensure the bot token is valid and that the bot has permission to post in the specified channel."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Neon Postgres API",
+          "url": "https://neon.tech/docs/reference/api-reference"
+        },
+        {
+          "label": "Slack Web API",
+          "url": "https://api.slack.com/methods"
+        },
+        {
+          "label": "Google Sheets API",
+          "url": "https://developers.google.com/sheets/api/reference/rest"
+        }
+      ],
+      "before_you_start": [
+        "A Neon Postgres project with access to the backups API",
+        "A Slack workspace with a bot token for posting messages",
+        "A Google Sheets document with edit access",
+        "Access to Neon Postgres API",
+        "Access to Slack Web API",
+        "Access to Google Sheets API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:17 UTC"
   },
   {
     "slug": "redis-rate-limit-store",
@@ -9452,8 +10127,8 @@
       "duration": "75–90 minutes",
       "tools": [
         "Upstash Redis API",
-        "Cloudflare Workers API",
-        "Sentry Error API"
+        "Sentry Error API",
+        "Cloudflare Workers API"
       ],
       "api_slugs": [
         "upstash-redis-api",
@@ -9467,26 +10142,228 @@
       "steps": [
         {
           "title": "Increment the Upstash counter",
-          "description": "Call the Redis REST command endpoint for the current window."
+          "description": "This step involves calling the Upstash Redis API to increment a counter associated with an API key. The counter tracks the number of requests made within a specified time window.",
+          "technical_explanation": "This step serves as the foundation for rate limiting by maintaining a count of requests per API key. It consumes the API key from the request and updates the corresponding counter in Upstash Redis. The API contract requires a POST request to the endpoint '/increment' with a JSON payload containing the API key and the increment value. Edge cases include handling rate limits imposed by Upstash and ensuring that the counter does not exceed predefined limits.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef increment_counter(api_key):\n    url = f'https://<your-upstash-endpoint>.upstash.io/increment'\n    payload = json.dumps({'api_key': api_key, 'increment': 1}).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers={'Authorization': f'Bearer {os.environ.get(\"UPSTASH_TOKEN\")}', 'Content-Type': 'application/json'})\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))\n\nresult = increment_counter('example_api_key')",
+          "mock_response": {
+            "success": true,
+            "new_count": 1
+          },
+          "actions": [
+            "Define the API key to be incremented.",
+            "Construct the API request payload.",
+            "Send the request to the Upstash Redis API."
+          ],
+          "commands": [
+            {
+              "label": "Run the increment function",
+              "language": "bash",
+              "code": "python3 your_script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "UPSTASH_TOKEN",
+              "value": "<your_upstash_token>",
+              "description": "Bearer token for authenticating with Upstash Redis API."
+            }
+          ],
+          "tools": [
+            "Upstash Redis API"
+          ],
+          "checklist": [
+            "Verify that the counter has been incremented in Upstash.",
+            "Check for any error messages in the API response."
+          ],
+          "expectedResult": "The Upstash counter for the specified API key is successfully incremented.",
+          "links": [
+            {
+              "label": "Upstash Redis API Documentation",
+              "url": "https://upstash.com/docs/redis/features/restapi"
+            }
+          ]
         },
         {
           "title": "Enforce the rate limit decision",
-          "description": "Compare the counter with the configured quota and return an allow or deny decision."
+          "description": "In this step, the current count from Upstash is compared against the configured rate limit to determine if the request should be allowed or denied.",
+          "technical_explanation": "This step is crucial for enforcing the rate limit policy. It retrieves the current count from Upstash and compares it with the predefined quota. The API contract requires a GET request to the endpoint '/current_count' to fetch the current count. Edge cases include handling scenarios where the count is not found or the quota is not set, which could lead to unintended access being granted or denied.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef enforce_rate_limit(api_key, quota):\n    url = f'https://api.example.com/current_count?api_key={api_key}'\n    request = urllib.request.Request(url, headers={'Authorization': f'Bearer {os.environ.get(\"UPSTASH_TOKEN\")}'})\n    with urllib.request.urlopen(request) as response:\n        current_count = json.loads(response.read().decode('utf-8')).get('count', 0)\n    return current_count <= quota\n\nis_allowed = enforce_rate_limit('example_api_key', 100)",
+          "mock_response": {
+            "count": 50
+          },
+          "actions": [
+            "Fetch the current count for the API key from Upstash.",
+            "Compare the count against the configured quota.",
+            "Return a boolean indicating whether the request is allowed."
+          ],
+          "commands": [
+            {
+              "label": "Run the rate limit enforcement function",
+              "language": "bash",
+              "code": "python3 your_script.py"
+            }
+          ],
+          "config": [],
+          "tools": [
+            "Upstash Redis API"
+          ],
+          "checklist": [
+            "Confirm that the correct count is retrieved from Upstash.",
+            "Ensure that the rate limit decision is accurate."
+          ],
+          "expectedResult": "The rate limit decision is enforced based on the current count and configured quota.",
+          "links": [
+            {
+              "label": "Upstash Redis API Documentation",
+              "url": "https://upstash.com/docs/redis/features/restapi"
+            }
+          ]
         },
         {
           "title": "Report violations to Sentry",
-          "description": "Send a structured event when a key exceeds its quota."
+          "description": "This step involves sending an error report to Sentry when a rate limit violation occurs. It captures relevant details about the violation for monitoring and debugging.",
+          "technical_explanation": "Reporting violations is essential for monitoring API usage and identifying potential abuse. This step constructs an error report and sends it to the Sentry Error API. The API contract requires a POST request to the endpoint '/api/0/projects/{organization_slug}/{project_slug}/errors/' with a structured payload. Edge cases include ensuring that the Sentry project is correctly configured and handling any errors returned by the Sentry API.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef report_violation(api_key):\n    url = f'https://sentry.io/api/0/projects/<your_organization>/<your_project>/errors/'\n    payload = json.dumps({'message': 'Rate limit exceeded', 'api_key': api_key}).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers={'Authorization': f'Bearer {os.environ.get(\"SENTRY_TOKEN\")}', 'Content-Type': 'application/json'})\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))\n\nviolation_report = report_violation('example_api_key')",
+          "mock_response": {
+            "id": "123456",
+            "status": "reported"
+          },
+          "actions": [
+            "Construct the error report payload.",
+            "Send the report to Sentry Error API.",
+            "Handle the response from Sentry."
+          ],
+          "commands": [
+            {
+              "label": "Run the violation reporting function",
+              "language": "bash",
+              "code": "python3 your_script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SENTRY_TOKEN",
+              "value": "<your_sentry_token>",
+              "description": "Bearer token for authenticating with Sentry Error API."
+            }
+          ],
+          "tools": [
+            "Sentry Error API"
+          ],
+          "checklist": [
+            "Verify that the violation report is sent successfully.",
+            "Check Sentry for the reported violation."
+          ],
+          "expectedResult": "A violation report is successfully sent to Sentry for monitoring.",
+          "links": [
+            {
+              "label": "Sentry Error API Documentation",
+              "url": "https://docs.sentry.io/api/"
+            }
+          ]
         },
         {
           "title": "Write the limiter audit report",
-          "description": "Summarise allowed and denied requests per key."
+          "description": "This step summarizes the allowed and denied requests per API key, providing an audit trail for monitoring and analysis.",
+          "technical_explanation": "The audit report is crucial for understanding API usage patterns and identifying potential issues. This step aggregates the data from previous steps and formats it into a structured report. There is no direct API call in this step, but it relies on the data collected from Upstash and Sentry. Edge cases include handling cases where no requests were made or where all requests were denied.",
+          "code_snippet": "import json\n\ndef write_audit_report(api_key, allowed, denied):\n    report = {\n        'api_key': api_key,\n        'allowed_requests': allowed,\n        'denied_requests': denied\n    }\n    with open('audit_report.json', 'w') as f:\n        json.dump(report, f)\n\nwrite_audit_report('example_api_key', 80, 20)",
+          "mock_response": {
+            "success": true,
+            "message": "Audit report written successfully."
+          },
+          "actions": [
+            "Aggregate allowed and denied request counts.",
+            "Format the data into a structured report.",
+            "Write the report to a JSON file."
+          ],
+          "commands": [
+            {
+              "label": "Run the audit report function",
+              "language": "bash",
+              "code": "python3 your_script.py"
+            }
+          ],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Confirm that the audit report file is created.",
+            "Verify the contents of the audit report."
+          ],
+          "expectedResult": "An audit report summarizing allowed and denied requests is generated.",
+          "links": [
+            {
+              "label": "Python JSON Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "An Upstash account and a Redis database instance",
+        "A Cloudflare Workers account and a deployed worker",
+        "A Sentry account and a project set up for error tracking",
+        "Access to Upstash Redis API",
+        "Access to Cloudflare Workers API",
+        "Access to Sentry Error API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method of API authentication using a token in the Authorization header."
+        },
+        {
+          "term": "Sliding Window Rate Limiting",
+          "definition": "A technique that allows a set number of requests over a specified time frame, resetting after that period."
+        },
+        {
+          "term": "Rate Limit Exceeded",
+          "definition": "A condition where the number of requests exceeds the allowed limit for a given time frame."
+        },
+        {
+          "term": "Structured Event Reporting",
+          "definition": "The practice of sending detailed error reports to a monitoring service in a predefined format."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Rate limit not enforced",
+          "solution": "Verify that the Redis counter is incrementing correctly and that the quota is set as expected."
+        },
+        {
+          "problem": "Sentry not reporting errors",
+          "solution": "Check the Sentry project settings and ensure the correct API token is being used."
+        },
+        {
+          "problem": "Cloudflare Worker not executing",
+          "solution": "Ensure the worker is deployed and the correct endpoint is being called."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Upstash Redis API",
+          "url": "https://upstash.com/docs/redis/features/restapi"
+        },
+        {
+          "label": "Cloudflare Workers API",
+          "url": "https://developers.cloudflare.com/workers/"
+        },
+        {
+          "label": "Sentry Error API",
+          "url": "https://docs.sentry.io/api/"
+        }
+      ],
+      "before_you_start": [
+        "An Upstash account and a Redis database instance",
+        "A Cloudflare Workers account and a deployed worker",
+        "A Sentry account and a project set up for error tracking",
+        "Access to Upstash Redis API",
+        "Access to Cloudflare Workers API",
+        "Access to Sentry Error API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:17 UTC"
   },
   {
     "slug": "google-sheets-reporting-hub",
@@ -9519,26 +10396,272 @@
       "steps": [
         {
           "title": "Read KPI rows from Google Sheets",
-          "description": "Fetch the configured range and validate numeric columns."
+          "description": "This step fetches KPI rows from a specified Google Sheets document. It validates numeric columns to ensure data integrity before proceeding to the next step.",
+          "technical_explanation": "This step serves as the initial data extraction phase, consuming the Google Sheets document's ID and range. The API contract involves a GET request to the endpoint 'https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}/values/{range}'. Required headers include 'Authorization' with a Bearer token. The response is expected to be a JSON object containing 'values', which is an array of arrays. Edge cases include handling rate limits, where a 429 status code indicates too many requests, and pagination if the data exceeds the maximum response size.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_kpi_rows(spreadsheet_id, range_name):\n    url = f'https://sheets.googleapis.com/v4/spreadsheets/{spreadsheet_id}/values/{range_name}'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"GOOGLE_SHEETS_API_TOKEN\")}'}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    return data.get('values', [])\n\nkpi_rows = fetch_kpi_rows(os.environ.get('SPREADSHEET_ID'), 'KPI!A1:D')",
+          "mock_response": {
+            "values": [
+              [
+                "KPI Name",
+                "Value",
+                "Target",
+                "Status"
+              ],
+              [
+                "Sales",
+                100,
+                150,
+                "On Track"
+              ],
+              [
+                "Revenue",
+                2000,
+                2500,
+                "At Risk"
+              ]
+            ]
+          },
+          "actions": [
+            "Set up Google Sheets API credentials and enable the API.",
+            "Define the spreadsheet ID and range for KPI data.",
+            "Implement error handling for API requests."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SPREADSHEET_ID",
+              "value": "<your_spreadsheet_id>",
+              "description": "The ID of the Google Sheets document."
+            },
+            {
+              "key": "GOOGLE_SHEETS_API_TOKEN",
+              "value": "<your_google_sheets_api_token>",
+              "description": "The OAuth 2.0 token for Google Sheets API access."
+            }
+          ],
+          "tools": [
+            "Google Sheets API"
+          ],
+          "checklist": [
+            "Verify that the Google Sheets API is enabled in the Google Cloud project.",
+            "Confirm that the correct spreadsheet ID and range are specified."
+          ],
+          "expectedResult": "KPI rows are successfully fetched and validated from Google Sheets.",
+          "links": [
+            {
+              "label": "Google Sheets API Documentation",
+              "url": "https://developers.google.com/sheets/api/reference/rest"
+            }
+          ]
         },
         {
           "title": "Generate the executive narrative",
-          "description": "Send computed deltas to the OpenAI chat endpoint."
+          "description": "In this step, the fetched KPI data is sent to the OpenAI GPT-4 API to generate a narrative summary. The summary provides insights based on the KPI values and targets.",
+          "technical_explanation": "This step transforms raw KPI data into a human-readable narrative. It consumes the KPI rows from the previous step and sends a POST request to 'https://api.openai.com/v1/chat/completions'. Required headers include 'Authorization' with a Bearer token and 'Content-Type' set to 'application/json'. The request payload includes the model and messages. The response contains the generated text. Edge cases include handling API response errors and ensuring the model is available.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\n\ndef generate_narrative(kpi_data):\n    url = 'https://api.openai.com/v1/chat/completions'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    messages = [{'role': 'user', 'content': f'Generate a report based on the following KPIs: {kpi_data}'}]\n    payload = json.dumps({'model': 'gpt-4o-mini', 'messages': messages}).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        result = json.loads(response.read().decode('utf-8'))\n    return result.get('choices', [{}])[0].get('message', {}).get('content', '')\n\nkpi_rows = \"example KPI data\"\nnarrative = generate_narrative(kpi_rows)",
+          "mock_response": {
+            "choices": [
+              {
+                "message": {
+                  "content": "The sales are currently at 100, which is below the target of 150. Revenue is at 2000, which is also below the target of 2500. Immediate action is required to address these issues."
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Set up OpenAI API key in the environment variables.",
+            "Define the message structure for the API request.",
+            "Implement error handling for API responses."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "OPENAI_API_KEY",
+              "value": "<your_openai_api_key>",
+              "description": "The API key for accessing OpenAI services."
+            }
+          ],
+          "tools": [
+            "OpenAI GPT-4 API"
+          ],
+          "checklist": [
+            "Ensure the OpenAI API key is valid and has access to the GPT-4 model.",
+            "Confirm that the narrative generation logic is correctly implemented."
+          ],
+          "expectedResult": "An executive narrative summarizing the KPI data is generated.",
+          "links": [
+            {
+              "label": "OpenAI GPT-4 API Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/chat/create"
+            }
+          ]
         },
         {
           "title": "Email the report with Resend",
-          "description": "Send an HTML email containing the narrative and key metrics."
+          "description": "This step sends the generated narrative and key metrics via email using the Resend API. The email is formatted in HTML for better presentation.",
+          "technical_explanation": "This step utilizes the Resend API to send an email containing the narrative and metrics. It consumes the narrative from the previous step and sends a POST request to 'https://api.resend.com/emails'. Required headers include 'Authorization' with a Bearer token and 'Content-Type' set to 'application/json'. The payload must include the recipient, subject, and HTML content. Edge cases include handling email delivery errors and ensuring the recipient's address is valid.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef send_email(narrative):\n    url = 'https://api.resend.com/emails'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"RESEND_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    payload = json.dumps({\n        'to': 'recipient@example.com',\n        'subject': 'KPI Report',\n        'html': f'<h1>KPI Report</h1><p>{narrative}</p>'\n    }).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        result = json.loads(response.read().decode('utf-8'))\n    return result\n\nnarrative = \"This is a sample KPI narrative.\"\nemail_response = send_email(narrative)",
+          "mock_response": {
+            "id": "email_12345",
+            "status": "sent"
+          },
+          "actions": [
+            "Set up Resend API key in the environment variables.",
+            "Define the email structure and content.",
+            "Implement error handling for email sending."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "RESEND_API_KEY",
+              "value": "<your_resend_api_key>",
+              "description": "The API key for sending emails via Resend."
+            }
+          ],
+          "tools": [
+            "Resend Email API"
+          ],
+          "checklist": [
+            "Verify that the Resend API key is valid.",
+            "Confirm that the email content is correctly formatted."
+          ],
+          "expectedResult": "The report is successfully sent via email.",
+          "links": [
+            {
+              "label": "Resend Email API Documentation",
+              "url": "https://resend.com/docs"
+            }
+          ]
         },
         {
           "title": "Record the report run",
-          "description": "Append a run row with timestamp and delivery status."
+          "description": "This final step appends a record of the report run to the Google Sheets document, including a timestamp and delivery status.",
+          "technical_explanation": "This step logs the execution of the report by appending a new row to the Google Sheets document. It consumes the email response and the current timestamp. The API contract involves a POST request to 'https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}/values/{range}:append'. Required headers include 'Authorization' with a Bearer token and 'Content-Type' set to 'application/json'. The request payload includes the values to append. Edge cases include handling errors during the append operation and ensuring the correct range is specified.",
+          "code_snippet": "import json\nimport urllib.request\nimport datetime\nimport os\n\n\ndef record_run(spreadsheet_id, email_response):\n    url = f'https://sheets.googleapis.com/v4/spreadsheets/{spreadsheet_id}/values/ReportLog!A1:append'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"GOOGLE_SHEETS_API_TOKEN\")}', 'Content-Type': 'application/json'}\n    timestamp = datetime.datetime.now().isoformat()\n    values = [[timestamp, email_response.get('id', ''), email_response.get('status', '')]]\n    payload = json.dumps({'values': values}).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        result = json.loads(response.read().decode('utf-8'))\n    return result\n\nrecord_response = record_run(os.environ.get('SPREADSHEET_ID'), email_response)",
+          "mock_response": {
+            "updates": {
+              "spreadsheetId": "spreadsheet_id",
+              "updatedRange": "ReportLog!A1:C1",
+              "updatedRows": 1
+            }
+          },
+          "actions": [
+            "Set up the Google Sheets document to log report runs.",
+            "Define the structure of the log entry.",
+            "Implement error handling for the append operation."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SPREADSHEET_ID",
+              "value": "<your_spreadsheet_id>",
+              "description": "The ID of the Google Sheets document for logging."
+            }
+          ],
+          "tools": [
+            "Google Sheets API"
+          ],
+          "checklist": [
+            "Verify that the Google Sheets document is set up for logging.",
+            "Confirm that the log entry structure is correctly implemented."
+          ],
+          "expectedResult": "The report run is successfully recorded in Google Sheets.",
+          "links": [
+            {
+              "label": "Google Sheets API Documentation",
+              "url": "https://developers.google.com/sheets/api/reference/rest"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Google Cloud project with the Google Sheets API enabled and OAuth 2.0 credentials",
+        "An OpenAI API key with access to the GPT-4 model",
+        "A Resend account with an API key for sending emails",
+        "Access to OpenAI GPT-4 API",
+        "Access to Resend Email API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy for handling API rate limits by pausing requests when limits are reached."
+        },
+        {
+          "term": "Structured Data",
+          "definition": "Data that is organized in a defined manner, making it easily accessible and analyzable."
+        },
+        {
+          "term": "HTML Email Formatting",
+          "definition": "The process of structuring an email using HTML to enhance its presentation."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Authentication failure with Google Sheets API",
+          "solution": "Ensure that the OAuth 2.0 credentials are correctly set up and that the API is enabled for your project."
+        },
+        {
+          "problem": "OpenAI API returns an error",
+          "solution": "Check the API key and ensure that the model specified is available and correctly referenced."
+        },
+        {
+          "problem": "Email not sent via Resend API",
+          "solution": "Verify the API key and ensure that the email payload conforms to the required structure."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Google Sheets API",
+          "url": "https://developers.google.com/sheets/api/reference/rest"
+        },
+        {
+          "label": "OpenAI GPT-4 API",
+          "url": "https://platform.openai.com/docs/api-reference/chat/create"
+        },
+        {
+          "label": "Resend Email API",
+          "url": "https://resend.com/docs"
+        }
+      ],
+      "before_you_start": [
+        "A Google Cloud project with the Google Sheets API enabled and OAuth 2.0 credentials",
+        "An OpenAI API key with access to the GPT-4 model",
+        "A Resend account with an API key for sending emails",
+        "Access to OpenAI GPT-4 API",
+        "Access to Resend Email API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:18 UTC"
   },
   {
     "slug": "github-issue-triage",
@@ -9571,26 +10694,247 @@
       "steps": [
         {
           "title": "Fetch untriaged GitHub issues",
-          "description": "List open issues and keep those without a triage label."
+          "description": "This step retrieves open issues from a specified GitHub repository that do not have a triage label. It is essential for identifying issues that require further classification.",
+          "technical_explanation": "This step interacts with the GitHub REST API to fetch issues. The endpoint used is /repos/{owner}/{repo}/issues with a GET request. Required headers include Authorization with a Bearer token. The response will be a list of issues, which may include pagination. Handle rate limits by implementing backoff strategies if necessary.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_untriaged_issues():\n    owner = 'your_github_owner'\n    repo = 'your_repository_name'\n    url = f'https://api.github.com/repos/{owner}/{repo}/issues'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"GITHUB_TOKEN\")}'}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        issues = json.loads(response.read().decode('utf-8'))\n    return [issue for issue in issues if 'triage' not in [label['name'] for label in issue.get('labels', [])]]\n\nuntriaged_issues = fetch_untriaged_issues()",
+          "mock_response": [
+            {
+              "id": 1,
+              "title": "Issue without triage label",
+              "labels": [],
+              "state": "open"
+            },
+            {
+              "id": 2,
+              "title": "Another issue without triage label",
+              "labels": [],
+              "state": "open"
+            }
+          ],
+          "actions": [
+            "Define the GitHub repository owner and name.",
+            "Construct the API request to fetch issues.",
+            "Filter issues to exclude those with a triage label."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python fetch_issues.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "GITHUB_TOKEN",
+              "value": "<your_github_token>",
+              "description": "GitHub personal access token for authentication."
+            }
+          ],
+          "tools": [
+            "GitHub REST API"
+          ],
+          "checklist": [
+            "Issues fetched successfully from GitHub.",
+            "Untriaged issues are correctly filtered."
+          ],
+          "expectedResult": "A list of untriaged issues is retrieved from the GitHub repository.",
+          "links": [
+            {
+              "label": "GitHub REST API Documentation",
+              "url": "https://docs.github.com/en/rest"
+            }
+          ]
         },
         {
           "title": "Classify issues with OpenAI",
-          "description": "Parse a constrained JSON with type, severity and component."
+          "description": "In this step, the untriaged issues are classified by type and severity using the OpenAI GPT-4 API. This classification helps prioritize issues for resolution.",
+          "technical_explanation": "This step sends a request to the OpenAI GPT-4 API to classify the issues. The endpoint used is /v1/chat/completions with a POST request. The request payload includes the issue titles and a prompt for classification. The response will contain the classification results. Handle potential errors and ensure the response is parsed correctly.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef classify_issues(issues):\n    url = 'https://api.openai.com/v1/chat/completions'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}', 'Content-Type': 'application/json'}\n    classifications = []\n    for issue in issues:\n        prompt = f'Classify this issue: {issue[\"title\"]}'\n        payload = json.dumps({'model': 'gpt-4o-mini', 'messages': [{'role': 'user', 'content': prompt}]})\n        request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            result = json.loads(response.read().decode('utf-8'))\n            classifications.append(result['choices'][0]['message']['content'])\n    return classifications\n\nclassifications = classify_issues(untriaged_issues)",
+          "mock_response": [
+            "Bug - High",
+            "Feature Request - Medium"
+          ],
+          "actions": [
+            "Construct the prompt for classification.",
+            "Send the request to the OpenAI API for each issue.",
+            "Collect and return the classification results."
+          ],
+          "commands": [
+            {
+              "label": "Run the classification script",
+              "language": "bash",
+              "code": "python classify_issues.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "OPENAI_API_KEY",
+              "value": "<your_openai_api_key>",
+              "description": "OpenAI API key for authentication."
+            }
+          ],
+          "tools": [
+            "OpenAI GPT-4 API"
+          ],
+          "checklist": [
+            "Classifications are received for all issues.",
+            "Classifications are in the expected format."
+          ],
+          "expectedResult": "Each untriaged issue is classified by type and severity.",
+          "links": [
+            {
+              "label": "OpenAI GPT-4 API Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/chat/create"
+            }
+          ]
         },
         {
           "title": "Apply labels to GitHub issues",
-          "description": "Update issue labels based on the classification."
+          "description": "This step updates the GitHub issues with the classifications received from the OpenAI API. Proper labeling helps in tracking and managing issues effectively.",
+          "technical_explanation": "This step interacts with the GitHub REST API to update issues with new labels. The endpoint used is /repos/{owner}/{repo}/issues/{issue_number} with a PATCH request. Required headers include Authorization with a Bearer token. The request payload contains the labels to be applied. Handle potential errors and ensure that the response is checked for success.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef apply_labels(issues, classifications):\n    owner = 'your_github_owner'\n    repo = 'your_repository_name'\n    for issue, classification in zip(issues, classifications):\n        issue_number = issue['number']\n        url = f'https://api.github.com/repos/{owner}/{repo}/issues/{issue_number}'\n        headers = {'Authorization': f'Bearer {os.environ.get(\"GITHUB_TOKEN\")}', 'Content-Type': 'application/json'}\n        payload = json.dumps({'labels': [classification]})\n        request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers, method='PATCH')\n        with urllib.request.urlopen(request) as response:\n            if response.status not in (200, 201):\n                print(f'Failed to update issue {issue_number}')\n\napply_labels(untriaged_issues, classifications)",
+          "mock_response": "No response expected, but the status code should be 200 or 201 for each update.",
+          "actions": [
+            "Iterate over each issue and its classification.",
+            "Construct the API request to update the issue labels.",
+            "Send the request and check for successful updates."
+          ],
+          "commands": [
+            {
+              "label": "Run the label application script",
+              "language": "bash",
+              "code": "python apply_labels.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "GITHUB_TOKEN",
+              "value": "<your_github_token>",
+              "description": "GitHub personal access token for authentication."
+            }
+          ],
+          "tools": [
+            "GitHub REST API"
+          ],
+          "checklist": [
+            "Labels are applied to all issues successfully.",
+            "No errors are reported during the update."
+          ],
+          "expectedResult": "GitHub issues are updated with the appropriate labels based on classifications.",
+          "links": [
+            {
+              "label": "GitHub REST API Documentation",
+              "url": "https://docs.github.com/en/rest"
+            }
+          ]
         },
         {
           "title": "Notify maintainers in Slack",
-          "description": "Post critical issues with a direct link to the repository."
+          "description": "This step sends a notification to a specified Slack channel about the high-severity issues that have been triaged. This ensures that maintainers are aware of critical issues needing attention.",
+          "technical_explanation": "This step uses the Slack Web API to send messages. The endpoint used is /chat.postMessage with a POST request. Required headers include Authorization with a Bearer token. The request payload contains the channel and message text. Handle potential errors and ensure the response is checked for success.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef notify_slack(high_severity_issues):\n    url = 'https://slack.com/api/chat.postMessage'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"SLACK_BOT_TOKEN\")}', 'Content-Type': 'application/json'}\n    for issue in high_severity_issues:\n        payload = json.dumps({'channel': '#your_channel', 'text': f'High severity issue: {issue[\"title\"]} - {issue[\"html_url\"]}'})\n        request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            if response.status != 200:\n                print('Failed to send message to Slack')\n\nhigh_severity_issues = [issue for issue in untriaged_issues if 'High' in classifications]\nnotify_slack(high_severity_issues)",
+          "mock_response": "No response expected, but the status code should be 200 for successful messages.",
+          "actions": [
+            "Filter high-severity issues from the classifications.",
+            "Construct the API request to send a message to Slack.",
+            "Send the request and check for successful notifications."
+          ],
+          "commands": [
+            {
+              "label": "Run the Slack notification script",
+              "language": "bash",
+              "code": "python notify_slack.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SLACK_BOT_TOKEN",
+              "value": "<your_slack_bot_token>",
+              "description": "Slack bot token for authentication."
+            }
+          ],
+          "tools": [
+            "Slack Web API"
+          ],
+          "checklist": [
+            "Notifications are sent for all high-severity issues.",
+            "No errors are reported during the notification process."
+          ],
+          "expectedResult": "Maintainers are notified in Slack about high-severity issues.",
+          "links": [
+            {
+              "label": "Slack Web API Documentation",
+              "url": "https://api.slack.com/methods"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A GitHub account with access to the repository containing issues.",
+        "An OpenAI API key with access to the GPT-4 model.",
+        "A Slack workspace with permissions to post messages in channels.",
+        "Access to GitHub REST API",
+        "Access to OpenAI GPT-4 API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method of API authentication where a token is passed in the Authorization header."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by pausing requests when limits are reached."
+        },
+        {
+          "term": "Payload",
+          "definition": "The data sent in an API request, typically in JSON format."
+        },
+        {
+          "term": "Structured Records",
+          "definition": "Data organized in a defined format, often as dictionaries or objects, for easier processing."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Failed to fetch GitHub issues",
+          "solution": "Check your GitHub personal access token and repository permissions."
+        },
+        {
+          "problem": "OpenAI API returns an error",
+          "solution": "Verify your OpenAI API key and ensure you are using the correct model."
+        },
+        {
+          "problem": "Slack message not sent",
+          "solution": "Ensure your Slack bot token has the correct permissions to post messages."
+        }
+      ],
+      "resources": [
+        {
+          "label": "GitHub REST API",
+          "url": "https://docs.github.com/en/rest"
+        },
+        {
+          "label": "OpenAI GPT-4 API",
+          "url": "https://platform.openai.com/docs/api-reference/chat/create"
+        },
+        {
+          "label": "Slack Web API",
+          "url": "https://api.slack.com/methods"
+        }
+      ],
+      "before_you_start": [
+        "A GitHub account with access to the repository containing issues.",
+        "An OpenAI API key with access to the GPT-4 model.",
+        "A Slack workspace with permissions to post messages in channels.",
+        "Access to GitHub REST API",
+        "Access to OpenAI GPT-4 API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:20 UTC"
   },
   {
     "slug": "deployment-monitoring-alerts",
@@ -9624,26 +10968,256 @@
       "steps": [
         {
           "title": "Read Cloudflare deployments",
-          "description": "List recent Worker deployments and their timestamps."
+          "description": "This step retrieves the most recent deployments from the Cloudflare Workers API. It lists the deployments along with their timestamps to establish a baseline for performance comparison.",
+          "technical_explanation": "This step serves as the initial point in the workflow, providing deployment metadata that will be used in subsequent steps. The API contract involves a GET request to the /accounts/{account_id}/workers/scripts endpoint, requiring a Bearer token for authentication. Edge cases include handling rate limits, where the API may return a 429 status code, and ensuring that the response contains a list of deployments, which may be empty if no recent deployments exist.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\n# Function to fetch deployments from Cloudflare Workers API\ndef fetch_deployments():\n    account_id = os.environ.get('CLOUDFLARE_ACCOUNT_ID')\n    api_token = os.environ.get('CLOUDFLARE_API_TOKEN')\n    url = f'https://api.cloudflare.com/client/v4/accounts/{account_id}/workers/scripts'\n    headers = {'Authorization': f'Bearer {api_token}'}\n    request = urllib.request.Request(url, headers=headers)\n    \n    # Making the request to the API\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n        return data.get('result', [])\n\n# Fetching recent deployments\nrecent_deployments = fetch_deployments()",
+          "mock_response": {
+            "result": [
+              {
+                "id": "1234567890abcdef",
+                "name": "my-worker",
+                "created_on": "2023-10-01T12:00:00Z"
+              }
+            ]
+          },
+          "actions": [
+            "Set up a Cloudflare account and create a Worker.",
+            "Generate an API token with read access to Workers.",
+            "Store the API token and account ID in environment variables."
+          ],
+          "commands": [
+            {
+              "label": "Fetch Cloudflare Deployments",
+              "language": "bash",
+              "code": "python fetch_deployments.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "CLOUDFLARE_ACCOUNT_ID",
+              "value": "<your_account_id>",
+              "description": "Your Cloudflare account ID."
+            },
+            {
+              "key": "CLOUDFLARE_API_TOKEN",
+              "value": "<your_api_token>",
+              "description": "Your Cloudflare API token."
+            }
+          ],
+          "tools": [
+            "Cloudflare Workers API"
+          ],
+          "checklist": [
+            "Successfully retrieved a list of recent deployments.",
+            "Deployment data includes timestamps and IDs."
+          ],
+          "expectedResult": "A list of recent Cloudflare deployments is obtained.",
+          "links": [
+            {
+              "label": "Cloudflare Workers API Documentation",
+              "url": "https://developers.cloudflare.com/workers/"
+            }
+          ]
         },
         {
           "title": "Fetch Sentry error rates",
-          "description": "Query performance data for the deploy window and the baseline window."
+          "description": "This step queries the Sentry Performance API to retrieve error rates for the deployment window and a baseline window. This data is crucial for comparing performance before and after the deployment.",
+          "technical_explanation": "This step consumes the deployment timestamps from the previous step to define the time windows for querying Sentry. The API contract involves a GET request to the /organizations/{organization_slug}/projects/{project_slug}/performance/ endpoint, requiring a Bearer token for authentication. Edge cases include handling empty responses if no data is available for the specified time frames and ensuring that the API does not exceed rate limits.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef fetch_sentry_errors():\n    organization_slug = os.environ.get('SENTRY_ORG_SLUG')\n    project_slug = os.environ.get('SENTRY_PROJECT_SLUG')\n    api_key = os.environ.get('SENTRY_API_KEY')\n    url = f'https://sentry.io/api/0/organizations/{organization_slug}/projects/{project_slug}/performance/'\n    headers = {'Authorization': f'Bearer {api_key}'}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n        return data.get('data', [])\n\nerror_rates = fetch_sentry_errors()",
+          "mock_response": {
+            "data": [
+              {
+                "timestamp": "2023-10-01T12:00:00Z",
+                "error_rate": 0.05
+              }
+            ]
+          },
+          "actions": [
+            "Set up a Sentry account and create a project.",
+            "Generate an API key with read access to performance data.",
+            "Store the API key and organization/project slugs in environment variables."
+          ],
+          "commands": [
+            {
+              "label": "Fetch Sentry Error Rates",
+              "language": "bash",
+              "code": "python fetch_sentry_errors.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SENTRY_ORG_SLUG",
+              "value": "<your_org_slug>",
+              "description": "Your Sentry organization slug."
+            },
+            {
+              "key": "SENTRY_PROJECT_SLUG",
+              "value": "<your_project_slug>",
+              "description": "Your Sentry project slug."
+            },
+            {
+              "key": "SENTRY_API_KEY",
+              "value": "<your_api_key>",
+              "description": "Your Sentry API key."
+            }
+          ],
+          "tools": [
+            "Sentry Performance API"
+          ],
+          "checklist": [
+            "Successfully retrieved error rates from Sentry.",
+            "Error rate data includes timestamps and values."
+          ],
+          "expectedResult": "Sentry error rates for the specified time windows are obtained.",
+          "links": [
+            {
+              "label": "Sentry Performance API Documentation",
+              "url": "https://docs.sentry.io/api/"
+            }
+          ]
         },
         {
           "title": "Detect performance regressions",
-          "description": "Compare error rates and p95 latency deterministically."
+          "description": "This step analyzes the error rates obtained from Sentry to detect any performance regressions compared to the baseline. It computes the differences in error rates and latency metrics.",
+          "technical_explanation": "This step processes the error rates from the previous step to identify regressions. It compares the error rates before and after the deployment, determining if there is a significant increase. The analysis must handle cases where the data may be insufficient or where no regressions are detected, ensuring robust output.",
+          "code_snippet": "import statistics\n\n\ndef detect_regressions(error_rates):\n    # Get the baseline error rate\n    baseline_rate = error_rates[0]['error_rate'] if len(error_rates) > 0 else 0\n    # Get the deployment error rate\n    deployment_rate = error_rates[1]['error_rate'] if len(error_rates) > 1 else 0\n    # Check if a regression is detected\n    regression_detected = deployment_rate > baseline_rate\n    return regression_detected, baseline_rate, deployment_rate\n\n\n# Example error rates for testing\nerror_rates = [\n    {'error_rate': 0.05},\n    {'error_rate': 0.1}\n]\n\n# Call the function to detect regressions\nregression_info = detect_regressions(error_rates)",
+          "mock_response": {
+            "regression_detected": true,
+            "baseline_rate": 0.02,
+            "deployment_rate": 0.05
+          },
+          "actions": [
+            "Ensure error rates are available for both baseline and deployment windows.",
+            "Implement logic to compare error rates.",
+            "Return structured information about regression detection."
+          ],
+          "commands": [
+            {
+              "label": "Detect Performance Regressions",
+              "language": "bash",
+              "code": "python detect_regressions.py"
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "Successfully analyzed error rates for regressions.",
+            "Regression detection logic returns expected results."
+          ],
+          "expectedResult": "Performance regressions are detected based on error rate comparisons.",
+          "links": [
+            {
+              "label": "Statistics Module Documentation",
+              "url": "https://docs.python.org/3/library/statistics.html"
+            }
+          ]
         },
         {
           "title": "Post the deployment report",
-          "description": "Send a regression summary to the engineering Slack channel."
+          "description": "This step sends a summary of the regression analysis to a designated Slack channel. It alerts the engineering team about any detected performance regressions.",
+          "technical_explanation": "This step utilizes the Slack Web API to send a message to a specified channel. The API contract involves a POST request to the chat.postMessage endpoint, requiring an OAuth 2.0 bot token for authentication. Edge cases include handling failed message deliveries and ensuring that the bot has permission to post in the channel.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef post_to_slack(message):\n    slack_token = os.environ.get('SLACK_BOT_TOKEN')\n    url = 'https://slack.com/api/chat.postMessage'\n    headers = {'Authorization': f'Bearer {slack_token}', 'Content-Type': 'application/json'}\n    payload = {'channel': '#engineering', 'text': message}\n    request = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        response_text = response.read().decode('utf-8')\n        return response_text\n\nslack_response = post_to_slack('Regression detected: baseline rate 0.02, deployment rate 0.05')",
+          "mock_response": "ok",
+          "actions": [
+            "Set up a Slack app and obtain a bot token.",
+            "Ensure the bot has permission to post in the designated channel.",
+            "Format the message content appropriately for Slack."
+          ],
+          "commands": [
+            {
+              "label": "Post to Slack",
+              "language": "bash",
+              "code": "python post_to_slack.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SLACK_BOT_TOKEN",
+              "value": "<your_bot_token>",
+              "description": "Your Slack bot token."
+            }
+          ],
+          "tools": [
+            "Slack Web API"
+          ],
+          "checklist": [
+            "Successfully sent a message to the Slack channel.",
+            "Message content reflects the regression analysis."
+          ],
+          "expectedResult": "A deployment report is posted to the Slack channel.",
+          "links": [
+            {
+              "label": "Slack Web API Documentation",
+              "url": "https://api.slack.com/methods"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Cloudflare account with access to the Workers API and an API token",
+        "A Sentry account with access to the Performance API and an API key",
+        "A Slack workspace with an OAuth 2.0 bot token for posting messages",
+        "Access to Cloudflare Workers API",
+        "Access to Sentry Performance API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access to resources."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy for handling API rate limits by delaying requests until the limit resets."
+        },
+        {
+          "term": "Performance Regression",
+          "definition": "A decrease in performance metrics such as error rates or latency after a deployment."
+        },
+        {
+          "term": "Deployment Metadata",
+          "definition": "Information related to application deployments, including timestamps and version identifiers."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API token authentication fails",
+          "solution": "Verify that the API tokens are correctly set in environment variables and have the necessary permissions."
+        },
+        {
+          "problem": "No deployments found",
+          "solution": "Ensure that there have been recent deployments in Cloudflare and that the API request is correctly formed."
+        },
+        {
+          "problem": "Slack message not sent",
+          "solution": "Check the Slack bot token and ensure the bot has permission to post in the specified channel."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Cloudflare Workers API",
+          "url": "https://developers.cloudflare.com/workers/"
+        },
+        {
+          "label": "Sentry Performance API",
+          "url": "https://docs.sentry.io/api/"
+        },
+        {
+          "label": "Slack Web API",
+          "url": "https://api.slack.com/methods"
+        }
+      ],
+      "before_you_start": [
+        "A Cloudflare account with access to the Workers API and an API token",
+        "A Sentry account with access to the Performance API and an API key",
+        "A Slack workspace with an OAuth 2.0 bot token for posting messages",
+        "Access to Cloudflare Workers API",
+        "Access to Sentry Performance API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:21 UTC"
   },
   {
     "slug": "feature-flag-rollout",
@@ -9676,26 +11250,249 @@
       "steps": [
         {
           "title": "Read the current flag configuration",
-          "description": "Fetch the LaunchDarkly flag and its current rollout percentage."
+          "description": "This step retrieves the current configuration of the feature flag from LaunchDarkly, including its rollout percentage. It is essential to know the current state before making any updates.",
+          "technical_explanation": "This step acts as the initial point of interaction with the LaunchDarkly Feature API. The API endpoint used is /flags/{projectKey}/{flagKey}, which requires a GET request with a Bearer token for authentication. The expected response includes the current rollout percentage and other flag details. Edge cases include handling rate limits, where the API may return a 429 status code, indicating too many requests in a given timeframe.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_flag():\n    url = 'https://app.launchdarkly.com/api/v2/flags/{projectKey}/{flagKey}'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"LD_API_TOKEN\")}' }\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n        return data.get('variations', [{}])[0].get('percentage', 0)\n\ncurrent_percentage = fetch_flag()",
+          "mock_response": {
+            "key": "feature-flag",
+            "variations": [
+              {
+                "percentage": 20
+              }
+            ]
+          },
+          "actions": [
+            "Set the project key and flag key in the URL",
+            "Include the Bearer token in the request headers",
+            "Parse the JSON response to extract the current percentage"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "LD_API_TOKEN",
+              "value": "<your_launchdarkly_api_token>",
+              "description": "The API token for authenticating with LaunchDarkly"
+            }
+          ],
+          "tools": [
+            "LaunchDarkly Feature API"
+          ],
+          "checklist": [
+            "Successfully retrieved the flag configuration",
+            "Current rollout percentage is displayed"
+          ],
+          "expectedResult": "The current rollout percentage of the feature flag is retrieved successfully.",
+          "links": [
+            {
+              "label": "LaunchDarkly Feature API Documentation",
+              "url": "https://apidocs.launchdarkly.com/"
+            }
+          ]
         },
         {
           "title": "Advance the rollout percentage",
-          "description": "Update the flag to the next rollout stage."
+          "description": "This step updates the feature flag's rollout percentage to the next stage. It is crucial for gradually rolling out features to users.",
+          "technical_explanation": "This step updates the flag's rollout percentage using the LaunchDarkly Feature API. The endpoint used is /flags/{projectKey}/{flagKey}, requiring a PATCH request with a Bearer token and a JSON payload specifying the new percentage. The API response confirms the update. Edge cases include ensuring the new percentage is within valid bounds and handling potential 404 errors if the flag does not exist.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef update_flag(new_percentage):\n    url = 'https://app.launchdarkly.com/api/v2/flags/{projectKey}/{flagKey}'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"LD_API_TOKEN\")}', 'Content-Type': 'application/json'}\n    payload = json.dumps({'variations': [{'percentage': new_percentage}]})\n    request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers, method='PATCH')\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))\n\ncurrent_percentage = 0  # Initialize current_percentage for demonstration\nupdate_response = update_flag(current_percentage + 10)",
+          "mock_response": {
+            "key": "feature-flag",
+            "variations": [
+              {
+                "percentage": 30
+              }
+            ]
+          },
+          "actions": [
+            "Prepare the JSON payload with the new percentage",
+            "Send a PATCH request to update the flag",
+            "Handle the response to confirm the update"
+          ],
+          "commands": [
+            {
+              "label": "Run the update script",
+              "language": "bash",
+              "code": "python update_script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "LD_API_TOKEN",
+              "value": "<your_launchdarkly_api_token>",
+              "description": "The API token for authenticating with LaunchDarkly"
+            }
+          ],
+          "tools": [
+            "LaunchDarkly Feature API"
+          ],
+          "checklist": [
+            "Successfully updated the flag's rollout percentage",
+            "New percentage is confirmed in the response"
+          ],
+          "expectedResult": "The feature flag's rollout percentage is successfully updated.",
+          "links": [
+            {
+              "label": "LaunchDarkly Feature API Documentation",
+              "url": "https://apidocs.launchdarkly.com/"
+            }
+          ]
         },
         {
           "title": "Verify the linked release",
-          "description": "Check the GitHub release tag matches the expected version."
+          "description": "This step checks the GitHub repository for the release tag associated with the feature flag. It ensures that the correct version is linked to the feature rollout.",
+          "technical_explanation": "This step interacts with the GitHub REST API to verify the release tag. The endpoint used is /repos/{owner}/{repo}/releases, requiring a GET request with a Personal Access Token for authentication. The response includes release details, which are checked against the expected version. Edge cases include handling 404 errors if the repository does not exist or if there are no releases.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef verify_release():\n    url = 'https://api.github.com/repos/{owner}/{repo}/releases'\n    headers = {'Authorization': f'token {os.environ.get(\"GITHUB_TOKEN\")}'}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        releases = json.loads(response.read().decode('utf-8'))\n        return releases[0].get('tag_name', 'No releases found')\n\n\ncurrent_release = verify_release()",
+          "mock_response": [
+            {
+              "tag_name": "v1.0.0"
+            }
+          ],
+          "actions": [
+            "Set the owner and repository in the URL",
+            "Include the Personal Access Token in the request headers",
+            "Parse the JSON response to extract the release tag"
+          ],
+          "commands": [
+            {
+              "label": "Run the verification script",
+              "language": "bash",
+              "code": "python verify_script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "GITHUB_TOKEN",
+              "value": "<your_github_personal_access_token>",
+              "description": "The Personal Access Token for authenticating with GitHub"
+            }
+          ],
+          "tools": [
+            "GitHub REST API"
+          ],
+          "checklist": [
+            "Successfully retrieved the release information",
+            "Current release tag is displayed"
+          ],
+          "expectedResult": "The release tag associated with the feature flag is verified successfully.",
+          "links": [
+            {
+              "label": "GitHub REST API Documentation",
+              "url": "https://docs.github.com/en/rest"
+            }
+          ]
         },
         {
           "title": "Announce the rollout stage",
-          "description": "Post the flag key, percentage and release link to Slack."
+          "description": "This step posts a message to a Slack channel announcing the new rollout percentage and the associated release link. It keeps the team informed about the feature's progress.",
+          "technical_explanation": "This step uses the Slack Web API to send a message to a specified channel. The endpoint used is /chat.postMessage, requiring a POST request with an OAuth 2.0 bot token and a JSON payload containing the message. The response confirms the message was sent. Edge cases include handling errors if the channel does not exist or if the bot lacks permission to post.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef post_to_slack(message):\n    url = 'https://slack.com/api/chat.postMessage'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"SLACK_BOT_TOKEN\")}', 'Content-Type': 'application/json'}\n    payload = json.dumps({'channel': '#your-channel', 'text': message})\n    request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return response.read().decode('utf-8')\n\n\ncurrent_percentage = 0  # Example initial percentage\ncurrent_release = 'https://example.com/release'  # Example release link\nslack_response = post_to_slack(f'Feature flag updated to {current_percentage + 10}% with release {current_release}')",
+          "mock_response": "ok",
+          "actions": [
+            "Prepare the message with the new percentage and release link",
+            "Send a POST request to the Slack API",
+            "Handle the response to confirm the message was sent"
+          ],
+          "commands": [
+            {
+              "label": "Run the announcement script",
+              "language": "bash",
+              "code": "python announce_script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SLACK_BOT_TOKEN",
+              "value": "<your_slack_bot_token>",
+              "description": "The OAuth 2.0 bot token for authenticating with Slack"
+            }
+          ],
+          "tools": [
+            "Slack Web API"
+          ],
+          "checklist": [
+            "Successfully posted the message to Slack",
+            "Message content is correct and includes the new percentage"
+          ],
+          "expectedResult": "The rollout stage is announced in the Slack channel successfully.",
+          "links": [
+            {
+              "label": "Slack Web API Documentation",
+              "url": "https://api.slack.com/methods"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A LaunchDarkly account with API access and a feature flag configured",
+        "A GitHub repository with at least one release created",
+        "A Slack workspace with a bot token for posting messages",
+        "Access to LaunchDarkly Feature API",
+        "Access to GitHub REST API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access to resources."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by waiting before retrying requests."
+        },
+        {
+          "term": "Feature Flag",
+          "definition": "A software development technique that allows enabling or disabling features without deploying new code."
+        },
+        {
+          "term": "Release Tag",
+          "definition": "A label in version control that marks a specific point in the repository's history."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Failed to fetch flag configuration",
+          "solution": "Verify the API token and flag key are correct."
+        },
+        {
+          "problem": "Rollout percentage update fails",
+          "solution": "Check if the new percentage is valid and within the allowed range."
+        },
+        {
+          "problem": "Slack message not sent",
+          "solution": "Ensure the bot token is valid and has permissions to post in the channel."
+        }
+      ],
+      "resources": [
+        {
+          "label": "LaunchDarkly Feature API",
+          "url": "https://apidocs.launchdarkly.com/"
+        },
+        {
+          "label": "GitHub REST API",
+          "url": "https://docs.github.com/en/rest"
+        },
+        {
+          "label": "Slack Web API",
+          "url": "https://api.slack.com/methods"
+        }
+      ],
+      "before_you_start": [
+        "A LaunchDarkly account with API access and a feature flag configured",
+        "A GitHub repository with at least one release created",
+        "A Slack workspace with a bot token for posting messages",
+        "Access to LaunchDarkly Feature API",
+        "Access to GitHub REST API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:22 UTC"
   },
   {
     "slug": "secrets-rotation-audit",
