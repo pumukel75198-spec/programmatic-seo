@@ -1,0 +1,310 @@
+[RESET] clearing workflows.json
+========================================================================
+FLOWMATRIX UNIFIED PIPELINE
+========================================================================
+Workflows: 76 | APIs: 0 | Alternatives: 0 | dry-run=False
+
+[WORKFLOW] ai-content-generation-pipeline
+  [REPAIR] ai-content-generation-pipeline: fixed snippet 'Draft the article with OpenAI'
+  [REPAIR] ai-content-generation-pipeline: fixed snippet 'Critique the draft with Anthropic Claude'
+  [REPAIR] ai-content-generation-pipeline: fixed snippet 'Persist approved drafts in Supabase'
+  [REPAIR] ai-content-generation-pipeline: fixed snippet 'Export a publication report'
+  [REPAIR] ai-content-generation-pipeline: expanded technical explanation for 'Export a publication report'
+  [OK] validated after 1 attempt(s) -> flowmatrix-ai-content-generation-pipeline.pdf
+  [OK] implementation kit -> ai-content-generation-pipeline-kit.zip
+
+[WORKFLOW] multi-model-prompt-router
+  [REPAIR] multi-model-prompt-router: fixed snippet 'Call the selected chat endpoint'
+  [OK] validated after 1 attempt(s) -> flowmatrix-multi-model-prompt-router.pdf
+  [OK] implementation kit -> multi-model-prompt-router-kit.zip
+
+[WORKFLOW] llm-evaluation-benchmark
+  [RETRY] llm-evaluation-benchmark attempt 1: ValueError: the generated steps reference none of the curated APIs
+  [REPAIR] llm-evaluation-benchmark: fixed snippet 'Run the OpenAI baseline'
+  [REPAIR] llm-evaluation-benchmark: fixed snippet 'Run the Mistral comparison'
+  [REPAIR] llm-evaluation-benchmark: fixed snippet 'Write benchmark rows to Airtable'
+  [OK] validated after 2 attempt(s) -> flowmatrix-llm-evaluation-benchmark.pdf
+  [OK] implementation kit -> llm-evaluation-benchmark-kit.zip
+
+[WORKFLOW] batch-llm-processing
+  [RETRY] batch-llm-processing attempt 1: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] batch-llm-processing attempt 2: ValueError: the generated steps reference none of the curated APIs
+  [REPAIR] batch-llm-processing: fixed snippet 'Upload and submit the batch job'
+  [REPAIR] batch-llm-processing: fixed snippet 'Poll the batch status'
+  [RETRY] batch-llm-processing attempt 3: 2 validator error(s)
+           - Workflow: code defines functions but never calls them – add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end
+           - Workflow dry-run timed out after 10s – remove infinite loops or blocking waits from the step code
+  [RETRY] batch-llm-processing attempt 4: 1 validator error(s)
+           - Workflow dry-run timed out after 10s – remove infinite loops or blocking waits from the step code
+  [FAIL] batch-llm-processing rejected after 4 attempts
+
+[WORKFLOW] ai-customer-insights
+  [REPAIR] ai-customer-insights: fixed snippet 'Pull event cohorts from PostHog'
+  [REPAIR] ai-customer-insights: fixed snippet 'Summarise behaviour with OpenAI'
+  [REPAIR] ai-customer-insights: fixed snippet 'Store insights in Supabase'
+  [REPAIR] ai-customer-insights: fixed snippet 'Generate the insight digest'
+  [OK] validated after 1 attempt(s) -> flowmatrix-ai-customer-insights.pdf
+  [OK] implementation kit -> ai-customer-insights-kit.zip
+
+[WORKFLOW] claude-document-summarizer
+  [RETRY] claude-document-summarizer attempt 1: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] claude-document-summarizer attempt 2: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] claude-document-summarizer attempt 3: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] claude-document-summarizer attempt 4: ValueError: the generated steps reference none of the curated APIs
+  [FAIL] claude-document-summarizer rejected after 4 attempts
+
+[WORKFLOW] gemini-multimodal-analyzer
+  [REPAIR] gemini-multimodal-analyzer: fixed snippet 'List image assets from Vercel Blob'
+  [OK] validated after 1 attempt(s) -> flowmatrix-gemini-multimodal-analyzer.pdf
+  [OK] implementation kit -> gemini-multimodal-analyzer-kit.zip
+
+[WORKFLOW] watson-assistant-helpdesk
+  [RETRY] watson-assistant-helpdesk attempt 1: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] watson-assistant-helpdesk attempt 2: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] watson-assistant-helpdesk attempt 3: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] watson-assistant-helpdesk attempt 4: ValueError: the generated steps reference none of the curated APIs
+  [FAIL] watson-assistant-helpdesk rejected after 4 attempts
+
+[WORKFLOW] podcast-transcription-pipeline
+  [OK] validated after 1 attempt(s) -> flowmatrix-podcast-transcription-pipeline.pdf
+  [OK] implementation kit -> podcast-transcription-pipeline-kit.zip
+
+[WORKFLOW] ai-voiceover-production
+  [RETRY] ai-voiceover-production attempt 1: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] ai-voiceover-production attempt 2: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] ai-voiceover-production attempt 3: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] ai-voiceover-production attempt 4: ValueError: the generated steps reference none of the curated APIs
+  [FAIL] ai-voiceover-production rejected after 4 attempts
+
+[WORKFLOW] meeting-transcription-summaries
+  [RETRY] meeting-transcription-summaries attempt 1: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] meeting-transcription-summaries attempt 2: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] meeting-transcription-summaries attempt 3: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] meeting-transcription-summaries attempt 4: ValueError: the generated steps reference none of the curated APIs
+  [FAIL] meeting-transcription-summaries rejected after 4 attempts
+
+[WORKFLOW] ai-image-generation-pipeline
+  [OK] validated after 1 attempt(s) -> flowmatrix-ai-image-generation-pipeline.pdf
+  [OK] implementation kit -> ai-image-generation-pipeline-kit.zip
+
+[WORKFLOW] semantic-search-knowledge-base
+  [REPAIR] semantic-search-knowledge-base: fixed snippet 'Export pages from Notion'
+  [REPAIR] semantic-search-knowledge-base: fixed snippet 'Create embeddings with OpenAI'
+  [REPAIR] semantic-search-knowledge-base: fixed snippet 'Upsert vectors into Pinecone'
+  [REPAIR] semantic-search-knowledge-base: fixed snippet 'Run a semantic query'
+  [OK] validated after 1 attempt(s) -> flowmatrix-semantic-search-knowledge-base.pdf
+  [OK] implementation kit -> semantic-search-knowledge-base-kit.zip
+
+[WORKFLOW] hybrid-search-product-catalog
+  [RETRY] hybrid-search-product-catalog attempt 1: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] hybrid-search-product-catalog attempt 2: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] hybrid-search-product-catalog attempt 3: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] hybrid-search-product-catalog attempt 4: ValueError: the generated steps reference none of the curated APIs
+  [FAIL] hybrid-search-product-catalog rejected after 4 attempts
+
+[WORKFLOW] rag-document-assistant
+  [REPAIR] rag-document-assistant: expanded technical explanation for 'Answer with a grounded completion'
+  [REPAIR] rag-document-assistant: targeted repair for step 4 'Answer with a grounded completion'
+  [OK] validated after 1 attempt(s) -> flowmatrix-rag-document-assistant.pdf
+  [OK] implementation kit -> rag-document-assistant-kit.zip
+
+[WORKFLOW] content-similarity-audit
+  [REPAIR] content-similarity-audit: expanded technical explanation for 'Log duplicate pairs in Airtable'
+  [RETRY] content-similarity-audit attempt 1: 1 validator error(s)
+           - Workflow: code defines functions but never calls them – add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end
+  [REPAIR] content-similarity-audit: fixed snippet 'Load the article inventory'
+  [OK] validated after 2 attempt(s) -> flowmatrix-content-similarity-audit.pdf
+  [OK] implementation kit -> content-similarity-audit-kit.zip
+
+[WORKFLOW] transactional-email-delivery
+  [RETRY] transactional-email-delivery attempt 1: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] transactional-email-delivery attempt 2: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] transactional-email-delivery attempt 3: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] transactional-email-delivery attempt 4: ValueError: the generated steps reference none of the curated APIs
+  [FAIL] transactional-email-delivery rejected after 4 attempts
+
+[WORKFLOW] email-campaign-automation
+  [RETRY] email-campaign-automation attempt 1: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] email-campaign-automation attempt 2: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] email-campaign-automation attempt 3: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] email-campaign-automation attempt 4: ValueError: the generated steps reference none of the curated APIs
+  [FAIL] email-campaign-automation rejected after 4 attempts
+
+[WORKFLOW] sms-alert-system
+  [REPAIR] sms-alert-system: fixed snippet 'Send SMS through Twilio'
+  [REPAIR] sms-alert-system: targeted repair for step 3 'Send fallback SMS through Sendinblue'
+  [OK] validated after 1 attempt(s) -> flowmatrix-sms-alert-system.pdf
+  [OK] implementation kit -> sms-alert-system-kit.zip
+
+[WORKFLOW] slack-incident-notifications
+  [RETRY] slack-incident-notifications attempt 1: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] slack-incident-notifications attempt 2: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] slack-incident-notifications attempt 3: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] slack-incident-notifications attempt 4: ValueError: the generated steps reference none of the curated APIs
+  [FAIL] slack-incident-notifications rejected after 4 attempts
+
+[WORKFLOW] telegram-community-bot
+  [RETRY] telegram-community-bot attempt 1: ValueError: the generated steps reference none of the curated APIs
+  [REPAIR] telegram-community-bot: fixed snippet 'Fetch Telegram updates'
+  [REPAIR] telegram-community-bot: fixed snippet 'Generate a moderated answer'
+  [REPAIR] telegram-community-bot: fixed snippet 'Send the reply on Telegram'
+  [REPAIR] telegram-community-bot: fixed snippet 'Log conversations in Supabase'
+  [OK] validated after 2 attempt(s) -> flowmatrix-telegram-community-bot.pdf
+  [OK] implementation kit -> telegram-community-bot-kit.zip
+
+[WORKFLOW] video-call-summarizer
+  [REPAIR] video-call-summarizer: fixed snippet 'List completed video rooms'
+  [REPAIR] video-call-summarizer: targeted repair for step 2 'Transcribe the recordings'
+  [REPAIR] video-call-summarizer: targeted repair for step 3 'Summarise the transcript'
+  [REPAIR] video-call-summarizer: targeted repair for step 4 'Publish meeting notes to Notion'
+  [RETRY] video-call-summarizer attempt 1: 3 validator error(s)
+           - Step 2: defines function(s) transcribe_recording but never calls one at top level – the step would not execute
+           - Step 3: defines function(s) summarize_transcript but never calls one at top level – the step would not execute
+           - Step 4: defines function(s) publish_to_notion but never calls one at top level – the step would not execute
+  [REPAIR] video-call-summarizer: fixed snippet 'List completed video rooms'
+  [REPAIR] video-call-summarizer: fixed snippet 'Transcribe the recordings'
+  [REPAIR] video-call-summarizer: fixed snippet 'Summarise the transcript'
+  [REPAIR] video-call-summarizer: fixed snippet 'Publish meeting notes to Notion'
+  [REPAIR] video-call-summarizer: targeted repair for step 2 'Transcribe the recordings'
+  [REPAIR] video-call-summarizer: targeted repair for step 3 'Summarise the transcript'
+  [REPAIR] video-call-summarizer: targeted repair for step 4 'Publish meeting notes to Notion'
+  [RETRY] video-call-summarizer attempt 2: 3 validator error(s)
+           - Step 2: defines function(s) transcribe_recording but never calls one at top level – the step would not execute
+           - Step 3: defines function(s) summarize_transcript but never calls one at top level – the step would not execute
+           - Step 4: defines function(s) publish_to_notion but never calls one at top level – the step would not execute
+  [REPAIR] video-call-summarizer: fixed snippet 'List completed video rooms'
+  [REPAIR] video-call-summarizer: targeted repair for step 2 'Transcribe the recordings'
+  [REPAIR] video-call-summarizer: targeted repair for step 3 'Summarise the transcript'
+  [REPAIR] video-call-summarizer: targeted repair for step 4 'Publish meeting notes to Notion'
+  [RETRY] video-call-summarizer attempt 3: 3 validator error(s)
+           - Step 2: defines function(s) transcribe_recording but never calls one at top level – the step would not execute
+           - Step 3: defines function(s) summarize_transcript but never calls one at top level – the step would not execute
+           - Step 4: defines function(s) publish_to_notion but never calls one at top level – the step would not execute
+  [REPAIR] video-call-summarizer: fixed snippet 'List completed video rooms'
+  [REPAIR] video-call-summarizer: targeted repair for step 2 'Transcribe the recordings'
+  [REPAIR] video-call-summarizer: targeted repair for step 3 'Summarise the transcript'
+  [REPAIR] video-call-summarizer: targeted repair for step 4 'Publish meeting notes to Notion'
+  [RETRY] video-call-summarizer attempt 4: 3 validator error(s)
+           - Step 2: defines function(s) transcribe_recording but never calls one at top level – the step would not execute
+           - Step 3: defines function(s) summarize_transcript but never calls one at top level – the step would not execute
+           - Step 4: defines function(s) publish_to_notion but never calls one at top level – the step would not execute
+  [FAIL] video-call-summarizer rejected after 4 attempts
+
+[WORKFLOW] conversational-messaging-hub
+  [RETRY] conversational-messaging-hub attempt 1: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] conversational-messaging-hub attempt 2: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] conversational-messaging-hub attempt 3: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] conversational-messaging-hub attempt 4: ValueError: the generated steps reference none of the curated APIs
+  [FAIL] conversational-messaging-hub rejected after 4 attempts
+
+[WORKFLOW] crm-lead-scoring
+  [RETRY] crm-lead-scoring attempt 1: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] crm-lead-scoring attempt 2: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] crm-lead-scoring attempt 3: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] crm-lead-scoring attempt 4: ValueError: the generated steps reference none of the curated APIs
+  [FAIL] crm-lead-scoring rejected after 4 attempts
+
+[WORKFLOW] salesforce-pipeline-sync
+  [RETRY] salesforce-pipeline-sync attempt 1: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] salesforce-pipeline-sync attempt 2: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] salesforce-pipeline-sync attempt 3: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] salesforce-pipeline-sync attempt 4: ValueError: the generated steps reference none of the curated APIs
+  [FAIL] salesforce-pipeline-sync rejected after 4 attempts
+
+[WORKFLOW] personalized-outreach-engine
+  [RETRY] personalized-outreach-engine attempt 1: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] personalized-outreach-engine attempt 2: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] personalized-outreach-engine attempt 3: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] personalized-outreach-engine attempt 4: ValueError: the generated steps reference none of the curated APIs
+  [FAIL] personalized-outreach-engine rejected after 4 attempts
+
+[WORKFLOW] support-ticket-triage
+  [RETRY] support-ticket-triage attempt 1: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] support-ticket-triage attempt 2: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] support-ticket-triage attempt 3: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] support-ticket-triage attempt 4: ValueError: the generated steps reference none of the curated APIs
+  [FAIL] support-ticket-triage rejected after 4 attempts
+
+[WORKFLOW] ai-help-center-search
+  [REPAIR] ai-help-center-search: fixed snippet 'Export help articles from Notion'
+  [REPAIR] ai-help-center-search: fixed snippet 'Create article embeddings'
+  [REPAIR] ai-help-center-search: expanded technical explanation for 'Create article embeddings'
+  [REPAIR] ai-help-center-search: fixed snippet 'Upsert vectors into Pinecone'
+  [REPAIR] ai-help-center-search: expanded technical explanation for 'Upsert vectors into Pinecone'
+  [REPAIR] ai-help-center-search: fixed snippet 'Answer support queries'
+  [RETRY] ai-help-center-search attempt 1: 1 validator error(s)
+           - Workflow dry-run failed: NameError: name 'article_titles' is not defined
+Traceback (most recent call last):
+  File "/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py", line 853, in execute_workflow_dry_run
+    "email": "test@example.com",
+  File "workflow.py", line 54, in <module>
+NameError: name 'article_titles' is not defined
+
+  [REPAIR] ai-help-center-search: fixed snippet 'Export help articles from Notion'
+  [REPAIR] ai-help-center-search: fixed snippet 'Create article embeddings'
+  [REPAIR] ai-help-center-search: fixed snippet 'Upsert vectors into Pinecone'
+  [REPAIR] ai-help-center-search: fixed snippet 'Answer support queries'
+  [REPAIR] ai-help-center-search: expanded technical explanation for 'Answer support queries'
+  [OK] validated after 2 attempt(s) -> flowmatrix-ai-help-center-search.pdf
+  [OK] implementation kit -> ai-help-center-search-kit.zip
+
+[WORKFLOW] csat-feedback-analysis
+  [RETRY] csat-feedback-analysis attempt 1: ValueError: the generated steps reference none of the curated APIs
+  [REPAIR] csat-feedback-analysis: fixed snippet 'Collect CSAT responses from Zendesk'
+  [REPAIR] csat-feedback-analysis: fixed snippet 'Classify feedback sentiment'
+  [REPAIR] csat-feedback-analysis: fixed snippet 'Append summaries to Google Sheets'
+  [RETRY] csat-feedback-analysis attempt 2: 2 validator error(s)
+           - Workflow: API host 'googleapis.com' is used in code but missing from resources
+           - Workflow: API host 'googleapis.com' is not part of the curated APIs – ungrounded API call
+  [RETRY] csat-feedback-analysis attempt 3: 3 validator error(s)
+           - Workflow: code defines functions but never calls them – add top-level calls (e.g. `mentions = fetch_mentions()`) so the concatenated script runs end-to-end
+           - Workflow: API host 'googleapis.com' is used in code but missing from resources
+           - Workflow: API host 'googleapis.com' is not part of the curated APIs – ungrounded API call
+  [REPAIR] csat-feedback-analysis: targeted repair for step 2 'Classify feedback sentiment'
+  [RETRY] csat-feedback-analysis attempt 4: 2 validator error(s)
+           - Workflow: API host 'googleapis.com' is used in code but missing from resources
+           - Workflow: API host 'googleapis.com' is not part of the curated APIs – ungrounded API call
+  [FAIL] csat-feedback-analysis rejected after 4 attempts
+
+[WORKFLOW] subscription-billing-automation
+  [RETRY] subscription-billing-automation attempt 1: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] subscription-billing-automation attempt 2: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] subscription-billing-automation attempt 3: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] subscription-billing-automation attempt 4: ValueError: the generated steps reference none of the curated APIs
+  [FAIL] subscription-billing-automation rejected after 4 attempts
+
+[WORKFLOW] invoice-reconciliation
+  [RETRY] invoice-reconciliation attempt 1: ValueError: the generated steps reference none of the curated APIs
+  [REPAIR] invoice-reconciliation: fixed snippet 'List paid Stripe invoices'
+  [REPAIR] invoice-reconciliation: fixed snippet 'Explain mismatches with OpenAI'
+  [RETRY] invoice-reconciliation attempt 2: 3 validator error(s)
+           - Workflow dry-run failed: TypeError: unsupported operand type(s) for /: 'SmartMockDict' and 'int'
+Traceback (most recent call last):
+  File "/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py", line 853, in execute_workflow_dry_run
+    "email": "test@example.com",
+  File "workflow.py", line 14, in <module>
+  File "workflow.py", line 11, in fetch_paid_invoices
+TypeError: unsupported operand type(s) for /: 'SmartMockDict' and 'int'
+
+           - Workflow: API host 'googleapis.com' is used in code but missing from resources
+           - Workflow: API host 'googleapis.com' is not part of the curated APIs – ungrounded API call
+  [REPAIR] invoice-reconciliation: fixed snippet 'List paid Stripe invoices'
+  [REPAIR] invoice-reconciliation: fixed snippet 'Read the Google Sheets ledger'
+  [REPAIR] invoice-reconciliation: fixed snippet 'Explain mismatches with OpenAI'
+  [RETRY] invoice-reconciliation attempt 3: 3 validator error(s)
+           - Workflow dry-run failed: TypeError: cannot use 'pipeline.validator.SmartMockDict' as a dict key (unhashable type: 'SmartMockDict')
+Traceback (most recent call last):
+  File "/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py", line 853, in execute_workflow_dry_run
+    "email": "test@example.com",
+  File "workflow.py", line 42, in <module>
+  File "workflow.py", line 36, in detect_mismatches
+TypeError: cannot use 'pipeline.validator.SmartMockDict' as a dict key (unhashable type: 'SmartMockDict')
+
+           - Workflow: API host 'googleapis.com' is used in code but missing from resources
+           - Workflow: API host 'googleapis.com' is not part of the curated APIs – ungrounded API call
+  [RETRY] invoice-reconciliation attempt 4: ValueError: the generated steps reference none of the curated APIs
+  [FAIL] invoice-reconciliation rejected after 4 attempts
+
+[WORKFLOW] paypal-payout-monitoring
+  [RETRY] paypal-payout-monitoring attempt 1: ValueError: the generated steps reference none of the curated APIs
+  [RETRY] paypal-payout-monitoring attempt 2: ValueError: the generated steps reference none of the curated APIs

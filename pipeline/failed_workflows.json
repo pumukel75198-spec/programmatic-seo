@@ -1,0 +1,6 @@
+{
+  "batch-llm-processing": {
+    "reason": "RuntimeError: Workflow dry-run timed out after 10s – remove infinite loops or blocking waits from the step code",
+    "timestamp": "2026-11-06 14:11 UTC"
+  }
+}

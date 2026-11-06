@@ -32,8 +32,19 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+# Allow direct execution: ``python3 pipeline/run_batch.py --limit 10``.
+if __package__ in (None, ""):
+    import os as _os
+    import sys as _sys
+
+    _sys.path.insert(
+        0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+    )
+    __package__ = "pipeline"
+
 from . import config as cfg
 from . import bundle_builder, llm_client, pdf_renderer, prompts, validator
+from . import seeds as seed_catalog
 
 
 # --------------------------------------------------------------------------- #
@@ -50,172 +61,93 @@ def save_json(path: Path, data: Any) -> None:
     tmp.replace(path)
 
 
-def _tool_map(partner: dict[str, Any], names: list[str]) -> list[dict[str, Any]]:
-    return [{"name": name, **partner.get(name, {})} for name in names]
-
-
-TOOL_FALLBACKS: dict[str, dict[str, str]] = {
-    "x api": {
-        "provider": "X",
-        "endpoint": "https://api.x.com/2/tweets/search/recent",
-        "url": "https://developer.x.com/en/docs/twitter-api/tweets/search/introduction",
-        "authentication": "Bearer token",
-    },
-    "twitter api": {
-        "provider": "X",
-        "endpoint": "https://api.x.com/2/tweets/search/recent",
-        "url": "https://developer.x.com/en/docs/twitter-api/tweets/search/introduction",
-        "authentication": "Bearer token",
-    },
-    "openai api": {
-        "provider": "OpenAI",
-        "endpoint": "https://api.openai.com/v1/chat/completions",
-        "url": "https://platform.openai.com/docs/api-reference/chat/create",
-        "authentication": "Bearer API key",
-    },
-    "slack": {
-        "provider": "Slack",
-        "endpoint": "https://hooks.slack.com/services/<workspace>/<channel>/<token>",
-        "url": "https://api.slack.com/messaging/webhooks",
-        "authentication": "Incoming webhook URL",
-    },
-    "n8n": {
-        "provider": "n8n",
-        "endpoint": "https://<your-n8n-instance>/webhook/<name>",
-        "url": "https://docs.n8n.io/",
-        "authentication": "Webhook URL",
-    },
-}
-
-
-def _api_script_endpoint(api: dict[str, Any]) -> str:
-    """Return a concrete URL that the validated API script actually uses."""
-    slug = str(api.get("slug") or "")
-    path = cfg.API_SCRIPTS_DIR / slug / f"{slug}.py"
-    if not path.exists():
-        return ""
-    code = path.read_text(encoding="utf-8")
-    urls = [
-        url
-        for url in validator.extract_urls(code)
-        if not any(marker in url for marker in ("<", ">", "{", "}"))
-    ]
-    for url in urls:
-        parsed = urllib.parse.urlparse(url)
-        if parsed.path not in ("", "/"):
-            return url
-    return urls[0] if urls else ""
-
-
-def _api_tokens(api: dict[str, Any]) -> set[str]:
+def _api_tool(api: dict[str, Any]) -> dict[str, Any]:
+    """Project an API record onto the tool shape used by the prompt."""
     details = api.get("details") or {}
-    text = " ".join(
-        [
-            str(api.get("title") or ""),
-            str(details.get("provider") or ""),
-            str(details.get("useCase") or ""),
-            " ".join(str(tag) for tag in api.get("tags") or []),
-        ]
-    ).lower()
     return {
-        token
-        for token in re.findall(r"[a-z0-9]+", text)
-        if len(token) >= 3
-        and token not in {"api", "the", "and", "for", "with"}
+        "name": str(api.get("title") or ""),
+        "slug": str(api.get("slug") or ""),
+        "provider": str(details.get("provider") or ""),
+        "endpoint": str(details.get("endpoint") or ""),
+        "url": str(details.get("docsUrl") or details.get("website") or ""),
+        "authentication": str(details.get("authentication") or ""),
     }
-
-
-def _tool_aliases(name: str) -> set[str]:
-    lowered = name.lower()
-    aliases = {
-        token for token in re.findall(r"[a-z0-9]+", lowered) if len(token) >= 3
-    }
-    if "x api" in lowered or "twitter" in lowered:
-        aliases |= {"twitter", "tweets"}
-    if "openai" in lowered:
-        aliases |= {"openai", "gpt"}
-    if "supabase" in lowered:
-        aliases |= {"supabase"}
-    if "slack" in lowered:
-        aliases |= {"slack"}
-    if "resend" in lowered:
-        aliases |= {"resend"}
-    if "crm" in lowered or "hubspot" in lowered:
-        aliases |= {"hubspot", "crm"}
-    return aliases
 
 
 def _grounded_tools(
     workflow: dict[str, Any],
     apis: list[dict[str, Any]],
-    partner: dict[str, Any],
 ) -> list[dict[str, Any]]:
-    """Map workflow tool names to real API records (endpoint + docs URL)."""
+    """Resolve the curated ``details.api_slugs`` to real API records.
+
+    No heuristic name matching is performed. A workflow without curated API
+    slugs is not grounded at all and must be discarded by the caller.
+    """
     details = workflow.get("details") or {}
-    names = [str(t).strip() for t in (details.get("tools") or []) if str(t).strip()]
-    workflow_category = str(workflow.get("category") or "").lower()
-    workflow_tags = {str(tag).lower() for tag in workflow.get("tags") or []}
-    grounded: list[dict[str, Any]] = []
-    used: set[str] = set()
-    for name in names:
-        fallback = TOOL_FALLBACKS.get(name.lower())
-        if fallback:
-            grounded.append({"name": name, **fallback})
+    slugs = [
+        str(slug).strip()
+        for slug in (details.get("api_slugs") or [])
+        if str(slug).strip()
+    ]
+    if not slugs:
+        return []
+    api_index = {str(api.get("slug")): api for api in apis}
+    tools: list[dict[str, Any]] = []
+    for slug in slugs:
+        api = api_index.get(slug)
+        if api is not None:
+            tools.append(_api_tool(api))
+    return tools
+
+
+def _tool_code_markers(tool: dict[str, Any]) -> tuple[str, ...]:
+    """Return strings that prove this exact API is called in generated code."""
+    markers: list[str] = []
+    for candidate in (tool.get("endpoint"), tool.get("url")):
+        raw = str(candidate or "")
+        if "<" in raw or "{" in raw:
             continue
-        aliases = _tool_aliases(name)
-        best = None
-        best_score = 0
-        for api in apis:
-            if api.get("slug") in used:
-                continue
-            score = len(aliases & _api_tokens(api))
-            if score == 0:
-                continue
-            if (
-                workflow_category
-                and str(api.get("category") or "").lower() == workflow_category
-            ):
-                score += 2
-            if workflow_tags & {
-                str(tag).lower() for tag in api.get("tags") or []
-            }:
-                score += 1
-            if score > best_score:
-                best_score = score
-                best = api
-        if best is None:
-            entry = partner.get(name) or {}
-            entry_url = entry.get("affiliateUrl") or entry.get("url") or ""
-            entry_endpoint = entry.get("endpoint") or ""
-            if not entry_url and not entry_endpoint:
-                # Ungrounded tool: exclude it so the LLM cannot invent an API.
-                continue
-            grounded.append(
-                {
-                    "name": name,
-                    "provider": entry.get("provider") or "",
-                    "url": entry_url,
-                    "endpoint": entry_endpoint,
-                    "authentication": entry.get("authentication") or "",
-                }
-            )
-            continue
-        used.add(best["slug"])
-        data = best.get("details") or {}
-        grounded.append(
-            {
-                "name": name,
-                "provider": data.get("provider") or "",
-                "url": data.get("docsUrl") or data.get("website") or "",
-                "endpoint": (
-                    _api_script_endpoint(best)
-                    or data.get("endpoint")
-                    or ""
-                ),
-                "authentication": data.get("authentication") or "",
-            }
-        )
-    return grounded
+        host = urllib.parse.urlparse(raw).hostname or ""
+        if host and host not in markers:
+            markers.append(host)
+    provider = str(tool.get("provider") or "").strip().lower()
+    if provider and provider not in markers:
+        markers.append(provider)
+    slug = str(tool.get("slug") or "").strip().lower()
+    if slug and slug not in markers:
+        markers.append(slug)
+    return tuple(markers) or (str(tool.get("name") or "").lower(),)
+
+
+def _normalise_name(value: str) -> str:
+    return re.sub(r"[^a-z0-9]+", " ", str(value or "").lower()).strip()
+
+
+def _match_tool_name(
+    raw_name: str, available_tools: list[dict[str, Any]]
+) -> str | None:
+    """Flexibly match a free-form tool name to a curated API title."""
+    value = str(raw_name or "").strip()
+    if not value:
+        return None
+    lowered = value.lower()
+    normalised = _normalise_name(value)
+    for tool in available_tools:
+        name = str(tool.get("name") or "")
+        name_lower = name.lower()
+        name_norm = _normalise_name(name)
+        slug = str(tool.get("slug") or "").lower()
+        provider = str(tool.get("provider") or "").lower()
+        if (
+            lowered == name_lower
+            or normalised == name_norm
+            or normalised in name_norm
+            or name_norm in normalised
+            or (slug and (lowered == slug or normalised == _normalise_name(slug)))
+            or (provider and provider in lowered)
+        ):
+            return name
+    return None
 
 
 def _related_alternatives(
@@ -223,19 +155,19 @@ def _related_alternatives(
     alternatives: list[dict[str, Any]],
     limit: int = 5,
 ) -> list[dict[str, Any]]:
-    tags = {str(tag).lower() for tag in workflow.get("tags") or []}
-    category = str(workflow.get("category") or "").lower()
-    scored: list[tuple[int, dict[str, Any]]] = []
-    for alternative in alternatives:
-        alt_tags = {str(tag).lower() for tag in alternative.get("tags") or []}
-        score = len(tags & alt_tags)
-        if category and str(alternative.get("category") or "").lower() == category:
-            score += 1
-        if score:
-            scored.append((score, alternative))
-    scored.sort(key=lambda item: item[0], reverse=True)
-    return [alternative for _, alternative in scored[:limit]]
-
+    """Resolve the curated ``details.alternative_slugs`` to real records."""
+    details = workflow.get("details") or {}
+    slugs = [
+        str(slug).strip()
+        for slug in (details.get("alternative_slugs") or [])
+        if str(slug).strip()
+    ]
+    alt_index = {str(item.get("slug")): item for item in alternatives}
+    return [
+        alt_index[slug]
+        for slug in slugs[:limit]
+        if slug in alt_index
+    ]
 
 def _deep_copy(item: dict[str, Any]) -> dict[str, Any]:
     return json.loads(json.dumps(item))
@@ -368,7 +300,6 @@ def repair_existing_workflow(
 def generate_workflow(
     workflow: dict[str, Any],
     workflows_all: list[dict[str, Any]],
-    partner: dict[str, Any],
     apis: list[dict[str, Any]],
     alternatives: list[dict[str, Any]],
     max_attempts: int = cfg.LLM_MAX_ATTEMPTS,
@@ -376,7 +307,9 @@ def generate_workflow(
 ) -> tuple[dict[str, Any] | None, list[str], int]:
     details = workflow.get("details") or {}
     steps = details.get("steps") or []
-    available_tools = _grounded_tools(workflow, apis, partner)
+    available_tools = _grounded_tools(workflow, apis)
+    if not available_tools:
+        return None, ["workflow has no curated details.api_slugs – not grounded"], 0
     related_alternatives = _related_alternatives(workflow, alternatives)
     prompt_workflow = _deep_copy(workflow)
     prompt_workflow.setdefault("details", {})["tools"] = [
@@ -423,34 +356,15 @@ def generate_workflow(
             candidate_details["prerequisites"] = data.get("prerequisites", [])
             candidate_details["glossary"] = data.get("glossary", [])
             candidate_details["troubleshooting"] = data.get("troubleshooting", [])
-            grounded_resources = []
-            for tool in available_tools:
-                if tool.get("url"):
-                    grounded_resources.append(
-                        {"label": tool["name"], "url": tool["url"]}
-                    )
-                endpoint = str(tool.get("endpoint") or "")
-                if (
-                    endpoint.startswith("http")
-                    and "<" not in endpoint
-                    and "{" not in endpoint
-                ):
-                    endpoint_host = endpoint.split("//", 1)[-1].split("/", 1)[0]
-                    docs_host = (
-                        str(tool.get("url") or "")
-                        .split("//", 1)[-1]
-                        .split("/", 1)[0]
-                    )
-                    if endpoint_host and endpoint_host != docs_host:
-                        grounded_resources.append(
-                            {
-                                "label": f"{tool['name']} Endpoint",
-                                "url": endpoint,
-                            }
-                        )
-            candidate_details["resources"] = (
-                grounded_resources or data.get("resources", [])
-            )
+            # Resources are deterministic: one docs URL per curated API.
+            # Endpoints are prefixes and must never be linked bare (they often
+            # return 404 on the base path and would fail the live-URL gate).
+            grounded_resources = [
+                {"label": tool["name"], "url": tool["url"]}
+                for tool in available_tools
+                if tool.get("url")
+            ]
+            candidate_details["resources"] = grounded_resources
 
             # Every grounded tool needs its own BEFORE YOU START bullet.
             prerequisites = list(candidate_details.get("prerequisites") or [])
@@ -504,41 +418,22 @@ def generate_workflow(
                 if not links:
                     links = []
                     resources = candidate_details.get("resources") or []
-                    tool_docs = {
-                        "X API": (
-                            "X API Search Docs",
-                            "https://developer.x.com/en/docs/twitter-api/tweets/search/introduction",
-                        ),
-                        "OpenAI API": (
-                            "OpenAI Chat Completions Docs",
-                            "https://platform.openai.com/docs/api-reference/chat/create",
-                        ),
-                        "Supabase": (
-                            "Supabase REST Docs",
-                            "https://supabase.com/docs/guides/api",
-                        ),
-                        "Slack": (
-                            "Slack Incoming Webhooks",
-                            "https://api.slack.com/messaging/webhooks",
-                        ),
-                    }
                     for tool_name in step.get("tools") or []:
-                        tool = partner.get(tool_name) or {}
-                        url = tool.get("affiliateUrl") or tool.get("url") or ""
-                        label = tool_name
-                        if not url and tool_name in tool_docs:
-                            label, url = tool_docs[tool_name]
-                        if not url:
-                            for resource in resources:
-                                resource_label = str(
-                                    resource.get("label") or ""
-                                ).strip().lower()
-                                if resource_label == str(tool_name).strip().lower():
-                                    url = str(resource.get("url") or "")
-                                    label = str(resource.get("label") or tool_name)
-                                    break
-                        if url:
-                            links.append({"label": label, "url": url})
+                        matched_name = _match_tool_name(
+                            str(tool_name), available_tools
+                        )
+                        matched = next(
+                            (
+                                tool
+                                for tool in available_tools
+                                if tool["name"] == matched_name
+                            ),
+                            None,
+                        )
+                        if matched and matched.get("url"):
+                            links.append(
+                                {"label": matched["name"], "url": matched["url"]}
+                            )
                 if not links:
                     code = str(step.get("code_snippet") or "")
                     stdlib_docs = [
@@ -565,18 +460,8 @@ def generate_workflow(
                     link["url"] = doc_url_fixes.get(url, url)
                 step_tool_names = []
                 for raw_tool in step.get("tools") or []:
-                    raw_name = str(raw_tool).strip()
-                    if not raw_name:
-                        continue
-                    matched_name = next(
-                        (
-                            tool["name"]
-                            for tool in available_tools
-                            if tool["name"].lower() == raw_name.lower()
-                            or raw_name.lower() in tool["name"].lower()
-                            or tool["name"].lower() in raw_name.lower()
-                        ),
-                        None,
+                    matched_name = _match_tool_name(
+                        str(raw_tool), available_tools
                     )
                     if matched_name and matched_name not in step_tool_names:
                         step_tool_names.append(matched_name)
@@ -619,23 +504,49 @@ def generate_workflow(
                         and name not in used_tools
                     ):
                         used_tools.append(name)
-            if used_tools:
+            tool_by_name = {tool["name"]: tool for tool in available_tools}
+            if not used_tools:
+                # Fallback: infer the used APIs directly from the generated
+                # code. This prevents a false "none of the curated APIs" abort
+                # when the LLM mislabels the step tool list.
                 code_all = "\n".join(
                     str(step.get("code_snippet") or "") for step in steps_out
                 ).lower()
-                filtered_tools = []
-                for name in used_tools:
-                    markers = cfg.TOOL_CODE_MARKERS.get(name) or (name.lower(),)
-                    if any(marker.lower() in code_all for marker in markers):
-                        filtered_tools.append(name)
-                candidate_details["tools"] = filtered_tools
-                allowed_tools = set(filtered_tools)
-                for step in steps_out:
-                    step["tools"] = [
-                        str(tool).strip()
-                        for tool in (step.get("tools") or [])
-                        if str(tool).strip() in allowed_tools
-                    ]
+                for tool in available_tools:
+                    if any(
+                        marker.lower() in code_all
+                        for marker in _tool_code_markers(tool)
+                    ):
+                        used_tools.append(tool["name"])
+            if not used_tools:
+                raise ValueError(
+                    "the generated steps reference none of the curated APIs"
+                )
+            code_all = "\n".join(
+                str(step.get("code_snippet") or "") for step in steps_out
+            ).lower()
+            filtered_tools = []
+            for name in used_tools:
+                tool = tool_by_name.get(name)
+                markers = (
+                    _tool_code_markers(tool)
+                    if tool is not None
+                    else cfg.TOOL_CODE_MARKERS.get(name) or (name.lower(),)
+                )
+                if any(marker.lower() in code_all for marker in markers):
+                    filtered_tools.append(name)
+            if not filtered_tools:
+                # Keep the curated tools instead of aborting: the validator
+                # now treats "listed but not used" as a warning.
+                filtered_tools = list(used_tools)
+            candidate_details["tools"] = filtered_tools
+            allowed_tools = set(filtered_tools)
+            for step in steps_out:
+                step["tools"] = [
+                    str(tool).strip()
+                    for tool in (step.get("tools") or [])
+                    if str(tool).strip() in allowed_tools
+                ]
 
             # Normalise structure, then repair only the snippets that fail the
             # AST gate instead of regenerating the entire workflow.
@@ -741,49 +652,106 @@ def generate_workflow(
     return None, last_errors or ["max attempts reached"], max_attempts
 
 
-def generate_replacement_topic(
-    workflows_all: list[dict[str, Any]],
-    partner: dict[str, Any],
-) -> dict[str, Any] | None:
-    """Ask the LLM for a brand-new workflow topic after a domain failure."""
-    existing_titles = [str(item.get("title", "")) for item in workflows_all]
-    available_tools = list(partner.keys())
-    try:
-        data = llm_client.chat_json(
-            prompts.TOPIC_SYSTEM,
-            prompts.build_new_topic_prompt(existing_titles, available_tools),
-        )
-    except llm_client.LLMError as error:
-        print(f"  [REPLACE] could not generate a new topic: {error}")
-        return None
-
-    slug = str(data.get("slug") or "").strip()
-    title = str(data.get("title") or "").strip()
-    if not slug or not title:
-        print("  [REPLACE] new topic is missing slug/title")
-        return None
-
-    existing_slugs = {str(item.get("slug", "")) for item in workflows_all}
-    base_slug = slug
+def _unique_slug(base: str, existing: set[str]) -> str:
+    slug = re.sub(r"[^a-z0-9]+", "-", base.lower()).strip("-") or "generated-workflow"
+    candidate = slug
     counter = 2
-    while slug in existing_slugs:
-        slug = f"{base_slug}-{counter}"
+    while candidate in existing:
+        candidate = f"{slug}-{counter}"
         counter += 1
+    return candidate
 
-    return {
-        "slug": slug,
-        "title": title,
-        "description": str(data.get("description") or "").strip(),
-        "category": str(data.get("category") or "Data & Automation").strip(),
-        "tags": data.get("tags") or [],
-        "details": {
-            "difficulty": str(data.get("difficulty") or "Intermediate").strip(),
-            "duration": str(data.get("duration") or "30–45 minutes").strip(),
-            "tools": data.get("tools") or [],
-            "steps": data.get("steps") or [],
-            "useCase": str(data.get("useCase") or "").strip(),
-        },
-    }
+
+def build_batch_workflow_seeds(
+    selected_apis: list[dict[str, Any]],
+    selected_alternatives: list[dict[str, Any]],
+    count: int,
+    workflows_all: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Create ``count`` workflow skeletons grounded on the batch records.
+
+    The LLM only proposes the topic and step outline. The API and alternative
+    slugs are assigned by the pipeline from the current batch, so a workflow can
+    never reference an API that was not selected and validated in this run.
+    """
+    if count <= 0 or not selected_apis:
+        return []
+    api_index = {str(api.get("slug")): api for api in selected_apis}
+    existing_slugs = {str(item.get("slug", "")) for item in workflows_all}
+    existing_titles = [str(item.get("title", "")) for item in workflows_all]
+    created: list[dict[str, Any]] = []
+
+    for index in range(count):
+        combo_size = min(3, len(selected_apis))
+        combo = [
+            selected_apis[(index + offset) % len(selected_apis)]
+            for offset in range(combo_size)
+        ]
+        combo = list({str(api["slug"]): api for api in combo}.values())
+        alt_combo: list[dict[str, Any]] = []
+        if selected_alternatives:
+            alt_combo.append(selected_alternatives[index % len(selected_alternatives)])
+            if len(selected_alternatives) > 1:
+                alt_combo.append(
+                    selected_alternatives[(index + 1) % len(selected_alternatives)]
+                )
+            alt_combo = list(
+                {str(alt["slug"]): alt for alt in alt_combo}.values()
+            )
+        try:
+            topic = llm_client.chat_json(
+                prompts.TOPIC_SYSTEM,
+                prompts.build_curated_topic_prompt(
+                    combo, alt_combo, existing_titles
+                ),
+            )
+        except llm_client.LLMError as error:
+            print(f"  [SEED] could not generate a topic: {error}")
+            continue
+        if len(topic.get("steps") or []) < cfg.MIN_STEPS:
+            print("  [SEED] topic has too few steps – skipped")
+            continue
+        topic["slug"] = _unique_slug(
+            str(topic.get("slug") or "generated-workflow"), existing_slugs
+        )
+        seed = seed_catalog.build_dynamic_seed(
+            topic,
+            [str(api["slug"]) for api in combo],
+            [str(alt["slug"]) for alt in alt_combo],
+        )
+        workflow = seed_catalog.build_workflow_from_seed(seed, api_index)
+        created.append(workflow)
+        existing_slugs.add(workflow["slug"])
+        existing_titles.append(workflow["title"])
+        print(
+            f"  [SEED] {workflow['slug']} grounded on "
+            f"{', '.join(seed['api_slugs'])}"
+        )
+    return created
+
+
+def build_seed_workflows(
+    seeds: list[dict[str, Any]],
+    apis: list[dict[str, Any]],
+    only: list[str] | None = None,
+) -> list[dict[str, Any]]:
+    """Build workflow skeletons from the curated seed catalogue.
+
+    This is the deterministic rebuild path: every workflow is grounded on the
+    exact API and alternative slugs declared in ``pipeline/seeds.py``. The LLM
+    only fills the editorial content later.
+    """
+    api_index = {str(api.get("slug")): api for api in apis}
+    wanted = set(only or [])
+    selected = [
+        seed
+        for seed in seeds
+        if not wanted or str(seed.get("slug")) in wanted
+    ]
+    return [
+        seed_catalog.build_workflow_from_seed(seed, api_index)
+        for seed in selected
+    ]
 
 
 # --------------------------------------------------------------------------- #
@@ -1012,6 +980,63 @@ def upload_to_r2(local_path: Path, key: str, bucket: str = "flowmatrix-downloads
         return False
 
 
+def delete_from_r2(key: str, bucket: str = "flowmatrix-downloads") -> bool:
+    """Delete a single object from the R2 bucket (best effort)."""
+    cfg.load_env()
+    try:
+        subprocess.run(
+            [
+                "npx",
+                "wrangler",
+                "r2",
+                "object",
+                "delete",
+                f"{bucket}/{key}",
+                "--remote",
+                "--force",
+            ],
+            cwd=str(cfg.ROOT),
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        return True
+    except (subprocess.CalledProcessError, FileNotFoundError) as error:
+        print(f"  [WARN] R2 delete failed for {key}: {error}")
+        return False
+
+
+def purge_r2_artifacts(
+    workflows: list[dict[str, Any]],
+    apis: list[dict[str, Any]],
+    include_apis: bool = False,
+) -> None:
+    """Delete the generated artifacts of the given workflows (and APIs) from R2.
+
+    The keys are deterministic, so no bucket listing is required. Missing
+    objects are reported as warnings and never abort the rebuild.
+    """
+    keys: list[str] = []
+    for workflow in workflows:
+        slug = str(workflow.get("slug") or "").strip()
+        if not slug:
+            continue
+        keys.append(f"pdfs/flowmatrix-{slug}.pdf")
+        keys.append(f"kits/{slug}-kit.zip")
+    if include_apis:
+        for api in apis:
+            slug = str(api.get("slug") or "").strip()
+            if not slug:
+                continue
+            keys.append(f"api-scripts/{slug}/{slug}.py")
+            keys.append(f"api-kits/{slug}-kit.zip")
+            keys.append(f"api-kits/{slug}-cheatsheet.pdf")
+    print(f"[R2] purging {len(keys)} object(s) from flowmatrix-downloads")
+    for key in keys:
+        if delete_from_r2(key):
+            print(f"  [OK] deleted from R2: {key}")
+
+
 def run_build() -> None:
     subprocess.run(["npm", "run", "build"], cwd=str(cfg.ROOT), check=True)
 
@@ -1074,15 +1099,46 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         action="store_true",
         help="Skip in-place repair and always call the LLM",
     )
+    parser.add_argument(
+        "--from-seeds",
+        action="store_true",
+        help="Rebuild workflows from the curated pipeline/seeds.py catalogue",
+    )
+    parser.add_argument(
+        "--reset-workflows",
+        action="store_true",
+        help="Clear workflows.json before the run (destructive)",
+    )
+    parser.add_argument(
+        "--purge-r2",
+        action="store_true",
+        help="Delete generated workflow/API artifacts from R2 before the run",
+    )
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--skip-build", action="store_true")
     parser.add_argument("--skip-upload", action="store_true")
     parser.add_argument("--skip-deploy", action="store_true")
     parser.add_argument("--seed", type=int, default=None)
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=0,
+        help="Process exactly N open workflows from the 76-seed catalogue",
+    )
     return parser.parse_args(argv)
 
 
-def _select(items: list[dict[str, Any]], only: list[str], limit: int, incomplete=None) -> list[dict[str, Any]]:
+def _select(
+    items: list[dict[str, Any]],
+    only: list[str],
+    limit: int,
+    incomplete=None,
+) -> list[dict[str, Any]]:
+    """Select a random batch from the catalogue.
+
+    ``--seed`` makes the selection reproducible; the scheduled GitHub batch
+    runs without a seed and therefore samples a fresh combination every time.
+    """
     if only:
         wanted = set(only)
         return [item for item in items if item.get("slug") in wanted]
@@ -1091,12 +1147,219 @@ def _select(items: list[dict[str, Any]], only: list[str], limit: int, incomplete
         pool = list(items)
     if limit <= 0:
         return []
-    return pool[:limit]
+    if len(pool) <= limit:
+        return list(pool)
+    return random.sample(pool, limit)
+
+
+# --------------------------------------------------------------------------- #
+# Limited batch mode (10er-Blöcke) with persistent progress
+# --------------------------------------------------------------------------- #
+PROGRESS_FILE = cfg.ROOT / "pipeline" / "batch_progress.json"
+FAILED_FILE = cfg.ROOT / "pipeline" / "failed_workflows.json"
+
+
+def _load_progress() -> dict[str, Any]:
+    if PROGRESS_FILE.exists():
+        try:
+            data = load_json(PROGRESS_FILE)
+            if isinstance(data, dict):
+                data.setdefault("status", {})
+                return data
+        except Exception:  # noqa: BLE001
+            pass
+    return {"status": {}, "updated_at": ""}
+
+
+def _save_progress(progress: dict[str, Any]) -> None:
+    progress["updated_at"] = _now_timestamp()
+    save_json(PROGRESS_FILE, progress)
+
+
+def _load_failed() -> dict[str, Any]:
+    if FAILED_FILE.exists():
+        try:
+            data = load_json(FAILED_FILE)
+            if isinstance(data, dict):
+                return data
+        except Exception:  # noqa: BLE001
+            pass
+    return {}
+
+
+def _save_failed(failed: dict[str, Any]) -> None:
+    save_json(FAILED_FILE, failed)
+
+
+def _is_complete_workflow(item: dict[str, Any]) -> bool:
+    details = item.get("details") or {}
+    steps = details.get("steps") or []
+    prerequisites = details.get("prerequisites") or []
+    return bool(
+        cfg.MIN_STEPS <= len(steps) <= cfg.MAX_STEPS
+        and len(prerequisites) >= cfg.PREREQUISITES_MIN
+        and any(
+            str(entry).strip() == cfg.FINAL_PREREQUISITE
+            for entry in prerequisites
+        )
+        and len(details.get("glossary") or []) >= cfg.GLOSSARY_TERMS_MIN
+        and len(details.get("troubleshooting") or []) >= cfg.TROUBLESHOOTING_MIN
+        and details.get("resources")
+        and str(item.get("created_and_verified_at") or "").strip()
+    )
+
+
+def run_limited_batch(limit: int) -> int:
+    """Process exactly ``limit`` open workflows from the 76-seed catalogue.
+
+    Progress is persisted in ``pipeline/batch_progress.json``. A workflow that
+    fails after the configured attempts is written to
+    ``pipeline/failed_workflows.json`` and the batch continues – it never
+    aborts with exit code 1.
+    """
+    cfg.load_env()
+    if not os.environ.get("OPENROUTER_API_KEY", "").strip():
+        print("[FAIL] OPENROUTER_API_KEY is not set.")
+        return 2
+
+    workflows = load_json(cfg.WORKFLOWS_FILE) if cfg.WORKFLOWS_FILE.exists() else []
+    apis = load_json(cfg.APIS_FILE)
+    alternatives = load_json(cfg.ALTERNATIVES_FILE)
+    api_index = {str(api.get("slug")): api for api in apis}
+
+    all_skeletons = [
+        seed_catalog.build_workflow_from_seed(seed, api_index)
+        for seed in seed_catalog.SEEDS
+    ]
+    existing_by_slug = {str(item.get("slug")): item for item in workflows}
+
+    progress = _load_progress()
+    status = progress.setdefault("status", {})
+    failed = _load_failed()
+
+    open_skeletons = [
+        skeleton
+        for skeleton in all_skeletons
+        if status.get(str(skeleton["slug"])) != "done"
+    ]
+    batch = open_skeletons[: max(0, limit)]
+
+    print("=" * 72)
+    print(
+        f"FLOWMATRIX LIMITED BATCH – {len(batch)} of {len(open_skeletons)} "
+        f"open workflows (total {len(all_skeletons)})"
+    )
+    print("=" * 72)
+
+    succeeded = 0
+    for skeleton in batch:
+        slug = str(skeleton["slug"])
+        print(f"\n[WORKFLOW] {slug}")
+        try:
+            candidate: dict[str, Any] | None = None
+            attempts = 0
+            warnings: list[str] = []
+
+            existing = existing_by_slug.get(slug)
+            if existing is not None and _is_complete_workflow(existing):
+                reuse_copy = _deep_copy(existing)
+                reuse_result = validator.validate_workflow(reuse_copy)
+                if reuse_result.ok:
+                    candidate = reuse_copy
+                    warnings = reuse_result.warnings
+                    print("  [REUSE] existing complete record passed validation")
+
+            if candidate is None:
+                candidate, errors, attempts = generate_workflow(
+                    skeleton,
+                    workflows,
+                    apis,
+                    alternatives,
+                    max_attempts=3,
+                    force_regenerate=True,
+                )
+                if candidate is None:
+                    raise RuntimeError("; ".join(errors) or "generation failed")
+                final_result = validator.validate_workflow(candidate)
+                if not final_result.ok:
+                    raise RuntimeError("; ".join(final_result.errors))
+                warnings = final_result.warnings
+
+            candidate["created_and_verified_at"] = _now_timestamp()
+            index = next(
+                (
+                    i
+                    for i, item in enumerate(workflows)
+                    if item.get("slug") == slug
+                ),
+                None,
+            )
+            if index is None:
+                workflows.append(candidate)
+            else:
+                workflows[index] = candidate
+            save_json(cfg.WORKFLOWS_FILE, workflows)
+            existing_by_slug[slug] = candidate
+
+            pdf_path = write_pdf(candidate)
+            kit_path = bundle_builder.build_workflow_kit(
+                candidate, pdf_path, cfg.KITS_DIR
+            )
+            kit_result = validator.validate_kit_zip(
+                kit_path, cfg.WORKFLOW_KIT_FILES
+            )
+            if not kit_result.ok:
+                raise RuntimeError(
+                    "kit validation failed: " + "; ".join(kit_result.errors)
+                )
+
+            pdf_key = f"pdfs/flowmatrix-{slug}.pdf"
+            kit_key = f"kits/{slug}-kit.zip"
+            pdf_uploaded = upload_to_r2(pdf_path, pdf_key)
+            kit_uploaded = upload_to_r2(kit_path, kit_key)
+            if not (pdf_uploaded and kit_uploaded):
+                print(
+                    "  [WARN] R2 upload incomplete – local artifacts kept, "
+                    "workflow still marked done"
+                )
+
+            status[slug] = "done"
+            failed.pop(slug, None)
+            _save_progress(progress)
+            _save_failed(failed)
+            succeeded += 1
+            print(
+                f"  [OK] {slug} done (attempts={attempts}) -> "
+                f"{pdf_path.name}, {kit_path.name}"
+            )
+        except Exception as error:  # noqa: BLE001 - never abort the batch
+            reason = f"{type(error).__name__}: {error}"
+            print(f"  [FAIL] {slug}: {reason}")
+            failed[slug] = {
+                "reason": reason,
+                "timestamp": _now_timestamp(),
+            }
+            _save_failed(failed)
+            continue
+
+    done_count = sum(
+        1
+        for skeleton in all_skeletons
+        if status.get(str(skeleton["slug"])) == "done"
+    )
+    total = len(all_skeletons)
+    print("\n" + "=" * 72)
+    print(f"BATCH SUMMARY: {succeeded}/{len(batch)} successful")
+    print(f"TOTAL: {done_count}/{total} done | open: {total - done_count}")
+    print("=" * 72)
+    return 0
 
 
 def main(argv: list[str] | None = None) -> int:
     cfg.load_env()
     args = parse_args(sys.argv[1:] if argv is None else argv)
+    if args.limit and args.limit > 0:
+        return run_limited_batch(args.limit)
     if args.seed is not None:
         random.seed(args.seed)
 
@@ -1104,6 +1367,7 @@ def main(argv: list[str] | None = None) -> int:
     needs_llm = bool(
         args.workflows or args.apis or args.alternatives
         or args.only_workflow or args.only_api or args.only_alternative
+        or args.from_seeds
     )
     if needs_llm and api_key_missing:
         print("[FAIL] OPENROUTER_API_KEY is not set.")
@@ -1114,7 +1378,15 @@ def main(argv: list[str] | None = None) -> int:
     alternatives = load_json(cfg.ALTERNATIVES_FILE)
     overrides = load_json(cfg.API_ENDPOINTS_FILE) if cfg.API_ENDPOINTS_FILE.exists() else {}
     overrides.pop("_comment", None)
-    partner = load_json(cfg.PARTNER_FILE) if cfg.PARTNER_FILE.exists() else {}
+
+    # Destructive cleanup happens before anything is regenerated. The R2 keys
+    # are derived from the current catalogue, so no bucket listing is needed.
+    if args.purge_r2:
+        purge_r2_artifacts(workflows, apis)
+    if args.reset_workflows:
+        print("[RESET] clearing workflows.json")
+        workflows = []
+        save_json(cfg.WORKFLOWS_FILE, workflows)
 
     skipped_file = cfg.ROOT / "pipeline" / "skipped.json"
     skipped: set[str] = set()
@@ -1146,20 +1418,7 @@ def main(argv: list[str] | None = None) -> int:
             and str(item.get("created_and_verified_at") or "").strip()
         )
 
-    if args.only_workflow or args.workflows:
-        selected_workflows = _select(
-            workflows, args.only_workflow, 100000, is_incomplete_workflow
-        )
-        if args.only_workflow:
-            selected_workflows = [
-                item for item in workflows if item.get("slug") in set(args.only_workflow)
-            ]
-        skip = set(args.skip_workflow) | skipped
-        if skip:
-            selected_workflows = [w for w in selected_workflows if w.get("slug") not in skip]
-        selected_workflows = selected_workflows[: args.workflows or len(selected_workflows)]
-    else:
-        selected_workflows = []
+    # Random batch selection: 4 APIs + 3 alternatives + N workflows per run.
     selected_apis = (
         _select(apis, args.only_api, args.apis or 0)
         if (args.only_api or args.apis)
@@ -1170,6 +1429,67 @@ def main(argv: list[str] | None = None) -> int:
         if (args.only_alternative or args.alternatives)
         else []
     )
+
+    if args.from_seeds:
+        skeletons = build_seed_workflows(
+            seed_catalog.SEEDS, apis, args.only_workflow
+        )
+        if not skeletons:
+            print("[FAIL] no curated seeds matched the selection")
+            return 2
+        existing_by_slug = {str(item.get("slug")): item for item in workflows}
+        if not args.force_regenerate:
+            # Resume-friendly: already complete workflows are not regenerated.
+            skeletons = [
+                skeleton
+                for skeleton in skeletons
+                if is_incomplete_workflow(
+                    existing_by_slug.get(str(skeleton["slug"]), skeleton)
+                )
+            ]
+        selected_workflows = skeletons
+        # Merge the seed skeletons into the live catalogue so duplicate
+        # protection and the final store see every workflow of this rebuild.
+        by_slug = {str(item.get("slug")): item for item in workflows}
+        for skeleton in selected_workflows:
+            by_slug[str(skeleton["slug"])] = skeleton
+        workflows = list(by_slug.values())
+        save_json(cfg.WORKFLOWS_FILE, workflows)
+    elif args.only_workflow:
+        selected_workflows = [
+            item for item in workflows if item.get("slug") in set(args.only_workflow)
+        ]
+    elif args.workflows:
+        if selected_apis:
+            # New workflows are composed from the APIs/alternatives selected in
+            # this exact batch. The LLM proposes the topic; the pipeline owns
+            # the grounding slugs.
+            selected_workflows = build_batch_workflow_seeds(
+                selected_apis,
+                selected_alternatives,
+                args.workflows,
+                workflows,
+            )
+        else:
+            skip = set(args.skip_workflow) | skipped
+            pool = [
+                item
+                for item in workflows
+                if is_incomplete_workflow(item) and item.get("slug") not in skip
+            ]
+            if not pool:
+                pool = [
+                    item for item in workflows if item.get("slug") not in skip
+                ]
+            selected_workflows = random.sample(
+                pool, min(args.workflows, len(pool))
+            )
+    else:
+        selected_workflows = []
+
+    # Live reference: candidates are written back into ``workflows`` during the
+    # loop, so duplicate protection always sees the current state.
+    workflows_for_checks = workflows
 
     print("=" * 72)
     print("FLOWMATRIX UNIFIED PIPELINE")
@@ -1182,7 +1502,6 @@ def main(argv: list[str] | None = None) -> int:
     # --- Workflows ----------------------------------------------------------- #
     queue = list(selected_workflows)
     processed: set[str] = set()
-    replacements = 0
 
     while queue:
         workflow = queue.pop(0)
@@ -1198,27 +1517,12 @@ def main(argv: list[str] | None = None) -> int:
 
         candidate, errors, attempts = generate_workflow(
             workflow,
-            workflows,
-            partner,
+            workflows_for_checks,
             apis,
             alternatives,
-            force_regenerate=args.force_regenerate,
+            force_regenerate=args.force_regenerate or args.from_seeds,
         )
         if candidate is None:
-            # Domain failure -> discard and generate a brand-new topic.
-            if _is_domain_failure(errors) and replacements < cfg.MAX_REPLACEMENT_TOPICS:
-                replacements += 1
-                print(
-                    f"  [REPLACE] {slug}: unreachable domain -> generating a new topic "
-                    f"({replacements}/{cfg.MAX_REPLACEMENT_TOPICS})"
-                )
-                new_topic = generate_replacement_topic(workflows, partner)
-                if new_topic is not None:
-                    workflows.append(new_topic)
-                    save_json(cfg.WORKFLOWS_FILE, workflows)
-                    queue.append(new_topic)
-                    continue
-
             protocol.append({"kind": "workflow", "slug": slug, "ok": False,
                              "attempts": attempts, "errors": errors})
             print(f"  [FAIL] {slug} rejected after {attempts} attempts")
@@ -1234,8 +1538,14 @@ def main(argv: list[str] | None = None) -> int:
             continue
 
         candidate["created_and_verified_at"] = _now_timestamp()
-        index = next(i for i, item in enumerate(workflows) if item["slug"] == slug)
-        workflows[index] = candidate
+        index = next(
+            (i for i, item in enumerate(workflows) if item["slug"] == slug),
+            None,
+        )
+        if index is None:
+            workflows.append(candidate)
+        else:
+            workflows[index] = candidate
         save_json(cfg.WORKFLOWS_FILE, workflows)
         skipped.discard(slug)
         save_json(skipped_file, sorted(skipped))

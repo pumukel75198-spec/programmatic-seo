@@ -57,8 +57,12 @@ def _tools_block(available_tools: list[dict[str, Any]]) -> str:
     lines = []
     for tool in available_tools:
         parts = [f"- {tool.get('name')}"]
+        if tool.get("slug"):
+            parts.append(f"slug: {tool['slug']}")
         if tool.get("provider"):
             parts.append(f"provider: {tool['provider']}")
+        if tool.get("description"):
+            parts.append(f"description: {tool['description']}")
         if tool.get("endpoint"):
             parts.append(
                 f"endpoint (BASE – append a concrete resource path): "
@@ -76,8 +80,43 @@ def _alternatives_block(alternatives: list[dict[str, Any]]) -> str:
     if not alternatives:
         return "—"
     return "\n".join(
-        f"- {item.get('title')}: {item.get('description')}"
+        f"- {item.get('title')} (slug: {item.get('slug')}): "
+        f"{item.get('description')}"
         for item in alternatives
+    )
+
+
+def _domain_of(url: str | None) -> str:
+    if not url:
+        return "—"
+    try:
+        from urllib.parse import urlparse
+
+        return urlparse(str(url)).hostname or "—"
+    except Exception:  # noqa: BLE001
+        return "—"
+
+
+def _api_building_blocks(available_tools: list[dict[str, Any]]) -> str:
+    if not available_tools:
+        return "—"
+    lines = []
+    for tool in available_tools:
+        lines.append(
+            f"- {tool.get('name')} | slug: {tool.get('slug')} | "
+            f"endpoint domain: {_domain_of(tool.get('endpoint'))} | "
+            f"docs domain: {_domain_of(tool.get('url'))}"
+        )
+    return "\n".join(lines)
+
+
+def _curated_block(workflow: dict[str, Any]) -> str:
+    details = workflow.get("details") or {}
+    api_slugs = ", ".join(details.get("api_slugs") or []) or "—"
+    alternative_slugs = ", ".join(details.get("alternative_slugs") or []) or "—"
+    return (
+        f"Curated API slugs (exactly these, no others): {api_slugs}\n"
+        f"Curated alternative slugs (context only): {alternative_slugs}"
     )
 
 
@@ -109,6 +148,10 @@ Description: {workflow.get('description')}
 Difficulty: {details.get('difficulty') or '—'}
 Duration: {details.get('duration') or '—'}
 Tools in this workflow: {', '.join(details.get('tools') or []) or '—'}
+{_curated_block(workflow)}
+
+MANDATORY API BUILDING BLOCKS (every one MUST be used in at least one step)
+{_api_building_blocks(available_tools)}
 
 EXISTING STEP OUTLINE
 {step_list}
@@ -149,6 +192,7 @@ Return a complete, practical guide for EVERY step. ALL text MUST be in precise t
       "description": "Detailed description (2–4 sentences).",
       "technical_explanation": "MUST cover: (1) architecture role – why this step exists and which data it consumes from the previous step; (2) API contract – exact endpoint, HTTP method, required headers, request payload and JSON response shape; (3) edge cases – rate limits, pagination, empty arrays, type conversion. At least 300 characters and 3 sentences.",
       "code_snippet": "Runnable Python 3 code, at least 10 non-empty lines, standard library only, with precise English inline comments explaining WHY each line is written that way.",
+      "mock_response": "A JSON object representing the expected API response for this step's code. Use realistic sample data.",
       "actions": ["Concrete technical action 1", "Concrete technical action 2", "Concrete technical action 3"],
       "commands": [{{ "label": "Short title", "language": "bash", "code": "real command" }}],
       "config": [{{ "key": "PARAMETER_NAME", "value": "concrete value or <placeholder>", "description": "What the parameter is for" }}],
@@ -167,6 +211,8 @@ HARD RULES
 - "troubleshooting": at least {config.TROUBLESHOOTING_MIN} objects with "problem" and "solution".
 - "resources": one entry per tool/API used, with the FULL official URL (https://...). Every tool in the workflow MUST appear here, and the label MUST exactly match the tool name (e.g. "X API", "OpenAI API", "Supabase", "Slack").
 - "code_snippet": MANDATORY in EVERY step, at least 10 non-empty lines (blank lines do NOT count). Count the lines before answering and add real statements, not comment filler. Every step MUST import the modules it uses (`json`, `urllib.request`, `urllib.parse`, `http.client`, etc. - specifically `import urllib.parse` whenever `urllib.parse.urlencode` is used) at the TOP of that step's snippet, so the concatenated script runs from step 1. Each step MUST end with a top-level call that executes its function and assigns the result (e.g. `mentions = fetch_mentions()`), so the concatenated script runs end-to-end.
+- "code_snippet": DEFENSIVE CODING: Always use `.get('key', default_value)` when accessing dictionary keys from API responses. Never assume a key exists. This prevents KeyError during the dry-run. Apply this to EVERY dict access, including nested access such as `data.get('cohorts', [])`, `payload.get('assets', [])` or `response.get('id', '')`.
+- "code_snippet": API USAGE: You MUST build at least one dedicated step with a real `urllib.request` call for EVERY provided API. Each API must be explicitly called in the code.
 - "code_snippet": Python standard library ONLY. FORBIDDEN: requests, openai, supabase, httpx, aiohttp, pydantic, pandas, scikit-learn, sklearn, sentry_sdk and ANY other SDK/third-party package. NEVER tell the reader to run "pip install".
 - "code_snippet": FORBIDDEN: "import random", "random.uniform", "# Dummy", "Dummy", and overwriting variables from previous steps. Use a real, deterministic data flow: step 1 defines a structure (e.g. `mentions = fetch_mentions()`), step 2 consumes exactly that variable (e.g. `analyzed = analyze_sentiment(mentions)`), step 3 consumes `analyzed`, and so on. The concatenation of all step snippets MUST form one coherent, runnable script.
 - "code_snippet": syntactically valid Python – correct brackets, quotes and indentation. Check every snippet for balanced brackets before answering.
@@ -176,6 +222,7 @@ HARD RULES
 - "links": EVERY step MUST contain at least one entry. Use ONLY the official documentation link of the API that is programmed in THIS specific step (maximum 1 link). Use the REAL documentation name (e.g. `"X API Search Docs: https://..."`). UNDER `LINKS`, NEVER use the literal sentence `"Official docs for the API used in THIS step"` or similar leak phrases, but always the actual name and URL. For a pure Python step without an API call (e.g. `collections.Counter`), link to the exact official Python standard library documentation (e.g. `https://docs.python.org/3/library/collections.html`). Never copy the same links into every step.
 - TOOL CONSISTENCY: the tools listed in the workflow, the tools in "prerequisites", the APIs actually called in the code and the "resources" list MUST match 100 %. Never list a tool (e.g. n8n) that does not appear in the code. Never call an API in the code that is missing from the tool list.
 - GROUNDING RULE: the ONLY allowed API hosts and endpoints are those listed under AVAILABLE TOOLS. Every code URL MUST use one of those exact endpoints (or a documented path variant of it). Never invent a domain such as api.enrichmentservice.com or use a placeholder host such as api.example.com. The tools in "tools" MUST be a subset of AVAILABLE TOOLS, and each "links" entry MUST point to that tool's docs URL.
+- MANDATORY API USAGE: You MUST use EVERY API listed under MANDATORY API BUILDING BLOCKS in at least one step. Reference each API by its brand name, slug or domain in the step code and in the step "tools" list. Never omit a curated API.
 - NO UNGROUNDED APIS: if a step needs a capability that is not covered by AVAILABLE TOOLS, implement it with the Python standard library (e.g. regex for email syntax, socket for DNS/MX checks, collections/difflib for clustering). NEVER invent a new API host or service for that capability.
 - BASE URL RULE: an endpoint marked BASE is only a prefix. NEVER call it bare (e.g. never call https://api.stripe.com/v1). Always append a real documented resource path such as /v1/customers or /v1/invoices.
 - CREDENTIALS: every secret and every project-specific endpoint MUST be read through `os.environ.get("NAME")` – never hardcode `YOUR_X_API_TOKEN`, `YOUR_OPENAI_API_KEY`, `YOUR_SUPABASE_KEY` or `YOUR_SLACK_WEBHOOK_URL` in runnable code. Use UPPER_SNAKE_CASE names such as `X_API_TOKEN`, `OPENAI_API_KEY`, `SUPABASE_URL`, `SUPABASE_KEY`, `SLACK_WEBHOOK_URL`; the kit's `.env.example` is generated from these names. Keep public API hosts (`https://api.x.com`, `https://api.openai.com`) as constants.
@@ -306,6 +353,65 @@ REQUIREMENTS
 
 Answer with valid JSON only:
 {{"technical_explanation": "..."}}"""
+
+
+def build_curated_topic_prompt(
+    apis: list[dict[str, Any]],
+    alternatives: list[dict[str, Any]],
+    existing_titles: list[str],
+) -> str:
+    """Ask for ONE workflow topic that is grounded on the given batch records.
+
+    The pipeline owns the grounding: the returned topic may describe the
+    business use case, but the workflow will only ever reference the API and
+    alternative slugs listed here.
+    """
+    api_lines = []
+    for api in apis:
+        details = api.get("details") or {}
+        api_lines.append(
+            f"- slug: {api.get('slug')} | title: {api.get('title')} | "
+            f"category: {api.get('category')} | use case: {details.get('useCase') or '—'} | "
+            f"endpoint: {details.get('endpoint') or '—'} | "
+            f"docs: {details.get('docsUrl') or details.get('website') or '—'}"
+        )
+    alt_lines = [
+        f"- slug: {alt.get('slug')} | title: {alt.get('title')} | "
+        f"category: {alt.get('category')}"
+        for alt in alternatives
+    ]
+    titles = "\n".join(f"- {title}" for title in existing_titles[:80]) or "—"
+    return f"""Design ONE realistic automation workflow that uses ALL of the following real APIs together.
+
+APIs (every one must be used in the workflow):
+{chr(10).join(api_lines) or '—'}
+
+ALTERNATIVES (business context only – never copy their domains):
+{chr(10).join(alt_lines) or '—'}
+
+Do NOT reuse any of these existing workflow titles:
+{titles}
+
+Return valid JSON in exactly this structure:
+{{
+  "slug": "kebab-case-slug",
+  "title": "Clear English title",
+  "description": "2–3 English sentences describing the outcome.",
+  "category": "A short category label such as AI & LLM, Developer Tools, Data & Databases, Content & SEO, Finance & Payments",
+  "tags": ["tag1", "tag2", "tag3"],
+  "difficulty": "Beginner | Intermediate | Advanced | Expert",
+  "duration": "e.g. 45–60 minutes",
+  "use_case": "One English sentence describing the business value.",
+  "steps": [
+    {{ "title": "Step title", "description": "One English sentence." }}
+  ]
+}}
+
+RULES
+- 3 to {config.MAX_STEPS} steps, driven by real complexity.
+- The workflow MUST call every listed API in at least one step.
+- Use only the listed APIs and their real endpoints/docs. No invented domains.
+- All text in English."""
 
 
 def build_new_topic_prompt(
