@@ -24,7 +24,9 @@ import argparse
 import json
 import os
 import random
+import re
 import subprocess
+import urllib.parse
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -50,6 +52,189 @@ def save_json(path: Path, data: Any) -> None:
 
 def _tool_map(partner: dict[str, Any], names: list[str]) -> list[dict[str, Any]]:
     return [{"name": name, **partner.get(name, {})} for name in names]
+
+
+TOOL_FALLBACKS: dict[str, dict[str, str]] = {
+    "x api": {
+        "provider": "X",
+        "endpoint": "https://api.x.com/2/tweets/search/recent",
+        "url": "https://developer.x.com/en/docs/twitter-api/tweets/search/introduction",
+        "authentication": "Bearer token",
+    },
+    "twitter api": {
+        "provider": "X",
+        "endpoint": "https://api.x.com/2/tweets/search/recent",
+        "url": "https://developer.x.com/en/docs/twitter-api/tweets/search/introduction",
+        "authentication": "Bearer token",
+    },
+    "openai api": {
+        "provider": "OpenAI",
+        "endpoint": "https://api.openai.com/v1/chat/completions",
+        "url": "https://platform.openai.com/docs/api-reference/chat/create",
+        "authentication": "Bearer API key",
+    },
+    "slack": {
+        "provider": "Slack",
+        "endpoint": "https://hooks.slack.com/services/<workspace>/<channel>/<token>",
+        "url": "https://api.slack.com/messaging/webhooks",
+        "authentication": "Incoming webhook URL",
+    },
+    "n8n": {
+        "provider": "n8n",
+        "endpoint": "https://<your-n8n-instance>/webhook/<name>",
+        "url": "https://docs.n8n.io/",
+        "authentication": "Webhook URL",
+    },
+}
+
+
+def _api_script_endpoint(api: dict[str, Any]) -> str:
+    """Return a concrete URL that the validated API script actually uses."""
+    slug = str(api.get("slug") or "")
+    path = cfg.API_SCRIPTS_DIR / slug / f"{slug}.py"
+    if not path.exists():
+        return ""
+    code = path.read_text(encoding="utf-8")
+    urls = [
+        url
+        for url in validator.extract_urls(code)
+        if not any(marker in url for marker in ("<", ">", "{", "}"))
+    ]
+    for url in urls:
+        parsed = urllib.parse.urlparse(url)
+        if parsed.path not in ("", "/"):
+            return url
+    return urls[0] if urls else ""
+
+
+def _api_tokens(api: dict[str, Any]) -> set[str]:
+    details = api.get("details") or {}
+    text = " ".join(
+        [
+            str(api.get("title") or ""),
+            str(details.get("provider") or ""),
+            str(details.get("useCase") or ""),
+            " ".join(str(tag) for tag in api.get("tags") or []),
+        ]
+    ).lower()
+    return {
+        token
+        for token in re.findall(r"[a-z0-9]+", text)
+        if len(token) >= 3
+        and token not in {"api", "the", "and", "for", "with"}
+    }
+
+
+def _tool_aliases(name: str) -> set[str]:
+    lowered = name.lower()
+    aliases = {
+        token for token in re.findall(r"[a-z0-9]+", lowered) if len(token) >= 3
+    }
+    if "x api" in lowered or "twitter" in lowered:
+        aliases |= {"twitter", "tweets"}
+    if "openai" in lowered:
+        aliases |= {"openai", "gpt"}
+    if "supabase" in lowered:
+        aliases |= {"supabase"}
+    if "slack" in lowered:
+        aliases |= {"slack"}
+    if "resend" in lowered:
+        aliases |= {"resend"}
+    if "crm" in lowered or "hubspot" in lowered:
+        aliases |= {"hubspot", "crm"}
+    return aliases
+
+
+def _grounded_tools(
+    workflow: dict[str, Any],
+    apis: list[dict[str, Any]],
+    partner: dict[str, Any],
+) -> list[dict[str, Any]]:
+    """Map workflow tool names to real API records (endpoint + docs URL)."""
+    details = workflow.get("details") or {}
+    names = [str(t).strip() for t in (details.get("tools") or []) if str(t).strip()]
+    workflow_category = str(workflow.get("category") or "").lower()
+    workflow_tags = {str(tag).lower() for tag in workflow.get("tags") or []}
+    grounded: list[dict[str, Any]] = []
+    used: set[str] = set()
+    for name in names:
+        fallback = TOOL_FALLBACKS.get(name.lower())
+        if fallback:
+            grounded.append({"name": name, **fallback})
+            continue
+        aliases = _tool_aliases(name)
+        best = None
+        best_score = 0
+        for api in apis:
+            if api.get("slug") in used:
+                continue
+            score = len(aliases & _api_tokens(api))
+            if score == 0:
+                continue
+            if (
+                workflow_category
+                and str(api.get("category") or "").lower() == workflow_category
+            ):
+                score += 2
+            if workflow_tags & {
+                str(tag).lower() for tag in api.get("tags") or []
+            }:
+                score += 1
+            if score > best_score:
+                best_score = score
+                best = api
+        if best is None:
+            entry = partner.get(name) or {}
+            entry_url = entry.get("affiliateUrl") or entry.get("url") or ""
+            entry_endpoint = entry.get("endpoint") or ""
+            if not entry_url and not entry_endpoint:
+                # Ungrounded tool: exclude it so the LLM cannot invent an API.
+                continue
+            grounded.append(
+                {
+                    "name": name,
+                    "provider": entry.get("provider") or "",
+                    "url": entry_url,
+                    "endpoint": entry_endpoint,
+                    "authentication": entry.get("authentication") or "",
+                }
+            )
+            continue
+        used.add(best["slug"])
+        data = best.get("details") or {}
+        grounded.append(
+            {
+                "name": name,
+                "provider": data.get("provider") or "",
+                "url": data.get("docsUrl") or data.get("website") or "",
+                "endpoint": (
+                    _api_script_endpoint(best)
+                    or data.get("endpoint")
+                    or ""
+                ),
+                "authentication": data.get("authentication") or "",
+            }
+        )
+    return grounded
+
+
+def _related_alternatives(
+    workflow: dict[str, Any],
+    alternatives: list[dict[str, Any]],
+    limit: int = 5,
+) -> list[dict[str, Any]]:
+    tags = {str(tag).lower() for tag in workflow.get("tags") or []}
+    category = str(workflow.get("category") or "").lower()
+    scored: list[tuple[int, dict[str, Any]]] = []
+    for alternative in alternatives:
+        alt_tags = {str(tag).lower() for tag in alternative.get("tags") or []}
+        score = len(tags & alt_tags)
+        if category and str(alternative.get("category") or "").lower() == category:
+            score += 1
+        if score:
+            scored.append((score, alternative))
+    scored.sort(key=lambda item: item[0], reverse=True)
+    return [alternative for _, alternative in scored[:limit]]
 
 
 def _deep_copy(item: dict[str, Any]) -> dict[str, Any]:
@@ -184,12 +369,19 @@ def generate_workflow(
     workflow: dict[str, Any],
     workflows_all: list[dict[str, Any]],
     partner: dict[str, Any],
+    apis: list[dict[str, Any]],
+    alternatives: list[dict[str, Any]],
     max_attempts: int = cfg.LLM_MAX_ATTEMPTS,
     force_regenerate: bool = False,
 ) -> tuple[dict[str, Any] | None, list[str], int]:
     details = workflow.get("details") or {}
     steps = details.get("steps") or []
-    available_tools = _tool_map(partner, details.get("tools") or [])
+    available_tools = _grounded_tools(workflow, apis, partner)
+    related_alternatives = _related_alternatives(workflow, alternatives)
+    prompt_workflow = _deep_copy(workflow)
+    prompt_workflow.setdefault("details", {})["tools"] = [
+        tool["name"] for tool in available_tools
+    ]
     feedback: str | None = None
     last_errors: list[str] = []
 
@@ -217,7 +409,13 @@ def generate_workflow(
         try:
             data = llm_client.chat_json(
                 prompts.WORKFLOW_SYSTEM,
-                prompts.build_workflow_prompt(workflow, steps, available_tools, feedback),
+                prompts.build_workflow_prompt(
+                    prompt_workflow,
+                    steps,
+                    available_tools,
+                    feedback,
+                    related_alternatives,
+                ),
             )
 
             candidate = _deep_copy(workflow)
@@ -225,7 +423,48 @@ def generate_workflow(
             candidate_details["prerequisites"] = data.get("prerequisites", [])
             candidate_details["glossary"] = data.get("glossary", [])
             candidate_details["troubleshooting"] = data.get("troubleshooting", [])
-            candidate_details["resources"] = data.get("resources", [])
+            grounded_resources = []
+            for tool in available_tools:
+                if tool.get("url"):
+                    grounded_resources.append(
+                        {"label": tool["name"], "url": tool["url"]}
+                    )
+                endpoint = str(tool.get("endpoint") or "")
+                if (
+                    endpoint.startswith("http")
+                    and "<" not in endpoint
+                    and "{" not in endpoint
+                ):
+                    endpoint_host = endpoint.split("//", 1)[-1].split("/", 1)[0]
+                    docs_host = (
+                        str(tool.get("url") or "")
+                        .split("//", 1)[-1]
+                        .split("/", 1)[0]
+                    )
+                    if endpoint_host and endpoint_host != docs_host:
+                        grounded_resources.append(
+                            {
+                                "label": f"{tool['name']} Endpoint",
+                                "url": endpoint,
+                            }
+                        )
+            candidate_details["resources"] = (
+                grounded_resources or data.get("resources", [])
+            )
+
+            # Every grounded tool needs its own BEFORE YOU START bullet.
+            prerequisites = list(candidate_details.get("prerequisites") or [])
+            for tool in available_tools:
+                tool_name = tool["name"]
+                if not any(
+                    tool_name.lower() in str(item).lower()
+                    for item in prerequisites
+                ):
+                    prerequisites.insert(
+                        max(0, len(prerequisites) - 1),
+                        f"Access to {tool_name}",
+                    )
+            candidate_details["prerequisites"] = prerequisites
             # Replace known dead documentation URLs with the current live pages.
             # The hard live-URL gate would otherwise discard the workflow.
             doc_url_fixes = {
@@ -324,7 +563,41 @@ def generate_workflow(
                     if "supabase.com/docs/reference/javascript" in url:
                         url = "https://supabase.com/docs/guides/api"
                     link["url"] = doc_url_fixes.get(url, url)
-                step["links"] = links
+                step_tool_names = []
+                for raw_tool in step.get("tools") or []:
+                    raw_name = str(raw_tool).strip()
+                    if not raw_name:
+                        continue
+                    matched_name = next(
+                        (
+                            tool["name"]
+                            for tool in available_tools
+                            if tool["name"].lower() == raw_name.lower()
+                            or raw_name.lower() in tool["name"].lower()
+                            or tool["name"].lower() in raw_name.lower()
+                        ),
+                        None,
+                    )
+                    if matched_name and matched_name not in step_tool_names:
+                        step_tool_names.append(matched_name)
+                step["tools"] = step_tool_names
+                grounded_link = next(
+                    (
+                        tool
+                        for tool in available_tools
+                        if tool["name"] in step_tool_names and tool.get("url")
+                    ),
+                    None,
+                )
+                if grounded_link:
+                    step["links"] = [
+                        {
+                            "label": f"{grounded_link['name']} Documentation",
+                            "url": grounded_link["url"],
+                        }
+                    ]
+                else:
+                    step["links"] = links
                 steps_out.append(step)
             candidate_details["steps"] = steps_out
 
@@ -347,7 +620,22 @@ def generate_workflow(
                     ):
                         used_tools.append(name)
             if used_tools:
-                candidate_details["tools"] = used_tools
+                code_all = "\n".join(
+                    str(step.get("code_snippet") or "") for step in steps_out
+                ).lower()
+                filtered_tools = []
+                for name in used_tools:
+                    markers = cfg.TOOL_CODE_MARKERS.get(name) or (name.lower(),)
+                    if any(marker.lower() in code_all for marker in markers):
+                        filtered_tools.append(name)
+                candidate_details["tools"] = filtered_tools
+                allowed_tools = set(filtered_tools)
+                for step in steps_out:
+                    step["tools"] = [
+                        str(tool).strip()
+                        for tool in (step.get("tools") or [])
+                        if str(tool).strip() in allowed_tools
+                    ]
 
             # Normalise structure, then repair only the snippets that fail the
             # AST gate instead of regenerating the entire workflow.
@@ -511,6 +799,38 @@ def generate_api_script(
     feedback: str | None = None
     last_errors: list[str] = []
 
+    # Reuse an existing, already valid script instead of burning an LLM call.
+    existing_path = cfg.API_SCRIPTS_DIR / api["slug"] / f"{api['slug']}.py"
+    if existing_path.exists():
+        existing_script = existing_path.read_text(encoding="utf-8")
+        existing_result = validator.validate_api_script(existing_script)
+        if not existing_result.ok:
+            missing_modules = sorted(
+                {
+                    match.group(1)
+                    for error in existing_result.errors
+                    if (
+                        match := re.search(
+                            r"module '(\w+)' is used but never imported", error
+                        )
+                    )
+                }
+            )
+            if missing_modules:
+                prefix = "\n".join(
+                    f"import {name}" for name in missing_modules
+                )
+                existing_script = f"{prefix}\n{existing_script}"
+                existing_result = validator.validate_api_script(existing_script)
+        if existing_result.ok:
+            return existing_script, existing_result.warnings, 0
+        feedback = "; ".join(existing_result.errors)
+        last_errors = existing_result.errors
+        print(
+            f"  [REUSE] {api['slug']}: existing script invalid "
+            f"({len(existing_result.errors)} error(s)) – regenerating"
+        )
+
     for attempt in range(1, max_attempts + 1):
         try:
             script = llm_client.chat_code(
@@ -524,6 +844,23 @@ def generate_api_script(
             continue
 
         result = validator.validate_api_script(script)
+        # Deterministically add missing stdlib imports before asking the LLM
+        # again. This fixes the most common API-script failure instantly.
+        missing_modules = sorted(
+            {
+                match.group(1)
+                for error in result.errors
+                if (
+                    match := re.search(
+                        r"module '(\w+)' is used but never imported", error
+                    )
+                )
+            }
+        )
+        if missing_modules:
+            prefix = "\n".join(f"import {name}" for name in missing_modules)
+            script = f"{prefix}\n{script}"
+            result = validator.validate_api_script(script)
         if result.ok:
             return script, result.warnings, attempt
 
@@ -548,6 +885,22 @@ def generate_alternative(
 ) -> tuple[dict[str, Any] | None, list[str], int]:
     feedback: str | None = None
     last_errors: list[str] = []
+
+    # Reuse an already valid alternative instead of burning an LLM call.
+    existing_result = validator.validate_alternative(alternative)
+    existing_result.errors.extend(
+        validator.check_duplicate(
+            alternative.get("slug", ""),
+            alternative.get("title", ""),
+            alternatives_all,
+            ignore_slug=alternative.get("slug"),
+        )
+    )
+    if existing_result.ok:
+        return alternative, existing_result.warnings, 0
+    feedback = "; ".join(existing_result.errors)
+    last_errors = existing_result.errors
+
     for attempt in range(1, max_attempts + 1):
         try:
             data = llm_client.chat_json(
@@ -844,7 +1197,12 @@ def main(argv: list[str] | None = None) -> int:
             continue
 
         candidate, errors, attempts = generate_workflow(
-            workflow, workflows, partner, force_regenerate=args.force_regenerate
+            workflow,
+            workflows,
+            partner,
+            apis,
+            alternatives,
+            force_regenerate=args.force_regenerate,
         )
         if candidate is None:
             # Domain failure -> discard and generate a brand-new topic.

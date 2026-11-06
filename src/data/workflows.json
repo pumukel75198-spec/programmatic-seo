@@ -15,31 +15,30 @@
       "duration": "About 2–3 hours setup",
       "tools": [
         "OpenAI API",
-        "Supabase",
-        "n8n"
+        "Supabase"
       ],
       "steps": [
         {
           "title": "Run keyword and topic research",
-          "description": "Utilize the OpenAI API to generate a list of relevant content topics based on specific keywords. This step involves clustering the topics according to search intent to create a comprehensive content strategy.",
-          "technical_explanation": "This step acts as the initial data generation phase, consuming keywords as input and producing clustered topics as output. The OpenAI API endpoint used is '/v1/chat/completions', with a POST method. Required headers include 'Authorization' for Bearer Token Authentication and 'Content-Type' for application/json. The request payload must contain the model and messages, while the response will include choices with generated content. Edge cases include handling rate limits and ensuring the response structure contains the expected keys.",
-          "code_snippet": "import json\nimport urllib.request\n\ndef fetch_topics(keywords):\n    url = 'https://api.openai.com/v1/chat/completions'\n    headers = {\n        'Authorization': 'Bearer YOUR_OPENAI_API_KEY',\n        'Content-Type': 'application/json'\n    }\n    data = json.dumps({\n        'model': 'gpt-4o-mini',\n        'messages': [{'role': 'user', 'content': f'Generate topics for: {keywords}'}]\n    }).encode('utf-8')\n    request = urllib.request.Request(url, data=data, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        result = json.loads(response.read())\n    return [item['message']['content'] for item in result['choices']]\n\ntopics = fetch_topics('SEO strategies')",
+          "description": "This step utilizes the OpenAI API to generate relevant content topics based on specific keywords. The topics are clustered according to search intent to create a comprehensive content strategy.",
+          "technical_explanation": "This step acts as the foundation for the content automation workflow by generating a list of topics that will be stored in Supabase. The OpenAI API endpoint used is '/v1/chat/completions' with a POST method. Required headers include 'Authorization' with a Bearer token and 'Content-Type' set to 'application/json'. The request payload must include the model, messages, and other parameters. Edge cases include handling rate limits and ensuring the response is valid before proceeding.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\ndef fetch_topics(keywords):\n    url = 'https://api.openai.com/v1/chat/completions'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    data = json.dumps({\n        'model': 'gpt-4o-mini',\n        'messages': [{'role': 'user', 'content': f'Generate content topics for: {keywords}'}]\n    }).encode('utf-8')\n    request = urllib.request.Request(url, data=data, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))['choices'][0]['message']['content']\n\nkeywords = 'SEO, automation'\ntopics = fetch_topics(keywords)",
           "actions": [
-            "Define keywords relevant to the content strategy.",
-            "Make a POST request to the OpenAI API to generate topics.",
-            "Extract and cluster topics based on search intent."
+            "Define keywords for content generation.",
+            "Call the OpenAI API to fetch topics.",
+            "Store the fetched topics for further processing."
           ],
           "commands": [
             {
               "label": "Run Python script",
               "language": "bash",
-              "code": "python script.py"
+              "code": "python3 script.py"
             }
           ],
           "config": [
             {
-              "key": "YOUR_OPENAI_API_KEY",
-              "value": "your_openai_api_key",
+              "key": "OPENAI_API_KEY",
+              "value": "<your_openai_api_key>",
               "description": "API key for authenticating requests to OpenAI."
             }
           ],
@@ -47,43 +46,43 @@
             "OpenAI API"
           ],
           "checklist": [
-            "Topics are generated and returned as a list.",
-            "No errors are encountered during the API call."
+            "Verify that the OpenAI API key is correctly set in the environment.",
+            "Ensure that the response from the API contains valid topics."
           ],
-          "expectedResult": "A list of clustered content topics based on the provided keywords.",
+          "expectedResult": "A list of relevant content topics is generated and stored for further processing.",
           "links": [
             {
-              "label": "OpenAI Chat Completions Docs",
+              "label": "OpenAI API Documentation",
               "url": "https://platform.openai.com/docs/api-reference/chat/create"
             }
           ]
         },
         {
           "title": "Set up the data model in Supabase",
-          "description": "Create a structured database in Supabase to store the generated content topics along with their status and metadata. This ensures efficient management and retrieval of content.",
-          "technical_explanation": "This step establishes the database schema required for storing content topics. The Supabase REST endpoint for inserting records is '/rest/v1/topics', using the POST method. Required headers include 'apikey' and 'Authorization' for authentication. The request payload must include the topic data, while the response will confirm the insertion. Edge cases include handling duplicate entries and ensuring the database connection is valid.",
-          "code_snippet": "import json\nimport urllib.request\n\ndef insert_topics(topics):\n    url = 'https://YOUR_SUPABASE_URL/rest/v1/topics'\n    headers = {\n        'apikey': 'YOUR_SUPABASE_KEY',\n        'Authorization': 'Bearer YOUR_SUPABASE_KEY',\n        'Content-Type': 'application/json',\n        'Prefer': 'return=representation'\n    }\n    for topic in topics:\n        data = json.dumps({'topic': topic, 'status': 'pending'}).encode('utf-8')\n        request = urllib.request.Request(url, data=data, headers=headers)\n        with urllib.request.urlopen(request) as response:\n            if response.status not in (200, 201, 204):\n                raise Exception('Failed to insert topic')\n\ninsert_topics(topics)",
+          "description": "In this step, a structured database is created in Supabase to store the generated content topics along with their status and metadata. This ensures efficient management and retrieval of content.",
+          "technical_explanation": "This step defines the schema for the Supabase database, ensuring that all generated topics are stored with relevant metadata. The endpoint used is '/rest/v1/topics' with a POST method. Required headers include 'Authorization' with a Bearer token and 'Content-Type' set to 'application/json'. The payload must include fields such as 'topic', 'status', and 'metadata'. Edge cases include handling duplicate entries and ensuring the database connection is valid.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef setup_supabase(topics):\n    url = f'{os.environ.get(\"SUPABASE_URL\")}/rest/v1/topics'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"SUPABASE_KEY\")}',\n        'Content-Type': 'application/json',\n        'apikey': os.environ.get(\"SUPABASE_KEY\")\n    }\n    for topic in topics:\n        data = json.dumps({\n            'topic': topic,\n            'status': 'pending',\n            'metadata': {}\n        }).encode('utf-8')\n        request = urllib.request.Request(url, data=data, headers=headers)\n        with urllib.request.urlopen(request) as response:\n            if response.status not in (200, 201, 204):\n                raise Exception('Failed to insert topic')\n\nsetup_supabase(topics)",
           "actions": [
             "Define the database schema for topics.",
-            "Make a POST request to insert each topic into Supabase.",
-            "Handle any errors during the insertion process."
+            "Insert generated topics into Supabase.",
+            "Handle potential errors during insertion."
           ],
           "commands": [
             {
               "label": "Run Python script",
               "language": "bash",
-              "code": "python script.py"
+              "code": "python3 script.py"
             }
           ],
           "config": [
             {
-              "key": "YOUR_SUPABASE_URL",
-              "value": "your_supabase_url",
-              "description": "The URL of your Supabase project."
+              "key": "SUPABASE_URL",
+              "value": "<your_supabase_url>",
+              "description": "URL for accessing the Supabase instance."
             },
             {
-              "key": "YOUR_SUPABASE_KEY",
-              "value": "your_supabase_key",
+              "key": "SUPABASE_KEY",
+              "value": "<your_supabase_key>",
               "description": "Service role key for authenticating requests to Supabase."
             }
           ],
@@ -91,159 +90,154 @@
             "Supabase"
           ],
           "checklist": [
-            "Topics are successfully inserted into the Supabase database.",
-            "No errors are encountered during the insertion."
+            "Confirm that the topics are inserted into the Supabase database.",
+            "Check for any duplicate entries in the database."
           ],
-          "expectedResult": "Content topics are stored in the Supabase database with a 'pending' status.",
+          "expectedResult": "A structured database in Supabase is created with the generated content topics.",
           "links": [
             {
-              "label": "Supabase REST Docs",
-              "url": "https://supabase.com/docs/reference/rest"
+              "label": "Supabase REST API Documentation",
+              "url": "https://supabase.com/docs/guides/api"
             }
           ]
         },
         {
           "title": "Generate drafts with the OpenAI API",
-          "description": "Leverage the OpenAI API to create initial content drafts based on the topics stored in Supabase. This ensures a consistent and scalable content creation process.",
-          "technical_explanation": "This step retrieves topics from Supabase and generates drafts using the OpenAI API. The endpoint used is '/v1/chat/completions' with a POST method. Required headers include 'Authorization' and 'Content-Type'. The request payload contains the model and messages, while the response includes generated drafts. Edge cases include handling empty topic lists and API rate limits.",
-          "code_snippet": "import json\nimport urllib.request\n\ndef generate_drafts(topics):\n    drafts = []\n    url = 'https://api.openai.com/v1/chat/completions'\n    headers = {\n        'Authorization': 'Bearer YOUR_OPENAI_API_KEY',\n        'Content-Type': 'application/json'\n    }\n    for topic in topics:\n        data = json.dumps({\n            'model': 'gpt-4o-mini',\n            'messages': [{'role': 'user', 'content': f'Write a draft for: {topic}'}]\n        }).encode('utf-8')\n        request = urllib.request.Request(url, data=data, headers=headers)\n        with urllib.request.urlopen(request) as response:\n            result = json.loads(response.read())\n            drafts.append(result['choices'][0]['message']['content'])\n    return drafts\n\ndrafts = generate_drafts(topics)",
+          "description": "This step leverages the OpenAI API to create initial content drafts based on the topics stored in Supabase. This ensures a consistent and scalable content creation process.",
+          "technical_explanation": "In this step, the stored topics are retrieved from Supabase and used to generate drafts via the OpenAI API. The endpoint used is '/v1/chat/completions' with a POST method. Required headers include 'Authorization' with a Bearer token and 'Content-Type' set to 'application/json'. The request payload must include the model, messages, and the topic for which the draft is generated. Edge cases include handling empty topics and ensuring the API returns valid drafts.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef generate_drafts():\n    url = f'{os.environ.get(\"SUPABASE_URL\")}/rest/v1/topics'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"SUPABASE_KEY\")}',\n        'apikey': os.environ.get(\"SUPABASE_KEY\")\n    }\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        topics = json.loads(response.read().decode('utf-8'))\n    drafts = []\n    for topic in topics:\n        draft = fetch_draft(topic['topic'])\n        drafts.append({'topic': topic['topic'], 'draft': draft})\n    return drafts\n\n\ndef fetch_draft(topic):\n    url = 'https://api.openai.com/v1/chat/completions'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    data = json.dumps({\n        'model': 'gpt-4o-mini',\n        'messages': [{'role': 'user', 'content': f'Write a draft for: {topic}'}]\n    }).encode('utf-8')\n    request = urllib.request.Request(url, data=data, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))['choices'][0]['message']['content']\n\ndrafts = generate_drafts()",
           "actions": [
             "Retrieve topics from Supabase.",
-            "Make a POST request to the OpenAI API for each topic.",
-            "Store the generated drafts for further processing."
+            "Generate drafts for each topic using OpenAI.",
+            "Store the generated drafts for quality checks."
           ],
           "commands": [
             {
               "label": "Run Python script",
               "language": "bash",
-              "code": "python script.py"
+              "code": "python3 script.py"
             }
           ],
-          "config": [
-            {
-              "key": "YOUR_OPENAI_API_KEY",
-              "value": "your_openai_api_key",
-              "description": "API key for authenticating requests to OpenAI."
-            }
-          ],
+          "config": [],
           "tools": [
-            "OpenAI API"
+            "OpenAI API",
+            "Supabase"
           ],
           "checklist": [
-            "Drafts are generated successfully for each topic.",
-            "No errors are encountered during the API calls."
+            "Ensure drafts are generated for all topics.",
+            "Check that drafts are stored correctly for further processing."
           ],
-          "expectedResult": "A list of content drafts generated from the topics.",
+          "expectedResult": "Initial content drafts are generated and stored for quality checks.",
           "links": [
             {
-              "label": "OpenAI Chat Completions Docs",
+              "label": "OpenAI API Documentation",
               "url": "https://platform.openai.com/docs/api-reference/chat/create"
             }
           ]
         },
         {
           "title": "Run quality checks and approvals",
-          "description": "Implement a system to conduct quality checks on the generated drafts. This ensures that the drafts meet predefined content standards before they are approved for publication.",
-          "technical_explanation": "This step evaluates the quality of drafts against predefined criteria. It consumes the drafts generated in the previous step and outputs a list of approved drafts. Quality checks may include keyword density, readability scores, and factual accuracy. Edge cases include handling drafts that do not meet quality standards and ensuring that all drafts are evaluated.",
-          "code_snippet": "import json\n\ndef quality_check(drafts):\n    approved_drafts = []\n    for draft in drafts:\n        if len(draft) > 100 and 'SEO' in draft:\n            approved_drafts.append(draft)\n    return approved_drafts\n\napproved_drafts = quality_check(drafts)\n\nresult = quality_check()\n",
+          "description": "This step implements a system to conduct quality checks on the generated drafts. This ensures that the drafts meet predefined content standards before they are approved for publication.",
+          "technical_explanation": "This workflow step is crucial for maintaining the integrity of the content produced in the previous step, as it consumes the drafts generated and assesses them against established quality criteria. The quality_check function is invoked, which requires the drafts as input, ensuring that only those meeting the standards proceed to the approval phase. The API contract specifies the endpoint as /api/quality-check, utilizing the POST method, and mandates headers such as Authorization and Content-Type: application/json. The request payload must include an array of drafts, while the JSON response will return a status field indicating success or failure, along with an array of errors if applicable. Edge cases to consider include rate limits imposed on the API to prevent abuse, pagination for large sets of drafts, handling empty arrays gracefully, and ensuring type conversion for any fields that may not match expected formats.",
+          "code_snippet": "import json\nimport os\n\ndef quality_check(drafts):\n    approved_drafts = []\n    for draft in drafts:\n        if meets_quality_standards(draft['draft']):\n            approved_drafts.append(draft)\n    return approved_drafts\n\n\ndef meets_quality_standards(draft):\n    # Placeholder for quality check logic\n    return len(draft) > 100  # Example check for draft length\n\napproved_drafts = quality_check(drafts)",
           "actions": [
-            "Define quality criteria for content drafts.",
-            "Evaluate each draft against the criteria.",
-            "Collect and store approved drafts for publication."
+            "Define quality standards for drafts.",
+            "Evaluate each draft against the quality standards.",
+            "Log the results of the quality checks."
           ],
           "commands": [
             {
               "label": "Run Python script",
               "language": "bash",
-              "code": "python script.py"
+              "code": "python3 script.py"
             }
           ],
-          "tools": [
-            "None"
-          ],
+          "config": [],
+          "tools": [],
           "checklist": [
-            "All drafts have been evaluated against quality criteria.",
-            "Approved drafts are stored for the next step."
+            "Verify that all drafts are evaluated against quality standards.",
+            "Ensure that approved drafts are correctly identified."
           ],
-          "expectedResult": "A list of approved drafts ready for publication.",
+          "expectedResult": "Drafts are evaluated and approved based on quality standards.",
           "links": [
             {
-              "label": "Python Built-in Functions",
-              "url": "https://docs.python.org/3/library/functions.html"
+              "label": "Python Documentation - Functions",
+              "url": "https://docs.python.org/3/tutorial/controlflow.html#defining-functions"
             }
           ]
         },
         {
           "title": "Publish automatically via CI/CD",
-          "description": "Set up a CI/CD pipeline to automate the publication of approved content. This ensures a seamless and efficient content deployment process.",
-          "technical_explanation": "This step integrates with a CI/CD tool to automate the deployment of approved drafts. The endpoint used is a placeholder for an n8n webhook. The request method is POST, and the payload includes the approved drafts. Edge cases include handling deployment failures and ensuring that the CI/CD pipeline is correctly configured.",
-          "code_snippet": "import json\nimport urllib.request\n\ndef publish_content(approved_drafts):\n    url = 'https://<your-n8n-instance>/webhook/publish'\n    headers = {'Content-Type': 'application/json'}\n    data = json.dumps({'drafts': approved_drafts}).encode('utf-8')\n    request = urllib.request.Request(url, data=data, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        if response.read().decode('utf-8') != 'ok':\n            raise Exception('Failed to publish content')\n\npublish_content(approved_drafts)",
+          "description": "In this final step, a CI/CD pipeline is set up to automate the publication of approved content. This ensures a seamless and efficient content deployment process.",
+          "technical_explanation": "This step integrates the approved drafts into a CI/CD pipeline for automated publication. The endpoint used is '/rest/v1/publish' with a POST method. Required headers include 'Authorization' with a Bearer token and 'Content-Type' set to 'application/json'. The payload must include the approved drafts. Edge cases include handling publication failures and ensuring that the deployment process is logged.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef publish_content(approved_drafts):\n    url = f'{os.environ.get(\"SUPABASE_URL\")}/rest/v1/publish'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"SUPABASE_KEY\")}',\n        'Content-Type': 'application/json',\n        'apikey': os.environ.get(\"SUPABASE_KEY\")\n    }\n    for draft in approved_drafts:\n        data = json.dumps({\n            'topic': draft['topic'],\n            'content': draft['draft']\n        }).encode('utf-8')\n        request = urllib.request.Request(url, data=data, headers=headers)\n        with urllib.request.urlopen(request) as response:\n            if response.status not in (200, 201, 204):\n                raise Exception('Failed to publish content')\n\npublish_content(approved_drafts)",
           "actions": [
-            "Configure the CI/CD pipeline for content deployment.",
-            "Make a POST request to the n8n webhook with approved drafts.",
-            "Handle any errors during the publication process."
+            "Define the CI/CD pipeline for content publication.",
+            "Integrate approved drafts into the pipeline.",
+            "Log the results of the publication process."
           ],
           "commands": [
             {
               "label": "Run Python script",
               "language": "bash",
-              "code": "python script.py"
+              "code": "python3 script.py"
             }
           ],
+          "config": [],
           "tools": [
-            "n8n"
+            "Supabase"
           ],
           "checklist": [
-            "Content is published successfully via the CI/CD pipeline.",
-            "No errors are encountered during the publication."
+            "Confirm that all approved drafts are published successfully.",
+            "Check the logs for any errors during the publication process."
           ],
           "expectedResult": "Approved content is published automatically through the CI/CD pipeline.",
           "links": [
             {
-              "label": "n8n Webhook Documentation",
-              "url": "https://docs.n8n.io/integrations/builtin/webhooks/"
+              "label": "Supabase REST API Documentation",
+              "url": "https://supabase.com/docs/guides/api"
             }
           ]
         }
       ],
       "useCase": "Scalable content production for programmatic SEO projects.",
       "prerequisites": [
+        "An n8n account and a webhook URL",
         "An OpenAI API key",
         "A Supabase project and service-role key",
-        "An n8n account and a webhook URL",
-        "Astro installed and configured",
+        "A Slack incoming webhook URL",
         "Python 3.10 or newer (standard library only) and a terminal"
       ],
       "glossary": [
         {
           "term": "Bearer Token Authentication",
-          "definition": "A method for securing API requests using a token that grants access."
+          "definition": "A method for securing API requests using a token that grants access to the API."
         },
         {
           "term": "Rate-Limit Backoff",
-          "definition": "A strategy to handle API rate limits by pausing requests when limits are reached."
+          "definition": "A strategy to handle API rate limits by delaying requests when limits are reached."
         },
         {
           "term": "PostgREST Upsert",
-          "definition": "An operation that inserts a new record or updates an existing one in a database."
+          "definition": "An operation that inserts a new record or updates an existing record in a database."
         },
         {
           "term": "Z-Score Spike Detection",
-          "definition": "A statistical method to identify anomalies in data based on standard deviations."
+          "definition": "A statistical method to identify outliers in a dataset based on standard deviations from the mean."
         }
       ],
       "troubleshooting": [
         {
-          "problem": "KeyError: 'content'",
-          "solution": "Ensure that the API response contains the 'content' key and handle missing keys appropriately."
+          "problem": "Quality check function missing drafts argument",
+          "solution": "Ensure the quality_check function is called with the drafts parameter."
         },
         {
-          "problem": "Rate limit exceeded",
-          "solution": "Implement a backoff strategy to pause requests when the API rate limit is reached."
+          "problem": "Supabase URL not reachable",
+          "solution": "Verify the Supabase instance URL and ensure it is correctly configured in the environment."
         },
         {
-          "problem": "Database connection failure",
-          "solution": "Verify that the Supabase credentials are correct and that the service is running."
+          "problem": "OpenAI API returns unexpected output",
+          "solution": "Check the prompt sent to OpenAI and ensure it adheres to the expected format."
         }
       ],
       "resources": [
@@ -256,16 +250,12 @@
           "url": "https://supabase.com/?ref=flowmatrix"
         },
         {
-          "label": "Astro",
-          "url": "https://astro.build/"
-        },
-        {
           "label": "n8n",
           "url": "https://n8n.io/?ref=flowmatrix"
         }
       ]
     },
-    "created_and_verified_at": "2026-11-04 10:00 UTC"
+    "created_and_verified_at": "2026-11-06 08:17 UTC"
   },
   {
     "slug": "lead-qualification",
@@ -282,267 +272,270 @@
       "difficulty": "Advanced",
       "duration": "About 1–2 hours setup",
       "tools": [
-        "CRM",
         "OpenAI API",
         "Resend API"
       ],
       "steps": [
         {
           "title": "Capture leads via forms or webhooks",
-          "description": "Integrate forms or webhooks into your website or applications to seamlessly transfer leads into your CRM system. This ensures that all incoming lead data is captured efficiently and accurately.",
-          "technical_explanation": "This step serves as the entry point for lead data, consuming input from forms or webhooks. The data is sent to the CRM via a POST request. The endpoint typically requires headers for authentication and a JSON payload containing lead details. Edge cases include handling rate limits imposed by the CRM API and ensuring that the data structure matches the expected format.",
-          "code_snippet": "import json\nimport urllib.request\n\ndef capture_leads(lead_data):\n    url = 'https://api.crm.example.com/leads'\n    headers = {'Authorization': 'Bearer YOUR_CRM_API_KEY', 'Content-Type': 'application/json'}\n    data = json.dumps(lead_data).encode('utf-8')\n    request = urllib.request.Request(url, data=data, headers=headers)\n    response = urllib.request.urlopen(request)\n    return json.loads(response.read())\n\nlead_data = {'email': 'example@domain.com', 'name': 'John Doe'}\nresult = capture_leads(lead_data)",
+          "description": "Integrate forms or webhooks into your website or applications to transfer leads into your CRM system. This ensures that all incoming lead data is captured efficiently and accurately.",
+          "technical_explanation": "This step acts as the entry point for lead data, consuming input from forms or webhooks. The API contract involves sending a POST request to the HubSpot API endpoint for contacts. Required headers include the authorization token, and the request payload must conform to the expected structure for lead data. Edge cases include handling rate limits and ensuring that the incoming data is not malformed or empty.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\n# Function to capture leads from a webhook\ndef capture_leads(lead_data):\n    url = 'https://api.hubapi.com/crm/v3/objects/contacts'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"HUBSPOT_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    data = json.dumps(lead_data).encode('utf-8')  # Encode lead data as JSON\n    request = urllib.request.Request(url, data=data, headers=headers, method='POST')\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))  # Decode and return the response\n\n# Example lead data\nlead_data = {'properties': {'email': 'example@example.com', 'firstname': 'John', 'lastname': 'Doe'}}\nresult = capture_leads(lead_data)",
           "actions": [
-            "Set up a form or webhook to capture lead data.",
-            "Configure the CRM API endpoint for lead creation.",
-            "Test the integration to ensure leads are captured."
+            "Integrate forms or webhooks into your website.",
+            "Ensure lead data is structured correctly.",
+            "Test the API connection with sample lead data."
           ],
           "commands": [
             {
-              "label": "Run Python script",
+              "label": "Run the capture leads function",
               "language": "bash",
               "code": "python script.py"
             }
           ],
           "config": [
             {
-              "key": "YOUR_CRM_API_KEY",
-              "value": "<your_crm_api_key>",
-              "description": "API key for authenticating with the CRM."
+              "key": "HUBSPOT_API_KEY",
+              "value": "<your_hubspot_api_key>",
+              "description": "API key for authenticating with HubSpot."
             }
           ],
-          "tools": [
-            "CRM"
-          ],
+          "tools": [],
           "checklist": [
-            "Lead data is successfully sent to the CRM.",
-            "Check for any errors in the API response."
+            "Lead data is successfully sent to HubSpot.",
+            "API response indicates successful creation of contact."
           ],
-          "expectedResult": "Leads are captured and stored in the CRM.",
+          "expectedResult": "Leads are captured and stored in the CRM system.",
           "links": [
             {
-              "label": "CRM",
-              "url": "https://www.hubspot.com/products/crm"
+              "label": "HubSpot API Documentation",
+              "url": "https://developers.hubspot.com/docs/api/crm/contacts"
             }
           ]
         },
         {
           "title": "Enrich company data and verify emails",
-          "description": "Enhance your collected data by adding additional information and verify email addresses to create complete and reliable lead profiles. This step ensures that your lead data is accurate and enriched with valuable insights.",
-          "technical_explanation": "This step enriches lead data by calling an external enrichment API and verifying email addresses. The API contract includes a GET request with the email as a query parameter. Edge cases include handling invalid email formats and ensuring the enrichment API does not exceed rate limits.",
-          "code_snippet": "import json\nimport urllib.request\n\ndef enrich_lead(lead_email):\n    url = f'https://api.enrichment.example.com/enrich?email={lead_email}'\n    response = urllib.request.urlopen(url)\n    return json.loads(response.read())\n\nlead_email = 'example@domain.com'\nenriched_data = enrich_lead(lead_email)\n\nresult = enrich_lead()\n",
+          "description": "Enhance collected data by adding additional information and verifying email addresses to create complete and reliable lead profiles.",
+          "technical_explanation": "This step enriches the lead data by verifying email addresses and adding company information. The API contract involves sending requests to an enrichment service, which is simulated here using the OpenAI API for email verification. Edge cases include handling invalid email formats and ensuring that the enrichment service is responsive.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n# Function to enrich lead data\ndef enrich_lead_data(lead_data):\n    email = lead_data['properties']['email']\n    # Simulate email verification using OpenAI\n    url = 'https://api.openai.com/v1/chat/completions'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    prompt = f'Is this a valid email? {email}'\n    data = json.dumps({'model': 'gpt-4o-mini', 'messages': [{'role': 'user', 'content': prompt}]}).encode('utf-8')\n    request = urllib.request.Request(url, data=data, headers=headers, method='POST')\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))  # Decode and return the response\n\n# Example lead data\nlead_data = {'properties': {'email': 'example@example.com'}}\nresult = enrich_lead_data(lead_data)",
           "actions": [
-            "Identify an enrichment API for company data.",
-            "Implement email verification logic.",
-            "Test the enrichment process with sample leads."
+            "Send lead email to the enrichment service.",
+            "Receive and process the enrichment response.",
+            "Update lead data with enriched information."
           ],
           "commands": [
             {
-              "label": "Run enrichment script",
+              "label": "Run the enrich lead data function",
               "language": "bash",
-              "code": "python enrich.py"
+              "code": "python script.py"
             }
           ],
           "config": [
             {
-              "key": "ENRICHMENT_API_KEY",
-              "value": "<your_enrichment_api_key>",
-              "description": "API key for accessing the enrichment service."
+              "key": "OPENAI_API_KEY",
+              "value": "<your_openai_api_key>",
+              "description": "API key for authenticating with OpenAI."
             }
           ],
           "tools": [
             "OpenAI API"
           ],
           "checklist": [
-            "Lead data is enriched with additional information.",
-            "Email verification results are accurate."
+            "Email verification response is received.",
+            "Lead data is enriched with additional information."
           ],
-          "expectedResult": "Lead profiles are enriched and verified.",
+          "expectedResult": "Lead data is enriched and verified.",
           "links": [
             {
-              "label": "OpenAI API",
-              "url": "https://platform.openai.com/?ref=flowmatrix"
+              "label": "OpenAI API Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/chat/create"
             }
           ]
         },
         {
           "title": "Score leads with a language model",
-          "description": "Evaluate leads using a language model powered by AI to precisely estimate sales opportunities based on various criteria. This scoring helps prioritize leads for the sales team.",
-          "technical_explanation": "This step uses a language model to score leads based on their attributes. The API contract includes a POST request with the lead data in the payload. Edge cases include handling model response errors and ensuring that the lead data is formatted correctly for scoring.",
-          "code_snippet": "import json\nimport urllib.request\n\ndef score_leads(leads):\n    url = 'https://api.openai.com/v1/chat/completions'\n    headers = {'Authorization': 'Bearer YOUR_OPENAI_API_KEY', 'Content-Type': 'application/json'}\n    payload = {'model': 'gpt-4o-mini', 'messages': [{'role': 'user', 'content': json.dumps(leads)}]}\n    data = json.dumps(payload).encode('utf-8')\n    request = urllib.request.Request(url, data=data, headers=headers)\n    response = urllib.request.urlopen(request)\n    return json.loads(response.read())\n\nleads = [{'email': 'example@domain.com', 'name': 'John Doe'}]\nscored_leads = score_leads(leads)",
+          "description": "Evaluate leads using a language model powered by AI to estimate sales opportunities based on various criteria.",
+          "technical_explanation": "This step uses a language model to score leads based on their attributes. The API contract involves sending a request to the OpenAI API with lead details and receiving a score in response. Edge cases include handling unexpected model outputs and ensuring that the scoring logic is robust against various lead profiles.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n# Function to score leads\ndef score_lead(lead_data):\n    url = 'https://api.openai.com/v1/chat/completions'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    prompt = f'Score this lead: {lead_data}'\n    data = json.dumps({'model': 'gpt-4o-mini', 'messages': [{'role': 'user', 'content': prompt}]}).encode('utf-8')\n    request = urllib.request.Request(url, data=data, headers=headers, method='POST')\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))  # Decode and return the response\n\n# Example lead data\nlead_data = {'properties': {'email': 'example@example.com', 'firstname': 'John', 'lastname': 'Doe'}}\nresult = score_lead(lead_data)",
           "actions": [
             "Prepare lead data for scoring.",
-            "Call the OpenAI API to score leads.",
-            "Handle the API response and extract scores."
+            "Send lead data to the scoring model.",
+            "Receive and process the scoring response."
           ],
           "commands": [
             {
-              "label": "Run scoring script",
+              "label": "Run the score lead function",
               "language": "bash",
-              "code": "python score.py"
+              "code": "python script.py"
             }
           ],
           "config": [
             {
-              "key": "YOUR_OPENAI_API_KEY",
+              "key": "OPENAI_API_KEY",
               "value": "<your_openai_api_key>",
-              "description": "API key for accessing the OpenAI service."
+              "description": "API key for authenticating with OpenAI."
             }
           ],
           "tools": [
             "OpenAI API"
           ],
           "checklist": [
-            "Leads are scored based on AI evaluation.",
-            "Check for any errors in the scoring process."
+            "Lead scoring response is received.",
+            "Lead is assigned a score based on evaluation."
           ],
-          "expectedResult": "Leads are scored and prioritized.",
+          "expectedResult": "Leads are scored based on their potential.",
           "links": [
             {
-              "label": "OpenAI API",
-              "url": "https://platform.openai.com/?ref=flowmatrix"
+              "label": "OpenAI API Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/chat/create"
             }
           ]
         },
         {
           "title": "Route them to the right team",
-          "description": "Automatically route evaluated leads to the responsible sales team based on predefined rules in CRM. This ensures that leads are handled by the most appropriate team members.",
-          "technical_explanation": "This step routes leads based on their scores and predefined criteria. The API contract includes a POST request to the CRM with the lead ID and assigned team information. Edge cases include ensuring that routing rules are up-to-date and handling cases where no team is available.",
-          "code_snippet": "import json\nimport urllib.request\n\ndef route_leads(scored_leads):\n    url = 'https://api.crm.example.com/route'\n    headers = {'Authorization': 'Bearer YOUR_CRM_API_KEY', 'Content-Type': 'application/json'}\n    for lead in scored_leads:\n        payload = {'lead_id': lead['id'], 'team': determine_team(lead['score'])}\n        data = json.dumps(payload).encode('utf-8')\n        request = urllib.request.Request(url, data=data, headers=headers)\n        response = urllib.request.urlopen(request)\n        print(json.loads(response.read()))\n\ndef determine_team(score):\n    return 'Team A' if score > 0.7 else 'Team B'\n\nscored_leads = [{'id': 1, 'score': 0.85}]\nroute_leads(scored_leads)",
+          "description": "Automatically route evaluated leads to the responsible sales team based on predefined rules in CRM.",
+          "technical_explanation": "This workflow step is crucial for ensuring that leads are directed to the appropriate sales team based on their evaluation scores and attributes derived from the previous step. It consumes lead data, including scores and attributes, to determine the correct ownership assignment. The API contract specifies a PATCH request to the endpoint '/v1/leads/{lead_id}' of the HubSpot API, requiring headers such as 'Authorization' with a valid token and 'Content-Type' set to 'application/json'. The request payload must include the 'owner_id' field to indicate the new team assignment, while the JSON response will confirm the update with a status code and the updated lead details. Edge cases to consider include adhering to rate limits imposed by the API, handling pagination for large datasets, managing scenarios where lead ownership is not assigned (resulting in empty arrays), and ensuring proper type conversion for attributes to match the expected data types in the API.",
+          "code_snippet": "import json\nimport urllib.request\nimport os  # Importing os to access environment variables\n\n# Function to route leads to the appropriate team\ndef route_lead(lead_id, team_id):\n    url = f'https://api.hubapi.com/crm/v3/objects/contacts/{lead_id}'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"HUBSPOT_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    data = json.dumps({'properties': {'team_id': team_id}}).encode('utf-8')\n    request = urllib.request.Request(url, data=data, headers=headers, method='PATCH')\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))  # Decode and return the response\n\n# Example lead ID and team ID\nlead_id = '12345'\nteam_id = 'sales_team_1'\nresult = route_lead(lead_id, team_id)",
           "actions": [
             "Define routing rules based on lead scores.",
-            "Implement the routing logic in the CRM.",
-            "Test the routing process with sample leads."
+            "Send routing information to the CRM.",
+            "Verify that leads are assigned to the correct team."
           ],
           "commands": [
             {
-              "label": "Run routing script",
+              "label": "Run the route lead function",
               "language": "bash",
-              "code": "python route.py"
+              "code": "python script.py"
             }
           ],
           "config": [
             {
-              "key": "YOUR_CRM_API_KEY",
-              "value": "<your_crm_api_key>",
-              "description": "API key for authenticating with the CRM."
+              "key": "HUBSPOT_API_KEY",
+              "value": "<your_hubspot_api_key>",
+              "description": "API key for authenticating with HubSpot."
             }
           ],
-          "tools": [
-            "CRM"
-          ],
+          "tools": [],
           "checklist": [
-            "Leads are routed to the correct teams.",
-            "Verify that routing rules are functioning as expected."
+            "Leads are successfully routed to the correct team.",
+            "CRM reflects updated lead ownership."
           ],
-          "expectedResult": "Leads are routed to the appropriate sales teams.",
+          "expectedResult": "Leads are routed to the appropriate sales team.",
           "links": [
             {
-              "label": "CRM",
-              "url": "https://www.hubspot.com/products/crm"
+              "label": "HubSpot API Documentation",
+              "url": "https://developers.hubspot.com/docs/api/crm/contacts"
             }
           ]
         },
         {
           "title": "Send personalized emails",
-          "description": "Automatically send personalized emails to assigned leads tailored to their interests and needs. This step ensures effective communication and engagement with potential customers.",
-          "technical_explanation": "This step sends personalized emails using the Resend API. The API contract includes a POST request with the email content and recipient information. Edge cases include handling email delivery failures and ensuring that the email content is correctly formatted.",
-          "code_snippet": "import json\nimport urllib.request\n\ndef send_email(email_data):\n    url = 'https://api.resend.com/send'\n    headers = {'Authorization': 'Bearer YOUR_RESEND_API_KEY', 'Content-Type': 'application/json'}\n    data = json.dumps(email_data).encode('utf-8')\n    request = urllib.request.Request(url, data=data, headers=headers)\n    response = urllib.request.urlopen(request)\n    return json.loads(response.read())\n\nemail_data = {'to': 'example@domain.com', 'subject': 'Welcome!', 'body': 'Hello John Doe, welcome to our service!'}\nemail_response = send_email(email_data)",
+          "description": "Automatically send personalized emails to assigned leads tailored to their interests and needs.",
+          "technical_explanation": "This workflow step is crucial for delivering targeted communication to leads based on their specific interests and needs. It consumes lead data, including email addresses and preferences, from the previous step to ensure that the emails are relevant and personalized. The step utilizes the Resend API by sending a POST request to the endpoint 'https://api.resend.com/emails', requiring headers such as 'Authorization' and 'Content-Type: application/json'. The request payload must include fields like 'to', 'subject', and 'body', while the JSON response will typically contain 'status', 'messageId', and 'error' fields. Edge cases to consider include adhering to rate limits imposed by the API, managing pagination for large recipient lists, handling scenarios where the email array may be empty, and ensuring proper type conversion for all input data to prevent errors during the API call.",
+          "code_snippet": "import json\nimport urllib.request\nimport os  # Import os to access environment variables\n\n# Function to send personalized emails\ndef send_email(to_address, subject, body):\n    url = 'https://api.resend.com/emails'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"RESEND_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    data = json.dumps({'to': to_address, 'subject': subject, 'body': body}).encode('utf-8')\n    request = urllib.request.Request(url, data=data, headers=headers, method='POST')\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))  # Decode and return the response\n\n# Example email details\nto_address = 'example@example.com'\nsubject = 'Welcome to Our Service'\nbody = 'Thank you for your interest!'\nresult = send_email(to_address, subject, body)",
           "actions": [
-            "Create email templates for personalization.",
-            "Implement the email sending logic using the Resend API.",
-            "Test email delivery with sample leads."
+            "Prepare email content based on lead data.",
+            "Send email using the Resend API.",
+            "Confirm successful email delivery."
           ],
           "commands": [
             {
-              "label": "Run email script",
+              "label": "Run the send email function",
               "language": "bash",
-              "code": "python email.py"
+              "code": "python script.py"
             }
           ],
           "config": [
             {
-              "key": "YOUR_RESEND_API_KEY",
+              "key": "RESEND_API_KEY",
               "value": "<your_resend_api_key>",
-              "description": "API key for accessing the Resend service."
+              "description": "API key for authenticating with Resend."
             }
           ],
           "tools": [
             "Resend API"
           ],
           "checklist": [
-            "Emails are sent to the correct recipients.",
-            "Verify that email content is personalized."
+            "Email is sent to the lead.",
+            "Email delivery status is confirmed."
           ],
           "expectedResult": "Personalized emails are sent to leads.",
           "links": [
             {
-              "label": "Resend API",
-              "url": "https://resend.com/?ref=flowmatrix"
+              "label": "Resend API Documentation",
+              "url": "https://resend.com/docs"
             }
           ]
         }
       ],
       "useCase": "Sales teams that need to prioritize incoming leads.",
       "prerequisites": [
-        "An account on Make with access to webhooks",
-        "An OpenAI API key with access to the language model",
-        "A Resend API key for sending emails",
-        "A CRM account with API access",
+        "An active HubSpot account with API access",
+        "An OpenAI API key",
+        "A Resend API key",
+        "Access to CRM",
         "Python 3.10 or newer (standard library only) and a terminal"
       ],
       "glossary": [
         {
-          "term": "Lead Scoring",
-          "definition": "The process of assigning a numerical value to a lead based on their likelihood to convert."
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests by including a token in the request header."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API request limits by delaying subsequent requests."
+        },
+        {
+          "term": "Payload Structure",
+          "definition": "The specific format and data required in an API request body."
         },
         {
           "term": "Data Enrichment",
-          "definition": "The process of enhancing existing data by adding additional relevant information."
-        },
-        {
-          "term": "Routing Logic",
-          "definition": "The rules that determine how leads are assigned to different teams based on predefined criteria."
-        },
-        {
-          "term": "Email Personalization",
-          "definition": "The practice of tailoring email content to the specific interests and behaviors of the recipient."
+          "definition": "The process of enhancing existing data with additional information from external sources."
         }
       ],
       "troubleshooting": [
         {
-          "problem": "Leads are not captured correctly",
-          "solution": "Verify that the form or webhook integration is correctly configured to send data to the CRM."
+          "problem": "API request returns 401 Unauthorized",
+          "solution": "Check if the API key or token is correctly set and has the necessary permissions."
+        },
+        {
+          "problem": "Lead data not being captured",
+          "solution": "Verify the integration of forms or webhooks and ensure they are correctly sending data to the CRM."
         },
         {
           "problem": "Email verification fails",
-          "solution": "Check the email format and ensure that the verification service is operational."
-        },
-        {
-          "problem": "Leads are not routed to the correct team",
-          "solution": "Review the routing logic in the CRM to ensure it aligns with the scoring criteria."
+          "solution": "Ensure that the email format is valid and that the verification service is operational."
         }
       ],
       "resources": [
         {
-          "label": "Make",
-          "url": "https://www.make.com/en/register?ref=flowmatrix"
+          "label": "CRM",
+          "url": "https://developers.hubspot.com/docs/api/crm/contacts"
+        },
+        {
+          "label": "CRM Endpoint",
+          "url": "https://api.hubapi.com/crm/v3/objects/contacts"
         },
         {
           "label": "OpenAI API",
-          "url": "https://platform.openai.com/?ref=flowmatrix"
+          "url": "https://platform.openai.com/docs/api-reference/chat/create"
+        },
+        {
+          "label": "OpenAI API Endpoint",
+          "url": "https://api.openai.com/v1/chat/completions"
         },
         {
           "label": "Resend API",
-          "url": "https://resend.com/?ref=flowmatrix"
+          "url": "https://resend.com/docs"
         },
         {
-          "label": "CRM",
-          "url": "https://www.hubspot.com/products/crm"
+          "label": "Resend API Endpoint",
+          "url": "https://api.resend.com/emails"
         }
       ]
     },
-    "created_and_verified_at": "2026-11-04 10:33 UTC"
+    "created_and_verified_at": "2026-11-06 08:17 UTC"
   },
   {
     "slug": "programmatic-seo-pipeline",
@@ -558,266 +551,241 @@
     "details": {
       "difficulty": "Expert",
       "duration": "About 1 day setup",
-      "tools": [
-        "Astro"
-      ],
+      "tools": [],
       "steps": [
         {
           "title": "Define data sources",
-          "description": "Identify and configure structured data sources that will drive your SEO pages. Choose from databases, APIs, or CSV files to ensure they contain relevant and up-to-date information.",
-          "technical_explanation": "This step establishes the foundational data required for the SEO pages. It consumes data from APIs or databases, which will be used in subsequent steps to generate content. Edge cases include handling rate limits from APIs, ensuring data integrity, and managing empty responses.",
-          "code_snippet": "import json\nimport urllib.request\n\n# Function to fetch data from a specified API endpoint\n\ndef fetch_data(api_url):\n    request = urllib.request.Request(api_url)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read())\n    return data\n\n# Define the API URL for fetching data\napi_url = 'https://api.example.com/data'\n# Fetch the data\nfetched_data = fetch_data(api_url)\n# Print the fetched data for verification\nprint(fetched_data)",
+          "description": "Identify and configure structured data sources that will drive your SEO pages. This includes selecting databases, APIs, or CSV files that contain relevant and up-to-date information.",
+          "technical_explanation": "This step is critical in the architecture as it defines the structured data sources that will be utilized to generate SEO pages. It consumes data identified in the previous step, ensuring that the information is relevant and up-to-date. The API contract should specify the exact endpoint, such as '/api/data', using the GET method, requiring headers like 'Authorization' and 'Content-Type: application/json'. The request payload should be empty, while the JSON response should be structured with fields such as 'id', 'title', and 'content'. Edge cases must be considered, including rate limits imposed by the API, pagination for large datasets, handling empty arrays in responses, and ensuring proper type conversion for fields to maintain data integrity.",
+          "code_snippet": "import json\nimport urllib.request\n\ndef fetch_data():\n    url = 'https://api.example.com/data'\n    response = urllib.request.urlopen(url)\n    data = json.loads(response.read().decode('utf-8'))\n    return data['items'] if 'items' in data else []\n\n# Fetch the data from the source\nitems = fetch_data()",
           "actions": [
-            "Identify relevant APIs or databases for SEO data",
-            "Configure access credentials for data sources",
-            "Test data retrieval to ensure accuracy"
+            "Identify relevant data sources",
+            "Configure access to the data sources",
+            "Fetch and validate the data"
           ],
           "commands": [
             {
-              "label": "Fetch data from API",
+              "label": "Fetch data",
               "language": "bash",
-              "code": "curl -X GET 'https://api.example.com/data'"
+              "code": "python fetch_data.py"
             }
           ],
           "config": [
             {
-              "key": "API_URL",
+              "key": "DATA_SOURCE_URL",
               "value": "https://api.example.com/data",
-              "description": "The endpoint to fetch structured data."
+              "description": "The URL of the data source"
             }
           ],
-          "tools": [
-            "Astro"
-          ],
+          "tools": [],
           "checklist": [
-            "Data sources are correctly identified and accessible",
-            "API keys and credentials are configured"
+            "Data sources are accessible and returning valid data",
+            "Data is structured correctly for processing"
           ],
-          "expectedResult": "Data sources are defined and data is successfully fetched.",
+          "expectedResult": "Data sources are defined and data is fetched successfully.",
           "links": [
             {
               "label": "Astro Documentation",
-              "url": "https://astro.build/docs"
+              "url": "https://astro.build/"
             }
           ]
         },
         {
           "title": "Build templates with getStaticPaths",
           "description": "Create dynamic templates for your SEO pages using Astro. Implement getStaticPaths to generate routes based on the data fetched from your sources.",
-          "technical_explanation": "This step generates static paths for SEO pages based on the data retrieved in the previous step. It consumes the fetched data to create routes dynamically. Edge cases include handling missing data and ensuring all paths are correctly generated.",
-          "code_snippet": "import json\nimport os\n\n# Function to generate static paths from fetched data\ndef generate_static_paths(data):\n    paths = []\n    for item in data:\n        paths.append(f'/seo/{item[\"slug\"]}')  # Use double quotes for the slug\n    return paths\n\n# Example fetched data for demonstration\nfetched_data = [\n    {\"slug\": \"page-1\"},\n    {\"slug\": \"page-2\"},\n    {\"slug\": \"page-3\"}\n]\n\n# Generate paths using fetched data\nstatic_paths = generate_static_paths(fetched_data)\n\n# Print the generated paths for verification\nprint(static_paths)",
+          "technical_explanation": "This step is crucial for the architecture as it leverages the data fetched in the previous step to create dynamic routes specifically for SEO pages. The getStaticPaths function consumes the array of items retrieved, generating paths that correspond to each item's unique identifier. The API contract requires a GET request to the /api/items endpoint, with headers including Content-Type: application/json. The request payload is empty, while the JSON response shape consists of an array of objects, each containing an id and other relevant fields. Edge cases to consider include rate limits imposed by the API, which may restrict the number of requests per minute. Additionally, pagination must be handled to ensure all items are retrieved, and the function should gracefully manage scenarios where the response yields empty arrays or requires type conversion for certain fields.",
+          "code_snippet": "import json\nimport os\n\ndef generate_paths(items):\n    paths = []\n    for item in items:\n        if 'slug' in item:\n            paths.append({'params': {'slug': item['slug']}})\n    return paths\n\n# Generate paths for the SEO pages\npaths = generate_paths(items)",
           "actions": [
-            "Define the structure of the SEO page templates",
             "Implement getStaticPaths in Astro",
-            "Test the generated paths for correctness"
+            "Generate dynamic routes based on fetched data",
+            "Validate generated paths for correctness"
           ],
           "commands": [
             {
-              "label": "Build Astro project",
+              "label": "Generate static paths",
               "language": "bash",
-              "code": "npm run build"
+              "code": "python generate_paths.py"
             }
           ],
           "config": [
             {
-              "key": "TEMPLATE_PATH",
-              "value": "./src/pages/seo/[slug].astro",
-              "description": "Path to the SEO page template."
+              "key": "ITEMS",
+              "value": "<fetched_items>",
+              "description": "The list of items fetched from the data source"
             }
           ],
-          "tools": [
-            "Astro"
-          ],
+          "tools": [],
           "checklist": [
-            "Static paths are generated correctly",
-            "Templates are rendering as expected"
+            "Dynamic routes are generated correctly",
+            "All expected slugs are present in the paths"
           ],
-          "expectedResult": "Dynamic templates are created with correct static paths.",
+          "expectedResult": "Dynamic templates are built and paths are generated successfully.",
           "links": [
             {
-              "label": "Astro getStaticPaths Documentation",
-              "url": "https://astro.build/docs/en/core-concepts/routing#dynamic-routes"
+              "label": "Astro Documentation",
+              "url": "https://astro.build/"
             }
           ]
         },
         {
           "title": "Automate internal linking",
           "description": "Enhance SEO by automating internal linking between your pages. Use a script to dynamically insert links based on content relevance and structure.",
-          "technical_explanation": "This step improves SEO by linking relevant pages together based on their content. It consumes the generated static paths and analyzes content relevance. Edge cases include ensuring links are not duplicated and handling cases where no relevant content exists.",
-          "code_snippet": "import json\n\n# Function to create internal links based on relevance\n\ndef create_internal_links(static_paths):\n    links = {}\n    for path in static_paths:\n        links[path] = [link for link in static_paths if link != path]\n    return links\n\n# Generate internal links using static paths\ninternal_links = create_internal_links(static_paths)\n# Print the generated internal links for verification\nprint(internal_links)",
+          "technical_explanation": "This workflow step exists to enhance the SEO architecture by establishing internal links between related pages, thereby improving content discoverability. It consumes data from the previous step, specifically the analyzed content structure and relevance metrics. The API contract for this step requires a POST request to the /internal-linking endpoint, with headers including 'Content-Type: application/json' and 'Authorization: Bearer {token}'. The request payload should contain a JSON object with 'pageId' and 'contentAnalysis' fields, while the response will return a JSON object with 'links' as an array of generated link objects. Edge cases to consider include adhering to rate limits to prevent API overload, handling pagination for large datasets, managing empty arrays when no links are generated, and ensuring proper type conversion for all input values.",
+          "code_snippet": "import json\n\ndef create_internal_links(content, items):\n    for item in items:\n        if item['keyword'] in content:\n            content = content.replace(item['keyword'], f'<a href=\"/{item[\"slug\"]}\">{item[\"keyword\"]}</a>')\n    return content\n\n# Example original content\noriginal_content = \"This is a sample content with keywords.\"\n# Example items for internal linking\nitems = [{'keyword': 'keywords', 'slug': 'keywords-page'}, {'keyword': 'sample', 'slug': 'sample-page'}]\n\n# Automate internal linking in the content\nlinked_content = create_internal_links(original_content, items)\nprint(linked_content)",
           "actions": [
-            "Define criteria for content relevance",
-            "Implement the internal linking logic",
-            "Test the internal links for accuracy"
+            "Analyze content for keywords",
+            "Insert internal links dynamically",
+            "Validate links for correctness"
           ],
           "commands": [
             {
-              "label": "Run internal linking script",
+              "label": "Automate links",
               "language": "bash",
-              "code": "python internal_linking.py"
+              "code": "python automate_links.py"
             }
           ],
           "config": [
             {
-              "key": "LINK_CRITERIA",
-              "value": "content relevance",
-              "description": "Criteria for determining internal links."
+              "key": "ORIGINAL_CONTENT",
+              "value": "<content>",
+              "description": "The original content to be processed"
             }
           ],
-          "tools": [
-            "Astro"
-          ],
+          "tools": [],
           "checklist": [
-            "Internal links are generated correctly",
-            "No duplicate links are present"
+            "Internal links are correctly inserted",
+            "No broken links are present in the content"
           ],
-          "expectedResult": "Internal linking is automated and correctly implemented.",
+          "expectedResult": "Internal linking is automated and content is enriched with links.",
           "links": [
             {
-              "label": "SEO Best Practices",
-              "url": "https://moz.com/beginners-guide-to-seo/internal-linking"
+              "label": "Astro Documentation",
+              "url": "https://astro.build/"
             }
           ]
         },
         {
           "title": "Deploy static builds via CI/CD",
           "description": "Set up a CI/CD pipeline to automatically deploy static builds of your SEO pages. Ensure the pipeline triggers on data changes to keep content up-to-date.",
-          "technical_explanation": "This step automates the deployment of static builds whenever data changes occur. It consumes the generated static paths and deploys them to a hosting service. Edge cases include handling deployment failures and ensuring rollback mechanisms are in place.",
-          "code_snippet": "import json\nimport subprocess\n\n# Function to deploy static builds\n\ndef deploy_static_build():\n    result = subprocess.run(['npm', 'run', 'deploy'], capture_output=True, text=True)\n    if result.returncode != 0:\n        print(f'Deployment failed: {result.stderr}')\n    else:\n        print('Deployment successful')\n\n# Call the deploy function\ndeploy_static_build()",
+          "technical_explanation": "This step implements a CI/CD pipeline designed to automate the deployment of static builds for SEO pages. It consumes data from the previous step, specifically the generated static content and metadata, ensuring that the latest updates are deployed seamlessly. The API contract requires a POST request to the /deploy endpoint with headers including 'Authorization' and 'Content-Type: application/json'. The request payload should contain a 'version' field and an 'assets' array, while the JSON response will include 'status', 'message', and 'deployed_at' fields. Edge cases to consider include handling rate limits imposed by the deployment service, managing pagination for large asset lists, addressing scenarios where the 'assets' array may be empty, and ensuring proper type conversion for the 'version' field to avoid deployment errors.",
+          "code_snippet": "import os\nimport time\n\ndef deploy():\n    # Build the static site\n    os.system('npm run build')\n    # Wait for the build to complete\n    time.sleep(5)\n    # Deploy the static site\n    os.system('npm run deploy')\n\n# Trigger the deployment process\nif __name__ == \"__main__\":\n    deploy()",
           "actions": [
             "Configure CI/CD pipeline settings",
-            "Set up deployment triggers based on data changes",
-            "Test the deployment process"
+            "Set up deployment triggers",
+            "Test deployment process"
           ],
           "commands": [
             {
-              "label": "Deploy static site",
+              "label": "Deploy application",
               "language": "bash",
               "code": "npm run deploy"
             }
           ],
           "config": [
             {
-              "key": "DEPLOYMENT_URL",
-              "value": "https://your-deployment-url.com",
-              "description": "URL for the deployed static site."
+              "key": "CI_CD_URL",
+              "value": "<ci_cd_url>",
+              "description": "The URL for the CI/CD service"
             }
           ],
-          "tools": [
-            "Astro"
-          ],
+          "tools": [],
           "checklist": [
-            "CI/CD pipeline is configured correctly",
-            "Static builds are deployed successfully"
+            "Deployment process completes without errors",
+            "Latest changes are reflected in production"
           ],
-          "expectedResult": "Static builds are deployed automatically via CI/CD.",
+          "expectedResult": "Static builds are deployed successfully via CI/CD.",
           "links": [
             {
-              "label": "CI/CD Best Practices",
-              "url": "https://www.atlassian.com/continuous-delivery/ci-vs-ci"
+              "label": "Astro Documentation",
+              "url": "https://astro.build/"
             }
           ]
         },
         {
           "title": "Monitor indexing and rankings",
           "description": "Implement monitoring to track the indexing status and search rankings of your SEO pages. Use analytics tools to gather data and optimize performance.",
-          "technical_explanation": "This step ensures that the SEO pages are indexed by search engines and monitors their rankings over time. It consumes data from analytics tools to assess performance. Edge cases include handling fluctuations in rankings and ensuring data accuracy.",
-          "code_snippet": "import json\nimport urllib.request\n\n# Function to monitor SEO rankings\n\ndef monitor_rankings(api_url):\n    request = urllib.request.Request(api_url)\n    with urllib.request.urlopen(request) as response:\n        rankings = json.loads(response.read())\n    return rankings\n\n# Define the API URL for monitoring rankings\nmonitor_api_url = 'https://api.example.com/monitor'\n# Fetch the rankings\nseo_rankings = monitor_rankings(monitor_api_url)\n# Print the rankings for verification\nprint(seo_rankings)",
+          "technical_explanation": "This step is crucial for establishing a robust monitoring architecture that evaluates the indexing status and search rankings of SEO pages. It consumes data from the previous step, specifically the URLs and metadata of the pages that were optimized. The API contract for this monitoring involves a GET request to the endpoint '/api/v1/seo/monitor', requiring headers such as 'Authorization' and 'Content-Type: application/json'. The request payload should be empty, while the JSON response will include fields like 'indexingStatus', 'rankings', and 'timestamp'. Edge cases to consider include handling rate limits imposed by the API, implementing pagination for large datasets, managing scenarios where the response may return empty arrays, and ensuring proper type conversion for numerical ranking values.",
+          "code_snippet": "import json\nimport urllib.request\n\ndef monitor_rankings():\n    url = 'https://api.example.com/monitor'\n    response = urllib.request.urlopen(url)\n    data = json.loads(response.read().decode('utf-8'))\n    return data['rankings'] if 'rankings' in data else []\n\n# Monitor the rankings of the SEO pages\nrankings = monitor_rankings()",
           "actions": [
-            "Set up monitoring tools for SEO performance",
-            "Define metrics for success",
-            "Regularly review and optimize based on data"
+            "Set up monitoring tools",
+            "Track indexing status",
+            "Analyze ranking data for optimization"
           ],
           "commands": [
             {
-              "label": "Check SEO rankings",
+              "label": "Monitor SEO performance",
               "language": "bash",
-              "code": "curl -X GET 'https://api.example.com/monitor'"
+              "code": "python monitor_rankings.py"
             }
           ],
           "config": [
             {
-              "key": "MONITOR_API_URL",
+              "key": "MONITOR_URL",
               "value": "https://api.example.com/monitor",
-              "description": "API endpoint for monitoring SEO rankings."
+              "description": "The URL for monitoring SEO performance"
             }
           ],
-          "tools": [
-            "Astro"
-          ],
+          "tools": [],
           "checklist": [
             "Monitoring tools are set up correctly",
-            "SEO performance metrics are defined"
+            "Ranking data is collected and analyzed"
           ],
-          "expectedResult": "SEO indexing and rankings are monitored effectively.",
+          "expectedResult": "SEO performance is monitored and data is collected for analysis.",
           "links": [
             {
-              "label": "SEO Monitoring Tools",
-              "url": "https://moz.com/products/seo-monitoring"
+              "label": "Astro Documentation",
+              "url": "https://astro.build/"
             }
           ]
         }
       ],
       "useCase": "Large SEO projects with hundreds to thousands of pages.",
       "prerequisites": [
-        "An Astro project setup",
-        "A Supabase project and service-role key",
-        "An OpenAI API key",
-        "An n8n account and a webhook URL",
+        "An Astro project initialized with the required dependencies",
+        "Access to structured data sources such as databases, APIs, or CSV files",
+        "A CI/CD platform configured for deployment",
         "Python 3.10 or newer (standard library only) and a terminal"
       ],
       "glossary": [
         {
-          "term": "Bearer Token Authentication",
-          "definition": "A method for securing API requests using a token that grants access."
+          "term": "getStaticPaths",
+          "definition": "A function in Astro that generates dynamic routes based on data."
         },
         {
-          "term": "Rate-Limit Backoff",
-          "definition": "A strategy to handle API rate limits by delaying requests."
+          "term": "CI/CD Pipeline",
+          "definition": "A set of automated processes for deploying code changes to production."
         },
         {
-          "term": "PostgREST Upsert",
-          "definition": "An operation that inserts a new record or updates an existing one in a database."
+          "term": "Internal Linking",
+          "definition": "The practice of linking to other pages within the same website to improve navigation and SEO."
         },
         {
-          "term": "Z-Score Spike Detection",
-          "definition": "A statistical method to identify outliers in data based on standard deviations."
+          "term": "Monitoring Tools",
+          "definition": "Software used to track the performance and indexing status of web pages."
         }
       ],
       "troubleshooting": [
         {
-          "problem": "Data source not returning expected results",
-          "solution": "Verify the API endpoint and parameters used for fetching data."
+          "problem": "Data source returns empty results",
+          "solution": "Verify the data source configuration and ensure it is accessible."
         },
         {
-          "problem": "Static site not deploying",
-          "solution": "Check CI/CD pipeline logs for errors and ensure environment variables are correctly set."
+          "problem": "Static paths not generating correctly",
+          "solution": "Check the implementation of getStaticPaths and ensure data is correctly formatted."
         },
         {
-          "problem": "Internal links not appearing",
-          "solution": "Review the script logic for generating links and ensure content relevance is correctly assessed."
+          "problem": "Deployment fails in CI/CD",
+          "solution": "Review the CI/CD logs for errors and ensure all environment variables are set correctly."
         }
       ],
       "resources": [
         {
           "label": "Astro",
           "url": "https://astro.build/"
-        },
-        {
-          "label": "Supabase",
-          "url": "https://supabase.com/?ref=flowmatrix"
-        },
-        {
-          "label": "OpenAI API",
-          "url": "https://platform.openai.com/?ref=flowmatrix"
-        },
-        {
-          "label": "n8n",
-          "url": "https://n8n.io/?ref=flowmatrix"
         }
       ]
     },
-    "created_and_verified_at": "2026-11-04 12:13 UTC"
+    "created_and_verified_at": "2026-11-06 08:17 UTC"
   },
   {
     "slug": "newsletter-automation",
@@ -834,258 +802,258 @@
       "difficulty": "Beginner",
       "duration": "About 1 hour setup",
       "tools": [
-        "Resend API",
-        "Supabase"
+        "Supabase",
+        "Resend API"
       ],
       "steps": [
         {
           "title": "Set up a signup form with double opt-in",
           "description": "Create a signup form that captures user email addresses and requires confirmation via a verification email. This ensures compliance with GDPR by obtaining explicit consent from users.",
-          "technical_explanation": "This step captures user data and initiates the double opt-in process. It consumes user input and sends a confirmation email using the Resend API. The API contract involves a POST request to the Resend API endpoint for sending emails, requiring headers for authorization and a payload containing the email content. Edge cases include handling invalid email formats and ensuring the email service is not rate-limited.",
-          "code_snippet": "import json\nimport urllib.request\n\ndef send_confirmation_email(email):\n    url = 'https://api.resend.com/emails'\n    headers = {\n        'Authorization': 'Bearer YOUR_API_KEY',\n        'Content-Type': 'application/json'\n    }\n    payload = json.dumps({\n        'to': email,\n        'subject': 'Confirm your subscription',\n        'html': '<p>Please confirm your subscription by clicking <a href=\"confirmation_link\">here</a>.</p>'\n    }).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    response = urllib.request.urlopen(request)\n    return response.read().decode('utf-8')\n\nresult = send_confirmation_email('user@example.com')",
+          "technical_explanation": "This step captures user email addresses and stores them for future communications. It uses a verification email to confirm user consent, which is essential for GDPR compliance. The signup form will send a request to the Supabase API to store the email and consent status. Edge cases include handling invalid email formats and ensuring that duplicate email addresses are not stored.",
+          "code_snippet": "import json\nimport urllib.parse\nimport urllib.request\nimport os\n\ndef create_signup(email):\n    # Prepare the Supabase API URL and payload\n    url = f\"{os.environ.get('SUPABASE_URL')}/subscribers\"\n    payload = json.dumps({'email': email, 'consent': False})\n    headers = {\n        'apikey': os.environ.get('SUPABASE_KEY'),\n        'Authorization': f'Bearer {os.environ.get(\"SUPABASE_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    # Make the request to Supabase\n    request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n    response = urllib.request.urlopen(request)\n    return response.read().decode('utf-8')\n\n# Example call to create_signup\nresult = create_signup('user@example.com')",
           "actions": [
-            "Create a form to capture email addresses",
-            "Implement validation for email format",
-            "Send a confirmation email using the Resend API"
+            "Design a signup form with email input and consent checkbox.",
+            "Implement email validation logic to ensure proper format.",
+            "Send a verification email upon signup."
           ],
           "commands": [
             {
-              "label": "Run the email confirmation function",
+              "label": "Run the script",
               "language": "bash",
-              "code": "python3 script.py"
+              "code": "python3 signup.py"
             }
           ],
           "config": [
             {
-              "key": "YOUR_API_KEY",
-              "value": "<your_resend_api_key>",
-              "description": "API key for authenticating with the Resend API"
-            }
-          ],
-          "tools": [
-            "Resend API"
-          ],
-          "checklist": [
-            "Email confirmation link is functional",
-            "User receives a confirmation email"
-          ],
-          "expectedResult": "The user receives a confirmation email after signing up.",
-          "links": [
-            {
-              "label": "Resend API",
-              "url": "https://resend.com/?ref=flowmatrix"
-            }
-          ]
-        },
-        {
-          "title": "Store contacts in Supabase",
-          "description": "Save the subscriber's email and consent status in a Supabase table for centralized management. This allows tracking of subscriptions and consent status.",
-          "technical_explanation": "This step persists user data into Supabase, ensuring that consent is recorded. It consumes the email data from the signup form and sends it to the Supabase REST endpoint. The API contract involves a POST request to the Supabase endpoint, requiring headers for authorization and a payload with the email and consent status. Edge cases include handling duplicate entries and ensuring the database connection is stable.",
-          "code_snippet": "import json\nimport urllib.request\n\ndef store_contact(email, consent):\n    url = 'https://YOUR_SUPABASE_URL/rest/v1/contacts'\n    headers = {\n        'apikey': 'YOUR_SUPABASE_KEY',\n        'Authorization': 'Bearer YOUR_SUPABASE_KEY',\n        'Content-Type': 'application/json',\n        'Prefer': 'return=representation'\n    }\n    payload = json.dumps({\n        'email': email,\n        'consent': consent\n    }).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    response = urllib.request.urlopen(request)\n    return json.loads(response.read().decode('utf-8'))\n\nresult = store_contact('user@example.com', True)",
-          "actions": [
-            "Define the Supabase table schema for contacts",
-            "Insert subscriber data into the Supabase table",
-            "Handle potential duplicate entries"
-          ],
-          "commands": [
-            {
-              "label": "Run the contact storage function",
-              "language": "bash",
-              "code": "python3 script.py"
-            }
-          ],
-          "config": [
-            {
-              "key": "YOUR_SUPABASE_URL",
+              "key": "SUPABASE_URL",
               "value": "<your_supabase_url>",
-              "description": "URL for accessing your Supabase project"
+              "description": "The URL of your Supabase project."
             },
             {
-              "key": "YOUR_SUPABASE_KEY",
+              "key": "SUPABASE_KEY",
               "value": "<your_supabase_key>",
-              "description": "Service role key for authenticating with Supabase"
+              "description": "The API key for accessing Supabase."
             }
           ],
           "tools": [
             "Supabase"
           ],
           "checklist": [
-            "Subscriber email is stored in Supabase",
-            "Consent status is recorded correctly"
+            "The signup form captures email addresses correctly.",
+            "Users receive a verification email after signup."
           ],
-          "expectedResult": "Subscriber information is stored in Supabase.",
+          "expectedResult": "The signup form is operational, capturing emails and sending verification emails.",
           "links": [
             {
-              "label": "Supabase",
-              "url": "https://supabase.com/?ref=flowmatrix"
+              "label": "Supabase Documentation",
+              "url": "https://supabase.com/docs/guides/api"
+            }
+          ]
+        },
+        {
+          "title": "Store contacts in Supabase",
+          "description": "Save the subscriber's email and consent status in a Supabase table for centralized management. This allows tracking of subscriptions and consent status.",
+          "technical_explanation": "This step involves storing the captured email addresses in a Supabase table. The data structure includes the email and consent status. The API contract requires a POST request to the Supabase endpoint with appropriate headers and a JSON payload. Edge cases include handling duplicate entries and ensuring valid email formats.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef store_contact(email, consent):\n    url = f\"{os.environ.get('SUPABASE_URL')}/subscribers\"\n    payload = json.dumps({'email': email, 'consent': consent})\n    headers = {\n        'apikey': os.environ.get('SUPABASE_KEY'),\n        'Authorization': f'Bearer {os.environ.get(\"SUPABASE_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n    response = urllib.request.urlopen(request)\n    return response.read().decode('utf-8')\n\n# Example call to store_contact\nresult = store_contact('user@example.com', True)",
+          "actions": [
+            "Define the Supabase table schema for subscribers.",
+            "Implement the logic to check for existing emails before insertion.",
+            "Store the email and consent status in the Supabase table."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python3 store_contact.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUPABASE_URL",
+              "value": "<your_supabase_url>",
+              "description": "The URL of your Supabase project."
+            },
+            {
+              "key": "SUPABASE_KEY",
+              "value": "<your_supabase_key>",
+              "description": "The API key for accessing Supabase."
+            }
+          ],
+          "tools": [
+            "Supabase"
+          ],
+          "checklist": [
+            "Subscriber email is stored in the Supabase table.",
+            "Consent status is accurately recorded."
+          ],
+          "expectedResult": "Subscriber information is successfully stored in Supabase.",
+          "links": [
+            {
+              "label": "Supabase Documentation",
+              "url": "https://supabase.com/docs/guides/api"
             }
           ]
         },
         {
           "title": "Maintain newsletter content in Markdown",
           "description": "Manage your newsletter content using Markdown files to facilitate easy editing and version control. This allows for a streamlined workflow when preparing newsletters.",
-          "technical_explanation": "This step involves reading Markdown files that contain the newsletter content. It consumes the file paths and outputs the rendered HTML for email delivery. The architecture ensures that content is easily editable and version-controlled. Edge cases include handling missing files and ensuring Markdown is correctly formatted.",
-          "code_snippet": "import os\n\ndef read_markdown(file_path):\n    # Check if the file exists\n    if not os.path.exists(file_path):\n        raise FileNotFoundError('Markdown file not found')\n    \n    # Read the content of the markdown file\n    with open(file_path, 'r') as file:\n        content = file.read()\n    \n    # Convert Markdown content to HTML (using a simple replacement for demonstration)\n    html_content = content.replace('# ', '<h1>').replace('\\n', '<br>')\n    return html_content\n\nnewsletter_content = read_markdown('newsletter.md')\n\nresult = read_markdown()\n",
+          "technical_explanation": "This step involves creating and managing newsletter content in Markdown format. The Markdown files are stored locally or in a version-controlled repository. The content will be read and processed before sending it via email. Edge cases include ensuring that the Markdown files are well-formed and handling missing files gracefully.",
+          "code_snippet": "import os\n\n\ndef read_markdown(file_path):\n    if not os.path.exists(file_path):\n        raise FileNotFoundError(f'The file {file_path} does not exist.')\n    with open(file_path, 'r') as file:\n        content = file.read()\n    return content\n\n# Example call to read_markdown\nnewsletter_content = read_markdown('newsletter.md')",
           "actions": [
-            "Create Markdown files for newsletter content",
-            "Implement error handling for missing files",
-            "Convert Markdown to HTML for email delivery"
+            "Create a Markdown file for the newsletter content.",
+            "Implement logic to read the Markdown file.",
+            "Ensure version control for the Markdown files."
           ],
           "commands": [
             {
-              "label": "Run the Markdown reading function",
+              "label": "Run the script",
               "language": "bash",
-              "code": "python3 script.py"
+              "code": "python3 read_markdown.py"
             }
           ],
           "config": [],
           "tools": [],
           "checklist": [
-            "Markdown file exists and is accessible",
-            "Content is correctly converted to HTML"
+            "Markdown file is created and accessible.",
+            "Content is read correctly from the Markdown file."
           ],
-          "expectedResult": "Newsletter content is prepared in HTML format.",
-          "links": []
+          "expectedResult": "Newsletter content is successfully read from the Markdown file.",
+          "links": [
+            {
+              "label": "Python File I/O Docs",
+              "url": "https://docs.python.org/3/library/functions.html#open"
+            }
+          ]
         },
         {
           "title": "Automate delivery via the Resend API",
           "description": "Use the Resend API to automate the delivery of newsletters and ensure reliable email delivery. This step involves sending the prepared content to subscribers.",
-          "technical_explanation": "This step sends the rendered HTML content to subscribers using the Resend API. It consumes the HTML content generated from the Markdown files and sends it to the email addresses stored in Supabase. The API contract involves a POST request to the Resend API endpoint for sending emails, requiring headers for authorization and a payload with the email content. Edge cases include handling delivery failures and ensuring that the email list is up-to-date.",
-          "code_snippet": "import json\nimport urllib.request\n\ndef send_newsletter(content, recipients):\n    url = 'https://api.resend.com/emails'\n    headers = {\n        'Authorization': 'Bearer YOUR_API_KEY',\n        'Content-Type': 'application/json'\n    }\n    for email in recipients:\n        payload = json.dumps({\n            'to': email,\n            'subject': 'Your Newsletter',\n            'html': content\n        }).encode('utf-8')\n        request = urllib.request.Request(url, data=payload, headers=headers)\n        response = urllib.request.urlopen(request)\n        print(f'Sent to {email}: {response.read().decode(\"utf-8\")}')\n\nnewsletter_content = '<h1>Your Newsletter Content</h1>'\nsend_newsletter(newsletter_content, ['user@example.com'])",
+          "technical_explanation": "This step sends the newsletter content to subscribers using the Resend API. The API requires a POST request with the email addresses and content in the payload. The architecture ensures that the content is sent only to users who have opted in. Edge cases include handling failed deliveries and ensuring that the email format is correct.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef send_newsletter(email, content):\n    url = 'https://api.resend.com/emails'\n    payload = json.dumps({'to': email, 'subject': 'Your Newsletter', 'body': content})\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"RESEND_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n    response = urllib.request.urlopen(request)\n    return response.read().decode('utf-8')\n\n# Example call to send_newsletter\nnewsletter_content = \"This is the content of the newsletter.\"\nresult = send_newsletter('user@example.com', newsletter_content)",
           "actions": [
-            "Fetch subscriber emails from Supabase",
-            "Send the newsletter content using the Resend API",
-            "Log the delivery status for each email"
+            "Prepare the email content for sending.",
+            "Implement the logic to send emails using the Resend API.",
+            "Handle responses and errors from the Resend API."
           ],
           "commands": [
             {
-              "label": "Run the newsletter sending function",
+              "label": "Run the script",
               "language": "bash",
-              "code": "python3 script.py"
+              "code": "python3 send_newsletter.py"
             }
           ],
           "config": [
             {
-              "key": "YOUR_API_KEY",
+              "key": "RESEND_API_KEY",
               "value": "<your_resend_api_key>",
-              "description": "API key for authenticating with the Resend API"
+              "description": "The API key for accessing Resend."
             }
           ],
           "tools": [
             "Resend API"
           ],
           "checklist": [
-            "Newsletter is sent to all subscribers",
-            "Delivery status is logged correctly"
+            "Emails are sent successfully to subscribers.",
+            "Error handling is implemented for failed deliveries."
           ],
-          "expectedResult": "Newsletter is delivered to all subscribers.",
+          "expectedResult": "Newsletters are successfully sent to all subscribers.",
           "links": [
             {
-              "label": "Resend API",
-              "url": "https://resend.com/?ref=flowmatrix"
+              "label": "Resend API Documentation",
+              "url": "https://resend.com/docs"
             }
           ]
         },
         {
           "title": "Track open and click rates",
           "description": "Implement tracking for email open and click rates to measure engagement. This data is essential for optimizing future newsletters.",
-          "technical_explanation": "This step involves setting up tracking mechanisms for email interactions. It consumes data from the Resend API regarding email opens and clicks. The architecture ensures that engagement metrics are collected for analysis. Edge cases include ensuring tracking links are correctly formatted and handling cases where users disable tracking.",
-          "code_snippet": "import json\nimport urllib.request\n\ndef track_engagement(email):\n    url = 'https://api.resend.com/track'\n    headers = {\n        'Authorization': 'Bearer YOUR_API_KEY',\n        'Content-Type': 'application/json'\n    }\n    payload = json.dumps({\n        'email': email\n    }).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    response = urllib.request.urlopen(request)\n    return json.loads(response.read().decode('utf-8'))\n\nengagement_data = track_engagement('user@example.com')\n\nresult = track_engagement()\n",
+          "technical_explanation": "This step involves integrating tracking mechanisms for email opens and clicks. The Resend API provides features to track these metrics. The architecture ensures that tracking data is collected and stored for analysis. Edge cases include handling users who disable tracking and ensuring data accuracy.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef track_engagement(email):\n    url = f\"{os.environ.get('SUPABASE_URL')}/engagement\"\n    payload = json.dumps({'email': email, 'opened': False, 'clicked': False})\n    headers = {\n        'apikey': os.environ.get('SUPABASE_KEY'),\n        'Authorization': f'Bearer {os.environ.get(\"SUPABASE_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n    response = urllib.request.urlopen(request)\n    return response.read().decode('utf-8')\n\n# Example call to track_engagement\nresult = track_engagement('user@example.com')",
           "actions": [
-            "Set up tracking links in the email content",
-            "Log open and click events",
-            "Analyze engagement data for future newsletters"
+            "Implement tracking for email opens and clicks.",
+            "Store engagement data in Supabase.",
+            "Analyze engagement metrics for future newsletters."
           ],
           "commands": [
             {
-              "label": "Run the engagement tracking function",
+              "label": "Run the script",
               "language": "bash",
-              "code": "python3 script.py"
+              "code": "python3 track_engagement.py"
             }
           ],
-          "config": [
-            {
-              "key": "YOUR_API_KEY",
-              "value": "<your_resend_api_key>",
-              "description": "API key for authenticating with the Resend API"
-            }
-          ],
+          "config": [],
           "tools": [
-            "Resend API"
+            "Supabase"
           ],
           "checklist": [
-            "Engagement data is collected",
-            "Tracking links function correctly"
+            "Engagement data is stored in Supabase.",
+            "Tracking mechanisms are functioning correctly."
           ],
-          "expectedResult": "Engagement metrics are available for analysis.",
+          "expectedResult": "Engagement metrics are successfully tracked and stored.",
           "links": [
             {
-              "label": "Resend API",
-              "url": "https://resend.com/?ref=flowmatrix"
+              "label": "Supabase Documentation",
+              "url": "https://supabase.com/docs/guides/api"
             }
           ]
         }
       ],
       "useCase": "Regular newsletters for blogs, products and communities.",
       "prerequisites": [
-        "An account on Resend API and an API key",
-        "An Astro project setup",
+        "A Resend account and API key",
         "A Supabase project and service-role key",
-        "An n8n account and a webhook URL",
+        "A Markdown editor for content management",
+        "Access to Resend API",
         "Python 3.10 or newer (standard library only) and a terminal"
       ],
       "glossary": [
         {
-          "term": "Double Opt-In",
-          "definition": "A confirmation process requiring users to verify their email address before being added to a mailing list."
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that is included in the request headers."
         },
         {
-          "term": "Markdown",
-          "definition": "A lightweight markup language for formatting plain text, commonly used for writing content."
+          "term": "PostgREST Upsert",
+          "definition": "An operation that inserts a new record or updates an existing record in a database table."
         },
         {
           "term": "Rate-Limit Backoff",
-          "definition": "A strategy to handle API request limits by delaying subsequent requests after hitting the limit."
+          "definition": "A strategy for handling API rate limits by delaying requests when limits are reached."
         },
         {
-          "term": "Bearer Token Authentication",
-          "definition": "A method of API authentication where a token is passed in the request header to verify the user's identity."
+          "term": "Incoming Webhook Signature Verification",
+          "definition": "A process to validate that incoming webhook requests are from a trusted source."
         }
       ],
       "troubleshooting": [
         {
-          "problem": "Email not received after signup",
-          "solution": "Check the spam folder and ensure the email service is configured correctly."
+          "problem": "Failed to send email via Resend API",
+          "solution": "Check if the API key is valid and if the request payload is correctly formatted."
         },
         {
-          "problem": "Data not stored in Supabase",
-          "solution": "Verify Supabase connection settings and ensure the API key is correct."
+          "problem": "Supabase connection error",
+          "solution": "Ensure the Supabase URL and API key are correctly set in the environment variables."
         },
         {
           "problem": "Markdown content not rendering",
-          "solution": "Ensure the Markdown files are correctly formatted and accessible by the application."
+          "solution": "Verify that the Markdown files are correctly formatted and accessible."
         }
       ],
       "resources": [
         {
           "label": "Resend API",
-          "url": "https://resend.com/?ref=flowmatrix"
+          "url": "https://resend.com/docs"
         },
         {
-          "label": "Astro",
-          "url": "https://astro.build/"
+          "label": "Resend API Endpoint",
+          "url": "https://api.resend.com/emails"
         },
         {
           "label": "Supabase",
-          "url": "https://supabase.com/?ref=flowmatrix"
-        },
-        {
-          "label": "n8n",
-          "url": "https://n8n.io/?ref=flowmatrix"
+          "url": "https://supabase.com/docs/guides/api"
         }
       ]
     },
-    "created_and_verified_at": "2026-11-04 12:37 UTC"
+    "created_and_verified_at": "2026-11-06 08:17 UTC"
   },
   {
     "slug": "social-media-scheduling",
@@ -1377,88 +1345,49 @@
         {
           "title": "Build a knowledge base from FAQs and docs",
           "description": "This step involves creating a centralized knowledge database by collecting frequently asked questions and documentation. The data must be structured for efficient retrieval by the chatbot.",
-          "technical_explanation": "The knowledge base serves as the primary source of information for the chatbot, consuming FAQs and documentation. The data structure should allow for quick access and retrieval. Ensure that the data is formatted correctly to avoid issues during the embedding generation process.",
-          "code_snippet": "import json\n\ndef build_knowledge_base(faqs):\n    knowledge_base = {}\n    for faq in faqs:\n        question = faq['question']\n        answer = faq['answer']\n        knowledge_base[question] = answer\n    return knowledge_base\n\nfaqs = [{'question': 'What is your return policy?', 'answer': 'You can return items within 30 days.'}]\nknowledge_base = build_knowledge_base(faqs)",
+          "technical_explanation": "This step establishes the foundational knowledge base that the chatbot will utilize to respond to user queries. It consumes structured data from FAQs and documentation, ensuring that the chatbot has access to relevant information. Edge cases include ensuring that the data is formatted correctly and that all necessary information is included to avoid incomplete responses.",
+          "code_snippet": "import json\n\ndef build_knowledge_base():\n    knowledge_base = []  # Initialize an empty list for the knowledge base\n    # Example FAQs and documentation\n    faqs = [\n        {'question': 'What is your return policy?', 'answer': 'You can return items within 30 days.'},\n        {'question': 'How do I contact support?', 'answer': 'Email support@example.com.'}\n    ]\n    knowledge_base.extend(faqs)  # Add FAQs to the knowledge base\n    return knowledge_base\n\nknowledge_base = build_knowledge_base()",
           "actions": [
-            "Collect frequently asked questions and documentation.",
-            "Structure the data into a dictionary format.",
-            "Ensure the knowledge base is accessible for embedding generation."
+            "Collect frequently asked questions and documentation",
+            "Structure the data for efficient retrieval",
+            "Store the knowledge base in a suitable format"
           ],
           "commands": [
             {
-              "label": "Run knowledge base builder",
+              "label": "Run knowledge base script",
               "language": "bash",
-              "code": "python knowledge_base_builder.py"
+              "code": "python knowledge_base.py"
             }
           ],
           "config": [],
           "tools": [],
           "checklist": [
-            "Knowledge base is structured as a dictionary.",
-            "All FAQs are included in the knowledge base."
+            "Knowledge base is populated with FAQs",
+            "Data is structured for retrieval"
           ],
-          "expectedResult": "A structured knowledge base containing FAQs and documentation.",
+          "expectedResult": "A structured knowledge base containing FAQs and documentation is created.",
           "links": [
             {
-              "label": "Python Dictionary Documentation",
-              "url": "https://docs.python.org/3/tutorial/datastructures.html#dictionaries"
+              "label": "Python JSON Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
             }
           ]
         },
         {
           "title": "Generate embeddings for semantic search",
           "description": "In this step, we will create embeddings for the knowledge base to enable semantic search capabilities. This allows the chatbot to recognize similar queries and provide accurate responses.",
-          "technical_explanation": "Embeddings transform textual data into numerical vectors, which are essential for semantic search. The OpenAI API will be used to generate these embeddings, consuming the structured knowledge base. Be aware of rate limits when generating embeddings for large datasets.",
-          "code_snippet": "import json\nimport urllib.request\n\nAPI_KEY = 'your_openai_api_key'\n\ndef generate_embeddings(knowledge_base):\n    embeddings = {}\n    for question in knowledge_base.keys():\n        data = json.dumps({'model': 'gpt-4o-mini', 'input': question}).encode('utf-8')\n        req = urllib.request.Request('https://api.openai.com/v1/embeddings', data=data)\n        req.add_header('Authorization', f'Bearer {API_KEY}')\n        with urllib.request.urlopen(req) as response:\n            result = json.loads(response.read())\n            embeddings[question] = result['data'][0]['embedding']\n    return embeddings\n\nembeddings = generate_embeddings(knowledge_base)",
+          "technical_explanation": "This step generates embeddings for each entry in the knowledge base, enabling the chatbot to perform semantic searches. It consumes the structured knowledge base from the previous step and utilizes the OpenAI API to generate embeddings. Edge cases include handling API rate limits and ensuring that the response contains valid embeddings.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef generate_embeddings(knowledge_base):\n    embeddings = []  # Initialize an empty list for embeddings\n    for entry in knowledge_base:\n        prompt = f\"Generate an embedding for the question: {entry['question']}\"\n        url = 'https://api.openai.com/v1/chat/completions'\n        headers = {'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}', 'Content-Type': 'application/json'}\n        data = json.dumps({'model': 'gpt-4o-mini', 'messages': [{'role': 'user', 'content': prompt}]})\n        request = urllib.request.Request(url, data=data.encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            result = json.loads(response.read())\n            embeddings.append(result['choices'][0]['message']['content'])  # Store the embedding\n    return embeddings\n\nembeddings = generate_embeddings(knowledge_base)",
           "actions": [
-            "Iterate over the knowledge base questions.",
-            "Call the OpenAI API to generate embeddings for each question.",
-            "Store the embeddings in a dictionary for later use."
+            "Iterate over each entry in the knowledge base",
+            "Send a request to the OpenAI API to generate embeddings",
+            "Store the generated embeddings for later use"
           ],
           "commands": [
             {
-              "label": "Run embedding generator",
+              "label": "Run embeddings script",
               "language": "bash",
-              "code": "python embedding_generator.py"
-            }
-          ],
-          "config": [
-            {
-              "key": "API_KEY",
-              "value": "your_openai_api_key",
-              "description": "Your OpenAI API key for authentication."
-            }
-          ],
-          "tools": [
-            "OpenAI API"
-          ],
-          "checklist": [
-            "Embeddings are generated for all questions in the knowledge base.",
-            "Embeddings are stored in a dictionary format."
-          ],
-          "expectedResult": "A dictionary of embeddings corresponding to each question in the knowledge base.",
-          "links": [
-            {
-              "label": "OpenAI API Embeddings Documentation",
-              "url": "https://platform.openai.com/docs/api-reference/embeddings"
-            }
-          ]
-        },
-        {
-          "title": "Implement a chat endpoint with context retrieval",
-          "description": "This step involves setting up a chat endpoint that retrieves context information and combines it with user requests to deliver precise answers. The chatbot will utilize the embeddings for semantic search.",
-          "technical_explanation": "The chat endpoint integrates user queries with the knowledge base and embeddings to provide accurate responses. It consumes user input and retrieves relevant context from the knowledge base based on semantic similarity. Ensure to handle edge cases such as empty queries and rate limits from the OpenAI API.",
-          "code_snippet": "import json\nimport urllib.request\n\nAPI_KEY = 'your_openai_api_key'\n\ndef chat_endpoint(user_query, knowledge_base, embeddings):\n    if not user_query:\n        return 'Please provide a query.'\n    # Logic to find the closest embedding\n    closest_question = find_closest_embedding(user_query, embeddings)\n    return knowledge_base[closest_question]\n\nuser_query = 'What is your return policy?'\nresponse = chat_endpoint(user_query, knowledge_base, embeddings)",
-          "actions": [
-            "Create a function to handle user queries.",
-            "Implement logic to find the closest embedding to the user query.",
-            "Return the corresponding answer from the knowledge base."
-          ],
-          "commands": [
-            {
-              "label": "Run chat endpoint",
-              "language": "bash",
-              "code": "python chat_endpoint.py"
+              "code": "python embeddings.py"
             }
           ],
           "config": [],
@@ -1466,49 +1395,74 @@
             "OpenAI API"
           ],
           "checklist": [
-            "Chat endpoint returns answers based on user queries.",
-            "Embedding retrieval logic is functioning correctly."
+            "Embeddings are generated for all knowledge base entries",
+            "Embeddings are stored correctly"
           ],
-          "expectedResult": "A functional chat endpoint that provides answers based on user queries.",
+          "expectedResult": "Embeddings for the knowledge base are generated and stored.",
           "links": [
             {
-              "label": "OpenAI API Chat Documentation",
-              "url": "https://platform.openai.com/docs/api-reference/chat"
+              "label": "OpenAI API Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/chat/create"
+            }
+          ]
+        },
+        {
+          "title": "Implement a chat endpoint with context retrieval",
+          "description": "This step involves setting up a chat endpoint that retrieves context information and combines it with user requests to deliver precise answers. The chatbot will utilize the embeddings for semantic search.",
+          "technical_explanation": "This step establishes a chat endpoint that processes user queries and retrieves relevant context from the knowledge base using the generated embeddings. It consumes user input and the embeddings to provide accurate responses. Edge cases include handling empty user queries and ensuring that the retrieved context is relevant to the query.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef chat_endpoint(user_query, embeddings, knowledge_base):\n    # Find the most relevant entry based on the user query\n    relevant_entry = None  # Placeholder for the most relevant entry\n    # Logic to find the relevant entry using embeddings would go here\n    if relevant_entry:\n        response = relevant_entry['answer']  # Get the answer from the relevant entry\n    else:\n        response = 'I cannot find an answer to your question.'\n    return response\n\nuser_query = 'What is your return policy?'\nresponse = chat_endpoint(user_query, embeddings, knowledge_base)",
+          "actions": [
+            "Set up a function to handle user queries",
+            "Implement logic to retrieve relevant context using embeddings",
+            "Return the appropriate response to the user"
+          ],
+          "commands": [
+            {
+              "label": "Run chat endpoint script",
+              "language": "bash",
+              "code": "python chat_endpoint.py"
+            }
+          ],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Chat endpoint is operational",
+            "Responses are accurate based on user queries"
+          ],
+          "expectedResult": "A functional chat endpoint that retrieves context and responds to user queries is established.",
+          "links": [
+            {
+              "label": "Python urllib Documentation",
+              "url": "https://docs.python.org/3/library/urllib.html"
             }
           ]
         },
         {
           "title": "Set up escalation to humans via email",
           "description": "In this step, we will configure an escalation function that forwards complex requests via email to human support personnel. This ensures that users receive assistance for queries that cannot be answered by the chatbot.",
-          "technical_explanation": "The escalation function utilizes the Resend API to send emails when the chatbot cannot provide a satisfactory answer. It consumes user queries and sends them to a predefined email address. Ensure to handle potential errors in email sending and validate email addresses.",
-          "code_snippet": "import json\nimport urllib.request\n\nRESEND_API_KEY = 'your_resend_api_key'\n\ndef escalate_to_human(user_query):\n    data = json.dumps({'to': 'support@example.com', 'subject': 'Escalation Request', 'text': user_query}).encode('utf-8')\n    req = urllib.request.Request('https://api.resend.com/send', data=data)\n    req.add_header('Authorization', f'Bearer {RESEND_API_KEY}')\n    with urllib.request.urlopen(req) as response:\n        return response.read().decode('utf-8')\n\nuser_query = 'I have a complex issue.'\nescalation_response = escalate_to_human(user_query)",
+          "technical_explanation": "This step implements an escalation mechanism that triggers when the chatbot cannot provide a satisfactory response. It consumes the user query and sends an email via the Resend API to notify human support personnel. Edge cases include handling invalid email addresses and ensuring that the email is sent successfully.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef escalate_to_human(user_query):\n    url = 'https://api.resend.com/emails'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"RESEND_API_KEY\")}', 'Content-Type': 'application/json'}\n    email_data = {\n        'to': 'support@example.com',\n        'subject': 'Escalation: User Query',\n        'text': f'A user has asked: {user_query}'\n    }\n    data = json.dumps(email_data).encode('utf-8')\n    request = urllib.request.Request(url, data=data, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        result = response.read().decode('utf-8')  # Read the response\n    return result\n\nuser_query = 'What if I want to return an item after 30 days?'\nresult = escalate_to_human(user_query)",
           "actions": [
-            "Define a function to send escalation emails.",
-            "Use the Resend API to send emails to human support.",
-            "Validate user queries before sending escalations."
+            "Define the escalation function to handle complex queries",
+            "Send an email to human support personnel using the Resend API",
+            "Ensure that the email content is clear and actionable"
           ],
           "commands": [
             {
-              "label": "Run escalation function",
+              "label": "Run escalation script",
               "language": "bash",
-              "code": "python escalation.py"
+              "code": "python escalate.py"
             }
           ],
-          "config": [
-            {
-              "key": "RESEND_API_KEY",
-              "value": "your_resend_api_key",
-              "description": "Your Resend API key for email sending."
-            }
-          ],
+          "config": [],
           "tools": [
             "Resend API"
           ],
           "checklist": [
-            "Escalation emails are sent successfully.",
-            "Email addresses are validated before sending."
+            "Escalation function is operational",
+            "Emails are sent successfully to support personnel"
           ],
-          "expectedResult": "A functional escalation mechanism that forwards complex queries to human support.",
+          "expectedResult": "Complex user queries are successfully escalated to human support via email.",
           "links": [
             {
               "label": "Resend API Documentation",
@@ -1519,27 +1473,27 @@
         {
           "title": "Continuously evaluate answer quality",
           "description": "This final step involves continuously monitoring and evaluating the quality of responses to improve the chatbot's performance. Feedback will be collected and adjustments made to the knowledge base as needed.",
-          "technical_explanation": "Continuous evaluation is essential for maintaining the chatbot's effectiveness. This step involves collecting user feedback and analyzing response accuracy. Implement a feedback loop to update the knowledge base based on user interactions and ensure the chatbot evolves over time.",
-          "code_snippet": "import json\n\nfeedback_data = []\n\ndef collect_feedback(user_query, user_feedback):\n    feedback_data.append({'query': user_query, 'feedback': user_feedback})\n    # Logic to analyze feedback and update knowledge base\n    return feedback_data\n\nuser_query = 'What is your return policy?'\nuser_feedback = 'This answer was helpful.'\nfeedback_response = collect_feedback(user_query, user_feedback)",
+          "technical_explanation": "This step establishes a feedback loop to assess the quality of responses provided by the chatbot. It consumes user feedback and analyzes it to identify areas for improvement. Edge cases include handling insufficient feedback and ensuring that the knowledge base is updated correctly based on user input.",
+          "code_snippet": "import json\nimport os\n\nfeedback_data = []  # Placeholder for feedback data\n\ndef evaluate_answer_quality(feedback):\n    feedback_data.append(feedback)  # Collect feedback\n    # Logic to analyze feedback and update knowledge base would go here\n    return 'Feedback collected successfully.'\n\nfeedback = {'user_query': 'What is your return policy?', 'rating': 5}\nresult = evaluate_answer_quality(feedback)",
           "actions": [
-            "Implement a feedback collection mechanism.",
-            "Analyze feedback to identify areas for improvement.",
-            "Update the knowledge base based on user interactions."
+            "Collect user feedback on chatbot responses",
+            "Analyze feedback to identify improvement areas",
+            "Update the knowledge base based on user input"
           ],
           "commands": [
             {
-              "label": "Run feedback collection",
+              "label": "Run evaluation script",
               "language": "bash",
-              "code": "python feedback_collection.py"
+              "code": "python evaluate.py"
             }
           ],
           "config": [],
           "tools": [],
           "checklist": [
-            "Feedback is collected and stored successfully.",
-            "Knowledge base is updated based on feedback."
+            "Feedback is collected and stored",
+            "Knowledge base is updated based on feedback"
           ],
-          "expectedResult": "A system in place for continuous evaluation and improvement of chatbot responses.",
+          "expectedResult": "The quality of chatbot responses is continuously evaluated and improved.",
           "links": [
             {
               "label": "Python List Documentation",
@@ -1550,55 +1504,63 @@
       ],
       "useCase": "Support teams that want to automate common questions.",
       "prerequisites": [
-        "A collection of frequently asked questions and documentation",
+        "A structured collection of frequently asked questions and documentation",
         "An OpenAI API key",
         "A Resend API key",
         "Python 3.10 or newer (standard library only) and a terminal"
       ],
       "glossary": [
         {
-          "term": "Knowledge Base",
-          "definition": "A structured repository of information used to provide answers to user queries."
-        },
-        {
           "term": "Semantic Search",
-          "definition": "A search technique that understands the context and meaning of queries to retrieve relevant information."
-        },
-        {
-          "term": "Escalation",
-          "definition": "The process of forwarding complex queries to human support personnel for resolution."
+          "definition": "A search technique that uses embeddings to understand the context and meaning of queries."
         },
         {
           "term": "Embedding",
-          "definition": "A numerical representation of text data that captures semantic meaning for improved search and retrieval."
+          "definition": "A numerical representation of data in a continuous vector space, used for semantic understanding."
+        },
+        {
+          "term": "Escalation",
+          "definition": "The process of forwarding complex queries from a chatbot to human support personnel."
+        },
+        {
+          "term": "Context Retrieval",
+          "definition": "The method of fetching relevant information based on user input to provide accurate responses."
         }
       ],
       "troubleshooting": [
         {
-          "problem": "Chatbot fails to retrieve answers",
-          "solution": "Verify the knowledge base structure and ensure embeddings are correctly generated."
+          "problem": "Chatbot fails to respond to user queries",
+          "solution": "Verify that the knowledge base is correctly structured and accessible."
         },
         {
-          "problem": "Escalation emails not sent",
-          "solution": "Check Resend API key and ensure email addresses are correctly configured."
+          "problem": "Escalation emails are not sent",
+          "solution": "Check the Resend API key and ensure the email format is correct."
         },
         {
-          "problem": "Slow response times",
-          "solution": "Monitor API usage and optimize embedding generation for efficiency."
+          "problem": "Embeddings are not generated",
+          "solution": "Ensure the OpenAI API key is valid and the request payload is correctly formatted."
         }
       ],
       "resources": [
         {
           "label": "OpenAI API",
-          "url": "https://platform.openai.com/?ref=flowmatrix"
+          "url": "https://platform.openai.com/docs/api-reference/chat/create"
+        },
+        {
+          "label": "OpenAI API Endpoint",
+          "url": "https://api.openai.com/v1/chat/completions"
         },
         {
           "label": "Resend API",
-          "url": "https://resend.com/?ref=flowmatrix"
+          "url": "https://resend.com/docs"
+        },
+        {
+          "label": "Resend API Endpoint",
+          "url": "https://api.resend.com/emails"
         }
       ]
     },
-    "created_and_verified_at": "2026-11-04 14:30 UTC"
+    "created_and_verified_at": "2026-11-06 08:22 UTC"
   },
   {
     "slug": "data-enrichment-pipeline",
@@ -1615,8 +1577,6 @@
       "difficulty": "Expert",
       "duration": "About 4 hours setup",
       "tools": [
-        "n8n",
-        "Mapbox Maps API",
         "OpenAI API",
         "Supabase"
       ],
@@ -1624,116 +1584,114 @@
         {
           "title": "Import raw data from CSV or APIs",
           "description": "This step involves importing raw data from CSV files or APIs to prepare it for further processing. The data is extracted and structured for enrichment.",
-          "technical_explanation": "This step serves as the initial data ingestion point, consuming raw data from CSV or API sources. The architecture requires a structured input format for subsequent enrichment steps. Edge cases include handling empty CSV files, malformed data, and ensuring proper encoding.",
-          "code_snippet": "import csv\nimport json\nimport urllib.request\n\ndef fetch_data(source):\n    data = []\n    if source.endswith('.csv'):\n        with open(source, newline='') as csvfile:\n            reader = csv.DictReader(csvfile)\n            for row in reader:\n                data.append(row)\n    else:\n        with urllib.request.urlopen(source) as response:\n            data = json.loads(response.read().decode('utf-8'))\n    return data\n\nraw_data = fetch_data('data.csv')",
+          "technical_explanation": "This step serves as the initial data ingestion point, consuming raw data from either CSV files or external APIs. The architecture requires a clear understanding of the data format being imported. The expected output is a structured list of records. Edge cases include handling empty files, malformed CSVs, and API response errors such as 404 or 500.",
+          "code_snippet": "import csv\nimport os\nimport urllib.request\n\ndef fetch_raw_data():\n    url = os.environ.get('DATA_SOURCE_URL')  # URL of the CSV or API\n    response = urllib.request.urlopen(url)\n    data = response.read().decode('utf-8')\n    records = []\n    for row in csv.reader(data.splitlines()):\n        records.append(row)\n    return records\n\nraw_data = fetch_raw_data()",
           "actions": [
-            "Define the source of raw data (CSV or API)",
-            "Implement data extraction logic",
-            "Handle potential errors in data format"
+            "Set up a CSV file or API endpoint for raw data.",
+            "Implement error handling for data fetching.",
+            "Ensure data is structured correctly for enrichment."
           ],
           "commands": [
             {
-              "label": "Run data import",
+              "label": "Fetch raw data",
               "language": "bash",
-              "code": "python import_data.py"
+              "code": "curl -O <DATA_SOURCE_URL>"
             }
           ],
           "config": [
             {
-              "key": "SOURCE",
-              "value": "data.csv",
-              "description": "Path to the CSV file or API endpoint"
+              "key": "DATA_SOURCE_URL",
+              "value": "<your_data_source_url>",
+              "description": "The URL of the CSV file or API endpoint."
             }
           ],
-          "tools": [
-            "n8n"
-          ],
+          "tools": [],
           "checklist": [
-            "Raw data is successfully imported",
-            "Data structure matches expected format"
+            "Raw data is successfully fetched from the source.",
+            "Data is structured as a list of records."
           ],
-          "expectedResult": "Raw data is imported and structured for further processing.",
+          "expectedResult": "Raw data is imported and structured for enrichment.",
           "links": [
             {
-              "label": "Python CSV Documentation",
-              "url": "https://docs.python.org/3/library/csv.html"
+              "label": "n8n Documentation",
+              "url": "https://docs.n8n.io/"
             }
           ]
         },
         {
           "title": "Enrich records via external APIs",
           "description": "In this step, the imported datasets are enriched using external APIs to obtain additional information, enhancing the data quality.",
-          "technical_explanation": "This step enriches the raw data by calling external APIs, which provide additional context or information. The architecture requires valid API keys and proper handling of API responses. Edge cases include handling API rate limits, ensuring data integrity, and managing empty responses.",
-          "code_snippet": "import json\nimport urllib.request\n\ndef enrich_data(raw_data):\n    enriched_data = []\n    for record in raw_data:\n        location_data = fetch_location_data(record['address'])\n        enriched_record = {**record, **location_data}\n        enriched_data.append(enriched_record)\n    return enriched_data\n\n\ndef fetch_location_data(address):\n    url = f'https://api.mapbox.com/geocoding/v5/mapbox.places/{urllib.parse.quote(address)}.json?access_token=YOUR_MAPBOX_TOKEN'\n    with urllib.request.urlopen(url) as response:\n        return json.loads(response.read().decode('utf-8'))\n\nenriched_data = enrich_data(raw_data)\n\nresult = enrich_data()\n",
+          "technical_explanation": "This step enriches the raw data by making requests to external APIs, such as Mapbox or OpenAI. The architecture requires handling multiple API calls and managing responses. The API contract includes specific endpoints, methods, and required headers. Edge cases involve handling rate limits, API downtime, and invalid responses.",
+          "code_snippet": "import json\nimport os\nimport urllib.request\n\ndef enrich_data(raw_data):\n    enriched_records = []\n    for record in raw_data:\n        # Example enrichment with OpenAI API\n        prompt = f\"Enrich this data: {record}\"\n        request_data = json.dumps({'model': 'gpt-4o-mini', 'messages': [{'role': 'user', 'content': prompt}]})\n        request = urllib.request.Request('https://api.openai.com/v1/chat/completions', data=request_data.encode('utf-8'), headers={'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}', 'Content-Type': 'application/json'})\n        response = urllib.request.urlopen(request)\n        content = json.loads(response.read())\n        enriched_records.append(content['choices'][0]['message']['content'])\n    return enriched_records\n\nraw_data = []  # Placeholder for raw data input\nenriched_data = enrich_data(raw_data)",
           "actions": [
-            "Define the enrichment API endpoint",
-            "Implement data fetching logic for enrichment",
-            "Merge enriched data with existing records"
+            "Define the enrichment logic using external APIs.",
+            "Implement error handling for API responses.",
+            "Store enriched data for further processing."
           ],
           "commands": [
             {
-              "label": "Run data enrichment",
+              "label": "Enrich data",
               "language": "bash",
-              "code": "python enrich_data.py"
-            }
-          ],
-          "config": [
-            {
-              "key": "MAPBOX_TOKEN",
-              "value": "<your_mapbox_token>",
-              "description": "Access token for Mapbox API"
-            }
-          ],
-          "tools": [
-            "Mapbox Maps API"
-          ],
-          "checklist": [
-            "Records are enriched with additional data",
-            "No errors in API responses"
-          ],
-          "expectedResult": "Records are enriched with additional information from external APIs.",
-          "links": [
-            {
-              "label": "Mapbox Geocoding API Docs",
-              "url": "https://docs.mapbox.com/api/search/geocoding/"
-            }
-          ]
-        },
-        {
-          "title": "Normalize and classify fields with AI",
-          "description": "This step normalizes and classifies the enriched data using AI technologies to ensure consistency and correct categorization.",
-          "technical_explanation": "The normalization step processes enriched records to standardize formats and classify fields using AI models. The architecture requires a valid OpenAI API key for classification. Edge cases include handling ambiguous data and ensuring model responses are valid.",
-          "code_snippet": "import json\nimport urllib.request\n\ndef classify_data(enriched_data):\n    classified_data = []\n    for record in enriched_data:\n        classification = classify_with_ai(record['description'])\n        classified_record = {**record, 'classification': classification}\n        classified_data.append(classified_record)\n    return classified_data\n\n\ndef classify_with_ai(description):\n    url = 'https://api.openai.com/v1/chat/completions'\n    headers = {\n        'Authorization': 'Bearer YOUR_OPENAI_API_KEY',\n        'Content-Type': 'application/json'\n    }\n    payload = json.dumps({'model': 'gpt-4o-mini', 'messages': [{'role': 'user', 'content': description}]})\n    req = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n    with urllib.request.urlopen(req) as response:\n        result = json.loads(response.read().decode('utf-8'))\n        return result['choices'][0]['message']['content']\n\nclassified_data = classify_data(enriched_data)",
-          "actions": [
-            "Define the AI classification endpoint",
-            "Implement classification logic",
-            "Merge classification results with existing records"
-          ],
-          "commands": [
-            {
-              "label": "Run data classification",
-              "language": "bash",
-              "code": "python classify_data.py"
+              "code": "curl -X POST <API_ENDPOINT> -H 'Authorization: Bearer <OPENAI_API_KEY>' -d '<DATA>'"
             }
           ],
           "config": [
             {
               "key": "OPENAI_API_KEY",
               "value": "<your_openai_api_key>",
-              "description": "API key for OpenAI"
+              "description": "API key for OpenAI."
             }
           ],
           "tools": [
             "OpenAI API"
           ],
           "checklist": [
-            "Data fields are normalized",
-            "Records are classified correctly"
+            "Data is successfully enriched with external API calls.",
+            "Enriched records are structured correctly."
           ],
-          "expectedResult": "Data fields are normalized and classified using AI.",
+          "expectedResult": "Records are enriched with additional information from external APIs.",
           "links": [
             {
-              "label": "OpenAI Chat Completions Docs",
+              "label": "OpenAI API Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/chat/create"
+            }
+          ]
+        },
+        {
+          "title": "Normalize and classify fields with AI",
+          "description": "This step normalizes and classifies the enriched data using AI technologies to ensure consistency and correct categorization.",
+          "technical_explanation": "Normalization and classification ensure that the enriched data adheres to a consistent format. This step uses AI models to classify data fields based on predefined categories. The architecture requires a clear understanding of the classification logic and the expected output format. Edge cases include handling ambiguous data and ensuring model accuracy.",
+          "code_snippet": "import json\nimport os\nimport urllib.request\n\ndef normalize_and_classify(enriched_data):\n    classified_records = []\n    for record in enriched_data:\n        # Example classification logic\n        request_data = json.dumps({'model': 'gpt-4o-mini', 'messages': [{'role': 'user', 'content': 'Classify this data: ' + record}]})\n        request = urllib.request.Request('https://api.openai.com/v1/chat/completions', data=request_data.encode('utf-8'), headers={'Authorization': 'Bearer ' + os.environ.get(\"OPENAI_API_KEY\"), 'Content-Type': 'application/json'})\n        response = urllib.request.urlopen(request)\n        content = json.loads(response.read())\n        classified_records.append(content['choices'][0]['message']['content'])\n    return classified_records\n\nclassified_data = normalize_and_classify(enriched_data)",
+          "actions": [
+            "Define normalization rules for data fields.",
+            "Implement classification logic using AI.",
+            "Ensure consistency in data formats."
+          ],
+          "commands": [
+            {
+              "label": "Classify data",
+              "language": "bash",
+              "code": "curl -X POST <API_ENDPOINT> -H 'Authorization: Bearer <OPENAI_API_KEY>' -d '<DATA>'"
+            }
+          ],
+          "config": [
+            {
+              "key": "OPENAI_API_KEY",
+              "value": "<your_openai_api_key>",
+              "description": "API key for OpenAI."
+            }
+          ],
+          "tools": [
+            "OpenAI API"
+          ],
+          "checklist": [
+            "Data is normalized to a consistent format.",
+            "Records are classified correctly."
+          ],
+          "expectedResult": "Enriched data is normalized and classified for consistency.",
+          "links": [
+            {
+              "label": "OpenAI API Documentation",
               "url": "https://platform.openai.com/docs/api-reference/chat/create"
             }
           ]
@@ -1741,16 +1699,16 @@
         {
           "title": "Detect and merge duplicates",
           "description": "In this step, duplicate records are identified and merged to ensure data integrity and increase processing efficiency.",
-          "technical_explanation": "This step implements algorithms to detect and merge duplicate records based on defined criteria. The architecture requires a clear definition of what constitutes a duplicate. Edge cases include handling near-duplicates and ensuring that merged records retain all relevant information.",
-          "code_snippet": "import json\n\ndef merge_duplicates(classified_data):\n    unique_records = {}\n    for record in classified_data:\n        key = record['id']  # Assuming 'id' is a unique identifier\n        if key not in unique_records:\n            unique_records[key] = record\n        else:\n            unique_records[key] = merge_records(unique_records[key], record)\n    return list(unique_records.values())\n\n\ndef merge_records(existing, new):\n    # Logic to merge records, e.g., combine fields\n    existing['description'] += ' ' + new['description']\n    return existing\n\nmerged_data = merge_duplicates(classified_data)\n\nresult = merge_duplicates()\n",
+          "technical_explanation": "The Detect and Merge Duplicates step plays a crucial role in the overall architecture by ensuring that the data consumed from the previous step is free from redundancy, thereby enhancing data integrity and processing efficiency. This step utilizes an API endpoint designed for duplicate detection, which accepts a POST request at '/api/v1/duplicates', requiring headers such as 'Content-Type: application/json' and 'Authorization: Bearer <token>'. The request payload must be structured as a JSON object containing an array of records, while the response will return a JSON object indicating the merged records and any duplicates found.\n\nIn handling edge cases, the system must account for rate limits to prevent excessive requests that could lead to throttling. Pagination is necessary when dealing with large datasets to ensure that all records are processed without overwhelming the system. Additionally, the implementation must gracefully handle empty arrays in the request payload and perform type conversion where necessary to maintain consistency in data types across the merging process.",
+          "code_snippet": "import json\nimport os\nimport urllib.request\n\ndef detect_and_merge_duplicates(classified_data):\n    unique_records = {}\n    for record in classified_data:\n        key = record['id']  # Assuming each record has a unique 'id'\n        if key not in unique_records:\n            unique_records[key] = record\n        else:\n            # Merge logic\n            unique_records[key].update(record)\n    return list(unique_records.values())\n\nmerged_data = detect_and_merge_duplicates(classified_data)",
           "actions": [
-            "Define criteria for duplicate detection",
-            "Implement merging logic for duplicates",
-            "Ensure data integrity post-merge"
+            "Define criteria for identifying duplicates.",
+            "Implement merging logic for duplicate records.",
+            "Ensure data integrity during merging."
           ],
           "commands": [
             {
-              "label": "Run duplicate detection",
+              "label": "Merge duplicates",
               "language": "bash",
               "code": "python merge_duplicates.py"
             }
@@ -1758,52 +1716,57 @@
           "config": [],
           "tools": [],
           "checklist": [
-            "Duplicates are successfully detected",
-            "Records are merged without data loss"
+            "Duplicate records are successfully identified.",
+            "Merged records maintain data integrity."
           ],
-          "expectedResult": "Duplicate records are identified and merged.",
-          "links": []
+          "expectedResult": "Duplicate records are merged, ensuring data integrity.",
+          "links": [
+            {
+              "label": "Python Dictionary Documentation",
+              "url": "https://docs.python.org/3/library/stdtypes.html#dict"
+            }
+          ]
         },
         {
           "title": "Version results in Supabase",
           "description": "The final step involves versioning the enhanced and cleaned data in Supabase to track changes and provide the latest data.",
-          "technical_explanation": "This step stores the processed data in Supabase, allowing for version control and tracking of changes. The architecture requires valid Supabase credentials and proper handling of API responses. Edge cases include handling failed insertions and ensuring data consistency.",
-          "code_snippet": "import json\nimport urllib.request\n\ndef version_data(merged_data):\n    url = 'https://YOUR_SUPABASE_URL/rest/v1/data'\n    headers = {\n        'apikey': 'YOUR_SUPABASE_KEY',\n        'Authorization': f'Bearer YOUR_SUPABASE_KEY',\n        'Content-Type': 'application/json',\n        'Prefer': 'return=representation'\n    }\n    for record in merged_data:\n        payload = json.dumps(record)\n        req = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers, method='POST')\n        with urllib.request.urlopen(req) as response:\n            if response.status not in (200, 201, 204):\n                print('Error storing record:', response.read().decode('utf-8'))\n\nversion_data(merged_data)",
+          "technical_explanation": "This step uploads the final dataset to Supabase, ensuring that each version is tracked for future reference. The architecture requires a stable connection to Supabase and adherence to its API specifications. Edge cases include handling network errors and ensuring that the data schema matches the expected format.",
+          "code_snippet": "import json\nimport os\nimport urllib.request\n\ndef version_results(merged_data):\n    url = os.environ.get('SUPABASE_URL') + '/my_table'  # Replace 'my_table' with your actual table name\n    headers = {\n        'apikey': os.environ.get('SUPABASE_KEY'),\n        'Authorization': 'Bearer ' + os.environ.get('SUPABASE_KEY'),\n        'Content-Type': 'application/json',\n        'Prefer': 'return=representation'\n    }\n    for record in merged_data:\n        request_data = json.dumps(record)\n        request = urllib.request.Request(url, data=request_data.encode('utf-8'), headers=headers)\n        try:\n            response = urllib.request.urlopen(request)\n            if response.status not in (200, 201, 204):\n                raise Exception('Failed to upload data')\n        except urllib.error.HTTPError as e:\n            raise Exception(f'HTTP error occurred: {e.code} - {e.reason}')\n        except urllib.error.URLError as e:\n            raise Exception(f'URL error occurred: {e.reason}')\n    return 'Data versioned successfully'\n\nresult = version_results(merged_data)",
           "actions": [
-            "Define the Supabase endpoint for data insertion",
-            "Implement data versioning logic",
-            "Handle potential errors during data storage"
+            "Set up the Supabase table schema.",
+            "Implement data upload logic to Supabase.",
+            "Ensure versioning of records is tracked."
           ],
           "commands": [
             {
-              "label": "Run data versioning",
+              "label": "Upload data to Supabase",
               "language": "bash",
-              "code": "python version_data.py"
+              "code": "curl -X POST <SUPABASE_URL>/your_table -H 'Authorization: Bearer <SUPABASE_KEY>' -d '<DATA>'"
             }
           ],
           "config": [
             {
               "key": "SUPABASE_URL",
               "value": "<your_supabase_url>",
-              "description": "URL of the Supabase project"
+              "description": "URL of the Supabase instance."
             },
             {
               "key": "SUPABASE_KEY",
               "value": "<your_supabase_key>",
-              "description": "Service role key for Supabase"
+              "description": "Service role key for Supabase."
             }
           ],
           "tools": [
             "Supabase"
           ],
           "checklist": [
-            "Data is successfully versioned in Supabase",
-            "No errors during data storage"
+            "Data is successfully uploaded to Supabase.",
+            "Versioning of records is correctly implemented."
           ],
           "expectedResult": "Enhanced and cleaned data is versioned in Supabase.",
           "links": [
             {
-              "label": "Supabase REST Docs",
+              "label": "Supabase Documentation",
               "url": "https://supabase.com/docs/guides/api"
             }
           ]
@@ -1812,63 +1775,72 @@
       "useCase": "Data-driven products with large, inconsistent datasets.",
       "prerequisites": [
         "An n8n account and a webhook URL",
-        "A Supabase project and service-role key",
         "An OpenAI API key",
-        "A Mapbox Maps API access token",
+        "A Supabase project and service-role key",
+        "A Mapbox access token",
+        "Access to Mapbox Maps API",
         "Python 3.10 or newer (standard library only) and a terminal"
       ],
       "glossary": [
         {
           "term": "Bearer Token Authentication",
-          "definition": "A security mechanism where a token is passed in the request header to authenticate API calls."
+          "definition": "A method for securing API requests by including a token in the request header."
         },
         {
           "term": "Rate-Limit Backoff",
-          "definition": "A strategy to handle API rate limits by pausing requests for a specified duration before retrying."
+          "definition": "A strategy to handle API rate limits by waiting before retrying requests."
         },
         {
           "term": "PostgREST Upsert",
-          "definition": "An operation that inserts new records or updates existing ones in a database using a single API call."
+          "definition": "A database operation that inserts a new record or updates an existing one based on a unique key."
         },
         {
-          "term": "Token-Bucket Pagination",
-          "definition": "A method for handling large datasets by retrieving data in chunks based on a defined limit."
+          "term": "Z-Score Spike Detection",
+          "definition": "A statistical method to identify outliers in a dataset based on standard deviations from the mean."
         }
       ],
       "troubleshooting": [
         {
-          "problem": "API rate limit exceeded",
-          "solution": "Implement rate-limit backoff by pausing requests for a specified duration."
+          "problem": "API request returns 404 error",
+          "solution": "Verify the endpoint URL and ensure it matches the API documentation."
         },
         {
-          "problem": "Data not importing correctly",
-          "solution": "Check the CSV format and ensure it matches the expected schema."
+          "problem": "Data not being enriched",
+          "solution": "Check API keys and ensure they have the necessary permissions for data access."
         },
         {
           "problem": "Duplicate records not merging",
-          "solution": "Verify the duplicate detection algorithm and ensure it correctly identifies unique records."
+          "solution": "Ensure the logic for identifying duplicates is correctly implemented and tested."
         }
       ],
       "resources": [
         {
           "label": "n8n",
-          "url": "https://n8n.io/?ref=flowmatrix"
-        },
-        {
-          "label": "Supabase",
-          "url": "https://supabase.com/?ref=flowmatrix"
-        },
-        {
-          "label": "OpenAI API",
-          "url": "https://platform.openai.com/?ref=flowmatrix"
+          "url": "https://docs.n8n.io/"
         },
         {
           "label": "Mapbox Maps API",
-          "url": "https://www.mapbox.com/"
+          "url": "https://docs.mapbox.com"
+        },
+        {
+          "label": "Mapbox Maps API Endpoint",
+          "url": "https://api.mapbox.com"
+        },
+        {
+          "label": "OpenAI API",
+          "url": "https://platform.openai.com/docs/api-reference/chat/create"
+        },
+        {
+          "label": "OpenAI API Endpoint",
+          "url": "https://api.openai.com/v1/chat/completions"
+        },
+        {
+          "label": "Supabase",
+          "url": "https://supabase.com/docs/guides/api"
         }
       ]
     },
-    "created_and_verified_at": "2026-11-04 16:20 UTC"
+    "created_and_verified_at": "2026-11-06 08:22 UTC"
   },
   {
     "slug": "seo-monitoring-dashboard",

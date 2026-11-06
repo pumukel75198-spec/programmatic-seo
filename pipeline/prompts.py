@@ -54,9 +54,30 @@ ALTERNATIVE_SYSTEM = (
 def _tools_block(available_tools: list[dict[str, Any]]) -> str:
     if not available_tools:
         return "—"
+    lines = []
+    for tool in available_tools:
+        parts = [f"- {tool.get('name')}"]
+        if tool.get("provider"):
+            parts.append(f"provider: {tool['provider']}")
+        if tool.get("endpoint"):
+            parts.append(
+                f"endpoint (BASE – append a concrete resource path): "
+                f"{tool['endpoint']}"
+            )
+        if tool.get("url") or tool.get("affiliateUrl"):
+            parts.append(f"docs: {tool.get('url') or tool.get('affiliateUrl')}")
+        if tool.get("authentication"):
+            parts.append(f"auth: {tool['authentication']}")
+        lines.append(" | ".join(parts))
+    return "\n".join(lines)
+
+
+def _alternatives_block(alternatives: list[dict[str, Any]]) -> str:
+    if not alternatives:
+        return "—"
     return "\n".join(
-        f"- {tool.get('name')} (URL: {tool.get('affiliateUrl') or tool.get('url') or '—'})"
-        for tool in available_tools
+        f"- {item.get('title')}: {item.get('description')}"
+        for item in alternatives
     )
 
 
@@ -65,6 +86,7 @@ def build_workflow_prompt(
     steps: list[dict[str, Any]],
     available_tools: list[dict[str, Any]],
     feedback: str | None = None,
+    related_alternatives: list[dict[str, Any]] | None = None,
 ) -> str:
     details = workflow.get("details", {})
     step_list = "\n".join(
@@ -91,8 +113,11 @@ Tools in this workflow: {', '.join(details.get('tools') or []) or '—'}
 EXISTING STEP OUTLINE
 {step_list}
 
-AVAILABLE TOOLS (use only these)
+AVAILABLE TOOLS (the ONLY allowed APIs – use their exact endpoints and docs URLs)
 {_tools_block(available_tools)}
+
+RELATED ALTERNATIVES (context for the business use case only – never copy their domains)
+{_alternatives_block(related_alternatives or [])}
 {feedback_block}
 TASK
 Return a complete, practical guide for EVERY step. ALL text MUST be in precise technical English – no German words, no umlauts, no ß. Answer with valid JSON in exactly this structure:
@@ -150,6 +175,9 @@ HARD RULES
 - "checklist": 2–4 verifiable points.
 - "links": EVERY step MUST contain at least one entry. Use ONLY the official documentation link of the API that is programmed in THIS specific step (maximum 1 link). Use the REAL documentation name (e.g. `"X API Search Docs: https://..."`). UNDER `LINKS`, NEVER use the literal sentence `"Official docs for the API used in THIS step"` or similar leak phrases, but always the actual name and URL. For a pure Python step without an API call (e.g. `collections.Counter`), link to the exact official Python standard library documentation (e.g. `https://docs.python.org/3/library/collections.html`). Never copy the same links into every step.
 - TOOL CONSISTENCY: the tools listed in the workflow, the tools in "prerequisites", the APIs actually called in the code and the "resources" list MUST match 100 %. Never list a tool (e.g. n8n) that does not appear in the code. Never call an API in the code that is missing from the tool list.
+- GROUNDING RULE: the ONLY allowed API hosts and endpoints are those listed under AVAILABLE TOOLS. Every code URL MUST use one of those exact endpoints (or a documented path variant of it). Never invent a domain such as api.enrichmentservice.com or use a placeholder host such as api.example.com. The tools in "tools" MUST be a subset of AVAILABLE TOOLS, and each "links" entry MUST point to that tool's docs URL.
+- NO UNGROUNDED APIS: if a step needs a capability that is not covered by AVAILABLE TOOLS, implement it with the Python standard library (e.g. regex for email syntax, socket for DNS/MX checks, collections/difflib for clustering). NEVER invent a new API host or service for that capability.
+- BASE URL RULE: an endpoint marked BASE is only a prefix. NEVER call it bare (e.g. never call https://api.stripe.com/v1). Always append a real documented resource path such as /v1/customers or /v1/invoices.
 - CREDENTIALS: every secret and every project-specific endpoint MUST be read through `os.environ.get("NAME")` – never hardcode `YOUR_X_API_TOKEN`, `YOUR_OPENAI_API_KEY`, `YOUR_SUPABASE_KEY` or `YOUR_SLACK_WEBHOOK_URL` in runnable code. Use UPPER_SNAKE_CASE names such as `X_API_TOKEN`, `OPENAI_API_KEY`, `SUPABASE_URL`, `SUPABASE_KEY`, `SLACK_WEBHOOK_URL`; the kit's `.env.example` is generated from these names. Keep public API hosts (`https://api.x.com`, `https://api.openai.com`) as constants.
   * The Supabase URL MUST come from `os.environ.get("SUPABASE_URL")`; never hardcode `https://your-supabase-instance.supabase.co`. Use a concrete table name (e.g. `trends`), never `your_table`.
 - ZERO-VARIANCE GUARD: before computing a Z-score, guard against fewer than 2 values and a standard deviation of zero (`if len(sentiments) < 2 or stdev == 0: return`). Never divide by zero.
@@ -246,6 +274,9 @@ CURRENT CODE:
 
 HARD RULES
 - Return ONLY the corrected Python source code (no markdown fences, no text before/after).
+- Use only the Python standard library. Never introduce a new external API, SDK or domain.
+- Use 'gpt-4o-mini' or 'gpt-4o'. 'gpt-4' and 'gpt-3.5-turbo' are forbidden.
+- If OpenAI output is converted with float(), include the literal instruction 'Respond ONLY with a float between -1.0 and 1.0'.
 - Python standard library only: urllib.request, urllib.error, urllib.parse, http.client, json, os, sys, time, datetime, hmac, hashlib, base64, typing, dataclasses, logging, argparse, re, math, collections, difflib.
 - FORBIDDEN third-party imports (requests, openai, supabase, httpx, aiohttp, pydantic, pandas, scikit-learn, sklearn, gspread, oauth2client, schedule, sentry_sdk, …).
 - FORBIDDEN: "import random", "random.uniform", "# Dummy", "Dummy".

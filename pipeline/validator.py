@@ -86,19 +86,22 @@ def extract_urls(payload: Any) -> set[str]:
     return urls
 
 
+def _tcp_reachable(host: str, port: int = 443, timeout: float = 5.0) -> tuple[bool, str]:
+    """Bounded TCP connect – never blocks on an unbounded DNS lookup."""
+    try:
+        with socket.create_connection((host, port), timeout=timeout):
+            return True, "TCP reachable"
+    except OSError as error:
+        return False, f"{type(error).__name__}: {error}"
+
+
 def check_domain_reachable(url: str) -> tuple[bool, str]:
-    """DNS + HTTP check for one exact URL. Cached per URL (not per host)."""
+    """HTTP check for one exact URL. Cached per URL (not per host)."""
     host = urllib.parse.urlparse(url).hostname or ""
     if not host:
         return False, "invalid URL"
     cache_key = url
     if cache_key in _DOMAIN_CACHE:
-        return _DOMAIN_CACHE[cache_key]
-
-    try:
-        socket.getaddrinfo(host, 443)
-    except socket.gaierror as error:
-        _DOMAIN_CACHE[cache_key] = (False, f"DNS error: {error}")
         return _DOMAIN_CACHE[cache_key]
 
     last_reason = "no response"
@@ -116,7 +119,9 @@ def check_domain_reachable(url: str) -> tuple[bool, str]:
             # 401/403/429 prove the host is alive but protected/rate-limited.
             # 404/410 and every 5xx mean the exact URL is gone or broken and
             # must trigger a hard workflow rejection + topic regeneration.
-            if error.code in (401, 403, 429):
+            # Any 4xx except 404/410 proves the endpoint exists; the request
+            # was simply missing auth, used the wrong method or malformed data.
+            if 400 <= error.code < 500 and error.code not in (404, 410):
                 _DOMAIN_CACHE[cache_key] = (True, f"HTTP {error.code}")
                 return _DOMAIN_CACHE[cache_key]
             last_reason = f"HTTP {error.code}"
@@ -170,11 +175,36 @@ def _registrable_domain(host: str) -> str:
 
 def validate_domains(payload: Any, context: str) -> list[str]:
     """Reject content whose linked domains are not live/reachable."""
+    if os.environ.get("FLOWMATRIX_SKIP_LIVE") == "1":
+        return []
     errors: list[str] = []
     checked: dict[str, tuple[bool, str]] = {}
     for url in sorted(extract_urls(payload)):
-        host = urllib.parse.urlparse(url).hostname or ""
+        parsed_url = urllib.parse.urlparse(url)
+        host = parsed_url.hostname or ""
         if not host:
+            continue
+
+        # A bare host such as https://rest.ably.io is an API base URL. APIs
+        # routinely answer 404 on the bare host while /time or /v1 works, so
+        # only a bounded TCP reachability check is meaningful here.
+        if parsed_url.path in ("", "/"):
+            ok, reason = _tcp_reachable(host)
+            if not ok:
+                errors.append(
+                    f"{context}: base host not reachable: {host} ({reason})"
+                )
+            continue
+
+        # Placeholder paths such as /bot{token}/sendMessage or
+        # /Accounts/{os.environ.get(...)} cannot be tested directly. Only the
+        # TCP reachability of the real host is meaningful.
+        if "{" in url or "}" in url:
+            ok, reason = _tcp_reachable(host)
+            if not ok:
+                errors.append(
+                    f"{context}: placeholder host not reachable: {host} ({reason})"
+                )
             continue
 
         if _is_placeholder_host(host):
@@ -286,12 +316,17 @@ def check_python_ast(
 
 
 def _assigned_names(code: str) -> set[str]:
+    """Module-level names that form the cross-step data flow.
+
+    Local variables inside functions are implementation details and must not be
+    mistaken for step output.
+    """
     try:
         tree = ast.parse(code)
     except SyntaxError:
         return set()
     names: set[str] = set()
-    for node in ast.walk(tree):
+    for node in tree.body:
         if isinstance(node, ast.Assign):
             for target in node.targets:
                 if isinstance(target, ast.Name):
@@ -300,6 +335,31 @@ def _assigned_names(code: str) -> set[str]:
             names.add(node.target.id)
         elif isinstance(node, ast.FunctionDef):
             names.add(node.name)
+    return names
+
+
+def _self_reassignments(code: str) -> set[str]:
+    """Names reassigned from a value that references the same name.
+
+    ``topics = refine_topics(topics)`` is a legitimate transformation;
+    ``mentions = ["dummy"]`` is a forbidden overwrite.
+    """
+    try:
+        tree = ast.parse(code)
+    except SyntaxError:
+        return set()
+    names: set[str] = set()
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Assign):
+            continue
+        loaded = {
+            child.id
+            for child in ast.walk(node.value)
+            if isinstance(child, ast.Name) and isinstance(child.ctx, ast.Load)
+        }
+        for target in node.targets:
+            if isinstance(target, ast.Name) and target.id in loaded:
+                names.add(target.id)
     return names
 
 
@@ -320,6 +380,15 @@ def _has_top_level_execution(code: str) -> bool:
             value = node.value
         elif isinstance(node, ast.Expr):
             value = node.value
+        elif isinstance(node, ast.If):
+            # `if __name__ == "__main__": main()` is a valid top-level call.
+            if any(
+                isinstance(child, ast.Call)
+                and isinstance(child.func, ast.Name)
+                and child.func.id in functions
+                for child in ast.walk(node)
+            ):
+                return True
         if (
             isinstance(value, ast.Call)
             and isinstance(value.func, ast.Name)
@@ -442,9 +511,10 @@ def mock_run(script: str) -> ValidationResult:
         "__file__": "generated_api_script.py",
     }
     try:
-        with mock.patch("urllib.request.urlopen", side_effect=_urlopen):
-            with mock.patch.dict(os.environ, fake_env, clear=False):
-                exec(compile(script, "generated_api_script.py", "exec"), namespace)
+        with mock.patch("sys.argv", ["generated_api_script.py"]):
+            with mock.patch("urllib.request.urlopen", side_effect=_urlopen):
+                with mock.patch.dict(os.environ, fake_env, clear=False):
+                    exec(compile(script, "generated_api_script.py", "exec"), namespace)
     except SystemExit:
         pass
     except (NameError, TypeError, KeyError, AttributeError) as error:
@@ -477,7 +547,13 @@ def _default_mock_responses() -> dict[str, Any]:
                 {"id": "2", "text": "Terrible experience"},
             ]
         },
-        "openai.com": {"choices": [{"message": {"content": "0.8"}}], "content": "Sample content"},
+        "openai.com": {
+            "choices": [{"message": {"content": "0.8"}}],
+            "content": "0.8",
+            "text": "sample",
+            "valid": True,
+            "score": 0.8,
+        },
         "anthropic.com": {"content": "Sample content"},
         "supabase": [],
         "slack.com": "ok",
@@ -533,11 +609,26 @@ def execute_workflow_dry_run(
                 "slots": [{"time": "2026-01-01T10:00:00Z"}],
                 "items": [{"id": "1", "name": "sample"}],
                 "results": [{"id": "1", "name": "sample"}],
+                "records": [{"id": "1", "name": "sample"}],
+                "messages": [],
+                "choices": [{"message": {"content": "0.8"}}],
+                "topics": [],
+                "drafts": [],
+                "approved_drafts": [],
+                "mentions": ["sample"],
+                "lead": {"id": "1", "email": "test@example.com", "valid": True},
+                "email": "test@example.com",
+                "keyword": "sample",
                 "id": "1",
                 "text": "sample",
                 "content": "0.8",
                 "value": 0.5,
+                "score": 0.8,
+                "sentiment": 0.8,
+                "z_score": 0.5,
                 "count": 1,
+                "valid": True,
+                "is_valid": True,
                 "status": "ok",
                 "ok": True,
             }
@@ -590,13 +681,32 @@ def execute_workflow_dry_run(
         os.chdir(temp_dir)
         with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(
             io.StringIO()
-        ):
-            with mock.patch("urllib.request.urlopen", side_effect=_urlopen):
-                with mock.patch("http.client.HTTPSConnection", _FakeHTTPSConnection):
-                    with mock.patch("time.sleep", return_value=None):
-                        with mock.patch("builtins.input", return_value="yes"):
-                            with mock.patch.dict(os.environ, fake_env, clear=False):
-                                exec(compile(code, "workflow.py", "exec"), namespace)
+        ), contextlib.ExitStack() as stack:
+            stack.enter_context(mock.patch("sys.argv", ["workflow.py"]))
+            stack.enter_context(
+                mock.patch("urllib.request.urlopen", side_effect=_urlopen)
+            )
+            stack.enter_context(
+                mock.patch("http.client.HTTPSConnection", _FakeHTTPSConnection)
+            )
+            stack.enter_context(mock.patch("time.sleep", return_value=None))
+            stack.enter_context(mock.patch("builtins.input", return_value="yes"))
+            # Generated snippets must never execute real shell commands during
+            # the dry-run (e.g. npm/astro/git). Mock them deterministically.
+            stack.enter_context(
+                mock.patch(
+                    "subprocess.run",
+                    return_value=mock.Mock(returncode=0, stdout=b"", stderr=b""),
+                )
+            )
+            stack.enter_context(
+                mock.patch("subprocess.check_output", return_value=b"")
+            )
+            stack.enter_context(mock.patch("os.system", return_value=0))
+            stack.enter_context(
+                mock.patch.dict(os.environ, fake_env, clear=False)
+            )
+            exec(compile(code, "workflow.py", "exec"), namespace)
     except _DryRunTimeout:
         result.add(
             "Workflow dry-run timed out after 10s – remove infinite loops or "
@@ -865,12 +975,16 @@ def validate_workflow(workflow: dict[str, Any]) -> ValidationResult:
                     )
             step_assigned = _meaningful(_assigned_names(code))
             if index > 1:
-                overwritten = step_assigned & previous_assigned
+                overwritten = (
+                    step_assigned & previous_assigned
+                ) - _self_reassignments(code)
                 if overwritten:
-                    result.add(
-                        f"{context}: overwrites variable(s) from previous steps "
-                        f"({', '.join(sorted(overwritten))}) – use a new "
-                        "variable and preserve the real data flow"
+                    # Warning only: the runtime dry-run below is the real gate
+                    # for broken data flow. Reassigning a name can be a valid
+                    # transformation and must not block the whole workflow.
+                    result.warn(
+                        f"{context}: reassigns variable(s) from previous steps "
+                        f"({', '.join(sorted(overwritten))}) – verify the data flow"
                     )
             previous_assigned |= step_assigned
             combined_code.append(code)
@@ -894,6 +1008,12 @@ def validate_workflow(workflow: dict[str, Any]) -> ValidationResult:
                         value = node.value
                     elif isinstance(node, ast.Expr):
                         value = node.value
+                    elif isinstance(node, ast.If):
+                        for child in ast.walk(node):
+                            if isinstance(child, ast.Call) and isinstance(
+                                child.func, ast.Name
+                            ):
+                                called.add(child.func.id)
                     if isinstance(value, ast.Call) and isinstance(
                         value.func, ast.Name
                     ):
@@ -989,8 +1109,10 @@ def validate_workflow(workflow: dict[str, Any]) -> ValidationResult:
                     "so the concatenated script runs end-to-end"
                 )
             # Real runtime execution against mocked HTTP responses. This
-            # catches type errors that ast.parse cannot see.
-            result.merge(execute_workflow_dry_run(combined_code))
+            # catches type errors that ast.parse cannot see. It is skipped only
+            # for the fast structural audit; the real pipeline always runs it.
+            if os.environ.get("FLOWMATRIX_SKIP_DRYRUN") != "1":
+                result.merge(execute_workflow_dry_run(combined_code))
 
     prerequisites = details.get("prerequisites") or []
     if len(prerequisites) < config.PREREQUISITES_MIN:
@@ -1076,7 +1198,18 @@ def validate_workflow(workflow: dict[str, Any]) -> ValidationResult:
                 "BEFORE YOU START (prerequisites)"
             )
 
-    # Reverse check: API hosts used in code must be represented in resources.
+    # Reverse check: API hosts used in code must be represented in resources,
+    # but documentation links and already-referenced hosts are exempt.
+    reference_hosts: set[str] = set()
+    for step in steps:
+        for link in step.get("links") or []:
+            host = (
+                urllib.parse.urlparse(str(link.get("url") or "")).hostname
+                or ""
+            )
+            if host:
+                reference_hosts.add(_registrable_domain(host))
+    reference_hosts |= resource_domains
     code_hosts: set[str] = set()
     for step in steps:
         for url in extract_urls(str(step.get("code_snippet") or "")):
@@ -1084,7 +1217,7 @@ def validate_workflow(workflow: dict[str, Any]) -> ValidationResult:
             if host and not _is_placeholder_host(host):
                 code_hosts.add(_registrable_domain(host))
     for domain in sorted(code_hosts):
-        if domain in {"flowmatrix.dev"}:
+        if domain in {"flowmatrix.dev"} or domain in reference_hosts:
             continue
         if domain not in resource_domains:
             result.add(

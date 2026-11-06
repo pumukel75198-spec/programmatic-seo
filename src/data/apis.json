@@ -1173,14 +1173,14 @@
       ],
       "useCase": "Collaborative editors, whiteboards and design tools",
       "website": "https://liveblocks.io",
-      "endpoint": "https://api.liveblocks.io/v2/",
+      "endpoint": "https://api.liveblocks.io/v2/rooms",
       "authentication": "Bearer secret key",
       "sdkLanguages": [
         "JavaScript",
         "React",
         "Node.js"
       ],
-      "docsUrl": "https://liveblocks.io/docs/api-reference/rest-api",
+      "docsUrl": "https://liveblocks.io/docs/api-reference",
       "lastVerified": "2026-10-31"
     }
   },
@@ -1206,7 +1206,7 @@
       ],
       "useCase": "Chat, live dashboards and collaborative apps",
       "website": "https://ably.com",
-      "endpoint": "https://rest.ably.io/",
+      "endpoint": "https://rest.ably.io/time",
       "authentication": "Basic auth or token auth",
       "sdkLanguages": [
         "JavaScript",
@@ -1786,7 +1786,7 @@
         "Text analytics"
       ],
       "useCase": "Utilize AI services to enhance applications with capabilities like image and speech processing.",
-      "website": "https://azure.microsoft.com/en-us/services/cognitive-services/",
+      "website": "https://learn.microsoft.com/en-us/azure/ai-services/",
       "authentication": "Ocp-Apim-Subscription-Key header",
       "apiKeyRequired": true,
       "sdkLanguages": [
@@ -1822,7 +1822,7 @@
         "Integration with various applications"
       ],
       "useCase": "This API is used for tasks like content creation, chatbots, and language understanding.",
-      "website": "https://openai.com/api",
+      "website": "https://platform.openai.com/docs/api-reference/chat/create",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
       "sdkLanguages": [
@@ -1831,8 +1831,8 @@
         "Ruby"
       ],
       "rateLimit": "60 requests/minute",
-      "endpoint": "https://api.openai.com/v1/gpt-4",
-      "docsUrl": "https://platform.openai.com/docs/api-reference/gpt-4"
+      "endpoint": "https://api.openai.com/v1/chat/completions",
+      "docsUrl": "https://platform.openai.com/docs/api-reference/chat/create"
     }
   },
   {
@@ -1854,7 +1854,7 @@
         "Support for various languages"
       ],
       "useCase": "This API is used for generating embeddings that can be utilized in search and machine learning models.",
-      "website": "https://openai.com/api/embeddings",
+      "website": "https://platform.openai.com/docs/guides/embeddings",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
       "sdkLanguages": [
@@ -2146,7 +2146,7 @@
       ],
       "rateLimit": "5000 requests per day",
       "endpoint": "https://api.yelp.com/v3",
-      "docsUrl": "https://www.yelp.com/developers/documentation/v3"
+      "docsUrl": "https://docs.developer.yelp.com/"
     }
   },
   {
@@ -2262,7 +2262,7 @@
         "Face verification"
       ],
       "useCase": "Used for applications requiring facial recognition, such as security systems and user authentication.",
-      "website": "https://azure.microsoft.com/en-us/services/cognitive-services/face/",
+      "website": "https://learn.microsoft.com/en-us/azure/ai-services/",
       "authentication": "Ocp-Apim-Subscription-Key header",
       "apiKeyRequired": true,
       "sdkLanguages": [
@@ -2327,7 +2327,7 @@
         "Automatic scaling"
       ],
       "useCase": "Used for building highly responsive and always-on applications that require low latency and high throughput.",
-      "website": "https://azure.microsoft.com/en-us/services/cosmos-db/",
+      "website": "https://learn.microsoft.com/en-us/azure/cosmos-db/",
       "authentication": "Master key (HMAC) or Microsoft Entra ID",
       "apiKeyRequired": true,
       "sdkLanguages": [
@@ -2463,7 +2463,7 @@
       ],
       "rateLimit": "300 requests/minute",
       "endpoint": "https://api.sendinblue.com/v3",
-      "docsUrl": "https://developers.sendinblue.com/docs"
+      "docsUrl": "https://developers.brevo.com/"
     }
   },
   {
@@ -2525,7 +2525,7 @@
       ],
       "rateLimit": "3 requests/second",
       "endpoint": "https://api.notion.com/v1",
-      "docsUrl": "https://developers.notion.com/docs"
+      "docsUrl": "https://developers.notion.com/reference/intro"
     }
   },
   {
@@ -2592,7 +2592,7 @@
       ],
       "rateLimit": "100 requests/minute",
       "endpoint": "https://api.notion.com/v1/forms",
-      "docsUrl": "https://developers.notion.com/docs/forms-api"
+      "docsUrl": "https://developers.notion.com/reference/intro"
     }
   },
   {
@@ -2696,7 +2696,7 @@
         "Java"
       ],
       "rateLimit": "60 requests/minute",
-      "endpoint": "https://api.twelvedata.com/v1",
+      "endpoint": "https://api.twelvedata.com/time_series",
       "docsUrl": "https://twelvedata.com/docs"
     }
   },
@@ -2789,7 +2789,7 @@
         "Real-time notifications"
       ],
       "useCase": "This API is used to automate tasks and workflows within Notion and integrate with external applications.",
-      "website": "https://www.notion.so/product/api",
+      "website": "https://developers.notion.com/",
       "authentication": "Bearer token",
       "apiKeyRequired": true,
       "sdkLanguages": [
@@ -2799,7 +2799,7 @@
       ],
       "rateLimit": "3 requests per second",
       "endpoint": "https://api.notion.com/v1",
-      "docsUrl": "https://developers.notion.com/docs"
+      "docsUrl": "https://developers.notion.com/reference/intro"
     }
   },
   {
@@ -2889,7 +2889,7 @@
         "Customizable templates and workflows"
       ],
       "useCase": "Ideal for automating repetitive tasks and integrating Notion with other tools.",
-      "website": "https://www.notion.so/product/api",
+      "website": "https://developers.notion.com/",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
       "sdkLanguages": [
@@ -2899,7 +2899,7 @@
       ],
       "rateLimit": "3 requests/second",
       "endpoint": "https://api.notion.com/v1",
-      "docsUrl": "https://developers.notion.com/docs"
+      "docsUrl": "https://developers.notion.com/reference/intro"
     }
   },
   {
@@ -2966,7 +2966,7 @@
       ],
       "rateLimit": "200 requests/minute",
       "endpoint": "https://api.sendinblue.com/v3/sms",
-      "docsUrl": "https://developers.sendinblue.com/docs"
+      "docsUrl": "https://developers.brevo.com/"
     }
   },
   {
@@ -3052,7 +3052,7 @@
         "Customizable queries for specific datasets"
       ],
       "useCase": "Utilized for demographic analysis, research, and policy-making.",
-      "website": "https://www.census.gov/developers.html",
+      "website": "https://www.census.gov/data/developers.html",
       "authentication": "API key required",
       "apiKeyRequired": true,
       "sdkLanguages": [
@@ -3196,38 +3196,6 @@
     }
   },
   {
-    "slug": "telescope-nasa-api",
-    "title": "NASA Telescope API",
-    "description": "Access data from NASA's telescope missions, including images and observations. Suitable for astronomy enthusiasts and researchers.",
-    "category": "AI & Multimodal",
-    "tags": [
-      "nasa",
-      "telescope",
-      "astronomy"
-    ],
-    "details": {
-      "provider": "NASA",
-      "pricing": "Free",
-      "features": [
-        "Access to telescope images",
-        "Observation data",
-        "Searchable database"
-      ],
-      "useCase": "The API is used to retrieve and analyze astronomical data from NASA's telescope missions.",
-      "website": "https://www.nasa.gov",
-      "authentication": "Bearer API key",
-      "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Java"
-      ],
-      "rateLimit": "100 requests/minute",
-      "endpoint": "https://api.nasa.gov/telescope/v1",
-      "docsUrl": "https://api.nasa.gov/docs/telescope-api"
-    }
-  },
-  {
     "slug": "squarespace-api",
     "title": "Squarespace API",
     "description": "The Squarespace API allows developers to build and manage custom integrations with Squarespace websites and services.",
@@ -3356,8 +3324,8 @@
         "Go"
       ],
       "rateLimit": "100 requests/minute",
-      "endpoint": "https://api.aiven.io/v1",
-      "docsUrl": "https://aiven.com/docs/kafka"
+      "endpoint": "https://api.aiven.io/v1/project",
+      "docsUrl": "https://aiven.io/docs/products/kafka"
     }
   },
   {
@@ -3419,8 +3387,8 @@
         "Ruby"
       ],
       "rateLimit": "100 requests/minute",
-      "endpoint": "https://sentry.io/api/v1",
-      "docsUrl": "https://docs.sentry.io/api/performance/"
+      "endpoint": "https://sentry.io/api/0/",
+      "docsUrl": "https://docs.sentry.io/api/"
     }
   },
   {
