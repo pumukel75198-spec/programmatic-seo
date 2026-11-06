@@ -13793,8 +13793,8 @@
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
       "tools": [
-        "Mapbox Maps API",
         "Google Sheets API",
+        "Mapbox Maps API",
         "OpenAI GPT-4 API"
       ],
       "api_slugs": [
@@ -13809,26 +13809,262 @@
       "steps": [
         {
           "title": "Read service areas from Google Sheets",
-          "description": "Load city names and target service keywords."
+          "description": "This step retrieves city names and target service keywords from a Google Sheets document. The data extracted will be used in subsequent steps for geocoding and content generation.",
+          "technical_explanation": "This step serves as the initial data source for the workflow, consuming the spreadsheet data to provide city names and keywords. The API contract involves making a GET request to the Google Sheets API endpoint, specifically to the '/{spreadsheetId}/values/{range}' resource. Required headers include 'Authorization' with a Bearer token. The expected JSON response contains a 'values' array with the data. Edge cases include handling empty arrays and ensuring proper authentication to avoid 403 errors.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\ndef fetch_service_areas():\n    spreadsheet_id = os.environ.get('SPREADSHEET_ID')\n    range_name = 'Sheet1!A:B'  # Adjust as necessary\n    url = f'https://sheets.googleapis.com/v4/spreadsheets/{spreadsheet_id}/values/{range_name}'\n    request = urllib.request.Request(url)\n    request.add_header('Authorization', f'Bearer {os.environ.get(\"GOOGLE_API_TOKEN\")}')\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n        return data.get('values', [])\n\nservice_areas = fetch_service_areas()",
+          "mock_response": {
+            "values": [
+              [
+                "City Name",
+                "Service Keyword"
+              ],
+              [
+                "New York",
+                "SEO Services"
+              ],
+              [
+                "Los Angeles",
+                "Local Marketing"
+              ]
+            ]
+          },
+          "actions": [
+            "Obtain the spreadsheet ID from Google Sheets.",
+            "Set up OAuth 2.0 credentials for Google Sheets API access.",
+            "Ensure the spreadsheet contains the required data."
+          ],
+          "commands": [
+            {
+              "label": "Fetch Google Sheets Data",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SPREADSHEET_ID",
+              "value": "<your_spreadsheet_id>",
+              "description": "The ID of the Google Sheets document."
+            },
+            {
+              "key": "GOOGLE_API_TOKEN",
+              "value": "<your_google_api_token>",
+              "description": "The OAuth 2.0 token for Google Sheets API access."
+            }
+          ],
+          "tools": [
+            "Google Sheets API"
+          ],
+          "checklist": [
+            "Spreadsheet ID is correctly set in the environment variable.",
+            "Data is present in the specified range of the Google Sheet."
+          ],
+          "expectedResult": "Service areas and keywords are successfully retrieved from Google Sheets.",
+          "links": [
+            {
+              "label": "Google Sheets API Documentation",
+              "url": "https://developers.google.com/sheets/api/reference/rest"
+            }
+          ]
         },
         {
           "title": "Geocode service areas with Mapbox",
-          "description": "Resolve coordinates and normalise place names."
+          "description": "This step takes the city names retrieved from Google Sheets and converts them into geographic coordinates using the Mapbox Maps API. The coordinates will be used to enhance the local page content.",
+          "technical_explanation": "This step is crucial for transforming textual location data into usable geographic coordinates. The API contract requires a GET request to the Mapbox Geocoding API endpoint, specifically '/geocoding/v5/mapbox.places/{place}.json'. Required headers include 'Authorization' with the Mapbox access token. The response will contain coordinates in the 'features' array. Edge cases include handling rate limits and ensuring valid place names to avoid empty responses.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\n\ndef geocode_service_area(city_name):\n    url = f\"https://api.mapbox.com/geocoding/v5/mapbox.places/{urllib.parse.quote(city_name)}.json?access_token={os.environ.get('MAPBOX_ACCESS_TOKEN')}\"\n    with urllib.request.urlopen(url) as response:\n        data = json.loads(response.read().decode('utf-8'))\n        return data.get('features', [{}])[0].get('geometry', {}).get('coordinates', [])\n\n\ndef main():\n    # Assuming service_areas is defined and contains city names\n    service_areas = [[\"New York\"], [\"Los Angeles\"], [\"Chicago\"]]  # Example city names\n    coordinates = [geocode_service_area(area[0]) for area in service_areas if area]\n    print(coordinates)\n\n\nif __name__ == \"__main__\":\n    main()",
+          "mock_response": {
+            "features": [
+              {
+                "geometry": {
+                  "coordinates": [
+                    -74.006,
+                    40.7128
+                  ]
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Ensure valid city names are passed to the geocoding function.",
+            "Handle potential rate limits by implementing backoff strategies.",
+            "Check for empty responses and log errors appropriately."
+          ],
+          "commands": [
+            {
+              "label": "Geocode Service Areas",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "MAPBOX_ACCESS_TOKEN",
+              "value": "<your_mapbox_access_token>",
+              "description": "The access token for Mapbox API."
+            }
+          ],
+          "tools": [
+            "Mapbox Maps API"
+          ],
+          "checklist": [
+            "Mapbox access token is correctly set in the environment variable.",
+            "Geocoding returns valid coordinates for all service areas."
+          ],
+          "expectedResult": "Service areas are successfully geocoded into geographic coordinates.",
+          "links": [
+            {
+              "label": "Mapbox Maps API Documentation",
+              "url": "https://docs.mapbox.com"
+            }
+          ]
         },
         {
           "title": "Generate local page copy",
-          "description": "Create unique headings, intros and local highlights with OpenAI."
+          "description": "This step utilizes the OpenAI GPT-4 API to create unique headings, introductions, and local highlights for each service area based on the geocoded data. The generated content will be used to populate the local landing pages.",
+          "technical_explanation": "This step generates dynamic content for local landing pages using AI. The API contract involves a POST request to the OpenAI GPT-4 API endpoint, specifically '/v1/chat/completions'. The request payload includes the model and messages. The expected response contains the generated text. Edge cases include handling API rate limits and ensuring valid prompts to avoid empty responses.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\ndef generate_local_copy(city_name, keyword):\n    url = 'https://api.openai.com/v1/chat/completions'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}', 'Content-Type': 'application/json'}\n    payload = json.dumps({\n        'model': 'gpt-4o-mini',\n        'messages': [{'role': 'user', 'content': f'Generate a landing page for {city_name} focusing on {keyword}.'}]\n    }).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n        return data.get('choices', [{}])[0].get('message', {}).get('content', '')\n\nif __name__ == \"__main__\":\n    service_areas = [('New York', 'pizza'), ('Los Angeles', 'tacos')]  # Example service areas\n    local_copies = [generate_local_copy(area[0], area[1]) for area in service_areas if area]",
+          "mock_response": {
+            "choices": [
+              {
+                "message": {
+                  "content": "Welcome to our SEO Services in New York! Here, we offer tailored solutions to enhance your local visibility."
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Ensure prompts are clear and specific to generate relevant content.",
+            "Handle potential API rate limits by implementing backoff strategies.",
+            "Verify that the generated content meets quality standards."
+          ],
+          "commands": [
+            {
+              "label": "Generate Local Copies",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "OPENAI_API_KEY",
+              "value": "<your_openai_api_key>",
+              "description": "The API key for OpenAI GPT-4."
+            }
+          ],
+          "tools": [
+            "OpenAI GPT-4 API"
+          ],
+          "checklist": [
+            "OpenAI API key is correctly set in the environment variable.",
+            "Generated content is relevant and of high quality."
+          ],
+          "expectedResult": "Unique local page copy is generated for each service area.",
+          "links": [
+            {
+              "label": "OpenAI GPT-4 API Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/chat/create"
+            }
+          ]
         },
         {
           "title": "Write the landing page manifest",
-          "description": "Produce a deterministic page list with slugs and metadata."
+          "description": "This final step compiles the generated content and coordinates into a manifest that includes slugs and metadata for each local landing page. This manifest will be used for deployment or further processing.",
+          "technical_explanation": "This step consolidates the data into a structured format for easy access and deployment. The manifest will include slugs derived from city names and associated metadata. There are no external API calls in this step, but it is essential to ensure the integrity of the data. Edge cases include handling empty content and ensuring unique slugs.",
+          "code_snippet": "import json\n\n\ndef write_manifest(local_copies):\n    manifest = []\n    for index, copy in enumerate(local_copies):\n        slug = f'{copy.split()[0].lower()}-landing-page'\n        manifest.append({\n            'slug': slug,\n            'content': copy\n        })\n    with open('landing_page_manifest.json', 'w') as f:\n        json.dump(manifest, f, indent=4)\n\nwrite_manifest(local_copies)\n",
+          "mock_response": {
+            "manifest": [
+              {
+                "slug": "new-landing-page",
+                "content": "Welcome to our SEO Services in New York! Here, we offer tailored solutions to enhance your local visibility."
+              }
+            ]
+          },
+          "actions": [
+            "Ensure that the generated content is correctly formatted.",
+            "Check for duplicate slugs and resolve any conflicts.",
+            "Save the manifest in a structured format for future use."
+          ],
+          "commands": [
+            {
+              "label": "Write Landing Page Manifest",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "checklist": [
+            "Manifest file is created successfully.",
+            "All entries in the manifest are correctly formatted."
+          ],
+          "expectedResult": "A landing page manifest is created containing slugs and content for each local page.",
+          "links": [
+            {
+              "label": "Python JSON Module Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ],
+          "tools": []
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Google Cloud project with the Google Sheets API enabled and OAuth 2.0 credentials",
+        "A Mapbox account with an access token for the Mapbox Maps API",
+        "An OpenAI account with an API key for the OpenAI GPT-4 API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests by including a token in the request header."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API request limits by pausing requests for a specified duration when limits are reached."
+        },
+        {
+          "term": "Geocoding",
+          "definition": "The process of converting addresses into geographic coordinates."
+        },
+        {
+          "term": "Deterministic Page List",
+          "definition": "A structured list of web pages generated based on predefined rules and input data."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API request returns 403 Forbidden",
+          "solution": "Check if the API key or access token is valid and has the necessary permissions."
+        },
+        {
+          "problem": "Empty response from Google Sheets API",
+          "solution": "Verify that the spreadsheet ID is correct and that the sheet contains data."
+        },
+        {
+          "problem": "Geocoding fails for certain locations",
+          "solution": "Ensure that the location names are correctly formatted and exist in the Mapbox database."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Mapbox Maps API",
+          "url": "https://docs.mapbox.com"
+        },
+        {
+          "label": "Google Sheets API",
+          "url": "https://developers.google.com/sheets/api/reference/rest"
+        },
+        {
+          "label": "OpenAI GPT-4 API",
+          "url": "https://platform.openai.com/docs/api-reference/chat/create"
+        }
+      ],
+      "before_you_start": [
+        "A Google Cloud project with the Google Sheets API enabled and OAuth 2.0 credentials",
+        "A Mapbox account with an access token for the Mapbox Maps API",
+        "An OpenAI account with an API key for the OpenAI GPT-4 API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:51 UTC"
   },
   {
     "slug": "newsletter-automation",
@@ -13846,8 +14082,8 @@
       "duration": "60–75 minutes",
       "tools": [
         "Supabase Database API",
-        "Resend Email API",
-        "OpenAI GPT-4 API"
+        "OpenAI GPT-4 API",
+        "Resend Email API"
       ],
       "api_slugs": [
         "supabase-database-api",
@@ -13862,26 +14098,243 @@
       "steps": [
         {
           "title": "Select newsletter items from Supabase",
-          "description": "Query approved items for the current issue."
+          "description": "This step retrieves approved newsletter items from the Supabase database. It queries the database for items marked as approved for the current issue, ensuring that only relevant content is processed further.",
+          "technical_explanation": "This step acts as the data source for the entire workflow, consuming the database to fetch approved items. The API contract involves a GET request to the Supabase REST endpoint, specifically targeting the approved items table. Required headers include the API key and JWT for authentication. Edge cases to consider include handling empty responses and ensuring that pagination is managed if the result set is large.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\ndef fetch_newsletter_items():\n    url = os.environ.get('SUPABASE_URL') + '/rest/v1/newsletter_items?select=*'\n    headers = {\n        'apikey': os.environ.get('SUPABASE_KEY'),\n        'Authorization': f'Bearer {os.environ.get(\"SUPABASE_KEY\")}'\n    }\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    return data\n\nitems = fetch_newsletter_items()",
+          "mock_response": [
+            {
+              "id": 1,
+              "title": "Weekly Update",
+              "content": "This is the content of the weekly update.",
+              "approved": true
+            },
+            {
+              "id": 2,
+              "title": "Monthly Highlights",
+              "content": "Highlights from the month.",
+              "approved": true
+            }
+          ],
+          "actions": [
+            "Construct the API endpoint URL for Supabase.",
+            "Set the required authentication headers.",
+            "Send a GET request to retrieve approved newsletter items."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python fetch_newsletter_items.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUPABASE_URL",
+              "value": "<your-supabase-url>",
+              "description": "The base URL for your Supabase project."
+            },
+            {
+              "key": "SUPABASE_KEY",
+              "value": "<your-supabase-key>",
+              "description": "The API key for accessing your Supabase project."
+            }
+          ],
+          "tools": [
+            "Supabase Database API"
+          ],
+          "checklist": [
+            "The API request returns a list of approved items.",
+            "The response contains the expected fields: id, title, content."
+          ],
+          "expectedResult": "A list of approved newsletter items is retrieved from Supabase.",
+          "links": [
+            {
+              "label": "Supabase Database API Documentation",
+              "url": "https://supabase.com/docs/guides/api"
+            }
+          ]
         },
         {
           "title": "Summarise items with OpenAI",
-          "description": "Create short blurbs and a subject line."
+          "description": "In this step, the retrieved newsletter items are summarized using the OpenAI GPT-4 API. The goal is to create concise blurbs and a subject line for the newsletter based on the content of the items.",
+          "technical_explanation": "This step transforms the raw content from the previous step into a more digestible format for readers. The API contract involves a POST request to the OpenAI GPT-4 endpoint, sending the item content as input. Required headers include the Bearer token for authentication. Edge cases include handling API rate limits and ensuring the input does not exceed token limits.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\ndef summarize_items(items):\n    summaries = []\n    for item in items:\n        prompt = f'Summarize the following content: {item.get(\"content\", \"\")}'\n        url = 'https://api.openai.com/v1/chat/completions'\n        headers = {\n            'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}',\n            'Content-Type': 'application/json'\n        }\n        payload = json.dumps({\n            'model': 'gpt-4o',\n            'messages': [{'role': 'user', 'content': prompt}]\n        }).encode('utf-8')\n        request = urllib.request.Request(url, data=payload, headers=headers)\n        with urllib.request.urlopen(request) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        summaries.append(result.get('choices', [{}])[0].get('message', {}).get('content', ''))\n    return summaries\n\nsummaries = summarize_items(items)",
+          "mock_response": [
+            "This is a summary of the weekly update.",
+            "Highlights from the month are summarized here."
+          ],
+          "actions": [
+            "Iterate over each newsletter item.",
+            "Construct a prompt for the OpenAI API.",
+            "Send a POST request to the OpenAI API to get the summary."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python summarize_items.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "OPENAI_API_KEY",
+              "value": "<your-openai-api-key>",
+              "description": "The API key for accessing OpenAI services."
+            }
+          ],
+          "tools": [
+            "OpenAI GPT-4 API"
+          ],
+          "checklist": [
+            "Each item is summarized correctly.",
+            "The summaries are concise and relevant."
+          ],
+          "expectedResult": "A list of summaries for the newsletter items is generated.",
+          "links": [
+            {
+              "label": "OpenAI GPT-4 API Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/chat/create"
+            }
+          ]
         },
         {
           "title": "Render the newsletter HTML",
-          "description": "Compose the issue from the ordered item list."
+          "description": "This step composes the final newsletter by rendering the HTML structure using the summarized content. The output will be formatted for email delivery.",
+          "technical_explanation": "This step is crucial for transforming the summarized content generated in the previous workflow step into a structured HTML format suitable for email distribution. It consumes the summarized content data, which is typically an array of objects containing the necessary information for each newsletter item. The architecture relies on concatenating these objects into a cohesive HTML string that adheres to email formatting standards.\n\nThe API contract for this step involves a POST request to the '/render-newsletter' endpoint. The required headers include 'Content-Type: application/json' and 'Authorization: Bearer <token>'. The request payload must be structured as a JSON object containing an array of summaries, each with fields such as 'title', 'body', and 'image_url'. The expected JSON response will include a 'status' field indicating success or failure and a 'html_content' field containing the rendered HTML string.\n\nEdge cases to consider include rate limits imposed by the API, which may restrict the number of requests per minute. Pagination may be necessary if the summarized content exceeds a certain length, requiring the implementation of logic to handle multiple pages of data. Additionally, scenarios with empty arrays should be handled gracefully, ensuring that the output remains valid HTML, and type conversion must be managed to prevent errors when processing different data types.",
+          "code_snippet": "def render_newsletter_html(summaries):\n    # Start the HTML content with the opening tags\n    html_content = '<html><body>'\n    \n    # Loop through each summary and add it to the HTML content\n    for summary in summaries:\n        html_content += f'<p>{summary}</p>'\n    \n    # Add a footer to the newsletter\n    html_content += '<footer>Thank you for reading!</footer>'\n    \n    # Close the HTML tags\n    html_content += '</body></html>'\n    \n    # Return the complete HTML content\n    return html_content\n\n# Example usage of the function\nsummaries = [\"Summary 1\", \"Summary 2\", \"Summary 3\"]\nnewsletter_html = render_newsletter_html(summaries)",
+          "mock_response": "<html><body><p>This is a summary of the weekly update.</p><p>Highlights from the month are summarized here.</p></body></html>",
+          "actions": [
+            "Create an HTML structure for the newsletter.",
+            "Iterate over the summaries to populate the HTML.",
+            "Ensure proper HTML formatting and escaping."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python render_newsletter_html.py"
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "The HTML structure is valid.",
+            "All summaries are included in the HTML."
+          ],
+          "expectedResult": "The newsletter is rendered as valid HTML.",
+          "links": [
+            {
+              "label": "HTML Documentation",
+              "url": "https://developer.mozilla.org/en-US/docs/Web/HTML"
+            }
+          ]
         },
         {
           "title": "Send the issue with Resend",
-          "description": "Deliver the newsletter and record the broadcast id."
+          "description": "In this final step, the rendered HTML newsletter is sent via the Resend Email API. This step ensures that the newsletter reaches the intended recipients.",
+          "technical_explanation": "This step is responsible for delivering the final product to users. The API contract involves a POST request to the Resend Email API endpoint, sending the HTML content and recipient details. Required headers include the Bearer token for authentication. Edge cases include handling delivery failures and ensuring that the email format is correct.",
+          "code_snippet": "import json\nimport os\nimport urllib\n\ndef send_newsletter(html_content):\n    url = 'https://api.resend.com/emails'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"RESEND_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    payload = json.dumps({\n        'to': 'recipient@example.com',\n        'subject': 'Your Weekly Newsletter',\n        'html': html_content\n    }).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        result = json.loads(response.read().decode('utf-8'))\n    return result.get('id', '')\n\nbroadcast_id = send_newsletter(newsletter_html)",
+          "mock_response": "1234567890abcdef",
+          "actions": [
+            "Construct the email payload with recipient and content.",
+            "Send a POST request to the Resend API.",
+            "Capture the broadcast ID for tracking."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python send_newsletter.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "RESEND_API_KEY",
+              "value": "<your-resend-api-key>",
+              "description": "The API key for accessing Resend services."
+            }
+          ],
+          "tools": [
+            "Resend Email API"
+          ],
+          "checklist": [
+            "The email is sent successfully.",
+            "The broadcast ID is recorded."
+          ],
+          "expectedResult": "The newsletter is sent and the broadcast ID is recorded.",
+          "links": [
+            {
+              "label": "Resend Email API Documentation",
+              "url": "https://resend.com/docs"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Supabase project with a table for approved newsletter items",
+        "An OpenAI API key with access to GPT-4",
+        "A Resend account with an API key for sending emails",
+        "Access to Supabase Database API",
+        "Access to Resend Email API",
+        "Access to OpenAI GPT-4 API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access to resources."
+        },
+        {
+          "term": "PostgREST Upsert",
+          "definition": "An operation that inserts a new record or updates an existing record in a database."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API request limits by delaying subsequent requests."
+        },
+        {
+          "term": "Structured Data Extraction",
+          "definition": "The process of retrieving specific data points from a larger dataset in a defined format."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API key authentication fails",
+          "solution": "Verify that the API key is correctly set in environment variables and has the necessary permissions."
+        },
+        {
+          "problem": "Empty response from Supabase",
+          "solution": "Check the query parameters and ensure there are approved items in the database."
+        },
+        {
+          "problem": "Email not sent via Resend",
+          "solution": "Confirm that the Resend API key is valid and that the email payload is correctly formatted."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Supabase Database API",
+          "url": "https://supabase.com/docs/guides/api"
+        },
+        {
+          "label": "Resend Email API",
+          "url": "https://resend.com/docs"
+        },
+        {
+          "label": "OpenAI GPT-4 API",
+          "url": "https://platform.openai.com/docs/api-reference/chat/create"
+        }
+      ],
+      "before_you_start": [
+        "A Supabase project with a table for approved newsletter items",
+        "An OpenAI API key with access to GPT-4",
+        "A Resend account with an API key for sending emails",
+        "Access to Supabase Database API",
+        "Access to Resend Email API",
+        "Access to OpenAI GPT-4 API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:52 UTC"
   },
   {
     "slug": "content-localization-pipeline",
@@ -13898,8 +14351,8 @@
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
       "tools": [
-        "IBM Watson Language Translator API",
         "Contentful Content Management System API",
+        "IBM Watson Language Translator API",
         "Amazon S3 API"
       ],
       "api_slugs": [
@@ -13914,26 +14367,275 @@
       "steps": [
         {
           "title": "Read source entries from Contentful",
-          "description": "Select entries marked ready for localization."
+          "description": "This step retrieves entries from Contentful that are marked as ready for localization. It ensures that only the necessary content is processed further.",
+          "technical_explanation": "This step acts as the initial data fetch from Contentful, consuming the API to gather entries. The endpoint used is /spaces/{space_id}/entries, requiring a Bearer token for authentication. The response will include an array of entries, which may be paginated. Handle pagination by checking the total number of entries and fetching additional pages if necessary.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\nimport sys\n\ndef fetch_contentful_entries():\n    space_id = os.environ.get('CONTENTFUL_SPACE_ID')\n    access_token = os.environ.get('CONTENTFUL_ACCESS_TOKEN')\n    url = f'https://api.contentful.com/v1/spaces/{space_id}/entries?sys.publishedAt[exists]=true'\n    request = urllib.request.Request(url)\n    request.add_header('Authorization', f'Bearer {access_token}')\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    return data.get('items', [])\n\nentries = fetch_contentful_entries()",
+          "mock_response": {
+            "items": [
+              {
+                "sys": {
+                  "id": "entry1",
+                  "type": "Entry"
+                },
+                "fields": {
+                  "title": {
+                    "en-US": "Hello World"
+                  },
+                  "body": {
+                    "en-US": "This is a test entry."
+                  }
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Set up Contentful space and API access",
+            "Identify entries marked for localization",
+            "Fetch entries using Contentful API"
+          ],
+          "commands": [
+            {
+              "label": "Fetch Contentful Entries",
+              "language": "bash",
+              "code": "python fetch_contentful_entries.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "CONTENTFUL_SPACE_ID",
+              "value": "<your_space_id>",
+              "description": "The ID of your Contentful space"
+            },
+            {
+              "key": "CONTENTFUL_ACCESS_TOKEN",
+              "value": "<your_access_token>",
+              "description": "The access token for Contentful API"
+            }
+          ],
+          "tools": [
+            "Contentful Content Management System API"
+          ],
+          "checklist": [
+            "Verify that the API key is set correctly",
+            "Ensure that entries are published and accessible"
+          ],
+          "expectedResult": "A list of entries marked for localization is retrieved from Contentful.",
+          "links": [
+            {
+              "label": "Contentful Content Management System API Documentation",
+              "url": "https://www.contentful.com/developers/docs/references/content-delivery-api/"
+            }
+          ]
         },
         {
           "title": "Translate with Watson Language Translator",
-          "description": "Call the translate endpoint for each target language."
+          "description": "This step translates the retrieved entries into the target languages using the IBM Watson Language Translator API.",
+          "technical_explanation": "This step processes each entry and sends it to the Watson Language Translator API for translation. The endpoint used is /v3/translate, requiring a Bearer token for authentication. The request payload must include the text to be translated and the target language. Handle potential errors such as unsupported languages or empty text by validating inputs before making the API call.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\n\ndef translate_text(text, target_language):\n    # Get the API key from environment variables\n    api_key = os.environ.get('WATSON_TRANSLATOR_API_KEY')\n    # Define the URL for the IBM Watson Language Translator API\n    url = 'https://api.us-south.language-translator.watson.cloud.ibm.com/instances/your_instance_id/v3/translate?version=2018-05-01'\n    headers = {'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'}\n    # Prepare the payload with the text and target language\n    payload = json.dumps({'text': text, 'target': target_language}).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    # Make the request to the API and return the translated text\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))\n\n# Example usage of the translate_text function\ntranslated = translate_text('Hello World', 'es')",
+          "mock_response": {
+            "translations": [
+              {
+                "translation": "Hola Mundo"
+              }
+            ]
+          },
+          "actions": [
+            "Prepare text for translation",
+            "Call Watson Language Translator API",
+            "Handle translation response"
+          ],
+          "commands": [
+            {
+              "label": "Translate Text",
+              "language": "bash",
+              "code": "python translate_text.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "WATSON_TRANSLATOR_API_KEY",
+              "value": "<your_api_key>",
+              "description": "The API key for IBM Watson Language Translator"
+            }
+          ],
+          "tools": [
+            "IBM Watson Language Translator API"
+          ],
+          "checklist": [
+            "Verify that the API key is set correctly",
+            "Ensure that the text is not empty before translation"
+          ],
+          "expectedResult": "The text is translated into the specified target language.",
+          "links": [
+            {
+              "label": "IBM Watson Language Translator API Documentation",
+              "url": "https://cloud.ibm.com/apidocs/language-translator"
+            }
+          ]
         },
         {
           "title": "Create localized Contentful entries",
-          "description": "Write translated fields into the target locale."
+          "description": "This step writes the translated content back to Contentful as new entries in the target locale.",
+          "technical_explanation": "This step takes the translated text and creates new entries in Contentful for the specified locale. The endpoint used is /spaces/{space_id}/entries, requiring a Bearer token for authentication. The request payload must include the translated fields structured according to Contentful's requirements. Handle potential errors such as duplicate entries by checking existing entries before creation.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\n\ndef create_contentful_entry(title, body, locale):\n    space_id = os.environ.get('CONTENTFUL_SPACE_ID')\n    access_token = os.environ.get('CONTENTFUL_ACCESS_TOKEN')\n    url = f'https://api.contentful.com/v1/spaces/{space_id}/entries'\n    headers = {'Authorization': f'Bearer {access_token}', 'Content-Type': 'application/json'}\n    payload = json.dumps({'fields': {'title': {locale: title}, 'body': {locale: body}}}).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))\n\nnew_entry = create_contentful_entry('Hola Mundo', 'Esta es una entrada de prueba.', 'es')",
+          "mock_response": {
+            "sys": {
+              "id": "new_entry_id",
+              "type": "Entry"
+            },
+            "fields": {
+              "title": {
+                "es": "Hola Mundo"
+              },
+              "body": {
+                "es": "Esta es una entrada de prueba."
+              }
+            }
+          },
+          "actions": [
+            "Format translated content for Contentful",
+            "Call Contentful API to create new entry",
+            "Handle response and errors"
+          ],
+          "commands": [
+            {
+              "label": "Create Contentful Entry",
+              "language": "bash",
+              "code": "python create_contentful_entry.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "CONTENTFUL_SPACE_ID",
+              "value": "<your_space_id>",
+              "description": "The ID of your Contentful space"
+            },
+            {
+              "key": "CONTENTFUL_ACCESS_TOKEN",
+              "value": "<your_access_token>",
+              "description": "The access token for Contentful API"
+            }
+          ],
+          "tools": [
+            "Contentful Content Management System API"
+          ],
+          "checklist": [
+            "Verify that the API key is set correctly",
+            "Ensure that the entry is created successfully"
+          ],
+          "expectedResult": "New localized entries are created in Contentful for the target locale.",
+          "links": [
+            {
+              "label": "Contentful Content Management System API Documentation",
+              "url": "https://www.contentful.com/developers/docs/references/content-delivery-api/"
+            }
+          ]
         },
         {
           "title": "Archive translation assets on S3",
-          "description": "Store source and translated payloads for audit."
+          "description": "This step stores both the source and translated payloads in an S3 bucket for future auditing.",
+          "technical_explanation": "This step uploads the source and translated content to an S3 bucket using the Amazon S3 API. The endpoint used is /{bucket_name}/{object_key}, requiring AWS Signature Version 4 for authentication. The request must include the payload as the object content. Handle potential errors such as access denied by ensuring the correct permissions are set on the S3 bucket.",
+          "code_snippet": "import json\nimport os\nimport urllib.request\n\n\ndef upload_to_s3(bucket_name, object_key, data):\n    # Simulate uploading to S3 by printing the action\n    print(f'Uploading to S3 bucket: {bucket_name}, object key: {object_key}, data: {data}')\n\n\nbucket_name = os.environ.get('S3_BUCKET_NAME')\nsource_data = {'title': 'Hello World', 'body': 'This is a test entry.'}\ntranslated_data = {'title': 'Hola Mundo', 'body': 'Esta es una entrada de prueba.'}\n\nupload_to_s3(bucket_name, 'source_entry.json', source_data)\nupload_to_s3(bucket_name, 'translated_entry.json', translated_data)",
+          "mock_response": "None",
+          "actions": [
+            "Prepare data for S3 upload",
+            "Call S3 API to upload source and translated data",
+            "Handle response and errors"
+          ],
+          "commands": [
+            {
+              "label": "Upload to S3",
+              "language": "bash",
+              "code": "python upload_to_s3.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "S3_BUCKET_NAME",
+              "value": "<your_bucket_name>",
+              "description": "The name of your S3 bucket"
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "Verify that the S3 bucket exists and is accessible",
+            "Ensure that the data is uploaded successfully"
+          ],
+          "expectedResult": "Source and translated payloads are archived in the specified S3 bucket.",
+          "links": [
+            {
+              "label": "Amazon S3 API Documentation",
+              "url": "https://docs.aws.amazon.com/s3/index.html"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "An IBM Cloud account with access to the Watson Language Translator service",
+        "A Contentful account with a space set up and API access",
+        "An AWS account with S3 bucket created for archiving",
+        "Access to IBM Watson Language Translator API",
+        "Access to Contentful Content Management System API",
+        "Access to Amazon S3 API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method of API authentication where a token is passed in the HTTP header to authorize requests."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by pausing requests when limits are reached."
+        },
+        {
+          "term": "Payload Structure",
+          "definition": "The specific format and keys of data sent in API requests and responses."
+        },
+        {
+          "term": "Content Localization",
+          "definition": "The process of adapting content to meet the language and cultural requirements of a target audience."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API rate limit exceeded",
+          "solution": "Implement exponential backoff to retry requests after a delay."
+        },
+        {
+          "problem": "Invalid API key error",
+          "solution": "Verify that the API key is correctly set in the environment variables."
+        },
+        {
+          "problem": "Empty response from Contentful",
+          "solution": "Check if the entries marked for localization are correctly published and accessible."
+        }
+      ],
+      "resources": [
+        {
+          "label": "IBM Watson Language Translator API",
+          "url": "https://cloud.ibm.com/apidocs/language-translator"
+        },
+        {
+          "label": "Contentful Content Management System API",
+          "url": "https://www.contentful.com/developers/docs/references/content-delivery-api/"
+        },
+        {
+          "label": "Amazon S3 API",
+          "url": "https://docs.aws.amazon.com/s3/index.html"
+        }
+      ],
+      "before_you_start": [
+        "An IBM Cloud account with access to the Watson Language Translator service",
+        "A Contentful account with a space set up and API access",
+        "An AWS account with S3 bucket created for archiving",
+        "Access to IBM Watson Language Translator API",
+        "Access to Contentful Content Management System API",
+        "Access to Amazon S3 API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:53 UTC"
   },
   {
     "slug": "meeting-notes-automation",
@@ -13967,26 +14669,260 @@
       "steps": [
         {
           "title": "Transcribe the meeting recording",
-          "description": "Submit the recording to the Whisper transcriptions endpoint."
+          "description": "This step involves submitting the audio recording to the OpenAI Whisper API for transcription. The response will contain the transcribed text, which will be used in subsequent steps.",
+          "technical_explanation": "This step serves as the initial data ingestion point, consuming an audio file and producing a text transcription. The API contract requires a POST request to the endpoint 'https://api.openai.com/v1/audio/transcriptions' with the audio file in the payload and a Bearer token for authentication. Edge cases include handling unsupported audio formats and ensuring the API key is valid to avoid authentication errors.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef transcribe_audio(file_path):\n    url = 'https://api.openai.com/v1/audio/transcriptions'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    with open(file_path, 'rb') as audio_file:\n        request = urllib.request.Request(url, data=audio_file.read(), headers=headers)\n        response = urllib.request.urlopen(request)\n        return json.loads(response.read().decode('utf-8'))\n\ntranscription = transcribe_audio('meeting_recording.mp3')",
+          "mock_response": {
+            "text": "This is the transcribed text of the meeting."
+          },
+          "actions": [
+            "Prepare the audio file in a supported format.",
+            "Set the OPENAI_API_KEY environment variable.",
+            "Call the transcription function with the audio file path."
+          ],
+          "commands": [
+            {
+              "label": "Run transcription",
+              "language": "bash",
+              "code": "python transcribe.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "OPENAI_API_KEY",
+              "value": "<your_openai_api_key>",
+              "description": "API key for authenticating requests to OpenAI."
+            }
+          ],
+          "tools": [
+            "OpenAI Whisper API"
+          ],
+          "checklist": [
+            "Audio file is in a supported format.",
+            "Transcription response is not empty."
+          ],
+          "expectedResult": "The meeting recording is transcribed into text.",
+          "links": [
+            {
+              "label": "OpenAI Whisper API Documentation",
+              "url": "https://platform.openai.com/docs/guides/speech-to-text"
+            }
+          ]
         },
         {
           "title": "Extract decisions and owners",
-          "description": "Call OpenAI to parse action items with owners and due dates."
+          "description": "In this step, the transcribed text is analyzed to extract actionable items, including decisions made during the meeting and the owners responsible for those items.",
+          "technical_explanation": "This step processes the transcription output to identify key decisions and assign owners. It utilizes the OpenAI API to analyze the text, requiring a POST request to the appropriate endpoint with the transcription as input. Edge cases include handling ambiguous text and ensuring that the response contains the expected structure.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef extract_decisions(transcription):\n    url = 'https://api.openai.com/v1/chat/completions'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    payload = json.dumps({\n        'model': 'gpt-4o-mini',\n        'messages': [{'role': 'user', 'content': f'Extract decisions and owners from the following text: {transcription}'}]\n    }).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    response = urllib.request.urlopen(request)\n    return json.loads(response.read().decode('utf-8'))\n\ndecisions = extract_decisions(transcription.get('text', ''))",
+          "mock_response": {
+            "decisions": [
+              {
+                "item": "Finalize project timeline",
+                "owner": "Alice",
+                "due_date": "2023-10-15"
+              },
+              {
+                "item": "Prepare budget report",
+                "owner": "Bob",
+                "due_date": "2023-10-20"
+              }
+            ]
+          },
+          "actions": [
+            "Set the OPENAI_API_KEY environment variable.",
+            "Call the extraction function with the transcription text.",
+            "Handle the response to extract decision items."
+          ],
+          "commands": [
+            {
+              "label": "Run extraction",
+              "language": "bash",
+              "code": "python extract.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "OPENAI_API_KEY",
+              "value": "<your_openai_api_key>",
+              "description": "API key for authenticating requests to OpenAI."
+            }
+          ],
+          "tools": [
+            "OpenAI Whisper API"
+          ],
+          "checklist": [
+            "Decisions are extracted from the transcription.",
+            "Each decision has an associated owner."
+          ],
+          "expectedResult": "Decisions and owners are extracted from the transcription.",
+          "links": [
+            {
+              "label": "OpenAI Whisper API Documentation",
+              "url": "https://platform.openai.com/docs/guides/speech-to-text"
+            }
+          ]
         },
         {
           "title": "Create the Notion meeting page",
-          "description": "Write the notes into the meetings database."
+          "description": "This step involves creating a new page in Notion to store the meeting notes, including the transcribed text and extracted decisions.",
+          "technical_explanation": "This step persists the meeting notes into Notion, requiring a POST request to the Notion API endpoint for page creation. The request must include the appropriate headers and a structured payload containing the meeting details. Edge cases include handling errors related to invalid tokens or incorrect database IDs.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef create_notion_page(decisions):\n    url = 'https://api.notion.com/v1/pages'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"NOTION_TOKEN\")}',\n        'Notion-Version': '2022-06-28',\n        'Content-Type': 'application/json'\n    }\n    payload = json.dumps({\n        'parent': {'database_id': os.environ.get('NOTION_DATABASE_ID')},\n        'properties': {\n            'Title': {'title': [{'text': {'content': 'Meeting Notes'}}]},\n            'Decisions': {'rich_text': [{'text': {'content': json.dumps(decisions)}}]}\n        }\n    }).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    response = urllib.request.urlopen(request)\n    return json.loads(response.read().decode('utf-8'))\n\nnotion_response = create_notion_page(decisions)",
+          "mock_response": {
+            "id": "12345",
+            "object": "page",
+            "created_time": "2023-10-01T12:00:00Z"
+          },
+          "actions": [
+            "Set the NOTION_TOKEN and NOTION_DATABASE_ID environment variables.",
+            "Call the function to create a Notion page with decisions.",
+            "Verify the response for successful page creation."
+          ],
+          "commands": [
+            {
+              "label": "Run Notion page creation",
+              "language": "bash",
+              "code": "python create_notion.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "NOTION_TOKEN",
+              "value": "<your_notion_token>",
+              "description": "Integration token for accessing Notion."
+            },
+            {
+              "key": "NOTION_DATABASE_ID",
+              "value": "<your_notion_database_id>",
+              "description": "Database ID where the meeting notes will be stored."
+            }
+          ],
+          "tools": [
+            "Notion API"
+          ],
+          "checklist": [
+            "Notion page is created successfully.",
+            "Meeting notes are stored in the specified database."
+          ],
+          "expectedResult": "A new page in Notion containing the meeting notes is created.",
+          "links": [
+            {
+              "label": "Notion API Documentation",
+              "url": "https://developers.notion.com/reference/intro"
+            }
+          ]
         },
         {
           "title": "Share the summary in Slack",
-          "description": "Post decisions and action items to the project channel."
+          "description": "This final step posts the extracted decisions and action items to a specified Slack channel for team visibility.",
+          "technical_explanation": "This workflow step serves a critical role in the overall architecture by facilitating team communication through Slack. It consumes the extracted decisions and action items generated in the previous step, ensuring that relevant information is shared with the team in a timely manner. The step utilizes the Slack Web API, specifically the endpoint 'https://slack.com/api/chat.postMessage', employing a POST request method. Required headers include 'Authorization' with a Bearer token and 'Content-Type' set to 'application/json'. The request payload must contain 'channel' as the target channel ID and 'text' as the message content, formatted as a JSON object. The expected JSON response will include fields such as 'ok', 'channel', and 'ts', indicating the success of the message posting. Edge cases to consider include Slack's rate limits, which may restrict the number of messages sent within a specific timeframe, necessitating error handling for 'ratelimited' responses. Additionally, the API does not support pagination, so if the extracted data is empty, the system should handle this gracefully by either sending a default message or skipping the post. Type conversion should be managed to ensure that the channel ID and message content are correctly formatted as strings.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef post_to_slack(decisions):\n    url = 'https://slack.com/api/chat.postMessage'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"SLACK_BOT_TOKEN\")}',\n        'Content-Type': 'application/json'\n    }\n    payload = json.dumps({\n        'channel': os.environ.get('SLACK_CHANNEL_ID'),\n        'text': f'Decisions from the meeting: {json.dumps(decisions)}'\n    }).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    response = urllib.request.urlopen(request)\n    return response.read().decode('utf-8')\n\nslack_response = post_to_slack(decisions)",
+          "mock_response": "ok",
+          "actions": [
+            "Set the SLACK_BOT_TOKEN and SLACK_CHANNEL_ID environment variables.",
+            "Call the function to post the summary to Slack.",
+            "Check the response to confirm the message was sent."
+          ],
+          "commands": [
+            {
+              "label": "Run Slack post",
+              "language": "bash",
+              "code": "python post_to_slack.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SLACK_BOT_TOKEN",
+              "value": "<your_slack_bot_token>",
+              "description": "OAuth 2.0 bot token for Slack."
+            },
+            {
+              "key": "SLACK_CHANNEL_ID",
+              "value": "<your_slack_channel_id>",
+              "description": "Channel ID where the message will be posted."
+            }
+          ],
+          "tools": [
+            "Slack Web API"
+          ],
+          "checklist": [
+            "Slack message is sent successfully.",
+            "Message contains the correct decisions."
+          ],
+          "expectedResult": "The summary of decisions is posted in the specified Slack channel.",
+          "links": [
+            {
+              "label": "Slack Web API Documentation",
+              "url": "https://api.slack.com/methods"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "An OpenAI API key",
+        "A Notion integration token",
+        "A Slack OAuth 2.0 bot token",
+        "Access to OpenAI Whisper API",
+        "Access to Notion API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that is included in the request header."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by waiting before retrying requests."
+        },
+        {
+          "term": "Structured Data Extraction",
+          "definition": "The process of retrieving specific data fields from a larger dataset."
+        },
+        {
+          "term": "Payload Construction",
+          "definition": "The process of creating a structured data object to send in an API request."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API key authentication fails",
+          "solution": "Ensure that the API key is correctly set in the environment variables."
+        },
+        {
+          "problem": "Transcription returns empty",
+          "solution": "Check the audio file format and ensure it is supported by the OpenAI Whisper API."
+        },
+        {
+          "problem": "Slack message not sent",
+          "solution": "Verify the Slack bot token and ensure the bot has permission to post in the channel."
+        }
+      ],
+      "resources": [
+        {
+          "label": "OpenAI Whisper API",
+          "url": "https://platform.openai.com/docs/guides/speech-to-text"
+        },
+        {
+          "label": "Notion API",
+          "url": "https://developers.notion.com/reference/intro"
+        },
+        {
+          "label": "Slack Web API",
+          "url": "https://api.slack.com/methods"
+        }
+      ],
+      "before_you_start": [
+        "An OpenAI API key",
+        "A Notion integration token",
+        "A Slack OAuth 2.0 bot token",
+        "Access to OpenAI Whisper API",
+        "Access to Notion API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:53 UTC"
   },
   {
     "slug": "notion-task-sync",
@@ -14020,26 +14956,271 @@
       "steps": [
         {
           "title": "Read open tasks from Notion",
-          "description": "Query the tasks database for items not marked done."
+          "description": "This step retrieves tasks from a Notion database that are not marked as done. It ensures that only relevant tasks are processed in subsequent steps.",
+          "technical_explanation": "This step serves as the initial data source for the workflow, querying the Notion tasks database to fetch open tasks. The API contract involves a GET request to the Notion API endpoint '/v1/databases/{database_id}/query' with appropriate headers for authorization. Edge cases include handling rate limits by implementing backoff strategies and ensuring that the response is parsed correctly, especially when no tasks are found.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_open_tasks():\n    url = 'https://api.notion.com/v1/databases/YOUR_DATABASE_ID/query'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"NOTION_API_TOKEN\")}',\n        'Notion-Version': '2022-06-28'\n    }\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    return [task.get('properties', {}).get('Name', {}).get('title', [{}])[0].get('text', {}).get('content', '') for task in data.get('results', [])]\n\nopen_tasks = fetch_open_tasks()",
+          "mock_response": {
+            "results": [
+              {
+                "properties": {
+                  "Name": {
+                    "title": [
+                      {
+                        "text": {
+                          "content": "Task 1"
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "Name": {
+                    "title": [
+                      {
+                        "text": {
+                          "content": "Task 2"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Set up a Notion integration and obtain the API token.",
+            "Identify the database ID for the tasks database in Notion.",
+            "Ensure the Notion API version is specified in the request headers."
+          ],
+          "commands": [
+            {
+              "label": "Fetch open tasks from Notion",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "NOTION_API_TOKEN",
+              "value": "<YOUR_NOTION_API_TOKEN>",
+              "description": "Bearer token for Notion API authentication."
+            }
+          ],
+          "tools": [
+            "Notion API"
+          ],
+          "checklist": [
+            "Successfully retrieved open tasks from Notion.",
+            "Tasks are not marked as done in the response."
+          ],
+          "expectedResult": "Open tasks from Notion are successfully fetched.",
+          "links": [
+            {
+              "label": "Notion API Documentation",
+              "url": "https://developers.notion.com/reference/intro"
+            }
+          ]
         },
         {
           "title": "Create or update Asana tasks",
-          "description": "Match by external id and sync assignee and due date."
+          "description": "This step synchronizes the tasks retrieved from Notion with Asana, creating new tasks or updating existing ones based on the external ID.",
+          "technical_explanation": "This step processes the open tasks from Notion and interacts with the Asana API to either create new tasks or update existing ones. The API contract requires a POST request to the Asana API endpoint '/v1/tasks' for creating tasks and a PUT request to '/v1/tasks/{task_id}' for updates, including necessary headers for authentication. Edge cases include handling scenarios where tasks already exist and ensuring that the correct task ID is used for updates.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef sync_tasks_with_asana(open_tasks):\n    for task in open_tasks:\n        task_id = task.get('external_id')\n        if task_id:\n            url = f'https://api.asana.com/v1/tasks/{task_id}'\n            headers = {\n                'Authorization': f'Bearer {os.environ.get(\"ASANA_API_TOKEN\")}',\n                'Content-Type': 'application/json'\n            }\n            payload = json.dumps({\n                'name': task['name'],\n                'due_on': task['due_date'],\n                'assignee': task['assignee']\n            }).encode('utf-8')\n            request = urllib.request.Request(url, data=payload, headers=headers, method='PUT')\n            urllib.request.urlopen(request)\n        else:\n            url = 'https://api.asana.com/v1/tasks'\n            headers = {\n                'Authorization': f'Bearer {os.environ.get(\"ASANA_API_TOKEN\")}',\n                'Content-Type': 'application/json'\n            }\n            payload = json.dumps({\n                'name': task['name'],\n                'due_on': task['due_date'],\n                'assignee': task['assignee']\n            }).encode('utf-8')\n            request = urllib.request.Request(url, data=payload, headers=headers)\n            urllib.request.urlopen(request)\n\nsync_tasks_with_asana(open_tasks)",
+          "mock_response": {
+            "data": {
+              "id": "123456789",
+              "name": "Task 1",
+              "assignee": "user@example.com",
+              "due_on": "2023-10-31"
+            }
+          },
+          "actions": [
+            "Obtain the Asana API token and set it as an environment variable.",
+            "Map the Notion task properties to Asana task fields.",
+            "Implement error handling for API responses."
+          ],
+          "commands": [
+            {
+              "label": "Sync tasks with Asana",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "ASANA_API_TOKEN",
+              "value": "<YOUR_ASANA_API_TOKEN>",
+              "description": "Bearer token for Asana API authentication."
+            }
+          ],
+          "tools": [
+            "Asana API"
+          ],
+          "checklist": [
+            "Tasks are created or updated in Asana successfully.",
+            "No errors are returned from the Asana API."
+          ],
+          "expectedResult": "Tasks are synchronized between Notion and Asana.",
+          "links": [
+            {
+              "label": "Asana API Documentation",
+              "url": "https://developers.asana.com/docs"
+            }
+          ]
         },
         {
           "title": "Detect overdue tasks",
-          "description": "Compare due dates with the current date."
+          "description": "This step identifies tasks that are overdue by comparing their due dates with the current date.",
+          "technical_explanation": "This step processes the list of tasks and checks each task's due date against the current date to determine if it is overdue. The architecture ensures that only overdue tasks are passed to the next step for reporting. Edge cases include handling tasks without due dates and ensuring that date comparisons are correctly formatted.",
+          "code_snippet": "import json\nimport datetime\n\ndef detect_overdue_tasks(open_tasks):\n    overdue_tasks = []\n    current_date = datetime.datetime.now().date()\n    for task in open_tasks:\n        due_date = task.get('due_date')\n        if due_date and datetime.datetime.strptime(due_date, '%Y-%m-%d').date() < current_date:\n            overdue_tasks.append(task)\n    return overdue_tasks\n\noverdue_tasks = detect_overdue_tasks(open_tasks)",
+          "mock_response": [
+            {
+              "name": "Task 1",
+              "due_date": "2023-10-01",
+              "assignee": "user@example.com"
+            }
+          ],
+          "actions": [
+            "Ensure that due dates are in the correct format.",
+            "Implement logic to handle tasks without due dates.",
+            "Verify that the current date is correctly retrieved."
+          ],
+          "commands": [
+            {
+              "label": "Detect overdue tasks",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [],
+          "tools": [
+            "Notion API"
+          ],
+          "checklist": [
+            "Overdue tasks are correctly identified.",
+            "Tasks without due dates are handled appropriately."
+          ],
+          "expectedResult": "Overdue tasks are successfully detected.",
+          "links": [
+            {
+              "label": "Notion API Documentation",
+              "url": "https://developers.notion.com/reference/intro"
+            }
+          ]
         },
         {
           "title": "Report overdue work in Slack",
-          "description": "Post overdue tasks grouped by owner."
+          "description": "This step sends a message to a Slack channel listing the overdue tasks grouped by their assignees.",
+          "technical_explanation": "This step formats the overdue tasks and sends a message to a specified Slack channel using the Slack Web API. The API contract involves a POST request to the Slack API endpoint '/api/chat.postMessage' with the necessary headers and payload. Edge cases include handling message formatting and ensuring that the Slack bot has permission to post in the specified channel.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef report_overdue_tasks(overdue_tasks):\n    channel_id = 'YOUR_CHANNEL_ID'\n    message = 'Overdue Tasks:\\n'\n    for task in overdue_tasks:\n        message += f\"- {task['name']} (Due: {task['due_date']})\\n\"\n    url = 'https://slack.com/api/chat.postMessage'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"SLACK_BOT_TOKEN\")}',\n        'Content-Type': 'application/json'\n    }\n    payload = json.dumps({\n        'channel': channel_id,\n        'text': message\n    }).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        response.read().decode('utf-8')\n\nreport_overdue_tasks(overdue_tasks)",
+          "mock_response": {
+            "ok": true,
+            "channel": "YOUR_CHANNEL_ID",
+            "ts": "1234567890.123456"
+          },
+          "actions": [
+            "Set up a Slack app and obtain the bot token.",
+            "Ensure the bot has permission to post in the desired channel.",
+            "Format the message correctly for Slack."
+          ],
+          "commands": [
+            {
+              "label": "Report overdue tasks in Slack",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SLACK_BOT_TOKEN",
+              "value": "<YOUR_SLACK_BOT_TOKEN>",
+              "description": "OAuth 2.0 bot token for Slack API."
+            }
+          ],
+          "tools": [
+            "Slack Web API"
+          ],
+          "checklist": [
+            "Overdue tasks are reported in Slack.",
+            "Message formatting is correct."
+          ],
+          "expectedResult": "Overdue tasks are successfully reported in Slack.",
+          "links": [
+            {
+              "label": "Slack Web API Documentation",
+              "url": "https://api.slack.com/methods"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Notion account with access to the tasks database",
+        "An Asana account with permission to create and update tasks",
+        "A Slack account with access to the desired channel",
+        "Access to Notion API",
+        "Access to Asana API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by waiting before retrying requests."
+        },
+        {
+          "term": "Payload Structure",
+          "definition": "The format and content of data sent in an API request."
+        },
+        {
+          "term": "Webhook Response Handling",
+          "definition": "The process of managing responses from webhooks, ensuring they are processed correctly."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Authentication failure with Notion API",
+          "solution": "Verify that the Bearer token and Notion-Version header are correctly set."
+        },
+        {
+          "problem": "Asana tasks not updating",
+          "solution": "Check that the external ID matches and that the API token has sufficient permissions."
+        },
+        {
+          "problem": "Slack messages not posting",
+          "solution": "Ensure the OAuth 2.0 bot token is valid and that the channel ID is correct."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Notion API",
+          "url": "https://developers.notion.com/reference/intro"
+        },
+        {
+          "label": "Asana API",
+          "url": "https://developers.asana.com/docs"
+        },
+        {
+          "label": "Slack Web API",
+          "url": "https://api.slack.com/methods"
+        }
+      ],
+      "before_you_start": [
+        "A Notion account with access to the tasks database",
+        "An Asana account with permission to create and update tasks",
+        "A Slack account with access to the desired channel",
+        "Access to Notion API",
+        "Access to Asana API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:54 UTC"
   },
   {
     "slug": "document-approval-workflow",
@@ -14073,26 +15254,255 @@
       "steps": [
         {
           "title": "Read document records from Notion",
-          "description": "Select documents waiting for approval."
+          "description": "This step retrieves documents that are pending approval from Notion. It filters documents based on their status to ensure only relevant records are processed.",
+          "technical_explanation": "This step acts as the initial data fetcher, consuming the Notion API to retrieve document records. The endpoint used is https://api.notion.com/v1/databases/{database_id}/query with a POST method. Required headers include the Bearer token for authentication and Notion-Version. The response will contain an array of documents, which may be empty if no documents are pending approval. Rate limits apply, so ensure to handle potential 429 responses.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\ndef fetch_documents():\n    url = 'https://api.notion.com/v1/databases/YOUR_DATABASE_ID/query'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"NOTION_API_TOKEN\")}',\n        'Notion-Version': '2022-06-28'\n    }\n    request = urllib.request.Request(url, method='POST', headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n        return data.get('results', [])\n\ndocuments = fetch_documents()",
+          "mock_response": {
+            "results": [
+              {
+                "id": "document_id_1",
+                "properties": {
+                  "Name": {
+                    "title": [
+                      {
+                        "text": {
+                          "content": "Document Title 1"
+                        }
+                      }
+                    ]
+                  },
+                  "Status": {
+                    "select": {
+                      "name": "Pending"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Construct the API request to Notion",
+            "Send the request and read the response",
+            "Extract the relevant document records from the response"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "NOTION_API_TOKEN",
+              "value": "<YOUR_NOTION_API_TOKEN>",
+              "description": "Token for authenticating with the Notion API"
+            }
+          ],
+          "tools": [
+            "Notion API"
+          ],
+          "checklist": [
+            "Documents are fetched successfully",
+            "Response contains the expected structure"
+          ],
+          "expectedResult": "The list of documents pending approval is retrieved from Notion.",
+          "links": [
+            {
+              "label": "Notion API Documentation",
+              "url": "https://developers.notion.com/reference/intro"
+            }
+          ]
         },
         {
           "title": "Render the PDF with PDF.co",
-          "description": "Call the HTML-to-PDF endpoint and store the result URL."
+          "description": "This step converts the HTML content of the documents into PDF format using the PDF.co API. The resulting PDF URL is stored for later use.",
+          "technical_explanation": "This step transforms the HTML content retrieved from the previous step into a PDF file. It utilizes the PDF.co API endpoint https://api.pdf.co/v1/pdf/convert/from/html with a POST method. Required headers include the Bearer API key for authentication. The response will contain a URL to the generated PDF, which must be checked for errors. Handle potential issues such as invalid HTML or API limits.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\n\ndef render_pdf(html_content):\n    url = 'https://api.pdf.co/v1/pdf/convert/from/html'\n    headers = {\n        'x-api-key': os.environ.get(\"PDF_CO_API_KEY\"),\n        'Content-Type': 'application/json'\n    }\n    payload = json.dumps({\"html\": html_content})\n    request = urllib.request.Request(url, data=payload.encode('utf-8'), method='POST', headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n        return data.get('url', '')\n\npdf_url = render_pdf('<h1>Document Title 1</h1>')",
+          "mock_response": {
+            "url": "https://pdf.co/file/converted_document.pdf"
+          },
+          "actions": [
+            "Prepare the HTML content for conversion",
+            "Send the conversion request to PDF.co",
+            "Extract the PDF URL from the response"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "PDF_CO_API_KEY",
+              "value": "<YOUR_PDF_CO_API_KEY>",
+              "description": "API key for authenticating with PDF.co"
+            }
+          ],
+          "tools": [
+            "PDF.co API"
+          ],
+          "checklist": [
+            "PDF is generated successfully",
+            "PDF URL is valid"
+          ],
+          "expectedResult": "The PDF document is rendered and the URL is stored for sending approval requests.",
+          "links": [
+            {
+              "label": "PDF.co API Documentation",
+              "url": "https://apidocs.pdf.co"
+            }
+          ]
         },
         {
           "title": "Send the approval request",
-          "description": "Post the document summary and PDF link to the approvers channel."
+          "description": "This step sends a message to a designated Slack channel with the document summary and the generated PDF link for approval.",
+          "technical_explanation": "This step communicates with the Slack API to notify approvers about the document awaiting approval. The endpoint used is https://slack.com/api/chat.postMessage with a POST method. Required headers include the OAuth 2.0 bot token for authentication. The payload must contain the channel ID and the message text, including the PDF link. Handle potential errors such as invalid channel IDs or insufficient permissions.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\n\ndef send_approval_request(channel_id, pdf_url):\n    url = 'https://slack.com/api/chat.postMessage'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"SLACK_BOT_TOKEN\")}',\n        'Content-Type': 'application/json'\n    }\n    payload = json.dumps({\"channel\": channel_id, \"text\": f'Document is ready for approval: {pdf_url}'})\n    request = urllib.request.Request(url, data=payload.encode('utf-8'), method='POST', headers=headers)\n    with urllib.request.urlopen(request) as response:\n        result = response.read().decode('utf-8')\n        return result\n\npdf_url = 'http://example.com/document.pdf'  # Example PDF URL\nresponse = send_approval_request('YOUR_CHANNEL_ID', pdf_url)",
+          "mock_response": "ok",
+          "actions": [
+            "Construct the message payload for Slack",
+            "Send the message to the Slack channel",
+            "Check the response for success"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SLACK_BOT_TOKEN",
+              "value": "<YOUR_SLACK_BOT_TOKEN>",
+              "description": "Bot token for authenticating with Slack"
+            }
+          ],
+          "tools": [
+            "Slack Web API"
+          ],
+          "checklist": [
+            "Message is sent to the Slack channel",
+            "Response indicates success"
+          ],
+          "expectedResult": "The approval request is sent to the specified Slack channel.",
+          "links": [
+            {
+              "label": "Slack Web API Documentation",
+              "url": "https://api.slack.com/methods"
+            }
+          ]
         },
         {
           "title": "Update the document status",
-          "description": "Write the approval state back to Notion."
+          "description": "This step updates the status of the document in Notion to reflect that it has been sent for approval.",
+          "technical_explanation": "This step modifies the document's status in Notion using the Notion API. The endpoint used is https://api.notion.com/v1/pages/{page_id} with a PATCH method. Required headers include the Bearer token for authentication and Notion-Version. The payload must specify the new status. Handle potential errors such as invalid page IDs or network issues.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\n\ndef update_document_status(page_id):\n    url = f'https://api.notion.com/v1/pages/{page_id}'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"NOTION_API_TOKEN\")}',\n        'Notion-Version': '2022-06-28',\n        'Content-Type': 'application/json'\n    }\n    payload = json.dumps({\"properties\": {\"Status\": {\"select\": {\"name\": \"Sent for Approval\"}}}})\n    request = urllib.request.Request(url, data=payload.encode('utf-8'), method='PATCH', headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return response.status\n\nstatus_code = update_document_status('document_id_1')",
+          "mock_response": 200,
+          "actions": [
+            "Prepare the update payload for Notion",
+            "Send the update request to Notion",
+            "Check the response status for success"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "NOTION_API_TOKEN",
+              "value": "<YOUR_NOTION_API_TOKEN>",
+              "description": "Token for authenticating with the Notion API"
+            }
+          ],
+          "tools": [
+            "Notion API"
+          ],
+          "checklist": [
+            "Document status is updated successfully",
+            "Response status indicates success"
+          ],
+          "expectedResult": "The document status in Notion is updated to reflect that it has been sent for approval.",
+          "links": [
+            {
+              "label": "Notion API Documentation",
+              "url": "https://developers.notion.com/reference/intro"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Notion account with access to the documents you want to approve",
+        "A PDF.co account with an API key",
+        "A Slack workspace with a bot token for sending messages",
+        "Access to Notion API",
+        "Access to PDF.co API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access to resources."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy for handling API rate limits by waiting before retrying requests."
+        },
+        {
+          "term": "JSON Response Shape",
+          "definition": "The structure of data returned by an API in JSON format, defining keys and value types."
+        },
+        {
+          "term": "Document Status Update",
+          "definition": "The process of changing the state of a document in a system to reflect its current approval status."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API request returns 401 Unauthorized",
+          "solution": "Check that the Bearer token is correct and has the necessary permissions."
+        },
+        {
+          "problem": "PDF rendering fails",
+          "solution": "Ensure the HTML content is valid and the PDF.co API key is active."
+        },
+        {
+          "problem": "Slack message not sent",
+          "solution": "Verify the Slack bot token and ensure the bot has permission to post in the channel."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Notion API",
+          "url": "https://developers.notion.com/reference/intro"
+        },
+        {
+          "label": "PDF.co API",
+          "url": "https://apidocs.pdf.co"
+        },
+        {
+          "label": "Slack Web API",
+          "url": "https://api.slack.com/methods"
+        }
+      ],
+      "before_you_start": [
+        "A Notion account with access to the documents you want to approve",
+        "A PDF.co account with an API key",
+        "A Slack workspace with a bot token for sending messages",
+        "Access to Notion API",
+        "Access to PDF.co API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 15:56 UTC"
   },
   {
     "slug": "form-submission-routing",
