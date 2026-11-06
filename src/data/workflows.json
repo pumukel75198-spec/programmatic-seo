@@ -15520,8 +15520,8 @@
       "duration": "45–60 minutes",
       "tools": [
         "Notion Forms API",
-        "Resend Email API",
-        "Airtable API"
+        "Airtable API",
+        "Resend Email API"
       ],
       "api_slugs": [
         "notion-forms-api",
@@ -15536,26 +15536,252 @@
       "steps": [
         {
           "title": "Read form submissions",
-          "description": "Fetch new submission entries and validate required fields."
+          "description": "This step involves fetching new submission entries from the Notion Forms API and validating the required fields to ensure data integrity.",
+          "technical_explanation": "This step serves as the initial data ingestion point, consuming form submission data from the Notion Forms API. The API endpoint used is POST https://api.notion.com/v1/forms/submissions, requiring a Bearer token for authentication. The expected response is a JSON object containing an array of submissions. Edge cases include handling rate limits, which may require implementing a backoff strategy if too many requests are made in a short period.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\ndef fetch_form_submissions():\n    url = 'https://api.notion.com/v1/forms/submissions'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"NOTION_API_KEY\")}', 'Content-Type': 'application/json'}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    return data.get('submissions', [])\n\nsubmissions = fetch_form_submissions()",
+          "mock_response": {
+            "submissions": [
+              {
+                "id": "submission_1",
+                "fields": {
+                  "type": "support",
+                  "email": "user@example.com"
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Construct the API request to fetch submissions",
+            "Send the request to the Notion Forms API",
+            "Parse the JSON response to extract submissions"
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "NOTION_API_KEY",
+              "value": "<your_notion_api_key>",
+              "description": "API key for authenticating requests to Notion"
+            }
+          ],
+          "tools": [
+            "Notion Forms API"
+          ],
+          "checklist": [
+            "Submissions are fetched without errors",
+            "Response contains the expected fields"
+          ],
+          "expectedResult": "Form submissions are successfully fetched and stored for further processing.",
+          "links": [
+            {
+              "label": "Notion Forms API Documentation",
+              "url": "https://developers.notion.com/reference/intro"
+            }
+          ]
         },
         {
           "title": "Classify the request type",
-          "description": "Map submission fields to support, sales or billing deterministically."
+          "description": "In this step, the fetched form submissions are analyzed to classify the request type into support, sales, or billing based on the submission fields.",
+          "technical_explanation": "This step processes the submissions obtained from the previous step, determining the type of request based on specific field values. The classification logic is deterministic, using simple conditional checks. Edge cases include handling unexpected field values or missing data, which should be logged for further investigation.",
+          "code_snippet": "def classify_requests(submissions):\n    # Initialize a list to hold classified requests\n    classified_requests = []\n    \n    # Iterate through each submission\n    for submission in submissions:\n        # Get the request type from the submission fields\n        request_type = submission.get('fields', {}).get('type', 'unknown')\n        \n        # Append the classified request to the list\n        classified_requests.append({'id': submission.get('id'), 'type': request_type})\n    \n    # Return the list of classified requests\n    return classified_requests\n\n# Example submissions to classify\nsubmissions = [\n    {'id': 1, 'fields': {'type': 'support'}},\n    {'id': 2, 'fields': {'type': 'sales'}},\n    {'id': 3, 'fields': {'type': 'billing'}}\n]\n\nclassified_requests = classify_requests(submissions)",
+          "mock_response": [
+            {
+              "id": "submission_1",
+              "type": "support"
+            }
+          ],
+          "actions": [
+            "Iterate over the fetched submissions",
+            "Determine the request type based on submission fields",
+            "Store the classified requests for routing"
+          ],
+          "commands": [
+            {
+              "label": "Run the classification",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Requests are classified correctly",
+            "Classification logic handles edge cases"
+          ],
+          "expectedResult": "Requests are classified into their respective types for routing.",
+          "links": [
+            {
+              "label": "Python Standard Library - dict",
+              "url": "https://docs.python.org/3/library/stdtypes.html#dict"
+            }
+          ]
         },
         {
           "title": "Route the submission to Airtable",
-          "description": "Create a record in the matching team table."
+          "description": "This step involves creating a record in the appropriate Airtable table based on the classified request type.",
+          "technical_explanation": "This step routes classified requests to the Airtable API, creating a new record in the corresponding table based on the request type. The endpoint used is POST https://api.airtable.com/v0/{base_id}/{table_name}, requiring a Bearer token for authentication and a JSON payload that matches the Airtable schema. Edge cases include handling API errors and ensuring that the correct table is targeted based on the request type.",
+          "code_snippet": "import json\nimport os\nimport urllib.request\n\ndef route_to_airtable(classified_requests):\n    base_id = os.environ.get('AIRTABLE_BASE_ID')\n    url = f'https://api.airtable.com/v0/{base_id}/requests'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"AIRTABLE_API_KEY\")}', 'Content-Type': 'application/json'}\n    for request in classified_requests:\n        payload = {'fields': {'type': request['type'], 'submission_id': request['id']}}\n        request = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            response_data = json.loads(response.read().decode('utf-8'))\n    return response_data\n\nairtable_response = route_to_airtable(classified_requests)",
+          "mock_response": {
+            "id": "rec123456",
+            "fields": {
+              "type": "support",
+              "submission_id": "submission_1"
+            }
+          },
+          "actions": [
+            "Construct the API request to create a record in Airtable",
+            "Send the request with the classified request data",
+            "Handle the API response and log any errors"
+          ],
+          "commands": [
+            {
+              "label": "Run the routing",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "AIRTABLE_API_KEY",
+              "value": "<your_airtable_api_key>",
+              "description": "API key for authenticating requests to Airtable"
+            },
+            {
+              "key": "AIRTABLE_BASE_ID",
+              "value": "<your_airtable_base_id>",
+              "description": "Base ID for the Airtable database"
+            }
+          ],
+          "tools": [
+            "Airtable API"
+          ],
+          "checklist": [
+            "Records are created in Airtable successfully",
+            "API responses are logged for errors"
+          ],
+          "expectedResult": "Classified requests are routed to Airtable and stored as records.",
+          "links": [
+            {
+              "label": "Airtable API Documentation",
+              "url": "https://airtable.com/developers/web/api/introduction"
+            }
+          ]
         },
         {
           "title": "Send the confirmation email",
-          "description": "Call the Resend emails endpoint with a tailored receipt."
+          "description": "This step sends a confirmation email to the user using the Resend Email API after the submission has been processed.",
+          "technical_explanation": "This step utilizes the Resend Email API to send a confirmation email to the user. The endpoint used is POST https://api.resend.com/emails, requiring a Bearer token for authentication and a JSON payload containing the email details. Edge cases include handling failed email sends and ensuring that the email content is correctly formatted.",
+          "code_snippet": "import json\nimport os\nimport urllib.request\n\ndef send_confirmation_email(email, submission_id):\n    url = 'https://api.resend.com/emails'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"RESEND_API_KEY\")}', 'Content-Type': 'application/json'}\n    payload = {'to': email, 'subject': 'Submission Confirmation', 'text': f'Your submission with ID {submission_id} has been received.'}\n    request = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        response_data = json.loads(response.read().decode('utf-8'))\n    return response_data\n\nemail_response = send_confirmation_email('user@example.com', 'submission_1')",
+          "mock_response": {
+            "id": "email_123456",
+            "status": "sent"
+          },
+          "actions": [
+            "Construct the API request to send an email",
+            "Send the email using the Resend API",
+            "Handle the API response and log any errors"
+          ],
+          "commands": [
+            {
+              "label": "Run the email sending",
+              "language": "bash",
+              "code": "python script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "RESEND_API_KEY",
+              "value": "<your_resend_api_key>",
+              "description": "API key for authenticating requests to Resend"
+            }
+          ],
+          "tools": [
+            "Resend Email API"
+          ],
+          "checklist": [
+            "Confirmation email is sent successfully",
+            "Email content is correctly formatted"
+          ],
+          "expectedResult": "A confirmation email is sent to the user after processing the submission.",
+          "links": [
+            {
+              "label": "Resend Email API Documentation",
+              "url": "https://resend.com/docs"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "An Airtable account and a personal access token",
+        "A Notion account and an API key",
+        "A Resend account and an API key",
+        "Access to Notion Forms API",
+        "Access to Resend Email API",
+        "Access to Airtable API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access to specific resources."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by waiting before retrying requests."
+        },
+        {
+          "term": "Payload Structure",
+          "definition": "The format and fields required in the data sent to an API endpoint."
+        },
+        {
+          "term": "Response Validation",
+          "definition": "The process of checking the API response to ensure it contains the expected data."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API returns 401 Unauthorized",
+          "solution": "Verify that the API key is correctly set in the environment variables."
+        },
+        {
+          "problem": "Form submissions are not being fetched",
+          "solution": "Check the Notion Forms API endpoint and ensure the correct permissions are granted."
+        },
+        {
+          "problem": "Email not sending",
+          "solution": "Confirm that the Resend API key is valid and that the email payload is correctly structured."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Notion Forms API",
+          "url": "https://developers.notion.com/reference/intro"
+        },
+        {
+          "label": "Resend Email API",
+          "url": "https://resend.com/docs"
+        },
+        {
+          "label": "Airtable API",
+          "url": "https://airtable.com/developers/web/api/introduction"
+        }
+      ],
+      "before_you_start": [
+        "An Airtable account and a personal access token",
+        "A Notion account and an API key",
+        "A Resend account and an API key",
+        "Access to Notion Forms API",
+        "Access to Resend Email API",
+        "Access to Airtable API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 16:38 UTC"
   },
   {
     "slug": "team-wiki-search",
@@ -15589,26 +15815,283 @@
       "steps": [
         {
           "title": "Export wiki pages from Notion",
-          "description": "Collect all pages under the wiki root and extract text."
+          "description": "This step involves fetching all pages from the Notion wiki and extracting their text content. The data will be used in subsequent steps to create embeddings.",
+          "technical_explanation": "This step serves as the data collection phase, retrieving wiki pages from Notion. It consumes the Notion API to fetch page content. The API contract requires a GET request to the /v1/pages endpoint with appropriate headers. Edge cases include handling pagination if there are many pages and ensuring the response is not empty.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_wiki_pages():\n    url = 'https://api.notion.com/v1/pages'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"NOTION_API_TOKEN\")}',\n        'Notion-Version': '2022-06-28'\n    }\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n        return [page.get('properties', {}).get('title', {}).get('title', [{}])[0].get('text', {}).get('content', '') for page in data.get('results', [])]\n\nwiki_pages = fetch_wiki_pages()",
+          "mock_response": {
+            "results": [
+              {
+                "properties": {
+                  "title": {
+                    "title": [
+                      {
+                        "text": {
+                          "content": "Page Title 1"
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "title": {
+                    "title": [
+                      {
+                        "text": {
+                          "content": "Page Title 2"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Authenticate with the Notion API using Bearer token.",
+            "Send a GET request to fetch wiki pages.",
+            "Extract titles from the response data."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python fetch_wiki.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "NOTION_API_TOKEN",
+              "value": "<YOUR_NOTION_API_TOKEN>",
+              "description": "The Bearer token for authenticating with the Notion API."
+            }
+          ],
+          "tools": [
+            "Notion API"
+          ],
+          "checklist": [
+            "Successfully fetched wiki pages from Notion.",
+            "Extracted titles are not empty."
+          ],
+          "expectedResult": "The titles of all wiki pages are successfully retrieved.",
+          "links": [
+            {
+              "label": "Notion API Documentation",
+              "url": "https://developers.notion.com/reference/intro"
+            }
+          ]
         },
         {
           "title": "Create embeddings for wiki pages",
-          "description": "Batch page text through the OpenAI embeddings endpoint."
+          "description": "In this step, the text content of the wiki pages is sent to the OpenAI Embeddings API to generate numerical embeddings. These embeddings will be used for indexing in Pinecone.",
+          "technical_explanation": "This step transforms the extracted text into embeddings, which are numerical representations useful for similarity searches. The OpenAI Embeddings API requires a POST request to the /v1/embeddings endpoint with the text as the payload. Edge cases include handling API errors and ensuring the response contains valid embeddings.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef create_embeddings(pages):\n    url = 'https://api.openai.com/v1/embeddings'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}',\n        'Content-Type': 'application/json'\n    }\n    embeddings = []\n    for page in pages:\n        payload = json.dumps({'input': page, 'model': 'text-embedding-ada-002'})\n        request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            data = json.loads(response.read().decode('utf-8'))\n            embeddings.append(data.get('data', [{}])[0].get('embedding', []))\n    return embeddings\n\nembeddings = create_embeddings(wiki_pages)",
+          "mock_response": {
+            "data": [
+              {
+                "embedding": [
+                  0.1,
+                  0.2,
+                  0.3
+                ]
+              }
+            ]
+          },
+          "actions": [
+            "Prepare the text payload for the OpenAI API.",
+            "Send a POST request to create embeddings.",
+            "Collect embeddings from the API response."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python create_embeddings.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "OPENAI_API_KEY",
+              "value": "<YOUR_OPENAI_API_KEY>",
+              "description": "The API key for authenticating with the OpenAI API."
+            }
+          ],
+          "tools": [
+            "OpenAI Embeddings API"
+          ],
+          "checklist": [
+            "Embeddings are successfully created for all wiki pages.",
+            "The embeddings list is populated with numerical data."
+          ],
+          "expectedResult": "Embeddings for all wiki pages are generated and stored in a list.",
+          "links": [
+            {
+              "label": "OpenAI Embeddings API Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/embeddings"
+            }
+          ]
         },
         {
           "title": "Upsert wiki vectors into Pinecone",
-          "description": "Store vectors with page title and URL metadata."
+          "description": "This step involves sending the generated embeddings along with their corresponding page titles and URLs to Pinecone for indexing. This allows for efficient searching of the wiki content.",
+          "technical_explanation": "This step indexes the embeddings in Pinecone, enabling fast retrieval based on similarity. The Pinecone Vector API requires a POST request to the appropriate endpoint with the embeddings and metadata. Edge cases include handling duplicate entries and ensuring the response indicates successful upsert.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef upsert_vectors(embeddings, titles):\n    url = f'https://<your-index>-<your-project>.svc.<your-environment>.pinecone.io/vectors/upsert'\n    headers = {\n        'Api-Key': os.environ.get(\"PINECONE_API_KEY\"),\n        'Content-Type': 'application/json'\n    }\n    vectors = [{'id': title, 'values': embedding} for title, embedding in zip(titles, embeddings)]\n    payload = json.dumps({'vectors': vectors})\n    request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))\n\nupsert_response = upsert_vectors(embeddings, wiki_pages)",
+          "mock_response": {
+            "upsertedCount": 2
+          },
+          "actions": [
+            "Prepare the vectors payload for Pinecone.",
+            "Send a POST request to upsert vectors.",
+            "Check the response for successful upsert confirmation."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python upsert_vectors.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "PINECONE_API_KEY",
+              "value": "<YOUR_PINECONE_API_KEY>",
+              "description": "The API key for authenticating with the Pinecone API."
+            }
+          ],
+          "tools": [
+            "Pinecone Vector API"
+          ],
+          "checklist": [
+            "Vectors are successfully upserted into Pinecone.",
+            "The upsert response confirms the number of vectors added."
+          ],
+          "expectedResult": "All wiki vectors are indexed in Pinecone for fast search.",
+          "links": [
+            {
+              "label": "Pinecone Vector API Documentation",
+              "url": "https://docs.pinecone.io/reference/api/introduction"
+            }
+          ]
         },
         {
           "title": "Search the team wiki",
-          "description": "Embed a query and return the most relevant pages."
+          "description": "In this final step, a search query is embedded and sent to Pinecone to retrieve the most relevant wiki pages based on the embeddings. This enables quick access to the desired content.",
+          "technical_explanation": "This step is crucial in the workflow as it leverages the embeddings generated in the previous step to perform a similarity search within the Pinecone database. The data consumed includes the query embedding, which is a vector representation of the search term, allowing for the retrieval of the most relevant wiki pages. The API contract specifies that a POST request must be made to the '/search' endpoint, requiring headers such as 'Content-Type: application/json' and 'Authorization: Bearer <token>'. The request payload should be structured as a JSON object containing the 'vector' key with the embedding as its value. The expected JSON response will include a 'matches' array with relevant results and their associated metadata. Edge cases to consider include adhering to rate limits imposed by the API, handling pagination for large result sets, managing scenarios where the response may return empty arrays, and ensuring proper type conversion for the embedding data to maintain compatibility with the API requirements.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef search_wiki(query):\n    url = f'https://<your-index>-<your-project>.svc.<your-environment>.pinecone.io/query'\n    headers = {\n        'Api-Key': os.environ.get(\"PINECONE_API_KEY\"),\n        'Content-Type': 'application/json'\n    }\n    payload = json.dumps({'query': query})\n    request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8'))\n\nsearch_results = search_wiki('desired query')",
+          "mock_response": {
+            "matches": [
+              {
+                "id": "Page Title 1",
+                "score": 0.95
+              },
+              {
+                "id": "Page Title 2",
+                "score": 0.9
+              }
+            ]
+          },
+          "actions": [
+            "Prepare the query embedding for Pinecone.",
+            "Send a POST request to search for relevant wiki pages.",
+            "Extract and display the search results."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python search_wiki.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "PINECONE_API_KEY",
+              "value": "<YOUR_PINECONE_API_KEY>",
+              "description": "The API key for authenticating with the Pinecone API."
+            }
+          ],
+          "tools": [
+            "Pinecone Vector API"
+          ],
+          "checklist": [
+            "Search query returns relevant wiki pages.",
+            "Results are displayed with associated scores."
+          ],
+          "expectedResult": "The search functionality retrieves relevant wiki pages based on the query.",
+          "links": [
+            {
+              "label": "Pinecone Vector API Documentation",
+              "url": "https://docs.pinecone.io/reference/api/introduction"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Notion account with access to the wiki pages",
+        "An OpenAI API key",
+        "A Pinecone account with an active project",
+        "Access to Notion API",
+        "Access to OpenAI Embeddings API",
+        "Access to Pinecone Vector API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access to specific resources."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by pausing requests until the limit resets."
+        },
+        {
+          "term": "Vector Indexing",
+          "definition": "The process of storing high-dimensional data points in a way that allows for efficient similarity search."
+        },
+        {
+          "term": "Embedding",
+          "definition": "A numerical representation of data that captures its semantic meaning in a lower-dimensional space."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Failed to authenticate with Notion API",
+          "solution": "Ensure the Bearer token is correct and has the necessary permissions."
+        },
+        {
+          "problem": "OpenAI API returns an error",
+          "solution": "Check the API key and ensure the request payload is correctly formatted."
+        },
+        {
+          "problem": "Pinecone Vector API returns a 429 status code",
+          "solution": "Implement rate-limit backoff by waiting before retrying the request."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Notion API",
+          "url": "https://developers.notion.com/reference/intro"
+        },
+        {
+          "label": "OpenAI Embeddings API",
+          "url": "https://platform.openai.com/docs/api-reference/embeddings"
+        },
+        {
+          "label": "Pinecone Vector API",
+          "url": "https://docs.pinecone.io/reference/api/introduction"
+        }
+      ],
+      "before_you_start": [
+        "A Notion account with access to the wiki pages",
+        "An OpenAI API key",
+        "A Pinecone account with an active project",
+        "Access to Notion API",
+        "Access to OpenAI Embeddings API",
+        "Access to Pinecone Vector API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 16:39 UTC"
   },
   {
     "slug": "design-feedback-collection",
@@ -15626,8 +16109,8 @@
       "duration": "60–75 minutes",
       "tools": [
         "Airtable API",
-        "Slack Web API",
-        "Notion API"
+        "Notion API",
+        "Slack Web API"
       ],
       "api_slugs": [
         "airtable-api",
@@ -15642,26 +16125,269 @@
       "steps": [
         {
           "title": "Read design review records from Airtable",
-          "description": "Fetch feedback rows for active design assets."
+          "description": "This step fetches feedback rows for active design assets from Airtable. It retrieves the relevant records to be processed in subsequent steps.",
+          "technical_explanation": "This step acts as the initial data source, consuming the Airtable API to fetch design feedback records. The API contract requires a GET request to the endpoint https://api.airtable.com/v0/{base_id}/{table_name} with a Bearer token for authentication. Edge cases include handling rate limits, which may require implementing a backoff strategy, and ensuring pagination is managed if the number of records exceeds the limit.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_feedback():\n    url = 'https://api.airtable.com/v0/appXXXXXXXXX/Feedback'  # Replace with your actual base ID and table name\n    headers = {'Authorization': f'Bearer {os.environ.get(\"AIRTABLE_API_TOKEN\")}', 'Content-Type': 'application/json'}\n    request = urllib.request.Request(url, headers=headers)\n    try:\n        with urllib.request.urlopen(request) as response:\n            data = json.loads(response.read().decode('utf-8'))\n        return data.get('records', [])\n    except urllib.error.HTTPError as e:\n        print(f'HTTP error occurred: {e.code} - {e.reason}')\n        return []\n    except Exception as e:\n        print(f'An error occurred: {str(e)}')\n        return []\n\nfeedback_records = fetch_feedback()",
+          "mock_response": {
+            "records": [
+              {
+                "id": "rec123456",
+                "fields": {
+                  "Asset": "Design A",
+                  "Feedback": "Great design!",
+                  "Status": "Open"
+                }
+              },
+              {
+                "id": "rec654321",
+                "fields": {
+                  "Asset": "Design B",
+                  "Feedback": "Needs improvement.",
+                  "Status": "Open"
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Set up Airtable base and table with design review records.",
+            "Generate a personal access token for Airtable API.",
+            "Store the Airtable API token in an environment variable."
+          ],
+          "commands": [
+            {
+              "label": "Run Python script",
+              "language": "bash",
+              "code": "python3 your_script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "AIRTABLE_API_TOKEN",
+              "value": "<your_airtable_api_token>",
+              "description": "Token for authenticating with Airtable API."
+            },
+            {
+              "key": "YOUR_BASE_ID",
+              "value": "<your_base_id>",
+              "description": "The ID of your Airtable base."
+            },
+            {
+              "key": "YOUR_TABLE_NAME",
+              "value": "<your_table_name>",
+              "description": "The name of the table containing design feedback."
+            }
+          ],
+          "tools": [
+            "Airtable API"
+          ],
+          "checklist": [
+            "Airtable API token is set in environment variables.",
+            "The correct base ID and table name are used in the request."
+          ],
+          "expectedResult": "Feedback records are successfully fetched from Airtable.",
+          "links": [
+            {
+              "label": "Airtable API Documentation",
+              "url": "https://airtable.com/developers/web/api/introduction"
+            }
+          ]
         },
         {
           "title": "Group feedback by asset and theme",
-          "description": "Cluster comments deterministically by asset and label."
+          "description": "This step processes the feedback records to cluster comments by asset and theme. It organizes the feedback for easier analysis.",
+          "technical_explanation": "This step transforms the raw feedback data into a structured format, grouping comments by asset. The architecture role is to prepare data for reporting. The input is the list of feedback records from the previous step. Edge cases include handling empty feedback arrays and ensuring that all feedback is accounted for in the grouping process.",
+          "code_snippet": "from collections import defaultdict\n\ndef group_feedback(records):\n    grouped = defaultdict(list)\n    for record in records:\n        asset = record.get('fields', {}).get('Asset', 'Unknown')\n        feedback = record.get('fields', {}).get('Feedback', '')\n        grouped[asset].append(feedback)\n    return dict(grouped)\n\ngrouped_feedback = group_feedback(feedback_records)",
+          "mock_response": {
+            "Design A": [
+              "Great design!"
+            ],
+            "Design B": [
+              "Needs improvement."
+            ]
+          },
+          "actions": [
+            "Iterate through feedback records to extract asset and feedback.",
+            "Use a dictionary to group feedback by asset.",
+            "Handle cases where feedback may be missing or empty."
+          ],
+          "commands": [
+            {
+              "label": "Run Python script",
+              "language": "bash",
+              "code": "python3 your_script.py"
+            }
+          ],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Feedback is grouped correctly by asset.",
+            "All feedback comments are accounted for."
+          ],
+          "expectedResult": "Feedback is organized by asset for further processing.",
+          "links": [
+            {
+              "label": "Python Collections Documentation",
+              "url": "https://docs.python.org/3/library/collections.html"
+            }
+          ]
         },
         {
           "title": "Update the Notion review index",
-          "description": "Write asset status and feedback counts to Notion."
+          "description": "This step writes the asset status and feedback counts to the Notion database. It ensures that the feedback is tracked in Notion for future reference.",
+          "technical_explanation": "This step updates the Notion database with the latest feedback counts. It consumes the Notion API to perform an upsert operation. The API contract requires a POST request to the endpoint https://api.notion.com/v1/pages with a Bearer token for authentication. Edge cases include handling errors during the upsert and ensuring the correct payload structure is maintained.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\ndef update_notion(grouped_feedback):\n    url = 'https://api.notion.com/v1/pages'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"NOTION_INTEGRATION_TOKEN\")}',\n        'Content-Type': 'application/json',\n        'Notion-Version': '2022-06-28'\n    }\n    for asset, feedback_list in grouped_feedback.items():\n        payload = {\n            'parent': {'database_id': os.environ.get('NOTION_DATABASE_ID')},\n            'properties': {\n                'Asset': {'title': [{'text': {'content': asset}}]},\n                'Feedback Count': {'number': len(feedback_list)}\n            }\n        }\n        request = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            if response.status not in (200, 201, 204):\n                print('Failed to update Notion')\n\nupdate_notion(grouped_feedback)",
+          "mock_response": {},
+          "actions": [
+            "Set up a Notion database for tracking design feedback.",
+            "Generate an integration token for Notion API.",
+            "Store the Notion integration token and database ID in environment variables."
+          ],
+          "commands": [
+            {
+              "label": "Run Python script",
+              "language": "bash",
+              "code": "python3 your_script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "NOTION_INTEGRATION_TOKEN",
+              "value": "<your_notion_integration_token>",
+              "description": "Token for authenticating with Notion API."
+            },
+            {
+              "key": "NOTION_DATABASE_ID",
+              "value": "<your_notion_database_id>",
+              "description": "The ID of your Notion database."
+            }
+          ],
+          "tools": [
+            "Notion API"
+          ],
+          "checklist": [
+            "Notion integration token is set in environment variables.",
+            "The correct database ID is used in the request."
+          ],
+          "expectedResult": "Notion database is updated with the latest feedback counts.",
+          "links": [
+            {
+              "label": "Notion API Documentation",
+              "url": "https://developers.notion.com/reference/intro"
+            }
+          ]
         },
         {
           "title": "Post the feedback digest to Slack",
-          "description": "Summarise open feedback per asset in Slack."
+          "description": "This step summarizes open feedback per asset and posts it to the designated Slack channel. It provides a digest of the feedback for team visibility.",
+          "technical_explanation": "This step sends a summary of the feedback to Slack using the Slack Web API. The architecture role is to alert the team about the current feedback status. The API contract requires a POST request to the endpoint https://slack.com/api/chat.postMessage with an OAuth 2.0 bot token for authentication. Edge cases include handling message formatting and ensuring the bot has permission to post in the channel.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\ndef post_to_slack(grouped_feedback):\n    url = 'https://slack.com/api/chat.postMessage'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"SLACK_BOT_TOKEN\")}', 'Content-Type': 'application/json'}\n    message = 'Feedback Digest:\\n'\n    for asset, feedback_list in grouped_feedback.items():\n        message += f'{asset}: {len(feedback_list)} feedbacks\\n'\n    payload = {'channel': os.environ.get('SLACK_CHANNEL_ID'), 'text': message}\n    request = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        if response.status != 200:\n            print('Failed to send message to Slack')\n\n# Example usage\ngrouped_feedback = {\n    'Asset1': ['Feedback1', 'Feedback2'],\n    'Asset2': ['Feedback1']\n}\npost_to_slack(grouped_feedback)",
+          "mock_response": "ok",
+          "actions": [
+            "Set up a Slack bot and add it to the channel.",
+            "Generate a bot token for Slack API.",
+            "Store the Slack bot token and channel ID in environment variables."
+          ],
+          "commands": [
+            {
+              "label": "Run Python script",
+              "language": "bash",
+              "code": "python3 your_script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SLACK_BOT_TOKEN",
+              "value": "<your_slack_bot_token>",
+              "description": "Token for authenticating with Slack API."
+            },
+            {
+              "key": "SLACK_CHANNEL_ID",
+              "value": "<your_slack_channel_id>",
+              "description": "The ID of the Slack channel to post messages."
+            }
+          ],
+          "tools": [
+            "Slack Web API"
+          ],
+          "checklist": [
+            "Slack bot token is set in environment variables.",
+            "The correct channel ID is used in the request."
+          ],
+          "expectedResult": "Feedback digest is successfully posted to the Slack channel.",
+          "links": [
+            {
+              "label": "Slack Web API Documentation",
+              "url": "https://api.slack.com/methods"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "An Airtable account and a base with design review records",
+        "A Slack workspace and a bot with permissions to post messages",
+        "A Notion account and a database for tracking design feedback",
+        "Access to Airtable API",
+        "Access to Slack Web API",
+        "Access to Notion API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy for handling API rate limits by pausing requests when limits are reached."
+        },
+        {
+          "term": "Upsert",
+          "definition": "An operation that inserts a new record or updates an existing one based on a unique key."
+        },
+        {
+          "term": "Payload Structure",
+          "definition": "The specific format and keys required in the data sent to an API."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API authentication fails",
+          "solution": "Ensure that the correct tokens are set in environment variables."
+        },
+        {
+          "problem": "No feedback records returned from Airtable",
+          "solution": "Check the Airtable base and ensure the correct table name is used."
+        },
+        {
+          "problem": "Slack message not sent",
+          "solution": "Verify that the bot has permission to post in the designated channel."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Airtable API",
+          "url": "https://airtable.com/developers/web/api/introduction"
+        },
+        {
+          "label": "Slack Web API",
+          "url": "https://api.slack.com/methods"
+        },
+        {
+          "label": "Notion API",
+          "url": "https://developers.notion.com/reference/intro"
+        }
+      ],
+      "before_you_start": [
+        "An Airtable account and a base with design review records",
+        "A Slack workspace and a bot with permissions to post messages",
+        "A Notion account and a database for tracking design feedback",
+        "Access to Airtable API",
+        "Access to Slack Web API",
+        "Access to Notion API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 16:42 UTC"
   },
   {
     "slug": "collaboration-presence-sync",
@@ -15695,26 +16421,248 @@
       "steps": [
         {
           "title": "Read Liveblocks room presence",
-          "description": "Fetch active users for the configured rooms."
+          "description": "This step fetches the active users for the configured rooms using the Liveblocks Collaboration API. It establishes the initial state of user presence in the collaboration environment.",
+          "technical_explanation": "This step serves as the foundation for tracking user presence. It consumes the Liveblocks Collaboration API to retrieve the current users in specified rooms. The API contract requires a GET request to the endpoint '/v2/rooms/{roomId}/presence', with a Bearer token in the Authorization header. Edge cases include handling rate limits, where the API may return a 429 status code, and ensuring that the response contains an array of users, which may be empty if no users are present.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_liveblocks_presence(room_id):\n    # Fetch the presence of users in the specified Liveblocks room\n    url = f'https://api.liveblocks.io/v2/rooms/{room_id}/presence'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"LIVEBLOCKS_API_KEY\")}'}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    return data.get('users', [])\n\n# Fetch active users from the specified room\nactive_users = fetch_liveblocks_presence('your_room_id')",
+          "mock_response": {
+            "users": [
+              {
+                "id": "user1",
+                "name": "Alice"
+              },
+              {
+                "id": "user2",
+                "name": "Bob"
+              }
+            ]
+          },
+          "actions": [
+            "Set up a Liveblocks account and create a room.",
+            "Obtain the Liveblocks API key.",
+            "Replace 'your_room_id' with the actual room ID."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python your_script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "LIVEBLOCKS_API_KEY",
+              "value": "<your_liveblocks_api_key>",
+              "description": "The API key for authenticating with Liveblocks."
+            }
+          ],
+          "tools": [
+            "Liveblocks Collaboration API"
+          ],
+          "checklist": [
+            "Successfully fetched the list of active users.",
+            "No errors returned from the Liveblocks API."
+          ],
+          "expectedResult": "Active users in the specified room are retrieved successfully.",
+          "links": [
+            {
+              "label": "Liveblocks Collaboration API Documentation",
+              "url": "https://liveblocks.io/docs/api-reference"
+            }
+          ]
         },
         {
           "title": "Publish presence events through Ably",
-          "description": "Send presence updates to the collaboration channel."
+          "description": "This step sends presence updates to the collaboration channel using the Ably Realtime API. It ensures that all users are notified of changes in presence.",
+          "technical_explanation": "This step publishes presence updates to an Ably channel, allowing real-time communication of user presence. The API contract requires a POST request to the '/channels/{channelName}/messages' endpoint with Basic authentication. The request payload must include the user ID and presence status. Edge cases include handling 403 Forbidden errors if the API key is incorrect and managing message rate limits to avoid exceeding the allowed number of messages per second.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\ndef publish_presence_update(channel_name, user_id, status):\n    # Construct the URL for the Ably API\n    url = f'https://rest.ably.io/channels/{channel_name}/messages'\n    # Set the headers including the authorization key\n    headers = {'Authorization': f'Basic {os.environ.get(\"ABLY_API_KEY\")}', 'Content-Type': 'application/json'}\n    # Create the payload with user ID and status\n    payload = json.dumps({'id': user_id, 'status': status}).encode('utf-8')\n    # Prepare the request\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    # Send the request and return the response\n    with urllib.request.urlopen(request) as response:\n        return response.read().decode('utf-8')\n\n# Call the function to publish a presence update\nresponse = publish_presence_update('presence_channel', 'user1', 'online')",
+          "mock_response": "ok",
+          "actions": [
+            "Set up an Ably account and create a channel.",
+            "Obtain the Ably API key.",
+            "Replace 'presence_channel' with the actual channel name."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python your_script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "ABLY_API_KEY",
+              "value": "<your_ably_api_key>",
+              "description": "The API key for authenticating with Ably."
+            }
+          ],
+          "tools": [
+            "Ably Realtime API"
+          ],
+          "checklist": [
+            "Presence update sent successfully.",
+            "No errors returned from the Ably API."
+          ],
+          "expectedResult": "Presence updates are published to the specified Ably channel.",
+          "links": [
+            {
+              "label": "Ably Realtime API Documentation",
+              "url": "https://ably.com/docs/api/rest-api"
+            }
+          ]
         },
         {
           "title": "Persist session metrics in Supabase",
-          "description": "Upsert room, user count and timestamp rows."
+          "description": "This step upserts room, user count, and timestamp rows into the Supabase database. It ensures that session metrics are stored for future analysis.",
+          "technical_explanation": "This step stores session metrics in Supabase using the Database API. The API contract requires a POST request to the '/rest/v1/metrics' endpoint with an API key and JWT for authentication. The payload must include the room ID, user count, and timestamp. Edge cases include handling 409 Conflict errors if the record already exists and ensuring that the response status is checked for successful upsert operations.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef upsert_session_metrics(room_id, user_count):\n    url = f'{os.environ.get(\"SUPABASE_URL\")}/rest/v1/metrics'\n    headers = {\n        'apikey': os.environ.get(\"SUPABASE_KEY\"),\n        'Authorization': f'Bearer {os.environ.get(\"SUPABASE_KEY\")}',\n        'Content-Type': 'application/json',\n        'Prefer': 'return=representation'\n    }\n    payload = json.dumps({'room_id': room_id, 'user_count': user_count, 'timestamp': '2023-10-01T12:00:00Z'}).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return response.read().decode('utf-8')\n\nresult = upsert_session_metrics('room1', 2)",
+          "mock_response": {
+            "id": 1,
+            "room_id": "room1",
+            "user_count": 2,
+            "timestamp": "2023-10-01T12:00:00Z"
+          },
+          "actions": [
+            "Set up a Supabase project and create a metrics table.",
+            "Obtain the Supabase URL and API key.",
+            "Ensure the metrics table schema matches the payload."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python your_script.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUPABASE_URL",
+              "value": "<your_supabase_url>",
+              "description": "The URL for accessing your Supabase project."
+            },
+            {
+              "key": "SUPABASE_KEY",
+              "value": "<your_supabase_key>",
+              "description": "The API key for authenticating with Supabase."
+            }
+          ],
+          "tools": [
+            "Supabase Database API"
+          ],
+          "checklist": [
+            "Session metrics upserted successfully.",
+            "No errors returned from the Supabase API."
+          ],
+          "expectedResult": "Session metrics are stored in the Supabase database.",
+          "links": [
+            {
+              "label": "Supabase Database API Documentation",
+              "url": "https://supabase.com/docs/guides/api"
+            }
+          ]
         },
         {
           "title": "Detect stale presence sessions",
-          "description": "Flag sessions without updates beyond the timeout."
+          "description": "This step flags sessions without updates beyond a specified timeout. It helps maintain the integrity of the presence data.",
+          "technical_explanation": "This step checks for stale presence sessions by comparing the current timestamp with the last update timestamp. It consumes the data stored in Supabase to identify sessions that have not been updated within a defined timeout period. Edge cases include handling scenarios where no sessions are found and ensuring that the timeout value is configurable to adapt to different use cases.",
+          "code_snippet": "import json\nimport urllib.request\nimport time\nimport os\n\ndef detect_stale_sessions(timeout):\n    url = f'{os.environ.get(\"SUPABASE_URL\")}/rest/v1/metrics'\n    headers = {'apikey': os.environ.get(\"SUPABASE_KEY\"), 'Authorization': f'Bearer {os.environ.get(\"SUPABASE_KEY\")}' }\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        metrics = json.loads(response.read().decode('utf-8'))\n    stale_sessions = []\n    current_time = time.time()\n    for metric in metrics:\n        last_update = time.mktime(time.strptime(metric['timestamp'], '%Y-%m-%dT%H:%M:%SZ'))\n        if current_time - last_update > timeout:\n            stale_sessions.append(metric['room_id'])\n    return stale_sessions\n\nstale = detect_stale_sessions(300)",
+          "mock_response": [
+            "room1"
+          ],
+          "actions": [
+            "Define a timeout period for session updates.",
+            "Run the detection script after presence updates.",
+            "Log or handle stale sessions as needed."
+          ],
+          "commands": [
+            {
+              "label": "Run the script",
+              "language": "bash",
+              "code": "python your_script.py"
+            }
+          ],
+          "config": [],
+          "tools": [
+            "Supabase Database API"
+          ],
+          "checklist": [
+            "Stale sessions detected correctly.",
+            "No errors returned during the detection process."
+          ],
+          "expectedResult": "Stale presence sessions are identified and can be handled appropriately.",
+          "links": [
+            {
+              "label": "Supabase Database API Documentation",
+              "url": "https://supabase.com/docs/guides/api"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Liveblocks account and API key",
+        "An Ably account and API key",
+        "A Supabase project and service-role key",
+        "Access to Liveblocks Collaboration API",
+        "Access to Ably Realtime API",
+        "Access to Supabase Database API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method of API authentication where a token is passed in the Authorization header."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by delaying requests when limits are reached."
+        },
+        {
+          "term": "PostgREST Upsert",
+          "definition": "An operation that inserts a new record or updates an existing record in a database."
+        },
+        {
+          "term": "Z-Score Spike Detection",
+          "definition": "A statistical method to identify outliers in a dataset based on standard deviations from the mean."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Failed to fetch room presence from Liveblocks",
+          "solution": "Verify the Liveblocks API key and room configuration."
+        },
+        {
+          "problem": "Presence updates not sent to Ably",
+          "solution": "Check the Ably API key and ensure the presence channel is correctly specified."
+        },
+        {
+          "problem": "Supabase upsert operation fails",
+          "solution": "Ensure the Supabase URL and API key are correctly set and the table schema matches the payload."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Liveblocks Collaboration API",
+          "url": "https://liveblocks.io/docs/api-reference"
+        },
+        {
+          "label": "Ably Realtime API",
+          "url": "https://ably.com/docs/api/rest-api"
+        },
+        {
+          "label": "Supabase Database API",
+          "url": "https://supabase.com/docs/guides/api"
+        }
+      ],
+      "before_you_start": [
+        "A Liveblocks account and API key",
+        "An Ably account and API key",
+        "A Supabase project and service-role key",
+        "Access to Liveblocks Collaboration API",
+        "Access to Ably Realtime API",
+        "Access to Supabase Database API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 16:43 UTC"
   },
   {
     "slug": "product-analytics-dashboard",
@@ -15747,26 +16695,250 @@
       "steps": [
         {
           "title": "Query PostHog product metrics",
-          "description": "Fetch weekly active users and conversion events."
+          "description": "This step fetches weekly active users and conversion events from the PostHog Analytics API. The data retrieved will be used for further analysis and reporting.",
+          "technical_explanation": "This step serves as the initial data source for the workflow, consuming metrics from the PostHog API. The endpoint used is '/api/event/', with a GET request requiring a Bearer token for authentication. The expected response is a JSON object containing event data. Edge cases include handling rate limits, where the API may restrict the number of requests, and ensuring the response contains the expected data structure.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_posthog_metrics():\n    url = 'https://your-posthog-instance/api/event/'  # Replace with your PostHog instance\n    headers = {'Authorization': f'Bearer {os.environ.get(\"POSTHOG_API_KEY\")}' }\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    return data.get('results', [])  # Extract results from the response\n\nmetrics = fetch_posthog_metrics()",
+          "mock_response": {
+            "results": [
+              {
+                "event": "user_signup",
+                "count": 50
+              },
+              {
+                "event": "purchase",
+                "count": 20
+              }
+            ]
+          },
+          "actions": [
+            "Set up a PostHog account and obtain an API key.",
+            "Identify the metrics to be fetched from PostHog.",
+            "Ensure the PostHog API is accessible from your environment."
+          ],
+          "commands": [
+            {
+              "label": "Fetch PostHog Metrics",
+              "language": "bash",
+              "code": "python fetch_posthog_metrics.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "POSTHOG_API_KEY",
+              "value": "<your_posthog_api_key>",
+              "description": "Bearer token for authenticating with the PostHog API."
+            }
+          ],
+          "tools": [
+            "PostHog Analytics API"
+          ],
+          "checklist": [
+            "PostHog API key is set in the environment.",
+            "The API request returns a valid response with event data."
+          ],
+          "expectedResult": "Weekly active users and conversion events are retrieved from PostHog.",
+          "links": [
+            {
+              "label": "PostHog Analytics API Documentation",
+              "url": "https://posthog.com/docs/api"
+            }
+          ]
         },
         {
           "title": "Write the cohort table to Google Sheets",
-          "description": "Append weekly rows with metric values."
+          "description": "This step appends the fetched metrics to a Google Sheet, creating a cohort table that tracks weekly performance.",
+          "technical_explanation": "This step persists the data retrieved from PostHog into Google Sheets. The endpoint used is '/v4/spreadsheets/{spreadsheetId}/values/{range}:append', with a POST request requiring OAuth 2.0 credentials for authorization. The payload includes the data to be appended. Edge cases include handling quota limits for Google Sheets API and ensuring the correct range is specified for appending data.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef append_to_google_sheets(data):\n    spreadsheet_id = os.environ.get('SPREADSHEET_ID')\n    url = f'https://sheets.googleapis.com/v4/spreadsheets/{spreadsheet_id}/values/Sheet1!A1:append?valueInputOption=USER_ENTERED'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"GOOGLE_SHEETS_TOKEN\")}', 'Content-Type': 'application/json'}\n    payload = {'values': data}\n    request = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return response.read().decode('utf-8')\n\nresult = append_to_google_sheets([[\"Week\", \"Active Users\", \"Conversions\"], [\"2023-10-01\", 50, 20]])",
+          "mock_response": "Success",
+          "actions": [
+            "Create a Google Sheet and note the spreadsheet ID.",
+            "Set up OAuth 2.0 credentials for Google Sheets API access.",
+            "Ensure the Google Sheet is shared with the service account."
+          ],
+          "commands": [
+            {
+              "label": "Append Data to Google Sheets",
+              "language": "bash",
+              "code": "python append_to_google_sheets.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SPREADSHEET_ID",
+              "value": "<your_spreadsheet_id>",
+              "description": "ID of the Google Sheet to append data."
+            },
+            {
+              "key": "GOOGLE_SHEETS_TOKEN",
+              "value": "<your_google_sheets_token>",
+              "description": "OAuth token for authenticating with Google Sheets API."
+            }
+          ],
+          "tools": [
+            "Google Sheets API"
+          ],
+          "checklist": [
+            "Google Sheets API token is set in the environment.",
+            "Data is successfully appended to the specified Google Sheet."
+          ],
+          "expectedResult": "Cohort table is updated in Google Sheets with the latest metrics.",
+          "links": [
+            {
+              "label": "Google Sheets API Documentation",
+              "url": "https://developers.google.com/sheets/api/reference/rest"
+            }
+          ]
         },
         {
           "title": "Compute week-over-week changes",
-          "description": "Calculate deltas and flag significant movements."
+          "description": "This step calculates the deltas between the current and previous week's metrics to identify significant changes.",
+          "technical_explanation": "This step analyzes the metrics data to compute week-over-week changes. It requires the previously stored metrics to compare against the current week's metrics. The calculation involves determining the difference between the two sets of data. Edge cases include handling scenarios where there is no previous data to compare against and ensuring that the calculations do not result in division by zero.",
+          "code_snippet": "import statistics\n\ndef compute_deltas(current_week, previous_week):\n    deltas = []\n    for current, previous in zip(current_week, previous_week):\n        delta = current['count'] - previous['count']\n        if previous['count'] != 0:\n            percentage_change = (delta / previous['count']) * 100\n        else:\n            percentage_change = 0\n        deltas.append({'event': current['event'], 'delta': delta, 'percentage_change': percentage_change})\n    return deltas\n\nprevious_week_metrics = [{'event': 'user_signup', 'count': 40}, {'event': 'purchase', 'count': 15}]\ncurrent_week_metrics = [{'event': 'user_signup', 'count': 50}, {'event': 'purchase', 'count': 20}]\ndeltas = compute_deltas(current_week_metrics, previous_week_metrics)",
+          "mock_response": [
+            {
+              "event": "user_signup",
+              "delta": 10,
+              "percentage_change": 25.0
+            },
+            {
+              "event": "purchase",
+              "delta": 5,
+              "percentage_change": 33.33
+            }
+          ],
+          "actions": [
+            "Retrieve previous week's metrics from Google Sheets.",
+            "Ensure current week's metrics are available for comparison.",
+            "Implement logic to handle division by zero in percentage calculations."
+          ],
+          "commands": [
+            {
+              "label": "Compute Deltas",
+              "language": "bash",
+              "code": "python compute_deltas.py"
+            }
+          ],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Deltas are calculated without errors.",
+            "Percentage changes are computed correctly."
+          ],
+          "expectedResult": "Week-over-week changes are computed and stored for reporting.",
+          "links": [
+            {
+              "label": "Python Statistics Documentation",
+              "url": "https://docs.python.org/3/library/statistics.html"
+            }
+          ]
         },
         {
           "title": "Post the analytics summary",
-          "description": "Send the weekly summary to the product Slack channel."
+          "description": "This step sends a summary of the analytics to a designated Slack channel for team visibility.",
+          "technical_explanation": "This step utilizes the Slack Web API to post messages containing the analytics summary. The endpoint used is '/api/chat.postMessage', with a POST request requiring a bot token for authentication. The payload includes the channel ID and the message text. Edge cases include handling scenarios where the channel ID is invalid or the bot lacks permissions to post in the channel.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef post_to_slack(message):\n    url = 'https://slack.com/api/chat.postMessage'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"SLACK_BOT_TOKEN\")}', 'Content-Type': 'application/json'}\n    payload = {'channel': '#analytics', 'text': message}\n    request = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return response.read().decode('utf-8')\n\nsummary_message = 'Weekly Summary: User Signups: 50, Purchases: 20'\nresult = post_to_slack(summary_message)",
+          "mock_response": "ok",
+          "actions": [
+            "Set up a Slack bot and obtain a bot token.",
+            "Identify the channel where the summary will be posted.",
+            "Ensure the bot has permissions to post messages in the channel."
+          ],
+          "commands": [
+            {
+              "label": "Post Summary to Slack",
+              "language": "bash",
+              "code": "python post_to_slack.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SLACK_BOT_TOKEN",
+              "value": "<your_slack_bot_token>",
+              "description": "OAuth token for authenticating with Slack API."
+            }
+          ],
+          "tools": [
+            "Slack Web API"
+          ],
+          "checklist": [
+            "Slack bot token is set in the environment.",
+            "Summary message is successfully posted to the Slack channel."
+          ],
+          "expectedResult": "Analytics summary is posted to the designated Slack channel.",
+          "links": [
+            {
+              "label": "Slack Web API Documentation",
+              "url": "https://api.slack.com/methods"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A PostHog account and a personal API key",
+        "A Google account with access to Google Sheets and OAuth 2.0 credentials",
+        "A Slack account with a bot token for posting messages",
+        "Access to PostHog Analytics API",
+        "Access to Google Sheets API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access to resources."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by waiting before retrying requests."
+        },
+        {
+          "term": "Cohort Analysis",
+          "definition": "A technique to analyze the behavior of a group of users over time."
+        },
+        {
+          "term": "Delta Calculation",
+          "definition": "The process of determining the difference between two values, often used to track changes over time."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API request returns 401 Unauthorized",
+          "solution": "Check if the Bearer token is valid and has the necessary permissions."
+        },
+        {
+          "problem": "Google Sheets API returns 403 Forbidden",
+          "solution": "Ensure the OAuth credentials are correctly set up and the Google Sheet is shared with the service account."
+        },
+        {
+          "problem": "Slack message not posting",
+          "solution": "Verify that the bot token is correct and has permissions to post messages in the specified channel."
+        }
+      ],
+      "resources": [
+        {
+          "label": "PostHog Analytics API",
+          "url": "https://posthog.com/docs/api"
+        },
+        {
+          "label": "Google Sheets API",
+          "url": "https://developers.google.com/sheets/api/reference/rest"
+        },
+        {
+          "label": "Slack Web API",
+          "url": "https://api.slack.com/methods"
+        }
+      ],
+      "before_you_start": [
+        "A PostHog account and a personal API key",
+        "A Google account with access to Google Sheets and OAuth 2.0 credentials",
+        "A Slack account with a bot token for posting messages",
+        "Access to PostHog Analytics API",
+        "Access to Google Sheets API",
+        "Access to Slack Web API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 16:45 UTC"
   },
   {
     "slug": "error-tracking-alerts",
@@ -15784,8 +16956,8 @@
       "duration": "60–75 minutes",
       "tools": [
         "Sentry Error API",
-        "Slack Web API",
-        "Linear GraphQL API"
+        "Linear GraphQL API",
+        "Slack Web API"
       ],
       "api_slugs": [
         "sentry-error-api",
@@ -15799,26 +16971,258 @@
       "steps": [
         {
           "title": "Group new Sentry errors",
-          "description": "Fetch unresolved issues and group them by fingerprint."
+          "description": "This step fetches unresolved errors from Sentry and groups them by their fingerprint. This allows for efficient tracking of similar errors and reduces redundancy in issue reporting.",
+          "technical_explanation": "This step acts as the initial data collection point, consuming data from the Sentry Error API. The endpoint used is 'https://sentry.io/api/0/projects/{organization_slug}/{project_slug}/issues/'. The request requires a Bearer token in the Authorization header. The response will be a list of unresolved issues, which may be paginated. Handle rate limits by implementing backoff strategies and ensure to check for empty responses.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_sentry_errors():\n    url = 'https://sentry.io/api/0/projects/YOUR_ORG/YOUR_PROJECT/issues/'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"SENTRY_BEARER_TOKEN\")}' }\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    return [issue.get('fingerprint', '') for issue in data]\n\nerrors = fetch_sentry_errors()",
+          "mock_response": [
+            {
+              "fingerprint": "abc123",
+              "title": "Error 1"
+            },
+            {
+              "fingerprint": "abc123",
+              "title": "Error 2"
+            },
+            {
+              "fingerprint": "def456",
+              "title": "Error 3"
+            }
+          ],
+          "actions": [
+            "Construct the API request URL with organization and project slugs.",
+            "Set the Authorization header with the Bearer token.",
+            "Parse the JSON response to extract fingerprints."
+          ],
+          "commands": [
+            {
+              "label": "Fetch Sentry Errors",
+              "language": "bash",
+              "code": "python fetch_sentry_errors.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SENTRY_BEARER_TOKEN",
+              "value": "<your_sentry_bearer_token>",
+              "description": "Bearer token for Sentry API authentication."
+            }
+          ],
+          "tools": [
+            "Sentry Error API"
+          ],
+          "checklist": [
+            "Verify that the Bearer token is correctly set and valid.",
+            "Check that the response contains unresolved issues."
+          ],
+          "expectedResult": "A list of grouped fingerprints from unresolved Sentry errors.",
+          "links": [
+            {
+              "label": "Sentry Error API Documentation",
+              "url": "https://docs.sentry.io/api/"
+            }
+          ]
         },
         {
           "title": "Create or update Linear issues",
-          "description": "Match by external id and set priority from event volume."
+          "description": "This step matches the grouped Sentry errors with existing Linear issues using their external IDs. If a match is found, the issue is updated; otherwise, a new issue is created.",
+          "technical_explanation": "This step integrates with the Linear GraphQL API to either create or update issues based on the fingerprints received from the previous step. The endpoint is 'https://api.linear.app/graphql'. The request requires a personal API key in the Authorization header. The response will indicate whether the issue was created or updated. Handle cases where the external ID does not match any existing issues by implementing error handling.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\n\n\ndef create_or_update_linear_issues(errors):\n    url = 'https://api.linear.app/graphql'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"LINEAR_API_KEY\")}', 'Content-Type': 'application/json'}\n    for fingerprint in errors:\n        query = f'''mutation {{ createIssue(input: {{ title: \"Issue for {fingerprint}\", externalId: \"{fingerprint}\" }}) {{ id }} }}'''  \n        payload = json.dumps({'query': query}).encode('utf-8')\n        request = urllib.request.Request(url, data=payload, headers=headers)\n        with urllib.request.urlopen(request) as response:\n            result = json.loads(response.read().decode('utf-8'))\n            print(result)\n\nerrors = []  # Placeholder for the list of errors\ncreate_or_update_linear_issues(errors)",
+          "mock_response": {
+            "data": {
+              "createIssue": {
+                "id": "issue_id_123"
+              }
+            }
+          },
+          "actions": [
+            "Construct the GraphQL mutation for creating or updating issues.",
+            "Set the Authorization header with the personal API key.",
+            "Parse the response to confirm issue creation or update."
+          ],
+          "commands": [
+            {
+              "label": "Create or Update Linear Issues",
+              "language": "bash",
+              "code": "python create_or_update_linear_issues.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "LINEAR_API_KEY",
+              "value": "<your_linear_api_key>",
+              "description": "Personal API key for Linear API authentication."
+            }
+          ],
+          "tools": [
+            "Linear GraphQL API"
+          ],
+          "checklist": [
+            "Verify that the Linear API key is correctly set and valid.",
+            "Check that issues are created or updated as expected."
+          ],
+          "expectedResult": "Linear issues are created or updated based on Sentry error fingerprints.",
+          "links": [
+            {
+              "label": "Linear GraphQL API Documentation",
+              "url": "https://developers.linear.app/docs/graphql/working-with-the-graphql-api"
+            }
+          ]
         },
         {
           "title": "Alert the engineering channel",
-          "description": "Post new and escalated errors to Slack."
+          "description": "This step sends alerts to a designated Slack channel whenever new or escalated errors are detected. It ensures that the engineering team is promptly informed about critical issues.",
+          "technical_explanation": "This step utilizes the Slack Web API to post messages to a specified channel. The endpoint is 'https://slack.com/api/chat.postMessage'. The request requires an OAuth 2.0 bot token in the Authorization header. The response will indicate whether the message was successfully sent. Handle rate limits by implementing backoff strategies and ensure to check for the response status.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef send_alert_to_slack(message):\n    url = 'https://slack.com/api/chat.postMessage'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"SLACK_BOT_TOKEN\")}', 'Content-Type': 'application/json'}\n    payload = json.dumps({'channel': '#engineering', 'text': message}).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        result = response.read().decode('utf-8')\n        if response.status == 200:\n            print('Alert sent successfully:', result)\n        else:\n            print('Failed to send alert:', result)\n\nsend_alert_to_slack('New error detected!')",
+          "mock_response": "ok",
+          "actions": [
+            "Construct the payload for the Slack message.",
+            "Set the Authorization header with the bot token.",
+            "Check the response to confirm successful message delivery."
+          ],
+          "commands": [
+            {
+              "label": "Send Alert to Slack",
+              "language": "bash",
+              "code": "python send_alert_to_slack.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SLACK_BOT_TOKEN",
+              "value": "<your_slack_bot_token>",
+              "description": "OAuth 2.0 bot token for Slack API authentication."
+            }
+          ],
+          "tools": [
+            "Slack Web API"
+          ],
+          "checklist": [
+            "Verify that the Slack bot token is correctly set and valid.",
+            "Check that alerts are sent to the correct Slack channel."
+          ],
+          "expectedResult": "Alerts are successfully sent to the engineering Slack channel.",
+          "links": [
+            {
+              "label": "Slack Web API Documentation",
+              "url": "https://api.slack.com/methods"
+            }
+          ]
         },
         {
           "title": "Write the error digest",
-          "description": "Summarise counts and owners in a deterministic JSON file."
+          "description": "This step summarizes the counts and owners of the errors in a deterministic JSON file. This provides a structured overview of the current error state for future reference.",
+          "technical_explanation": "This workflow step is crucial for aggregating error data collected from the preceding steps, specifically focusing on the counts and ownership of errors. It consumes structured data that includes error identifiers, their respective counts, and the owners responsible for them. The output is a deterministic JSON file, which serves as a reliable reference for reporting and future analysis. The API contract for this step involves a POST request to the '/error-digest' endpoint, requiring 'Content-Type: application/json' in the headers. The request payload must conform to a specific shape, including fields for 'errorCounts' and 'owners', while the JSON response will return a structured overview of the error state, including 'summary' and 'timestamp' fields. Additionally, it is essential to handle edge cases such as rate limits imposed on API requests, pagination for large datasets, and scenarios where no errors are present, ensuring that empty arrays are returned appropriately. Type conversion must also be managed to maintain data integrity throughout the process.",
+          "code_snippet": "import json\n\ndef write_error_digest(errors):\n    # Create a summary of the errors\n    summary = {'error_count': len(errors), 'errors': errors}\n    \n    # Write the summary to a JSON file\n    with open('error_digest.json', 'w') as f:\n        json.dump(summary, f, indent=4)\n    \n    # Notify that the digest has been written\n    print('Error digest written to error_digest.json')\n\n# Example errors list for demonstration\nerrors = [{'owner': 'user1', 'message': 'Error 1'}, {'owner': 'user2', 'message': 'Error 2'}]\nwrite_error_digest(errors)",
+          "mock_response": {
+            "error_count": 3,
+            "errors": [
+              {
+                "fingerprint": "abc123",
+                "title": "Error 1"
+              },
+              {
+                "fingerprint": "abc123",
+                "title": "Error 2"
+              },
+              {
+                "fingerprint": "def456",
+                "title": "Error 3"
+              }
+            ]
+          },
+          "actions": [
+            "Construct the summary of errors.",
+            "Open a file for writing the JSON output.",
+            "Dump the summary into the JSON file."
+          ],
+          "commands": [
+            {
+              "label": "Write Error Digest",
+              "language": "bash",
+              "code": "python write_error_digest.py"
+            }
+          ],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Verify that the error digest file is created successfully.",
+            "Check the structure of the JSON output for correctness."
+          ],
+          "expectedResult": "A deterministic JSON file summarizing the error counts and details is created.",
+          "links": [
+            {
+              "label": "Python JSON Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A Sentry account with access to the Error API and a valid Bearer token",
+        "A Slack workspace with a bot user and a valid OAuth 2.0 bot token",
+        "A Linear account with access to the GraphQL API and a personal API key",
+        "Access to Sentry Error API",
+        "Access to Slack Web API",
+        "Access to Linear GraphQL API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method of API authentication where a token is passed in the Authorization header."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy for handling API rate limits by waiting before retrying requests."
+        },
+        {
+          "term": "GraphQL Query",
+          "definition": "A request format for APIs that allows clients to specify exactly what data they need."
+        },
+        {
+          "term": "Deterministic JSON",
+          "definition": "A structured JSON format that consistently represents data in a predictable manner."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Sentry API returns 403 Forbidden",
+          "solution": "Check if the Bearer token is valid and has the necessary permissions."
+        },
+        {
+          "problem": "Slack message not posting",
+          "solution": "Verify the OAuth 2.0 bot token and ensure the bot has permission to post in the channel."
+        },
+        {
+          "problem": "Linear API returns null for issue updates",
+          "solution": "Ensure the external ID matches the Linear issue and that the API key is valid."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Sentry Error API",
+          "url": "https://docs.sentry.io/api/"
+        },
+        {
+          "label": "Slack Web API",
+          "url": "https://api.slack.com/methods"
+        },
+        {
+          "label": "Linear GraphQL API",
+          "url": "https://developers.linear.app/docs/graphql/working-with-the-graphql-api"
+        }
+      ],
+      "before_you_start": [
+        "A Sentry account with access to the Error API and a valid Bearer token",
+        "A Slack workspace with a bot user and a valid OAuth 2.0 bot token",
+        "A Linear account with access to the GraphQL API and a personal API key",
+        "Access to Sentry Error API",
+        "Access to Slack Web API",
+        "Access to Linear GraphQL API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 16:46 UTC"
   },
   {
     "slug": "website-performance-reporting",
@@ -15835,8 +17239,8 @@
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
       "tools": [
-        "PostHog Analytics API",
         "Cloudflare Workers API",
+        "PostHog Analytics API",
         "Resend Email API"
       ],
       "api_slugs": [
@@ -15852,26 +17256,244 @@
       "steps": [
         {
           "title": "Fetch Cloudflare Worker analytics",
-          "description": "Read request counts and latency for the reporting window."
+          "description": "This step retrieves analytics data from Cloudflare Workers, specifically focusing on request counts and latency over a defined reporting window.",
+          "technical_explanation": "This step serves as the initial data source for performance metrics. It consumes the reporting window parameters and calls the Cloudflare Workers API to fetch analytics data. The API contract requires a GET request to the endpoint '/client/v4/workers/analytics', with a Bearer token for authentication. Edge cases include handling rate limits, which may require implementing a backoff strategy, and ensuring the response is not empty, which could indicate no data for the specified window.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_cloudflare_analytics():\n    url = 'https://api.cloudflare.com/client/v4/workers/analytics'\n    token = os.environ.get('CLOUDFLARE_API_TOKEN')\n    headers = {'Authorization': f'Bearer {token}'}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    return data.get('result', [])\n\ncloudflare_data = fetch_cloudflare_analytics()",
+          "mock_response": {
+            "result": [
+              {
+                "request_count": 1500,
+                "latency": 200
+              }
+            ]
+          },
+          "actions": [
+            "Set the reporting window parameters for analytics retrieval",
+            "Authenticate using the Cloudflare API token",
+            "Make a GET request to the Cloudflare Workers API"
+          ],
+          "commands": [
+            {
+              "label": "Set environment variable",
+              "language": "bash",
+              "code": "export CLOUDFLARE_API_TOKEN='your_cloudflare_api_token'"
+            }
+          ],
+          "config": [
+            {
+              "key": "CLOUDFLARE_API_TOKEN",
+              "value": "<your_cloudflare_api_token>",
+              "description": "API token for authenticating requests to Cloudflare Workers API"
+            }
+          ],
+          "tools": [
+            "Cloudflare Workers API"
+          ],
+          "checklist": [
+            "Cloudflare API token is set in environment variables",
+            "Data is successfully retrieved from Cloudflare Workers API"
+          ],
+          "expectedResult": "Cloudflare Worker analytics data is fetched successfully.",
+          "links": [
+            {
+              "label": "Cloudflare Workers API Documentation",
+              "url": "https://developers.cloudflare.com/workers/"
+            }
+          ]
         },
         {
           "title": "Fetch PostHog traffic metrics",
-          "description": "Aggregate sessions and top landing pages."
+          "description": "This step aggregates traffic metrics from PostHog, focusing on session counts and identifying top landing pages.",
+          "technical_explanation": "This step aggregates traffic data from PostHog, which is crucial for understanding user engagement. It consumes the analytics data fetched in the previous step to correlate performance with traffic. The API contract involves a GET request to the PostHog Analytics API endpoint '/api/event', requiring a Bearer token for authentication. Edge cases include handling scenarios where no sessions are recorded, which may lead to empty responses or zero counts.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_posthog_traffic():\n    url = 'https://{host}/api/event'\n    token = os.environ.get('POSTHOG_API_KEY')\n    headers = {'Authorization': f'Bearer {token}'}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    return data.get('results', [])\n\nposthog_data = fetch_posthog_traffic()",
+          "mock_response": {
+            "results": [
+              {
+                "session_count": 300,
+                "top_landing_pages": [
+                  "/home",
+                  "/about"
+                ]
+              }
+            ]
+          },
+          "actions": [
+            "Set the PostHog API key in environment variables",
+            "Authenticate using the PostHog API key",
+            "Make a GET request to the PostHog Analytics API"
+          ],
+          "commands": [
+            {
+              "label": "Set environment variable",
+              "language": "bash",
+              "code": "export POSTHOG_API_KEY='your_posthog_api_key'"
+            }
+          ],
+          "config": [
+            {
+              "key": "POSTHOG_API_KEY",
+              "value": "<your_posthog_api_key>",
+              "description": "API key for authenticating requests to PostHog Analytics API"
+            }
+          ],
+          "tools": [
+            "PostHog Analytics API"
+          ],
+          "checklist": [
+            "PostHog API key is set in environment variables",
+            "Traffic metrics are successfully retrieved from PostHog"
+          ],
+          "expectedResult": "PostHog traffic metrics are fetched successfully.",
+          "links": [
+            {
+              "label": "PostHog Analytics API Documentation",
+              "url": "https://posthog.com/docs/api"
+            }
+          ]
         },
         {
           "title": "Generate the performance report",
-          "description": "Compute Core Web Vitals proxies and traffic deltas."
+          "description": "This step computes the performance report by analyzing the metrics from Cloudflare and PostHog, focusing on Core Web Vitals and traffic deltas.",
+          "technical_explanation": "This step synthesizes data from both Cloudflare and PostHog to generate a comprehensive performance report. It uses the analytics data from the previous steps to compute Core Web Vitals proxies and traffic deltas. The architecture requires careful handling of data types to ensure accurate calculations. Edge cases include scenarios where metrics may be missing or zero, which should be accounted for in calculations to avoid division by zero errors.",
+          "code_snippet": "import json\nimport statistics\n\ndef generate_performance_report(cloudflare_data, posthog_data):\n    request_count = cloudflare_data[0].get('request_count', 0)\n    latency = cloudflare_data[0].get('latency', 0)\n    session_count = posthog_data[0].get('session_count', 0)\n    top_landing_pages = posthog_data[0].get('top_landing_pages', [])\n    if request_count == 0 or session_count == 0:\n        return 'Insufficient data to generate report'\n    core_web_vitals = {'request_count': request_count, 'latency': latency, 'session_count': session_count}\n    return core_web_vitals, top_landing_pages\n\nreport = generate_performance_report(cloudflare_data, posthog_data)",
+          "mock_response": {
+            "core_web_vitals": {
+              "request_count": 1500,
+              "latency": 200,
+              "session_count": 300
+            },
+            "top_landing_pages": [
+              "/home",
+              "/about"
+            ]
+          },
+          "actions": [
+            "Combine metrics from Cloudflare and PostHog",
+            "Compute Core Web Vitals proxies",
+            "Identify top landing pages for the report"
+          ],
+          "commands": [],
+          "config": [],
+          "tools": [],
+          "checklist": [
+            "Performance report is generated successfully",
+            "Core Web Vitals and top landing pages are included"
+          ],
+          "expectedResult": "A performance report is generated successfully.",
+          "links": [
+            {
+              "label": "Statistics Library Documentation",
+              "url": "https://docs.python.org/3/library/statistics.html"
+            }
+          ]
         },
         {
           "title": "Email the weekly report",
-          "description": "Send the HTML report to the stakeholder list via Resend."
+          "description": "This step sends the generated performance report to stakeholders via email using the Resend Email API.",
+          "technical_explanation": "This step utilizes the Resend Email API to distribute the performance report to stakeholders. It consumes the report generated in the previous step and formats it into an email payload. The API contract requires a POST request to the endpoint '/emails', with a Bearer token for authentication. Edge cases include handling failed email deliveries and ensuring the email payload is correctly structured to avoid errors during sending.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef send_email(report):\n    url = 'https://api.resend.com/emails'\n    token = os.environ.get('RESEND_API_KEY')\n    headers = {'Authorization': f'Bearer {token}', 'Content-Type': 'application/json'}\n    payload = json.dumps({'to': 'stakeholders@example.com', 'subject': 'Weekly Performance Report', 'html': report})\n    request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return response.read().decode('utf-8')\n\nemail_response = send_email(report)",
+          "mock_response": "Email sent successfully",
+          "actions": [
+            "Format the performance report into an email payload",
+            "Authenticate using the Resend API key",
+            "Send the email using the Resend Email API"
+          ],
+          "commands": [
+            {
+              "label": "Set environment variable",
+              "language": "bash",
+              "code": "export RESEND_API_KEY='your_resend_api_key'"
+            }
+          ],
+          "config": [
+            {
+              "key": "RESEND_API_KEY",
+              "value": "<your_resend_api_key>",
+              "description": "API key for authenticating requests to Resend Email API"
+            }
+          ],
+          "tools": [
+            "Resend Email API"
+          ],
+          "checklist": [
+            "Email payload is correctly structured",
+            "Email is sent successfully to stakeholders"
+          ],
+          "expectedResult": "The performance report is emailed to stakeholders successfully.",
+          "links": [
+            {
+              "label": "Resend Email API Documentation",
+              "url": "https://resend.com/docs"
+            }
+          ]
         }
       ],
-      "prerequisites": [],
-      "glossary": [],
-      "troubleshooting": [],
-      "resources": []
-    }
+      "prerequisites": [
+        "A PostHog account with API access and a personal API key",
+        "A Cloudflare account with access to Workers and an API token",
+        "A Resend account with an API key for sending emails",
+        "Access to PostHog Analytics API",
+        "Access to Cloudflare Workers API",
+        "Access to Resend Email API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A method for securing API requests using a token that grants access to resources."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A strategy to handle API rate limits by pausing requests and retrying after a specified duration."
+        },
+        {
+          "term": "Core Web Vitals",
+          "definition": "A set of metrics that assess the user experience of a website, focusing on loading performance, interactivity, and visual stability."
+        },
+        {
+          "term": "Email Payload Structure",
+          "definition": "The format and data included in an email message sent via an API, typically including recipient, subject, and body."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "API request fails with 401 Unauthorized",
+          "solution": "Verify that the API key or token is correctly set in the environment variables."
+        },
+        {
+          "problem": "Empty response from Cloudflare Workers API",
+          "solution": "Check if the specified reporting window has valid data and ensure the API token has the necessary permissions."
+        },
+        {
+          "problem": "Email not received by stakeholders",
+          "solution": "Confirm that the email payload is correctly structured and that the Resend API key is valid."
+        }
+      ],
+      "resources": [
+        {
+          "label": "PostHog Analytics API",
+          "url": "https://posthog.com/docs/api"
+        },
+        {
+          "label": "Cloudflare Workers API",
+          "url": "https://developers.cloudflare.com/workers/"
+        },
+        {
+          "label": "Resend Email API",
+          "url": "https://resend.com/docs"
+        }
+      ],
+      "before_you_start": [
+        "A PostHog account with API access and a personal API key",
+        "A Cloudflare account with access to Workers and an API token",
+        "A Resend account with an API key for sending emails",
+        "Access to PostHog Analytics API",
+        "Access to Cloudflare Workers API",
+        "Access to Resend Email API",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ]
+    },
+    "created_and_verified_at": "2026-11-06 16:46 UTC"
   },
   {
     "slug": "social-media-analytics",

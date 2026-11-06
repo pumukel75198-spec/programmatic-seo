@@ -1,18 +1,14 @@
 {
   "mongodb-data-pipeline": {
     "reason": "RuntimeError: Workflow: API host 'mongodb-api.com' is used in code but missing from resources; Workflow: API host 'mongodb-api.com' is not part of the curated APIs – ungrounded API call",
-    "timestamp": "2026-11-06 15:45 UTC"
+    "timestamp": "2026-11-06 16:30 UTC"
   },
   "serverless-job-scheduler": {
-    "reason": "RuntimeError: Step 2: defines function(s) invoke_lambda but never calls one at top level – the step would not execute; Step 3: defines function(s) update_job_status but never calls one at top level – the step would not execute; Step 4: defines function(s) report_failure but never calls one at top level – the step would not execute",
-    "timestamp": "2026-11-06 15:47 UTC"
+    "reason": "RuntimeError: Step 2: defines function(s) invoke_lambda but never calls one at top level – the step would not execute; Step 3: defines function(s) update_job_status but never calls one at top level – the step would not execute; Workflow dry-run failed: KeyError: 'status'\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 996, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 84, in <module>\n  File \"workflow.py\", line 80, in main\nKeyError: 'status'\n",
+    "timestamp": "2026-11-06 16:33 UTC"
   },
   "blog-cms-publishing": {
-    "reason": "RuntimeError: Workflow dry-run failed: ValueError: Slug is not unique\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 996, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 67, in <module>\n  File \"workflow.py\", line 64, in validate_entry\nValueError: Slug is not unique\n",
-    "timestamp": "2026-11-06 15:50 UTC"
-  },
-  "form-submission-routing": {
-    "reason": "RuntimeError: Workflow dry-run failed: UnboundLocalError: cannot access local variable 'response_data' where it is not associated with a value\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 996, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 47, in <module>\n  File \"workflow.py\", line 45, in route_to_airtable\nUnboundLocalError: cannot access local variable 'response_data' where it is not associated with a value\n",
-    "timestamp": "2026-11-06 15:59 UTC"
+    "reason": "RuntimeError: Workflow dry-run failed: ValueError: Missing mandatory field: title\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 996, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 46, in <module>\n  File \"workflow.py\", line 41, in validate_entry\nValueError: Missing mandatory field: title\n",
+    "timestamp": "2026-11-06 16:36 UTC"
   }
 }
