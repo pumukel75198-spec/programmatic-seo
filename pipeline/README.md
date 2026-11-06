@@ -7,16 +7,16 @@ batch scripts have been removed.
 
 ## Modules
 
-| File | Responsibility |
-|---|---|
-| `config.py` | Paths, binding prices, import whitelist, blacklist, variable step bounds, timestamp/disclaimer, placeholder→base-domain map |
-| `schemas.py` | Strict Pydantic models (variable step count, `resources`, `created_and_verified_at`) |
-| `prompts.py` | The only valid LLM system prompts (100 % English, didactic depth, tool consistency, correct API patterns) |
-| `llm_client.py` | OpenRouter client (standard library, retries, backoff) |
-| `validator.py` | Hard gatekeeper: AST per step + concatenated, stdlib imports, mock execution, blacklist, dummy/random ban, tool consistency, live HTTP reachability |
-| `pdf_renderer.py` | The only PDF layout – dynamic, content-driven page count, H1 title, timestamp, link disclaimer |
-| `bundle_builder.py` | Builds the `<slug>-kit.zip` Implementation Kits (workflow + API) |
-| `run_batch.py` | Single entry point: generate → validate → retry → store → PDF → kit → R2 → build → deploy, with automatic topic replacement on domain failure |
+| File                | Responsibility                                                                                                                                      |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `config.py`         | Paths, binding prices, import whitelist, blacklist, variable step bounds, timestamp/disclaimer, placeholder→base-domain map                         |
+| `schemas.py`        | Strict Pydantic models (variable step count, `resources`, `created_and_verified_at`)                                                                |
+| `prompts.py`        | The only valid LLM system prompts (100 % English, didactic depth, tool consistency, correct API patterns)                                           |
+| `llm_client.py`     | OpenRouter client (standard library, retries, backoff)                                                                                              |
+| `validator.py`      | Hard gatekeeper: AST per step + concatenated, stdlib imports, mock execution, blacklist, dummy/random ban, tool consistency, live HTTP reachability |
+| `pdf_renderer.py`   | The only PDF layout – dynamic, content-driven page count, H1 title, timestamp, link disclaimer                                                      |
+| `bundle_builder.py` | Builds the `<slug>-kit.zip` Implementation Kits (workflow + API)                                                                                    |
+| `run_batch.py`      | Single entry point: generate → validate → retry → store → PDF → kit → R2 → build → deploy, with automatic topic replacement on domain failure       |
 
 ## Setup
 

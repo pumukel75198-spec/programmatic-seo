@@ -1,6 +1,19 @@
 # build output
 dist/
 
+# Accidental duplicate files created by cloud sync ("name 2.ext")
+* 2.*
+
+# Python virtualenvs (local tooling only)
+venv/
+.venv/
+
+# Temporary sample / test fixtures accidentally committed to the repo root
+test_extracted/
+documents/
+*.log
+
+
 # private premium assets (generated, uploaded to KV)
 private/downloads/
 private/api-scripts/

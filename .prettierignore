@@ -12,6 +12,23 @@ public/api-scripts/
 .cache/
 .wrangler/
 
+# Python virtualenvs (local tooling only, never deployed)
+venv/
+.venv/
+
+# Test / coverage artifacts
+coverage/
+test-results/
+playwright-report/
+test_extracted/
+
+# Sample / uploaded documents and PDFs
+documents/
+*.pdf
+
+# Accidental duplicate files created by cloud sync ("name 2.ext")
+* 2.*
+
 # Lockfile is generated, keep it stable
 package-lock.json
 

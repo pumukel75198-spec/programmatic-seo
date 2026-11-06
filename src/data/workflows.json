@@ -4,12 +4,7 @@
     "title": "AI Content Generation Pipeline",
     "description": "Build a two-model content pipeline that drafts articles with OpenAI, critiques them with Anthropic Claude and stores approved drafts in Supabase for publication.",
     "category": "AI & LLM",
-    "tags": [
-      "ai",
-      "content",
-      "llm",
-      "automation"
-    ],
+    "tags": ["ai", "content", "llm", "automation"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
@@ -23,10 +18,7 @@
         "anthropic-claude-api",
         "supabase-database-api"
       ],
-      "alternative_slugs": [
-        "openai-alternatives",
-        "notion-ai-alternatives"
-      ],
+      "alternative_slugs": ["openai-alternatives", "notion-ai-alternatives"],
       "useCase": "Generate, review and store long-form content with two LLMs and a Supabase content queue.",
       "steps": [
         {
@@ -54,9 +46,7 @@
               "description": "Path to the local JSON file containing content briefs"
             }
           ],
-          "tools": [
-            "Supabase Database API"
-          ],
+          "tools": ["Supabase Database API"],
           "checklist": [
             "Content briefs are loaded successfully",
             "Each brief has normalized fields"
@@ -292,28 +282,17 @@
     "title": "Multi-Model Prompt Router",
     "description": "Classify incoming prompts and route them to Groq, Together AI or OpenAI based on complexity, latency budget and cost.",
     "category": "AI & LLM",
-    "tags": [
-      "ai",
-      "llm",
-      "routing",
-      "inference"
-    ],
+    "tags": ["ai", "llm", "routing", "inference"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
-      "tools": [
-        "OpenAI GPT-4 API",
-        "Groq Inference API",
-        "Together AI API"
-      ],
+      "tools": ["OpenAI GPT-4 API", "Groq Inference API", "Together AI API"],
       "api_slugs": [
         "groq-inference-api",
         "together-ai-api",
         "openai-gpt-4-api"
       ],
-      "alternative_slugs": [
-        "openai-alternatives"
-      ],
+      "alternative_slugs": ["openai-alternatives"],
       "useCase": "Route prompts to the cheapest suitable model while keeping one OpenAI-compatible contract.",
       "steps": [
         {
@@ -411,9 +390,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "OpenAI GPT-4 API"
-          ],
+          "tools": ["OpenAI GPT-4 API"],
           "checklist": [
             "The API call returns a valid JSON response.",
             "The response contains the expected message content."
@@ -528,28 +505,13 @@
     "title": "LLM Evaluation Benchmark",
     "description": "Run a fixed prompt suite against OpenAI and Mistral, score the answers and record the benchmark rows in Airtable.",
     "category": "AI & LLM",
-    "tags": [
-      "ai",
-      "llm",
-      "evaluation",
-      "benchmark"
-    ],
+    "tags": ["ai", "llm", "evaluation", "benchmark"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
-      "tools": [
-        "OpenAI GPT-4 API",
-        "Mistral AI API",
-        "Airtable API"
-      ],
-      "api_slugs": [
-        "openai-gpt-4-api",
-        "mistral-ai-api",
-        "airtable-api"
-      ],
-      "alternative_slugs": [
-        "openai-alternatives"
-      ],
+      "tools": ["OpenAI GPT-4 API", "Mistral AI API", "Airtable API"],
+      "api_slugs": ["openai-gpt-4-api", "mistral-ai-api", "airtable-api"],
+      "alternative_slugs": ["openai-alternatives"],
       "useCase": "Benchmark two LLM providers on the same prompts and store the scores in Airtable.",
       "steps": [
         {
@@ -577,9 +539,7 @@
               "description": "Path to the JSON file containing prompt fixtures."
             }
           ],
-          "tools": [
-            "OpenAI GPT-4 API"
-          ],
+          "tools": ["OpenAI GPT-4 API"],
           "checklist": [
             "Prompt suite is loaded successfully.",
             "All prompts are validated and malformed entries are rejected."
@@ -611,9 +571,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "OpenAI GPT-4 API"
-          ],
+          "tools": ["OpenAI GPT-4 API"],
           "checklist": [
             "Responses from OpenAI are collected successfully.",
             "All prompts receive a valid response."
@@ -645,9 +603,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "Mistral AI API"
-          ],
+          "tools": ["Mistral AI API"],
           "checklist": [
             "Responses from Mistral are collected successfully.",
             "All prompts receive a valid response."
@@ -717,9 +673,7 @@
               "description": "The ID of the Airtable base where records will be written."
             }
           ],
-          "tools": [
-            "Airtable API"
-          ],
+          "tools": ["Airtable API"],
           "checklist": [
             "Records are created successfully in Airtable.",
             "All scores are written to the benchmark table."
@@ -805,12 +759,7 @@
     "title": "Batch LLM Processing",
     "description": "Prepare a JSONL batch file, submit it to the OpenAI Batch API, poll the job status and store completed results in Supabase.",
     "category": "AI & LLM",
-    "tags": [
-      "ai",
-      "llm",
-      "batch",
-      "cost"
-    ],
+    "tags": ["ai", "llm", "batch", "cost"],
     "details": {
       "difficulty": "Advanced",
       "duration": "60–90 minutes",
@@ -824,10 +773,7 @@
         "openai-gpt-4-api",
         "supabase-database-api"
       ],
-      "alternative_slugs": [
-        "openai-alternatives",
-        "supabase-alternatives"
-      ],
+      "alternative_slugs": ["openai-alternatives", "supabase-alternatives"],
       "useCase": "Submit large prompt sets as an OpenAI batch job and reconcile the results in Supabase.",
       "steps": [
         {
@@ -843,9 +789,7 @@
           ],
           "commands": [],
           "config": [],
-          "tools": [
-            "OpenAI Batch API"
-          ],
+          "tools": ["OpenAI Batch API"],
           "checklist": [
             "The JSONL format is valid",
             "The output contains all prompts"
@@ -871,9 +815,7 @@
           ],
           "commands": [],
           "config": [],
-          "tools": [
-            "OpenAI Batch API"
-          ],
+          "tools": ["OpenAI Batch API"],
           "checklist": [
             "The batch job is submitted successfully",
             "The response contains a valid job identifier"
@@ -899,9 +841,7 @@
           ],
           "commands": [],
           "config": [],
-          "tools": [
-            "OpenAI Batch API"
-          ],
+          "tools": ["OpenAI Batch API"],
           "checklist": [
             "The job status is retrieved successfully",
             "The job reaches a terminal state"
@@ -927,9 +867,7 @@
           ],
           "commands": [],
           "config": [],
-          "tools": [
-            "Supabase Database API"
-          ],
+          "tools": ["Supabase Database API"],
           "checklist": [
             "Results are upserted successfully",
             "No errors are encountered during the process"
@@ -1015,12 +953,7 @@
     "title": "AI Customer Insights",
     "description": "Pull PostHog event cohorts, summarise behaviour patterns with OpenAI and persist the generated insights in Supabase.",
     "category": "AI & LLM",
-    "tags": [
-      "ai",
-      "analytics",
-      "customer",
-      "insights"
-    ],
+    "tags": ["ai", "analytics", "customer", "insights"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
@@ -1076,9 +1009,7 @@
               "description": "Your PostHog personal API key."
             }
           ],
-          "tools": [
-            "PostHog Analytics API"
-          ],
+          "tools": ["PostHog Analytics API"],
           "checklist": [
             "Successfully retrieved event data from PostHog.",
             "Data structure matches expected format."
@@ -1124,9 +1055,7 @@
               "description": "Your OpenAI API key."
             }
           ],
-          "tools": [
-            "OpenAI GPT-4 API"
-          ],
+          "tools": ["OpenAI GPT-4 API"],
           "checklist": [
             "Insights generated successfully from OpenAI.",
             "Response structure matches expected format."
@@ -1169,9 +1098,7 @@
               "description": "Your Supabase service-role key."
             }
           ],
-          "tools": [
-            "Supabase Database API"
-          ],
+          "tools": ["Supabase Database API"],
           "checklist": [
             "Insights stored successfully in Supabase.",
             "Response indicates successful upsert operation."
@@ -1288,26 +1215,13 @@
     "title": "Claude Document Summarizer",
     "description": "Read document manifest entries, request concise summaries from the Anthropic messages endpoint and archive the results in S3.",
     "category": "AI & LLM",
-    "tags": [
-      "ai",
-      "documents",
-      "summary",
-      "claude"
-    ],
+    "tags": ["ai", "documents", "summary", "claude"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "45–60 minutes",
-      "tools": [
-        "Amazon S3 API",
-        "Anthropic Claude API"
-      ],
-      "api_slugs": [
-        "anthropic-claude-api",
-        "aws-s3-api"
-      ],
-      "alternative_slugs": [
-        "openai-alternatives"
-      ],
+      "tools": ["Amazon S3 API", "Anthropic Claude API"],
+      "api_slugs": ["anthropic-claude-api", "aws-s3-api"],
+      "alternative_slugs": ["openai-alternatives"],
       "useCase": "Summarise uploaded documents with Anthropic Claude and archive the summaries on S3.",
       "steps": [
         {
@@ -1357,9 +1271,7 @@
               "description": "The key for the manifest file in the S3 bucket."
             }
           ],
-          "tools": [
-            "Amazon S3 API"
-          ],
+          "tools": ["Amazon S3 API"],
           "checklist": [
             "Manifest file is successfully retrieved from S3",
             "Document entries are correctly parsed from the manifest"
@@ -1399,9 +1311,7 @@
               "description": "API key for authenticating with the Anthropic Claude API."
             }
           ],
-          "tools": [
-            "Anthropic Claude API"
-          ],
+          "tools": ["Anthropic Claude API"],
           "checklist": [
             "Each document is successfully summarized",
             "Summaries are stored in a structured format"
@@ -1439,9 +1349,7 @@
               "description": "The name of the S3 bucket for archiving summaries."
             }
           ],
-          "tools": [
-            "Amazon S3 API"
-          ],
+          "tools": ["Amazon S3 API"],
           "checklist": [
             "Summaries are successfully uploaded to S3",
             "Each summary is stored as a JSON file"
@@ -1460,10 +1368,7 @@
           "technical_explanation": "This step ensures that any issues encountered during processing are logged for review. The report is generated based on the documents that failed to be summarized. The output is a JSON object listing the keys of the problematic documents. Edge cases include handling empty reports and ensuring the report is correctly formatted.",
           "code_snippet": "import os\nimport json\n\n\ndef report_failures(failed_documents):\n    report = {'failed_documents': failed_documents}\n    with open('failure_report.json', 'w') as file:\n        json.dump(report, file)\n\nfailed_documents = ['document3.txt', 'document4.pdf']\nreport_failures(failed_documents)",
           "mock_response": {
-            "failed_documents": [
-              "document3.txt",
-              "document4.pdf"
-            ]
+            "failed_documents": ["document3.txt", "document4.pdf"]
           },
           "actions": [
             "Collect keys of documents that failed processing",
@@ -1556,27 +1461,13 @@
     "title": "Gemini Multimodal Analyzer",
     "description": "Send image references to the Gemini API, extract structured attributes and keep the results next to the Vercel Blob asset URL.",
     "category": "AI & LLM",
-    "tags": [
-      "ai",
-      "multimodal",
-      "gemini",
-      "images"
-    ],
+    "tags": ["ai", "multimodal", "gemini", "images"],
     "details": {
       "difficulty": "Advanced",
       "duration": "60–75 minutes",
-      "tools": [
-        "Vercel Blob API",
-        "Google Gemini API"
-      ],
-      "api_slugs": [
-        "google-gemini-api",
-        "vercel-blob-api"
-      ],
-      "alternative_slugs": [
-        "openai-alternatives",
-        "canva-alternatives"
-      ],
+      "tools": ["Vercel Blob API", "Google Gemini API"],
+      "api_slugs": ["google-gemini-api", "vercel-blob-api"],
+      "alternative_slugs": ["openai-alternatives", "canva-alternatives"],
       "useCase": "Analyse product images with Gemini and store the extracted attributes with the blob URL.",
       "steps": [
         {
@@ -1615,9 +1506,7 @@
               "description": "Bearer token for Vercel Blob API access."
             }
           ],
-          "tools": [
-            "Vercel Blob API"
-          ],
+          "tools": ["Vercel Blob API"],
           "checklist": [
             "Verify that the API call returns a valid response.",
             "Ensure that the list of blob URLs is correctly populated."
@@ -1638,10 +1527,7 @@
           "mock_response": {
             "attributes": {
               "color": "blue",
-              "objects": [
-                "car",
-                "tree"
-              ]
+              "objects": ["car", "tree"]
             }
           },
           "actions": [
@@ -1663,9 +1549,7 @@
               "description": "API key for Google Gemini access."
             }
           ],
-          "tools": [
-            "Google Gemini API"
-          ],
+          "tools": ["Google Gemini API"],
           "checklist": [
             "Confirm that each image URL is processed without errors.",
             "Verify that the structured attributes are correctly extracted."
@@ -1686,16 +1570,11 @@
           "mock_response": [
             {
               "color": "blue",
-              "objects": [
-                "car",
-                "tree"
-              ]
+              "objects": ["car", "tree"]
             },
             {
               "color": "red",
-              "objects": [
-                "bike"
-              ]
+              "objects": ["bike"]
             }
           ],
           "actions": [
@@ -1731,16 +1610,11 @@
           "mock_response": {
             "https://blob.vercel-storage.com/image1.png": {
               "color": "blue",
-              "objects": [
-                "car",
-                "tree"
-              ]
+              "objects": ["car", "tree"]
             },
             "https://blob.vercel-storage.com/image2.jpg": {
               "color": "red",
-              "objects": [
-                "bike"
-              ]
+              "objects": ["bike"]
             }
           },
           "actions": [
@@ -1835,27 +1709,13 @@
     "title": "Watson Assistant Helpdesk",
     "description": "Send incoming questions to Watson Assistant, detect low-confidence answers and create Zendesk tickets for escalation.",
     "category": "AI & LLM",
-    "tags": [
-      "assistant",
-      "helpdesk",
-      "ai",
-      "support"
-    ],
+    "tags": ["assistant", "helpdesk", "ai", "support"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
-      "tools": [
-        "IBM Watson Assistant API",
-        "Zendesk Support API"
-      ],
-      "api_slugs": [
-        "ibm-watson-assistant-api",
-        "zendesk-support-api"
-      ],
-      "alternative_slugs": [
-        "intercom-alternatives",
-        "zendesk-alternatives"
-      ],
+      "tools": ["IBM Watson Assistant API", "Zendesk Support API"],
+      "api_slugs": ["ibm-watson-assistant-api", "zendesk-support-api"],
+      "alternative_slugs": ["intercom-alternatives", "zendesk-alternatives"],
       "useCase": "Deflect repetitive helpdesk tickets with Watson Assistant and escalate the rest to Zendesk.",
       "steps": [
         {
@@ -1913,9 +1773,7 @@
               "description": "The API key for authenticating with Watson Assistant."
             }
           ],
-          "tools": [
-            "IBM Watson Assistant API"
-          ],
+          "tools": ["IBM Watson Assistant API"],
           "checklist": [
             "Verify that the API key is set correctly in the environment.",
             "Ensure the question format is compatible with Watson Assistant."
@@ -1996,9 +1854,7 @@
               "description": "Your Zendesk API token."
             }
           ],
-          "tools": [
-            "Zendesk Support API"
-          ],
+          "tools": ["Zendesk Support API"],
           "checklist": [
             "Verify that the subdomain is set correctly in the environment.",
             "Ensure the ticket details are correctly formatted."
@@ -2114,12 +1970,7 @@
     "title": "Podcast Transcription Pipeline",
     "description": "Transcribe episode audio through Whisper and Deepgram, compare the transcripts and store the preferred result in Supabase.",
     "category": "AI & Speech",
-    "tags": [
-      "transcription",
-      "podcast",
-      "speech",
-      "ai"
-    ],
+    "tags": ["transcription", "podcast", "speech", "ai"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
@@ -2133,9 +1984,7 @@
         "deepgram-speech-api",
         "supabase-database-api"
       ],
-      "alternative_slugs": [
-        "deepgram-alternatives"
-      ],
+      "alternative_slugs": ["deepgram-alternatives"],
       "useCase": "Transcribe podcast episodes with two speech APIs and store transcripts in Supabase.",
       "steps": [
         {
@@ -2164,10 +2013,7 @@
             }
           ],
           "tools": [],
-          "checklist": [
-            "Manifest file exists",
-            "Audio URLs are valid"
-          ],
+          "checklist": ["Manifest file exists", "Audio URLs are valid"],
           "expectedResult": "A list of episodes with their audio URLs and metadata is prepared for transcription.",
           "links": [
             {
@@ -2201,9 +2047,7 @@
               "description": "API key for OpenAI Whisper"
             }
           ],
-          "tools": [
-            "OpenAI Whisper API"
-          ],
+          "tools": ["OpenAI Whisper API"],
           "checklist": [
             "Transcription response is received",
             "Transcription text is valid"
@@ -2241,9 +2085,7 @@
               "description": "API key for Deepgram Speech API"
             }
           ],
-          "tools": [
-            "Deepgram Speech API"
-          ],
+          "tools": ["Deepgram Speech API"],
           "checklist": [
             "Transcription response is received",
             "Transcription text is valid"
@@ -2286,9 +2128,7 @@
               "description": "API key for Supabase"
             }
           ],
-          "tools": [
-            "Supabase Database API"
-          ],
+          "tools": ["Supabase Database API"],
           "checklist": [
             "Transcript is selected",
             "Transcript is stored in Supabase"
@@ -2374,28 +2214,13 @@
     "title": "AI Voiceover Production",
     "description": "Create voiceover audio from a script, render an ElevenLabs and an AWS Polly variant, and archive both under the S3 media prefix.",
     "category": "AI & Speech",
-    "tags": [
-      "voice",
-      "audio",
-      "tts",
-      "production"
-    ],
+    "tags": ["voice", "audio", "tts", "production"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
-      "tools": [
-        "ElevenLabs Voice API",
-        "Amazon Polly API",
-        "Amazon S3 API"
-      ],
-      "api_slugs": [
-        "elevenlabs-voice-api",
-        "aws-polly-api",
-        "aws-s3-api"
-      ],
-      "alternative_slugs": [
-        "elevenlabs-alternatives"
-      ],
+      "tools": ["ElevenLabs Voice API", "Amazon Polly API", "Amazon S3 API"],
+      "api_slugs": ["elevenlabs-voice-api", "aws-polly-api", "aws-s3-api"],
+      "alternative_slugs": ["elevenlabs-alternatives"],
       "useCase": "Generate voiceovers with ElevenLabs and Polly and archive the audio on S3.",
       "steps": [
         {
@@ -2439,9 +2264,7 @@
           ],
           "commands": [],
           "config": [],
-          "tools": [
-            "ElevenLabs Voice API"
-          ],
+          "tools": ["ElevenLabs Voice API"],
           "checklist": [
             "Audio URL is returned from the ElevenLabs API.",
             "Audio data is valid and accessible."
@@ -2581,29 +2404,13 @@
     "title": "Meeting Transcription and Summaries",
     "description": "Start an AWS Transcribe job, poll its completion, summarise the transcript with OpenAI and create a Notion page with action items.",
     "category": "AI & Speech",
-    "tags": [
-      "meeting",
-      "transcription",
-      "summary",
-      "notion"
-    ],
+    "tags": ["meeting", "transcription", "summary", "notion"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
-      "tools": [
-        "Amazon Transcribe API",
-        "OpenAI GPT-4 API",
-        "Notion API"
-      ],
-      "api_slugs": [
-        "aws-transcribe-api",
-        "openai-gpt-4-api",
-        "notion-api"
-      ],
-      "alternative_slugs": [
-        "notion-alternatives",
-        "zoom-alternatives"
-      ],
+      "tools": ["Amazon Transcribe API", "OpenAI GPT-4 API", "Notion API"],
+      "api_slugs": ["aws-transcribe-api", "openai-gpt-4-api", "notion-api"],
+      "alternative_slugs": ["notion-alternatives", "zoom-alternatives"],
       "useCase": "Transcribe meeting recordings with AWS Transcribe and publish AI summaries to Notion.",
       "steps": [
         {
@@ -2641,9 +2448,7 @@
               "description": "S3 bucket for storing the transcription output."
             }
           ],
-          "tools": [
-            "Amazon Transcribe API"
-          ],
+          "tools": ["Amazon Transcribe API"],
           "checklist": [
             "Transcription job name is stored correctly.",
             "API response indicates job status is IN_PROGRESS."
@@ -2675,9 +2480,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "Amazon Transcribe API"
-          ],
+          "tools": ["Amazon Transcribe API"],
           "checklist": [
             "Transcript URI is retrieved successfully.",
             "Polling does not exceed maximum attempts."
@@ -2709,9 +2512,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "OpenAI GPT-4 API"
-          ],
+          "tools": ["OpenAI GPT-4 API"],
           "checklist": [
             "Summary is generated successfully.",
             "Key points and action items are included in the summary."
@@ -2753,9 +2554,7 @@
               "description": "ID of the Notion database to publish the summary."
             }
           ],
-          "tools": [
-            "Notion API"
-          ],
+          "tools": ["Notion API"],
           "checklist": [
             "Notion page is created successfully.",
             "Summary and action items are correctly formatted in the page."
@@ -2841,12 +2640,7 @@
     "title": "AI Image Generation Pipeline",
     "description": "Render a base image with Stability AI, create a stylised variant with DeepAI and upload both assets to Vercel Blob.",
     "category": "AI & Vision",
-    "tags": [
-      "image",
-      "generation",
-      "ai",
-      "assets"
-    ],
+    "tags": ["image", "generation", "ai", "assets"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
@@ -2860,10 +2654,7 @@
         "api-ai-image-generator",
         "vercel-blob-api"
       ],
-      "alternative_slugs": [
-        "canva-alternatives",
-        "figma-alternatives"
-      ],
+      "alternative_slugs": ["canva-alternatives", "figma-alternatives"],
       "useCase": "Generate campaign images with two image APIs and publish them to Vercel Blob.",
       "steps": [
         {
@@ -2924,9 +2715,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "Stability AI Image API"
-          ],
+          "tools": ["Stability AI Image API"],
           "checklist": [
             "Images are generated without errors",
             "Binary data is captured correctly"
@@ -2958,9 +2747,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "DeepAI Image Generator API"
-          ],
+          "tools": ["DeepAI Image Generator API"],
           "checklist": [
             "Stylized image is generated without errors",
             "Image data is captured correctly"
@@ -2995,9 +2782,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "Vercel Blob API"
-          ],
+          "tools": ["Vercel Blob API"],
           "checklist": [
             "Images are uploaded successfully",
             "Public asset manifest is created"
@@ -3083,29 +2868,17 @@
     "title": "Semantic Search Knowledge Base",
     "description": "Export Notion page text, create OpenAI embeddings, upsert them into Pinecone and run a semantic nearest-neighbour query.",
     "category": "Search & Vector",
-    "tags": [
-      "search",
-      "embeddings",
-      "vector",
-      "knowledge"
-    ],
+    "tags": ["search", "embeddings", "vector", "knowledge"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
-      "tools": [
-        "Notion API",
-        "OpenAI Embeddings API",
-        "Pinecone Vector API"
-      ],
+      "tools": ["Notion API", "OpenAI Embeddings API", "Pinecone Vector API"],
       "api_slugs": [
         "openai-embeddings-api",
         "pinecone-vector-api",
         "notion-api"
       ],
-      "alternative_slugs": [
-        "pinecone-alternatives",
-        "notion-alternatives"
-      ],
+      "alternative_slugs": ["pinecone-alternatives", "notion-alternatives"],
       "useCase": "Index Notion pages as embeddings in Pinecone and answer semantic queries.",
       "steps": [
         {
@@ -3142,9 +2915,7 @@
               "description": "Bearer token for Notion API authentication."
             }
           ],
-          "tools": [
-            "Notion API"
-          ],
+          "tools": ["Notion API"],
           "checklist": [
             "Notion pages are successfully retrieved.",
             "Text content is extracted correctly."
@@ -3165,18 +2936,10 @@
           "mock_response": {
             "data": [
               {
-                "embedding": [
-                  0.1,
-                  0.2,
-                  0.3
-                ]
+                "embedding": [0.1, 0.2, 0.3]
               },
               {
-                "embedding": [
-                  0.4,
-                  0.5,
-                  0.6
-                ]
+                "embedding": [0.4, 0.5, 0.6]
               }
             ]
           },
@@ -3199,9 +2962,7 @@
               "description": "Bearer token for OpenAI API authentication."
             }
           ],
-          "tools": [
-            "OpenAI Embeddings API"
-          ],
+          "tools": ["OpenAI Embeddings API"],
           "checklist": [
             "Embeddings are successfully generated for all texts.",
             "Each embedding is in the expected format."
@@ -3241,9 +3002,7 @@
               "description": "API key for Pinecone authentication."
             }
           ],
-          "tools": [
-            "Pinecone Vector API"
-          ],
+          "tools": ["Pinecone Vector API"],
           "checklist": [
             "Vectors are successfully upserted into the Pinecone index.",
             "The response confirms the number of upserted vectors."
@@ -3292,9 +3051,7 @@
               "description": "API key for Pinecone authentication."
             }
           ],
-          "tools": [
-            "Pinecone Vector API"
-          ],
+          "tools": ["Pinecone Vector API"],
           "checklist": [
             "Query results are successfully retrieved from the Pinecone index.",
             "The results contain relevant matches based on the query."
@@ -3380,29 +3137,17 @@
     "title": "Hybrid Search Product Catalog",
     "description": "Sync Shopify products into Algolia, enrich them with Cohere embeddings and merge keyword and semantic ranking for search results.",
     "category": "Search & Vector",
-    "tags": [
-      "search",
-      "ecommerce",
-      "catalog",
-      "embeddings"
-    ],
+    "tags": ["search", "ecommerce", "catalog", "embeddings"],
     "details": {
       "difficulty": "Advanced",
       "duration": "90–120 minutes",
-      "tools": [
-        "Shopify Admin API",
-        "Cohere Embed API",
-        "Algolia Search API"
-      ],
+      "tools": ["Shopify Admin API", "Cohere Embed API", "Algolia Search API"],
       "api_slugs": [
         "algolia-search-api",
         "cohere-embed-api",
         "shopify-admin-api"
       ],
-      "alternative_slugs": [
-        "algolia-alternatives",
-        "shopify-alternatives"
-      ],
+      "alternative_slugs": ["algolia-alternatives", "shopify-alternatives"],
       "useCase": "Combine keyword and vector search for a Shopify product catalog using Algolia and Cohere.",
       "steps": [
         {
@@ -3447,9 +3192,7 @@
               "description": "The access token for Shopify API."
             }
           ],
-          "tools": [
-            "Shopify Admin API"
-          ],
+          "tools": ["Shopify Admin API"],
           "checklist": [
             "Products are successfully fetched from Shopify.",
             "The response contains a list of product objects."
@@ -3469,16 +3212,8 @@
           "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef create_embeddings(products):\n    api_key = os.environ.get('COHERE_API_KEY')\n    url = 'https://api.cohere.com/v2/embed'\n    headers = {'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'}\n    texts = [f\"{product['title']} {product['body_html']}\" for product in products]\n    payload = json.dumps({'texts': texts}).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n        return data.get('embeddings', [])\n\nembeddings = create_embeddings(products)",
           "mock_response": {
             "embeddings": [
-              [
-                0.1,
-                0.2,
-                0.3
-              ],
-              [
-                0.4,
-                0.5,
-                0.6
-              ]
+              [0.1, 0.2, 0.3],
+              [0.4, 0.5, 0.6]
             ]
           },
           "actions": [
@@ -3500,9 +3235,7 @@
               "description": "The API key for Cohere Embed API."
             }
           ],
-          "tools": [
-            "Cohere Embed API"
-          ],
+          "tools": ["Cohere Embed API"],
           "checklist": [
             "Embeddings are successfully created for all products.",
             "The response contains a list of embeddings."
@@ -3547,9 +3280,7 @@
               "description": "The API key for Algolia."
             }
           ],
-          "tools": [
-            "Algolia Search API"
-          ],
+          "tools": ["Algolia Search API"],
           "checklist": [
             "Products are successfully indexed in Algolia.",
             "The response contains a task ID for the indexing operation."
@@ -3572,11 +3303,7 @@
               "objectID": 123456789,
               "title": "Sample Product",
               "description": "<strong>Good product!</strong>",
-              "embedding": [
-                0.1,
-                0.2,
-                0.3
-              ]
+              "embedding": [0.1, 0.2, 0.3]
             }
           ],
           "actions": [
@@ -3592,9 +3319,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "Algolia Search API"
-          ],
+          "tools": ["Algolia Search API"],
           "checklist": [
             "Search results are successfully retrieved from Algolia.",
             "Results are re-ranked based on semantic similarity."
@@ -3680,12 +3405,7 @@
     "title": "RAG Document Assistant",
     "description": "Chunk documents, embed them with OpenAI, store vectors in Qdrant and answer questions with retrieval-augmented completions.",
     "category": "Search & Vector",
-    "tags": [
-      "rag",
-      "embeddings",
-      "vector",
-      "assistant"
-    ],
+    "tags": ["rag", "embeddings", "vector", "assistant"],
     "details": {
       "difficulty": "Advanced",
       "duration": "90–120 minutes",
@@ -3699,10 +3419,7 @@
         "qdrant-vector-api",
         "openai-gpt-4-api"
       ],
-      "alternative_slugs": [
-        "pinecone-alternatives",
-        "openai-alternatives"
-      ],
+      "alternative_slugs": ["pinecone-alternatives", "openai-alternatives"],
       "useCase": "Build a retrieval-augmented assistant over internal documents with Qdrant and OpenAI.",
       "steps": [
         {
@@ -3756,10 +3473,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "OpenAI Embeddings API",
-            "Qdrant Vector API"
-          ],
+          "tools": ["OpenAI Embeddings API", "Qdrant Vector API"],
           "checklist": [
             "Verify embeddings are generated without errors",
             "Check that embeddings are upserted into Qdrant"
@@ -3791,10 +3505,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "OpenAI Embeddings API",
-            "Qdrant Vector API"
-          ],
+          "tools": ["OpenAI Embeddings API", "Qdrant Vector API"],
           "checklist": [
             "Ensure the question is embedded correctly",
             "Verify relevant chunks are retrieved from Qdrant"
@@ -3826,9 +3537,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "OpenAI GPT-4 API"
-          ],
+          "tools": ["OpenAI GPT-4 API"],
           "checklist": [
             "Ensure the context is included in the request",
             "Verify the generated answer is coherent"
@@ -3914,29 +3623,13 @@
     "title": "Content Similarity Audit",
     "description": "Embed published articles with Cohere, index them in Weaviate and flag near-duplicate pairs in an Airtable audit table.",
     "category": "Search & Vector",
-    "tags": [
-      "content",
-      "similarity",
-      "vector",
-      "audit"
-    ],
+    "tags": ["content", "similarity", "vector", "audit"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
-      "tools": [
-        "Cohere Embed API",
-        "Weaviate Vector API",
-        "Airtable API"
-      ],
-      "api_slugs": [
-        "weaviate-vector-api",
-        "cohere-embed-api",
-        "airtable-api"
-      ],
-      "alternative_slugs": [
-        "pinecone-alternatives",
-        "airtable-alternatives"
-      ],
+      "tools": ["Cohere Embed API", "Weaviate Vector API", "Airtable API"],
+      "api_slugs": ["weaviate-vector-api", "cohere-embed-api", "airtable-api"],
+      "alternative_slugs": ["pinecone-alternatives", "airtable-alternatives"],
       "useCase": "Detect near-duplicate content with Weaviate embeddings and log the audit in Airtable.",
       "steps": [
         {
@@ -3990,9 +3683,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "Cohere Embed API"
-          ],
+          "tools": ["Cohere Embed API"],
           "checklist": [
             "Embeddings are generated without errors",
             "Each article has a corresponding embedding"
@@ -4024,9 +3715,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "Weaviate Vector API"
-          ],
+          "tools": ["Weaviate Vector API"],
           "checklist": [
             "Embeddings are indexed without errors",
             "Each embedding is associated with the correct article ID"
@@ -4058,9 +3747,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "Airtable API"
-          ],
+          "tools": ["Airtable API"],
           "checklist": [
             "Duplicate pairs are logged without errors",
             "Each log entry contains the correct article IDs and similarity scores"
@@ -4146,12 +3833,7 @@
     "title": "Transactional Email Delivery",
     "description": "Send queued transactional emails through Resend, fall back to SendGrid on failure and record delivery outcomes in Supabase.",
     "category": "Communication",
-    "tags": [
-      "email",
-      "transactional",
-      "delivery",
-      "reliability"
-    ],
+    "tags": ["email", "transactional", "delivery", "reliability"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "45–60 minutes",
@@ -4165,9 +3847,7 @@
         "sendgrid-email-api",
         "supabase-database-api"
       ],
-      "alternative_slugs": [
-        "mailchimp-alternatives"
-      ],
+      "alternative_slugs": ["mailchimp-alternatives"],
       "useCase": "Send transactional emails through Resend with a SendGrid fallback and log delivery attempts.",
       "steps": [
         {
@@ -4221,9 +3901,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "Resend Email API"
-          ],
+          "tools": ["Resend Email API"],
           "checklist": [
             "Emails are sent successfully",
             "Message IDs are logged correctly"
@@ -4255,9 +3933,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "SendGrid Email API"
-          ],
+          "tools": ["SendGrid Email API"],
           "checklist": [
             "Emails are retried successfully",
             "SendGrid responses are logged"
@@ -4289,9 +3965,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "Supabase Database API"
-          ],
+          "tools": ["Supabase Database API"],
           "checklist": [
             "Delivery outcomes are recorded successfully",
             "No duplicate entries are created"
@@ -4377,28 +4051,13 @@
     "title": "Email Campaign Automation",
     "description": "Select campaign recipients from Airtable, send segmented campaigns with Sendinblue and record per-recipient status rows.",
     "category": "Communication",
-    "tags": [
-      "email",
-      "campaign",
-      "marketing",
-      "automation"
-    ],
+    "tags": ["email", "campaign", "marketing", "automation"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
-      "tools": [
-        "Airtable API",
-        "Sendinblue Email API",
-        "Resend Email API"
-      ],
-      "api_slugs": [
-        "sendinblue-email-api",
-        "resend-email-api",
-        "airtable-api"
-      ],
-      "alternative_slugs": [
-        "mailchimp-alternatives"
-      ],
+      "tools": ["Airtable API", "Sendinblue Email API", "Resend Email API"],
+      "api_slugs": ["sendinblue-email-api", "resend-email-api", "airtable-api"],
+      "alternative_slugs": ["mailchimp-alternatives"],
       "useCase": "Run a segmented email campaign with Sendinblue and track campaign state in Airtable.",
       "steps": [
         {
@@ -4447,9 +4106,7 @@
               "description": "Your Airtable API key for authentication."
             }
           ],
-          "tools": [
-            "Airtable API"
-          ],
+          "tools": ["Airtable API"],
           "checklist": [
             "Successfully retrieved contact records from Airtable.",
             "Handled pagination if necessary."
@@ -4526,9 +4183,7 @@
               "description": "Your Sendinblue API key for authentication."
             }
           ],
-          "tools": [
-            "Sendinblue Email API"
-          ],
+          "tools": ["Sendinblue Email API"],
           "checklist": [
             "Emails are sent to all recipients.",
             "Responses from the Sendinblue API are logged."
@@ -4565,9 +4220,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "Airtable API"
-          ],
+          "tools": ["Airtable API"],
           "checklist": [
             "Status of each recipient is updated in Airtable.",
             "Responses from the Airtable API are logged."
@@ -4653,12 +4306,7 @@
     "title": "SMS Alert System",
     "description": "Route critical incidents to SMS through Twilio, use Sendinblue as a secondary provider and store delivery receipts in Supabase.",
     "category": "Communication",
-    "tags": [
-      "sms",
-      "alerts",
-      "twilio",
-      "notifications"
-    ],
+    "tags": ["sms", "alerts", "twilio", "notifications"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "45–60 minutes",
@@ -4672,9 +4320,7 @@
         "sendinblue-sms-api",
         "supabase-database-api"
       ],
-      "alternative_slugs": [
-        "whatsapp-alternatives"
-      ],
+      "alternative_slugs": ["whatsapp-alternatives"],
       "useCase": "Deliver critical SMS alerts through Twilio and Sendinblue with delivery tracking.",
       "steps": [
         {
@@ -4749,9 +4395,7 @@
               "description": "The recipient's phone number"
             }
           ],
-          "tools": [
-            "Twilio Messaging API"
-          ],
+          "tools": ["Twilio Messaging API"],
           "checklist": [
             "SMS message is sent successfully",
             "Response contains message SID"
@@ -4794,9 +4438,7 @@
               "description": "The sender ID for Sendinblue"
             }
           ],
-          "tools": [
-            "Sendinblue SMS API"
-          ],
+          "tools": ["Sendinblue SMS API"],
           "checklist": [
             "Fallback SMS is sent successfully",
             "Response contains message ID"
@@ -4839,9 +4481,7 @@
               "description": "Your Supabase API key"
             }
           ],
-          "tools": [
-            "Supabase Database API"
-          ],
+          "tools": ["Supabase Database API"],
           "checklist": [
             "Delivery receipt is stored successfully",
             "Response contains the stored receipt ID"
@@ -4927,28 +4567,13 @@
     "title": "Slack Incident Notifications",
     "description": "Poll Sentry for unresolved issues, format an incident summary and post it to a Slack channel with severity colouring.",
     "category": "Communication",
-    "tags": [
-      "slack",
-      "incidents",
-      "notifications",
-      "devops"
-    ],
+    "tags": ["slack", "incidents", "notifications", "devops"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "45–60 minutes",
-      "tools": [
-        "Sentry Error API",
-        "Slack Web API",
-        "Slack API"
-      ],
-      "api_slugs": [
-        "slack-web-api",
-        "slack-api",
-        "sentry-error-api"
-      ],
-      "alternative_slugs": [
-        "slack-alternatives"
-      ],
+      "tools": ["Sentry Error API", "Slack Web API", "Slack API"],
+      "api_slugs": ["slack-web-api", "slack-api", "sentry-error-api"],
+      "alternative_slugs": ["slack-alternatives"],
       "useCase": "Turn new Sentry issues into structured Slack incident messages.",
       "steps": [
         {
@@ -4985,9 +4610,7 @@
               "description": "Bearer token for authenticating with the Sentry API"
             }
           ],
-          "tools": [
-            "Sentry Error API"
-          ],
+          "tools": ["Sentry Error API"],
           "checklist": [
             "Verify that unresolved issues are fetched from Sentry",
             "Check that severity fields are normalized correctly"
@@ -5034,9 +4657,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "Slack Web API"
-          ],
+          "tools": ["Slack Web API"],
           "checklist": [
             "Ensure all issues are formatted correctly",
             "Verify that the payload structure matches Slack requirements"
@@ -5074,9 +4695,7 @@
               "description": "OAuth 2.0 bot token for Slack API"
             }
           ],
-          "tools": [
-            "Slack Web API"
-          ],
+          "tools": ["Slack Web API"],
           "checklist": [
             "Verify that the message is posted to Slack",
             "Check for any error messages in the response"
@@ -5194,12 +4813,7 @@
     "title": "Telegram Community Bot",
     "description": "Receive Telegram updates, answer eligible questions with OpenAI and log conversations in Supabase for moderation.",
     "category": "Communication",
-    "tags": [
-      "telegram",
-      "community",
-      "bot",
-      "ai"
-    ],
+    "tags": ["telegram", "community", "bot", "ai"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
@@ -5213,9 +4827,7 @@
         "openai-gpt-4-api",
         "supabase-database-api"
       ],
-      "alternative_slugs": [
-        "openai-alternatives"
-      ],
+      "alternative_slugs": ["openai-alternatives"],
       "useCase": "Answer community questions on Telegram with a moderated AI assistant.",
       "steps": [
         {
@@ -5270,9 +4882,7 @@
               "description": "The token provided by BotFather for your Telegram bot."
             }
           ],
-          "tools": [
-            "Telegram Bot API"
-          ],
+          "tools": ["Telegram Bot API"],
           "checklist": [
             "Verify that the bot token is correctly set.",
             "Ensure that new messages are being fetched."
@@ -5325,9 +4935,7 @@
               "description": "The API key for accessing OpenAI services."
             }
           ],
-          "tools": [
-            "OpenAI GPT-4 API"
-          ],
+          "tools": ["OpenAI GPT-4 API"],
           "checklist": [
             "Verify that the OpenAI API key is correctly set.",
             "Ensure that the generated answer is valid."
@@ -5365,9 +4973,7 @@
               "description": "The token provided by BotFather for your Telegram bot."
             }
           ],
-          "tools": [
-            "Telegram Bot API"
-          ],
+          "tools": ["Telegram Bot API"],
           "checklist": [
             "Verify that the chat ID is correct.",
             "Ensure that the message is sent successfully."
@@ -5415,9 +5021,7 @@
               "description": "The API key for accessing Supabase."
             }
           ],
-          "tools": [
-            "Supabase Database API"
-          ],
+          "tools": ["Supabase Database API"],
           "checklist": [
             "Verify that the Supabase URL and key are correctly set.",
             "Ensure that the conversation is logged successfully."
@@ -5503,29 +5107,13 @@
     "title": "Video Call Summarizer",
     "description": "List completed Twilio Video rooms, transcribe their recordings with Whisper and create structured Notion meeting notes.",
     "category": "Communication",
-    "tags": [
-      "video",
-      "meetings",
-      "summary",
-      "transcription"
-    ],
+    "tags": ["video", "meetings", "summary", "transcription"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
-      "tools": [
-        "Twilio Video API",
-        "OpenAI Whisper API",
-        "Notion API"
-      ],
-      "api_slugs": [
-        "twilio-video-api",
-        "openai-whisper-api",
-        "notion-api"
-      ],
-      "alternative_slugs": [
-        "zoom-alternatives",
-        "notion-alternatives"
-      ],
+      "tools": ["Twilio Video API", "OpenAI Whisper API", "Notion API"],
+      "api_slugs": ["twilio-video-api", "openai-whisper-api", "notion-api"],
+      "alternative_slugs": ["zoom-alternatives", "notion-alternatives"],
       "useCase": "Summarise Twilio Video recordings with Whisper and publish notes to Notion.",
       "steps": [
         {
@@ -5560,9 +5148,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "Twilio Video API"
-          ],
+          "tools": ["Twilio Video API"],
           "checklist": [
             "Verify that the API key is set correctly in the environment variables.",
             "Ensure the response contains completed rooms."
@@ -5596,9 +5182,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "OpenAI Whisper API"
-          ],
+          "tools": ["OpenAI Whisper API"],
           "checklist": [
             "Ensure the audio file exists at the specified path.",
             "Check that the transcription response contains the expected text."
@@ -5638,9 +5222,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "OpenAI Whisper API"
-          ],
+          "tools": ["OpenAI Whisper API"],
           "checklist": [
             "Verify that the transcript is not empty before summarization.",
             "Ensure the summary response contains the expected content."
@@ -5676,9 +5258,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "Notion API"
-          ],
+          "tools": ["Notion API"],
           "checklist": [
             "Ensure the Notion integration has access to the specified database.",
             "Verify that the page is created successfully in Notion."
@@ -5764,12 +5344,7 @@
     "title": "Conversational Messaging Hub",
     "description": "Read Twilio Conversations messages, enrich them with HubSpot contact data and draft AI replies for agent review.",
     "category": "Communication",
-    "tags": [
-      "messaging",
-      "conversations",
-      "crm",
-      "ai"
-    ],
+    "tags": ["messaging", "conversations", "crm", "ai"],
     "details": {
       "difficulty": "Advanced",
       "duration": "90–120 minutes",
@@ -5783,10 +5358,7 @@
         "hubspot-crm-api",
         "openai-gpt-4-api"
       ],
-      "alternative_slugs": [
-        "intercom-alternatives",
-        "hubspot-alternatives"
-      ],
+      "alternative_slugs": ["intercom-alternatives", "hubspot-alternatives"],
       "useCase": "Unify Twilio conversations, HubSpot contacts and AI replies in one inbox workflow.",
       "steps": [
         {
@@ -5823,9 +5395,7 @@
               "description": "Twilio API key for authentication."
             }
           ],
-          "tools": [
-            "Twilio Conversations API"
-          ],
+          "tools": ["Twilio Conversations API"],
           "checklist": [
             "Successfully retrieved messages from Twilio.",
             "Messages are stored in a list format."
@@ -5874,9 +5444,7 @@
               "description": "HubSpot API key for authentication."
             }
           ],
-          "tools": [
-            "HubSpot CRM API"
-          ],
+          "tools": ["HubSpot CRM API"],
           "checklist": [
             "Successfully matched senders to HubSpot contacts.",
             "Contact details are enriched with conversation messages."
@@ -5922,9 +5490,7 @@
               "description": "OpenAI API key for authentication."
             }
           ],
-          "tools": [
-            "OpenAI GPT-4 API"
-          ],
+          "tools": ["OpenAI GPT-4 API"],
           "checklist": [
             "Successfully generated replies using OpenAI.",
             "Replies are based on the conversation context."
@@ -6044,29 +5610,13 @@
     "title": "CRM Lead Scoring",
     "description": "Fetch new HubSpot contacts, enrich them with OpenAI-based fit scoring and post high-score leads to Slack.",
     "category": "CRM & Sales",
-    "tags": [
-      "crm",
-      "leads",
-      "scoring",
-      "sales"
-    ],
+    "tags": ["crm", "leads", "scoring", "sales"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
-      "tools": [
-        "HubSpot CRM API",
-        "OpenAI GPT-4 API",
-        "Slack Web API"
-      ],
-      "api_slugs": [
-        "hubspot-crm-api",
-        "openai-gpt-4-api",
-        "slack-web-api"
-      ],
-      "alternative_slugs": [
-        "hubspot-alternatives",
-        "salesforce-alternatives"
-      ],
+      "tools": ["HubSpot CRM API", "OpenAI GPT-4 API", "Slack Web API"],
+      "api_slugs": ["hubspot-crm-api", "openai-gpt-4-api", "slack-web-api"],
+      "alternative_slugs": ["hubspot-alternatives", "salesforce-alternatives"],
       "useCase": "Score HubSpot leads with AI and notify the sales team about hot opportunities.",
       "steps": [
         {
@@ -6105,9 +5655,7 @@
               "description": "Token for authenticating requests to the HubSpot API."
             }
           ],
-          "tools": [
-            "HubSpot CRM API"
-          ],
+          "tools": ["HubSpot CRM API"],
           "checklist": [
             "Verify that the API token is correctly set in the environment.",
             "Check that the response contains new contacts."
@@ -6153,9 +5701,7 @@
               "description": "API key for authenticating requests to the OpenAI API."
             }
           ],
-          "tools": [
-            "OpenAI GPT-4 API"
-          ],
+          "tools": ["OpenAI GPT-4 API"],
           "checklist": [
             "Ensure the OpenAI API key is set in the environment.",
             "Verify that scores are returned as floats."
@@ -6193,9 +5739,7 @@
               "description": "Bot token for authenticating requests to the Slack API."
             }
           ],
-          "tools": [
-            "Slack Web API"
-          ],
+          "tools": ["Slack Web API"],
           "checklist": [
             "Verify that the Slack bot token is set in the environment.",
             "Check that messages are sent successfully to the channel."
@@ -6321,28 +5865,13 @@
     "title": "Salesforce Pipeline Sync",
     "description": "Query Salesforce opportunities, mirror the pipeline in Airtable and post a weekly forecast summary to Slack.",
     "category": "CRM & Sales",
-    "tags": [
-      "salesforce",
-      "pipeline",
-      "sync",
-      "reporting"
-    ],
+    "tags": ["salesforce", "pipeline", "sync", "reporting"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
-      "tools": [
-        "Salesforce REST API",
-        "Airtable API",
-        "Slack Web API"
-      ],
-      "api_slugs": [
-        "salesforce-rest-api",
-        "airtable-api",
-        "slack-web-api"
-      ],
-      "alternative_slugs": [
-        "salesforce-alternatives"
-      ],
+      "tools": ["Salesforce REST API", "Airtable API", "Slack Web API"],
+      "api_slugs": ["salesforce-rest-api", "airtable-api", "slack-web-api"],
+      "alternative_slugs": ["salesforce-alternatives"],
       "useCase": "Sync Salesforce opportunities into Airtable and publish a weekly pipeline snapshot to Slack.",
       "steps": [
         {
@@ -6385,9 +5914,7 @@
               "description": "OAuth token for authenticating with Salesforce API"
             }
           ],
-          "tools": [
-            "Salesforce REST API"
-          ],
+          "tools": ["Salesforce REST API"],
           "checklist": [
             "Successfully retrieved opportunity records from Salesforce",
             "No authentication errors in the API response"
@@ -6438,9 +5965,7 @@
               "description": "The ID of the Airtable base to update"
             }
           ],
-          "tools": [
-            "Airtable API"
-          ],
+          "tools": ["Airtable API"],
           "checklist": [
             "Successfully upserted opportunity records into Airtable",
             "No errors in the Airtable API response"
@@ -6520,9 +6045,7 @@
               "description": "OAuth token for authenticating with Slack API"
             }
           ],
-          "tools": [
-            "Slack Web API"
-          ],
+          "tools": ["Slack Web API"],
           "checklist": [
             "Successfully sent the forecast message to Slack",
             "No errors in the Slack API response"
@@ -6608,29 +6131,13 @@
     "title": "Personalized Outreach Engine",
     "description": "Read target contacts from HubSpot, generate a personalised first line with OpenAI and send approved outreach emails via Resend.",
     "category": "CRM & Sales",
-    "tags": [
-      "outreach",
-      "personalization",
-      "sales",
-      "email"
-    ],
+    "tags": ["outreach", "personalization", "sales", "email"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
-      "tools": [
-        "HubSpot CRM API",
-        "OpenAI GPT-4 API",
-        "Resend Email API"
-      ],
-      "api_slugs": [
-        "hubspot-crm-api",
-        "openai-gpt-4-api",
-        "resend-email-api"
-      ],
-      "alternative_slugs": [
-        "zoominfo-alternatives",
-        "hubspot-alternatives"
-      ],
+      "tools": ["HubSpot CRM API", "OpenAI GPT-4 API", "Resend Email API"],
+      "api_slugs": ["hubspot-crm-api", "openai-gpt-4-api", "resend-email-api"],
+      "alternative_slugs": ["zoominfo-alternatives", "hubspot-alternatives"],
       "useCase": "Generate personalised outbound emails from CRM data and send them through Resend.",
       "steps": [
         {
@@ -6677,9 +6184,7 @@
               "description": "API key for authenticating with HubSpot"
             }
           ],
-          "tools": [
-            "HubSpot CRM API"
-          ],
+          "tools": ["HubSpot CRM API"],
           "checklist": [
             "Successfully retrieved contacts from HubSpot",
             "Contact data is in the expected JSON format"
@@ -6725,9 +6230,7 @@
               "description": "API key for authenticating with OpenAI"
             }
           ],
-          "tools": [
-            "OpenAI GPT-4 API"
-          ],
+          "tools": ["OpenAI GPT-4 API"],
           "checklist": [
             "Generated personalized email content for each contact",
             "Content is in the expected format"
@@ -6768,9 +6271,7 @@
               "description": "API key for authenticating with Resend"
             }
           ],
-          "tools": [
-            "Resend Email API"
-          ],
+          "tools": ["Resend Email API"],
           "checklist": [
             "Emails sent successfully to all contacts",
             "Response from Resend API confirms email delivery"
@@ -6888,12 +6389,7 @@
     "title": "Support Ticket Triage",
     "description": "Read new Zendesk tickets, classify intent and urgency with OpenAI and write routing decisions to Supabase.",
     "category": "Customer Support",
-    "tags": [
-      "support",
-      "tickets",
-      "triage",
-      "ai"
-    ],
+    "tags": ["support", "tickets", "triage", "ai"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
@@ -6907,10 +6403,7 @@
         "openai-gpt-4-api",
         "supabase-database-api"
       ],
-      "alternative_slugs": [
-        "zendesk-alternatives",
-        "intercom-alternatives"
-      ],
+      "alternative_slugs": ["zendesk-alternatives", "intercom-alternatives"],
       "useCase": "Classify incoming Zendesk tickets and route them to the right queue.",
       "steps": [
         {
@@ -6956,9 +6449,7 @@
               "description": "Your Zendesk API token for authentication"
             }
           ],
-          "tools": [
-            "Zendesk Support API"
-          ],
+          "tools": ["Zendesk Support API"],
           "checklist": [
             "Verify that the API URL is correctly formatted",
             "Check that the authentication headers are set properly"
@@ -6999,9 +6490,7 @@
               "description": "Your OpenAI API key for authentication"
             }
           ],
-          "tools": [
-            "OpenAI GPT-4 API"
-          ],
+          "tools": ["OpenAI GPT-4 API"],
           "checklist": [
             "Ensure the OpenAI API key is valid",
             "Check that the request payload is correctly structured"
@@ -7044,9 +6533,7 @@
               "description": "Your Zendesk API token for authentication"
             }
           ],
-          "tools": [
-            "Zendesk Support API"
-          ],
+          "tools": ["Zendesk Support API"],
           "checklist": [
             "Verify that the ticket IDs are valid",
             "Check that the tags are correctly applied"
@@ -7089,9 +6576,7 @@
               "description": "Your Supabase service role key"
             }
           ],
-          "tools": [
-            "Supabase Database API"
-          ],
+          "tools": ["Supabase Database API"],
           "checklist": [
             "Verify that the Supabase URL is correct",
             "Check that the payload matches the expected schema"
@@ -7177,29 +6662,17 @@
     "title": "AI Help Center Search",
     "description": "Export Notion help articles, embed them into Pinecone and expose a semantic search function for support agents.",
     "category": "Customer Support",
-    "tags": [
-      "helpcenter",
-      "search",
-      "embeddings",
-      "support"
-    ],
+    "tags": ["helpcenter", "search", "embeddings", "support"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
-      "tools": [
-        "Notion API",
-        "OpenAI Embeddings API",
-        "Pinecone Vector API"
-      ],
+      "tools": ["Notion API", "OpenAI Embeddings API", "Pinecone Vector API"],
       "api_slugs": [
         "notion-api",
         "openai-embeddings-api",
         "pinecone-vector-api"
       ],
-      "alternative_slugs": [
-        "notion-alternatives",
-        "intercom-alternatives"
-      ],
+      "alternative_slugs": ["notion-alternatives", "intercom-alternatives"],
       "useCase": "Index help center articles from Notion and answer support questions with semantic search.",
       "steps": [
         {
@@ -7243,9 +6716,7 @@
               "description": "Bearer token for Notion API authentication."
             }
           ],
-          "tools": [
-            "Notion API"
-          ],
+          "tools": ["Notion API"],
           "checklist": [
             "Successfully fetched article titles from Notion.",
             "No errors in API response."
@@ -7266,11 +6737,7 @@
           "mock_response": {
             "data": [
               {
-                "embedding": [
-                  0.1,
-                  0.2,
-                  0.3
-                ]
+                "embedding": [0.1, 0.2, 0.3]
               }
             ]
           },
@@ -7293,9 +6760,7 @@
               "description": "API key for OpenAI authentication."
             }
           ],
-          "tools": [
-            "OpenAI Embeddings API"
-          ],
+          "tools": ["OpenAI Embeddings API"],
           "checklist": [
             "Successfully generated embeddings for all article titles.",
             "No errors in API response."
@@ -7333,9 +6798,7 @@
               "description": "API key for Pinecone authentication."
             }
           ],
-          "tools": [
-            "Pinecone Vector API"
-          ],
+          "tools": ["Pinecone Vector API"],
           "checklist": [
             "Successfully upserted vectors into Pinecone.",
             "No errors in API response."
@@ -7374,9 +6837,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "Pinecone Vector API"
-          ],
+          "tools": ["Pinecone Vector API"],
           "checklist": [
             "Successfully retrieved relevant articles for the query.",
             "No errors in API response."
@@ -7462,20 +6923,11 @@
     "title": "CSAT Feedback Analysis",
     "description": "Collect CSAT responses from Zendesk, classify sentiment with OpenAI and append weekly summaries to Google Sheets.",
     "category": "Customer Support",
-    "tags": [
-      "csat",
-      "feedback",
-      "sentiment",
-      "support"
-    ],
+    "tags": ["csat", "feedback", "sentiment", "support"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
-      "tools": [
-        "Zendesk Support API",
-        "OpenAI GPT-4 API",
-        "Google Sheets API"
-      ],
+      "tools": ["Zendesk Support API", "OpenAI GPT-4 API", "Google Sheets API"],
       "api_slugs": [
         "zendesk-support-api",
         "google-sheets-api",
@@ -7542,9 +6994,7 @@
               "description": "Your Zendesk API token."
             }
           ],
-          "tools": [
-            "Zendesk Support API"
-          ],
+          "tools": ["Zendesk Support API"],
           "checklist": [
             "Verify that the API token is correctly set in environment variables.",
             "Check that the fetched data contains CSAT responses."
@@ -7590,9 +7040,7 @@
               "description": "Your OpenAI API key."
             }
           ],
-          "tools": [
-            "OpenAI GPT-4 API"
-          ],
+          "tools": ["OpenAI GPT-4 API"],
           "checklist": [
             "Verify that the OpenAI API key is correctly set in environment variables.",
             "Check that sentiment records are generated with correct sentiment scores."
@@ -7642,9 +7090,7 @@
               "description": "Your Google Sheets API key."
             }
           ],
-          "tools": [
-            "Google Sheets API"
-          ],
+          "tools": ["Google Sheets API"],
           "checklist": [
             "Verify that the Google Sheets API key is correctly set in environment variables.",
             "Check that data is appended correctly in the Google Sheets document."
@@ -7675,9 +7121,7 @@
               "code": "python detect_negative_spikes.py"
             }
           ],
-          "tools": [
-            "OpenAI GPT-4 API"
-          ],
+          "tools": ["OpenAI GPT-4 API"],
           "checklist": [
             "Verify that sentiment records contain sufficient data for analysis.",
             "Check that spikes are correctly identified and logged."
@@ -7763,12 +7207,7 @@
     "title": "Subscription Billing Automation",
     "description": "Create subscription checkouts in Stripe, send branded receipts with Resend and reconcile subscription state in Supabase.",
     "category": "Finance & Payments",
-    "tags": [
-      "billing",
-      "subscriptions",
-      "stripe",
-      "automation"
-    ],
+    "tags": ["billing", "subscriptions", "stripe", "automation"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
@@ -7782,9 +7221,7 @@
         "resend-email-api",
         "supabase-database-api"
       ],
-      "alternative_slugs": [
-        "stripe-alternatives"
-      ],
+      "alternative_slugs": ["stripe-alternatives"],
       "useCase": "Create Stripe subscriptions, send receipts and reconcile billing state.",
       "steps": [
         {
@@ -7816,9 +7253,7 @@
               "description": "API key for authenticating with Stripe"
             }
           ],
-          "tools": [
-            "Stripe Payments API"
-          ],
+          "tools": ["Stripe Payments API"],
           "checklist": [
             "Customer is created or fetched successfully",
             "Response contains customer ID"
@@ -7860,9 +7295,7 @@
               "description": "API key for authenticating with Stripe"
             }
           ],
-          "tools": [
-            "Stripe Payments API"
-          ],
+          "tools": ["Stripe Payments API"],
           "checklist": [
             "Subscription is created successfully",
             "Response contains subscription ID"
@@ -7900,9 +7333,7 @@
               "description": "API key for authenticating with Resend"
             }
           ],
-          "tools": [
-            "Resend Email API"
-          ],
+          "tools": ["Resend Email API"],
           "checklist": [
             "Email is sent successfully",
             "Response confirms email delivery"
@@ -7948,9 +7379,7 @@
               "description": "API key for authenticating with Supabase"
             }
           ],
-          "tools": [
-            "Supabase Database API"
-          ],
+          "tools": ["Supabase Database API"],
           "checklist": [
             "Subscription status is updated in Supabase",
             "Response confirms the update"
@@ -8036,29 +7465,17 @@
     "title": "Invoice Reconciliation",
     "description": "List paid Stripe invoices, compare them with ledger rows in Google Sheets and explain discrepancies with OpenAI.",
     "category": "Finance & Payments",
-    "tags": [
-      "invoices",
-      "reconciliation",
-      "stripe",
-      "finance"
-    ],
+    "tags": ["invoices", "reconciliation", "stripe", "finance"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
-      "tools": [
-        "Stripe Payments API",
-        "Google Sheets API",
-        "OpenAI GPT-4 API"
-      ],
+      "tools": ["Stripe Payments API", "Google Sheets API", "OpenAI GPT-4 API"],
       "api_slugs": [
         "stripe-payments-api",
         "google-sheets-api",
         "openai-gpt-4-api"
       ],
-      "alternative_slugs": [
-        "quickbooks-alternatives",
-        "stripe-alternatives"
-      ],
+      "alternative_slugs": ["quickbooks-alternatives", "stripe-alternatives"],
       "useCase": "Reconcile Stripe invoices against a Google Sheets ledger and flag mismatches.",
       "steps": [
         {
@@ -8099,9 +7516,7 @@
               "description": "The API key for authenticating requests to the Stripe Payments API"
             }
           ],
-          "tools": [
-            "Stripe Payments API"
-          ],
+          "tools": ["Stripe Payments API"],
           "checklist": [
             "Verify that the API key is set correctly",
             "Check that the response contains paid invoices"
@@ -8121,14 +7536,8 @@
           "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef read_google_sheet(spreadsheet_id, range_name):\n    url = f'https://sheets.googleapis.com/v4/spreadsheets/{spreadsheet_id}/values/{range_name}'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"GOOGLE_SHEETS_TOKEN\")}' }\n    request = urllib.request.Request(url, headers=headers)\n    response = urllib.request.urlopen(request)\n    data = json.loads(response.read().decode('utf-8'))\n    return {row[0]: {'amount': float(row[1])} for row in data.get('values', [])}\n\nledger = read_google_sheet(os.environ.get(\"SPREADSHEET_ID\"), 'Sheet1!A:B')",
           "mock_response": {
             "values": [
-              [
-                "in_1J2Y3Z2eZvKYlo2C5Q1gD4e5",
-                "1500"
-              ],
-              [
-                "in_1J2Y3Z2eZvKYlo2C5Q1gD4e6",
-                "2500"
-              ]
+              ["in_1J2Y3Z2eZvKYlo2C5Q1gD4e5", "1500"],
+              ["in_1J2Y3Z2eZvKYlo2C5Q1gD4e6", "2500"]
             ]
           },
           "actions": [
@@ -8155,9 +7564,7 @@
               "description": "The ID of the Google Sheets document containing the ledger"
             }
           ],
-          "tools": [
-            "Google Sheets API"
-          ],
+          "tools": ["Google Sheets API"],
           "checklist": [
             "Verify that the spreadsheet ID is correct",
             "Check that the response contains ledger rows"
@@ -8234,9 +7641,7 @@
               "description": "The API key for authenticating requests to the OpenAI GPT-4 API"
             }
           ],
-          "tools": [
-            "OpenAI GPT-4 API"
-          ],
+          "tools": ["OpenAI GPT-4 API"],
           "checklist": [
             "Verify that the OpenAI API key is set correctly",
             "Check that the response contains explanations for all mismatches"
@@ -8322,29 +7727,13 @@
     "title": "PayPal Payout Monitoring",
     "description": "Read PayPal payout batch status, record every item in Airtable and alert finance about failures in Slack.",
     "category": "Finance & Payments",
-    "tags": [
-      "paypal",
-      "payouts",
-      "monitoring",
-      "finance"
-    ],
+    "tags": ["paypal", "payouts", "monitoring", "finance"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
-      "tools": [
-        "PayPal Payments API",
-        "Airtable API",
-        "Slack Web API"
-      ],
-      "api_slugs": [
-        "paypal-payments-api",
-        "slack-web-api",
-        "airtable-api"
-      ],
-      "alternative_slugs": [
-        "stripe-alternatives",
-        "quickbooks-alternatives"
-      ],
+      "tools": ["PayPal Payments API", "Airtable API", "Slack Web API"],
+      "api_slugs": ["paypal-payments-api", "slack-web-api", "airtable-api"],
+      "alternative_slugs": ["stripe-alternatives", "quickbooks-alternatives"],
       "useCase": "Monitor PayPal payout batches and alert finance about failed transfers.",
       "steps": [
         {
@@ -8389,9 +7778,7 @@
               "description": "Bearer token for PayPal API authentication"
             }
           ],
-          "tools": [
-            "PayPal Payments API"
-          ],
+          "tools": ["PayPal Payments API"],
           "checklist": [
             "Verify that the API request returns a 200 status code",
             "Ensure that the response contains payout items"
@@ -8429,9 +7816,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "PayPal Payments API"
-          ],
+          "tools": ["PayPal Payments API"],
           "checklist": [
             "Verify that normalized items contain expected fields",
             "Ensure data types are consistent"
@@ -8474,9 +7859,7 @@
               "description": "Base ID for the Airtable table"
             }
           ],
-          "tools": [
-            "Airtable API"
-          ],
+          "tools": ["Airtable API"],
           "checklist": [
             "Verify that items are recorded in Airtable",
             "Check for any error messages during the upsert"
@@ -8523,9 +7906,7 @@
               "description": "OAuth 2.0 token for Slack API authentication"
             }
           ],
-          "tools": [
-            "Slack Web API"
-          ],
+          "tools": ["Slack Web API"],
           "checklist": [
             "Verify that alerts are sent to the Slack channel",
             "Check for any error messages during alerting"
@@ -8611,28 +7992,13 @@
     "title": "Stock Market Alerts",
     "description": "Fetch quotes from Finnhub, cross-check them with Twelve Data and post alerts when price thresholds are crossed.",
     "category": "Finance & Payments",
-    "tags": [
-      "stocks",
-      "alerts",
-      "market",
-      "finance"
-    ],
+    "tags": ["stocks", "alerts", "market", "finance"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "45–60 minutes",
-      "tools": [
-        "Finnhub Stock API",
-        "Twelve Data API",
-        "Slack Web API"
-      ],
-      "api_slugs": [
-        "finnhub-stock-api",
-        "twelvedata-api",
-        "slack-web-api"
-      ],
-      "alternative_slugs": [
-        "quickbooks-alternatives"
-      ],
+      "tools": ["Finnhub Stock API", "Twelve Data API", "Slack Web API"],
+      "api_slugs": ["finnhub-stock-api", "twelvedata-api", "slack-web-api"],
+      "alternative_slugs": ["quickbooks-alternatives"],
       "useCase": "Detect price movements with Finnhub and Twelve Data and send Slack alerts.",
       "steps": [
         {
@@ -8665,9 +8031,7 @@
               "description": "API key for accessing Finnhub Stock API."
             }
           ],
-          "tools": [
-            "Finnhub Stock API"
-          ],
+          "tools": ["Finnhub Stock API"],
           "checklist": [
             "Verify that the quotes list is populated with current prices.",
             "Ensure that no API errors occurred during the fetch."
@@ -8716,9 +8080,7 @@
               "description": "API key for accessing Twelve Data API."
             }
           ],
-          "tools": [
-            "Twelve Data API"
-          ],
+          "tools": ["Twelve Data API"],
           "checklist": [
             "Verify that the time series data is populated for each ticker.",
             "Ensure that no API errors occurred during the fetch."
@@ -8736,9 +8098,7 @@
           "description": "This step evaluates the fetched data against predefined price thresholds to determine if alerts should be triggered.",
           "technical_explanation": "This step analyzes the current and historical data to identify significant price movements. It compares the current price from Finnhub with the historical prices from Twelve Data. The evaluation criteria include daily changes and volume thresholds. Edge cases involve ensuring that sufficient historical data is available for comparison and handling cases where no significant changes are detected.",
           "code_snippet": "import statistics\n\ndef evaluate_thresholds(quotes, time_series):\n    alerts = []\n    for ticker, current_price in zip(['AAPL', 'GOOGL', 'MSFT'], quotes):\n        historical_prices = [float(item['close']) for item in time_series.get(ticker, [])]\n        if len(historical_prices) < 2:\n            continue  # Not enough data to evaluate\n        average_price = statistics.mean(historical_prices)\n        if current_price > average_price * 1.05:  # Trigger if price exceeds 5% of average\n            alerts.append(ticker)\n    return alerts\n\nalerts = evaluate_thresholds(quotes, time_series)",
-          "mock_response": [
-            "AAPL"
-          ],
+          "mock_response": ["AAPL"],
           "actions": [
             "Calculate the average historical price for each ticker.",
             "Compare the current price against the average.",
@@ -8790,9 +8150,7 @@
               "description": "OAuth token for accessing Slack Web API."
             }
           ],
-          "tools": [
-            "Slack Web API"
-          ],
+          "tools": ["Slack Web API"],
           "checklist": [
             "Verify that alerts are sent to the Slack channel.",
             "Ensure that the Slack bot has permission to post messages."
@@ -8878,28 +8236,17 @@
     "title": "Crypto Portfolio Tracker",
     "description": "Read portfolio holdings from Google Sheets, price them with Finnhub Crypto and send daily valuation updates via Telegram.",
     "category": "Finance & Payments",
-    "tags": [
-      "crypto",
-      "portfolio",
-      "tracking",
-      "telegram"
-    ],
+    "tags": ["crypto", "portfolio", "tracking", "telegram"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
-      "tools": [
-        "Google Sheets API",
-        "Finnhub Crypto API",
-        "Telegram Bot API"
-      ],
+      "tools": ["Google Sheets API", "Finnhub Crypto API", "Telegram Bot API"],
       "api_slugs": [
         "finnhub-crypto-api",
         "google-sheets-api",
         "telegram-bot-api"
       ],
-      "alternative_slugs": [
-        "stripe-alternatives"
-      ],
+      "alternative_slugs": ["stripe-alternatives"],
       "useCase": "Track a crypto portfolio in Google Sheets and send Telegram valuation updates.",
       "steps": [
         {
@@ -8911,14 +8258,8 @@
             "range": "Portfolio!A2:B",
             "majorDimension": "ROWS",
             "values": [
-              [
-                "BTC",
-                "0.5"
-              ],
-              [
-                "ETH",
-                "2.0"
-              ]
+              ["BTC", "0.5"],
+              ["ETH", "2.0"]
             ]
           },
           "actions": [
@@ -8940,9 +8281,7 @@
               "description": "The ID of the Google Sheet containing the portfolio"
             }
           ],
-          "tools": [
-            "Google Sheets API"
-          ],
+          "tools": ["Google Sheets API"],
           "checklist": [
             "Successfully retrieved holdings from Google Sheets",
             "Holdings contain both symbol and amount"
@@ -8986,9 +8325,7 @@
               "description": "Your Finnhub API key for authentication"
             }
           ],
-          "tools": [
-            "Finnhub Crypto API"
-          ],
+          "tools": ["Finnhub Crypto API"],
           "checklist": [
             "Successfully fetched current prices for all holdings",
             "Prices are stored in a dictionary with symbols as keys"
@@ -9014,9 +8351,7 @@
           ],
           "commands": [],
           "config": [],
-          "tools": [
-            "Google Sheets API"
-          ],
+          "tools": ["Google Sheets API"],
           "checklist": [
             "Successfully updated the portfolio sheet with valuations",
             "Changes are reflected in the specified range"
@@ -9064,9 +8399,7 @@
               "description": "The chat ID where the message will be sent"
             }
           ],
-          "tools": [
-            "Telegram Bot API"
-          ],
+          "tools": ["Telegram Bot API"],
           "checklist": [
             "Message sent successfully to the Telegram chat",
             "Total value and top movers are correctly formatted"
@@ -9148,28 +8481,13 @@
     "title": "Bank Transaction Enrichment",
     "description": "Fetch Plaid transactions, categorise merchants with OpenAI and upsert enriched transaction rows into Airtable.",
     "category": "Finance & Payments",
-    "tags": [
-      "banking",
-      "transactions",
-      "enrichment",
-      "plaid"
-    ],
+    "tags": ["banking", "transactions", "enrichment", "plaid"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
-      "tools": [
-        "Plaid Financial Data API",
-        "OpenAI GPT-4 API",
-        "Airtable API"
-      ],
-      "api_slugs": [
-        "plaid-financial-api",
-        "openai-gpt-4-api",
-        "airtable-api"
-      ],
-      "alternative_slugs": [
-        "quickbooks-alternatives"
-      ],
+      "tools": ["Plaid Financial Data API", "OpenAI GPT-4 API", "Airtable API"],
+      "api_slugs": ["plaid-financial-api", "openai-gpt-4-api", "airtable-api"],
+      "alternative_slugs": ["quickbooks-alternatives"],
       "useCase": "Categorise Plaid bank transactions with AI and sync them to Airtable.",
       "steps": [
         {
@@ -9222,9 +8540,7 @@
               "description": "The secret for your Plaid application."
             }
           ],
-          "tools": [
-            "Plaid Financial Data API"
-          ],
+          "tools": ["Plaid Financial Data API"],
           "checklist": [
             "Verify that the access token is valid.",
             "Check that the response contains transaction data."
@@ -9271,9 +8587,7 @@
               "description": "The API key for authenticating with the OpenAI API."
             }
           ],
-          "tools": [
-            "OpenAI GPT-4 API"
-          ],
+          "tools": ["OpenAI GPT-4 API"],
           "checklist": [
             "Verify that the OpenAI API key is valid.",
             "Check that the response contains valid categories."
@@ -9316,9 +8630,7 @@
               "description": "The base ID for the Airtable database."
             }
           ],
-          "tools": [
-            "Airtable API"
-          ],
+          "tools": ["Airtable API"],
           "checklist": [
             "Verify that the Airtable API key is valid.",
             "Check that the upsert operation completes successfully."
@@ -9439,12 +8751,7 @@
     "title": "Supabase Realtime Dashboard",
     "description": "Aggregate PostHog events, upsert hourly metrics into Supabase and store rendered chart snapshots in Vercel Blob.",
     "category": "Data & Databases",
-    "tags": [
-      "supabase",
-      "realtime",
-      "dashboard",
-      "analytics"
-    ],
+    "tags": ["supabase", "realtime", "dashboard", "analytics"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
@@ -9458,9 +8765,7 @@
         "posthog-analytics-api",
         "vercel-blob-api"
       ],
-      "alternative_slugs": [
-        "supabase-alternatives"
-      ],
+      "alternative_slugs": ["supabase-alternatives"],
       "useCase": "Feed a Supabase-backed dashboard with product events and cached chart assets.",
       "steps": [
         {
@@ -9493,9 +8798,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "PostHog Analytics API"
-          ],
+          "tools": ["PostHog Analytics API"],
           "checklist": [
             "Verify that the PostHog API key is set in environment variables.",
             "Check that the event data is correctly aggregated."
@@ -9527,9 +8830,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "Supabase Database API"
-          ],
+          "tools": ["Supabase Database API"],
           "checklist": [
             "Confirm that metrics are correctly upserted in Supabase.",
             "Check for any error messages during the upsert process."
@@ -9595,9 +8896,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "Vercel Blob API"
-          ],
+          "tools": ["Vercel Blob API"],
           "checklist": [
             "Verify that the SVG snapshot is uploaded successfully.",
             "Check that the public URL is accessible."
@@ -9683,29 +8982,13 @@
     "title": "Airtable Content Sync",
     "description": "Read approved content rows from Airtable, mirror them as Notion pages and email authors about newly published items.",
     "category": "Data & Databases",
-    "tags": [
-      "airtable",
-      "content",
-      "sync",
-      "notion"
-    ],
+    "tags": ["airtable", "content", "sync", "notion"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
-      "tools": [
-        "Airtable API",
-        "Notion API",
-        "Resend Email API"
-      ],
-      "api_slugs": [
-        "airtable-api",
-        "notion-api",
-        "resend-email-api"
-      ],
-      "alternative_slugs": [
-        "airtable-alternatives",
-        "notion-alternatives"
-      ],
+      "tools": ["Airtable API", "Notion API", "Resend Email API"],
+      "api_slugs": ["airtable-api", "notion-api", "resend-email-api"],
+      "alternative_slugs": ["airtable-alternatives", "notion-alternatives"],
       "useCase": "Sync editorial records from Airtable into Notion and notify authors by email.",
       "steps": [
         {
@@ -9754,9 +9037,7 @@
               "description": "Your Airtable API key for authentication."
             }
           ],
-          "tools": [
-            "Airtable API"
-          ],
+          "tools": ["Airtable API"],
           "checklist": [
             "Successfully retrieved records from Airtable.",
             "Filtered records by approved status."
@@ -9818,9 +9099,7 @@
               "description": "The ID of the Notion database where pages will be created."
             }
           ],
-          "tools": [
-            "Notion API"
-          ],
+          "tools": ["Notion API"],
           "checklist": [
             "Successfully created or updated pages in Notion.",
             "Pages contain the correct title and content."
@@ -9863,9 +9142,7 @@
               "description": "Your Resend API key for authentication."
             }
           ],
-          "tools": [
-            "Resend Email API"
-          ],
+          "tools": ["Resend Email API"],
           "checklist": [
             "Successfully sent notifications to authors.",
             "Emails contain the correct subject and body."
@@ -9985,28 +9262,13 @@
     "title": "MongoDB Data Pipeline",
     "description": "Read documents from MongoDB Atlas, generate AI summaries and archive the curated extracts as S3 objects.",
     "category": "Data & Databases",
-    "tags": [
-      "mongodb",
-      "pipeline",
-      "documents",
-      "ai"
-    ],
+    "tags": ["mongodb", "pipeline", "documents", "ai"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
-      "tools": [
-        "MongoDB Atlas API",
-        "Amazon S3 API",
-        "OpenAI GPT-4 API"
-      ],
-      "api_slugs": [
-        "mongodb-atlas-api",
-        "aws-s3-api",
-        "openai-gpt-4-api"
-      ],
-      "alternative_slugs": [
-        "microsoft-access-alternatives"
-      ],
+      "tools": ["MongoDB Atlas API", "Amazon S3 API", "OpenAI GPT-4 API"],
+      "api_slugs": ["mongodb-atlas-api", "aws-s3-api", "openai-gpt-4-api"],
+      "alternative_slugs": ["microsoft-access-alternatives"],
       "useCase": "Process MongoDB documents with AI and archive curated extracts on S3.",
       "steps": [
         {
@@ -10037,28 +9299,13 @@
     "title": "Postgres Backup Reporting",
     "description": "Collect Neon backup metadata, append health rows to Google Sheets and post a weekly backup report to Slack.",
     "category": "Data & Databases",
-    "tags": [
-      "postgres",
-      "backup",
-      "reporting",
-      "neon"
-    ],
+    "tags": ["postgres", "backup", "reporting", "neon"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
-      "tools": [
-        "Neon Postgres API",
-        "Google Sheets API",
-        "Slack Web API"
-      ],
-      "api_slugs": [
-        "neon-postgres-api",
-        "slack-web-api",
-        "google-sheets-api"
-      ],
-      "alternative_slugs": [
-        "supabase-alternatives"
-      ],
+      "tools": ["Neon Postgres API", "Google Sheets API", "Slack Web API"],
+      "api_slugs": ["neon-postgres-api", "slack-web-api", "google-sheets-api"],
+      "alternative_slugs": ["supabase-alternatives"],
       "useCase": "Track Neon Postgres backup health and publish a weekly report.",
       "steps": [
         {
@@ -10107,9 +9354,7 @@
               "description": "Neon project name"
             }
           ],
-          "tools": [
-            "Neon Postgres API"
-          ],
+          "tools": ["Neon Postgres API"],
           "checklist": [
             "Backup metadata is retrieved successfully",
             "Response contains expected fields"
@@ -10152,9 +9397,7 @@
               "description": "OAuth token for Google Sheets API"
             }
           ],
-          "tools": [
-            "Google Sheets API"
-          ],
+          "tools": ["Google Sheets API"],
           "checklist": [
             "Data is appended to Google Sheets successfully",
             "Response indicates successful write operation"
@@ -10235,9 +9478,7 @@
               "description": "OAuth token for Slack API"
             }
           ],
-          "tools": [
-            "Slack Web API"
-          ],
+          "tools": ["Slack Web API"],
           "checklist": [
             "Message is posted to Slack successfully",
             "Response indicates successful post operation"
@@ -10323,12 +9564,7 @@
     "title": "Redis Rate Limit Store",
     "description": "Increment Upstash Redis counters per API key, enforce a sliding window and report limit violations as Sentry events.",
     "category": "Data & Databases",
-    "tags": [
-      "redis",
-      "rate-limiting",
-      "upstash",
-      "edge"
-    ],
+    "tags": ["redis", "rate-limiting", "upstash", "edge"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
@@ -10342,9 +9578,7 @@
         "cloudflare-workers-api",
         "sentry-error-api"
       ],
-      "alternative_slugs": [
-        "supabase-alternatives"
-      ],
+      "alternative_slugs": ["supabase-alternatives"],
       "useCase": "Implement a distributed rate limiter with Upstash Redis and report violations to Sentry.",
       "steps": [
         {
@@ -10375,9 +9609,7 @@
               "description": "Bearer token for authenticating with Upstash Redis API."
             }
           ],
-          "tools": [
-            "Upstash Redis API"
-          ],
+          "tools": ["Upstash Redis API"],
           "checklist": [
             "Verify that the counter has been incremented in Upstash.",
             "Check for any error messages in the API response."
@@ -10411,9 +9643,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "Upstash Redis API"
-          ],
+          "tools": ["Upstash Redis API"],
           "checklist": [
             "Confirm that the correct count is retrieved from Upstash.",
             "Ensure that the rate limit decision is accurate."
@@ -10454,9 +9684,7 @@
               "description": "Bearer token for authenticating with Sentry Error API."
             }
           ],
-          "tools": [
-            "Sentry Error API"
-          ],
+          "tools": ["Sentry Error API"],
           "checklist": [
             "Verify that the violation report is sent successfully.",
             "Check Sentry for the reported violation."
@@ -10577,28 +9805,17 @@
     "title": "Google Sheets Reporting Hub",
     "description": "Read KPI rows from Google Sheets, generate a narrative summary with OpenAI and email the report with Resend.",
     "category": "Data & Databases",
-    "tags": [
-      "sheets",
-      "reporting",
-      "automation",
-      "ai"
-    ],
+    "tags": ["sheets", "reporting", "automation", "ai"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
-      "tools": [
-        "Google Sheets API",
-        "OpenAI GPT-4 API",
-        "Resend Email API"
-      ],
+      "tools": ["Google Sheets API", "OpenAI GPT-4 API", "Resend Email API"],
       "api_slugs": [
         "google-sheets-api",
         "openai-gpt-4-api",
         "resend-email-api"
       ],
-      "alternative_slugs": [
-        "microsoft-excel-alternatives"
-      ],
+      "alternative_slugs": ["microsoft-excel-alternatives"],
       "useCase": "Turn spreadsheet data into an AI-written executive email report.",
       "steps": [
         {
@@ -10608,24 +9825,9 @@
           "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_kpi_rows(spreadsheet_id, range_name):\n    url = f'https://sheets.googleapis.com/v4/spreadsheets/{spreadsheet_id}/values/{range_name}'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"GOOGLE_SHEETS_API_TOKEN\")}'}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    return data.get('values', [])\n\nkpi_rows = fetch_kpi_rows(os.environ.get('SPREADSHEET_ID'), 'KPI!A1:D')",
           "mock_response": {
             "values": [
-              [
-                "KPI Name",
-                "Value",
-                "Target",
-                "Status"
-              ],
-              [
-                "Sales",
-                100,
-                150,
-                "On Track"
-              ],
-              [
-                "Revenue",
-                2000,
-                2500,
-                "At Risk"
-              ]
+              ["KPI Name", "Value", "Target", "Status"],
+              ["Sales", 100, 150, "On Track"],
+              ["Revenue", 2000, 2500, "At Risk"]
             ]
           },
           "actions": [
@@ -10652,9 +9854,7 @@
               "description": "The OAuth 2.0 token for Google Sheets API access."
             }
           ],
-          "tools": [
-            "Google Sheets API"
-          ],
+          "tools": ["Google Sheets API"],
           "checklist": [
             "Verify that the Google Sheets API is enabled in the Google Cloud project.",
             "Confirm that the correct spreadsheet ID and range are specified."
@@ -10700,9 +9900,7 @@
               "description": "The API key for accessing OpenAI services."
             }
           ],
-          "tools": [
-            "OpenAI GPT-4 API"
-          ],
+          "tools": ["OpenAI GPT-4 API"],
           "checklist": [
             "Ensure the OpenAI API key is valid and has access to the GPT-4 model.",
             "Confirm that the narrative generation logic is correctly implemented."
@@ -10743,9 +9941,7 @@
               "description": "The API key for sending emails via Resend."
             }
           ],
-          "tools": [
-            "Resend Email API"
-          ],
+          "tools": ["Resend Email API"],
           "checklist": [
             "Verify that the Resend API key is valid.",
             "Confirm that the email content is correctly formatted."
@@ -10789,9 +9985,7 @@
               "description": "The ID of the Google Sheets document for logging."
             }
           ],
-          "tools": [
-            "Google Sheets API"
-          ],
+          "tools": ["Google Sheets API"],
           "checklist": [
             "Verify that the Google Sheets document is set up for logging.",
             "Confirm that the log entry structure is correctly implemented."
@@ -10875,28 +10069,13 @@
     "title": "GitHub Issue Triage",
     "description": "Fetch untriaged GitHub issues, classify type and severity with OpenAI and post high-severity issues to Slack.",
     "category": "Developer Tools",
-    "tags": [
-      "github",
-      "issues",
-      "triage",
-      "ai"
-    ],
+    "tags": ["github", "issues", "triage", "ai"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
-      "tools": [
-        "GitHub REST API",
-        "OpenAI GPT-4 API",
-        "Slack Web API"
-      ],
-      "api_slugs": [
-        "github-rest-api",
-        "openai-gpt-4-api",
-        "slack-web-api"
-      ],
-      "alternative_slugs": [
-        "github-alternatives"
-      ],
+      "tools": ["GitHub REST API", "OpenAI GPT-4 API", "Slack Web API"],
+      "api_slugs": ["github-rest-api", "openai-gpt-4-api", "slack-web-api"],
+      "alternative_slugs": ["github-alternatives"],
       "useCase": "Classify new GitHub issues with AI and notify maintainers about urgent bugs.",
       "steps": [
         {
@@ -10937,9 +10116,7 @@
               "description": "GitHub personal access token for authentication."
             }
           ],
-          "tools": [
-            "GitHub REST API"
-          ],
+          "tools": ["GitHub REST API"],
           "checklist": [
             "Issues fetched successfully from GitHub.",
             "Untriaged issues are correctly filtered."
@@ -10957,10 +10134,7 @@
           "description": "In this step, the untriaged issues are classified by type and severity using the OpenAI GPT-4 API. This classification helps prioritize issues for resolution.",
           "technical_explanation": "This step sends a request to the OpenAI GPT-4 API to classify the issues. The endpoint used is /v1/chat/completions with a POST request. The request payload includes the issue titles and a prompt for classification. The response will contain the classification results. Handle potential errors and ensure the response is parsed correctly.",
           "code_snippet": "import json\nimport urllib.request\nimport os\n\n\ndef classify_issues(issues):\n    url = 'https://api.openai.com/v1/chat/completions'\n    headers = {'Authorization': f'Bearer {os.environ.get(\"OPENAI_API_KEY\")}', 'Content-Type': 'application/json'}\n    classifications = []\n    for issue in issues:\n        prompt = f'Classify this issue: {issue[\"title\"]}'\n        payload = json.dumps({'model': 'gpt-4o-mini', 'messages': [{'role': 'user', 'content': prompt}]})\n        request = urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers)\n        with urllib.request.urlopen(request) as response:\n            result = json.loads(response.read().decode('utf-8'))\n            classifications.append(result['choices'][0]['message']['content'])\n    return classifications\n\nclassifications = classify_issues(untriaged_issues)",
-          "mock_response": [
-            "Bug - High",
-            "Feature Request - Medium"
-          ],
+          "mock_response": ["Bug - High", "Feature Request - Medium"],
           "actions": [
             "Construct the prompt for classification.",
             "Send the request to the OpenAI API for each issue.",
@@ -10980,9 +10154,7 @@
               "description": "OpenAI API key for authentication."
             }
           ],
-          "tools": [
-            "OpenAI GPT-4 API"
-          ],
+          "tools": ["OpenAI GPT-4 API"],
           "checklist": [
             "Classifications are received for all issues.",
             "Classifications are in the expected format."
@@ -11020,9 +10192,7 @@
               "description": "GitHub personal access token for authentication."
             }
           ],
-          "tools": [
-            "GitHub REST API"
-          ],
+          "tools": ["GitHub REST API"],
           "checklist": [
             "Labels are applied to all issues successfully.",
             "No errors are reported during the update."
@@ -11060,9 +10230,7 @@
               "description": "Slack bot token for authentication."
             }
           ],
-          "tools": [
-            "Slack Web API"
-          ],
+          "tools": ["Slack Web API"],
           "checklist": [
             "Notifications are sent for all high-severity issues.",
             "No errors are reported during the notification process."
@@ -11148,12 +10316,7 @@
     "title": "Deployment Monitoring Alerts",
     "description": "Read Cloudflare deployment metadata, compare Sentry error rates before and after each release and alert on regressions.",
     "category": "Developer Tools",
-    "tags": [
-      "deployment",
-      "monitoring",
-      "cloudflare",
-      "sentry"
-    ],
+    "tags": ["deployment", "monitoring", "cloudflare", "sentry"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
@@ -11167,10 +10330,7 @@
         "sentry-performance-api",
         "slack-web-api"
       ],
-      "alternative_slugs": [
-        "vercel-alternatives",
-        "netlify-alternatives"
-      ],
+      "alternative_slugs": ["vercel-alternatives", "netlify-alternatives"],
       "useCase": "Correlate Cloudflare Worker deployments with Sentry performance regressions.",
       "steps": [
         {
@@ -11211,9 +10371,7 @@
               "description": "Your Cloudflare API token."
             }
           ],
-          "tools": [
-            "Cloudflare Workers API"
-          ],
+          "tools": ["Cloudflare Workers API"],
           "checklist": [
             "Successfully retrieved a list of recent deployments.",
             "Deployment data includes timestamps and IDs."
@@ -11268,9 +10426,7 @@
               "description": "Your Sentry API key."
             }
           ],
-          "tools": [
-            "Sentry Performance API"
-          ],
+          "tools": ["Sentry Performance API"],
           "checklist": [
             "Successfully retrieved error rates from Sentry.",
             "Error rate data includes timestamps and values."
@@ -11343,9 +10499,7 @@
               "description": "Your Slack bot token."
             }
           ],
-          "tools": [
-            "Slack Web API"
-          ],
+          "tools": ["Slack Web API"],
           "checklist": [
             "Successfully sent a message to the Slack channel.",
             "Message content reflects the regression analysis."
@@ -11431,28 +10585,17 @@
     "title": "Feature Flag Rollout",
     "description": "Increase a LaunchDarkly rollout percentage in steps, verify the linked GitHub release and post rollout state to Slack.",
     "category": "Developer Tools",
-    "tags": [
-      "feature-flags",
-      "rollout",
-      "launchdarkly",
-      "github"
-    ],
+    "tags": ["feature-flags", "rollout", "launchdarkly", "github"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
-      "tools": [
-        "LaunchDarkly Feature API",
-        "GitHub REST API",
-        "Slack Web API"
-      ],
+      "tools": ["LaunchDarkly Feature API", "GitHub REST API", "Slack Web API"],
       "api_slugs": [
         "launchdarkly-feature-api",
         "github-rest-api",
         "slack-web-api"
       ],
-      "alternative_slugs": [
-        "github-alternatives"
-      ],
+      "alternative_slugs": ["github-alternatives"],
       "useCase": "Progressively roll out a feature flag and report rollout state to Slack.",
       "steps": [
         {
@@ -11487,9 +10630,7 @@
               "description": "The API token for authenticating with LaunchDarkly"
             }
           ],
-          "tools": [
-            "LaunchDarkly Feature API"
-          ],
+          "tools": ["LaunchDarkly Feature API"],
           "checklist": [
             "Successfully retrieved the flag configuration",
             "Current rollout percentage is displayed"
@@ -11534,9 +10675,7 @@
               "description": "The API token for authenticating with LaunchDarkly"
             }
           ],
-          "tools": [
-            "LaunchDarkly Feature API"
-          ],
+          "tools": ["LaunchDarkly Feature API"],
           "checklist": [
             "Successfully updated the flag's rollout percentage",
             "New percentage is confirmed in the response"
@@ -11578,9 +10717,7 @@
               "description": "The Personal Access Token for authenticating with GitHub"
             }
           ],
-          "tools": [
-            "GitHub REST API"
-          ],
+          "tools": ["GitHub REST API"],
           "checklist": [
             "Successfully retrieved the release information",
             "Current release tag is displayed"
@@ -11618,9 +10755,7 @@
               "description": "The OAuth 2.0 bot token for authenticating with Slack"
             }
           ],
-          "tools": [
-            "Slack Web API"
-          ],
+          "tools": ["Slack Web API"],
           "checklist": [
             "Successfully posted the message to Slack",
             "Message content is correct and includes the new percentage"
@@ -11706,28 +10841,13 @@
     "title": "Secrets Rotation Audit",
     "description": "Read Doppler secret metadata, compute rotation age and compare it with the repository secret inventory in GitHub.",
     "category": "Developer Tools",
-    "tags": [
-      "secrets",
-      "security",
-      "rotation",
-      "doppler"
-    ],
+    "tags": ["secrets", "security", "rotation", "doppler"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
-      "tools": [
-        "Doppler Secrets API",
-        "GitHub REST API",
-        "Slack Web API"
-      ],
-      "api_slugs": [
-        "doppler-secrets-api",
-        "github-rest-api",
-        "slack-web-api"
-      ],
-      "alternative_slugs": [
-        "docker-alternatives"
-      ],
+      "tools": ["Doppler Secrets API", "GitHub REST API", "Slack Web API"],
+      "api_slugs": ["doppler-secrets-api", "github-rest-api", "slack-web-api"],
+      "alternative_slugs": ["docker-alternatives"],
       "useCase": "Audit secret rotation age in Doppler and alert the security team.",
       "steps": [
         {
@@ -11766,9 +10886,7 @@
               "description": "Bearer token for accessing Doppler API."
             }
           ],
-          "tools": [
-            "Doppler Secrets API"
-          ],
+          "tools": ["Doppler Secrets API"],
           "checklist": [
             "Secrets metadata is successfully fetched.",
             "Last updated timestamps are included."
@@ -11815,9 +10933,7 @@
               "description": "Personal access token for GitHub API."
             }
           ],
-          "tools": [
-            "GitHub REST API"
-          ],
+          "tools": ["GitHub REST API"],
           "checklist": [
             "GitHub secrets are successfully fetched.",
             "Secrets list matches expected configuration."
@@ -11892,9 +11008,7 @@
               "description": "OAuth 2.0 bot token for Slack."
             }
           ],
-          "tools": [
-            "Slack Web API"
-          ],
+          "tools": ["Slack Web API"],
           "checklist": [
             "Alerts are sent to the Slack channel.",
             "Messages reflect accurate drift information."
@@ -11980,12 +11094,7 @@
     "title": "Serverless Job Scheduler",
     "description": "Invoke a Lambda function for each due job, record the execution result in Supabase and report failures to Sentry.",
     "category": "Developer Tools",
-    "tags": [
-      "serverless",
-      "scheduler",
-      "lambda",
-      "supabase"
-    ],
+    "tags": ["serverless", "scheduler", "lambda", "supabase"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
@@ -11999,9 +11108,7 @@
         "supabase-database-api",
         "sentry-error-api"
       ],
-      "alternative_slugs": [
-        "aws-ec2-alternatives"
-      ],
+      "alternative_slugs": ["aws-ec2-alternatives"],
       "useCase": "Trigger scheduled Lambda jobs and track execution results in Supabase.",
       "steps": [
         {
@@ -12032,12 +11139,7 @@
     "title": "API Health Monitoring",
     "description": "Compare Sentry transaction latency with PostHog request volume, detect unhealthy windows and post alerts to Slack.",
     "category": "Developer Tools",
-    "tags": [
-      "api",
-      "health",
-      "monitoring",
-      "sentry"
-    ],
+    "tags": ["api", "health", "monitoring", "sentry"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
@@ -12051,9 +11153,7 @@
         "posthog-analytics-api",
         "slack-web-api"
       ],
-      "alternative_slugs": [
-        "postman-alternatives"
-      ],
+      "alternative_slugs": ["postman-alternatives"],
       "useCase": "Monitor API health with Sentry transactions and PostHog usage and alert on anomalies.",
       "steps": [
         {
@@ -12102,9 +11202,7 @@
               "description": "Your Sentry project slug"
             }
           ],
-          "tools": [
-            "Sentry Performance API"
-          ],
+          "tools": ["Sentry Performance API"],
           "checklist": [
             "Sentry API key is set correctly",
             "Latency data is retrieved successfully"
@@ -12158,9 +11256,7 @@
               "description": "Your PostHog instance host"
             }
           ],
-          "tools": [
-            "PostHog Analytics API"
-          ],
+          "tools": ["PostHog Analytics API"],
           "checklist": [
             "PostHog API key is set correctly",
             "Request volume data is retrieved successfully"
@@ -12178,10 +11274,7 @@
           "description": "This step analyzes the fetched latency and request volume data to identify unhealthy windows where performance thresholds are breached. It is critical for proactive monitoring.",
           "technical_explanation": "This workflow step serves a crucial role in the overall architecture by analyzing latency data sourced from Sentry and request volume data from PostHog. It identifies unhealthy windows where performance metrics exceed established thresholds, thereby enabling proactive monitoring of system health. The API contract for this step requires a GET request to the '/health-check' endpoint, necessitating headers such as 'Authorization' and 'Content-Type: application/json'. The expected request payload is empty, while the JSON response includes fields for 'status', 'latency', and 'request_volume'. Edge cases must be considered, including rate limits that may restrict the frequency of API calls, pagination for large datasets, handling of empty arrays in the response, and ensuring proper type conversion for numerical values to avoid runtime errors.",
           "code_snippet": "import json\nimport statistics\n\ndef detect_unhealthy_windows(latency_data, request_data):\n    unhealthy_endpoints = []\n    for latency in latency_data:\n        endpoint = latency.get('endpoint')\n        p95_latency = latency.get('p95', 0)\n        request_count = next((item.get('count', 0) for item in request_data if item.get('endpoint') == endpoint), 0)\n        if p95_latency > 100 and request_count > 100:\n            unhealthy_endpoints.append(endpoint)\n    return unhealthy_endpoints\n\nunhealthy = detect_unhealthy_windows(latency_data, request_data)",
-          "mock_response": [
-            "/api/v1/resource",
-            "/api/v1/another_resource"
-          ],
+          "mock_response": ["/api/v1/resource", "/api/v1/another_resource"],
           "actions": [
             "Define latency and request volume thresholds",
             "Run the detection function with fetched data",
@@ -12233,9 +11326,7 @@
               "description": "OAuth 2.0 bot token for Slack"
             }
           ],
-          "tools": [
-            "Slack Web API"
-          ],
+          "tools": ["Slack Web API"],
           "checklist": [
             "Slack bot token is set correctly",
             "Alerts are sent successfully to Slack"
@@ -12319,29 +11410,13 @@
     "title": "Linear Roadmap Sync",
     "description": "Query Linear projects with GraphQL, create or update Notion roadmap sections and attach the matching GitHub milestone.",
     "category": "Developer Tools",
-    "tags": [
-      "linear",
-      "roadmap",
-      "notion",
-      "github"
-    ],
+    "tags": ["linear", "roadmap", "notion", "github"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
-      "tools": [
-        "Linear GraphQL API",
-        "GitHub REST API",
-        "Notion API"
-      ],
-      "api_slugs": [
-        "linear-graphql-api",
-        "notion-api",
-        "github-rest-api"
-      ],
-      "alternative_slugs": [
-        "jira-alternatives",
-        "notion-alternatives"
-      ],
+      "tools": ["Linear GraphQL API", "GitHub REST API", "Notion API"],
+      "api_slugs": ["linear-graphql-api", "notion-api", "github-rest-api"],
+      "alternative_slugs": ["jira-alternatives", "notion-alternatives"],
       "useCase": "Sync Linear projects into a Notion roadmap page and link GitHub milestones.",
       "steps": [
         {
@@ -12386,9 +11461,7 @@
               "description": "The API token for authenticating with Linear"
             }
           ],
-          "tools": [
-            "Linear GraphQL API"
-          ],
+          "tools": ["Linear GraphQL API"],
           "checklist": [
             "Successfully retrieved project data from Linear",
             "Response contains project nodes with expected fields"
@@ -12437,9 +11510,7 @@
               "description": "The personal access token for GitHub"
             }
           ],
-          "tools": [
-            "GitHub REST API"
-          ],
+          "tools": ["GitHub REST API"],
           "checklist": [
             "Successfully retrieved milestones from GitHub",
             "Response contains milestone details with expected fields"
@@ -12487,9 +11558,7 @@
               "description": "The database ID for the Notion roadmap"
             }
           ],
-          "tools": [
-            "Notion API"
-          ],
+          "tools": ["Notion API"],
           "checklist": [
             "Successfully updated the Notion roadmap",
             "Response confirms the creation or update of pages"
@@ -12607,28 +11676,13 @@
     "title": "Release Notes Generator",
     "description": "Collect merged pull requests since the last release, generate a readable changelog with OpenAI and email subscribers.",
     "category": "Developer Tools",
-    "tags": [
-      "release",
-      "notes",
-      "github",
-      "ai"
-    ],
+    "tags": ["release", "notes", "github", "ai"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
-      "tools": [
-        "GitHub REST API",
-        "OpenAI GPT-4 API",
-        "Resend Email API"
-      ],
-      "api_slugs": [
-        "github-rest-api",
-        "openai-gpt-4-api",
-        "resend-email-api"
-      ],
-      "alternative_slugs": [
-        "github-alternatives"
-      ],
+      "tools": ["GitHub REST API", "OpenAI GPT-4 API", "Resend Email API"],
+      "api_slugs": ["github-rest-api", "openai-gpt-4-api", "resend-email-api"],
+      "alternative_slugs": ["github-alternatives"],
       "useCase": "Generate release notes from merged pull requests and email the changelog.",
       "steps": [
         {
@@ -12667,9 +11721,7 @@
               "description": "GitHub personal access token for authentication."
             }
           ],
-          "tools": [
-            "GitHub REST API"
-          ],
+          "tools": ["GitHub REST API"],
           "checklist": [
             "Merged pull requests are successfully fetched.",
             "The response contains valid pull request data."
@@ -12715,9 +11767,7 @@
               "description": "OpenAI API key for authentication."
             }
           ],
-          "tools": [
-            "OpenAI GPT-4 API"
-          ],
+          "tools": ["OpenAI GPT-4 API"],
           "checklist": [
             "Changelog is generated successfully.",
             "The response contains valid changelog content."
@@ -12759,9 +11809,7 @@
               "description": "GitHub personal access token for authentication."
             }
           ],
-          "tools": [
-            "GitHub REST API"
-          ],
+          "tools": ["GitHub REST API"],
           "checklist": [
             "Release is created successfully.",
             "The response contains the release ID."
@@ -12802,9 +11850,7 @@
               "description": "Resend API key for authentication."
             }
           ],
-          "tools": [
-            "Resend Email API"
-          ],
+          "tools": ["Resend Email API"],
           "checklist": [
             "Email is sent successfully.",
             "The response contains the email ID."
@@ -12890,12 +11936,7 @@
     "title": "Programmatic SEO Pipeline",
     "description": "Cluster keywords, generate page copy with OpenAI, store page records in Supabase and index the published pages in Algolia.",
     "category": "Content & SEO",
-    "tags": [
-      "seo",
-      "programmatic",
-      "content",
-      "algolia"
-    ],
+    "tags": ["seo", "programmatic", "content", "algolia"],
     "details": {
       "difficulty": "Advanced",
       "duration": "90–120 minutes",
@@ -12909,10 +11950,7 @@
         "supabase-database-api",
         "algolia-search-api"
       ],
-      "alternative_slugs": [
-        "supabase-alternatives",
-        "openai-alternatives"
-      ],
+      "alternative_slugs": ["supabase-alternatives", "openai-alternatives"],
       "useCase": "Generate programmatic SEO landing pages from keyword clusters and index them for site search.",
       "steps": [
         {
@@ -12966,9 +12004,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "OpenAI GPT-4 API"
-          ],
+          "tools": ["OpenAI GPT-4 API"],
           "checklist": [
             "Content is generated for each keyword cluster.",
             "The API response contains valid content."
@@ -13000,9 +12036,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "Supabase Database API"
-          ],
+          "tools": ["Supabase Database API"],
           "checklist": [
             "Records are successfully upserted into Supabase.",
             "No errors are returned from the API."
@@ -13034,9 +12068,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "Algolia Search API"
-          ],
+          "tools": ["Algolia Search API"],
           "checklist": [
             "Records are successfully indexed in Algolia.",
             "No errors are returned from the API."
@@ -13122,29 +12154,13 @@
     "title": "AI Content Automation",
     "description": "Read briefs from Notion, draft articles with OpenAI, create review pages and email the editorial team.",
     "category": "Content & SEO",
-    "tags": [
-      "content",
-      "ai",
-      "notion",
-      "email"
-    ],
+    "tags": ["content", "ai", "notion", "email"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
-      "tools": [
-        "Notion API",
-        "OpenAI GPT-4 API",
-        "Resend Email API"
-      ],
-      "api_slugs": [
-        "openai-gpt-4-api",
-        "notion-api",
-        "resend-email-api"
-      ],
-      "alternative_slugs": [
-        "notion-alternatives",
-        "openai-alternatives"
-      ],
+      "tools": ["Notion API", "OpenAI GPT-4 API", "Resend Email API"],
+      "api_slugs": ["openai-gpt-4-api", "notion-api", "resend-email-api"],
+      "alternative_slugs": ["notion-alternatives", "openai-alternatives"],
       "useCase": "Draft editorial content in Notion and notify reviewers by email.",
       "steps": [
         {
@@ -13201,9 +12217,7 @@
               "description": "Token for authenticating with the Notion API."
             }
           ],
-          "tools": [
-            "Notion API"
-          ],
+          "tools": ["Notion API"],
           "checklist": [
             "Successfully retrieved briefs from the Notion database.",
             "Briefs contain expected titles."
@@ -13249,9 +12263,7 @@
               "description": "Key for authenticating with the OpenAI API."
             }
           ],
-          "tools": [
-            "OpenAI GPT-4 API"
-          ],
+          "tools": ["OpenAI GPT-4 API"],
           "checklist": [
             "Successfully generated article content from the OpenAI API.",
             "Article content matches the expected format."
@@ -13307,9 +12319,7 @@
               "description": "Token for authenticating with the Notion API."
             }
           ],
-          "tools": [
-            "Notion API"
-          ],
+          "tools": ["Notion API"],
           "checklist": [
             "Successfully created a new review page in Notion.",
             "Review page contains the correct article content and status."
@@ -13350,9 +12360,7 @@
               "description": "Key for authenticating with the Resend API."
             }
           ],
-          "tools": [
-            "Resend Email API"
-          ],
+          "tools": ["Resend Email API"],
           "checklist": [
             "Successfully sent an email notification to reviewers.",
             "Email contains the correct link to the review page."
@@ -13438,28 +12446,17 @@
     "title": "SEO Content Audit",
     "description": "Export indexed pages from Algolia, compare keywords with the target list in Google Sheets and generate recommendations.",
     "category": "Content & SEO",
-    "tags": [
-      "seo",
-      "audit",
-      "content",
-      "analytics"
-    ],
+    "tags": ["seo", "audit", "content", "analytics"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
-      "tools": [
-        "Algolia Search API",
-        "Google Sheets API",
-        "OpenAI GPT-4 API"
-      ],
+      "tools": ["Algolia Search API", "Google Sheets API", "OpenAI GPT-4 API"],
       "api_slugs": [
         "algolia-search-api",
         "google-sheets-api",
         "openai-gpt-4-api"
       ],
-      "alternative_slugs": [
-        "google-analytics-alternatives"
-      ],
+      "alternative_slugs": ["google-analytics-alternatives"],
       "useCase": "Audit indexed content for missing keywords and produce an SEO action list.",
       "steps": [
         {
@@ -13471,18 +12468,12 @@
             {
               "title": "Page 1",
               "slug": "page-1",
-              "keywords": [
-                "keyword1",
-                "keyword2"
-              ]
+              "keywords": ["keyword1", "keyword2"]
             },
             {
               "title": "Page 2",
               "slug": "page-2",
-              "keywords": [
-                "keyword3",
-                "keyword4"
-              ]
+              "keywords": ["keyword3", "keyword4"]
             }
           ],
           "actions": [
@@ -13509,9 +12500,7 @@
               "description": "Your Algolia API key."
             }
           ],
-          "tools": [
-            "Algolia Search API"
-          ],
+          "tools": ["Algolia Search API"],
           "checklist": [
             "Indexed pages are successfully retrieved.",
             "Response contains the expected fields: title, slug, and keywords."
@@ -13529,17 +12518,7 @@
           "description": "In this step, the target keywords are loaded from a specified Google Sheets document. This data will be compared against the indexed pages to identify gaps and opportunities.",
           "technical_explanation": "This step reads data from Google Sheets, consuming the indexed pages data from the previous step. It uses the Google Sheets API to access a specific spreadsheet. The endpoint is `https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}/values/{range}`, using the GET method with OAuth 2.0 for authentication. Edge cases include handling empty sheets and ensuring the correct range is specified.",
           "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef read_target_keywords():\n    spreadsheet_id = os.environ.get('SPREADSHEET_ID')\n    range_name = 'Sheet1!A1:A100'\n    url = f'https://sheets.googleapis.com/v4/spreadsheets/{spreadsheet_id}/values/{range_name}'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"GOOGLE_SHEETS_API_KEY\")}'\n    }\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read().decode('utf-8')).get('values', [])\n\ntarget_keywords = read_target_keywords()",
-          "mock_response": [
-            [
-              "keyword1"
-            ],
-            [
-              "keyword2"
-            ],
-            [
-              "keyword3"
-            ]
-          ],
+          "mock_response": [["keyword1"], ["keyword2"], ["keyword3"]],
           "actions": [
             "Set up a Google Sheets document with keywords.",
             "Retrieve the spreadsheet ID and range for keywords.",
@@ -13564,9 +12543,7 @@
               "description": "Your Google Sheets API key."
             }
           ],
-          "tools": [
-            "Google Sheets API"
-          ],
+          "tools": ["Google Sheets API"],
           "checklist": [
             "Target keywords are successfully retrieved.",
             "Response contains the expected keyword values."
@@ -13585,12 +12562,8 @@
           "technical_explanation": "This step processes the indexed pages and target keywords to score coverage. It consumes data from the previous two steps. The scoring logic is implemented in Python, ensuring that keywords are compared correctly. Edge cases include handling duplicates and ensuring that comparisons are case-insensitive.",
           "code_snippet": "def score_keyword_coverage(indexed_pages, target_keywords):\n    indexed_keywords = set()\n    for page in indexed_pages:\n        indexed_keywords.update(page.get('keywords', []))\n    target_keywords_set = set(keyword[0] for keyword in target_keywords)\n    missing_keywords = target_keywords_set - indexed_keywords\n    cannibalized_keywords = indexed_keywords & target_keywords_set\n    return missing_keywords, cannibalized_keywords\n\nmissing, cannibalized = score_keyword_coverage(indexed_pages, target_keywords)",
           "mock_response": {
-            "missing": [
-              "keyword4"
-            ],
-            "cannibalized": [
-              "keyword1"
-            ]
+            "missing": ["keyword4"],
+            "cannibalized": ["keyword1"]
           },
           "actions": [
             "Implement the scoring logic in Python.",
@@ -13643,9 +12616,7 @@
               "description": "Your OpenAI API key."
             }
           ],
-          "tools": [
-            "OpenAI GPT-4 API"
-          ],
+          "tools": ["OpenAI GPT-4 API"],
           "checklist": [
             "Recommendations are generated successfully.",
             "Response contains actionable insights."
@@ -13731,12 +12702,7 @@
     "title": "Blog CMS Publishing",
     "description": "Create Contentful draft entries with AI-generated copy, publish approved entries and trigger a Cloudflare Workers build hook.",
     "category": "Content & SEO",
-    "tags": [
-      "cms",
-      "contentful",
-      "blog",
-      "publishing"
-    ],
+    "tags": ["cms", "contentful", "blog", "publishing"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
@@ -13750,9 +12716,7 @@
         "openai-gpt-4-api",
         "cloudflare-workers-api"
       ],
-      "alternative_slugs": [
-        "wordpress-alternatives"
-      ],
+      "alternative_slugs": ["wordpress-alternatives"],
       "useCase": "Draft, review and publish blog entries from Contentful and trigger an edge rebuild.",
       "steps": [
         {
@@ -13788,9 +12752,7 @@
               "description": "API key for OpenAI access"
             }
           ],
-          "tools": [
-            "OpenAI GPT-4 API"
-          ],
+          "tools": ["OpenAI GPT-4 API"],
           "checklist": [
             "AI-generated content is successfully retrieved.",
             "Content format matches Contentful requirements."
@@ -13835,9 +12797,7 @@
               "description": "Space ID for Contentful"
             }
           ],
-          "tools": [
-            "Contentful Content Management System API"
-          ],
+          "tools": ["Contentful Content Management System API"],
           "checklist": [
             "All mandatory fields are validated.",
             "Slug uniqueness is confirmed."
@@ -13885,9 +12845,7 @@
               "description": "Space ID for Contentful"
             }
           ],
-          "tools": [
-            "Contentful Content Management System API"
-          ],
+          "tools": ["Contentful Content Management System API"],
           "checklist": [
             "Entry is successfully published.",
             "Published entry details are returned."
@@ -13935,9 +12893,7 @@
               "description": "Zone ID for Cloudflare"
             }
           ],
-          "tools": [
-            "Cloudflare Workers API"
-          ],
+          "tools": ["Cloudflare Workers API"],
           "checklist": [
             "Cache purge request is successfully sent.",
             "Response confirms the cache has been purged."
@@ -14023,28 +12979,13 @@
     "title": "Local SEO Landing Pages",
     "description": "Read service areas from Google Sheets, geocode them with Mapbox and generate local page copy with OpenAI.",
     "category": "Content & SEO",
-    "tags": [
-      "local-seo",
-      "geodata",
-      "landing-pages",
-      "maps"
-    ],
+    "tags": ["local-seo", "geodata", "landing-pages", "maps"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
-      "tools": [
-        "Google Sheets API",
-        "Mapbox Maps API",
-        "OpenAI GPT-4 API"
-      ],
-      "api_slugs": [
-        "mapbox-maps-api",
-        "google-sheets-api",
-        "openai-gpt-4-api"
-      ],
-      "alternative_slugs": [
-        "google-analytics-alternatives"
-      ],
+      "tools": ["Google Sheets API", "Mapbox Maps API", "OpenAI GPT-4 API"],
+      "api_slugs": ["mapbox-maps-api", "google-sheets-api", "openai-gpt-4-api"],
+      "alternative_slugs": ["google-analytics-alternatives"],
       "useCase": "Generate local landing pages from service areas and geocoded locations.",
       "steps": [
         {
@@ -14054,18 +12995,9 @@
           "code_snippet": "import os\nimport json\nimport urllib.request\n\ndef fetch_service_areas():\n    spreadsheet_id = os.environ.get('SPREADSHEET_ID')\n    range_name = 'Sheet1!A:B'  # Adjust as necessary\n    url = f'https://sheets.googleapis.com/v4/spreadsheets/{spreadsheet_id}/values/{range_name}'\n    request = urllib.request.Request(url)\n    request.add_header('Authorization', f'Bearer {os.environ.get(\"GOOGLE_API_TOKEN\")}')\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n        return data.get('values', [])\n\nservice_areas = fetch_service_areas()",
           "mock_response": {
             "values": [
-              [
-                "City Name",
-                "Service Keyword"
-              ],
-              [
-                "New York",
-                "SEO Services"
-              ],
-              [
-                "Los Angeles",
-                "Local Marketing"
-              ]
+              ["City Name", "Service Keyword"],
+              ["New York", "SEO Services"],
+              ["Los Angeles", "Local Marketing"]
             ]
           },
           "actions": [
@@ -14092,9 +13024,7 @@
               "description": "The OAuth 2.0 token for Google Sheets API access."
             }
           ],
-          "tools": [
-            "Google Sheets API"
-          ],
+          "tools": ["Google Sheets API"],
           "checklist": [
             "Spreadsheet ID is correctly set in the environment variable.",
             "Data is present in the specified range of the Google Sheet."
@@ -14116,10 +13046,7 @@
             "features": [
               {
                 "geometry": {
-                  "coordinates": [
-                    -74.006,
-                    40.7128
-                  ]
+                  "coordinates": [-74.006, 40.7128]
                 }
               }
             ]
@@ -14143,9 +13070,7 @@
               "description": "The access token for Mapbox API."
             }
           ],
-          "tools": [
-            "Mapbox Maps API"
-          ],
+          "tools": ["Mapbox Maps API"],
           "checklist": [
             "Mapbox access token is correctly set in the environment variable.",
             "Geocoding returns valid coordinates for all service areas."
@@ -14191,9 +13116,7 @@
               "description": "The API key for OpenAI GPT-4."
             }
           ],
-          "tools": [
-            "OpenAI GPT-4 API"
-          ],
+          "tools": ["OpenAI GPT-4 API"],
           "checklist": [
             "OpenAI API key is correctly set in the environment variable.",
             "Generated content is relevant and of high quality."
@@ -14311,12 +13234,7 @@
     "title": "Newsletter Automation",
     "description": "Select approved newsletter items from Supabase, summarise them with OpenAI and send the issue through Resend.",
     "category": "Content & SEO",
-    "tags": [
-      "newsletter",
-      "email",
-      "content",
-      "supabase"
-    ],
+    "tags": ["newsletter", "email", "content", "supabase"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
@@ -14330,10 +13248,7 @@
         "resend-email-api",
         "openai-gpt-4-api"
       ],
-      "alternative_slugs": [
-        "mailchimp-alternatives",
-        "supabase-alternatives"
-      ],
+      "alternative_slugs": ["mailchimp-alternatives", "supabase-alternatives"],
       "useCase": "Assemble and send a curated newsletter from Supabase content with AI summaries.",
       "steps": [
         {
@@ -14379,9 +13294,7 @@
               "description": "The API key for accessing your Supabase project."
             }
           ],
-          "tools": [
-            "Supabase Database API"
-          ],
+          "tools": ["Supabase Database API"],
           "checklist": [
             "The API request returns a list of approved items.",
             "The response contains the expected fields: id, title, content."
@@ -14422,9 +13335,7 @@
               "description": "The API key for accessing OpenAI services."
             }
           ],
-          "tools": [
-            "OpenAI GPT-4 API"
-          ],
+          "tools": ["OpenAI GPT-4 API"],
           "checklist": [
             "Each item is summarized correctly.",
             "The summaries are concise and relevant."
@@ -14493,9 +13404,7 @@
               "description": "The API key for accessing Resend services."
             }
           ],
-          "tools": [
-            "Resend Email API"
-          ],
+          "tools": ["Resend Email API"],
           "checklist": [
             "The email is sent successfully.",
             "The broadcast ID is recorded."
@@ -14581,12 +13490,7 @@
     "title": "Content Localization Pipeline",
     "description": "Read source entries from Contentful, translate them with IBM Watson Language Translator and archive the localized payloads on S3.",
     "category": "Content & SEO",
-    "tags": [
-      "localization",
-      "translation",
-      "contentful",
-      "content"
-    ],
+    "tags": ["localization", "translation", "contentful", "content"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
@@ -14600,9 +13504,7 @@
         "contentful-cms-api",
         "aws-s3-api"
       ],
-      "alternative_slugs": [
-        "wordpress-alternatives"
-      ],
+      "alternative_slugs": ["wordpress-alternatives"],
       "useCase": "Translate Contentful entries into target languages and archive translation assets.",
       "steps": [
         {
@@ -14652,9 +13554,7 @@
               "description": "The access token for Contentful API"
             }
           ],
-          "tools": [
-            "Contentful Content Management System API"
-          ],
+          "tools": ["Contentful Content Management System API"],
           "checklist": [
             "Verify that the API key is set correctly",
             "Ensure that entries are published and accessible"
@@ -14698,9 +13598,7 @@
               "description": "The API key for IBM Watson Language Translator"
             }
           ],
-          "tools": [
-            "IBM Watson Language Translator API"
-          ],
+          "tools": ["IBM Watson Language Translator API"],
           "checklist": [
             "Verify that the API key is set correctly",
             "Ensure that the text is not empty before translation"
@@ -14756,9 +13654,7 @@
               "description": "The access token for Contentful API"
             }
           ],
-          "tools": [
-            "Contentful Content Management System API"
-          ],
+          "tools": ["Contentful Content Management System API"],
           "checklist": [
             "Verify that the API key is set correctly",
             "Ensure that the entry is created successfully"
@@ -14882,29 +13778,13 @@
     "title": "Meeting Notes Automation",
     "description": "Transcribe recordings with Whisper, create structured Notion meeting notes and post the summary to the project channel.",
     "category": "Productivity & Collaboration",
-    "tags": [
-      "meetings",
-      "notes",
-      "notion",
-      "transcription"
-    ],
+    "tags": ["meetings", "notes", "notion", "transcription"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
-      "tools": [
-        "OpenAI Whisper API",
-        "Notion API",
-        "Slack Web API"
-      ],
-      "api_slugs": [
-        "openai-whisper-api",
-        "notion-api",
-        "slack-web-api"
-      ],
-      "alternative_slugs": [
-        "notion-alternatives",
-        "zoom-alternatives"
-      ],
+      "tools": ["OpenAI Whisper API", "Notion API", "Slack Web API"],
+      "api_slugs": ["openai-whisper-api", "notion-api", "slack-web-api"],
+      "alternative_slugs": ["notion-alternatives", "zoom-alternatives"],
       "useCase": "Turn meeting recordings into Notion notes and share the summary in Slack.",
       "steps": [
         {
@@ -14934,9 +13814,7 @@
               "description": "API key for authenticating requests to OpenAI."
             }
           ],
-          "tools": [
-            "OpenAI Whisper API"
-          ],
+          "tools": ["OpenAI Whisper API"],
           "checklist": [
             "Audio file is in a supported format.",
             "Transcription response is not empty."
@@ -14987,9 +13865,7 @@
               "description": "API key for authenticating requests to OpenAI."
             }
           ],
-          "tools": [
-            "OpenAI Whisper API"
-          ],
+          "tools": ["OpenAI Whisper API"],
           "checklist": [
             "Decisions are extracted from the transcription.",
             "Each decision has an associated owner."
@@ -15036,9 +13912,7 @@
               "description": "Database ID where the meeting notes will be stored."
             }
           ],
-          "tools": [
-            "Notion API"
-          ],
+          "tools": ["Notion API"],
           "checklist": [
             "Notion page is created successfully.",
             "Meeting notes are stored in the specified database."
@@ -15081,9 +13955,7 @@
               "description": "Channel ID where the message will be posted."
             }
           ],
-          "tools": [
-            "Slack Web API"
-          ],
+          "tools": ["Slack Web API"],
           "checklist": [
             "Slack message is sent successfully.",
             "Message contains the correct decisions."
@@ -15169,29 +14041,13 @@
     "title": "Notion Task Sync",
     "description": "Read open tasks from Notion, create or update Asana tasks and post overdue tasks to Slack.",
     "category": "Productivity & Collaboration",
-    "tags": [
-      "notion",
-      "asana",
-      "tasks",
-      "sync"
-    ],
+    "tags": ["notion", "asana", "tasks", "sync"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
-      "tools": [
-        "Notion API",
-        "Asana API",
-        "Slack Web API"
-      ],
-      "api_slugs": [
-        "notion-api",
-        "asana-api",
-        "slack-web-api"
-      ],
-      "alternative_slugs": [
-        "notion-alternatives",
-        "asana-alternatives"
-      ],
+      "tools": ["Notion API", "Asana API", "Slack Web API"],
+      "api_slugs": ["notion-api", "asana-api", "slack-web-api"],
+      "alternative_slugs": ["notion-alternatives", "asana-alternatives"],
       "useCase": "Sync Notion tasks into Asana and report overdue work to Slack.",
       "steps": [
         {
@@ -15248,9 +14104,7 @@
               "description": "Bearer token for Notion API authentication."
             }
           ],
-          "tools": [
-            "Notion API"
-          ],
+          "tools": ["Notion API"],
           "checklist": [
             "Successfully retrieved open tasks from Notion.",
             "Tasks are not marked as done in the response."
@@ -15295,9 +14149,7 @@
               "description": "Bearer token for Asana API authentication."
             }
           ],
-          "tools": [
-            "Asana API"
-          ],
+          "tools": ["Asana API"],
           "checklist": [
             "Tasks are created or updated in Asana successfully.",
             "No errors are returned from the Asana API."
@@ -15335,9 +14187,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "Notion API"
-          ],
+          "tools": ["Notion API"],
           "checklist": [
             "Overdue tasks are correctly identified.",
             "Tasks without due dates are handled appropriately."
@@ -15379,9 +14229,7 @@
               "description": "OAuth 2.0 bot token for Slack API."
             }
           ],
-          "tools": [
-            "Slack Web API"
-          ],
+          "tools": ["Slack Web API"],
           "checklist": [
             "Overdue tasks are reported in Slack.",
             "Message formatting is correct."
@@ -15467,25 +14315,12 @@
     "title": "Document Approval Workflow",
     "description": "Read document records from Notion, render PDFs with PDF.co and send approval requests with the PDF link to Slack.",
     "category": "Productivity & Collaboration",
-    "tags": [
-      "documents",
-      "approval",
-      "notion",
-      "pdf"
-    ],
+    "tags": ["documents", "approval", "notion", "pdf"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
-      "tools": [
-        "Notion API",
-        "PDF.co API",
-        "Slack Web API"
-      ],
-      "api_slugs": [
-        "notion-api",
-        "pdf-co-api",
-        "slack-web-api"
-      ],
+      "tools": ["Notion API", "PDF.co API", "Slack Web API"],
+      "api_slugs": ["notion-api", "pdf-co-api", "slack-web-api"],
       "alternative_slugs": [
         "docusign-alternatives",
         "adobe-acrobat-alternatives"
@@ -15539,9 +14374,7 @@
               "description": "Token for authenticating with the Notion API"
             }
           ],
-          "tools": [
-            "Notion API"
-          ],
+          "tools": ["Notion API"],
           "checklist": [
             "Documents are fetched successfully",
             "Response contains the expected structure"
@@ -15581,13 +14414,8 @@
               "description": "API key for authenticating with PDF.co"
             }
           ],
-          "tools": [
-            "PDF.co API"
-          ],
-          "checklist": [
-            "PDF is generated successfully",
-            "PDF URL is valid"
-          ],
+          "tools": ["PDF.co API"],
+          "checklist": ["PDF is generated successfully", "PDF URL is valid"],
           "expectedResult": "The PDF document is rendered and the URL is stored for sending approval requests.",
           "links": [
             {
@@ -15621,9 +14449,7 @@
               "description": "Bot token for authenticating with Slack"
             }
           ],
-          "tools": [
-            "Slack Web API"
-          ],
+          "tools": ["Slack Web API"],
           "checklist": [
             "Message is sent to the Slack channel",
             "Response indicates success"
@@ -15661,9 +14487,7 @@
               "description": "Token for authenticating with the Notion API"
             }
           ],
-          "tools": [
-            "Notion API"
-          ],
+          "tools": ["Notion API"],
           "checklist": [
             "Document status is updated successfully",
             "Response status indicates success"
@@ -15749,29 +14573,13 @@
     "title": "Form Submission Routing",
     "description": "Read form submissions, classify the request type, route it to Airtable and send a confirmation email.",
     "category": "Productivity & Collaboration",
-    "tags": [
-      "forms",
-      "routing",
-      "notion",
-      "email"
-    ],
+    "tags": ["forms", "routing", "notion", "email"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "45–60 minutes",
-      "tools": [
-        "Notion Forms API",
-        "Airtable API",
-        "Resend Email API"
-      ],
-      "api_slugs": [
-        "notion-forms-api",
-        "resend-email-api",
-        "airtable-api"
-      ],
-      "alternative_slugs": [
-        "notion-alternatives",
-        "airtable-alternatives"
-      ],
+      "tools": ["Notion Forms API", "Airtable API", "Resend Email API"],
+      "api_slugs": ["notion-forms-api", "resend-email-api", "airtable-api"],
+      "alternative_slugs": ["notion-alternatives", "airtable-alternatives"],
       "useCase": "Route website form submissions to the right team and confirm receipt.",
       "steps": [
         {
@@ -15809,9 +14617,7 @@
               "description": "API key for authenticating requests to Notion"
             }
           ],
-          "tools": [
-            "Notion Forms API"
-          ],
+          "tools": ["Notion Forms API"],
           "checklist": [
             "Submissions are fetched without errors",
             "Response contains the expected fields"
@@ -15897,9 +14703,7 @@
               "description": "Base ID for the Airtable database"
             }
           ],
-          "tools": [
-            "Airtable API"
-          ],
+          "tools": ["Airtable API"],
           "checklist": [
             "Records are created in Airtable successfully",
             "API responses are logged for errors"
@@ -15940,9 +14744,7 @@
               "description": "API key for authenticating requests to Resend"
             }
           ],
-          "tools": [
-            "Resend Email API"
-          ],
+          "tools": ["Resend Email API"],
           "checklist": [
             "Confirmation email is sent successfully",
             "Email content is correctly formatted"
@@ -16028,29 +14830,17 @@
     "title": "Team Wiki Search",
     "description": "Export wiki pages from Notion, create embeddings and index them in Pinecone for fast internal search.",
     "category": "Productivity & Collaboration",
-    "tags": [
-      "wiki",
-      "search",
-      "embeddings",
-      "notion"
-    ],
+    "tags": ["wiki", "search", "embeddings", "notion"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
-      "tools": [
-        "Notion API",
-        "OpenAI Embeddings API",
-        "Pinecone Vector API"
-      ],
+      "tools": ["Notion API", "OpenAI Embeddings API", "Pinecone Vector API"],
       "api_slugs": [
         "notion-api",
         "openai-embeddings-api",
         "pinecone-vector-api"
       ],
-      "alternative_slugs": [
-        "notion-wiki-alternatives",
-        "notion-alternatives"
-      ],
+      "alternative_slugs": ["notion-wiki-alternatives", "notion-alternatives"],
       "useCase": "Index the internal team wiki and provide embedding-based search over pages.",
       "steps": [
         {
@@ -16107,9 +14897,7 @@
               "description": "The Bearer token for authenticating with the Notion API."
             }
           ],
-          "tools": [
-            "Notion API"
-          ],
+          "tools": ["Notion API"],
           "checklist": [
             "Successfully fetched wiki pages from Notion.",
             "Extracted titles are not empty."
@@ -16130,11 +14918,7 @@
           "mock_response": {
             "data": [
               {
-                "embedding": [
-                  0.1,
-                  0.2,
-                  0.3
-                ]
+                "embedding": [0.1, 0.2, 0.3]
               }
             ]
           },
@@ -16157,9 +14941,7 @@
               "description": "The API key for authenticating with the OpenAI API."
             }
           ],
-          "tools": [
-            "OpenAI Embeddings API"
-          ],
+          "tools": ["OpenAI Embeddings API"],
           "checklist": [
             "Embeddings are successfully created for all wiki pages.",
             "The embeddings list is populated with numerical data."
@@ -16199,9 +14981,7 @@
               "description": "The API key for authenticating with the Pinecone API."
             }
           ],
-          "tools": [
-            "Pinecone Vector API"
-          ],
+          "tools": ["Pinecone Vector API"],
           "checklist": [
             "Vectors are successfully upserted into Pinecone.",
             "The upsert response confirms the number of vectors added."
@@ -16250,9 +15030,7 @@
               "description": "The API key for authenticating with the Pinecone API."
             }
           ],
-          "tools": [
-            "Pinecone Vector API"
-          ],
+          "tools": ["Pinecone Vector API"],
           "checklist": [
             "Search query returns relevant wiki pages.",
             "Results are displayed with associated scores."
@@ -16338,29 +15116,13 @@
     "title": "Design Feedback Collection",
     "description": "Read design review records from Airtable, group feedback by asset and post a digest to the design Slack channel.",
     "category": "Productivity & Collaboration",
-    "tags": [
-      "design",
-      "feedback",
-      "airtable",
-      "slack"
-    ],
+    "tags": ["design", "feedback", "airtable", "slack"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
-      "tools": [
-        "Airtable API",
-        "Notion API",
-        "Slack Web API"
-      ],
-      "api_slugs": [
-        "airtable-api",
-        "slack-web-api",
-        "notion-api"
-      ],
-      "alternative_slugs": [
-        "figma-alternatives",
-        "miro-alternatives"
-      ],
+      "tools": ["Airtable API", "Notion API", "Slack Web API"],
+      "api_slugs": ["airtable-api", "slack-web-api", "notion-api"],
+      "alternative_slugs": ["figma-alternatives", "miro-alternatives"],
       "useCase": "Collect design feedback in Airtable and summarise open feedback in Slack.",
       "steps": [
         {
@@ -16417,9 +15179,7 @@
               "description": "The name of the table containing design feedback."
             }
           ],
-          "tools": [
-            "Airtable API"
-          ],
+          "tools": ["Airtable API"],
           "checklist": [
             "Airtable API token is set in environment variables.",
             "The correct base ID and table name are used in the request."
@@ -16438,12 +15198,8 @@
           "technical_explanation": "This step transforms the raw feedback data into a structured format, grouping comments by asset. The architecture role is to prepare data for reporting. The input is the list of feedback records from the previous step. Edge cases include handling empty feedback arrays and ensuring that all feedback is accounted for in the grouping process.",
           "code_snippet": "from collections import defaultdict\n\ndef group_feedback(records):\n    grouped = defaultdict(list)\n    for record in records:\n        asset = record.get('fields', {}).get('Asset', 'Unknown')\n        feedback = record.get('fields', {}).get('Feedback', '')\n        grouped[asset].append(feedback)\n    return dict(grouped)\n\ngrouped_feedback = group_feedback(feedback_records)",
           "mock_response": {
-            "Design A": [
-              "Great design!"
-            ],
-            "Design B": [
-              "Needs improvement."
-            ]
+            "Design A": ["Great design!"],
+            "Design B": ["Needs improvement."]
           },
           "actions": [
             "Iterate through feedback records to extract asset and feedback.",
@@ -16501,9 +15257,7 @@
               "description": "The ID of your Notion database."
             }
           ],
-          "tools": [
-            "Notion API"
-          ],
+          "tools": ["Notion API"],
           "checklist": [
             "Notion integration token is set in environment variables.",
             "The correct database ID is used in the request."
@@ -16546,9 +15300,7 @@
               "description": "The ID of the Slack channel to post messages."
             }
           ],
-          "tools": [
-            "Slack Web API"
-          ],
+          "tools": ["Slack Web API"],
           "checklist": [
             "Slack bot token is set in environment variables.",
             "The correct channel ID is used in the request."
@@ -16634,12 +15386,7 @@
     "title": "Collaboration Presence Sync",
     "description": "Read Liveblocks room presence, publish presence updates through Ably and store session metrics in Supabase.",
     "category": "Realtime & Collaboration",
-    "tags": [
-      "realtime",
-      "presence",
-      "liveblocks",
-      "ably"
-    ],
+    "tags": ["realtime", "presence", "liveblocks", "ably"],
     "details": {
       "difficulty": "Advanced",
       "duration": "90–120 minutes",
@@ -16695,9 +15442,7 @@
               "description": "The API key for authenticating with Liveblocks."
             }
           ],
-          "tools": [
-            "Liveblocks Collaboration API"
-          ],
+          "tools": ["Liveblocks Collaboration API"],
           "checklist": [
             "Successfully fetched the list of active users.",
             "No errors returned from the Liveblocks API."
@@ -16735,9 +15480,7 @@
               "description": "The API key for authenticating with Ably."
             }
           ],
-          "tools": [
-            "Ably Realtime API"
-          ],
+          "tools": ["Ably Realtime API"],
           "checklist": [
             "Presence update sent successfully.",
             "No errors returned from the Ably API."
@@ -16785,9 +15528,7 @@
               "description": "The API key for authenticating with Supabase."
             }
           ],
-          "tools": [
-            "Supabase Database API"
-          ],
+          "tools": ["Supabase Database API"],
           "checklist": [
             "Session metrics upserted successfully.",
             "No errors returned from the Supabase API."
@@ -16805,9 +15546,7 @@
           "description": "This step flags sessions without updates beyond a specified timeout. It helps maintain the integrity of the presence data.",
           "technical_explanation": "This step checks for stale presence sessions by comparing the current timestamp with the last update timestamp. It consumes the data stored in Supabase to identify sessions that have not been updated within a defined timeout period. Edge cases include handling scenarios where no sessions are found and ensuring that the timeout value is configurable to adapt to different use cases.",
           "code_snippet": "import json\nimport urllib.request\nimport time\nimport os\n\ndef detect_stale_sessions(timeout):\n    url = f'{os.environ.get(\"SUPABASE_URL\")}/rest/v1/metrics'\n    headers = {'apikey': os.environ.get(\"SUPABASE_KEY\"), 'Authorization': f'Bearer {os.environ.get(\"SUPABASE_KEY\")}' }\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        metrics = json.loads(response.read().decode('utf-8'))\n    stale_sessions = []\n    current_time = time.time()\n    for metric in metrics:\n        last_update = time.mktime(time.strptime(metric['timestamp'], '%Y-%m-%dT%H:%M:%SZ'))\n        if current_time - last_update > timeout:\n            stale_sessions.append(metric['room_id'])\n    return stale_sessions\n\nstale = detect_stale_sessions(300)",
-          "mock_response": [
-            "room1"
-          ],
+          "mock_response": ["room1"],
           "actions": [
             "Define a timeout period for session updates.",
             "Run the detection script after presence updates.",
@@ -16821,9 +15560,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "Supabase Database API"
-          ],
+          "tools": ["Supabase Database API"],
           "checklist": [
             "Stale sessions detected correctly.",
             "No errors returned during the detection process."
@@ -16909,28 +15646,17 @@
     "title": "Product Analytics Dashboard",
     "description": "Query PostHog product metrics, write the weekly cohort table to Google Sheets and post a summary to Slack.",
     "category": "Analytics & Monitoring",
-    "tags": [
-      "analytics",
-      "product",
-      "posthog",
-      "reporting"
-    ],
+    "tags": ["analytics", "product", "posthog", "reporting"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
-      "tools": [
-        "PostHog Analytics API",
-        "Google Sheets API",
-        "Slack Web API"
-      ],
+      "tools": ["PostHog Analytics API", "Google Sheets API", "Slack Web API"],
       "api_slugs": [
         "posthog-analytics-api",
         "google-sheets-api",
         "slack-web-api"
       ],
-      "alternative_slugs": [
-        "google-analytics-alternatives"
-      ],
+      "alternative_slugs": ["google-analytics-alternatives"],
       "useCase": "Build a weekly product analytics report from PostHog and deliver it to stakeholders.",
       "steps": [
         {
@@ -16969,9 +15695,7 @@
               "description": "Bearer token for authenticating with the PostHog API."
             }
           ],
-          "tools": [
-            "PostHog Analytics API"
-          ],
+          "tools": ["PostHog Analytics API"],
           "checklist": [
             "PostHog API key is set in the environment.",
             "The API request returns a valid response with event data."
@@ -17014,9 +15738,7 @@
               "description": "OAuth token for authenticating with Google Sheets API."
             }
           ],
-          "tools": [
-            "Google Sheets API"
-          ],
+          "tools": ["Google Sheets API"],
           "checklist": [
             "Google Sheets API token is set in the environment.",
             "Data is successfully appended to the specified Google Sheet."
@@ -17097,9 +15819,7 @@
               "description": "OAuth token for authenticating with Slack API."
             }
           ],
-          "tools": [
-            "Slack Web API"
-          ],
+          "tools": ["Slack Web API"],
           "checklist": [
             "Slack bot token is set in the environment.",
             "Summary message is successfully posted to the Slack channel."
@@ -17185,28 +15905,13 @@
     "title": "Error Tracking Alerts",
     "description": "Group new Sentry errors, create or update Linear issues for regressions and alert the engineering channel.",
     "category": "Analytics & Monitoring",
-    "tags": [
-      "errors",
-      "monitoring",
-      "sentry",
-      "alerts"
-    ],
+    "tags": ["errors", "monitoring", "sentry", "alerts"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
-      "tools": [
-        "Sentry Error API",
-        "Linear GraphQL API",
-        "Slack Web API"
-      ],
-      "api_slugs": [
-        "sentry-error-api",
-        "slack-web-api",
-        "linear-graphql-api"
-      ],
-      "alternative_slugs": [
-        "jira-alternatives"
-      ],
+      "tools": ["Sentry Error API", "Linear GraphQL API", "Slack Web API"],
+      "api_slugs": ["sentry-error-api", "slack-web-api", "linear-graphql-api"],
+      "alternative_slugs": ["jira-alternatives"],
       "useCase": "Turn recurring Sentry errors into Linear issues and Slack alerts.",
       "steps": [
         {
@@ -17247,9 +15952,7 @@
               "description": "Bearer token for Sentry API authentication."
             }
           ],
-          "tools": [
-            "Sentry Error API"
-          ],
+          "tools": ["Sentry Error API"],
           "checklist": [
             "Verify that the Bearer token is correctly set and valid.",
             "Check that the response contains unresolved issues."
@@ -17293,9 +15996,7 @@
               "description": "Personal API key for Linear API authentication."
             }
           ],
-          "tools": [
-            "Linear GraphQL API"
-          ],
+          "tools": ["Linear GraphQL API"],
           "checklist": [
             "Verify that the Linear API key is correctly set and valid.",
             "Check that issues are created or updated as expected."
@@ -17333,9 +16034,7 @@
               "description": "OAuth 2.0 bot token for Slack API authentication."
             }
           ],
-          "tools": [
-            "Slack Web API"
-          ],
+          "tools": ["Slack Web API"],
           "checklist": [
             "Verify that the Slack bot token is correctly set and valid.",
             "Check that alerts are sent to the correct Slack channel."
@@ -17469,12 +16168,7 @@
     "title": "Website Performance Reporting",
     "description": "Combine Cloudflare Worker analytics with PostHog traffic, generate a performance report and email it to stakeholders.",
     "category": "Analytics & Monitoring",
-    "tags": [
-      "performance",
-      "monitoring",
-      "cloudflare",
-      "email"
-    ],
+    "tags": ["performance", "monitoring", "cloudflare", "email"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
@@ -17526,9 +16220,7 @@
               "description": "API token for authenticating requests to Cloudflare Workers API"
             }
           ],
-          "tools": [
-            "Cloudflare Workers API"
-          ],
+          "tools": ["Cloudflare Workers API"],
           "checklist": [
             "Cloudflare API token is set in environment variables",
             "Data is successfully retrieved from Cloudflare Workers API"
@@ -17550,10 +16242,7 @@
             "results": [
               {
                 "session_count": 300,
-                "top_landing_pages": [
-                  "/home",
-                  "/about"
-                ]
+                "top_landing_pages": ["/home", "/about"]
               }
             ]
           },
@@ -17576,9 +16265,7 @@
               "description": "API key for authenticating requests to PostHog Analytics API"
             }
           ],
-          "tools": [
-            "PostHog Analytics API"
-          ],
+          "tools": ["PostHog Analytics API"],
           "checklist": [
             "PostHog API key is set in environment variables",
             "Traffic metrics are successfully retrieved from PostHog"
@@ -17602,10 +16289,7 @@
               "latency": 200,
               "session_count": 300
             },
-            "top_landing_pages": [
-              "/home",
-              "/about"
-            ]
+            "top_landing_pages": ["/home", "/about"]
           },
           "actions": [
             "Combine metrics from Cloudflare and PostHog",
@@ -17652,9 +16336,7 @@
               "description": "API key for authenticating requests to Resend Email API"
             }
           ],
-          "tools": [
-            "Resend Email API"
-          ],
+          "tools": ["Resend Email API"],
           "checklist": [
             "Email payload is correctly structured",
             "Email is sent successfully to stakeholders"
@@ -17740,28 +16422,13 @@
     "title": "Social Media Analytics",
     "description": "Fetch Twitch analytics and channel metadata, compute engagement metrics and append weekly rows to Google Sheets.",
     "category": "Analytics & Monitoring",
-    "tags": [
-      "social",
-      "analytics",
-      "twitch",
-      "reporting"
-    ],
+    "tags": ["social", "analytics", "twitch", "reporting"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
-      "tools": [
-        "Twitch Analytics API",
-        "Google Sheets API",
-        "Twitch API"
-      ],
-      "api_slugs": [
-        "twitch-analytics-api",
-        "twitch-api",
-        "google-sheets-api"
-      ],
-      "alternative_slugs": [
-        "tiktok-alternatives"
-      ],
+      "tools": ["Twitch Analytics API", "Google Sheets API", "Twitch API"],
+      "api_slugs": ["twitch-analytics-api", "twitch-api", "google-sheets-api"],
+      "alternative_slugs": ["tiktok-alternatives"],
       "useCase": "Collect Twitch channel analytics and append weekly performance rows to Google Sheets.",
       "steps": [
         {
@@ -17802,9 +16469,7 @@
               "description": "Client ID for Twitch API access"
             }
           ],
-          "tools": [
-            "Twitch Analytics API"
-          ],
+          "tools": ["Twitch Analytics API"],
           "checklist": [
             "Successfully retrieved analytics data from Twitch API.",
             "Data contains expected fields such as stream_id and viewer counts."
@@ -17856,9 +16521,7 @@
               "description": "Client ID for Twitch API access"
             }
           ],
-          "tools": [
-            "Twitch Analytics API"
-          ],
+          "tools": ["Twitch Analytics API"],
           "checklist": [
             "Successfully retrieved channel metadata from Twitch API.",
             "Data contains expected fields such as followers and descriptions."
@@ -17942,9 +16605,7 @@
               "description": "ID of the Google Sheet to append data to"
             }
           ],
-          "tools": [
-            "Google Sheets API"
-          ],
+          "tools": ["Google Sheets API"],
           "checklist": [
             "Successfully appended data to the Google Sheet.",
             "Data appears in the correct format and location in the sheet."
@@ -18028,12 +16689,7 @@
     "title": "Shopify Order Automation",
     "description": "Fetch new Shopify orders, send branded confirmations with Resend and store order analytics in Supabase.",
     "category": "E-commerce",
-    "tags": [
-      "shopify",
-      "orders",
-      "automation",
-      "email"
-    ],
+    "tags": ["shopify", "orders", "automation", "email"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
@@ -18047,9 +16703,7 @@
         "resend-email-api",
         "supabase-database-api"
       ],
-      "alternative_slugs": [
-        "shopify-alternatives"
-      ],
+      "alternative_slugs": ["shopify-alternatives"],
       "useCase": "Process new Shopify orders, send confirmations and store order analytics.",
       "steps": [
         {
@@ -18105,9 +16759,7 @@
               "description": "The last time orders were fetched"
             }
           ],
-          "tools": [
-            "Shopify Admin API"
-          ],
+          "tools": ["Shopify Admin API"],
           "checklist": [
             "Environment variables are correctly set",
             "Orders are fetched successfully from Shopify"
@@ -18145,9 +16797,7 @@
               "description": "Your Resend API key"
             }
           ],
-          "tools": [
-            "Resend Email API"
-          ],
+          "tools": ["Resend Email API"],
           "checklist": [
             "Email payload is correctly formatted",
             "Emails are sent successfully to customers"
@@ -18195,9 +16845,7 @@
               "description": "Your Supabase API key"
             }
           ],
-          "tools": [
-            "Supabase Database API"
-          ],
+          "tools": ["Supabase Database API"],
           "checklist": [
             "Supabase table schema matches the payload structure",
             "Order analytics are stored successfully in Supabase"
@@ -18245,9 +16893,7 @@
               "description": "Your Supabase API key"
             }
           ],
-          "tools": [
-            "Supabase Database API"
-          ],
+          "tools": ["Supabase Database API"],
           "checklist": [
             "Order data is retrieved successfully from Supabase",
             "Unusual orders are detected based on z-score analysis"
@@ -18333,29 +16979,13 @@
     "title": "Inventory Sync Automation",
     "description": "Read Shopify inventory levels, mirror them in Airtable and alert the operations channel about low-stock variants.",
     "category": "E-commerce",
-    "tags": [
-      "inventory",
-      "shopify",
-      "airtable",
-      "sync"
-    ],
+    "tags": ["inventory", "shopify", "airtable", "sync"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
-      "tools": [
-        "Shopify Admin API",
-        "Airtable API",
-        "Slack Web API"
-      ],
-      "api_slugs": [
-        "shopify-admin-api",
-        "airtable-api",
-        "slack-web-api"
-      ],
-      "alternative_slugs": [
-        "shopify-alternatives",
-        "airtable-alternatives"
-      ],
+      "tools": ["Shopify Admin API", "Airtable API", "Slack Web API"],
+      "api_slugs": ["shopify-admin-api", "airtable-api", "slack-web-api"],
+      "alternative_slugs": ["shopify-alternatives", "airtable-alternatives"],
       "useCase": "Sync Shopify inventory levels into Airtable and alert on low stock.",
       "steps": [
         {
@@ -18401,9 +17031,7 @@
               "description": "Your Shopify Admin API access token"
             }
           ],
-          "tools": [
-            "Shopify Admin API"
-          ],
+          "tools": ["Shopify Admin API"],
           "checklist": [
             "Successfully retrieved inventory data from Shopify",
             "Data includes SKU and inventory quantity for each variant"
@@ -18451,9 +17079,7 @@
               "description": "Your Airtable API access token"
             }
           ],
-          "tools": [
-            "Airtable API"
-          ],
+          "tools": ["Airtable API"],
           "checklist": [
             "Successfully updated inventory quantities in Airtable",
             "All SKUs from Shopify are reflected in Airtable"
@@ -18539,9 +17165,7 @@
               "description": "The ID of the Slack channel for alerts"
             }
           ],
-          "tools": [
-            "Slack Web API"
-          ],
+          "tools": ["Slack Web API"],
           "checklist": [
             "Successfully sent alerts to Slack",
             "Alerts include correct SKU and quantity information"
@@ -18627,29 +17251,17 @@
     "title": "Checkout Payment Recovery",
     "description": "Detect failed Shopify checkouts, verify payment state in Stripe and send recovery emails through Resend.",
     "category": "E-commerce",
-    "tags": [
-      "checkout",
-      "payments",
-      "recovery",
-      "stripe"
-    ],
+    "tags": ["checkout", "payments", "recovery", "stripe"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
-      "tools": [
-        "Shopify Admin API",
-        "Stripe Payments API",
-        "Resend Email API"
-      ],
+      "tools": ["Shopify Admin API", "Stripe Payments API", "Resend Email API"],
       "api_slugs": [
         "stripe-payments-api",
         "shopify-admin-api",
         "resend-email-api"
       ],
-      "alternative_slugs": [
-        "stripe-alternatives",
-        "shopify-alternatives"
-      ],
+      "alternative_slugs": ["stripe-alternatives", "shopify-alternatives"],
       "useCase": "Recover failed checkouts with Stripe payment status and targeted emails.",
       "steps": [
         {
@@ -18690,9 +17302,7 @@
               "description": "Access token for Shopify Admin API"
             }
           ],
-          "tools": [
-            "Shopify Admin API"
-          ],
+          "tools": ["Shopify Admin API"],
           "checklist": [
             "Successfully retrieved abandoned checkouts",
             "Filtered checkouts with failed payment state"
@@ -18736,9 +17346,7 @@
               "description": "Secret key for Stripe Payments API"
             }
           ],
-          "tools": [
-            "Stripe Payments API"
-          ],
+          "tools": ["Stripe Payments API"],
           "checklist": [
             "Successfully verified payment state",
             "Captured failure reason if applicable"
@@ -18779,9 +17387,7 @@
               "description": "API key for Resend Email API"
             }
           ],
-          "tools": [
-            "Resend Email API"
-          ],
+          "tools": ["Resend Email API"],
           "checklist": [
             "Email sent successfully",
             "Email contains the correct recovery link"
@@ -18902,28 +17508,13 @@
     "title": "Weather-Driven Ops Alerts",
     "description": "Check OpenWeather and WeatherAPI forecasts for operating regions and alert the operations channel about severe conditions.",
     "category": "Geodata & Weather",
-    "tags": [
-      "weather",
-      "ops",
-      "alerts",
-      "monitoring"
-    ],
+    "tags": ["weather", "ops", "alerts", "monitoring"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "45–60 minutes",
-      "tools": [
-        "OpenWeather Weather API",
-        "WeatherAPI",
-        "Slack Web API"
-      ],
-      "api_slugs": [
-        "openweather-weather-api",
-        "weatherapi",
-        "slack-web-api"
-      ],
-      "alternative_slugs": [
-        "microsoft-azure-alternatives"
-      ],
+      "tools": ["OpenWeather Weather API", "WeatherAPI", "Slack Web API"],
+      "api_slugs": ["openweather-weather-api", "weatherapi", "slack-web-api"],
+      "alternative_slugs": ["microsoft-azure-alternatives"],
       "useCase": "Trigger operations alerts from severe weather forecasts for field teams.",
       "steps": [
         {
@@ -18969,10 +17560,7 @@
               "description": "API key for WeatherAPI."
             }
           ],
-          "tools": [
-            "OpenWeather Weather API",
-            "WeatherAPI"
-          ],
+          "tools": ["OpenWeather Weather API", "WeatherAPI"],
           "checklist": [
             "Ensure API keys are set in environment variables.",
             "Verify that forecasts are fetched for all locations."
@@ -19082,9 +17670,7 @@
             }
           ],
           "config": [],
-          "tools": [
-            "Slack Web API"
-          ],
+          "tools": ["Slack Web API"],
           "checklist": [
             "Verify that alerts are sent to the correct Slack channel.",
             "Ensure that error handling is in place for failed requests."
@@ -19168,28 +17754,13 @@
     "title": "Store Locator Geocoding",
     "description": "Geocode store addresses with Mapbox, verify them with Google Maps and publish the canonical store records to Airtable.",
     "category": "Geodata & Weather",
-    "tags": [
-      "geocoding",
-      "store-locator",
-      "maps",
-      "ecommerce"
-    ],
+    "tags": ["geocoding", "store-locator", "maps", "ecommerce"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
-      "tools": [
-        "Airtable API",
-        "Mapbox Maps API",
-        "Google Maps API"
-      ],
-      "api_slugs": [
-        "mapbox-maps-api",
-        "google-maps-api",
-        "airtable-api"
-      ],
-      "alternative_slugs": [
-        "shopify-alternatives"
-      ],
+      "tools": ["Airtable API", "Mapbox Maps API", "Google Maps API"],
+      "api_slugs": ["mapbox-maps-api", "google-maps-api", "airtable-api"],
+      "alternative_slugs": ["shopify-alternatives"],
       "useCase": "Geocode store addresses and maintain a store locator dataset in Airtable.",
       "steps": [
         {
@@ -19232,9 +17803,7 @@
               "description": "Your Airtable API key."
             }
           ],
-          "tools": [
-            "Airtable API"
-          ],
+          "tools": ["Airtable API"],
           "checklist": [
             "Successfully retrieved store records from Airtable.",
             "Records contain addresses and missing coordinates."
@@ -19256,10 +17825,7 @@
             "features": [
               {
                 "geometry": {
-                  "coordinates": [
-                    -122.084,
-                    37.421998
-                  ]
+                  "coordinates": [-122.084, 37.421998]
                 }
               }
             ]
@@ -19283,9 +17849,7 @@
               "description": "Your Mapbox access token."
             }
           ],
-          "tools": [
-            "Mapbox Maps API"
-          ],
+          "tools": ["Mapbox Maps API"],
           "checklist": [
             "Successfully geocoded store addresses.",
             "Coordinates are returned for each address."
@@ -19325,9 +17889,7 @@
               "description": "Your Google Maps API key."
             }
           ],
-          "tools": [
-            "Google Maps API"
-          ],
+          "tools": ["Google Maps API"],
           "checklist": [
             "Successfully verified coordinates with Google Maps.",
             "Verification status is recorded for each store."
@@ -19375,9 +17937,7 @@
               "description": "Your Airtable API key."
             }
           ],
-          "tools": [
-            "Airtable API"
-          ],
+          "tools": ["Airtable API"],
           "checklist": [
             "Successfully published verified coordinates to Airtable.",
             "Records in Airtable reflect the updated verification status."
@@ -19459,12 +18019,7 @@
     "title": "Asset Backup Automation",
     "description": "List Vercel Blob assets, copy them to an S3 backup prefix and mirror critical files to IBM Cloud Object Storage.",
     "category": "Storage & Infrastructure",
-    "tags": [
-      "backup",
-      "storage",
-      "s3",
-      "assets"
-    ],
+    "tags": ["backup", "storage", "s3", "assets"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
@@ -19522,9 +18077,7 @@
               "description": "Token for accessing Vercel Blob storage."
             }
           ],
-          "tools": [
-            "Vercel Blob API"
-          ],
+          "tools": ["Vercel Blob API"],
           "checklist": [
             "Assets are successfully retrieved from Vercel Blob.",
             "Each asset contains a valid URL, size, and checksum."
@@ -19562,9 +18115,7 @@
               "description": "Name of the S3 bucket for backup."
             }
           ],
-          "tools": [
-            "Amazon S3 API"
-          ],
+          "tools": ["Amazon S3 API"],
           "checklist": [
             "All assets are uploaded to the S3 bucket.",
             "Checksum verification is performed for each asset."
@@ -19602,9 +18153,7 @@
               "description": "Name of the IBM COS bucket for backup."
             }
           ],
-          "tools": [
-            "IBM Cloud Object Storage API"
-          ],
+          "tools": ["IBM Cloud Object Storage API"],
           "checklist": [
             "Critical assets are successfully mirrored to IBM COS.",
             "Data integrity is maintained during the upload."
@@ -19722,29 +18271,13 @@
     "title": "S3 Static Site Publishing",
     "description": "Upload build artifacts to an S3 bucket, trigger a Cloudflare cache purge and report deployment health to Sentry.",
     "category": "Storage & Infrastructure",
-    "tags": [
-      "s3",
-      "static-site",
-      "cloudflare",
-      "deployment"
-    ],
+    "tags": ["s3", "static-site", "cloudflare", "deployment"],
     "details": {
       "difficulty": "Advanced",
       "duration": "75–90 minutes",
-      "tools": [
-        "Amazon S3 API",
-        "Cloudflare Workers API",
-        "Sentry Error API"
-      ],
-      "api_slugs": [
-        "aws-s3-api",
-        "cloudflare-workers-api",
-        "sentry-error-api"
-      ],
-      "alternative_slugs": [
-        "netlify-alternatives",
-        "vercel-alternatives"
-      ],
+      "tools": ["Amazon S3 API", "Cloudflare Workers API", "Sentry Error API"],
+      "api_slugs": ["aws-s3-api", "cloudflare-workers-api", "sentry-error-api"],
+      "alternative_slugs": ["netlify-alternatives", "vercel-alternatives"],
       "useCase": "Publish a static build to S3, purge the edge cache and verify the deployment health.",
       "steps": [
         {
@@ -19775,9 +18308,7 @@
               "description": "The name of the S3 bucket where artifacts will be uploaded."
             }
           ],
-          "tools": [
-            "Amazon S3 API"
-          ],
+          "tools": ["Amazon S3 API"],
           "checklist": [
             "Build artifacts are uploaded successfully",
             "Correct content type and cache headers are set"
@@ -19799,9 +18330,7 @@
             "success": true,
             "result": {
               "id": "abc123",
-              "files_purged": [
-                "https://example.com/artifact"
-              ]
+              "files_purged": ["https://example.com/artifact"]
             }
           },
           "actions": [
@@ -19823,9 +18352,7 @@
               "description": "The API token for authenticating with Cloudflare."
             }
           ],
-          "tools": [
-            "Cloudflare Workers API"
-          ],
+          "tools": ["Cloudflare Workers API"],
           "checklist": [
             "Cache purge request is sent successfully",
             "Response indicates successful cache purge"
@@ -19863,9 +18390,7 @@
               "description": "The expected checksum for the deployed artifact."
             }
           ],
-          "tools": [
-            "Amazon S3 API"
-          ],
+          "tools": ["Amazon S3 API"],
           "checklist": [
             "Deployment content is fetched successfully",
             "Checksum verification is successful"
@@ -19906,9 +18431,7 @@
               "description": "The API token for authenticating with Sentry."
             }
           ],
-          "tools": [
-            "Sentry Error API"
-          ],
+          "tools": ["Sentry Error API"],
           "checklist": [
             "Deployment event is sent successfully",
             "Response indicates successful reporting"
@@ -19994,12 +18517,7 @@
     "title": "Auth0 SSO Provisioning",
     "description": "Read Microsoft Graph group members, create or update Auth0 users and post provisioning results to Slack.",
     "category": "Auth & Identity",
-    "tags": [
-      "auth0",
-      "sso",
-      "provisioning",
-      "identity"
-    ],
+    "tags": ["auth0", "sso", "provisioning", "identity"],
     "details": {
       "difficulty": "Advanced",
       "duration": "90–120 minutes",
@@ -20013,9 +18531,7 @@
         "microsoft-graph-api",
         "slack-web-api"
       ],
-      "alternative_slugs": [
-        "auth0-alternatives"
-      ],
+      "alternative_slugs": ["auth0-alternatives"],
       "useCase": "Provision Auth0 users from Microsoft 365 groups and report provisioning results.",
       "steps": [
         {
@@ -20046,12 +18562,7 @@
     "title": "Clerk User Onboarding",
     "description": "Read new Clerk users, create profile records in Supabase and send a welcome email through Resend.",
     "category": "Auth & Identity",
-    "tags": [
-      "clerk",
-      "onboarding",
-      "users",
-      "identity"
-    ],
+    "tags": ["clerk", "onboarding", "users", "identity"],
     "details": {
       "difficulty": "Intermediate",
       "duration": "60–75 minutes",
@@ -20065,9 +18576,7 @@
         "resend-email-api",
         "supabase-database-api"
       ],
-      "alternative_slugs": [
-        "auth0-alternatives"
-      ],
+      "alternative_slugs": ["auth0-alternatives"],
       "useCase": "Onboard new Clerk users with welcome emails and profile records.",
       "steps": [
         {
@@ -20113,9 +18622,7 @@
               "description": "Timestamp of the last processed user."
             }
           ],
-          "tools": [
-            "Clerk Authentication API"
-          ],
+          "tools": ["Clerk Authentication API"],
           "checklist": [
             "Verify that new users are fetched correctly.",
             "Ensure the response contains user details."
@@ -20162,9 +18669,7 @@
               "description": "API key for authenticating with Supabase."
             }
           ],
-          "tools": [
-            "Supabase Database API"
-          ],
+          "tools": ["Supabase Database API"],
           "checklist": [
             "Verify that user profiles are upserted correctly.",
             "Ensure the response contains the updated user details."
@@ -20205,9 +18710,7 @@
               "description": "API key for authenticating with Resend."
             }
           ],
-          "tools": [
-            "Resend Email API"
-          ],
+          "tools": ["Resend Email API"],
           "checklist": [
             "Verify that welcome emails are sent successfully.",
             "Ensure the response indicates successful email delivery."

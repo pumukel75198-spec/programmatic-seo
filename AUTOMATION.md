@@ -6,12 +6,12 @@ Eingriff. Die Content-Generierung läuft ausschließlich über die Unified Pipel
 
 ## Was automatisch läuft
 
-| Zeitplan | Workflow | Ergebnis |
-| --- | --- | --- |
-| alle 3 Tage, 06:00 UTC | `generate-content.yaml` | Batch über die Unified Pipeline (APIs/Alternatives/Workflows, PDFs, Python-Skripte), harte Validierung, R2-Upload, Build, Deploy, IndexNow, Newsletter |
-| täglich 06:00 & 18:00 Berlin | `insights.yml` | 2 neue Insights, Build, Deploy, IndexNow |
-| montags 08:00 UTC | `newsletter.yaml` | wartende Anmeldungen zu MailerLite, automatischer Versand |
-| bei jedem Push | `deploy.yaml` | Typecheck, Format, Unit-Tests, Build, E2E, Deploy, IndexNow |
+| Zeitplan                     | Workflow                | Ergebnis                                                                                                                                               |
+| ---------------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| alle 3 Tage, 06:00 UTC       | `generate-content.yaml` | Batch über die Unified Pipeline (APIs/Alternatives/Workflows, PDFs, Python-Skripte), harte Validierung, R2-Upload, Build, Deploy, IndexNow, Newsletter |
+| täglich 06:00 & 18:00 Berlin | `insights.yml`          | 2 neue Insights, Build, Deploy, IndexNow                                                                                                               |
+| montags 08:00 UTC            | `newsletter.yaml`       | wartende Anmeldungen zu MailerLite, automatischer Versand                                                                                              |
+| bei jedem Push               | `deploy.yaml`           | Typecheck, Format, Unit-Tests, Build, E2E, Deploy, IndexNow                                                                                            |
 
 ## Einmalige Einrichtung
 

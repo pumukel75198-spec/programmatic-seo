@@ -37,17 +37,17 @@ programmatic-seo/
 
 ## Befehle
 
-| Befehl | Beschreibung |
-| --- | --- |
-| `npm install` | Abhängigkeiten installieren |
-| `npm run dev` | Dev-Server unter `http://localhost:4321` |
-| `npm run build` | Produktions-Build nach `./dist/` |
-| `npm run preview` | Produktions-Build lokal testen |
-| `npm run pipeline:run -- <args>` | Unified Pipeline (`.venv/bin/python -m pipeline.run_batch`) |
-| `npm run generate:batch -- --workflows 3 --apis 4` | Content-Batch über die Pipeline |
-| `npm run insights:generate` | RSS-Feeds einlesen und Insights per LLM erzeugen |
-| `npm run og:generate` | Open-Graph-PNG aus `public/og-default.svg` erzeugen |
-| `npm run deploy` | Build + Deployment nach Cloudflare Pages |
+| Befehl                                             | Beschreibung                                                |
+| -------------------------------------------------- | ----------------------------------------------------------- |
+| `npm install`                                      | Abhängigkeiten installieren                                 |
+| `npm run dev`                                      | Dev-Server unter `http://localhost:4321`                    |
+| `npm run build`                                    | Produktions-Build nach `./dist/`                            |
+| `npm run preview`                                  | Produktions-Build lokal testen                              |
+| `npm run pipeline:run -- <args>`                   | Unified Pipeline (`.venv/bin/python -m pipeline.run_batch`) |
+| `npm run generate:batch -- --workflows 3 --apis 4` | Content-Batch über die Pipeline                             |
+| `npm run insights:generate`                        | RSS-Feeds einlesen und Insights per LLM erzeugen            |
+| `npm run og:generate`                              | Open-Graph-PNG aus `public/og-default.svg` erzeugen         |
+| `npm run deploy`                                   | Build + Deployment nach Cloudflare Pages                    |
 
 ## Inhalte erzeugen – die einzige Pipeline
 

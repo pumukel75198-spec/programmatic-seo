@@ -4,12 +4,7 @@
     "title": "OpenAI Whisper API",
     "description": "OpenAI's Whisper API transcribes audio to text with high accuracy across 50+ languages – ideal for podcasts, meetings and voice apps.",
     "category": "AI & Speech",
-    "tags": [
-      "speech-to-text",
-      "transcription",
-      "ai",
-      "audio"
-    ],
+    "tags": ["speech-to-text", "transcription", "ai", "audio"],
     "details": {
       "provider": "OpenAI",
       "pricing": "$0.006 per minute of audio",
@@ -24,11 +19,7 @@
       "endpoint": "https://api.openai.com/v1/audio/transcriptions",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "Python",
-        "JavaScript",
-        "cURL"
-      ],
+      "sdkLanguages": ["Python", "JavaScript", "cURL"],
       "rateLimit": "Tier-based rate limits",
       "docsUrl": "https://platform.openai.com/docs/guides/speech-to-text"
     }
@@ -38,12 +29,7 @@
     "title": "Stripe Payments API",
     "description": "The Stripe Payments API is the leading interface for online payments, subscriptions and financial infrastructure with an excellent developer experience.",
     "category": "Finance",
-    "tags": [
-      "payments",
-      "fintech",
-      "subscriptions",
-      "checkout"
-    ],
+    "tags": ["payments", "fintech", "subscriptions", "checkout"],
     "details": {
       "provider": "Stripe",
       "pricing": "~1.5% + $0.30 per transaction",
@@ -58,14 +44,7 @@
       "endpoint": "https://api.stripe.com/v1",
       "authentication": "Secret API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Ruby",
-        "PHP",
-        "Go",
-        "Java"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Ruby", "PHP", "Go", "Java"],
       "rateLimit": "100 read ops/s, 100 write ops/s",
       "docsUrl": "https://stripe.com/docs/api"
     }
@@ -75,12 +54,7 @@
     "title": "Supabase Database API",
     "description": "Supabase provides an auto-generated REST and GraphQL API on top of PostgreSQL – including auth, storage and realtime subscriptions.",
     "category": "Backend",
-    "tags": [
-      "postgresql",
-      "backend",
-      "open-source",
-      "auth"
-    ],
+    "tags": ["postgresql", "backend", "open-source", "auth"],
     "details": {
       "provider": "Supabase",
       "pricing": "Free tier, then from $25/month",
@@ -95,12 +69,7 @@
       "endpoint": "https://<project-ref>.supabase.co/rest/v1",
       "authentication": "API key + JWT",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Flutter",
-        "Swift"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Flutter", "Swift"],
       "rateLimit": "Plan-based limits",
       "docsUrl": "https://supabase.com/docs/guides/api"
     }
@@ -110,12 +79,7 @@
     "title": "Anthropic Claude API",
     "description": "Anthropic's Claude API offers strong reasoning, a large context window and safe agentic workflows for demanding applications.",
     "category": "AI & LLM",
-    "tags": [
-      "llm",
-      "reasoning",
-      "agents",
-      "safety"
-    ],
+    "tags": ["llm", "reasoning", "agents", "safety"],
     "details": {
       "provider": "Anthropic",
       "pricing": "Pay-as-you-go per token",
@@ -130,11 +94,7 @@
       "endpoint": "https://api.anthropic.com/v1/messages",
       "authentication": "x-api-key header",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "Python",
-        "TypeScript",
-        "cURL"
-      ],
+      "sdkLanguages": ["Python", "TypeScript", "cURL"],
       "rateLimit": "Tier-based rate limits",
       "docsUrl": "https://docs.anthropic.com"
     }
@@ -144,12 +104,7 @@
     "title": "Google Gemini API",
     "description": "The Google Gemini API combines text, image and audio in one multimodal model – ideal for vision, analysis and assistant applications.",
     "category": "AI & Multimodal",
-    "tags": [
-      "llm",
-      "multimodal",
-      "vision",
-      "google"
-    ],
+    "tags": ["llm", "multimodal", "vision", "google"],
     "details": {
       "provider": "Google",
       "pricing": "Free quota, then per token",
@@ -164,12 +119,7 @@
       "endpoint": "https://generativelanguage.googleapis.com/v1beta",
       "authentication": "API key or OAuth",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "Python",
-        "JavaScript",
-        "Go",
-        "Java"
-      ],
+      "sdkLanguages": ["Python", "JavaScript", "Go", "Java"],
       "rateLimit": "Quota-based limits",
       "docsUrl": "https://ai.google.dev/gemini-api/docs"
     }
@@ -179,11 +129,7 @@
     "title": "Resend Email API",
     "description": "The Resend API simplifies transactional email with clean documentation, React Email templates and reliable delivery.",
     "category": "Communication",
-    "tags": [
-      "email",
-      "transactional",
-      "developer-tools"
-    ],
+    "tags": ["email", "transactional", "developer-tools"],
     "details": {
       "provider": "Resend",
       "pricing": "Free up to 3,000 emails/month",
@@ -198,12 +144,7 @@
       "endpoint": "https://api.resend.com/emails",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "Node.js",
-        "Python",
-        "PHP",
-        "Ruby"
-      ],
+      "sdkLanguages": ["Node.js", "Python", "PHP", "Ruby"],
       "rateLimit": "2 requests/second",
       "docsUrl": "https://resend.com/docs"
     }
@@ -213,12 +154,7 @@
     "title": "Clerk Authentication API",
     "description": "The Clerk API delivers ready-made authentication with SSO, multi-factor login and user management – quickly integrated into modern web apps.",
     "category": "Auth & Identity",
-    "tags": [
-      "auth",
-      "sso",
-      "user-management",
-      "security"
-    ],
+    "tags": ["auth", "sso", "user-management", "security"],
     "details": {
       "provider": "Clerk",
       "pricing": "Free up to 10,000 MAU",
@@ -233,12 +169,7 @@
       "endpoint": "https://api.clerk.com/v1",
       "authentication": "Secret key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "React",
-        "Next.js",
-        "Remix"
-      ],
+      "sdkLanguages": ["JavaScript", "React", "Next.js", "Remix"],
       "rateLimit": "Plan-based limits",
       "docsUrl": "https://clerk.com/docs"
     }
@@ -248,12 +179,7 @@
     "title": "Cloudflare Workers API",
     "description": "The Cloudflare Workers API runs code directly at the edge – for fast, scalable serverless functions without managing your own server.",
     "category": "Edge Computing",
-    "tags": [
-      "edge",
-      "serverless",
-      "cdn",
-      "performance"
-    ],
+    "tags": ["edge", "serverless", "cdn", "performance"],
     "details": {
       "provider": "Cloudflare",
       "pricing": "Free up to 100,000 requests/day",
@@ -268,11 +194,7 @@
       "endpoint": "https://api.cloudflare.com/client/v4",
       "authentication": "Bearer API token",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "TypeScript",
-        "Rust"
-      ],
+      "sdkLanguages": ["JavaScript", "TypeScript", "Rust"],
       "rateLimit": "1,200 requests/5 minutes",
       "docsUrl": "https://developers.cloudflare.com/workers/"
     }
@@ -282,12 +204,7 @@
     "title": "Mapbox Maps API",
     "description": "The Mapbox Maps API provides interactive maps, geocoding and routing for web and mobile applications with high performance.",
     "category": "Geodata",
-    "tags": [
-      "maps",
-      "geolocation",
-      "routing",
-      "visualization"
-    ],
+    "tags": ["maps", "geolocation", "routing", "visualization"],
     "details": {
       "provider": "Mapbox",
       "pricing": "Free quota, then usage-based",
@@ -302,12 +219,7 @@
       "endpoint": "https://api.mapbox.com",
       "authentication": "Access token",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "iOS",
-        "Android",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "iOS", "Android", "Python"],
       "rateLimit": "Usage-based limits",
       "docsUrl": "https://docs.mapbox.com"
     }
@@ -317,12 +229,7 @@
     "title": "Twilio Messaging API",
     "description": "The Twilio Messaging API reliably sends SMS, WhatsApp and RCS messages – ideal for notifications and two-factor authentication.",
     "category": "Communication",
-    "tags": [
-      "sms",
-      "whatsapp",
-      "messaging",
-      "notifications"
-    ],
+    "tags": ["sms", "whatsapp", "messaging", "notifications"],
     "details": {
       "provider": "Twilio",
       "pricing": "Pay-as-you-go per message",
@@ -337,13 +244,7 @@
       "endpoint": "https://api.twilio.com/2010-04-01",
       "authentication": "Account SID + Auth Token",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Java",
-        "C#",
-        "PHP"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Java", "C#", "PHP"],
       "rateLimit": "Message queue-based",
       "docsUrl": "https://www.twilio.com/docs/messaging"
     }
@@ -353,12 +254,7 @@
     "title": "Hugging Face Inference API",
     "description": "The Hugging Face Inference API gives you hosted access to thousands of open models for text, vision and audio – without managing infrastructure.",
     "category": "AI & ML",
-    "tags": [
-      "ai",
-      "models",
-      "inference",
-      "open-source"
-    ],
+    "tags": ["ai", "models", "inference", "open-source"],
     "details": {
       "provider": "Hugging Face",
       "pricing": "Free tier, then usage-based",
@@ -372,11 +268,7 @@
       "website": "https://huggingface.co/inference-api",
       "endpoint": "https://router.huggingface.co/hf-inference/models/{model}",
       "authentication": "Bearer API token",
-      "sdkLanguages": [
-        "Python",
-        "JavaScript",
-        "cURL"
-      ],
+      "sdkLanguages": ["Python", "JavaScript", "cURL"],
       "docsUrl": "https://huggingface.co/docs/api-inference",
       "lastVerified": "2026-10-31"
     }
@@ -386,12 +278,7 @@
     "title": "Cohere Embed API",
     "description": "Cohere's Embed API turns text into high-quality vector embeddings for semantic search, clustering and retrieval-augmented generation.",
     "category": "AI & Embeddings",
-    "tags": [
-      "embeddings",
-      "search",
-      "rag",
-      "nlp"
-    ],
+    "tags": ["embeddings", "search", "rag", "nlp"],
     "details": {
       "provider": "Cohere",
       "pricing": "Pay-as-you-go per token",
@@ -405,11 +292,7 @@
       "website": "https://cohere.com",
       "endpoint": "https://api.cohere.com/v2/embed",
       "authentication": "Bearer API key",
-      "sdkLanguages": [
-        "Python",
-        "TypeScript",
-        "cURL"
-      ],
+      "sdkLanguages": ["Python", "TypeScript", "cURL"],
       "docsUrl": "https://docs.cohere.com/reference/embed",
       "lastVerified": "2026-10-31"
     }
@@ -419,12 +302,7 @@
     "title": "Pinecone Vector API",
     "description": "The Pinecone Vector API is a fully managed vector database for fast similarity search at scale – ideal for RAG and recommendation systems.",
     "category": "Vector Database",
-    "tags": [
-      "vector-database",
-      "similarity-search",
-      "rag",
-      "ai"
-    ],
+    "tags": ["vector-database", "similarity-search", "rag", "ai"],
     "details": {
       "provider": "Pinecone",
       "pricing": "Free tier, then usage-based",
@@ -438,12 +316,7 @@
       "website": "https://www.pinecone.io",
       "endpoint": "https://{index}-{project}.svc.{environment}.pinecone.io",
       "authentication": "Api-Key header",
-      "sdkLanguages": [
-        "Python",
-        "JavaScript",
-        "Go",
-        "Java"
-      ],
+      "sdkLanguages": ["Python", "JavaScript", "Go", "Java"],
       "docsUrl": "https://docs.pinecone.io/reference/api/introduction",
       "lastVerified": "2026-10-31"
     }
@@ -453,12 +326,7 @@
     "title": "Auth0 Authentication API",
     "description": "The Auth0 API provides enterprise-grade authentication and authorization with SSO, social logins and fine-grained access control.",
     "category": "Auth & Identity",
-    "tags": [
-      "auth",
-      "sso",
-      "oauth",
-      "security"
-    ],
+    "tags": ["auth", "sso", "oauth", "security"],
     "details": {
       "provider": "Auth0",
       "pricing": "Free tier, then per MAU",
@@ -472,12 +340,7 @@
       "website": "https://auth0.com",
       "endpoint": "https://{yourDomain}/api/v2/",
       "authentication": "OAuth 2.0 Bearer token",
-      "sdkLanguages": [
-        "Node.js",
-        "Python",
-        "Java",
-        ".NET"
-      ],
+      "sdkLanguages": ["Node.js", "Python", "Java", ".NET"],
       "docsUrl": "https://auth0.com/docs/api/management/v2",
       "lastVerified": "2026-10-31"
     }
@@ -487,12 +350,7 @@
     "title": "SendGrid Email API",
     "description": "The SendGrid Email API delivers transactional and marketing emails reliably at scale, with analytics, templates and webhooks.",
     "category": "Communication",
-    "tags": [
-      "email",
-      "transactional",
-      "marketing",
-      "deliverability"
-    ],
+    "tags": ["email", "transactional", "marketing", "deliverability"],
     "details": {
       "provider": "Twilio SendGrid",
       "pricing": "Free tier, then usage-based",
@@ -506,13 +364,7 @@
       "website": "https://sendgrid.com",
       "endpoint": "https://api.sendgrid.com/v3/",
       "authentication": "Bearer API key",
-      "sdkLanguages": [
-        "Python",
-        "Node.js",
-        "PHP",
-        "Ruby",
-        "Java"
-      ],
+      "sdkLanguages": ["Python", "Node.js", "PHP", "Ruby", "Java"],
       "docsUrl": "https://docs.sendgrid.com/api-reference",
       "lastVerified": "2026-10-31"
     }
@@ -522,12 +374,7 @@
     "title": "Algolia Search API",
     "description": "The Algolia Search API delivers instant, relevant search and discovery experiences with typo tolerance and faceting out of the box.",
     "category": "Search",
-    "tags": [
-      "search",
-      "discovery",
-      "relevance",
-      "api"
-    ],
+    "tags": ["search", "discovery", "relevance", "api"],
     "details": {
       "provider": "Algolia",
       "pricing": "Free tier, then usage-based",
@@ -541,13 +388,7 @@
       "website": "https://www.algolia.com",
       "endpoint": "https://{APPLICATION_ID}.algolia.net/1/",
       "authentication": "X-Algolia-API-Key and X-Algolia-Application-Id headers",
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "PHP",
-        "Ruby",
-        "Java"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "PHP", "Ruby", "Java"],
       "docsUrl": "https://www.algolia.com/doc/rest-api/",
       "lastVerified": "2026-10-31"
     }
@@ -557,12 +398,7 @@
     "title": "OpenWeather Weather API",
     "description": "The OpenWeather API provides current weather, forecasts and historical data for any location – ideal for apps and data products.",
     "category": "Weather",
-    "tags": [
-      "weather",
-      "forecast",
-      "geodata",
-      "api"
-    ],
+    "tags": ["weather", "forecast", "geodata", "api"],
     "details": {
       "provider": "OpenWeather",
       "pricing": "Free tier, then usage-based",
@@ -576,11 +412,7 @@
       "website": "https://openweathermap.org/api",
       "endpoint": "https://api.openweathermap.org/data/2.5/",
       "authentication": "API key query parameter (appid)",
-      "sdkLanguages": [
-        "cURL",
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["cURL", "JavaScript", "Python"],
       "docsUrl": "https://openweathermap.org/api",
       "lastVerified": "2026-10-31"
     }
@@ -590,12 +422,7 @@
     "title": "Shopify Admin API",
     "description": "The Shopify Admin API lets you manage products, orders, customers and inventory programmatically for e-commerce automation.",
     "category": "E-commerce",
-    "tags": [
-      "ecommerce",
-      "orders",
-      "inventory",
-      "shopify"
-    ],
+    "tags": ["ecommerce", "orders", "inventory", "shopify"],
     "details": {
       "provider": "Shopify",
       "pricing": "Included with Shopify plans",
@@ -609,12 +436,7 @@
       "website": "https://shopify.dev/docs/api/admin",
       "endpoint": "https://{shop}.myshopify.com/admin/api/2024-10/",
       "authentication": "X-Shopify-Access-Token header",
-      "sdkLanguages": [
-        "Node.js",
-        "Ruby",
-        "Python",
-        "PHP"
-      ],
+      "sdkLanguages": ["Node.js", "Ruby", "Python", "PHP"],
       "docsUrl": "https://shopify.dev/docs/api/admin",
       "lastVerified": "2026-10-31"
     }
@@ -624,12 +446,7 @@
     "title": "Notion API",
     "description": "The Notion API connects your workspace to other tools, enabling automated pages, databases and content pipelines.",
     "category": "Productivity",
-    "tags": [
-      "productivity",
-      "database",
-      "content",
-      "automation"
-    ],
+    "tags": ["productivity", "database", "content", "automation"],
     "details": {
       "provider": "Notion",
       "pricing": "Free for most integrations",
@@ -643,11 +460,7 @@
       "website": "https://developers.notion.com",
       "endpoint": "https://api.notion.com/v1/",
       "authentication": "Bearer integration token and Notion-Version header",
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "cURL"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "cURL"],
       "docsUrl": "https://developers.notion.com/reference/intro",
       "lastVerified": "2026-10-31"
     }
@@ -657,12 +470,7 @@
     "title": "Airtable API",
     "description": "The Airtable API turns your bases into a REST API, so you can read and write records, attachments and views from any application.",
     "category": "Databases",
-    "tags": [
-      "database",
-      "no-code",
-      "rest",
-      "automation"
-    ],
+    "tags": ["database", "no-code", "rest", "automation"],
     "details": {
       "provider": "Airtable",
       "pricing": "Included with Airtable plans",
@@ -676,11 +484,7 @@
       "website": "https://airtable.com/developers/web/api",
       "endpoint": "https://api.airtable.com/v0/",
       "authentication": "Bearer personal access token",
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "cURL"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "cURL"],
       "docsUrl": "https://airtable.com/developers/web/api/introduction",
       "lastVerified": "2026-10-31"
     }
@@ -690,12 +494,7 @@
     "title": "Mistral AI API",
     "description": "The Mistral AI API offers fast, efficient open-weight language models for chat, coding and retrieval tasks at competitive prices.",
     "category": "AI & LLM",
-    "tags": [
-      "llm",
-      "open-weight",
-      "chat",
-      "efficiency"
-    ],
+    "tags": ["llm", "open-weight", "chat", "efficiency"],
     "details": {
       "provider": "Mistral AI",
       "pricing": "Pay-as-you-go per token",
@@ -709,11 +508,7 @@
       "website": "https://mistral.ai",
       "endpoint": "https://api.mistral.ai/v1/",
       "authentication": "Bearer API key",
-      "sdkLanguages": [
-        "Python",
-        "JavaScript",
-        "cURL"
-      ],
+      "sdkLanguages": ["Python", "JavaScript", "cURL"],
       "docsUrl": "https://docs.mistral.ai/api/",
       "lastVerified": "2026-10-31"
     }
@@ -723,12 +518,7 @@
     "title": "Groq Inference API",
     "description": "The Groq API delivers extremely fast LLM inference on custom hardware, ideal for real-time chat and voice applications.",
     "category": "AI & Inference",
-    "tags": [
-      "llm",
-      "inference",
-      "speed",
-      "realtime"
-    ],
+    "tags": ["llm", "inference", "speed", "realtime"],
     "details": {
       "provider": "Groq",
       "pricing": "Pay-as-you-go per token",
@@ -742,11 +532,7 @@
       "website": "https://groq.com",
       "endpoint": "https://api.groq.com/openai/v1/",
       "authentication": "Bearer API key",
-      "sdkLanguages": [
-        "Python",
-        "JavaScript",
-        "cURL"
-      ],
+      "sdkLanguages": ["Python", "JavaScript", "cURL"],
       "docsUrl": "https://console.groq.com/docs/api-reference",
       "lastVerified": "2026-10-31"
     }
@@ -756,12 +542,7 @@
     "title": "Together AI API",
     "description": "The Together AI API provides access to a wide range of open-source models with fine-tuning, embeddings and serverless inference.",
     "category": "AI & LLM",
-    "tags": [
-      "llm",
-      "open-source",
-      "fine-tuning",
-      "inference"
-    ],
+    "tags": ["llm", "open-source", "fine-tuning", "inference"],
     "details": {
       "provider": "Together AI",
       "pricing": "Pay-as-you-go per token",
@@ -775,11 +556,7 @@
       "website": "https://www.together.ai",
       "endpoint": "https://api.together.xyz/v1/",
       "authentication": "Bearer API key",
-      "sdkLanguages": [
-        "Python",
-        "JavaScript",
-        "cURL"
-      ],
+      "sdkLanguages": ["Python", "JavaScript", "cURL"],
       "docsUrl": "https://docs.together.ai/reference",
       "lastVerified": "2026-10-31"
     }
@@ -789,12 +566,7 @@
     "title": "Replicate Model API",
     "description": "Replicate lets you run thousands of open-source models via a simple API, from image generation to speech and language tasks.",
     "category": "AI & ML",
-    "tags": [
-      "models",
-      "image-generation",
-      "api",
-      "open-source"
-    ],
+    "tags": ["models", "image-generation", "api", "open-source"],
     "details": {
       "provider": "Replicate",
       "pricing": "Pay-per-second of compute",
@@ -808,11 +580,7 @@
       "website": "https://replicate.com",
       "endpoint": "https://api.replicate.com/v1/",
       "authentication": "Bearer API token",
-      "sdkLanguages": [
-        "Python",
-        "JavaScript",
-        "cURL"
-      ],
+      "sdkLanguages": ["Python", "JavaScript", "cURL"],
       "docsUrl": "https://replicate.com/docs/reference/http",
       "lastVerified": "2026-10-31"
     }
@@ -822,12 +590,7 @@
     "title": "ElevenLabs Voice API",
     "description": "The ElevenLabs API generates natural, expressive speech and clones voices for apps, audiobooks and voice agents.",
     "category": "AI & Voice",
-    "tags": [
-      "text-to-speech",
-      "voice-cloning",
-      "audio",
-      "ai"
-    ],
+    "tags": ["text-to-speech", "voice-cloning", "audio", "ai"],
     "details": {
       "provider": "ElevenLabs",
       "pricing": "Free tier, then per character",
@@ -841,11 +604,7 @@
       "website": "https://elevenlabs.io",
       "endpoint": "https://api.elevenlabs.io/v1/",
       "authentication": "xi-api-key header",
-      "sdkLanguages": [
-        "Python",
-        "JavaScript",
-        "cURL"
-      ],
+      "sdkLanguages": ["Python", "JavaScript", "cURL"],
       "docsUrl": "https://elevenlabs.io/docs/api-reference",
       "lastVerified": "2026-10-31"
     }
@@ -855,12 +614,7 @@
     "title": "Deepgram Speech API",
     "description": "Deepgram offers fast, accurate speech-to-text and text-to-speech APIs for real-time transcription and voice interfaces.",
     "category": "AI & Speech",
-    "tags": [
-      "speech-to-text",
-      "transcription",
-      "realtime",
-      "audio"
-    ],
+    "tags": ["speech-to-text", "transcription", "realtime", "audio"],
     "details": {
       "provider": "Deepgram",
       "pricing": "Pay-as-you-go per minute",
@@ -874,11 +628,7 @@
       "website": "https://deepgram.com",
       "endpoint": "https://api.deepgram.com/v1/",
       "authentication": "Token authentication (Authorization: Token)",
-      "sdkLanguages": [
-        "Python",
-        "JavaScript",
-        "cURL"
-      ],
+      "sdkLanguages": ["Python", "JavaScript", "cURL"],
       "docsUrl": "https://developers.deepgram.com/reference",
       "lastVerified": "2026-10-31"
     }
@@ -888,12 +638,7 @@
     "title": "Stability AI Image API",
     "description": "The Stability AI API generates and edits images with Stable Diffusion models, including upscaling and inpainting.",
     "category": "AI & Image",
-    "tags": [
-      "image-generation",
-      "stable-diffusion",
-      "inpainting",
-      "ai"
-    ],
+    "tags": ["image-generation", "stable-diffusion", "inpainting", "ai"],
     "details": {
       "provider": "Stability AI",
       "pricing": "Pay-as-you-go per image",
@@ -907,11 +652,7 @@
       "website": "https://stability.ai",
       "endpoint": "https://api.stability.ai/v2beta/",
       "authentication": "Bearer API key",
-      "sdkLanguages": [
-        "Python",
-        "JavaScript",
-        "cURL"
-      ],
+      "sdkLanguages": ["Python", "JavaScript", "cURL"],
       "docsUrl": "https://platform.stability.ai/docs/api-reference",
       "lastVerified": "2026-10-31"
     }
@@ -921,12 +662,7 @@
     "title": "Weaviate Vector API",
     "description": "Weaviate is an open-source vector database with a GraphQL API for semantic search, hybrid search and RAG at scale.",
     "category": "Vector Database",
-    "tags": [
-      "vector-database",
-      "semantic-search",
-      "rag",
-      "open-source"
-    ],
+    "tags": ["vector-database", "semantic-search", "rag", "open-source"],
     "details": {
       "provider": "Weaviate",
       "pricing": "Open-source, cloud usage-based",
@@ -940,12 +676,7 @@
       "website": "https://weaviate.io",
       "endpoint": "https://{cluster}.weaviate.cloud/v1/",
       "authentication": "Bearer API key or OIDC",
-      "sdkLanguages": [
-        "Python",
-        "JavaScript",
-        "Go",
-        "Java"
-      ],
+      "sdkLanguages": ["Python", "JavaScript", "Go", "Java"],
       "docsUrl": "https://weaviate.io/developers/weaviate/api/rest",
       "lastVerified": "2026-10-31"
     }
@@ -955,12 +686,7 @@
     "title": "Qdrant Vector API",
     "description": "Qdrant is a high-performance vector database with REST and gRPC APIs for similarity search and RAG workloads.",
     "category": "Vector Database",
-    "tags": [
-      "vector-database",
-      "similarity-search",
-      "rag",
-      "rust"
-    ],
+    "tags": ["vector-database", "similarity-search", "rag", "rust"],
     "details": {
       "provider": "Qdrant",
       "pricing": "Open-source, cloud usage-based",
@@ -974,12 +700,7 @@
       "website": "https://qdrant.tech",
       "endpoint": "https://{cluster}.cloud.qdrant.io:6333/",
       "authentication": "api-key header",
-      "sdkLanguages": [
-        "Python",
-        "JavaScript",
-        "Rust",
-        "Go"
-      ],
+      "sdkLanguages": ["Python", "JavaScript", "Rust", "Go"],
       "docsUrl": "https://api.qdrant.tech/api-reference",
       "lastVerified": "2026-10-31"
     }
@@ -989,12 +710,7 @@
     "title": "MongoDB Atlas API",
     "description": "MongoDB Atlas provides a managed document database with a flexible Data API for serverless and app-driven workloads.",
     "category": "Databases",
-    "tags": [
-      "database",
-      "document-db",
-      "serverless",
-      "api"
-    ],
+    "tags": ["database", "document-db", "serverless", "api"],
     "details": {
       "provider": "MongoDB",
       "pricing": "Free tier, then usage-based",
@@ -1008,11 +724,7 @@
       "website": "https://www.mongodb.com/atlas",
       "endpoint": "https://data.mongodb-api.com/app/{appId}/endpoint/data/v1/",
       "authentication": "Api-Key header",
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "cURL"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "cURL"],
       "docsUrl": "https://www.mongodb.com/docs/atlas/api/data-api/",
       "lastVerified": "2026-10-31"
     }
@@ -1022,12 +734,7 @@
     "title": "Neon Postgres API",
     "description": "Neon is a serverless Postgres platform with branching, autoscaling and a simple API for modern application backends.",
     "category": "Databases",
-    "tags": [
-      "postgresql",
-      "serverless",
-      "database",
-      "branching"
-    ],
+    "tags": ["postgresql", "serverless", "database", "branching"],
     "details": {
       "provider": "Neon",
       "pricing": "Free tier, then usage-based",
@@ -1041,12 +748,7 @@
       "website": "https://neon.tech",
       "endpoint": "postgresql://{user}:{password}@{project}.neon.tech/{database}",
       "authentication": "PostgreSQL password or IAM",
-      "sdkLanguages": [
-        "Node.js",
-        "Python",
-        "Go",
-        "Rust"
-      ],
+      "sdkLanguages": ["Node.js", "Python", "Go", "Rust"],
       "docsUrl": "https://neon.tech/docs/reference/api-reference",
       "lastVerified": "2026-10-31"
     }
@@ -1056,12 +758,7 @@
     "title": "PlanetScale Database API",
     "description": "PlanetScale offers a MySQL-compatible serverless database with branching, safe schema changes and a developer-friendly API.",
     "category": "Databases",
-    "tags": [
-      "mysql",
-      "serverless",
-      "database",
-      "branching"
-    ],
+    "tags": ["mysql", "serverless", "database", "branching"],
     "details": {
       "provider": "PlanetScale",
       "pricing": "Free tier, then usage-based",
@@ -1075,12 +772,7 @@
       "website": "https://planetscale.com",
       "endpoint": "mysql://{user}:{password}@{host}/{database}",
       "authentication": "Database password or IAM",
-      "sdkLanguages": [
-        "Node.js",
-        "Python",
-        "Go",
-        "Ruby"
-      ],
+      "sdkLanguages": ["Node.js", "Python", "Go", "Ruby"],
       "docsUrl": "https://planetscale.com/docs/api/reference",
       "lastVerified": "2026-10-31"
     }
@@ -1090,12 +782,7 @@
     "title": "Upstash Redis API",
     "description": "Upstash provides serverless Redis and Kafka with REST APIs and pay-per-request pricing for edge and serverless apps.",
     "category": "Databases",
-    "tags": [
-      "redis",
-      "serverless",
-      "caching",
-      "rest"
-    ],
+    "tags": ["redis", "serverless", "caching", "rest"],
     "details": {
       "provider": "Upstash",
       "pricing": "Pay-per-request, free tier",
@@ -1109,12 +796,7 @@
       "website": "https://upstash.com",
       "endpoint": "https://{endpoint}.upstash.io",
       "authentication": "Bearer token",
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Go",
-        "Rust"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Go", "Rust"],
       "docsUrl": "https://upstash.com/docs/redis/features/restapi",
       "lastVerified": "2026-10-31"
     }
@@ -1124,12 +806,7 @@
     "title": "Vercel Blob API",
     "description": "Vercel Blob offers simple, scalable object storage with a TypeScript-friendly API for uploads, downloads and public assets.",
     "category": "Storage",
-    "tags": [
-      "storage",
-      "files",
-      "serverless",
-      "cdn"
-    ],
+    "tags": ["storage", "files", "serverless", "cdn"],
     "details": {
       "provider": "Vercel",
       "pricing": "Usage-based",
@@ -1143,10 +820,7 @@
       "website": "https://vercel.com/docs/storage/vercel-blob",
       "endpoint": "https://blob.vercel-storage.com",
       "authentication": "Bearer token (BLOB_READ_WRITE_TOKEN)",
-      "sdkLanguages": [
-        "JavaScript",
-        "cURL"
-      ],
+      "sdkLanguages": ["JavaScript", "cURL"],
       "docsUrl": "https://vercel.com/docs/storage/vercel-blob/using-blob-sdk",
       "lastVerified": "2026-10-31"
     }
@@ -1156,12 +830,7 @@
     "title": "Liveblocks Collaboration API",
     "description": "Liveblocks adds real-time multiplayer collaboration to apps with presence, comments, notifications and conflict-free storage.",
     "category": "Realtime",
-    "tags": [
-      "realtime",
-      "collaboration",
-      "presence",
-      "multiplayer"
-    ],
+    "tags": ["realtime", "collaboration", "presence", "multiplayer"],
     "details": {
       "provider": "Liveblocks",
       "pricing": "Free tier, then usage-based",
@@ -1175,11 +844,7 @@
       "website": "https://liveblocks.io",
       "endpoint": "https://api.liveblocks.io/v2/rooms",
       "authentication": "Bearer secret key",
-      "sdkLanguages": [
-        "JavaScript",
-        "React",
-        "Node.js"
-      ],
+      "sdkLanguages": ["JavaScript", "React", "Node.js"],
       "docsUrl": "https://liveblocks.io/docs/api-reference",
       "lastVerified": "2026-10-31"
     }
@@ -1189,12 +854,7 @@
     "title": "Ably Realtime API",
     "description": "Ably provides globally distributed realtime messaging with pub/sub channels, presence and reliable delivery at scale.",
     "category": "Realtime",
-    "tags": [
-      "realtime",
-      "pubsub",
-      "websockets",
-      "messaging"
-    ],
+    "tags": ["realtime", "pubsub", "websockets", "messaging"],
     "details": {
       "provider": "Ably",
       "pricing": "Free tier, then usage-based",
@@ -1208,12 +868,7 @@
       "website": "https://ably.com",
       "endpoint": "https://rest.ably.io/time",
       "authentication": "Basic auth or token auth",
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Go",
-        "Java"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Go", "Java"],
       "docsUrl": "https://ably.com/docs/api/rest-api",
       "lastVerified": "2026-10-31"
     }
@@ -1223,12 +878,7 @@
     "title": "PostHog Analytics API",
     "description": "PostHog combines product analytics, session replay, feature flags and experiments in one privacy-friendly platform.",
     "category": "Analytics",
-    "tags": [
-      "analytics",
-      "product",
-      "feature-flags",
-      "session-replay"
-    ],
+    "tags": ["analytics", "product", "feature-flags", "session-replay"],
     "details": {
       "provider": "PostHog",
       "pricing": "Free tier, then usage-based",
@@ -1242,12 +892,7 @@
       "website": "https://posthog.com",
       "endpoint": "https://{host}/api/",
       "authentication": "Bearer personal API key",
-      "sdkLanguages": [
-        "Python",
-        "JavaScript",
-        "Ruby",
-        "PHP"
-      ],
+      "sdkLanguages": ["Python", "JavaScript", "Ruby", "PHP"],
       "docsUrl": "https://posthog.com/docs/api",
       "lastVerified": "2026-10-31"
     }
@@ -1257,12 +902,7 @@
     "title": "Sentry Error API",
     "description": "Sentry captures errors, traces and performance data across your stack so teams can find and fix issues faster.",
     "category": "Observability",
-    "tags": [
-      "monitoring",
-      "errors",
-      "tracing",
-      "performance"
-    ],
+    "tags": ["monitoring", "errors", "tracing", "performance"],
     "details": {
       "provider": "Sentry",
       "pricing": "Free tier, then usage-based",
@@ -1276,12 +916,7 @@
       "website": "https://sentry.io",
       "endpoint": "https://sentry.io/api/0/",
       "authentication": "Bearer auth token",
-      "sdkLanguages": [
-        "Python",
-        "JavaScript",
-        "Ruby",
-        "Go"
-      ],
+      "sdkLanguages": ["Python", "JavaScript", "Ruby", "Go"],
       "docsUrl": "https://docs.sentry.io/api/",
       "lastVerified": "2026-10-31"
     }
@@ -1291,12 +926,7 @@
     "title": "LaunchDarkly Feature API",
     "description": "LaunchDarkly lets teams ship features safely with feature flags, targeting rules, experiments and gradual rollouts.",
     "category": "DevOps",
-    "tags": [
-      "feature-flags",
-      "devops",
-      "experimentation",
-      "rollouts"
-    ],
+    "tags": ["feature-flags", "devops", "experimentation", "rollouts"],
     "details": {
       "provider": "LaunchDarkly",
       "pricing": "Free tier, then usage-based",
@@ -1310,12 +940,7 @@
       "website": "https://launchdarkly.com",
       "endpoint": "https://app.launchdarkly.com/api/v2/",
       "authentication": "Bearer API access token",
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Go",
-        "Java"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Go", "Java"],
       "docsUrl": "https://apidocs.launchdarkly.com/",
       "lastVerified": "2026-10-31"
     }
@@ -1325,12 +950,7 @@
     "title": "Doppler Secrets API",
     "description": "Doppler centralizes secrets and environment configuration with a secure API and integrations for every major cloud.",
     "category": "Security",
-    "tags": [
-      "secrets",
-      "security",
-      "devops",
-      "configuration"
-    ],
+    "tags": ["secrets", "security", "devops", "configuration"],
     "details": {
       "provider": "Doppler",
       "pricing": "Free tier, then per user",
@@ -1344,12 +964,7 @@
       "website": "https://www.doppler.com",
       "endpoint": "https://api.doppler.com/v3/",
       "authentication": "Bearer token (Basic auth)",
-      "sdkLanguages": [
-        "cURL",
-        "Go",
-        "Python",
-        "Node.js"
-      ],
+      "sdkLanguages": ["cURL", "Go", "Python", "Node.js"],
       "docsUrl": "https://docs.doppler.com/reference/api",
       "lastVerified": "2026-10-31"
     }
@@ -1359,12 +974,7 @@
     "title": "OpenAI Batch API",
     "description": "OpenAI's Batch API processes large request sets asynchronously at lower cost – ideal for bulk classification, embeddings and content jobs.",
     "category": "AI & Automation",
-    "tags": [
-      "ai",
-      "batch",
-      "async",
-      "openai"
-    ],
+    "tags": ["ai", "batch", "async", "openai"],
     "details": {
       "provider": "OpenAI",
       "pricing": "Usage-based with batch discounts; see OpenAI pricing",
@@ -1379,11 +989,7 @@
       "endpoint": "https://api.openai.com/v1/batches",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "Python",
-        "JavaScript",
-        "cURL"
-      ],
+      "sdkLanguages": ["Python", "JavaScript", "cURL"],
       "rateLimit": "Subject to account tier limits",
       "docsUrl": "https://platform.openai.com/docs/guides/batch"
     }
@@ -1393,12 +999,7 @@
     "title": "Google Sheets API",
     "description": "The Google Sheets API reads and writes spreadsheet data programmatically – useful for reporting, lightweight databases and content pipelines.",
     "category": "Productivity & Data",
-    "tags": [
-      "spreadsheet",
-      "google",
-      "automation",
-      "data"
-    ],
+    "tags": ["spreadsheet", "google", "automation", "data"],
     "details": {
       "provider": "Google",
       "pricing": "Free with Google Cloud quotas; see Google Cloud pricing",
@@ -1413,11 +1014,7 @@
       "endpoint": "https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}",
       "authentication": "OAuth 2.0 or service account",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "Python",
-        "JavaScript",
-        "Java"
-      ],
+      "sdkLanguages": ["Python", "JavaScript", "Java"],
       "rateLimit": "Per-project quotas in Google Cloud",
       "docsUrl": "https://developers.google.com/sheets/api/reference/rest"
     }
@@ -1427,12 +1024,7 @@
     "title": "Slack Web API",
     "description": "The Slack Web API sends messages, manages channels and reads workspace data – the fastest way to add Slack notifications to any workflow.",
     "category": "Communication",
-    "tags": [
-      "slack",
-      "messaging",
-      "notifications",
-      "automation"
-    ],
+    "tags": ["slack", "messaging", "notifications", "automation"],
     "details": {
       "provider": "Slack",
       "pricing": "Included with Slack plans; see Slack pricing",
@@ -1447,11 +1039,7 @@
       "endpoint": "https://slack.com/api/chat.postMessage",
       "authentication": "OAuth 2.0 bot token",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "cURL"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "cURL"],
       "rateLimit": "Tier-based method rate limits",
       "docsUrl": "https://api.slack.com/methods"
     }
@@ -1461,12 +1049,7 @@
     "title": "HubSpot CRM API",
     "description": "The HubSpot CRM API manages contacts, companies, deals and tickets programmatically – ideal for syncing sales and marketing data.",
     "category": "CRM & Sales",
-    "tags": [
-      "crm",
-      "sales",
-      "marketing",
-      "hubspot"
-    ],
+    "tags": ["crm", "sales", "marketing", "hubspot"],
     "details": {
       "provider": "HubSpot",
       "pricing": "Free tier available; paid plans for advanced features",
@@ -1481,11 +1064,7 @@
       "endpoint": "https://api.hubapi.com/crm/v3/objects/contacts",
       "authentication": "OAuth 2.0 or private app token",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "PHP"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "PHP"],
       "rateLimit": "Per-account API limits by plan",
       "docsUrl": "https://developers.hubspot.com/docs/api/crm/contacts"
     }
@@ -1495,12 +1074,7 @@
     "title": "Zendesk Support API",
     "description": "The Zendesk Support API manages tickets, users and comments programmatically – useful for support automation and reporting.",
     "category": "Customer Support",
-    "tags": [
-      "support",
-      "tickets",
-      "helpdesk",
-      "zendesk"
-    ],
+    "tags": ["support", "tickets", "helpdesk", "zendesk"],
     "details": {
       "provider": "Zendesk",
       "pricing": "Included with Zendesk plans; see Zendesk pricing",
@@ -1515,11 +1089,7 @@
       "endpoint": "https://{subdomain}.zendesk.com/api/v2/tickets.json",
       "authentication": "API token or OAuth",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "cURL",
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["cURL", "JavaScript", "Python"],
       "rateLimit": "Plan-based request limits",
       "docsUrl": "https://developer.zendesk.com/api-reference/ticketing/tickets/tickets/"
     }
@@ -1529,12 +1099,7 @@
     "title": "Salesforce REST API",
     "description": "The Salesforce REST API exposes objects, records and queries over HTTP – the standard way to integrate Salesforce data with other systems.",
     "category": "CRM & Enterprise",
-    "tags": [
-      "crm",
-      "salesforce",
-      "enterprise",
-      "rest"
-    ],
+    "tags": ["crm", "salesforce", "enterprise", "rest"],
     "details": {
       "provider": "Salesforce",
       "pricing": "Included with Salesforce editions; API limits vary by edition",
@@ -1549,11 +1114,7 @@
       "endpoint": "https://{instance}.salesforce.com/services/data/v62.0/sobjects/Account",
       "authentication": "OAuth 2.0",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "Java",
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["Java", "JavaScript", "Python"],
       "rateLimit": "Edition-based API request limits",
       "docsUrl": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/"
     }
@@ -1563,12 +1124,7 @@
     "title": "Discord Bot API",
     "description": "The Discord API lets bots send messages, manage servers and react to events – ideal for community automation and alerts.",
     "category": "Community & Messaging",
-    "tags": [
-      "discord",
-      "bots",
-      "community",
-      "messaging"
-    ],
+    "tags": ["discord", "bots", "community", "messaging"],
     "details": {
       "provider": "Discord",
       "pricing": "Free for bots; hosting costs separate",
@@ -1583,11 +1139,7 @@
       "endpoint": "https://discord.com/api/v10/channels/{channel.id}/messages",
       "authentication": "Bot token",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "cURL"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "cURL"],
       "rateLimit": "Per-route rate limits with buckets",
       "docsUrl": "https://discord.com/developers/docs/reference"
     }
@@ -1597,12 +1149,7 @@
     "title": "Telegram Bot API",
     "description": "The Telegram Bot API sends messages, handles commands and manages chats – a lightweight channel for alerts and personal automations.",
     "category": "Messaging",
-    "tags": [
-      "telegram",
-      "bots",
-      "messaging",
-      "alerts"
-    ],
+    "tags": ["telegram", "bots", "messaging", "alerts"],
     "details": {
       "provider": "Telegram",
       "pricing": "Free to use; see Telegram Bot API terms",
@@ -1617,11 +1164,7 @@
       "endpoint": "https://api.telegram.org/bot{token}/sendMessage",
       "authentication": "Bot token in URL",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "cURL",
-        "Python",
-        "JavaScript"
-      ],
+      "sdkLanguages": ["cURL", "Python", "JavaScript"],
       "rateLimit": "Broadcasting limits per chat and second",
       "docsUrl": "https://core.telegram.org/bots/api"
     }
@@ -1631,12 +1174,7 @@
     "title": "GitHub REST API",
     "description": "The GitHub REST API manages repositories, issues, pull requests and releases – the foundation for developer automation.",
     "category": "Developer Tools",
-    "tags": [
-      "github",
-      "devops",
-      "automation",
-      "rest"
-    ],
+    "tags": ["github", "devops", "automation", "rest"],
     "details": {
       "provider": "GitHub",
       "pricing": "Free for public repositories; paid plans for private features",
@@ -1651,11 +1189,7 @@
       "endpoint": "https://api.github.com/repos/{owner}/{repo}/issues",
       "authentication": "Personal access token or GitHub App",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Go"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Go"],
       "rateLimit": "5,000 requests per hour for authenticated users",
       "docsUrl": "https://docs.github.com/en/rest"
     }
@@ -1665,12 +1199,7 @@
     "title": "Linear GraphQL API",
     "description": "The Linear GraphQL API manages issues, projects and cycles programmatically – built for fast product and engineering workflows.",
     "category": "Project Management",
-    "tags": [
-      "linear",
-      "graphql",
-      "issues",
-      "productivity"
-    ],
+    "tags": ["linear", "graphql", "issues", "productivity"],
     "details": {
       "provider": "Linear",
       "pricing": "Included with Linear plans; see Linear pricing",
@@ -1685,11 +1214,7 @@
       "endpoint": "https://api.linear.app/graphql",
       "authentication": "Personal API key or OAuth",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "TypeScript",
-        "cURL"
-      ],
+      "sdkLanguages": ["JavaScript", "TypeScript", "cURL"],
       "rateLimit": "Per-workspace complexity limits",
       "docsUrl": "https://developers.linear.app/docs/graphql/working-with-the-graphql-api"
     }
@@ -1699,13 +1224,7 @@
     "title": "Microsoft Graph API",
     "description": "Access Microsoft cloud service resources with a unified endpoint. It enables integration with Microsoft 365 services.",
     "category": "Developer Tools",
-    "tags": [
-      "microsoft",
-      "cloud",
-      "api",
-      "integration",
-      "services"
-    ],
+    "tags": ["microsoft", "cloud", "api", "integration", "services"],
     "details": {
       "provider": "Microsoft",
       "pricing": "Free tier available with limits on usage.",
@@ -1720,11 +1239,7 @@
       "website": "https://developer.microsoft.com/en-us/graph",
       "authentication": "OAuth 2.0 Bearer token",
       "apiKeyRequired": false,
-      "sdkLanguages": [
-        "JavaScript",
-        "C#",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "C#", "Python"],
       "rateLimit": "Limit varies by endpoint.",
       "endpoint": "https://graph.microsoft.com/v1.0",
       "docsUrl": "https://docs.microsoft.com/en-us/graph/api/overview"
@@ -1735,13 +1250,7 @@
     "title": "OpenAI DALL·E API",
     "description": "Generate images from text descriptions using advanced AI models. Create unique visuals effortlessly.",
     "category": "AI & Image",
-    "tags": [
-      "ai",
-      "image-generation",
-      "creativity",
-      "art",
-      "visuals"
-    ],
+    "tags": ["ai", "image-generation", "creativity", "art", "visuals"],
     "details": {
       "provider": "OpenAI",
       "pricing": "Pay-per-image generated; free tier available",
@@ -1754,10 +1263,7 @@
       "website": "https://openai.com/dall-e",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "20 requests/minute",
       "endpoint": "https://api.openai.com/v1/dall-e",
       "docsUrl": "https://platform.openai.com/docs/api-reference/dall-e"
@@ -1768,13 +1274,7 @@
     "title": "Microsoft Azure Cognitive Services API",
     "description": "Access various AI services including vision, speech, and language understanding. Enhance applications with powerful AI capabilities.",
     "category": "AI & Multimodal",
-    "tags": [
-      "ai",
-      "cognitive-services",
-      "microsoft",
-      "cloud",
-      "api"
-    ],
+    "tags": ["ai", "cognitive-services", "microsoft", "cloud", "api"],
     "details": {
       "provider": "Microsoft",
       "pricing": "Free tier available, pay-as-you-go pricing model.",
@@ -1789,12 +1289,7 @@
       "website": "https://learn.microsoft.com/en-us/azure/ai-services/",
       "authentication": "Ocp-Apim-Subscription-Key header",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "C#",
-        ".NET",
-        "Python",
-        "JavaScript"
-      ],
+      "sdkLanguages": ["C#", ".NET", "Python", "JavaScript"],
       "rateLimit": "Standard limits apply based on service utilized.",
       "docsUrl": "https://learn.microsoft.com/azure/cognitive-services/",
       "endpoint": "https://{region}.api.cognitive.microsoft.com/",
@@ -1806,11 +1301,7 @@
     "title": "OpenAI GPT-4 API",
     "description": "The OpenAI GPT-4 API offers advanced natural language processing capabilities for various applications.",
     "category": "AI & LLM",
-    "tags": [
-      "ai",
-      "nlp",
-      "language-modeling"
-    ],
+    "tags": ["ai", "nlp", "language-modeling"],
     "details": {
       "provider": "OpenAI",
       "pricing": "Pay-as-you-go with free tier available.",
@@ -1825,11 +1316,7 @@
       "website": "https://platform.openai.com/docs/api-reference/chat/create",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Ruby"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Ruby"],
       "rateLimit": "60 requests/minute",
       "endpoint": "https://api.openai.com/v1/chat/completions",
       "docsUrl": "https://platform.openai.com/docs/api-reference/chat/create"
@@ -1840,11 +1327,7 @@
     "title": "OpenAI Embeddings API",
     "description": "The OpenAI Embeddings API allows developers to convert text into vector representations. It is useful for various natural language processing tasks.",
     "category": "AI & Embeddings",
-    "tags": [
-      "embeddings",
-      "nlp",
-      "api"
-    ],
+    "tags": ["embeddings", "nlp", "api"],
     "details": {
       "provider": "OpenAI",
       "pricing": "Pay-as-you-go based on usage",
@@ -1857,10 +1340,7 @@
       "website": "https://platform.openai.com/docs/guides/embeddings",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "60 requests/minute",
       "endpoint": "https://api.openai.com/v1/embeddings",
       "docsUrl": "https://platform.openai.com/docs/api-reference/embeddings"
@@ -1871,11 +1351,7 @@
     "title": "Twitch API",
     "description": "The Twitch API allows developers to access Twitch's features and data to enhance their applications. Integrate streaming, chat, and user information seamlessly.",
     "category": "Communication",
-    "tags": [
-      "twitch",
-      "streaming",
-      "api"
-    ],
+    "tags": ["twitch", "streaming", "api"],
     "details": {
       "provider": "Twitch",
       "pricing": "Free with rate limits",
@@ -1890,11 +1366,7 @@
       "website": "https://dev.twitch.tv",
       "authentication": "Bearer token",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Java"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Java"],
       "rateLimit": "30 requests/minute",
       "endpoint": "https://api.twitch.tv/helix",
       "docsUrl": "https://dev.twitch.tv/docs/api"
@@ -1905,27 +1377,16 @@
     "title": "Amazon S3 API",
     "description": "Amazon S3 API provides scalable object storage with high availability and security.",
     "category": "Storage",
-    "tags": [
-      "storage",
-      "cloud",
-      "aws"
-    ],
+    "tags": ["storage", "cloud", "aws"],
     "details": {
       "provider": "Amazon Web Services",
       "pricing": "Free tier available with limited storage; pay-as-you-go for additional usage.",
-      "features": [
-        "Object storage",
-        "Versioning",
-        "Access control"
-      ],
+      "features": ["Object storage", "Versioning", "Access control"],
       "useCase": "Use the API for storing and retrieving any amount of data from anywhere on the web.",
       "website": "https://aws.amazon.com/s3/",
       "authentication": "AWS Signature Version 4",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "Unlimited requests, subject to account limits",
       "endpoint": "https://s3.amazonaws.com",
       "docsUrl": "https://docs.aws.amazon.com/s3/index.html"
@@ -1936,11 +1397,7 @@
     "title": "IBM Watson Text to Speech API",
     "description": "Converts written text into natural-sounding speech in various languages.",
     "category": "AI & Speech",
-    "tags": [
-      "text-to-speech",
-      "speech",
-      "language"
-    ],
+    "tags": ["text-to-speech", "speech", "language"],
     "details": {
       "provider": "IBM",
       "pricing": "Free tier available, pay-as-you-go pricing.",
@@ -1953,10 +1410,7 @@
       "website": "https://www.ibm.com/cloud/watson-text-to-speech",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "1000 requests/minute",
       "endpoint": "https://api.us-south.text-to-speech.watson.cloud.ibm.com/instances/123456/v1",
       "docsUrl": "https://cloud.ibm.com/apidocs/text-to-speech"
@@ -1967,11 +1421,7 @@
     "title": "Amazon AWS Lambda API",
     "description": "AWS Lambda lets you run code without provisioning or managing servers, enabling serverless computing.",
     "category": "Backend",
-    "tags": [
-      "serverless",
-      "compute",
-      "aws"
-    ],
+    "tags": ["serverless", "compute", "aws"],
     "details": {
       "provider": "Amazon",
       "pricing": "Pay-per-use pricing with a free tier available.",
@@ -1984,11 +1434,7 @@
       "website": "https://aws.amazon.com/lambda/",
       "authentication": "AWS Signature Version 4",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Java"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Java"],
       "rateLimit": "1000 requests/second",
       "endpoint": "https://lambda.us-east-1.amazonaws.com",
       "docsUrl": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html"
@@ -1999,11 +1445,7 @@
     "title": "PayPal Payments API",
     "description": "Integrate PayPal payment processing into your applications with ease.",
     "category": "Payments",
-    "tags": [
-      "payments",
-      "paypal",
-      "transactions"
-    ],
+    "tags": ["payments", "paypal", "transactions"],
     "details": {
       "provider": "PayPal",
       "pricing": "Transaction fees apply; free tier available.",
@@ -2016,10 +1458,7 @@
       "website": "https://developer.paypal.com",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "5000 requests per day",
       "endpoint": "https://api.paypal.com/v1",
       "docsUrl": "https://developer.paypal.com/docs/api/overview"
@@ -2030,11 +1469,7 @@
     "title": "IBM Cloud Object Storage API",
     "description": "Reliable cloud object storage for data archiving and app development.",
     "category": "Storage",
-    "tags": [
-      "cloud",
-      "storage",
-      "ibm"
-    ],
+    "tags": ["cloud", "storage", "ibm"],
     "details": {
       "provider": "IBM",
       "pricing": "Free tier available with limited storage.",
@@ -2047,10 +1482,7 @@
       "website": "https://www.ibm.com/cloud/object-storage",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "200 requests/minute",
       "endpoint": "https://s3.us.cloud-object-storage.appdomain.cloud",
       "docsUrl": "https://cloud.ibm.com/docs/cloud-object-storage"
@@ -2061,27 +1493,16 @@
     "title": "Amazon Rekognition API",
     "description": "Image and video analysis API for face detection, object recognition, and more.",
     "category": "AI & Vision",
-    "tags": [
-      "image",
-      "video",
-      "analysis"
-    ],
+    "tags": ["image", "video", "analysis"],
     "details": {
       "provider": "Amazon Web Services",
       "pricing": "Free tier available for 5,000 images per month.",
-      "features": [
-        "Face detection",
-        "Object recognition",
-        "Facial analysis"
-      ],
+      "features": ["Face detection", "Object recognition", "Facial analysis"],
       "useCase": "Used for automating image and video analysis tasks like detecting objects, faces, and inappropriate content.",
       "website": "https://aws.amazon.com/rekognition/",
       "authentication": "AWS Signature V4",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "Up to 10,000 requests per second",
       "endpoint": "https://rekognition.us-west-2.amazonaws.com",
       "docsUrl": "https://docs.aws.amazon.com/rekognition/latest/dg/what-is.html"
@@ -2092,27 +1513,16 @@
     "title": "Amazon SES API",
     "description": "Amazon Simple Email Service (SES) provides reliable and scalable email sending capabilities.",
     "category": "Email",
-    "tags": [
-      "email",
-      "aws",
-      "transactional"
-    ],
+    "tags": ["email", "aws", "transactional"],
     "details": {
       "provider": "Amazon",
       "pricing": "Free tier includes 62,000 emails per month for AWS customers.",
-      "features": [
-        "Email sending",
-        "Bounce tracking",
-        "Email authentication"
-      ],
+      "features": ["Email sending", "Bounce tracking", "Email authentication"],
       "useCase": "Used for sending transactional and marketing emails with high deliverability rates.",
       "website": "https://aws.amazon.com/ses/",
       "authentication": "AWS IAM credentials",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "1,000 emails/second",
       "endpoint": "https://email.us-east-1.amazonaws.com",
       "docsUrl": "https://docs.aws.amazon.com/ses/latest/APIReference/Welcome.html"
@@ -2123,27 +1533,16 @@
     "title": "Yelp Fusion API",
     "description": "Access Yelp's extensive business database for reviews, ratings, and more.",
     "category": "Geodata",
-    "tags": [
-      "business",
-      "reviews",
-      "geolocation"
-    ],
+    "tags": ["business", "reviews", "geolocation"],
     "details": {
       "provider": "Yelp",
       "pricing": "Free tier available with limited access.",
-      "features": [
-        "Business search",
-        "Review data",
-        "Geolocation services"
-      ],
+      "features": ["Business search", "Review data", "Geolocation services"],
       "useCase": "Use to integrate Yelp's business data, including reviews and ratings, into your applications.",
       "website": "https://www.yelp.com/developers",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "5000 requests per day",
       "endpoint": "https://api.yelp.com/v3",
       "docsUrl": "https://docs.developer.yelp.com/"
@@ -2154,11 +1553,7 @@
     "title": "IBM Watson Language Translator API",
     "description": "Provides language translation capabilities for multiple languages, powered by AI.",
     "category": "AI & Speech",
-    "tags": [
-      "translation",
-      "language",
-      "AI"
-    ],
+    "tags": ["translation", "language", "AI"],
     "details": {
       "provider": "IBM",
       "pricing": "Free tier available with limited translations.",
@@ -2171,10 +1566,7 @@
       "website": "https://www.ibm.com/cloud/watson-language-translator",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "1000 requests/day",
       "endpoint": "https://cloud.ibm.com",
       "docsUrl": "https://cloud.ibm.com/apidocs/language-translator"
@@ -2185,11 +1577,7 @@
     "title": "IBM Watson Assistant API",
     "description": "Enable natural language processing to build conversational interfaces with the IBM Watson Assistant API.",
     "category": "AI & LLM",
-    "tags": [
-      "nlp",
-      "conversational",
-      "ai"
-    ],
+    "tags": ["nlp", "conversational", "ai"],
     "details": {
       "provider": "IBM",
       "pricing": "Free tier available with limited usage.",
@@ -2202,10 +1590,7 @@
       "website": "https://www.ibm.com/cloud/watson-assistant",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "1000 requests/minute",
       "endpoint": "https://api.us-south.assistant.watson.cloud.ibm.com/instances/{instance_id}/v2",
       "docsUrl": "https://cloud.ibm.com/apidocs/assistant"
@@ -2216,12 +1601,7 @@
     "title": "IBM Watson Discovery API",
     "description": "Unlock the value of your data with AI-powered search and text analytics.",
     "category": "AI & ML",
-    "tags": [
-      "ai",
-      "search",
-      "analytics",
-      "ibm"
-    ],
+    "tags": ["ai", "search", "analytics", "ibm"],
     "details": {
       "provider": "IBM",
       "pricing": "Free tier available with limited usage.",
@@ -2234,10 +1614,7 @@
       "website": "https://www.ibm.com/cloud/watson-discovery",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "1000 requests/minute",
       "endpoint": "https://api.us-south.discovery.watson.cloud.ibm.com/instances",
       "docsUrl": "https://cloud.ibm.com/apidocs/discovery"
@@ -2248,11 +1625,7 @@
     "title": "Microsoft Azure Face API",
     "description": "Provides facial recognition capabilities for detecting and analyzing human faces in images.",
     "category": "AI & Vision",
-    "tags": [
-      "facial-recognition",
-      "image-analysis",
-      "azure"
-    ],
+    "tags": ["facial-recognition", "image-analysis", "azure"],
     "details": {
       "provider": "Microsoft",
       "pricing": "Free tier available; paid plans based on request volume.",
@@ -2265,12 +1638,7 @@
       "website": "https://learn.microsoft.com/en-us/azure/ai-services/",
       "authentication": "Ocp-Apim-Subscription-Key header",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "C#",
-        ".NET",
-        "Python",
-        "JavaScript"
-      ],
+      "sdkLanguages": ["C#", ".NET", "Python", "JavaScript"],
       "rateLimit": "20 requests per second",
       "docsUrl": "https://learn.microsoft.com/azure/ai-services/computer-vision/overview-identity",
       "endpoint": "https://{region}.api.cognitive.microsoft.com/face/v1.0/",
@@ -2282,11 +1650,7 @@
     "title": "Amazon Polly API",
     "description": "Amazon Polly converts text into lifelike speech, enabling applications to speak.",
     "category": "AI & Voice",
-    "tags": [
-      "text-to-speech",
-      "ai",
-      "voice"
-    ],
+    "tags": ["text-to-speech", "ai", "voice"],
     "details": {
       "provider": "Amazon Web Services",
       "pricing": "Pay-as-you-go with a free tier of 5 million characters per month.",
@@ -2299,10 +1663,7 @@
       "website": "https://aws.amazon.com/polly/",
       "authentication": "AWS Signature Version 4",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "No specific rate limit, but subject to account limits.",
       "endpoint": "https://polly.us-east-1.amazonaws.com",
       "docsUrl": "https://docs.aws.amazon.com/polly/"
@@ -2313,11 +1674,7 @@
     "title": "Microsoft Azure Cosmos DB API",
     "description": "A globally distributed, multi-model database service for high-performance applications.",
     "category": "Databases",
-    "tags": [
-      "database",
-      "distributed",
-      "multi-model"
-    ],
+    "tags": ["database", "distributed", "multi-model"],
     "details": {
       "provider": "Microsoft",
       "pricing": "Pay-as-you-go with a free tier available.",
@@ -2330,12 +1687,7 @@
       "website": "https://learn.microsoft.com/en-us/azure/cosmos-db/",
       "authentication": "Master key (HMAC) or Microsoft Entra ID",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        ".NET",
-        "Java",
-        "Python",
-        "Node.js"
-      ],
+      "sdkLanguages": [".NET", "Java", "Python", "Node.js"],
       "rateLimit": "Request units per second (RUs/s)",
       "docsUrl": "https://learn.microsoft.com/rest/api/cosmos-db/",
       "endpoint": "https://{account}.documents.azure.com/",
@@ -2347,27 +1699,16 @@
     "title": "Google Maps API",
     "description": "Access a variety of location-based services such as maps, routes, and places.",
     "category": "Geodata",
-    "tags": [
-      "maps",
-      "location",
-      "navigation"
-    ],
+    "tags": ["maps", "location", "navigation"],
     "details": {
       "provider": "Google",
       "pricing": "Pay-as-you-go with free tier up to certain usage.",
-      "features": [
-        "Dynamic Maps",
-        "Street View",
-        "Geocoding"
-      ],
+      "features": ["Dynamic Maps", "Street View", "Geocoding"],
       "useCase": "Used for integrating maps and location-based services into applications, enhancing user experience with geolocation data.",
       "website": "https://cloud.google.com/maps-platform",
       "authentication": "API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "2500 requests per day",
       "endpoint": "https://maps.googleapis.com/maps/api",
       "docsUrl": "https://developers.google.com/maps/documentation"
@@ -2378,11 +1719,7 @@
     "title": "Plaid Financial Data API",
     "description": "Access consumer financial data from various institutions securely and easily.",
     "category": "Finance",
-    "tags": [
-      "financial-data",
-      "api",
-      "banking"
-    ],
+    "tags": ["financial-data", "api", "banking"],
     "details": {
       "provider": "Plaid",
       "pricing": "Free tier available, paid plans start at $500/month.",
@@ -2395,10 +1732,7 @@
       "website": "https://plaid.com",
       "authentication": "OAuth 2.0",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "100 requests/minute",
       "endpoint": "https://production.plaid.com",
       "docsUrl": "https://plaid.com/docs/"
@@ -2409,11 +1743,7 @@
     "title": "Twilio Video API",
     "description": "Build real-time video applications with Twilio's scalable Video API.",
     "category": "Communication",
-    "tags": [
-      "video",
-      "real-time",
-      "communication"
-    ],
+    "tags": ["video", "real-time", "communication"],
     "details": {
       "provider": "Twilio",
       "pricing": "Pricing based on usage; free tier available.",
@@ -2426,10 +1756,7 @@
       "website": "https://www.twilio.com",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "Unlimited",
       "endpoint": "https://video.twilio.com/v1",
       "docsUrl": "https://www.twilio.com/docs/video"
@@ -2440,11 +1767,7 @@
     "title": "Sendinblue Email API",
     "description": "The Sendinblue Email API enables sending and managing email campaigns programmatically.",
     "category": "Communication",
-    "tags": [
-      "email",
-      "marketing",
-      "automation"
-    ],
+    "tags": ["email", "marketing", "automation"],
     "details": {
       "provider": "Sendinblue",
       "pricing": "Free tier available with limited emails.",
@@ -2457,10 +1780,7 @@
       "website": "https://www.sendinblue.com",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "300 requests/minute",
       "endpoint": "https://api.sendinblue.com/v3",
       "docsUrl": "https://developers.brevo.com/"
@@ -2471,11 +1791,7 @@
     "title": "Amazon Transcribe API",
     "description": "Automatic speech recognition (ASR) service that makes it easy to add speech-to-text capability to applications.",
     "category": "AI & Speech",
-    "tags": [
-      "speech-to-text",
-      "transcription",
-      "ASR"
-    ],
+    "tags": ["speech-to-text", "transcription", "ASR"],
     "details": {
       "provider": "Amazon Web Services",
       "pricing": "Free tier available; pricing based on usage.",
@@ -2488,10 +1804,7 @@
       "website": "https://aws.amazon.com/transcribe/",
       "authentication": "AWS Signature Version 4",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "Standard AWS service limits apply",
       "endpoint": "https://transcribe.us-east-1.amazonaws.com",
       "docsUrl": "https://docs.aws.amazon.com/transcribe/latest/dg/what-is-transcribe.html"
@@ -2502,11 +1815,7 @@
     "title": "Notion Automation API",
     "description": "Automate and integrate your Notion workspace to enhance productivity and collaboration.",
     "category": "Productivity",
-    "tags": [
-      "automation",
-      "productivity",
-      "integration"
-    ],
+    "tags": ["automation", "productivity", "integration"],
     "details": {
       "provider": "Notion Labs, Inc.",
       "pricing": "Free tier available; paid plans start at $10/month.",
@@ -2519,10 +1828,7 @@
       "website": "https://www.notion.so",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "3 requests/second",
       "endpoint": "https://api.notion.com/v1",
       "docsUrl": "https://developers.notion.com/reference/intro"
@@ -2533,13 +1839,7 @@
     "title": "GitHub Copilot API",
     "description": "GitHub Copilot helps developers by providing AI-powered code suggestions in real-time. It enhances productivity through intelligent code completion.",
     "category": "AI & Automation",
-    "tags": [
-      "ai",
-      "coding",
-      "automation",
-      "developer-tools",
-      "productivity"
-    ],
+    "tags": ["ai", "coding", "automation", "developer-tools", "productivity"],
     "details": {
       "provider": "GitHub",
       "pricing": "Subscription-based with a free trial available",
@@ -2554,11 +1854,7 @@
       "website": "https://github.com/features/copilot",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Ruby"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Ruby"],
       "rateLimit": "60 requests/minute",
       "endpoint": "https://api.github.com/copilot/v1",
       "docsUrl": "https://docs.github.com/en/copilot"
@@ -2569,11 +1865,7 @@
     "title": "Notion Forms API",
     "description": "Easily create forms and collect data within Notion. Integrate seamlessly with your Notion workspace.",
     "category": "Productivity",
-    "tags": [
-      "forms",
-      "data-collection",
-      "notion"
-    ],
+    "tags": ["forms", "data-collection", "notion"],
     "details": {
       "provider": "Notion Labs, Inc.",
       "pricing": "Free Tier available with limited features.",
@@ -2586,10 +1878,7 @@
       "website": "https://www.notion.so",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "100 requests/minute",
       "endpoint": "https://api.notion.com/v1/forms",
       "docsUrl": "https://developers.notion.com/reference/intro"
@@ -2600,12 +1889,7 @@
     "title": "Twitch API Kraken",
     "description": "The Twitch API Kraken provides a comprehensive interface for developers to access Twitch's platform data, including streams and user information.",
     "category": "Communication",
-    "tags": [
-      "twitch",
-      "api",
-      "streaming",
-      "developer"
-    ],
+    "tags": ["twitch", "api", "streaming", "developer"],
     "details": {
       "provider": "Twitch",
       "pricing": "Free with rate limits.",
@@ -2620,11 +1904,7 @@
       "website": "https://dev.twitch.tv/docs/api",
       "authentication": "OAuth 2.0 Bearer Token",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Java"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Java"],
       "rateLimit": "30 requests/second",
       "endpoint": "https://api.twitch.tv/kraken",
       "docsUrl": "https://dev.twitch.tv/docs/api/reference"
@@ -2635,12 +1915,7 @@
     "title": "Asana API",
     "description": "The Asana API allows developers to integrate with Asana to manage tasks, projects, and team collaboration effectively.",
     "category": "Productivity",
-    "tags": [
-      "tasks",
-      "projects",
-      "collaboration",
-      "api"
-    ],
+    "tags": ["tasks", "projects", "collaboration", "api"],
     "details": {
       "provider": "Asana",
       "pricing": "Free tier available with premium features for paid plans.",
@@ -2655,11 +1930,7 @@
       "website": "https://asana.com",
       "authentication": "Bearer token",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Ruby"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Ruby"],
       "rateLimit": "60 requests/minute",
       "endpoint": "https://api.asana.com/v1",
       "docsUrl": "https://developers.asana.com/docs"
@@ -2670,11 +1941,7 @@
     "title": "Twelve Data API",
     "description": "Access real-time and historical financial market data through a simple API. Ideal for traders and developers.",
     "category": "Finance",
-    "tags": [
-      "financial-data",
-      "api",
-      "market-data"
-    ],
+    "tags": ["financial-data", "api", "market-data"],
     "details": {
       "provider": "Twelve Data",
       "pricing": "Free tier available with limited requests, paid plans start at $19/month.",
@@ -2689,12 +1956,7 @@
       "website": "https://twelvedata.com",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Ruby",
-        "Java"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Ruby", "Java"],
       "rateLimit": "60 requests/minute",
       "endpoint": "https://api.twelvedata.com/time_series",
       "docsUrl": "https://twelvedata.com/docs"
@@ -2705,12 +1967,7 @@
     "title": "PDF Generator API",
     "description": "Easily convert HTML content into PDF documents with this API. It supports various customization options.",
     "category": "Developer Tools",
-    "tags": [
-      "pdf",
-      "html",
-      "document",
-      "conversion"
-    ],
+    "tags": ["pdf", "html", "document", "conversion"],
     "details": {
       "provider": "PDF.co",
       "pricing": "Free tier available, pay-as-you-go for higher usage.",
@@ -2724,11 +1981,7 @@
       "website": "https://pdf.co",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Java"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Java"],
       "rateLimit": "100 requests/minute",
       "endpoint": "https://api.pdf.co/v1/pdf/convert/from/html",
       "docsUrl": "https://apidocs.pdf.co"
@@ -2739,11 +1992,7 @@
     "title": "WeatherAPI",
     "description": "WeatherAPI offers real-time weather data and forecasts globally. Get accurate weather information for any location.",
     "category": "Weather",
-    "tags": [
-      "weather",
-      "forecast",
-      "api"
-    ],
+    "tags": ["weather", "forecast", "api"],
     "details": {
       "provider": "WeatherAPI",
       "pricing": "Free tier available with limited requests; paid plans start at $9.99/month.",
@@ -2758,11 +2007,7 @@
       "website": "https://www.weatherapi.com",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Ruby"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Ruby"],
       "rateLimit": "100 requests/minute",
       "endpoint": "https://api.weatherapi.com/v1",
       "docsUrl": "https://www.weatherapi.com/docs/"
@@ -2773,11 +2018,7 @@
     "title": "Notion API for Automation",
     "description": "Automate workflows and integrate with various tools using the Notion API. Enhance productivity through seamless data management.",
     "category": "Productivity",
-    "tags": [
-      "automation",
-      "integration",
-      "workflow"
-    ],
+    "tags": ["automation", "integration", "workflow"],
     "details": {
       "provider": "Notion Labs, Inc.",
       "pricing": "Free tier available with rate limits.",
@@ -2792,11 +2033,7 @@
       "website": "https://developers.notion.com/",
       "authentication": "Bearer token",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Ruby"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Ruby"],
       "rateLimit": "3 requests per second",
       "endpoint": "https://api.notion.com/v1",
       "docsUrl": "https://developers.notion.com/reference/intro"
@@ -2807,11 +2044,7 @@
     "title": "Twilio Conversations API",
     "description": "Manage multi-channel conversations across SMS, Messenger, and more. Streamline customer engagement with a unified messaging platform.",
     "category": "Communication",
-    "tags": [
-      "messaging",
-      "conversations",
-      "customer-engagement"
-    ],
+    "tags": ["messaging", "conversations", "customer-engagement"],
     "details": {
       "provider": "Twilio",
       "pricing": "Pay as you go; pricing based on usage.",
@@ -2826,12 +2059,7 @@
       "website": "https://www.twilio.com/conversations",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Ruby",
-        "Java"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Ruby", "Java"],
       "rateLimit": "100 requests/minute",
       "endpoint": "https://conversations.twilio.com/v1",
       "docsUrl": "https://www.twilio.com/docs/conversations"
@@ -2842,11 +2070,7 @@
     "title": "Asana Automation API",
     "description": "Automate workflows in Asana with this powerful API. Enhance productivity by integrating various tools and services.",
     "category": "Productivity",
-    "tags": [
-      "automation",
-      "workflow",
-      "productivity"
-    ],
+    "tags": ["automation", "workflow", "productivity"],
     "details": {
       "provider": "Asana",
       "pricing": "Free tier available with premium features.",
@@ -2859,11 +2083,7 @@
       "website": "https://developers.asana.com",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Ruby"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Ruby"],
       "rateLimit": "60 requests/minute",
       "endpoint": "https://app.asana.com/api/1.0",
       "docsUrl": "https://developers.asana.com/docs"
@@ -2874,11 +2094,7 @@
     "title": "Notion API for Automation V2",
     "description": "The Notion API for Automation V2 allows developers to automate workflows and integrate Notion with other applications easily.",
     "category": "Productivity",
-    "tags": [
-      "automation",
-      "integration",
-      "notion"
-    ],
+    "tags": ["automation", "integration", "notion"],
     "details": {
       "provider": "Notion Labs, Inc.",
       "pricing": "Free tier available with limited features.",
@@ -2892,11 +2108,7 @@
       "website": "https://developers.notion.com/",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Ruby"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Ruby"],
       "rateLimit": "3 requests/second",
       "endpoint": "https://api.notion.com/v1",
       "docsUrl": "https://developers.notion.com/reference/intro"
@@ -2907,11 +2119,7 @@
     "title": "Contentful Content Management System API",
     "description": "Contentful's API allows developers to build, manage, and deliver content across various platforms. It supports powerful content modeling and delivery.",
     "category": "Backend",
-    "tags": [
-      "cms",
-      "content",
-      "api"
-    ],
+    "tags": ["cms", "content", "api"],
     "details": {
       "provider": "Contentful",
       "pricing": "Free tier available; paid plans start at $39/month.",
@@ -2926,11 +2134,7 @@
       "website": "https://www.contentful.com",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Ruby",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Ruby", "Python"],
       "rateLimit": "100 requests/minute",
       "endpoint": "https://api.contentful.com/v1",
       "docsUrl": "https://www.contentful.com/developers/docs/references/content-delivery-api/"
@@ -2941,11 +2145,7 @@
     "title": "Sendinblue SMS API",
     "description": "The Sendinblue SMS API enables businesses to send and manage SMS campaigns effectively. It provides detailed tracking and reporting features.",
     "category": "Communication",
-    "tags": [
-      "sms",
-      "communication",
-      "marketing"
-    ],
+    "tags": ["sms", "communication", "marketing"],
     "details": {
       "provider": "Sendinblue",
       "pricing": "Pay-as-you-go pricing with a free tier available.",
@@ -2960,10 +2160,7 @@
       "website": "https://www.sendinblue.com",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "200 requests/minute",
       "endpoint": "https://api.sendinblue.com/v3/sms",
       "docsUrl": "https://developers.brevo.com/"
@@ -2974,11 +2171,7 @@
     "title": "Tibber API",
     "description": "Tibber API provides access to energy data and services for smart homes. Integrate with home automation systems to optimize energy consumption.",
     "category": "Finance",
-    "tags": [
-      "energy",
-      "smart-home",
-      "automation"
-    ],
+    "tags": ["energy", "smart-home", "automation"],
     "details": {
       "provider": "Tibber",
       "pricing": "Free Tier available",
@@ -2991,10 +2184,7 @@
       "website": "https://tibber.com",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "10 requests/minute",
       "endpoint": "https://api.tibber.com/v1",
       "docsUrl": "https://developer.tibber.com/docs"
@@ -3005,11 +2195,7 @@
     "title": "Braintree Payments API",
     "description": "Braintree Payments API enables businesses to accept and process payments online. It supports multiple payment methods and currencies.",
     "category": "Payments",
-    "tags": [
-      "payments",
-      "fintech",
-      "transactions"
-    ],
+    "tags": ["payments", "fintech", "transactions"],
     "details": {
       "provider": "Braintree",
       "pricing": "No monthly fees; transaction fees apply.",
@@ -3022,12 +2208,7 @@
       "website": "https://www.braintreepayments.com",
       "authentication": "Basic Auth with merchant ID and secret key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Ruby",
-        "Python",
-        "Java"
-      ],
+      "sdkLanguages": ["JavaScript", "Ruby", "Python", "Java"],
       "rateLimit": "100 requests/minute",
       "endpoint": "https://api.braintreegateway.com",
       "docsUrl": "https://developer.paypal.com/braintree/docs"
@@ -3038,11 +2219,7 @@
     "title": "U.S. Census Bureau API",
     "description": "Access demographic, economic, and geographic data from the U.S. Census Bureau. Ideal for research and analytics.",
     "category": "Data Visualization",
-    "tags": [
-      "census",
-      "data",
-      "statistics"
-    ],
+    "tags": ["census", "data", "statistics"],
     "details": {
       "provider": "U.S. Census Bureau",
       "pricing": "Free to use",
@@ -3055,10 +2232,7 @@
       "website": "https://www.census.gov/data/developers.html",
       "authentication": "API key required",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "100 requests/minute",
       "endpoint": "https://api.census.gov/data",
       "docsUrl": "https://api.census.gov/data.html"
@@ -3069,11 +2243,7 @@
     "title": "Finnhub Stock API",
     "description": "Access real-time stock market data, news, and fundamentals through a powerful API. Ideal for financial applications.",
     "category": "Finance",
-    "tags": [
-      "stocks",
-      "market-data",
-      "finance"
-    ],
+    "tags": ["stocks", "market-data", "finance"],
     "details": {
       "provider": "Finnhub",
       "pricing": "Free tier available; paid plans start at $49/month.",
@@ -3086,11 +2256,7 @@
       "website": "https://finnhub.io",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Java"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Java"],
       "rateLimit": "100 requests/minute",
       "endpoint": "https://finnhub.io/api/v1",
       "docsUrl": "https://finnhub.io/docs/api"
@@ -3101,11 +2267,7 @@
     "title": "Slack API",
     "description": "The Slack API allows developers to integrate with Slack's messaging platform, enabling automation and real-time communication.",
     "category": "Communication",
-    "tags": [
-      "slack",
-      "messaging",
-      "api"
-    ],
+    "tags": ["slack", "messaging", "api"],
     "details": {
       "provider": "Slack Technologies, Inc.",
       "pricing": "Free tier available with additional paid features.",
@@ -3118,11 +2280,7 @@
       "website": "https://slack.com",
       "authentication": "Bearer token",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Ruby"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Ruby"],
       "rateLimit": "50 requests/second",
       "endpoint": "https://slack.com/api",
       "docsUrl": "https://api.slack.com/docs"
@@ -3133,11 +2291,7 @@
     "title": "Tinkr API",
     "description": "Tinkr API simplifies financial data aggregation and access. It provides essential tools for developers to integrate financial services.",
     "category": "Finance",
-    "tags": [
-      "financial-data",
-      "api",
-      "aggregation"
-    ],
+    "tags": ["financial-data", "api", "aggregation"],
     "details": {
       "provider": "Tink",
       "pricing": "Free tier available, with premium plans based on usage.",
@@ -3152,10 +2306,7 @@
       "website": "https://tink.com",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "100 requests/minute",
       "endpoint": "https://api.tink.com/v1",
       "docsUrl": "https://docs.tink.com"
@@ -3166,11 +2317,7 @@
     "title": "Finnhub Crypto API",
     "description": "Access real-time cryptocurrency market data and analytics. Ideal for tracking prices and trends.",
     "category": "Finance",
-    "tags": [
-      "cryptocurrency",
-      "market-data",
-      "finance"
-    ],
+    "tags": ["cryptocurrency", "market-data", "finance"],
     "details": {
       "provider": "Finnhub",
       "pricing": "Free Tier available with premium options.",
@@ -3185,11 +2332,7 @@
       "website": "https://finnhub.io",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Java"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Java"],
       "rateLimit": "60 requests/minute",
       "endpoint": "https://api.finnhub.io/v1",
       "docsUrl": "https://finnhub.io/docs/api"
@@ -3200,11 +2343,7 @@
     "title": "Squarespace API",
     "description": "The Squarespace API allows developers to build and manage custom integrations with Squarespace websites and services.",
     "category": "Developer Tools",
-    "tags": [
-      "api",
-      "squarespace",
-      "integration"
-    ],
+    "tags": ["api", "squarespace", "integration"],
     "details": {
       "provider": "Squarespace",
       "pricing": "Free tier available with limited features.",
@@ -3217,10 +2356,7 @@
       "website": "https://squarespace.com",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "100 requests/minute",
       "endpoint": "https://api.squarespace.com/v1",
       "docsUrl": "https://developers.squarespace.com"
@@ -3231,13 +2367,7 @@
     "title": "Twitch Helix API",
     "description": "The Twitch Helix API allows developers to access Twitch's core functionality and data. It enables integration with Twitch services for personalized experiences.",
     "category": "Communication",
-    "tags": [
-      "twitch",
-      "api",
-      "streaming",
-      "integration",
-      "developer-tools"
-    ],
+    "tags": ["twitch", "api", "streaming", "integration", "developer-tools"],
     "details": {
       "provider": "Twitch",
       "pricing": "Free with rate limits",
@@ -3251,10 +2381,7 @@
       "website": "https://dev.twitch.tv",
       "authentication": "OAuth 2.0 Bearer Token",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "30 requests/minute",
       "endpoint": "https://api.twitch.tv/helix",
       "docsUrl": "https://dev.twitch.tv/docs/api"
@@ -3265,12 +2392,7 @@
     "title": "PDF.co API",
     "description": "PDF.co API allows you to create, convert, and manipulate PDF documents easily. It provides a range of functionalities for PDF processing.",
     "category": "Developer Tools",
-    "tags": [
-      "pdf",
-      "conversion",
-      "api",
-      "documents"
-    ],
+    "tags": ["pdf", "conversion", "api", "documents"],
     "details": {
       "provider": "PDF.co",
       "pricing": "Free tier available with paid plans starting at $19/month.",
@@ -3284,11 +2406,7 @@
       "website": "https://pdf.co",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "PHP"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "PHP"],
       "rateLimit": "100 requests/minute",
       "endpoint": "https://api.pdf.co/v1",
       "docsUrl": "https://apidocs.pdf.co"
@@ -3299,11 +2417,7 @@
     "title": "Aiven Kafka API",
     "description": "Aiven Kafka API allows you to manage Apache Kafka clusters easily. It simplifies data streaming and integration processes.",
     "category": "Backend",
-    "tags": [
-      "kafka",
-      "data-streaming",
-      "integration"
-    ],
+    "tags": ["kafka", "data-streaming", "integration"],
     "details": {
       "provider": "Aiven",
       "pricing": "Starts at $0 for free tier with limited features.",
@@ -3318,11 +2432,7 @@
       "website": "https://aiven.io",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "Java",
-        "Python",
-        "Go"
-      ],
+      "sdkLanguages": ["Java", "Python", "Go"],
       "rateLimit": "100 requests/minute",
       "endpoint": "https://api.aiven.io/v1/project",
       "docsUrl": "https://aiven.io/docs/products/kafka"
@@ -3333,11 +2443,7 @@
     "title": "DeepAI Image Generator API",
     "description": "Generate images from textual descriptions using this API. It leverages advanced AI algorithms for image creation.",
     "category": "AI & Image",
-    "tags": [
-      "ai",
-      "image-generation",
-      "api"
-    ],
+    "tags": ["ai", "image-generation", "api"],
     "details": {
       "provider": "DeepAI",
       "pricing": "Free tier available with basic usage limits.",
@@ -3350,10 +2456,7 @@
       "website": "https://deepai.org/machine-learning-model/text2img",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python"
-      ],
+      "sdkLanguages": ["JavaScript", "Python"],
       "rateLimit": "50 requests/minute",
       "endpoint": "https://api.deepai.org/api/text2img",
       "docsUrl": "https://deepai.org/machine-learning-model/text2img"
@@ -3364,11 +2467,7 @@
     "title": "Sentry Performance API",
     "description": "Sentry Performance API helps developers monitor and optimize application performance. Track transaction traces and performance metrics.",
     "category": "Observability",
-    "tags": [
-      "performance",
-      "monitoring",
-      "analytics"
-    ],
+    "tags": ["performance", "monitoring", "analytics"],
     "details": {
       "provider": "Sentry",
       "pricing": "Free tier available with paid plans for larger teams.",
@@ -3381,11 +2480,7 @@
       "website": "https://sentry.io",
       "authentication": "Bearer API key",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Ruby"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Ruby"],
       "rateLimit": "100 requests/minute",
       "endpoint": "https://sentry.io/api/0/",
       "docsUrl": "https://docs.sentry.io/api/"
@@ -3396,11 +2491,7 @@
     "title": "Twitch Analytics API",
     "description": "Access detailed analytics about Twitch streams, channels, and video performance. Useful for streamers and marketers.",
     "category": "Analytics",
-    "tags": [
-      "twitch",
-      "analytics",
-      "streaming"
-    ],
+    "tags": ["twitch", "analytics", "streaming"],
     "details": {
       "provider": "Twitch",
       "pricing": "Free tier available with limited access.",
@@ -3413,11 +2504,7 @@
       "website": "https://dev.twitch.tv/docs",
       "authentication": "Bearer OAuth token",
       "apiKeyRequired": true,
-      "sdkLanguages": [
-        "JavaScript",
-        "Python",
-        "Java"
-      ],
+      "sdkLanguages": ["JavaScript", "Python", "Java"],
       "rateLimit": "30 requests/minute",
       "endpoint": "https://api.twitch.tv/helix/analytics",
       "docsUrl": "https://dev.twitch.tv/docs/api/reference#analytics"
