@@ -40,3 +40,6 @@ src/i18n/de-overrides.generated.json
 
 # Generated audit output
 AUDIT_REPORT.md
+CUSTOMER_AUDIT_REPORT.md
+pipeline/audit_state.json
+pipeline/customer_audit.log

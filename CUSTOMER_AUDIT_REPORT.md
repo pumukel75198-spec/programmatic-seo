@@ -1,37 +1,19 @@
 # Customer Audit Report
 
-Generated: 2026-11-07 10:04 UTC
+Generated: 2026-11-07 10:32 UTC
 
 ## Summary
 
 | Product type | Checked | OK | Auto-healed | Failed |
 | --- | ---: | ---: | ---: | ---: |
-| APIs | 106 | 38/106 OK | 12 | 68 |
-| Alternatives | 113 | 113/113 OK | 38 | 0 |
-| Workflows | 86 | 69/86 OK | 0 | 17 |
+| APIs | 106 | 43/106 OK | 15 | 63 |
+| Alternatives | 113 | 113/113 OK | 0 | 0 |
+| Workflows | 86 | 75/86 OK | 6 | 11 |
 
 - `npm run build`: OK
 - git commit & push: OK
 
 ## Remaining issues
-
-### api:ably-realtime-api
-- API sandbox failed: unittest failed:
-
-..E
-======================================================================
-ERROR: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-1xgukdik/test_mock.py", line 53, in test_successful_call_and_auth_header
-    result = api_client.request_json('https://rest.ably.io/time', **kwargs)
-TypeError: request_json() missing 1 required positional argument: 'config'
-
-----------------------------------------------------------------------
-Ran 3 tests in 0.001s
-
-FAILED (errors=1)
-
 
 ### api:airtable-api
 - requests.http: does not use the endpoint host 'api.airtable.com'
@@ -48,15 +30,18 @@ E..
 ERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-hqo8v_bc/test_mock.py", line 75, in test_http_error_is_handled
-    result = api_client.request_json("https://api.example.com/v1/test")
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-hqo8v_bc/api_client.py", line 50, in request_json
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-emxyi4mu/test_mock.py", line 98, in test_http_error_is_handled
+    result = self._call_request_json('https://api.aiven.io/v1/project')
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-emxyi4mu/test_mock.py", line 60, in _call_request_json
+    return api_client.request_json(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-emxyi4mu/api_client.py", line 50, in request_json
     sys.exit(1)
     ~~~~~~~~^^^
 SystemExit: 1
 
 ----------------------------------------------------------------------
-Ran 3 tests in 0.001s
+Ran 3 tests in 0.002s
 
 FAILED (errors=1)
 
@@ -65,17 +50,29 @@ FAILED (errors=1)
 - api_client.py does not mention the API title
 - API sandbox failed: unittest failed:
 
-..E
+WARNING:root:HTTPError 500: server error. Retrying...
+WARNING:root:HTTPError 500: server error. Retrying...
+WARNING:root:HTTPError 500: server error. Retrying...
+WARNING:root:HTTPError 500: server error. Retrying...
+WARNING:root:HTTPError 500: server error. Retrying...
+ERROR:root:Max retries exceeded.
+E..
 ======================================================================
-ERROR: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
+ERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-wp4qewa5/test_mock.py", line 53, in test_successful_call_and_auth_header
-    result = api_client.request_json('https://api.deepai.org/api/text2img', **kwargs)
-TypeError: request_json() missing 1 required positional argument: 'data'
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ebghq2rr/test_mock.py", line 98, in test_http_error_is_handled
+    result = self._call_request_json('https://api.deepai.org/api/text2img')
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ebghq2rr/test_mock.py", line 60, in _call_request_json
+    return api_client.request_json(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ebghq2rr/api_client.py", line 51, in request_json
+    sys.exit(1)
+    ~~~~~~~~^^^
+SystemExit: 1
 
 ----------------------------------------------------------------------
-Ran 3 tests in 0.001s
+Ran 3 tests in 0.002s
 
 FAILED (errors=1)
 
@@ -94,15 +91,18 @@ E..
 ERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-75xtahtt/test_mock.py", line 75, in test_http_error_is_handled
-    result = api_client.request_json("https://api.example.com/v1/test")
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-75xtahtt/api_client.py", line 67, in request_json
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-3nz0e0i5/test_mock.py", line 98, in test_http_error_is_handled
+    result = self._call_request_json('https://api.asana.com/v1')
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-3nz0e0i5/test_mock.py", line 60, in _call_request_json
+    return api_client.request_json(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-3nz0e0i5/api_client.py", line 67, in request_json
     sys.exit(1)
     ~~~~~~~~^^^
 SystemExit: 1
 
 ----------------------------------------------------------------------
-Ran 3 tests in 0.002s
+Ran 3 tests in 0.001s
 
 FAILED (errors=1)
 
@@ -121,51 +121,18 @@ E..
 ERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-igrq3k5t/test_mock.py", line 75, in test_http_error_is_handled
-    result = api_client.request_json("https://api.example.com/v1/test")
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-igrq3k5t/api_client.py", line 70, in request_json
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-y2khxni0/test_mock.py", line 98, in test_http_error_is_handled
+    result = self._call_request_json('https://app.asana.com/api/1.0')
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-y2khxni0/test_mock.py", line 60, in _call_request_json
+    return api_client.request_json(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-y2khxni0/api_client.py", line 70, in request_json
     sys.exit(1)
     ~~~~~~~~^^^
 SystemExit: 1
 
 ----------------------------------------------------------------------
-Ran 3 tests in 0.001s
-
-FAILED (errors=1)
-
-
-### api:aws-lambda-api
-- API sandbox failed: unittest failed:
-
-..E
-======================================================================
-ERROR: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-xyxbu9d5/test_mock.py", line 53, in test_successful_call_and_auth_header
-    result = api_client.request_json('https://lambda.us-east-1.amazonaws.com', **kwargs)
-TypeError: request_json() missing 1 required positional argument: 'uri'
-
-----------------------------------------------------------------------
-Ran 3 tests in 0.001s
-
-FAILED (errors=1)
-
-
-### api:aws-polly-api
-- API sandbox failed: unittest failed:
-
-..E
-======================================================================
-ERROR: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-mnomvrrl/test_mock.py", line 53, in test_successful_call_and_auth_header
-    result = api_client.request_json('https://polly.us-east-1.amazonaws.com', **kwargs)
-TypeError: request_json() missing 1 required positional argument: 'uri'
-
-----------------------------------------------------------------------
-Ran 3 tests in 0.001s
+Ran 3 tests in 0.002s
 
 FAILED (errors=1)
 
@@ -174,76 +141,38 @@ FAILED (errors=1)
 - requests.http: does not use the endpoint host 'rekognition.us-west-2.amazonaws.com'
 - API sandbox failed: unittest failed:
 
-..E
+WARNING:root:HTTPError 500: server error. Retrying...
+WARNING:root:HTTPError 500: server error. Retrying...
+WARNING:root:HTTPError 500: server error. Retrying...
+WARNING:root:HTTPError 500: server error. Retrying...
+WARNING:root:HTTPError 500: server error. Retrying...
+ERROR:root:Max retries exceeded
+E..
 ======================================================================
-ERROR: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
+ERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-gm10l_zr/test_mock.py", line 53, in test_successful_call_and_auth_header
-    result = api_client.request_json('https://rekognition.us-west-2.amazonaws.com', **kwargs)
-TypeError: request_json() missing 1 required positional argument: 'url'
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-m_mx5dgn/test_mock.py", line 98, in test_http_error_is_handled
+    result = self._call_request_json('https://rekognition.us-west-2.amazonaws.com')
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-m_mx5dgn/test_mock.py", line 60, in _call_request_json
+    return api_client.request_json(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-m_mx5dgn/api_client.py", line 64, in request_json
+    sys.exit(1)
+    ~~~~~~~~^^^
+SystemExit: 1
 
 ----------------------------------------------------------------------
-Ran 3 tests in 0.001s
-
-FAILED (errors=1)
-
-
-### api:aws-s3-api
-- API sandbox failed: unittest failed:
-
-..E
-======================================================================
-ERROR: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-_a6tv6og/test_mock.py", line 53, in test_successful_call_and_auth_header
-    result = api_client.request_json('https://s3.amazonaws.com', **kwargs)
-TypeError: request_json() missing 1 required positional argument: 'uri'
-
-----------------------------------------------------------------------
-Ran 3 tests in 0.001s
+Ran 3 tests in 0.002s
 
 FAILED (errors=1)
 
 
 ### api:aws-ses-api
 - requests.http: does not use the endpoint host 'email.us-east-1.amazonaws.com'
-- API sandbox failed: unittest failed:
-
-..E
-======================================================================
-ERROR: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-tmuuo489/test_mock.py", line 53, in test_successful_call_and_auth_header
-    result = api_client.request_json('https://email.us-east-1.amazonaws.com', **kwargs)
-TypeError: request_json() missing 1 required positional argument: 'url'
-
-----------------------------------------------------------------------
-Ran 3 tests in 0.001s
-
-FAILED (errors=1)
-
 
 ### api:aws-transcribe-api
 - requests.http: does not use the endpoint host 'transcribe.us-east-1.amazonaws.com'
-- API sandbox failed: unittest failed:
-
-..E
-======================================================================
-ERROR: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-pm7m34mx/test_mock.py", line 53, in test_successful_call_and_auth_header
-    result = api_client.request_json('https://transcribe.us-east-1.amazonaws.com', **kwargs)
-TypeError: request_json() missing 1 required positional argument: 'url'
-
-----------------------------------------------------------------------
-Ran 3 tests in 0.001s
-
-FAILED (errors=1)
-
 
 ### api:braintree-payments-api
 - api_client.py does not implement the endpoint host 'api.braintreegateway.com'
@@ -257,7 +186,7 @@ FAILED (errors=1)
 - api_client.py contains a generic placeholder domain
 
 ### api:deepgram-speech-api
-- API sandbox failed: ying...
+- API sandbox failed: ing...
 WARNING:root:HTTP Error 500: server error. Retrying...
 WARNING:root:HTTP Error 500: server error. Retrying...
 ERROR:root:Max attempts reached. Request failed.
@@ -266,7 +195,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-zqvedcco/test_mock.py", line 78, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ns6kcp16/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -275,13 +204,13 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-zqvedcco/test_mock.py", line 54, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ns6kcp16/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: DeepgramResponse(status='success', data={'ok': True}) is not an instance of <class 'dict'>
 
 ----------------------------------------------------------------------
-Ran 3 tests in 0.001s
+Ran 3 tests in 0.002s
 
 FAILED (failures=2)
 
@@ -299,7 +228,6 @@ api_client.py: error: the following arguments are required: symbol
 ### api:github-copilot-api
 - api_client.py does not implement the endpoint host 'api.github.com'
 - requests.http: does not use the endpoint host 'api.github.com'
-- API kit file 'requests.http' is <= 100 bytes
 
 ### api:google-gemini-api
 - api_client.py contains a generic placeholder domain
@@ -311,34 +239,15 @@ api_client.py: error: the following arguments are required: symbol
 - requests.http: does not use the endpoint host 'api.hubapi.com'
 
 ### api:ibm-cloud-object-storage-api
-- API sandbox failed: unittest failed:
-
-..E
-======================================================================
-ERROR: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-0rqnbgyr/test_mock.py", line 53, in test_successful_call_and_auth_header
-    result = api_client.request_json('https://s3.us.cloud-object-storage.appdomain.cloud', **kwargs)
-TypeError: request_json() missing 1 required positional argument: 'url'
-
-----------------------------------------------------------------------
-Ran 3 tests in 0.001s
-
-FAILED (errors=1)
-
-
-### api:ibm-watson-assistant-api
-- requests.http: does not use the endpoint host 'api.us-south.assistant.watson.cloud.ibm.com'
-- API sandbox failed: P Error 500: server error. Retrying...
-WARNING:root:HTTP Error 500: server error. Retrying...
-WARNING:root:HTTP Error 500: server error. Retrying...
+- API sandbox failed: RNING:root:HTTPError 500: server error. Retrying...
+WARNING:root:HTTPError 500: server error. Retrying...
+WARNING:root:HTTPError 500: server error. Retrying...
 F.F
 ======================================================================
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-5r9llxl8/test_mock.py", line 78, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-zbzykie9/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -347,13 +256,43 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-5r9llxl8/test_mock.py", line 54, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-zbzykie9/test_mock.py", line 76, in test_successful_call_and_auth_header
+    self.assertIsInstance(result, dict)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+AssertionError: ApiResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.002s
+
+FAILED (failures=2)
+
+
+### api:ibm-watson-assistant-api
+- requests.http: does not use the endpoint host 'api.us-south.assistant.watson.cloud.ibm.com'
+- API sandbox failed:  Error 500: server error. Retrying...
+WARNING:root:HTTP Error 500: server error. Retrying...
+WARNING:root:HTTP Error 500: server error. Retrying...
+F.F
+======================================================================
+FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-8rmqkljb/test_mock.py", line 103, in test_http_error_is_handled
+    self.assertTrue(result is None or isinstance(result, (dict, list, str)))
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-8rmqkljb/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: WatsonAssistantResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>
 
 ----------------------------------------------------------------------
-Ran 3 tests in 0.001s
+Ran 3 tests in 0.002s
 
 FAILED (failures=2)
 
@@ -382,15 +321,18 @@ E..
 ERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-c91e169y/test_mock.py", line 75, in test_http_error_is_handled
-    result = api_client.request_json("https://api.example.com/v1/test")
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-c91e169y/api_client.py", line 64, in request_json
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-cdapu1qz/test_mock.py", line 98, in test_http_error_is_handled
+    result = self._call_request_json('https://app.launchdarkly.com/api/v2/')
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-cdapu1qz/test_mock.py", line 60, in _call_request_json
+    return api_client.request_json(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-cdapu1qz/api_client.py", line 64, in request_json
     sys.exit(1)
     ~~~~~~~~^^^
 SystemExit: 1
 
 ----------------------------------------------------------------------
-Ran 3 tests in 0.001s
+Ran 3 tests in 0.002s
 
 FAILED (errors=1)
 
@@ -402,12 +344,21 @@ FAILED (errors=1)
 ### api:microsoft-azure-cognitive-services-api
 - API sandbox failed: unittest failed:
 
-..F
+F.F
+======================================================================
+FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-g87ged51/test_mock.py", line 103, in test_http_error_is_handled
+    self.assertTrue(result is None or isinstance(result, (dict, list, str)))
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true
+
 ======================================================================
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-k7wl0uda/test_mock.py", line 54, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-g87ged51/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: CognitiveServiceResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>
@@ -415,7 +366,7 @@ AssertionError: CognitiveServiceResponse(status_code=200, data={'ok': True}, err
 ----------------------------------------------------------------------
 Ran 3 tests in 0.001s
 
-FAILED (failures=1)
+FAILED (failures=2)
 
 
 ### api:microsoft-graph-api
@@ -427,7 +378,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-orv3z59a/test_mock.py", line 78, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-nnh8c8a8/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -436,7 +387,7 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-orv3z59a/test_mock.py", line 54, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-nnh8c8a8/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: GraphAPIResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>
@@ -450,7 +401,7 @@ FAILED (failures=2)
 ### api:mongodb-atlas-api
 - api_client.py does not implement the endpoint host 'data.mongodb-api.com'
 - requests.http: does not use the endpoint host 'data.mongodb-api.com'
-- API sandbox failed: ARNING:root:HTTPError 500: server error. Retrying...
+- API sandbox failed: RNING:root:HTTPError 500: server error. Retrying...
 WARNING:root:HTTPError 500: server error. Retrying...
 WARNING:root:HTTPError 500: server error. Retrying...
 F.F
@@ -458,7 +409,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-vspg1eo8/test_mock.py", line 78, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-8vrevc8y/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -467,13 +418,13 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-vspg1eo8/test_mock.py", line 54, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-8vrevc8y/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: ApiResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>
 
 ----------------------------------------------------------------------
-Ran 3 tests in 0.002s
+Ran 3 tests in 0.001s
 
 FAILED (failures=2)
 
@@ -493,24 +444,6 @@ FAILED (failures=2)
 - api_client.py does not implement the endpoint host 'api.notion.com'
 - requests.http: does not use the endpoint host 'api.notion.com'
 
-### api:openai-embeddings-api
-- API sandbox failed: unittest failed:
-
-..E
-======================================================================
-ERROR: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-jrcem0bw/test_mock.py", line 53, in test_successful_call_and_auth_header
-    result = api_client.request_json('https://api.openai.com/v1/embeddings', **kwargs)
-TypeError: request_json() missing 1 required positional argument: 'method'
-
-----------------------------------------------------------------------
-Ran 3 tests in 0.001s
-
-FAILED (errors=1)
-
-
 ### api:openai-gpt-4-api
 - API sandbox failed: unittest failed:
 
@@ -523,15 +456,18 @@ E..
 ERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-9ewq58tk/test_mock.py", line 75, in test_http_error_is_handled
-    result = api_client.request_json("https://api.example.com/v1/test")
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-9ewq58tk/api_client.py", line 48, in request_json
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-j5zk3yll/test_mock.py", line 98, in test_http_error_is_handled
+    result = self._call_request_json('https://api.openai.com/v1/chat/completions')
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-j5zk3yll/test_mock.py", line 60, in _call_request_json
+    return api_client.request_json(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-j5zk3yll/api_client.py", line 48, in request_json
     sys.exit(1)
     ~~~~~~~~^^^
 SystemExit: 1
 
 ----------------------------------------------------------------------
-Ran 3 tests in 0.001s
+Ran 3 tests in 0.002s
 
 FAILED (errors=1)
 
@@ -547,29 +483,15 @@ FAILED (errors=1)
 
 ### api:pinecone-vector-api
 - api_client.py does not mention the API title
+- api_client.py does not implement the endpoint host 'docs.pinecone.io'
+- requests.http: does not use the endpoint host 'docs.pinecone.io'
 - API kit file 'requests.http' is <= 100 bytes
-- API sandbox failed: unittest failed:
-
-..E
-======================================================================
-ERROR: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-8xzpzxej/test_mock.py", line 53, in test_successful_call_and_auth_header
-    result = api_client.request_json('https://docs.pinecone.io', **kwargs)
-TypeError: request_json() missing 1 required positional argument: 'endpoint'
-
-----------------------------------------------------------------------
-Ran 3 tests in 0.001s
-
-FAILED (errors=1)
-
 
 ### api:plaid-financial-api
 - api_client.py does not implement the endpoint host 'production.plaid.com'
 - requests.http: does not use the endpoint host 'production.plaid.com'
 - API kit file 'requests.http' is <= 100 bytes
-- API sandbox failed: r 500: server error. Retrying in 16 seconds...
+- API sandbox failed:  500: server error. Retrying in 16 seconds...
 WARNING:api_client:HTTPError 500: server error. Retrying in 32 seconds...
 ERROR:api_client:Max retries exceeded.
 F.F
@@ -577,7 +499,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-_72fwlg2/test_mock.py", line 78, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-e_jw2ivc/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -586,13 +508,13 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-_72fwlg2/test_mock.py", line 54, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-e_jw2ivc/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: ApiResponse(status='success', data={'ok': True}, error=None) is not an instance of <class 'dict'>
 
 ----------------------------------------------------------------------
-Ran 3 tests in 0.002s
+Ran 3 tests in 0.001s
 
 FAILED (failures=2)
 
@@ -614,15 +536,18 @@ E..
 ERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-9oexzyb2/test_mock.py", line 75, in test_http_error_is_handled
-    result = api_client.request_json("https://api.example.com/v1/test")
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-9oexzyb2/api_client.py", line 58, in request_json
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-co28xfh4/test_mock.py", line 98, in test_http_error_is_handled
+    result = self._call_request_json('https://developer.salesforce.com/services/data/v62.0/sobjects/Account')
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-co28xfh4/test_mock.py", line 60, in _call_request_json
+    return api_client.request_json(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-co28xfh4/api_client.py", line 58, in request_json
     sys.exit(1)
     ~~~~~~~~^^^
 SystemExit: 1
 
 ----------------------------------------------------------------------
-Ran 3 tests in 0.002s
+Ran 3 tests in 0.001s
 
 FAILED (errors=1)
 
@@ -655,9 +580,12 @@ E..
 ERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-dft5uzy_/test_mock.py", line 75, in test_http_error_is_handled
-    result = api_client.request_json("https://api.example.com/v1/test")
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-dft5uzy_/api_client.py", line 64, in request_json
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-suiircv2/test_mock.py", line 98, in test_http_error_is_handled
+    result = self._call_request_json('https://sentry.io/api/0/')
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-suiircv2/test_mock.py", line 60, in _call_request_json
+    return api_client.request_json(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-suiircv2/api_client.py", line 64, in request_json
     sys.exit(1)
     ~~~~~~~~^^^
 SystemExit: 1
@@ -681,9 +609,12 @@ E..
 ERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ciqh60qu/test_mock.py", line 75, in test_http_error_is_handled
-    result = api_client.request_json("https://api.example.com/v1/test")
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ciqh60qu/api_client.py", line 50, in request_json
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-k4hoz1a6/test_mock.py", line 98, in test_http_error_is_handled
+    result = self._call_request_json('https://sentry.io/api/0/')
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-k4hoz1a6/test_mock.py", line 60, in _call_request_json
+    return api_client.request_json(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-k4hoz1a6/api_client.py", line 50, in request_json
     sys.exit(1)
     ~~~~~~~~^^^
 SystemExit: 1
@@ -712,15 +643,18 @@ E..
 ERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-bwgl1z71/test_mock.py", line 75, in test_http_error_is_handled
-    result = api_client.request_json("https://api.example.com/v1/test")
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-bwgl1z71/api_client.py", line 61, in request_json
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-di58atpd/test_mock.py", line 98, in test_http_error_is_handled
+    result = self._call_request_json('https://slack.com/api/chat.postMessage')
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-di58atpd/test_mock.py", line 60, in _call_request_json
+    return api_client.request_json(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-di58atpd/api_client.py", line 61, in request_json
     sys.exit(1)
     ~~~~~~~~^^^
 SystemExit: 1
 
 ----------------------------------------------------------------------
-Ran 3 tests in 0.001s
+Ran 3 tests in 0.002s
 
 FAILED (errors=1)
 
@@ -733,7 +667,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ma1vit4v/test_mock.py", line 78, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-g8sdjvj3/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -742,7 +676,7 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ma1vit4v/test_mock.py", line 54, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-g8sdjvj3/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: ApiResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>
@@ -754,7 +688,7 @@ FAILED (failures=2)
 
 
 ### api:stability-ai-image-api
-- API sandbox failed: RNING:root:HTTPError 500: server error. Retrying...
+- API sandbox failed: NING:root:HTTPError 500: server error. Retrying...
 WARNING:root:HTTPError 500: server error. Retrying...
 WARNING:root:HTTPError 500: server error. Retrying...
 F.F
@@ -762,7 +696,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-io0pc2yz/test_mock.py", line 78, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ysfo9r_w/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -771,7 +705,7 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-io0pc2yz/test_mock.py", line 54, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ysfo9r_w/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: ApiResponse(status='success', data={'ok': True}, error=None) is not an instance of <class 'dict'>
@@ -801,9 +735,12 @@ E..
 ERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-xkcd10rc/test_mock.py", line 75, in test_http_error_is_handled
-    result = api_client.request_json("https://api.example.com/v1/test")
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-xkcd10rc/api_client.py", line 53, in request_json
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ln6cd8kb/test_mock.py", line 98, in test_http_error_is_handled
+    result = self._call_request_json('https://api.telegram.org/bot{token}/sendMessage')
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ln6cd8kb/test_mock.py", line 60, in _call_request_json
+    return api_client.request_json(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ln6cd8kb/api_client.py", line 53, in request_json
     sys.exit(1)
     ~~~~~~~~^^^
 SystemExit: 1
@@ -829,15 +766,18 @@ E..
 ERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-f7y7uafn/test_mock.py", line 75, in test_http_error_is_handled
-    result = api_client.request_json("https://api.example.com/v1/test")
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-f7y7uafn/api_client.py", line 47, in request_json
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-iqini4q7/test_mock.py", line 98, in test_http_error_is_handled
+    result = self._call_request_json('https://api.tibber.com/v1')
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-iqini4q7/test_mock.py", line 60, in _call_request_json
+    return api_client.request_json(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-iqini4q7/api_client.py", line 47, in request_json
     sys.exit(1)
     ~~~~~~~~^^^
 SystemExit: 1
 
 ----------------------------------------------------------------------
-Ran 3 tests in 0.001s
+Ran 3 tests in 0.002s
 
 FAILED (errors=1)
 
@@ -848,31 +788,7 @@ FAILED (errors=1)
 - API kit file 'requests.http' is <= 100 bytes
 
 ### api:together-ai-api
-- API sandbox failed: unittest failed:
-
-WARNING:root:HTTP Error 500: server error. Retrying...
-WARNING:root:HTTP Error 500: server error. Retrying...
-WARNING:root:HTTP Error 500: server error. Retrying...
-WARNING:root:HTTP Error 500: server error. Retrying...
-WARNING:root:HTTP Error 500: server error. Retrying...
-ERROR:root:Max retries exceeded.
-E..
-======================================================================
-ERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-9e4nmtsk/test_mock.py", line 75, in test_http_error_is_handled
-    result = api_client.request_json("https://api.example.com/v1/test")
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-9e4nmtsk/api_client.py", line 58, in request_json
-    sys.exit(1)
-    ~~~~~~~~^^^
-SystemExit: 1
-
-----------------------------------------------------------------------
-Ran 3 tests in 0.001s
-
-FAILED (errors=1)
-
+- API kit file 'requests.http' is <= 100 bytes
 
 ### api:twilio-conversations-api
 - api_client.py does not implement the endpoint host 'conversations.twilio.com'
@@ -890,22 +806,24 @@ E..
 ERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ve6tydul/test_mock.py", line 75, in test_http_error_is_handled
-    result = api_client.request_json("https://api.example.com/v1/test")
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ve6tydul/api_client.py", line 64, in request_json
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-yb_5neiw/test_mock.py", line 98, in test_http_error_is_handled
+    result = self._call_request_json('https://conversations.twilio.com/v1')
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-yb_5neiw/test_mock.py", line 60, in _call_request_json
+    return api_client.request_json(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-yb_5neiw/api_client.py", line 64, in request_json
     sys.exit(1)
     ~~~~~~~~^^^
 SystemExit: 1
 
 ----------------------------------------------------------------------
-Ran 3 tests in 0.001s
+Ran 3 tests in 0.002s
 
 FAILED (errors=1)
 
 
 ### api:twilio-messaging-api
 - requests.http: does not use the endpoint host 'api.twilio.com'
-- API kit file 'requests.http' is <= 100 bytes
 - API sandbox failed: unittest failed:
 
 WARNING:root:HTTPError 500: server error. Retrying...
@@ -919,15 +837,18 @@ E..
 ERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-cxbmfekj/test_mock.py", line 75, in test_http_error_is_handled
-    result = api_client.request_json("https://api.example.com/v1/test")
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-cxbmfekj/api_client.py", line 58, in request_json
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-pahgvjb8/test_mock.py", line 98, in test_http_error_is_handled
+    result = self._call_request_json('https://api.twilio.com/2010-04-01')
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-pahgvjb8/test_mock.py", line 60, in _call_request_json
+    return api_client.request_json(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-pahgvjb8/api_client.py", line 58, in request_json
     sys.exit(1)
     ~~~~~~~~^^^
 SystemExit: 1
 
 ----------------------------------------------------------------------
-Ran 3 tests in 0.001s
+Ran 3 tests in 0.002s
 
 FAILED (errors=1)
 
@@ -946,15 +867,18 @@ E..
 ERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-1bwa2fha/test_mock.py", line 75, in test_http_error_is_handled
-    result = api_client.request_json("https://api.example.com/v1/test")
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-1bwa2fha/api_client.py", line 65, in request_json
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-oiaq_rkg/test_mock.py", line 98, in test_http_error_is_handled
+    result = self._call_request_json('https://video.twilio.com/v1')
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-oiaq_rkg/test_mock.py", line 60, in _call_request_json
+    return api_client.request_json(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-oiaq_rkg/api_client.py", line 65, in request_json
     sys.exit(1)
     ~~~~~~~~^^^
 SystemExit: 1
 
 ----------------------------------------------------------------------
-Ran 3 tests in 0.001s
+Ran 3 tests in 0.002s
 
 FAILED (errors=1)
 
@@ -980,7 +904,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-hcjei9wm/test_mock.py", line 78, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ydhhyq94/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -989,7 +913,7 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-hcjei9wm/test_mock.py", line 54, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ydhhyq94/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: RedisResponse(status='success', data={'ok': True}, error=None) is not an instance of <class 'dict'>
@@ -1002,21 +926,33 @@ FAILED (failures=2)
 
 ### api:vercel-blob-api
 - API kit file 'requests.http' is <= 100 bytes
-- API sandbox failed: unittest failed:
-
-..E
+- API sandbox failed: .
+WARNING:root:HTTPError 500: server error. Retrying...
+WARNING:root:HTTPError 500: server error. Retrying...
+WARNING:root:HTTPError 500: server error. Retrying...
+F.F
 ======================================================================
-ERROR: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
+FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-lp38y28y/test_mock.py", line 53, in test_successful_call_and_auth_header
-    result = api_client.request_json('https://blob.vercel-storage.com', **kwargs)
-TypeError: request_json() missing 1 required positional argument: 'endpoint'
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-fphdtl4s/test_mock.py", line 103, in test_http_error_is_handled
+    self.assertTrue(result is None or isinstance(result, (dict, list, str)))
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-fphdtl4s/test_mock.py", line 76, in test_successful_call_and_auth_header
+    self.assertIsInstance(result, dict)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+AssertionError: BlobResponse(status=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>
 
 ----------------------------------------------------------------------
 Ran 3 tests in 0.001s
 
-FAILED (errors=1)
+FAILED (failures=2)
 
 
 ### api:yelp-fusion-api
@@ -1031,9 +967,12 @@ E..
 ERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-qcyt37cj/test_mock.py", line 75, in test_http_error_is_handled
-    result = api_client.request_json("https://api.example.com/v1/test")
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-qcyt37cj/api_client.py", line 49, in request_json
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-_tml0z73/test_mock.py", line 98, in test_http_error_is_handled
+    result = self._call_request_json('https://api.yelp.com/v3')
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-_tml0z73/test_mock.py", line 60, in _call_request_json
+    return api_client.request_json(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-_tml0z73/api_client.py", line 49, in request_json
     sys.exit(1)
     ~~~~~~~~^^^
 SystemExit: 1
@@ -1058,37 +997,39 @@ E..
 ERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-z0ld1pwc/test_mock.py", line 75, in test_http_error_is_handled
-    result = api_client.request_json("https://api.example.com/v1/test")
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-z0ld1pwc/api_client.py", line 70, in request_json
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ih22vr7h/test_mock.py", line 98, in test_http_error_is_handled
+    result = self._call_request_json('https://{subdomain}.zendesk.com/api/v2/tickets.json')
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ih22vr7h/test_mock.py", line 60, in _call_request_json
+    return api_client.request_json(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ih22vr7h/api_client.py", line 70, in request_json
     sys.exit(1)
     ~~~~~~~~^^^
 SystemExit: 1
 
 ----------------------------------------------------------------------
-Ran 3 tests in 0.001s
+Ran 3 tests in 0.002s
 
 FAILED (errors=1)
 
 
 ### workflow:ai-image-generation-pipeline
 - workflow.py --dry-run failed: Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-zvkkcmpv/workflow.py", line 181, in <module>
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-il90c_eq/workflow.py", line 181, in <module>
     main()
     ~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-zvkkcmpv/workflow.py", line 173, in main
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-il90c_eq/workflow.py", line 173, in main
     run_workflow()
     ~~~~~~~~~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-zvkkcmpv/workflow.py", line 129, in run_workflow
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-il90c_eq/workflow.py", line 129, in run_workflow
     manifest = upload_to_vercel_blob(images)
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-zvkkcmpv/workflow.py", line 125, in upload_to_vercel_blob
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-il90c_eq/workflow.py", line 125, in upload_to_vercel_blob
     manifest.append(response_data.get('url'))
                     ^^^^^^^^^^^^^^^^^
 AttributeError: 'list' object has no attribute 'get'
 
 ### workflow:auth0-sso-provisioning
 - workflow kit file 'mock_data.json' is <= 100 bytes
-- workflow kit file 'requests.http' is <= 100 bytes
 - step 1: technical_explanation too short (0 < 250 chars)
 - step 1: 'what you need to do' actions missing
 - step 1: checklist missing
@@ -1107,24 +1048,22 @@ AttributeError: 'list' object has no attribute 'get'
 - step 4: technical_explanation too short (0 < 250 chars)
 - step 4: 'what you need to do' actions missing
 - step 4: checklist missing
+- step 4: expected result missing
 
 ### workflow:bank-transaction-enrichment
 - workflow.py --dry-run failed: Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ew14qscv/workflow.py", line 207, in <module>
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ebwmnr5m/workflow.py", line 207, in <module>
     main()
     ~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ew14qscv/workflow.py", line 199, in main
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ebwmnr5m/workflow.py", line 199, in main
     run_workflow()
     ~~~~~~~~~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ew14qscv/workflow.py", line 114, in run_workflow
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ebwmnr5m/workflow.py", line 114, in run_workflow
     categorized_merchants = categorize_merchants(transactions)
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ew14qscv/workflow.py", line 110, in categorize_merchants
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ebwmnr5m/workflow.py", line 110, in categorize_merchants
     category = json.loads(response.read().decode('utf-8')).get('choices', [{}])[0].get('message', {}).get('content', '')
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AttributeError: 'list' object has no attribute 'get'
-
-### workflow:content-localization-pipeline
-- workflow kit file 'requests.http' is <= 100 bytes
 
 ### workflow:content-similarity-audit
 - workflow kit file 'requests.http' is <= 100 bytes
@@ -1132,21 +1071,18 @@ AttributeError: 'list' object has no attribute 'get'
 {'id': '1', 'text': 'This is the first article.'}
 
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-cx47q92o/workflow.py", line 183, in <module>
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-5rl6di9v/workflow.py", line 183, in <module>
     main()
     ~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-cx47q92o/workflow.py", line 175, in main
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-5rl6di9v/workflow.py", line 175, in main
     run_workflow()
     ~~~~~~~~~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-cx47q92o/workflow.py", line 103, in run_workflow
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-5rl6di9v/workflow.py", line 103, in run_workflow
     embeddings = embed_articles(articles)
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-cx47q92o/workflow.py", line 101, in embed_articles
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-5rl6di9v/workflow.py", line 101, in embed_articles
     return response_data.get('embeddings', [])  # Use .get() to avoid KeyError
            ^^^^^^^^^^^^^^^^^
 AttributeError: 'list' object has no attribute 'get'
-
-### workflow:crypto-portfolio-tracker
-- workflow kit file 'requests.http' is <= 100 bytes
 
 ### workflow:feature-flag-rollout
 - workflow kit file 'mock_data.json' is <= 100 bytes
@@ -1155,27 +1091,23 @@ AttributeError: 'list' object has no attribute 'get'
 ### workflow:hybrid-search-product-catalog
 - workflow kit file 'requests.http' is <= 100 bytes
 
-### workflow:jira-rest-notion-api-for-automation-automation-pipeline
-- workflow kit file 'requests.http' is <= 100 bytes
-
 ### workflow:llm-evaluation-benchmark
 - workflow.py --dry-run failed: Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-7j7mk1pt/workflow.py", line 195, in <module>
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ed8peviu/workflow.py", line 195, in <module>
     main()
     ~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-7j7mk1pt/workflow.py", line 187, in main
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ed8peviu/workflow.py", line 187, in main
     run_workflow()
     ~~~~~~~~~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-7j7mk1pt/workflow.py", line 98, in run_workflow
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ed8peviu/workflow.py", line 98, in run_workflow
     openai_responses = run_openai_baseline(prompts)
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-7j7mk1pt/workflow.py", line 95, in run_openai_baseline
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ed8peviu/workflow.py", line 95, in run_openai_baseline
     responses.append(result.get('choices', [{}])[0].get('message', {}).get('content', ''))
                      ^^^^^^^^^^
 AttributeError: 'list' object has no attribute 'get'
 
 ### workflow:mongodb-data-pipeline
 - workflow kit file 'mock_data.json' is <= 100 bytes
-- workflow kit file 'requests.http' is <= 100 bytes
 - step 1: technical_explanation too short (0 < 250 chars)
 - step 1: 'what you need to do' actions missing
 - step 1: checklist missing
@@ -1194,28 +1126,26 @@ AttributeError: 'list' object has no attribute 'get'
 - step 4: technical_explanation too short (0 < 250 chars)
 - step 4: 'what you need to do' actions missing
 - step 4: checklist missing
+- step 4: expected result missing
 
 ### workflow:notion-task-sync
 - workflow.py --dry-run failed: Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ezjk0kdi/workflow.py", line 208, in <module>
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-mbb9o2mk/workflow.py", line 208, in <module>
     main()
     ~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ezjk0kdi/workflow.py", line 200, in main
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-mbb9o2mk/workflow.py", line 200, in main
     run_workflow()
     ~~~~~~~~~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ezjk0kdi/workflow.py", line 118, in run_workflow
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-mbb9o2mk/workflow.py", line 118, in run_workflow
     sync_tasks_with_asana(open_tasks)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ezjk0kdi/workflow.py", line 90, in sync_tasks_with_asana
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-mbb9o2mk/workflow.py", line 90, in sync_tasks_with_asana
     task_id = task.get('external_id')
               ^^^^^^^^
 AttributeError: 'str' object has no attribute 'get'
 
 ### workflow:postgres-backup-reporting
 - workflow kit file 'mock_data.json' is <= 100 bytes
-
-### workflow:salesforce-rest-weatherapi-automation-pipeline
-- workflow kit file 'requests.http' is <= 100 bytes
 
 ### workflow:serverless-job-scheduler
 - workflow kit file 'mock_data.json' is <= 100 bytes
@@ -1238,10 +1168,4 @@ AttributeError: 'str' object has no attribute 'get'
 - step 4: technical_explanation too short (0 < 250 chars)
 - step 4: 'what you need to do' actions missing
 - step 4: checklist missing
-
-### workflow:store-locator-geocoding
-- workflow kit file 'requests.http' is <= 100 bytes
-
-### workflow:watson-assistant-helpdesk
-- workflow kit file 'requests.http' is <= 100 bytes
 
