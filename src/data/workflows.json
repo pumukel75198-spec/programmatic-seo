@@ -273,9 +273,11 @@
         "Access to OpenAI GPT-4 API",
         "Access to Supabase Database API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 14:08 UTC"
+    "created_and_verified_at": "2026-11-06 14:08 UTC",
+    "price": 19.99
   },
   {
     "slug": "multi-model-prompt-router",
@@ -496,9 +498,11 @@
         "An active Together AI API account and API key",
         "An active OpenAI GPT-4 API account and API key",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 14:08 UTC"
+    "created_and_verified_at": "2026-11-06 14:08 UTC",
+    "price": 34.99
   },
   {
     "slug": "llm-evaluation-benchmark",
@@ -750,9 +754,11 @@
         "Access to Mistral AI API",
         "Access to Airtable API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 14:08 UTC"
+    "created_and_verified_at": "2026-11-06 14:08 UTC",
+    "price": 34.99
   },
   {
     "slug": "batch-llm-processing",
@@ -944,9 +950,11 @@
         "Access to OpenAI GPT-4 API",
         "Access to Supabase Database API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 14:19 UTC"
+    "created_and_verified_at": "2026-11-06 14:19 UTC",
+    "price": 34.99
   },
   {
     "slug": "ai-customer-insights",
@@ -1206,9 +1214,11 @@
         "Access to PostHog Analytics API",
         "Access to Supabase Database API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 14:11 UTC"
+    "created_and_verified_at": "2026-11-06 14:11 UTC",
+    "price": 34.99
   },
   {
     "slug": "claude-document-summarizer",
@@ -1452,9 +1462,11 @@
         "A JSON manifest file stored in S3 containing document entries",
         "Access to Amazon S3 API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 14:12 UTC"
+    "created_and_verified_at": "2026-11-06 14:12 UTC",
+    "price": 19.99
   },
   {
     "slug": "gemini-multimodal-analyzer",
@@ -1700,9 +1712,11 @@
         "Access to Google Gemini API",
         "Access to Vercel Blob API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 14:12 UTC"
+    "created_and_verified_at": "2026-11-06 14:12 UTC",
+    "price": 34.99
   },
   {
     "slug": "watson-assistant-helpdesk",
@@ -1961,9 +1975,11 @@
         "Access to IBM Watson Assistant API",
         "Access to Zendesk Support API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 14:13 UTC"
+    "created_and_verified_at": "2026-11-06 14:13 UTC",
+    "price": 34.99
   },
   {
     "slug": "podcast-transcription-pipeline",
@@ -2205,9 +2221,11 @@
         "Access to Deepgram Speech API",
         "Access to Supabase Database API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 14:13 UTC"
+    "created_and_verified_at": "2026-11-06 14:13 UTC",
+    "price": 19.99
   },
   {
     "slug": "ai-voiceover-production",
@@ -2395,9 +2413,11 @@
         "Access to Amazon Polly API",
         "Access to Amazon S3 API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 14:15 UTC"
+    "created_and_verified_at": "2026-11-06 14:15 UTC",
+    "price": 19.99
   },
   {
     "slug": "ai-image-generation-pipeline",
@@ -2623,9 +2643,11 @@
         "Access to DeepAI Image Generator API",
         "Access to Vercel Blob API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 14:22 UTC"
+    "created_and_verified_at": "2026-11-06 14:22 UTC",
+    "price": 19.99
   },
   {
     "slug": "semantic-search-knowledge-base",
@@ -2892,9 +2914,11 @@
         "Access to Pinecone Vector API",
         "Access to Notion API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 14:22 UTC"
+    "created_and_verified_at": "2026-11-06 14:22 UTC",
+    "price": 34.99
   },
   {
     "slug": "hybrid-search-product-catalog",
@@ -3160,9 +3184,11 @@
         "Access to Cohere Embed API",
         "Access to Shopify Admin API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 14:23 UTC"
+    "created_and_verified_at": "2026-11-06 14:23 UTC",
+    "price": 34.99
   },
   {
     "slug": "rag-document-assistant",
@@ -3378,9 +3404,11 @@
         "Access to Qdrant Vector API",
         "Access to OpenAI GPT-4 API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 14:23 UTC"
+    "created_and_verified_at": "2026-11-06 14:23 UTC",
+    "price": 34.99
   },
   {
     "slug": "content-similarity-audit",
@@ -3588,9 +3616,11 @@
         "Access to Cohere Embed API",
         "Access to Airtable API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 14:23 UTC"
+    "created_and_verified_at": "2026-11-06 14:23 UTC",
+    "price": 34.99
   },
   {
     "slug": "transactional-email-delivery",
@@ -3806,9 +3836,11 @@
         "Access to SendGrid Email API",
         "Access to Supabase Database API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 14:57 UTC"
+    "created_and_verified_at": "2026-11-06 14:57 UTC",
+    "price": 19.99
   },
   {
     "slug": "email-campaign-automation",
@@ -4061,9 +4093,11 @@
         "Access to Resend Email API",
         "Access to Airtable API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 14:26 UTC"
+    "created_and_verified_at": "2026-11-06 14:26 UTC",
+    "price": 19.99
   },
   {
     "slug": "sms-alert-system",
@@ -4322,9 +4356,11 @@
         "Access to Sendinblue SMS API",
         "Access to Supabase Database API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 14:26 UTC"
+    "created_and_verified_at": "2026-11-06 14:26 UTC",
+    "price": 19.99
   },
   {
     "slug": "slack-incident-notifications",
@@ -4568,9 +4604,11 @@
         "Access to Slack API",
         "Access to Sentry Error API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 14:35 UTC"
+    "created_and_verified_at": "2026-11-06 14:35 UTC",
+    "price": 19.99
   },
   {
     "slug": "telegram-community-bot",
@@ -4862,9 +4900,11 @@
         "Access to OpenAI GPT-4 API",
         "Access to Supabase Database API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 14:35 UTC"
+    "created_and_verified_at": "2026-11-06 14:35 UTC",
+    "price": 19.99
   },
   {
     "slug": "video-call-summarizer",
@@ -5099,9 +5139,11 @@
         "Access to OpenAI Whisper API",
         "Access to Notion API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 14:40 UTC"
+    "created_and_verified_at": "2026-11-06 14:40 UTC",
+    "price": 34.99
   },
   {
     "slug": "conversational-messaging-hub",
@@ -5365,9 +5407,11 @@
         "Access to HubSpot CRM API",
         "Access to OpenAI GPT-4 API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 14:42 UTC"
+    "created_and_verified_at": "2026-11-06 14:42 UTC",
+    "price": 34.99
   },
   {
     "slug": "crm-lead-scoring",
@@ -5620,9 +5664,11 @@
         "Access to OpenAI GPT-4 API",
         "Access to Slack Web API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 14:45 UTC"
+    "created_and_verified_at": "2026-11-06 14:45 UTC",
+    "price": 19.99
   },
   {
     "slug": "salesforce-pipeline-sync",
@@ -5886,9 +5932,11 @@
         "Access to Airtable API",
         "Access to Slack Web API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 14:46 UTC"
+    "created_and_verified_at": "2026-11-06 14:46 UTC",
+    "price": 34.99
   },
   {
     "slug": "personalized-outreach-engine",
@@ -6144,9 +6192,11 @@
         "Access to OpenAI GPT-4 API",
         "Access to Resend Email API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 14:47 UTC"
+    "created_and_verified_at": "2026-11-06 14:47 UTC",
+    "price": 19.99
   },
   {
     "slug": "support-ticket-triage",
@@ -6417,9 +6467,11 @@
         "Access to OpenAI GPT-4 API",
         "Access to Supabase Database API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 14:50 UTC"
+    "created_and_verified_at": "2026-11-06 14:50 UTC",
+    "price": 19.99
   },
   {
     "slug": "ai-help-center-search",
@@ -6678,9 +6730,11 @@
         "Access to OpenAI Embeddings API",
         "Access to Pinecone Vector API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 14:57 UTC"
+    "created_and_verified_at": "2026-11-06 14:57 UTC",
+    "price": 34.99
   },
   {
     "slug": "csat-feedback-analysis",
@@ -6962,9 +7016,11 @@
         "Access to Google Sheets API",
         "Access to OpenAI GPT-4 API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 14:58 UTC"
+    "created_and_verified_at": "2026-11-06 14:58 UTC",
+    "price": 19.99
   },
   {
     "slug": "subscription-billing-automation",
@@ -7220,9 +7276,11 @@
         "Access to Resend Email API",
         "Access to Supabase Database API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 14:59 UTC"
+    "created_and_verified_at": "2026-11-06 14:59 UTC",
+    "price": 34.99
   },
   {
     "slug": "invoice-reconciliation",
@@ -7482,9 +7540,11 @@
         "Access to Google Sheets API",
         "Access to OpenAI GPT-4 API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 15:00 UTC"
+    "created_and_verified_at": "2026-11-06 15:00 UTC",
+    "price": 34.99
   },
   {
     "slug": "paypal-payout-monitoring",
@@ -7747,9 +7807,11 @@
         "Access to Slack Web API",
         "Access to Airtable API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 15:03 UTC"
+    "created_and_verified_at": "2026-11-06 15:03 UTC",
+    "price": 34.99
   },
   {
     "slug": "stock-market-alerts",
@@ -7991,9 +8053,11 @@
         "Access to Twelve Data API",
         "Access to Slack Web API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 15:04 UTC"
+    "created_and_verified_at": "2026-11-06 15:04 UTC",
+    "price": 19.99
   },
   {
     "slug": "crypto-portfolio-tracker",
@@ -8236,9 +8300,11 @@
         "A Telegram bot created with a valid bot token",
         "Access to Telegram Bot API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 15:05 UTC"
+    "created_and_verified_at": "2026-11-06 15:05 UTC",
+    "price": 19.99
   },
   {
     "slug": "bank-transaction-enrichment",
@@ -8506,9 +8572,11 @@
         "Access to OpenAI GPT-4 API",
         "Access to Airtable API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 15:06 UTC"
+    "created_and_verified_at": "2026-11-06 15:06 UTC",
+    "price": 34.99
   },
   {
     "slug": "supabase-realtime-dashboard",
@@ -8737,9 +8805,11 @@
         "Access to PostHog Analytics API",
         "Access to Vercel Blob API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 15:12 UTC"
+    "created_and_verified_at": "2026-11-06 15:12 UTC",
+    "price": 19.99
   },
   {
     "slug": "airtable-content-sync",
@@ -9017,9 +9087,11 @@
         "Access to Notion API",
         "Access to Resend Email API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 15:13 UTC"
+    "created_and_verified_at": "2026-11-06 15:13 UTC",
+    "price": 19.99
   },
   {
     "slug": "mongodb-data-pipeline",
@@ -9059,8 +9131,29 @@
       "prerequisites": [],
       "glossary": [],
       "troubleshooting": [],
-      "resources": []
-    }
+      "resources": [
+        {
+          "label": "MongoDB Atlas API",
+          "url": "https://www.mongodb.com/docs/atlas/api/data-api/"
+        },
+        {
+          "label": "Amazon S3 API",
+          "url": "https://docs.aws.amazon.com/s3/index.html"
+        },
+        {
+          "label": "OpenAI GPT-4 API",
+          "url": "https://platform.openai.com/docs/api-reference/chat/create"
+        }
+      ],
+      "price": 34.99,
+      "before_you_start": [
+        "Access to MongoDB Atlas API",
+        "Access to Amazon S3 API",
+        "Access to OpenAI GPT-4 API"
+      ]
+    },
+    "price": 34.99,
+    "created_and_verified_at": "2026-11-07 09:21 UTC"
   },
   {
     "slug": "postgres-backup-reporting",
@@ -9323,9 +9416,11 @@
         "Access to Slack Web API",
         "Access to Google Sheets API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 15:17 UTC"
+    "created_and_verified_at": "2026-11-06 15:17 UTC",
+    "price": 34.99
   },
   {
     "slug": "redis-rate-limit-store",
@@ -9564,9 +9659,11 @@
         "Access to Cloudflare Workers API",
         "Access to Sentry Error API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 15:17 UTC"
+    "created_and_verified_at": "2026-11-06 15:17 UTC",
+    "price": 34.99
   },
   {
     "slug": "google-sheets-reporting-hub",
@@ -9828,9 +9925,11 @@
         "Access to OpenAI GPT-4 API",
         "Access to Resend Email API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 15:18 UTC"
+    "created_and_verified_at": "2026-11-06 15:18 UTC",
+    "price": 19.99
   },
   {
     "slug": "deployment-monitoring-alerts",
@@ -10097,9 +10196,11 @@
         "Access to Sentry Performance API",
         "Access to Slack Web API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 15:21 UTC"
+    "created_and_verified_at": "2026-11-06 15:21 UTC",
+    "price": 34.99
   },
   {
     "slug": "feature-flag-rollout",
@@ -10353,9 +10454,11 @@
         "Access to GitHub REST API",
         "Access to Slack Web API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 15:22 UTC"
+    "created_and_verified_at": "2026-11-06 15:22 UTC",
+    "price": 19.99
   },
   {
     "slug": "secrets-rotation-audit",
@@ -10606,9 +10709,11 @@
         "Access to GitHub REST API",
         "Access to Slack Web API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 15:31 UTC"
+    "created_and_verified_at": "2026-11-06 15:31 UTC",
+    "price": 34.99
   },
   {
     "slug": "serverless-job-scheduler",
@@ -10656,8 +10761,29 @@
       "prerequisites": [],
       "glossary": [],
       "troubleshooting": [],
-      "resources": []
-    }
+      "resources": [
+        {
+          "label": "Amazon AWS Lambda API",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html"
+        },
+        {
+          "label": "Supabase Database API",
+          "url": "https://supabase.com/docs/guides/api"
+        },
+        {
+          "label": "Sentry Error API",
+          "url": "https://docs.sentry.io/api/"
+        }
+      ],
+      "price": 34.99,
+      "before_you_start": [
+        "Access to Amazon AWS Lambda API",
+        "Access to Supabase Database API",
+        "Access to Sentry Error API"
+      ]
+    },
+    "price": 34.99,
+    "created_and_verified_at": "2026-11-07 09:21 UTC"
   },
   {
     "slug": "api-health-monitoring",
@@ -10926,9 +11052,11 @@
         "Access to Sentry Performance API",
         "Access to PostHog Analytics API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 15:36 UTC"
+    "created_and_verified_at": "2026-11-06 15:36 UTC",
+    "price": 19.99
   },
   {
     "slug": "linear-roadmap-sync",
@@ -11192,9 +11320,11 @@
         "Access to Notion API",
         "Access to GitHub REST API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 15:36 UTC"
+    "created_and_verified_at": "2026-11-06 15:36 UTC",
+    "price": 34.99
   },
   {
     "slug": "release-notes-generator",
@@ -11452,9 +11582,11 @@
         "Access to OpenAI GPT-4 API",
         "Access to Resend Email API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 15:37 UTC"
+    "created_and_verified_at": "2026-11-06 15:37 UTC",
+    "price": 19.99
   },
   {
     "slug": "programmatic-seo-pipeline",
@@ -11670,9 +11802,11 @@
         "Access to Supabase Database API",
         "Access to Algolia Search API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 15:38 UTC"
+    "created_and_verified_at": "2026-11-06 15:38 UTC",
+    "price": 34.99
   },
   {
     "slug": "ai-content-automation",
@@ -11962,9 +12096,11 @@
         "Access to Notion API",
         "Access to Resend Email API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 15:39 UTC"
+    "created_and_verified_at": "2026-11-06 15:39 UTC",
+    "price": 19.99
   },
   {
     "slug": "seo-content-audit",
@@ -12218,9 +12354,11 @@
         "Access to Google Sheets API",
         "Access to OpenAI GPT-4 API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 15:40 UTC"
+    "created_and_verified_at": "2026-11-06 15:40 UTC",
+    "price": 19.99
   },
   {
     "slug": "blog-cms-publishing",
@@ -12495,9 +12633,11 @@
         "Access to OpenAI GPT-4 API",
         "Access to Cloudflare Workers API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 16:56 UTC"
+    "created_and_verified_at": "2026-11-06 16:56 UTC",
+    "price": 34.99
   },
   {
     "slug": "local-seo-landing-pages",
@@ -12750,9 +12890,11 @@
         "A Mapbox account with an access token for the Mapbox Maps API",
         "An OpenAI account with an API key for the OpenAI GPT-4 API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 15:51 UTC"
+    "created_and_verified_at": "2026-11-06 15:51 UTC",
+    "price": 19.99
   },
   {
     "slug": "newsletter-automation",
@@ -13006,9 +13148,11 @@
         "Access to Resend Email API",
         "Access to OpenAI GPT-4 API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 15:52 UTC"
+    "created_and_verified_at": "2026-11-06 15:52 UTC",
+    "price": 19.99
   },
   {
     "slug": "content-localization-pipeline",
@@ -13294,9 +13438,11 @@
         "Access to Contentful Content Management System API",
         "Access to Amazon S3 API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 15:53 UTC"
+    "created_and_verified_at": "2026-11-06 15:53 UTC",
+    "price": 34.99
   },
   {
     "slug": "meeting-notes-automation",
@@ -13557,9 +13703,11 @@
         "Access to Notion API",
         "Access to Slack Web API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 15:53 UTC"
+    "created_and_verified_at": "2026-11-06 15:53 UTC",
+    "price": 19.99
   },
   {
     "slug": "notion-task-sync",
@@ -13831,9 +13979,11 @@
         "Access to Asana API",
         "Access to Slack Web API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 15:54 UTC"
+    "created_and_verified_at": "2026-11-06 15:54 UTC",
+    "price": 19.99
   },
   {
     "slug": "document-approval-workflow",
@@ -14089,9 +14239,11 @@
         "Access to PDF.co API",
         "Access to Slack Web API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 15:56 UTC"
+    "created_and_verified_at": "2026-11-06 15:56 UTC",
+    "price": 34.99
   },
   {
     "slug": "form-submission-routing",
@@ -14346,9 +14498,11 @@
         "Access to Resend Email API",
         "Access to Airtable API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 16:38 UTC"
+    "created_and_verified_at": "2026-11-06 16:38 UTC",
+    "price": 19.99
   },
   {
     "slug": "team-wiki-search",
@@ -14632,9 +14786,11 @@
         "Access to OpenAI Embeddings API",
         "Access to Pinecone Vector API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 16:39 UTC"
+    "created_and_verified_at": "2026-11-06 16:39 UTC",
+    "price": 34.99
   },
   {
     "slug": "design-feedback-collection",
@@ -14902,9 +15058,11 @@
         "Access to Slack Web API",
         "Access to Notion API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 16:42 UTC"
+    "created_and_verified_at": "2026-11-06 16:42 UTC",
+    "price": 19.99
   },
   {
     "slug": "collaboration-presence-sync",
@@ -15162,9 +15320,11 @@
         "Access to Ably Realtime API",
         "Access to Supabase Database API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 16:43 UTC"
+    "created_and_verified_at": "2026-11-06 16:43 UTC",
+    "price": 34.99
   },
   {
     "slug": "product-analytics-dashboard",
@@ -15421,9 +15581,11 @@
         "Access to Google Sheets API",
         "Access to Slack Web API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 16:45 UTC"
+    "created_and_verified_at": "2026-11-06 16:45 UTC",
+    "price": 19.99
   },
   {
     "slug": "error-tracking-alerts",
@@ -15684,9 +15846,11 @@
         "Access to Slack Web API",
         "Access to Linear GraphQL API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 16:46 UTC"
+    "created_and_verified_at": "2026-11-06 16:46 UTC",
+    "price": 19.99
   },
   {
     "slug": "website-performance-reporting",
@@ -15938,9 +16102,11 @@
         "Access to Cloudflare Workers API",
         "Access to Resend Email API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 16:46 UTC"
+    "created_and_verified_at": "2026-11-06 16:46 UTC",
+    "price": 19.99
   },
   {
     "slug": "social-media-analytics",
@@ -16205,9 +16371,11 @@
         "Access to Twitch Analytics API",
         "Access to Twitch API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 16:57 UTC"
+    "created_and_verified_at": "2026-11-06 16:57 UTC",
+    "price": 19.99
   },
   {
     "slug": "shopify-order-automation",
@@ -16495,9 +16663,11 @@
         "Access to Resend Email API",
         "Access to Supabase Database API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 17:00 UTC"
+    "created_and_verified_at": "2026-11-06 17:00 UTC",
+    "price": 19.99
   },
   {
     "slug": "inventory-sync-automation",
@@ -16767,9 +16937,11 @@
         "Access to Airtable API",
         "Access to Slack Web API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 17:01 UTC"
+    "created_and_verified_at": "2026-11-06 17:01 UTC",
+    "price": 19.99
   },
   {
     "slug": "weather-driven-ops-alerts",
@@ -17013,9 +17185,11 @@
         "Access to OpenWeather Weather API",
         "Access to Slack Web API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 17:05 UTC"
+    "created_and_verified_at": "2026-11-06 17:05 UTC",
+    "price": 19.99
   },
   {
     "slug": "store-locator-geocoding",
@@ -17278,9 +17452,11 @@
         "A Google Cloud account with an API key for the Google Maps API",
         "Access to Airtable API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 17:07 UTC"
+    "created_and_verified_at": "2026-11-06 17:07 UTC",
+    "price": 19.99
   },
   {
     "slug": "asset-backup-automation",
@@ -17530,9 +17706,11 @@
         "Access to Vercel Blob API",
         "Access to IBM Cloud Object Storage API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 17:07 UTC"
+    "created_and_verified_at": "2026-11-06 17:07 UTC",
+    "price": 34.99
   },
   {
     "slug": "s3-static-site-publishing",
@@ -17776,9 +17954,11 @@
         "Access to Cloudflare Workers API",
         "Access to Sentry Error API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 34.99
     },
-    "created_and_verified_at": "2026-11-06 17:26 UTC"
+    "created_and_verified_at": "2026-11-06 17:26 UTC",
+    "price": 34.99
   },
   {
     "slug": "auth0-sso-provisioning",
@@ -17826,8 +18006,29 @@
       "prerequisites": [],
       "glossary": [],
       "troubleshooting": [],
-      "resources": []
-    }
+      "resources": [
+        {
+          "label": "Auth0 Authentication API",
+          "url": "https://auth0.com/docs/api/management/v2"
+        },
+        {
+          "label": "Microsoft Graph API",
+          "url": "https://docs.microsoft.com/en-us/graph/api/overview"
+        },
+        {
+          "label": "Slack Web API",
+          "url": "https://api.slack.com/methods"
+        }
+      ],
+      "price": 34.99,
+      "before_you_start": [
+        "Access to Auth0 Authentication API",
+        "Access to Microsoft Graph API",
+        "Access to Slack Web API"
+      ]
+    },
+    "price": 34.99,
+    "created_and_verified_at": "2026-11-07 09:21 UTC"
   },
   {
     "slug": "clerk-user-onboarding",
@@ -18092,9 +18293,11 @@
         "Access to Resend Email API",
         "Access to Supabase Database API",
         "Python 3.10 or newer (standard library only) and a terminal"
-      ]
+      ],
+      "price": 19.99
     },
-    "created_and_verified_at": "2026-11-06 17:29 UTC"
+    "created_and_verified_at": "2026-11-06 17:29 UTC",
+    "price": 19.99
   },
   {
     "slug": "slack-twitch-automation-pipeline",

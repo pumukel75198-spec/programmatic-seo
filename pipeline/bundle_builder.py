@@ -85,9 +85,35 @@ def _dry_run_env_value(name: str) -> str:
 
 def _env_example(code: str) -> str:
     names = _env_names(code)
+    header = (
+        "# FlowMatrix Implementation Kit – environment variables\n"
+        "# Copy this file to .env and fill in your real credentials.\n"
+        "# Never commit the .env file to version control.\n"
+    )
     if not names:
-        return "# No environment variables required.\n"
-    return "\n".join(f"{name}=" for name in names) + "\n"
+        return header + "# No environment variables required for this kit.\n"
+    return header + "\n".join(f"{name}=" for name in names) + "\n"
+
+
+def _shape_mock(step_code: str, mock: Any) -> Any:
+    """Shape a string mock into the structure the step code actually reads.
+
+    LLMs frequently document a plain string as ``mock_response`` while the
+    snippet expects an OpenAI/Anthropic response object. Serving the raw string
+    would raise ``AttributeError: 'str' object has no attribute 'get'`` in the
+    customer sandbox, so the mock is wrapped deterministically.
+    """
+    if not isinstance(mock, str):
+        return mock
+    if ".get('choices'" in step_code or '.get("choices"' in step_code:
+        return {"choices": [{"message": {"content": mock}}]}
+    if ".get('feedback'" in step_code or '.get("feedback"' in step_code:
+        return {"feedback": mock}
+    if ".get('data'" in step_code or '.get("data"' in step_code:
+        return {"data": [{"id": "1", "text": mock, "value": 0.5}]}
+    if "json.loads" in step_code:
+        return {"__json_string__": mock}
+    return mock
 
 
 def _mock_data(workflow: dict[str, Any]) -> dict[str, Any]:
@@ -110,6 +136,7 @@ def _mock_data(workflow: dict[str, Any]) -> dict[str, Any]:
                 except Exception:  # noqa: BLE001
                     continue
         mock = _json_safe(mock)
+        mock = _shape_mock(step_code, mock)
         for url in _URL_RE.findall(step_code):
             data.setdefault(url, mock)
     code = _step_code(workflow).lower()
@@ -210,8 +237,8 @@ def _schema_sql(workflow: dict[str, Any]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def _requests_http(code: str) -> str:
-    lines = ["### FlowMatrix API calls", ""]
+def _requests_http(code: str, title: str = "") -> str:
+    lines = [f"# {title}", ""] if title else ["### FlowMatrix API calls", ""]
     urls: list[str] = []
     for url in sorted(_URL_RE.findall(code)):
         if any(marker in url for marker in ("<", ">", "{", "}")):
@@ -270,6 +297,7 @@ def _requests_http(code: str) -> str:
 
 def _workflow_script(workflow: dict[str, Any]) -> str:
     title = str(workflow.get("title") or "FlowMatrix Workflow")
+    slug = str(workflow.get("slug") or "")
     body = _step_code(workflow)
     env_names = _env_names(body)
     env_defaults = {name: _dry_run_env_value(name) for name in env_names}
@@ -313,6 +341,7 @@ def _workflow_script(workflow: dict[str, Any]) -> str:
     return f'''#!/usr/bin/env python3
 """FlowMatrix Implementation Kit – {title}
 
+Slug: {slug}
 Run with --dry-run to execute against mock_data.json (no real API keys needed).
 All code uses the Python standard library only.
 """
@@ -353,11 +382,12 @@ def _mock_urlopen(mock_responses):
         url = getattr(request, "full_url", None) or str(request)
         for key, payload in mock_responses.items():
             if key in url:
-                body = (
-                    payload.encode("utf-8")
-                    if isinstance(payload, str)
-                    else json.dumps(payload).encode("utf-8")
-                )
+                if isinstance(payload, dict) and "__json_string__" in payload:
+                    body = json.dumps(payload["__json_string__"]).encode("utf-8")
+                elif isinstance(payload, str):
+                    body = payload.encode("utf-8")
+                else:
+                    body = json.dumps(payload).encode("utf-8")
                 return _Resp(body)
         # Generic fallback so environment-driven mock URLs (e.g. a
         # dry-run SUPABASE_URL) still satisfy the common response contracts.
@@ -417,6 +447,7 @@ if __name__ == "__main__":
 
 def _ai_prompt(workflow: dict[str, Any], kind: str) -> str:
     title = str(workflow.get("title") or "the workflow")
+    slug = str(workflow.get("slug") or "")
     return f"""# AI Implementation Prompt – {title}
 
 You are a senior software engineer. Port the following {kind} to the target
@@ -426,6 +457,7 @@ language's standard library where possible. Keep all comments in English.
 
 ## Source
 - Title: {title}
+- Slug: {slug}
 - Category: {workflow.get("category", "—")}
 - Tools: {", ".join((workflow.get("details") or {}).get("tools") or []) or "—"}
 
@@ -440,12 +472,15 @@ language's standard library where possible. Keep all comments in English.
 
 def _workflow_readme(workflow: dict[str, Any]) -> str:
     title = str(workflow.get("title") or "FlowMatrix Workflow")
+    slug = str(workflow.get("slug") or "")
     details = workflow.get("details") or {}
     steps = details.get("steps") or []
     checklist = "\n".join(
         f"- [ ] Step {i}: {step.get('title', '')}" for i, step in enumerate(steps, 1)
     )
     return f"""# {title} – Implementation Kit
+
+Slug: `{slug}`
 
 This kit contains everything you need to rebuild the workflow locally.
 
@@ -500,6 +535,13 @@ python3 api_client.py
 def _api_test(api: dict[str, Any], script: str = "") -> str:
     env_defaults = {name: _dry_run_env_value(name) for name in _env_names(script)}
     title = str(api.get("title") or "API")
+    details = api.get("details") or {}
+    endpoint = str(details.get("endpoint") or "").strip()
+    test_url = (
+        endpoint
+        if endpoint.startswith(("http://", "https://"))
+        else "https://api.example.com/v1/test"
+    )
     return f'''"""Executable mock tests for the {title} client."""
 import json
 import os
@@ -543,22 +585,28 @@ class ApiClientTest(unittest.TestCase):
         self.assertTrue(callable(getattr(api_client, "request_json", None)))
 
     def test_successful_call_and_auth_header(self):
+        import inspect
+
+        signature = inspect.signature(api_client.request_json)
+        kwargs = {{}}
+        if "headers" in signature.parameters:
+            kwargs["headers"] = {{"Authorization": "Bearer unit-test-token"}}
         with mock.patch(
             "urllib.request.urlopen", return_value=_Resp({{"ok": True}})
         ) as mocked:
-            result = api_client.request_json(
-                "https://api.example.com/v1/test",
-                headers={{"Authorization": "Bearer unit-test-token"}},
-            )
+            result = api_client.request_json({test_url!r}, **kwargs)
         self.assertIsInstance(result, dict)
         self.assertEqual(result.get("ok"), True)
         self.assertTrue(mocked.called)
-        request = mocked.call_args[0][0]
-        headers = getattr(request, "headers", {{}})
-        authorization = headers.get("Authorization") or headers.get("authorization") or ""
-        # The client may derive the token from its own environment variable;
-        # the contract is that an Authorization header is present at all.
-        self.assertTrue(authorization)
+        if "headers" in signature.parameters:
+            request = mocked.call_args[0][0]
+            headers = getattr(request, "headers", {{}})
+            authorization = (
+                headers.get("Authorization") or headers.get("authorization") or ""
+            )
+            # The client may derive the token from its own environment variable;
+            # the contract is that an Authorization header is present at all.
+            self.assertTrue(authorization)
 
     def test_http_error_is_handled(self):
         error = urllib.error.HTTPError(
@@ -579,8 +627,18 @@ if __name__ == "__main__":
 '''
 
 
+def _pdf_page_count(path: Path) -> int:
+    try:
+        return len(re.findall(rb"/Type\s*/Page\b", path.read_bytes()))
+    except Exception:  # noqa: BLE001
+        return 0
+
+
 def _cheatsheet_pdf(
-    api: dict[str, Any], script: str, out_path: Path
+    api: dict[str, Any],
+    script: str,
+    out_path: Path,
+    total_pages: int | None = None,
 ) -> None:
     """Render the multi-page API kit PDF (H1 on page 1 and 2, code, notice)."""
     import textwrap
@@ -630,7 +688,8 @@ def _cheatsheet_pdf(
         c.drawString(
             margin,
             28,
-            f"FlowMatrix.dev – API Implementation Kit | Page {page_number}",
+            "FlowMatrix.dev – API Implementation Kit | "
+            f"Page {page_number} of {total_pages or '?'}",
         )
 
     def h1(subtitle: str | None = None) -> float:
@@ -712,6 +771,14 @@ def _cheatsheet_pdf(
             c.drawString(margin + 8, y, line)
             y -= 12
         y -= 4
+    y -= 8
+    c.setFont("Helvetica-Bold", 9)
+    c.drawString(margin, y, "Verification & Link Validity Notice")
+    y -= 12
+    c.setFont("Helvetica", 7.5)
+    for line in wrap(disclaimer, "Helvetica", 7.5):
+        c.drawString(margin, y, line)
+        y -= 9
     footer()
     c.showPage()
     page_number += 1
@@ -847,7 +914,12 @@ def build_api_kit(
     script = script_path.read_text(encoding="utf-8")
     out_dir.mkdir(parents=True, exist_ok=True)
     cheatsheet_path = out_dir / f"{slug}-cheatsheet.pdf"
-    _cheatsheet_pdf(api, script, cheatsheet_path)
+    # Two-pass render so the footer can show the real "Page X of Y".
+    with tempfile.TemporaryDirectory() as count_tmp:
+        count_path = Path(count_tmp) / "count.pdf"
+        _cheatsheet_pdf(api, script, count_path, total_pages=None)
+        total_pages = _pdf_page_count(count_path)
+    _cheatsheet_pdf(api, script, cheatsheet_path, total_pages=total_pages)
     with tempfile.TemporaryDirectory() as tmp:
         directory = Path(tmp)
         shutil.copy2(script_path, directory / "api_client.py")
@@ -858,7 +930,8 @@ def build_api_kit(
             _env_example(script), encoding="utf-8"
         )
         (directory / "requests.http").write_text(
-            _requests_http(script), encoding="utf-8"
+            _requests_http(script, title=str(api.get("title") or "")),
+            encoding="utf-8",
         )
         (directory / "AI_INTEGRATION_PROMPT.md").write_text(
             _ai_prompt(api, "API client"), encoding="utf-8"

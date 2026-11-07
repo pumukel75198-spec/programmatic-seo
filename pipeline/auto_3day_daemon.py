@@ -2347,6 +2347,35 @@ def _finalize(
     return git_ok, build_ok
 
 
+def run_customer_audit(args: argparse.Namespace) -> bool:
+    """Run the end-to-end customer audit as the final mandatory gate.
+
+    Every future 3-day batch must end with the same customer-facing quality
+    control that a paying buyer would perform: open the PDF, unzip the kit and
+    execute the code. The audit heals defects autonomously and writes
+    ``CUSTOMER_AUDIT_REPORT.md``.
+    """
+    log("[AUDIT] starting end-to-end customer audit & auto-heal")
+    try:
+        from . import customer_audit_healer
+    except Exception as error:  # noqa: BLE001 - never abort the batch here
+        log(f"[AUDIT] could not import customer_audit_healer: {error}")
+        return False
+
+    audit_args: list[str] = []
+    if getattr(args, "skip_git", False):
+        audit_args.append("--skip-git")
+    if getattr(args, "skip_build", False):
+        audit_args.append("--skip-build")
+    try:
+        code = customer_audit_healer.main(audit_args)
+    except Exception as error:  # noqa: BLE001 - report, do not crash the daemon
+        log(f"[AUDIT] customer audit crashed: {error}")
+        return False
+    log(f"[AUDIT] customer audit finished with exit code {code}")
+    return code == 0
+
+
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     cfg.load_env()
@@ -2739,6 +2768,18 @@ def main(argv: list[str] | None = None) -> int:
     state["status"] = "success"
     state["finished_at"] = _now()
     sync_state()
+
+    # ------------------------------------------------------------------ #
+    # Mandatory final gate: end-to-end customer audit & auto-heal
+    # ------------------------------------------------------------------ #
+    audit_ok = run_customer_audit(args)
+    state["customer_audit_ok"] = audit_ok
+    sync_state()
+    if not audit_ok:
+        log(
+            "[AUDIT] customer audit reported remaining issues – see "
+            "CUSTOMER_AUDIT_REPORT.md (batch artifacts are still delivered)"
+        )
 
     if not args.no_launchd:
         try:

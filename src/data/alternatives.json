@@ -15,7 +15,7 @@
           "cons": ["No native collaboration", "Sync is paid"],
           "bestFor": "Privacy-focused users who want local files",
           "recommended": true,
-          "url": "https://obsidian.md"
+          "url": "https://obsidian.md?ref=flowmatrix"
         },
         {
           "name": "Coda",
@@ -23,7 +23,7 @@
           "pros": ["Powerful formulas", "Good automation", "Team-friendly"],
           "cons": ["Learning curve", "Pricing scales quickly"],
           "bestFor": "Teams that need docs and tables in one place",
-          "url": "https://coda.io"
+          "url": "https://coda.io?ref=flowmatrix"
         },
         {
           "name": "AppFlowy",
@@ -31,7 +31,7 @@
           "pros": ["Open source", "Self-hosting", "Notion-like UI"],
           "cons": ["Fewer integrations", "Younger ecosystem"],
           "bestFor": "Teams that want self-hosted knowledge management",
-          "url": "https://appflowy.io"
+          "url": "https://appflowy.io?ref=flowmatrix"
         }
       ],
       "bestFor": "Teams that need offline access, privacy or self-hosting",
@@ -63,7 +63,7 @@
           "cons": ["More complex UI", "Operation limits"],
           "bestFor": "Teams that want visual automation at a lower cost",
           "recommended": true,
-          "url": "https://make.com"
+          "url": "https://make.com?ref=flowmatrix"
         },
         {
           "name": "n8n",
@@ -71,7 +71,7 @@
           "pros": ["Open source", "Self-hosting", "Code nodes"],
           "cons": ["Technical setup", "Fewer ready-made templates"],
           "bestFor": "Developers who want full control and self-hosting",
-          "url": "https://n8n.io"
+          "url": "https://n8n.io?ref=flowmatrix"
         },
         {
           "name": "Pipedream",
@@ -79,7 +79,7 @@
           "pros": ["Code-first", "Great developer experience", "Fair pricing"],
           "cons": ["Less no-code", "Smaller community"],
           "bestFor": "Developers building custom integrations",
-          "url": "https://pipedream.com"
+          "url": "https://pipedream.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Teams with high workflow volume or self-hosting needs",
@@ -107,7 +107,7 @@
           "cons": ["Fewer plugins", "Performance on large files"],
           "bestFor": "Teams that want open-source design with self-hosting",
           "recommended": true,
-          "url": "https://penpot.app"
+          "url": "https://penpot.app?ref=flowmatrix"
         },
         {
           "name": "Sketch",
@@ -115,7 +115,7 @@
           "pros": ["Native macOS", "Local files", "Mature ecosystem"],
           "cons": ["macOS only", "Weaker collaboration"],
           "bestFor": "macOS designers who prefer local files",
-          "url": "https://www.sketch.com"
+          "url": "https://www.sketch.com?ref=flowmatrix"
         },
         {
           "name": "Framer",
@@ -127,7 +127,7 @@
           ],
           "cons": ["Less suited for design systems", "Per-site pricing"],
           "bestFor": "Teams that want to design and publish in one tool",
-          "url": "https://www.framer.com"
+          "url": "https://www.framer.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Design teams focused on privacy, local files or publishing",
@@ -155,7 +155,7 @@
           "cons": ["Requires ops", "Smaller app ecosystem"],
           "bestFor": "Teams with strict security and compliance needs",
           "recommended": true,
-          "url": "https://mattermost.com"
+          "url": "https://mattermost.com?ref=flowmatrix"
         },
         {
           "name": "Rocket.Chat",
@@ -163,7 +163,7 @@
           "pros": ["Open source", "Omnichannel", "Self-hosting"],
           "cons": ["Setup complexity", "UI can feel busy"],
           "bestFor": "Teams that need chat plus customer channels",
-          "url": "https://rocket.chat"
+          "url": "https://rocket.chat?ref=flowmatrix"
         },
         {
           "name": "Discord",
@@ -175,7 +175,7 @@
           ],
           "cons": ["Not enterprise-focused", "Less control over data"],
           "bestFor": "Communities and creator teams",
-          "url": "https://discord.com"
+          "url": "https://discord.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Teams with privacy, compliance or self-hosting requirements",
@@ -203,7 +203,7 @@
           "cons": ["Fewer integrations", "Smaller template library"],
           "bestFor": "Teams that want Airtable-like tables with data ownership",
           "recommended": true,
-          "url": "https://baserow.io"
+          "url": "https://baserow.io?ref=flowmatrix"
         },
         {
           "name": "NocoDB",
@@ -211,7 +211,7 @@
           "pros": ["Works with existing SQL", "Self-hosting", "REST API"],
           "cons": ["Setup required", "UI less polished"],
           "bestFor": "Teams with existing databases that want a no-code UI",
-          "url": "https://nocodb.com"
+          "url": "https://nocodb.com?ref=flowmatrix"
         },
         {
           "name": "SeaTable",
@@ -223,7 +223,7 @@
           ],
           "cons": ["Smaller ecosystem", "Learning curve"],
           "bestFor": "Teams that need spreadsheets and databases together",
-          "url": "https://seatable.io"
+          "url": "https://seatable.io?ref=flowmatrix"
         }
       ],
       "bestFor": "Teams that need data ownership, self-hosting or open formats",
@@ -1280,7 +1280,7 @@
           "cons": ["Usage-based pricing", "Fewer model sizes"],
           "bestFor": "Teams that need careful reasoning and long documents",
           "recommended": true,
-          "url": "https://www.anthropic.com/"
+          "url": "https://www.anthropic.com/?ref=flowmatrix"
         },
         {
           "name": "Google Gemini",
@@ -1288,7 +1288,7 @@
           "pros": ["Multimodal input", "Free tier", "Google Cloud integration"],
           "cons": ["Quotas vary by region", "API surface changes often"],
           "bestFor": "Prototypes that combine text, images and audio",
-          "url": "https://ai.google.dev/"
+          "url": "https://ai.google.dev/?ref=flowmatrix"
         },
         {
           "name": "Mistral AI",
@@ -1296,7 +1296,7 @@
           "pros": ["Open-weight options", "Competitive pricing", "EU hosting"],
           "cons": ["Smaller ecosystem", "Fewer managed features"],
           "bestFor": "Teams that value open models and EU hosting",
-          "url": "https://mistral.ai/"
+          "url": "https://mistral.ai/?ref=flowmatrix"
         }
       ],
       "bestFor": "Teams comparing hosted and open-weight LLMs",
@@ -1328,7 +1328,7 @@
           "cons": ["Higher fees", "Less control over checkout"],
           "bestFor": "SaaS teams that want tax compliance handled",
           "recommended": true,
-          "url": "https://www.paddle.com/"
+          "url": "https://www.paddle.com/?ref=flowmatrix"
         },
         {
           "name": "Lemon Squeezy",
@@ -1336,7 +1336,7 @@
           "pros": ["Simple setup", "License keys", "Tax handling"],
           "cons": ["Fewer enterprise features", "Limited customization"],
           "bestFor": "Indie makers selling digital products",
-          "url": "https://www.lemonsqueezy.com/"
+          "url": "https://www.lemonsqueezy.com/?ref=flowmatrix"
         },
         {
           "name": "Chargebee",
@@ -1348,7 +1348,7 @@
           ],
           "cons": ["Pricing for larger teams", "Setup complexity"],
           "bestFor": "Subscription businesses with complex billing",
-          "url": "https://www.chargebee.com/"
+          "url": "https://www.chargebee.com/?ref=flowmatrix"
         }
       ],
       "bestFor": "Teams that want less tax and billing overhead",
@@ -1376,7 +1376,7 @@
           "cons": ["Vendor lock-in", "NoSQL query limits"],
           "bestFor": "Mobile apps that want a managed Google backend",
           "recommended": true,
-          "url": "https://firebase.google.com/"
+          "url": "https://firebase.google.com/?ref=flowmatrix"
         },
         {
           "name": "Appwrite",
@@ -1384,7 +1384,7 @@
           "pros": ["Self-hosting", "Open source", "Unified API"],
           "cons": ["Smaller ecosystem", "Fewer managed regions"],
           "bestFor": "Teams that want a self-hosted backend",
-          "url": "https://appwrite.io/"
+          "url": "https://appwrite.io/?ref=flowmatrix"
         },
         {
           "name": "PocketBase",
@@ -1392,7 +1392,7 @@
           "pros": ["Tiny footprint", "Easy to self-host", "Simple data model"],
           "cons": ["SQLite scale limits", "Smaller feature set"],
           "bestFor": "Prototypes and small self-hosted apps",
-          "url": "https://pocketbase.io/"
+          "url": "https://pocketbase.io/?ref=flowmatrix"
         }
       ],
       "bestFor": "Teams choosing between managed and self-hosted backends",
@@ -1420,7 +1420,7 @@
           "cons": ["Some features paid", "Account required for sync"],
           "bestFor": "Developers who want a polished desktop client",
           "recommended": true,
-          "url": "https://insomnia.rest/"
+          "url": "https://insomnia.rest/?ref=flowmatrix"
         },
         {
           "name": "Bruno",
@@ -1432,7 +1432,7 @@
           ],
           "cons": ["Younger ecosystem", "Fewer integrations"],
           "bestFor": "Teams that keep API collections in Git",
-          "url": "https://www.usebruno.com/"
+          "url": "https://www.usebruno.com/?ref=flowmatrix"
         },
         {
           "name": "Hoppscotch",
@@ -1440,7 +1440,7 @@
           "pros": ["Runs in the browser", "Open source", "Self-host option"],
           "cons": ["Browser limitations", "Fewer advanced features"],
           "bestFor": "Quick API tests without installing an app",
-          "url": "https://hoppscotch.io/"
+          "url": "https://hoppscotch.io/?ref=flowmatrix"
         }
       ],
       "bestFor": "Teams that want Git-friendly or offline API testing",
@@ -1468,7 +1468,7 @@
           "cons": ["Steeper learning curve", "Mobile app less mature"],
           "bestFor": "People who think in outlines and daily notes",
           "recommended": true,
-          "url": "https://logseq.com/"
+          "url": "https://logseq.com/?ref=flowmatrix"
         },
         {
           "name": "Joplin",
@@ -1476,7 +1476,7 @@
           "pros": ["E2E encryption", "Many sync targets", "Open source"],
           "cons": ["Older interface", "Plugin quality varies"],
           "bestFor": "Users who want encrypted sync across devices",
-          "url": "https://joplinapp.org/"
+          "url": "https://joplinapp.org/?ref=flowmatrix"
         },
         {
           "name": "Anytype",
@@ -1484,7 +1484,7 @@
           "pros": ["Local-first", "Object-based structure", "Encrypted sync"],
           "cons": ["Still evolving", "Smaller community"],
           "bestFor": "Teams exploring local-first knowledge tools",
-          "url": "https://anytype.io/"
+          "url": "https://anytype.io/?ref=flowmatrix"
         }
       ],
       "bestFor": "Users who want local files and Markdown ownership",
@@ -1516,7 +1516,7 @@
           "cons": ["Usage-based pricing", "Less self-hosting"],
           "bestFor": "Modern web apps that want auth fast",
           "recommended": true,
-          "url": "https://clerk.com/"
+          "url": "https://clerk.com/?ref=flowmatrix"
         },
         {
           "name": "Supabase Auth",
@@ -1528,7 +1528,7 @@
           ],
           "cons": ["Fewer enterprise features", "Tied to Supabase"],
           "bestFor": "Teams already using Supabase",
-          "url": "https://supabase.com/auth"
+          "url": "https://supabase.com/auth?ref=flowmatrix"
         },
         {
           "name": "Keycloak",
@@ -1540,7 +1540,7 @@
           ],
           "cons": ["Complex setup", "Operational overhead"],
           "bestFor": "Enterprises that need self-hosted SSO",
-          "url": "https://www.keycloak.org/"
+          "url": "https://www.keycloak.org/?ref=flowmatrix"
         }
       ],
       "bestFor": "Teams choosing between managed and self-hosted identity",
@@ -1568,7 +1568,7 @@
           "cons": ["Fewer enterprise features", "Smaller ecosystem"],
           "bestFor": "Teams that want self-hosted search quickly",
           "recommended": true,
-          "url": "https://www.meilisearch.com/"
+          "url": "https://www.meilisearch.com/?ref=flowmatrix"
         },
         {
           "name": "Typesense",
@@ -1576,7 +1576,7 @@
           "pros": ["Low latency", "Simple API", "Self-host or cloud"],
           "cons": ["Smaller community", "Fewer built-in analytics"],
           "bestFor": "Developers who need fast, predictable search",
-          "url": "https://typesense.org/"
+          "url": "https://typesense.org/?ref=flowmatrix"
         },
         {
           "name": "Elasticsearch",
@@ -1584,7 +1584,7 @@
           "pros": ["Very flexible", "Strong analytics", "Large ecosystem"],
           "cons": ["Operational complexity", "Resource heavy"],
           "bestFor": "Enterprises with complex search requirements",
-          "url": "https://www.elastic.co/elasticsearch/"
+          "url": "https://www.elastic.co/elasticsearch/?ref=flowmatrix"
         }
       ],
       "bestFor": "Teams comparing managed and self-hosted search",
@@ -1612,7 +1612,7 @@
           "cons": ["Usage-based pricing", "Fewer self-host options"],
           "bestFor": "Teams that need transcription plus audio insights",
           "recommended": true,
-          "url": "https://www.assemblyai.com/"
+          "url": "https://www.assemblyai.com/?ref=flowmatrix"
         },
         {
           "name": "OpenAI Whisper",
@@ -1620,7 +1620,7 @@
           "pros": ["Many languages", "Simple endpoint", "Good accuracy"],
           "cons": ["File size limits", "No realtime streaming"],
           "bestFor": "Batch transcription and multilingual content",
-          "url": "https://platform.openai.com/docs/guides/speech-to-text"
+          "url": "https://platform.openai.com/docs/guides/speech-to-text?ref=flowmatrix"
         },
         {
           "name": "Speechmatics",
@@ -1632,7 +1632,7 @@
           ],
           "cons": ["Less developer-focused", "Pricing requires sales contact"],
           "bestFor": "Enterprises with difficult audio conditions",
-          "url": "https://www.speechmatics.com/"
+          "url": "https://www.speechmatics.com/?ref=flowmatrix"
         }
       ],
       "bestFor": "Teams choosing a transcription API for production",
@@ -1748,7 +1748,7 @@
           ],
           "cons": ["Steep learning curve", "Less intuitive interface"],
           "bestFor": "Users seeking a free and open-source alternative for image editing.",
-          "url": "https://www.gimp.org"
+          "url": "https://www.gimp.org?ref=flowmatrix"
         },
         {
           "name": "Affinity Photo",
@@ -1760,7 +1760,7 @@
           ],
           "cons": ["No Linux support", "Limited plugin ecosystem"],
           "bestFor": "Professional photographers and designers looking for a cost-effective tool.",
-          "url": "https://affinity.serif.com/photo/"
+          "url": "https://affinity.serif.com/photo/?ref=flowmatrix"
         },
         {
           "name": "CorelDRAW",
@@ -1772,7 +1772,7 @@
           ],
           "cons": ["Expensive", "Resource-intensive"],
           "bestFor": "Designers focused on vector graphics and illustration work.",
-          "url": "https://www.coreldraw.com"
+          "url": "https://www.coreldraw.com?ref=flowmatrix"
         },
         {
           "name": "Pixelmator",
@@ -1784,7 +1784,7 @@
           ],
           "cons": ["Mac-only", "Limited advanced features"],
           "bestFor": "Mac users seeking an affordable and intuitive image editor.",
-          "url": "https://www.pixelmator.com"
+          "url": "https://www.pixelmator.com?ref=flowmatrix"
         },
         {
           "name": "Krita",
@@ -1799,7 +1799,7 @@
             "Occasional performance issues"
           ],
           "bestFor": "Digital artists and illustrators looking for a free painting tool.",
-          "url": "https://krita.org"
+          "url": "https://krita.org?ref=flowmatrix"
         }
       ],
       "bestFor": "Designers and photographers seeking robust image editing tools.",
@@ -1826,7 +1826,7 @@
           ],
           "cons": ["Can be complex to set up", "Requires Microsoft account"],
           "bestFor": "Businesses using Microsoft Office 365 for collaboration.",
-          "url": "https://www.microsoft.com/en-us/microsoft-teams"
+          "url": "https://www.microsoft.com/en-us/microsoft-teams?ref=flowmatrix"
         },
         {
           "name": "Google Meet",
@@ -1841,7 +1841,7 @@
             "Requires Google account"
           ],
           "bestFor": "Organizations using Google Workspace for communication.",
-          "url": "https://meet.google.com"
+          "url": "https://meet.google.com?ref=flowmatrix"
         },
         {
           "name": "Cisco Webex",
@@ -1853,7 +1853,7 @@
           ],
           "cons": ["Can be expensive", "Complex interface for new users"],
           "bestFor": "Enterprises needing secure and scalable video conferencing.",
-          "url": "https://www.webex.com"
+          "url": "https://www.webex.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Teams seeking reliable video conferencing and collaborative tools.",
@@ -1880,7 +1880,7 @@
           ],
           "cons": ["Limited customization", "Higher tiers can be costly"],
           "bestFor": "Small to medium businesses seeking integrated marketing tools.",
-          "url": "https://www.hubspot.com/products/crm"
+          "url": "https://www.hubspot.com/products/crm?ref=flowmatrix"
         },
         {
           "name": "Zoho CRM",
@@ -1892,7 +1892,7 @@
           ],
           "cons": ["Complex setup", "Limited third-party integrations"],
           "bestFor": "Businesses needing a customizable and affordable CRM solution.",
-          "url": "https://www.zoho.com/crm/"
+          "url": "https://www.zoho.com/crm/?ref=flowmatrix"
         },
         {
           "name": "Pipedrive",
@@ -1904,7 +1904,7 @@
           ],
           "cons": ["Limited marketing features", "Basic reporting"],
           "bestFor": "Sales teams needing simple and effective pipeline management.",
-          "url": "https://www.pipedrive.com/"
+          "url": "https://www.pipedrive.com/?ref=flowmatrix"
         }
       ],
       "bestFor": "Businesses looking for adaptable CRM solutions with robust feature sets.",
@@ -1935,7 +1935,7 @@
           ],
           "cons": ["Limited free storage", "Higher cost for more storage"],
           "bestFor": "Individuals and teams needing easy file sharing and collaboration.",
-          "url": "https://www.dropbox.com"
+          "url": "https://www.dropbox.com?ref=flowmatrix"
         },
         {
           "name": "OneDrive",
@@ -1950,7 +1950,7 @@
             "Sync issues on non-Windows devices"
           ],
           "bestFor": "Microsoft Office users and businesses needing integrated solutions.",
-          "url": "https://onedrive.live.com"
+          "url": "https://onedrive.live.com?ref=flowmatrix"
         },
         {
           "name": "iCloud Drive",
@@ -1965,7 +1965,7 @@
             "Paid plans can be costly"
           ],
           "bestFor": "Apple users looking for integrated cloud storage solutions.",
-          "url": "https://www.icloud.com"
+          "url": "https://www.icloud.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Individuals and teams looking for reliable cloud storage solutions.",
@@ -1999,7 +1999,7 @@
             "Can be overwhelming with notifications"
           ],
           "bestFor": "Teams needing robust communication and integration capabilities.",
-          "url": "https://slack.com"
+          "url": "https://slack.com?ref=flowmatrix"
         },
         {
           "name": "Zoom",
@@ -2011,7 +2011,7 @@
           ],
           "cons": ["Security concerns", "Limited features in free plan"],
           "bestFor": "Businesses and educators needing reliable video conferencing.",
-          "url": "https://zoom.us"
+          "url": "https://zoom.us?ref=flowmatrix"
         },
         {
           "name": "Google Meet",
@@ -2026,7 +2026,7 @@
             "Requires Google account"
           ],
           "bestFor": "Organizations using Google Workspace for communication.",
-          "url": "https://meet.google.com"
+          "url": "https://meet.google.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Teams looking for versatile communication and collaboration tools.",
@@ -2060,7 +2060,7 @@
             "Occasional compatibility issues"
           ],
           "bestFor": "Users seeking a fast and lightweight PDF editor.",
-          "url": "https://www.foxit.com/pdf-editor/"
+          "url": "https://www.foxit.com/pdf-editor/?ref=flowmatrix"
         },
         {
           "name": "Nitro PDF Pro",
@@ -2072,7 +2072,7 @@
           ],
           "cons": ["Higher cost", "Resource-intensive"],
           "bestFor": "Professionals needing comprehensive PDF tools with cloud support.",
-          "url": "https://www.gonitro.com/pdf-pro"
+          "url": "https://www.gonitro.com/pdf-pro?ref=flowmatrix"
         },
         {
           "name": "PDFelement",
@@ -2084,7 +2084,7 @@
           ],
           "cons": ["Limited customer support", "Occasional bugs"],
           "bestFor": "Budget-conscious users needing versatile PDF editing tools.",
-          "url": "https://pdf.wondershare.com/"
+          "url": "https://pdf.wondershare.com/?ref=flowmatrix"
         }
       ],
       "bestFor": "Ideal for users seeking versatile PDF editing and management tools.",
@@ -2114,7 +2114,7 @@
             "Complex setup for new users"
           ],
           "bestFor": "Businesses using Adobe products seeking seamless integration.",
-          "url": "https://acrobat.adobe.com/us/en/sign.html"
+          "url": "https://acrobat.adobe.com/us/en/sign.html?ref=flowmatrix"
         },
         {
           "name": "HelloSign",
@@ -2126,7 +2126,7 @@
           ],
           "cons": ["Limited advanced features", "Occasional syncing issues"],
           "bestFor": "Small to medium businesses using Google Workspace.",
-          "url": "https://www.hellosign.com"
+          "url": "https://www.hellosign.com?ref=flowmatrix"
         },
         {
           "name": "PandaDoc",
@@ -2141,7 +2141,7 @@
             "Limited offline functionality"
           ],
           "bestFor": "Businesses needing document management and customization.",
-          "url": "https://www.pandadoc.com"
+          "url": "https://www.pandadoc.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Business professionals and teams seeking electronic signature solutions.",
@@ -2172,7 +2172,7 @@
           ],
           "cons": ["Slower performance", "No longer actively maintained"],
           "bestFor": "Developers seeking a customizable and open-source editor.",
-          "url": "https://atom.io"
+          "url": "https://atom.io?ref=flowmatrix"
         },
         {
           "name": "Sublime Text",
@@ -2184,7 +2184,7 @@
           ],
           "cons": ["Paid license", "Limited built-in features"],
           "bestFor": "Developers who need a fast and efficient code editor.",
-          "url": "https://www.sublimetext.com"
+          "url": "https://www.sublimetext.com?ref=flowmatrix"
         },
         {
           "name": "JetBrains PyCharm",
@@ -2196,7 +2196,7 @@
           ],
           "cons": ["Resource-intensive", "Paid version for full features"],
           "bestFor": "Python developers requiring advanced features and tools.",
-          "url": "https://www.jetbrains.com/pycharm"
+          "url": "https://www.jetbrains.com/pycharm?ref=flowmatrix"
         }
       ],
       "bestFor": "Developers looking for customizable and efficient code editors.",
@@ -2227,7 +2227,7 @@
           ],
           "cons": ["Limited offline functionality", "Requires Google account"],
           "bestFor": "Teams needing cloud-based collaboration and integration with Google services.",
-          "url": "https://www.google.com/sheets/about/"
+          "url": "https://www.google.com/sheets/about/?ref=flowmatrix"
         },
         {
           "name": "Apple Numbers",
@@ -2242,7 +2242,7 @@
             "Fewer advanced features"
           ],
           "bestFor": "Apple users seeking a simple and visually appealing spreadsheet tool.",
-          "url": "https://www.apple.com/numbers/"
+          "url": "https://www.apple.com/numbers/?ref=flowmatrix"
         },
         {
           "name": "Zoho Sheet",
@@ -2257,7 +2257,7 @@
             "Learning curve for new users"
           ],
           "bestFor": "Businesses using Zoho products and needing collaborative spreadsheet solutions.",
-          "url": "https://www.zoho.com/sheet/"
+          "url": "https://www.zoho.com/sheet/?ref=flowmatrix"
         }
       ],
       "bestFor": "Users seeking flexible and collaborative spreadsheet tools.",
@@ -2343,7 +2343,7 @@
           ],
           "cons": ["Complex setup", "Steep learning curve"],
           "bestFor": "Organizations needing robust container orchestration.",
-          "url": "https://kubernetes.io"
+          "url": "https://kubernetes.io?ref=flowmatrix"
         },
         {
           "name": "Podman",
@@ -2355,7 +2355,7 @@
           ],
           "cons": ["Limited Windows support", "Smaller community"],
           "bestFor": "Developers seeking a Docker alternative without a daemon.",
-          "url": "https://podman.io"
+          "url": "https://podman.io?ref=flowmatrix"
         },
         {
           "name": "OpenShift",
@@ -2367,7 +2367,7 @@
           ],
           "cons": ["Higher cost", "Complex configuration"],
           "bestFor": "Enterprises needing a comprehensive PaaS with Kubernetes.",
-          "url": "https://www.openshift.com"
+          "url": "https://www.openshift.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Developers seeking scalable container orchestration and management.",
@@ -2401,7 +2401,7 @@
             "Higher cost for additional features"
           ],
           "bestFor": "Small to medium-sized businesses needing robust accounting features.",
-          "url": "https://www.xero.com"
+          "url": "https://www.xero.com?ref=flowmatrix"
         },
         {
           "name": "FreshBooks",
@@ -2416,7 +2416,7 @@
             "Higher pricing for larger teams"
           ],
           "bestFor": "Freelancers and small business owners focused on invoicing and time tracking.",
-          "url": "https://www.freshbooks.com"
+          "url": "https://www.freshbooks.com?ref=flowmatrix"
         },
         {
           "name": "Wave",
@@ -2428,7 +2428,7 @@
           ],
           "cons": ["Limited customer support", "No inventory management"],
           "bestFor": "Small businesses and freelancers looking for free accounting solutions.",
-          "url": "https://www.waveapps.com"
+          "url": "https://www.waveapps.com?ref=flowmatrix"
         },
         {
           "name": "Zoho Books",
@@ -2443,7 +2443,7 @@
             "Limited third-party integrations"
           ],
           "bestFor": "Small businesses seeking affordable and automated accounting solutions.",
-          "url": "https://www.zoho.com/books"
+          "url": "https://www.zoho.com/books?ref=flowmatrix"
         }
       ],
       "bestFor": "Small to medium-sized businesses seeking alternatives for accounting tasks.",
@@ -2466,7 +2466,7 @@
           "pros": ["Real-time data", "Comprehensive API", "Easy integration"],
           "cons": ["High cost", "Limited data for small businesses"],
           "bestFor": "Companies needing real-time data enrichment and insights.",
-          "url": "https://clearbit.com"
+          "url": "https://clearbit.com?ref=flowmatrix"
         },
         {
           "name": "LinkedIn Sales Navigator",
@@ -2478,7 +2478,7 @@
           ],
           "cons": ["High subscription cost", "Complex interface"],
           "bestFor": "Sales professionals seeking to leverage LinkedIn's network for lead generation.",
-          "url": "https://business.linkedin.com/sales-solutions/sales-navigator"
+          "url": "https://business.linkedin.com/sales-solutions/sales-navigator?ref=flowmatrix"
         },
         {
           "name": "D&B Hoovers",
@@ -2490,7 +2490,7 @@
           ],
           "cons": ["Expensive for small businesses", "Complex setup"],
           "bestFor": "Businesses needing detailed company information and global market insights.",
-          "url": "https://www.dnb.com/products/marketing-sales/dnb-hoovers.html"
+          "url": "https://www.dnb.com/products/marketing-sales/dnb-hoovers.html?ref=flowmatrix"
         }
       ],
       "bestFor": "Ideal for businesses seeking comprehensive lead databases and sales insights.",
@@ -2517,7 +2517,7 @@
           ],
           "cons": ["Limited advanced features", "Less precise than CAD tools"],
           "bestFor": "Ideal for architects and designers needing quick 3D models.",
-          "url": "https://www.sketchup.com"
+          "url": "https://www.sketchup.com?ref=flowmatrix"
         },
         {
           "name": "SolidWorks",
@@ -2529,7 +2529,7 @@
           ],
           "cons": ["Expensive", "Steep learning curve"],
           "bestFor": "Engineers and designers requiring detailed 3D modeling and simulations.",
-          "url": "https://www.solidworks.com"
+          "url": "https://www.solidworks.com?ref=flowmatrix"
         },
         {
           "name": "CorelCAD",
@@ -2541,7 +2541,7 @@
           ],
           "cons": ["Limited 3D capabilities", "Fewer features than AutoCAD"],
           "bestFor": "Professionals needing cost-effective CAD software with .DWG support.",
-          "url": "https://www.coreldraw.com/en/product/corelcad/"
+          "url": "https://www.coreldraw.com/en/product/corelcad/?ref=flowmatrix"
         }
       ],
       "bestFor": "Ideal for architects, engineers, and designers seeking robust CAD solutions.",
@@ -2572,7 +2572,7 @@
           ],
           "cons": ["Limited offline functionality", "Requires Google account"],
           "bestFor": "Teams needing seamless collaboration and integration with Google services.",
-          "url": "https://docs.google.com"
+          "url": "https://docs.google.com?ref=flowmatrix"
         },
         {
           "name": "Notion",
@@ -2584,7 +2584,7 @@
           ],
           "cons": ["Steep learning curve", "Limited offline access"],
           "bestFor": "Users seeking a versatile tool for organizing and managing projects.",
-          "url": "https://www.notion.so"
+          "url": "https://www.notion.so?ref=flowmatrix"
         },
         {
           "name": "Quip",
@@ -2599,7 +2599,7 @@
             "Subscription-based pricing"
           ],
           "bestFor": "Teams looking for integrated communication and document editing.",
-          "url": "https://quip.com"
+          "url": "https://quip.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Teams seeking integrated collaboration and document editing tools.",
@@ -2630,7 +2630,7 @@
           ],
           "cons": ["Requires internet connection", "Limited offline features"],
           "bestFor": "Users needing cloud-based collaboration and document sharing.",
-          "url": "https://docs.google.com"
+          "url": "https://docs.google.com?ref=flowmatrix"
         },
         {
           "name": "LibreOffice Writer",
@@ -2642,7 +2642,7 @@
           ],
           "cons": ["Less intuitive UI", "Limited cloud integration"],
           "bestFor": "Users seeking a free, open-source alternative with extensive format support.",
-          "url": "https://www.libreoffice.org"
+          "url": "https://www.libreoffice.org?ref=flowmatrix"
         },
         {
           "name": "Apple Pages",
@@ -2654,7 +2654,7 @@
           ],
           "cons": ["Mac and iOS only", "Limited third-party integration"],
           "bestFor": "Apple users looking for a native word processor with ecosystem integration.",
-          "url": "https://www.apple.com/pages"
+          "url": "https://www.apple.com/pages?ref=flowmatrix"
         }
       ],
       "bestFor": "Individuals and teams seeking versatile word processing tools.",
@@ -2685,7 +2685,7 @@
           ],
           "cons": ["Paid license", "Limited built-in features"],
           "bestFor": "Developers who need a fast and efficient code editor.",
-          "url": "https://www.sublimetext.com"
+          "url": "https://www.sublimetext.com?ref=flowmatrix"
         },
         {
           "name": "Visual Studio Code",
@@ -2700,7 +2700,7 @@
             "Steep learning curve for beginners"
           ],
           "bestFor": "Developers seeking a versatile and extensible code editor.",
-          "url": "https://code.visualstudio.com"
+          "url": "https://code.visualstudio.com?ref=flowmatrix"
         },
         {
           "name": "Atom",
@@ -2712,7 +2712,7 @@
           ],
           "cons": ["Slower performance", "No longer actively maintained"],
           "bestFor": "Developers seeking a customizable and open-source editor.",
-          "url": "https://atom.io"
+          "url": "https://atom.io?ref=flowmatrix"
         },
         {
           "name": "Brackets",
@@ -2720,7 +2720,7 @@
           "pros": ["Live preview", "Inline editing", "Preprocessor support"],
           "cons": ["Limited plugin ecosystem", "Less frequent updates"],
           "bestFor": "Web developers who need a lightweight editor with live preview capabilities.",
-          "url": "http://brackets.io"
+          "url": "http://brackets.io?ref=flowmatrix"
         }
       ],
       "bestFor": "Ideal for programmers seeking customizable text editors with plugin support.",
@@ -2747,7 +2747,7 @@
           ],
           "cons": ["Mac-only", "Expensive"],
           "bestFor": "Mac users seeking professional video editing tools.",
-          "url": "https://www.apple.com/final-cut-pro/"
+          "url": "https://www.apple.com/final-cut-pro/?ref=flowmatrix"
         },
         {
           "name": "DaVinci Resolve",
@@ -2759,7 +2759,7 @@
           ],
           "cons": ["Steep learning curve", "Resource-intensive"],
           "bestFor": "Professionals needing comprehensive editing and grading tools.",
-          "url": "https://www.blackmagicdesign.com/products/davinciresolve/"
+          "url": "https://www.blackmagicdesign.com/products/davinciresolve/?ref=flowmatrix"
         },
         {
           "name": "Avid Media Composer",
@@ -2771,7 +2771,7 @@
           ],
           "cons": ["Complex interface", "Subscription-based"],
           "bestFor": "Film and TV professionals requiring industry-standard editing software.",
-          "url": "https://www.avid.com/media-composer"
+          "url": "https://www.avid.com/media-composer?ref=flowmatrix"
         }
       ],
       "bestFor": "Individuals and professionals seeking robust video editing software.",
@@ -2798,7 +2798,7 @@
           ],
           "cons": ["Steep learning curve", "Higher cost"],
           "bestFor": "Professional photographers needing advanced editing tools.",
-          "url": "https://www.captureone.com"
+          "url": "https://www.captureone.com?ref=flowmatrix"
         },
         {
           "name": "DxO PhotoLab",
@@ -2810,7 +2810,7 @@
           ],
           "cons": ["Limited DAM features", "Complex interface"],
           "bestFor": "Photographers seeking top-notch image quality and corrections.",
-          "url": "https://www.dxo.com"
+          "url": "https://www.dxo.com?ref=flowmatrix"
         },
         {
           "name": "Luminar Neo",
@@ -2825,7 +2825,7 @@
             "Occasional performance issues"
           ],
           "bestFor": "Enthusiasts looking for creative and easy photo enhancements.",
-          "url": "https://skylum.com/luminar"
+          "url": "https://skylum.com/luminar?ref=flowmatrix"
         }
       ],
       "bestFor": "Ideal for photographers seeking powerful editing and management tools.",
@@ -2908,7 +2908,7 @@
             "Not ideal for complex projects"
           ],
           "bestFor": "Teams seeking a simple, visual task management tool.",
-          "url": "https://trello.com"
+          "url": "https://trello.com?ref=flowmatrix"
         },
         {
           "name": "Asana",
@@ -2923,7 +2923,7 @@
             "Can be overwhelming for small teams"
           ],
           "bestFor": "Teams needing detailed project tracking and task management.",
-          "url": "https://asana.com"
+          "url": "https://asana.com?ref=flowmatrix"
         },
         {
           "name": "Monday.com",
@@ -2935,7 +2935,7 @@
           ],
           "cons": ["Can be expensive", "Complex setup for new users"],
           "bestFor": "Organizations looking for a customizable project management solution.",
-          "url": "https://monday.com"
+          "url": "https://monday.com?ref=flowmatrix"
         },
         {
           "name": "ClickUp",
@@ -2943,7 +2943,7 @@
           "pros": ["Feature-rich", "Customizable views", "Affordable pricing"],
           "cons": ["Complex interface", "Occasional performance issues"],
           "bestFor": "Teams seeking a comprehensive, all-in-one project management tool.",
-          "url": "https://clickup.com"
+          "url": "https://clickup.com?ref=flowmatrix"
         },
         {
           "name": "Jira",
@@ -2955,7 +2955,7 @@
           ],
           "cons": ["Complex for beginners", "Can be costly for large teams"],
           "bestFor": "Software development teams using agile methodologies.",
-          "url": "https://www.atlassian.com/software/jira"
+          "url": "https://www.atlassian.com/software/jira?ref=flowmatrix"
         }
       ],
       "bestFor": "Teams looking for flexible project management and collaboration solutions.",
@@ -3079,7 +3079,7 @@
           ],
           "cons": ["Limited to 15 seconds", "Algorithm can be unpredictable"],
           "bestFor": "Users who are already active on Instagram and enjoy short video content.",
-          "url": "https://www.instagram.com"
+          "url": "https://www.instagram.com?ref=flowmatrix"
         },
         {
           "name": "YouTube Shorts",
@@ -3091,7 +3091,7 @@
           ],
           "cons": ["Still in development", "Limited editing features"],
           "bestFor": "Creators looking to reach a wide audience on YouTube with short videos.",
-          "url": "https://www.youtube.com"
+          "url": "https://www.youtube.com?ref=flowmatrix"
         },
         {
           "name": "Triller",
@@ -3103,7 +3103,7 @@
           ],
           "cons": ["Smaller user base", "Less known than competitors"],
           "bestFor": "Aspiring artists and creators seeking a music-focused video platform.",
-          "url": "https://www.triller.co"
+          "url": "https://www.triller.co?ref=flowmatrix"
         },
         {
           "name": "Snapchat Spotlight",
@@ -3118,7 +3118,7 @@
             "Content discovery can be challenging"
           ],
           "bestFor": "Snapchat users who want to create and share viral short videos.",
-          "url": "https://www.snapchat.com"
+          "url": "https://www.snapchat.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Content creators looking for platforms to share short-form videos.",
@@ -3152,7 +3152,7 @@
             "Subscription required for premium assets"
           ],
           "bestFor": "Individuals and small businesses looking for quick design solutions.",
-          "url": "https://www.adobe.com/express/"
+          "url": "https://www.adobe.com/express/?ref=flowmatrix"
         },
         {
           "name": "Visme",
@@ -3167,7 +3167,7 @@
             "Limited free version"
           ],
           "bestFor": "Professionals and educators needing engaging visual content.",
-          "url": "https://www.visme.co/"
+          "url": "https://www.visme.co/?ref=flowmatrix"
         },
         {
           "name": "Snappa",
@@ -3182,7 +3182,7 @@
             "Free plan has download restrictions"
           ],
           "bestFor": "Marketers and social media managers creating quick graphics.",
-          "url": "https://snappa.com/"
+          "url": "https://snappa.com/?ref=flowmatrix"
         }
       ],
       "bestFor": "Individuals and teams looking for intuitive design tools.",
@@ -3216,7 +3216,7 @@
             "Sync issues may occur sometimes"
           ],
           "bestFor": "Users looking for a versatile note-taking tool with collaboration features.",
-          "url": "https://www.onenote.com"
+          "url": "https://www.onenote.com?ref=flowmatrix"
         },
         {
           "name": "Notion",
@@ -3231,7 +3231,7 @@
             "Can become cluttered without organization"
           ],
           "bestFor": "Individuals and teams needing a flexible and comprehensive productivity tool.",
-          "url": "https://www.notion.so"
+          "url": "https://www.notion.so?ref=flowmatrix"
         },
         {
           "name": "Google Keep",
@@ -3246,7 +3246,7 @@
             "Basic features compared to competitors"
           ],
           "bestFor": "Users looking for a straightforward and quick note-taking solution.",
-          "url": "https://keep.google.com"
+          "url": "https://keep.google.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Individuals or teams looking for effective note management.",
@@ -3277,7 +3277,7 @@
           ],
           "cons": ["Limited collaboration options", "iOS only"],
           "bestFor": "Users looking for a robust digital notebook experience on iOS.",
-          "url": "https://www.goodnotes.com"
+          "url": "https://www.goodnotes.com?ref=flowmatrix"
         },
         {
           "name": "Microsoft OneNote",
@@ -3292,7 +3292,7 @@
             "Sync issues occasionally reported"
           ],
           "bestFor": "Users who need a comprehensive note-taking solution across devices.",
-          "url": "https://www.onenote.com"
+          "url": "https://www.onenote.com?ref=flowmatrix"
         },
         {
           "name": "Evernote",
@@ -3304,7 +3304,7 @@
           ],
           "cons": ["Free version has limited features", "Can become cluttered"],
           "bestFor": "Individuals and teams looking for a robust organization tool.",
-          "url": "https://www.evernote.com"
+          "url": "https://www.evernote.com?ref=flowmatrix"
         },
         {
           "name": "Squid",
@@ -3319,7 +3319,7 @@
             "Android-focused"
           ],
           "bestFor": "Users who prefer handwritten notes on Android devices.",
-          "url": "https://www.squidnotes.com"
+          "url": "https://www.squidnotes.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Users looking for versatile note-taking solutions.",
@@ -3351,7 +3351,7 @@
           ],
           "cons": ["Privacy concerns", "Limited offline access"],
           "bestFor": "Ideal for users heavily invested in the Google ecosystem.",
-          "url": "https://www.google.com/drive/"
+          "url": "https://www.google.com/drive/?ref=flowmatrix"
         },
         {
           "name": "Box",
@@ -3366,7 +3366,7 @@
             "Complex interface for new users"
           ],
           "bestFor": "Best suited for businesses needing secure file management.",
-          "url": "https://www.box.com/"
+          "url": "https://www.box.com/?ref=flowmatrix"
         },
         {
           "name": "pCloud",
@@ -3381,7 +3381,7 @@
             "No built-in office suite"
           ],
           "bestFor": "Great for users prioritizing privacy and long-term storage solutions.",
-          "url": "https://www.pcloud.com/"
+          "url": "https://www.pcloud.com/?ref=flowmatrix"
         },
         {
           "name": "Tresorit",
@@ -3396,7 +3396,7 @@
             "Limited free storage"
           ],
           "bestFor": "Perfect for users needing top-notch security for sensitive data.",
-          "url": "https://tresorit.com/"
+          "url": "https://tresorit.com/?ref=flowmatrix"
         }
       ],
       "bestFor": "Individuals and businesses looking for reliable cloud storage solutions.",
@@ -3427,7 +3427,7 @@
           ],
           "cons": ["Limited API rate limits", "Complexity for large datasets"],
           "bestFor": "Teams needing a flexible database solution with automation capabilities.",
-          "url": "https://airtable.com/api"
+          "url": "https://airtable.com/api?ref=flowmatrix"
         },
         {
           "name": "Trello API",
@@ -3442,7 +3442,7 @@
             "Can be overwhelming for new users"
           ],
           "bestFor": "Teams looking for a straightforward project management tool.",
-          "url": "https://developer.atlassian.com/cloud/trello/rest/"
+          "url": "https://developer.atlassian.com/cloud/trello/rest/?ref=flowmatrix"
         },
         {
           "name": "Asana API",
@@ -3454,7 +3454,7 @@
           ],
           "cons": ["Steeper learning curve", "Limited customization options"],
           "bestFor": "Teams needing advanced project tracking and collaboration tools.",
-          "url": "https://developers.asana.com/docs/"
+          "url": "https://developers.asana.com/docs/?ref=flowmatrix"
         }
       ],
       "bestFor": "Developers looking for flexible automation solutions.",
@@ -3573,7 +3573,7 @@
             "Limited customization options"
           ],
           "bestFor": "Businesses looking for a reliable webinar solution with strong analytics.",
-          "url": "https://www.goto.com/webinar"
+          "url": "https://www.goto.com/webinar?ref=flowmatrix"
         },
         {
           "name": "Webex",
@@ -3588,7 +3588,7 @@
             "Occasional connectivity issues"
           ],
           "bestFor": "Organizations needing a secure and versatile communication platform.",
-          "url": "https://www.webex.com"
+          "url": "https://www.webex.com?ref=flowmatrix"
         },
         {
           "name": "Zoom",
@@ -3603,7 +3603,7 @@
             "Limited features on free plan"
           ],
           "bestFor": "Individuals and businesses seeking a simple and effective video conferencing solution.",
-          "url": "https://zoom.us"
+          "url": "https://zoom.us?ref=flowmatrix"
         },
         {
           "name": "Microsoft Teams",
@@ -3618,7 +3618,7 @@
             "Performance issues with large teams"
           ],
           "bestFor": "Teams already using Microsoft 365 looking for integrated communication tools.",
-          "url": "https://www.microsoft.com/en-us/microsoft-teams/group-chat-software"
+          "url": "https://www.microsoft.com/en-us/microsoft-teams/group-chat-software?ref=flowmatrix"
         }
       ],
       "bestFor": "Businesses and educators looking for reliable webinar solutions.",
@@ -3653,7 +3653,7 @@
             "Sync issues may occur occasionally"
           ],
           "bestFor": "Individuals and teams looking for a versatile note-taking solution.",
-          "url": "https://www.onenote.com"
+          "url": "https://www.onenote.com?ref=flowmatrix"
         },
         {
           "name": "Coda",
@@ -3665,7 +3665,7 @@
           ],
           "cons": ["Steeper learning curve", "Limited offline functionality"],
           "bestFor": "Teams needing a powerful tool for project management and documentation.",
-          "url": "https://coda.io"
+          "url": "https://coda.io?ref=flowmatrix"
         },
         {
           "name": "Trello",
@@ -3680,7 +3680,7 @@
             "Not ideal for complex projects"
           ],
           "bestFor": "Teams seeking a simple, visual task management tool.",
-          "url": "https://trello.com"
+          "url": "https://trello.com?ref=flowmatrix"
         },
         {
           "name": "ClickUp",
@@ -3688,7 +3688,7 @@
           "pros": ["Feature-rich", "Customizable views", "Affordable pricing"],
           "cons": ["Complex interface", "Occasional performance issues"],
           "bestFor": "Teams seeking a comprehensive, all-in-one project management tool.",
-          "url": "https://clickup.com"
+          "url": "https://clickup.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Individuals and teams looking for versatile organization tools.",
@@ -3764,7 +3764,7 @@
             "Can be expensive for premium plans"
           ],
           "bestFor": "Businesses looking for engaging and interactive forms.",
-          "url": "https://www.typeform.com"
+          "url": "https://www.typeform.com?ref=flowmatrix"
         },
         {
           "name": "Google Forms",
@@ -3779,7 +3779,7 @@
             "Basic functionality compared to others"
           ],
           "bestFor": "Individuals and teams needing simple and effective forms.",
-          "url": "https://www.google.com/forms"
+          "url": "https://www.google.com/forms?ref=flowmatrix"
         },
         {
           "name": "JotForm",
@@ -3794,7 +3794,7 @@
             "Can be complex for beginners"
           ],
           "bestFor": "Users needing advanced features and integrations for forms.",
-          "url": "https://www.jotform.com"
+          "url": "https://www.jotform.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Individuals and teams looking to streamline data collection.",
@@ -3873,7 +3873,7 @@
           ],
           "cons": ["Steeper learning curve", "Limited offline functionality"],
           "bestFor": "Teams looking for a flexible workspace solution.",
-          "url": "https://coda.io"
+          "url": "https://coda.io?ref=flowmatrix"
         },
         {
           "name": "Airtable",
@@ -3888,7 +3888,7 @@
             "Limited features in free version"
           ],
           "bestFor": "Users needing a blend of spreadsheet and database features.",
-          "url": "https://airtable.com"
+          "url": "https://airtable.com?ref=flowmatrix"
         },
         {
           "name": "ClickUp",
@@ -3903,7 +3903,7 @@
             "Performance issues with large projects"
           ],
           "bestFor": "Teams seeking an all-encompassing project management solution.",
-          "url": "https://clickup.com"
+          "url": "https://clickup.com?ref=flowmatrix"
         },
         {
           "name": "Trello",
@@ -3918,7 +3918,7 @@
             "Can become cluttered with many cards"
           ],
           "bestFor": "Individuals and teams looking for a simple task management tool.",
-          "url": "https://trello.com"
+          "url": "https://trello.com?ref=flowmatrix"
         },
         {
           "name": "Evernote",
@@ -3930,7 +3930,7 @@
           ],
           "cons": ["Limited free plan", "Can be slow with large notebooks"],
           "bestFor": "Users needing a robust note-taking and organization tool.",
-          "url": "https://evernote.com"
+          "url": "https://evernote.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Users looking for customizable templates for various workflows.",
@@ -3964,7 +3964,7 @@
             "Limited scalability for large enterprises"
           ],
           "bestFor": "Small to medium businesses needing custom database solutions.",
-          "url": "https://www.filemaker.com"
+          "url": "https://www.filemaker.com?ref=flowmatrix"
         },
         {
           "name": "Airtable",
@@ -3979,7 +3979,7 @@
             "Can become complex with large datasets"
           ],
           "bestFor": "Teams looking for a collaborative and flexible database solution.",
-          "url": "https://www.airtable.com"
+          "url": "https://www.airtable.com?ref=flowmatrix"
         },
         {
           "name": "Zoho Creator",
@@ -3994,7 +3994,7 @@
             "Performance may lag with complex apps"
           ],
           "bestFor": "Businesses seeking to automate processes with minimal coding.",
-          "url": "https://www.zoho.com/creator"
+          "url": "https://www.zoho.com/creator?ref=flowmatrix"
         }
       ],
       "bestFor": "Small to medium businesses looking for database solutions.",
@@ -4028,7 +4028,7 @@
             "Higher cost for larger teams"
           ],
           "bestFor": "Ideal for teams using Atlassian products and needing extensive collaboration features.",
-          "url": "https://www.atlassian.com/software/confluence"
+          "url": "https://www.atlassian.com/software/confluence?ref=flowmatrix"
         },
         {
           "name": "Slite",
@@ -4043,7 +4043,7 @@
             "Less feature-rich than some alternatives"
           ],
           "bestFor": "Great for small to medium teams looking for a simple documentation solution.",
-          "url": "https://slite.com"
+          "url": "https://slite.com?ref=flowmatrix"
         },
         {
           "name": "Nuclino",
@@ -4058,7 +4058,7 @@
             "Less suitable for large organizations"
           ],
           "bestFor": "Perfect for small teams needing a straightforward and efficient knowledge base.",
-          "url": "https://nuclino.com"
+          "url": "https://nuclino.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Teams seeking to streamline documentation and collaboration.",
@@ -4150,7 +4150,7 @@
             "Can become cluttered with many cards"
           ],
           "bestFor": "Teams looking for a simple and visual project management tool.",
-          "url": "https://trello.com"
+          "url": "https://trello.com?ref=flowmatrix"
         },
         {
           "name": "Asana",
@@ -4165,7 +4165,7 @@
             "Can be overwhelming for new users"
           ],
           "bestFor": "Teams needing detailed project tracking and task management.",
-          "url": "https://asana.com"
+          "url": "https://asana.com?ref=flowmatrix"
         },
         {
           "name": "ClickUp",
@@ -4180,7 +4180,7 @@
             "Performance issues with large projects"
           ],
           "bestFor": "Teams looking for a comprehensive project management solution.",
-          "url": "https://clickup.com"
+          "url": "https://clickup.com?ref=flowmatrix"
         },
         {
           "name": "Monday.com",
@@ -4195,7 +4195,7 @@
             "Limited reporting options in lower tiers"
           ],
           "bestFor": "Teams wanting a visually appealing and flexible project management tool.",
-          "url": "https://monday.com"
+          "url": "https://monday.com?ref=flowmatrix"
         },
         {
           "name": "Airtable",
@@ -4210,7 +4210,7 @@
             "Can become complex with large datasets"
           ],
           "bestFor": "Teams looking for a collaborative and flexible database solution.",
-          "url": "https://www.airtable.com"
+          "url": "https://www.airtable.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Teams and individuals looking to enhance task organization.",
@@ -4244,7 +4244,7 @@
             "Limited offline capabilities"
           ],
           "bestFor": "Teams looking for a versatile collaboration tool for brainstorming and planning.",
-          "url": "https://miro.com"
+          "url": "https://miro.com?ref=flowmatrix"
         },
         {
           "name": "Lucidspark",
@@ -4259,7 +4259,7 @@
             "Can lag with many users"
           ],
           "bestFor": "Teams needing a simple and effective brainstorming tool.",
-          "url": "https://lucidspark.com"
+          "url": "https://lucidspark.com?ref=flowmatrix"
         },
         {
           "name": "Stormboard",
@@ -4274,7 +4274,7 @@
             "Learning curve for new users"
           ],
           "bestFor": "Teams focused on structured brainstorming and project planning.",
-          "url": "https://stormboard.com"
+          "url": "https://stormboard.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Teams looking for interactive whiteboarding solutions.",
@@ -4354,7 +4354,7 @@
             "Limited free version features"
           ],
           "bestFor": "Teams looking for a flexible communication tool with extensive integrations.",
-          "url": "https://slack.com"
+          "url": "https://slack.com?ref=flowmatrix"
         },
         {
           "name": "Zoom Apps",
@@ -4369,7 +4369,7 @@
             "Limited features in free version"
           ],
           "bestFor": "Organizations needing reliable video conferencing with integrated collaboration tools.",
-          "url": "https://zoom.us"
+          "url": "https://zoom.us?ref=flowmatrix"
         },
         {
           "name": "Cisco Webex Apps",
@@ -4384,7 +4384,7 @@
             "Higher cost compared to competitors"
           ],
           "bestFor": "Businesses requiring secure and scalable collaboration solutions.",
-          "url": "https://webex.com"
+          "url": "https://webex.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Teams looking to enhance their collaboration tools.",
@@ -4415,7 +4415,7 @@
           ],
           "cons": ["Complex pricing model", "Steeper learning curve"],
           "bestFor": "Businesses needing scalable cloud solutions with extensive features.",
-          "url": "https://aws.amazon.com"
+          "url": "https://aws.amazon.com?ref=flowmatrix"
         },
         {
           "name": "Google Cloud Platform",
@@ -4430,7 +4430,7 @@
             "Less enterprise adoption"
           ],
           "bestFor": "Companies looking for advanced data processing and machine learning capabilities.",
-          "url": "https://cloud.google.com"
+          "url": "https://cloud.google.com?ref=flowmatrix"
         },
         {
           "name": "IBM Cloud",
@@ -4445,7 +4445,7 @@
             "Higher costs for some services"
           ],
           "bestFor": "Enterprises needing hybrid cloud solutions with AI integration.",
-          "url": "https://www.ibm.com/cloud"
+          "url": "https://www.ibm.com/cloud?ref=flowmatrix"
         }
       ],
       "bestFor": "Developers looking for robust cloud solutions.",
@@ -4525,7 +4525,7 @@
           ],
           "cons": ["Privacy concerns", "Limited offline access"],
           "bestFor": "Individuals and businesses looking for a reliable email solution.",
-          "url": "https://www.google.com/gmail/"
+          "url": "https://www.google.com/gmail/?ref=flowmatrix"
         },
         {
           "name": "Thunderbird",
@@ -4537,7 +4537,7 @@
           ],
           "cons": ["Steeper learning curve", "Less frequent updates"],
           "bestFor": "Users who prefer a customizable email client with strong privacy features.",
-          "url": "https://www.thunderbird.net/"
+          "url": "https://www.thunderbird.net/?ref=flowmatrix"
         },
         {
           "name": "Zoho Mail",
@@ -4549,7 +4549,7 @@
           ],
           "cons": ["Limited free plan", "Less popular than competitors"],
           "bestFor": "Small to medium businesses seeking a professional email solution.",
-          "url": "https://www.zoho.com/mail/"
+          "url": "https://www.zoho.com/mail/?ref=flowmatrix"
         }
       ],
       "bestFor": "Individuals and teams looking for efficient email solutions.",
@@ -4583,7 +4583,7 @@
             "Less popular in some regions"
           ],
           "bestFor": "Users seeking a feature-rich messaging platform with large group capabilities.",
-          "url": "https://telegram.org"
+          "url": "https://telegram.org?ref=flowmatrix"
         },
         {
           "name": "Signal",
@@ -4595,7 +4595,7 @@
           ],
           "cons": ["Smaller user base", "Limited customization options"],
           "bestFor": "Privacy-conscious users who prioritize secure communication.",
-          "url": "https://signal.org"
+          "url": "https://signal.org?ref=flowmatrix"
         },
         {
           "name": "Viber",
@@ -4607,7 +4607,7 @@
           ],
           "cons": ["Ads in the app", "Requires phone number for registration"],
           "bestFor": "Users looking for a versatile app for messaging and calling with friends and family.",
-          "url": "https://www.viber.com"
+          "url": "https://www.viber.com?ref=flowmatrix"
         },
         {
           "name": "WeChat",
@@ -4619,7 +4619,7 @@
           ],
           "cons": ["Privacy concerns", "Limited functionality outside China"],
           "bestFor": "Users wanting a comprehensive app for messaging, social networking, and payments.",
-          "url": "https://www.wechat.com"
+          "url": "https://www.wechat.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Users seeking secure and versatile messaging options.",
@@ -4653,7 +4653,7 @@
             "Learning curve for advanced features"
           ],
           "bestFor": "Ideal for higher education institutions and online courses.",
-          "url": "https://www.instructure.com/canvas"
+          "url": "https://www.instructure.com/canvas?ref=flowmatrix"
         },
         {
           "name": "Blackboard",
@@ -4665,7 +4665,7 @@
           ],
           "cons": ["Complex navigation", "Higher cost compared to competitors"],
           "bestFor": "Suitable for large universities and diverse learning environments.",
-          "url": "https://www.blackboard.com"
+          "url": "https://www.blackboard.com?ref=flowmatrix"
         },
         {
           "name": "Schoology",
@@ -4680,7 +4680,7 @@
             "Some features may require additional training"
           ],
           "bestFor": "Great for K-12 schools and blended learning environments.",
-          "url": "https://www.schoology.com"
+          "url": "https://www.schoology.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Educational institutions looking for effective learning management solutions.",
@@ -4710,7 +4710,7 @@
             "Limited offline capabilities"
           ],
           "bestFor": "Teams looking for an interactive whiteboard solution for brainstorming and planning.",
-          "url": "https://miro.com"
+          "url": "https://miro.com?ref=flowmatrix"
         },
         {
           "name": "Lucidchart",
@@ -4722,7 +4722,7 @@
           ],
           "cons": ["Limited free version", "Can be slow with large diagrams"],
           "bestFor": "Individuals and teams needing to create detailed diagrams and flowcharts.",
-          "url": "https://lucidchart.com"
+          "url": "https://lucidchart.com?ref=flowmatrix"
         },
         {
           "name": "Whimsical",
@@ -4737,7 +4737,7 @@
             "Less suitable for complex projects"
           ],
           "bestFor": "Designers and teams looking for a straightforward tool for visual brainstorming.",
-          "url": "https://whimsical.com"
+          "url": "https://whimsical.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Teams looking to improve brainstorming and design workflows.",
@@ -4768,7 +4768,7 @@
           ],
           "cons": ["Steeper learning curve", "Limited offline functionality"],
           "bestFor": "Teams looking for a versatile document and project management solution.",
-          "url": "https://coda.io"
+          "url": "https://coda.io?ref=flowmatrix"
         },
         {
           "name": "Trello AI",
@@ -4783,7 +4783,7 @@
             "Can become cluttered with many cards"
           ],
           "bestFor": "Individuals and teams needing a simple, visual project management tool.",
-          "url": "https://trello.com"
+          "url": "https://trello.com?ref=flowmatrix"
         },
         {
           "name": "ClickUp AI",
@@ -4798,7 +4798,7 @@
             "Performance issues with large projects"
           ],
           "bestFor": "Teams seeking a powerful and customizable project management tool.",
-          "url": "https://clickup.com"
+          "url": "https://clickup.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Individuals and teams looking to boost their productivity with AI tools.",
@@ -4825,7 +4825,7 @@
           ],
           "cons": ["Limited free version", "Can be overwhelming for new users"],
           "bestFor": "Individuals and teams looking for robust note organization.",
-          "url": "https://evernote.com"
+          "url": "https://evernote.com?ref=flowmatrix"
         },
         {
           "name": "Notion",
@@ -4840,7 +4840,7 @@
             "Can be slow with large databases"
           ],
           "bestFor": "Teams and individuals seeking a versatile productivity tool.",
-          "url": "https://www.notion.so"
+          "url": "https://www.notion.so?ref=flowmatrix"
         },
         {
           "name": "Bear",
@@ -4852,7 +4852,7 @@
           ],
           "cons": ["Mac and iOS only", "Limited export options"],
           "bestFor": "Writers and creatives who prefer a minimalist interface.",
-          "url": "https://bear.app"
+          "url": "https://bear.app?ref=flowmatrix"
         },
         {
           "name": "Zoho Notebook",
@@ -4864,7 +4864,7 @@
           ],
           "cons": ["Limited integrations", "Less known than competitors"],
           "bestFor": "Users looking for a free and visually engaging note-taking solution.",
-          "url": "https://www.zoho.com/notebook/"
+          "url": "https://www.zoho.com/notebook/?ref=flowmatrix"
         }
       ],
       "bestFor": "Individuals and teams looking for effective note-taking solutions.",
@@ -4945,7 +4945,7 @@
             "Can become expensive for advanced features"
           ],
           "bestFor": "Businesses looking for engaging surveys and forms.",
-          "url": "https://www.typeform.com"
+          "url": "https://www.typeform.com?ref=flowmatrix"
         },
         {
           "name": "Google Forms",
@@ -4960,7 +4960,7 @@
             "Basic functionality compared to competitors"
           ],
           "bestFor": "Individuals and teams needing a simple, free form solution.",
-          "url": "https://forms.google.com"
+          "url": "https://forms.google.com?ref=flowmatrix"
         },
         {
           "name": "JotForm",
@@ -4975,7 +4975,7 @@
             "Some advanced features require payment"
           ],
           "bestFor": "Users needing versatile forms with many integrations.",
-          "url": "https://www.jotform.com"
+          "url": "https://www.jotform.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Individuals and teams looking for versatile form solutions.",
@@ -5058,7 +5058,7 @@
             "Limited customization options"
           ],
           "bestFor": "Ideal for businesses looking to automate repetitive tasks easily.",
-          "url": "https://zapier.com"
+          "url": "https://zapier.com?ref=flowmatrix"
         },
         {
           "name": "Integromat",
@@ -5073,7 +5073,7 @@
             "Limited app integrations compared to competitors"
           ],
           "bestFor": "Best for users needing advanced automation capabilities and flexibility.",
-          "url": "https://www.integromat.com"
+          "url": "https://www.integromat.com?ref=flowmatrix"
         },
         {
           "name": "Automate.io",
@@ -5088,7 +5088,7 @@
             "Limited features in free plan"
           ],
           "bestFor": "Great for small businesses wanting to streamline their operations without coding.",
-          "url": "https://automate.io"
+          "url": "https://automate.io?ref=flowmatrix"
         }
       ],
       "bestFor": "Users looking to streamline their workflows and automate tasks.",
@@ -5122,7 +5122,7 @@
             "Can become cluttered with many cards"
           ],
           "bestFor": "Teams looking for a simple and visual way to manage tasks.",
-          "url": "https://trello.com"
+          "url": "https://trello.com?ref=flowmatrix"
         },
         {
           "name": "Asana",
@@ -5137,7 +5137,7 @@
             "Can be overwhelming for new users"
           ],
           "bestFor": "Teams needing detailed task tracking and project management.",
-          "url": "https://asana.com"
+          "url": "https://asana.com?ref=flowmatrix"
         },
         {
           "name": "ClickUp",
@@ -5152,7 +5152,7 @@
             "Performance issues with large projects"
           ],
           "bestFor": "Teams wanting a comprehensive project management solution.",
-          "url": "https://clickup.com"
+          "url": "https://clickup.com?ref=flowmatrix"
         },
         {
           "name": "Jira",
@@ -5167,7 +5167,7 @@
             "Can be overly complex for simple projects"
           ],
           "bestFor": "Software development teams using agile methodologies.",
-          "url": "https://jira.atlassian.com"
+          "url": "https://jira.atlassian.com?ref=flowmatrix"
         },
         {
           "name": "Monday.com",
@@ -5182,7 +5182,7 @@
             "Limited features in the free version"
           ],
           "bestFor": "Teams looking for a visually engaging project management tool.",
-          "url": "https://monday.com"
+          "url": "https://monday.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Teams and individuals seeking advanced project management solutions.",
@@ -5218,7 +5218,7 @@
             "Can become expensive for advanced features"
           ],
           "bestFor": "Businesses looking for visually appealing forms and surveys.",
-          "url": "https://www.typeform.com"
+          "url": "https://www.typeform.com?ref=flowmatrix"
         },
         {
           "name": "Google Forms",
@@ -5233,7 +5233,7 @@
             "Basic functionality compared to competitors"
           ],
           "bestFor": "Individuals and teams needing a simple, no-cost form solution.",
-          "url": "https://forms.google.com"
+          "url": "https://forms.google.com?ref=flowmatrix"
         },
         {
           "name": "JotForm",
@@ -5248,7 +5248,7 @@
             "Some advanced features require a paid plan"
           ],
           "bestFor": "Users needing versatile forms with many integrations and templates.",
-          "url": "https://www.jotform.com"
+          "url": "https://www.jotform.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Users needing advanced form creation and management tools.",
@@ -5376,7 +5376,7 @@
           ],
           "cons": ["Windows-only", "User interface can be outdated"],
           "bestFor": "Developers looking for a lightweight code editor.",
-          "url": "https://notepad-plus-plus.org"
+          "url": "https://notepad-plus-plus.org?ref=flowmatrix"
         },
         {
           "name": "Sublime Text",
@@ -5388,7 +5388,7 @@
           ],
           "cons": ["Paid software after trial", "Can be resource-intensive"],
           "bestFor": "Developers needing a powerful and flexible text editor.",
-          "url": "https://www.sublimetext.com"
+          "url": "https://www.sublimetext.com?ref=flowmatrix"
         },
         {
           "name": "Atom",
@@ -5403,7 +5403,7 @@
             "Less stable than some alternatives"
           ],
           "bestFor": "Collaborative developers looking for a customizable editor.",
-          "url": "https://atom.io"
+          "url": "https://atom.io?ref=flowmatrix"
         },
         {
           "name": "Visual Studio Code",
@@ -5418,7 +5418,7 @@
             "Requires internet for some features"
           ],
           "bestFor": "Developers seeking a feature-rich code editor.",
-          "url": "https://code.visualstudio.com"
+          "url": "https://code.visualstudio.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Users seeking advanced text editing solutions.",
@@ -5452,7 +5452,7 @@
             "Can become cluttered with many cards"
           ],
           "bestFor": "Teams looking for a simple project management tool.",
-          "url": "https://trello.com/platforms/api"
+          "url": "https://trello.com/platforms/api?ref=flowmatrix"
         },
         {
           "name": "Asana API",
@@ -5467,7 +5467,7 @@
             "Can be overwhelming for new users"
           ],
           "bestFor": "Teams needing comprehensive project management solutions.",
-          "url": "https://developers.asana.com/docs/"
+          "url": "https://developers.asana.com/docs/?ref=flowmatrix"
         },
         {
           "name": "Jira API",
@@ -5479,7 +5479,7 @@
           ],
           "cons": ["Complex setup", "Can be too detailed for small projects"],
           "bestFor": "Agile teams managing software development projects.",
-          "url": "https://developer.atlassian.com/server/jira/platform/rest-apis/"
+          "url": "https://developer.atlassian.com/server/jira/platform/rest-apis/?ref=flowmatrix"
         }
       ],
       "bestFor": "Teams looking for efficient project management solutions.",
@@ -5510,7 +5510,7 @@
           ],
           "cons": ["Limited customization options", "Requires Adobe account"],
           "bestFor": "Individuals and small businesses looking for quick video creation.",
-          "url": "https://spark.adobe.com"
+          "url": "https://spark.adobe.com?ref=flowmatrix"
         },
         {
           "name": "Animoto",
@@ -5522,7 +5522,7 @@
           ],
           "cons": ["Limited free version", "Watermark on videos in free plan"],
           "bestFor": "Marketers and educators needing quick video content.",
-          "url": "https://animoto.com"
+          "url": "https://animoto.com?ref=flowmatrix"
         },
         {
           "name": "InVideo",
@@ -5537,7 +5537,7 @@
             "Watermark on free version"
           ],
           "bestFor": "Content creators and businesses wanting versatile video options.",
-          "url": "https://invideo.io"
+          "url": "https://invideo.io?ref=flowmatrix"
         },
         {
           "name": "Kapwing",
@@ -5552,7 +5552,7 @@
             "Export limits for free users"
           ],
           "bestFor": "Teams and individuals needing collaborative video editing.",
-          "url": "https://www.kapwing.com"
+          "url": "https://www.kapwing.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Individuals and teams looking for user-friendly video editing solutions.",
@@ -5583,7 +5583,7 @@
           ],
           "cons": ["Limited customization options", "Basic design features"],
           "bestFor": "Users looking for a simple and free form solution.",
-          "url": "https://forms.google.com"
+          "url": "https://forms.google.com?ref=flowmatrix"
         },
         {
           "name": "Typeform",
@@ -5598,7 +5598,7 @@
             "Limited response storage on free plan"
           ],
           "bestFor": "Businesses wanting to create visually appealing forms.",
-          "url": "https://www.typeform.com"
+          "url": "https://www.typeform.com?ref=flowmatrix"
         },
         {
           "name": "JotForm",
@@ -5613,7 +5613,7 @@
             "Some advanced features require payment"
           ],
           "bestFor": "Users needing a flexible form builder with many options.",
-          "url": "https://www.jotform.com"
+          "url": "https://www.jotform.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Anyone looking for versatile form solutions.",
@@ -5647,7 +5647,7 @@
             "Limited customization options"
           ],
           "bestFor": "Ideal for businesses seeking a user-friendly video conferencing solution.",
-          "url": "https://zoom.us/zoomrooms"
+          "url": "https://zoom.us/zoomrooms?ref=flowmatrix"
         },
         {
           "name": "Cisco Webex Rooms",
@@ -5662,7 +5662,7 @@
             "Higher cost compared to some alternatives"
           ],
           "bestFor": "Best suited for enterprises needing secure and scalable video solutions.",
-          "url": "https://www.webex.com/video-conferencing/rooms.html"
+          "url": "https://www.webex.com/video-conferencing/rooms.html?ref=flowmatrix"
         },
         {
           "name": "Logitech Sync",
@@ -5677,7 +5677,7 @@
             "May require additional setup for full functionality"
           ],
           "bestFor": "Perfect for IT teams managing multiple video conferencing setups.",
-          "url": "https://www.logitech.com/en-us/video-collaboration/sync"
+          "url": "https://www.logitech.com/en-us/video-collaboration/sync?ref=flowmatrix"
         }
       ],
       "bestFor": "Businesses seeking efficient video conferencing solutions.",
@@ -5711,7 +5711,7 @@
             "Learning curve for new users"
           ],
           "bestFor": "Teams needing fast, actionable user feedback for product development.",
-          "url": "https://www.usertesting.com"
+          "url": "https://www.usertesting.com?ref=flowmatrix"
         },
         {
           "name": "Lookback",
@@ -5726,7 +5726,7 @@
             "Pricing can be high for advanced features"
           ],
           "bestFor": "Teams focused on qualitative research and user interviews.",
-          "url": "https://lookback.io"
+          "url": "https://lookback.io?ref=flowmatrix"
         },
         {
           "name": "Maze",
@@ -5741,7 +5741,7 @@
             "May not support complex testing scenarios"
           ],
           "bestFor": "Design teams looking for quick feedback on prototypes and concepts.",
-          "url": "https://maze.design"
+          "url": "https://maze.design?ref=flowmatrix"
         }
       ],
       "bestFor": "Teams looking to improve user experience through research.",
@@ -5775,7 +5775,7 @@
             "Can be overwhelming for new users"
           ],
           "bestFor": "Teams looking for a versatile collaborative workspace.",
-          "url": "https://miro.com"
+          "url": "https://miro.com?ref=flowmatrix"
         },
         {
           "name": "Microsoft Whiteboard",
@@ -5790,7 +5790,7 @@
             "Requires Microsoft account for full functionality"
           ],
           "bestFor": "Microsoft 365 users seeking a simple collaboration tool.",
-          "url": "https://whiteboard.microsoft.com"
+          "url": "https://whiteboard.microsoft.com?ref=flowmatrix"
         },
         {
           "name": "Jamboard",
@@ -5805,7 +5805,7 @@
             "Requires Google account for access"
           ],
           "bestFor": "Teams using Google Workspace looking for a visual collaboration tool.",
-          "url": "https://jamboard.google.com"
+          "url": "https://jamboard.google.com?ref=flowmatrix"
         }
       ],
       "bestFor": "Teams looking for effective visual collaboration tools.",

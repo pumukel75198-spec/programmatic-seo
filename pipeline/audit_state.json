@@ -1,0 +1,2329 @@
+{
+  "products": {
+    "workflow:ai-content-generation-pipeline": {
+      "status": "verified_clean",
+      "healed": false,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:12.839309+00:00"
+    },
+    "api:openai-whisper-api": {
+      "status": "verified_clean",
+      "healed": false,
+      "errors": [],
+      "checked_at": "2026-11-07T09:16:35.579174+00:00"
+    },
+    "alternative:notion-alternatives": {
+      "status": "verified_clean",
+      "healed": false,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:50.999980+00:00"
+    },
+    "api:stripe-payments-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:16:52.584974+00:00"
+    },
+    "api:supabase-database-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py contains a generic placeholder domain"
+      ],
+      "checked_at": "2026-11-07T09:17:48.159766+00:00"
+    },
+    "api:anthropic-claude-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:17:56.263291+00:00"
+    },
+    "api:google-gemini-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py contains a generic placeholder domain"
+      ],
+      "checked_at": "2026-11-07T09:18:38.969452+00:00"
+    },
+    "api:resend-email-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:18:39.348461+00:00"
+    },
+    "api:clerk-authentication-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not mention the API title",
+        "API kit file 'requests.http' is <= 100 bytes"
+      ],
+      "checked_at": "2026-11-07T09:19:06.991297+00:00"
+    },
+    "api:cloudflare-workers-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not implement the endpoint host 'api.cloudflare.com'",
+        "requests.http: does not use the endpoint host 'api.cloudflare.com'"
+      ],
+      "checked_at": "2026-11-07T09:19:07.508228+00:00"
+    },
+    "api:mapbox-maps-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-mz9jc7b5/test_mock.py\", line 75, in test_http_error_is_handled\n    result = api_client.request_json(\"https://api.example.com/v1/test\")\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-mz9jc7b5/api_client.py\", line 66, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:07.877368+00:00"
+    },
+    "api:twilio-messaging-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "requests.http: does not use the endpoint host 'api.twilio.com'",
+        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-r42cyt8e/test_mock.py\", line 75, in test_http_error_is_handled\n    result = api_client.request_json(\"https://api.example.com/v1/test\")\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-r42cyt8e/api_client.py\", line 69, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:08.188816+00:00"
+    },
+    "api:hugging-face-inference-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:08.557891+00:00"
+    },
+    "api:cohere-embed-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:08.986785+00:00"
+    },
+    "api:pinecone-vector-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not mention the API title",
+        "api_client.py does not implement the endpoint host 'docs.pinecone.io'",
+        "requests.http: does not use the endpoint host 'docs.pinecone.io'",
+        "API kit file 'requests.http' is <= 100 bytes",
+        "API sandbox failed: unittest failed:\n\n..E\n======================================================================\nERROR: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-sn2fecnu/test_mock.py\", line 53, in test_successful_call_and_auth_header\n    result = api_client.request_json('https://docs.pinecone.io', **kwargs)\nTypeError: request_json() missing 1 required positional argument: 'endpoint'\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:09.362390+00:00"
+    },
+    "api:auth0-authentication-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:09.756267+00:00"
+    },
+    "api:sendgrid-email-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not implement the endpoint host 'api.sendgrid.com'",
+        "api_client.py contains a generic placeholder domain",
+        "requests.http: does not use the endpoint host 'api.sendgrid.com'"
+      ],
+      "checked_at": "2026-11-07T09:19:10.212220+00:00"
+    },
+    "api:algolia-search-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:10.602722+00:00"
+    },
+    "api:openweather-weather-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying in 2 seconds...\nWARNING:root:HTTPError 500: server error. Retrying in 4 seconds...\nWARNING:root:HTTPError 500: server error. Retrying in 8 seconds...\nWARNING:root:HTTPError 500: server error. Retrying in 16 seconds...\nWARNING:root:HTTPError 500: server error. Retrying in 32 seconds...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-rgrds_wj/test_mock.py\", line 75, in test_http_error_is_handled\n    result = api_client.request_json(\"https://api.example.com/v1/test\")\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-rgrds_wj/api_client.py\", line 49, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:10.895535+00:00"
+    },
+    "api:shopify-admin-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "requests.http: does not use the endpoint host '{shop}.myshopify.com'",
+        "API kit file 'requests.http' is <= 100 bytes"
+      ],
+      "checked_at": "2026-11-07T09:19:11.307752+00:00"
+    },
+    "api:notion-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:12.007861+00:00"
+    },
+    "api:airtable-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not implement the endpoint host 'api.airtable.com'",
+        "requests.http: does not use the endpoint host 'api.airtable.com'"
+      ],
+      "checked_at": "2026-11-07T09:19:12.395669+00:00"
+    },
+    "api:mistral-ai-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:12.827419+00:00"
+    },
+    "api:groq-inference-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:13.266057+00:00"
+    },
+    "api:together-ai-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-vh6uo4ww/test_mock.py\", line 75, in test_http_error_is_handled\n    result = api_client.request_json(\"https://api.example.com/v1/test\")\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-vh6uo4ww/api_client.py\", line 59, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:13.627886+00:00"
+    },
+    "api:replicate-model-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:14.062847+00:00"
+    },
+    "api:elevenlabs-voice-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:14.498966+00:00"
+    },
+    "api:deepgram-speech-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: ying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nERROR:root:Max attempts reached. Request failed.\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ikee71iz/test_mock.py\", line 78, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ikee71iz/test_mock.py\", line 54, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: DeepgramResponse(status='success', data={'ok': True}) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:14.828483+00:00"
+    },
+    "api:stability-ai-image-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: RNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-okld15x3/test_mock.py\", line 78, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-okld15x3/test_mock.py\", line 54, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: ApiResponse(status='success', data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:15.194648+00:00"
+    },
+    "api:weaviate-vector-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:15.700282+00:00"
+    },
+    "api:qdrant-vector-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:16.121821+00:00"
+    },
+    "api:mongodb-atlas-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not implement the endpoint host 'data.mongodb-api.com'",
+        "requests.http: does not use the endpoint host 'data.mongodb-api.com'",
+        "API sandbox failed: ARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-r_tp5y4x/test_mock.py\", line 78, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-r_tp5y4x/test_mock.py\", line 54, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: ApiResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:16.452571+00:00"
+    },
+    "api:neon-postgres-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "test_mock.py: does not use the endpoint host 'neon.tech'"
+      ],
+      "checked_at": "2026-11-07T09:19:16.962642+00:00"
+    },
+    "api:planetscale-database-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "test_mock.py: does not use the endpoint host 'planetscale.com'"
+      ],
+      "checked_at": "2026-11-07T09:19:17.401134+00:00"
+    },
+    "api:upstash-redis-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: unittest failed:\n\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-awxkskjz/test_mock.py\", line 78, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-awxkskjz/test_mock.py\", line 54, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: RedisResponse(status='success', data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:17.856698+00:00"
+    },
+    "api:vercel-blob-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API kit file 'requests.http' is <= 100 bytes",
+        "API sandbox failed: unittest failed:\n\n..E\n======================================================================\nERROR: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-kvl5wd75/test_mock.py\", line 53, in test_successful_call_and_auth_header\n    result = api_client.request_json('https://blob.vercel-storage.com', **kwargs)\nTypeError: request_json() missing 1 required positional argument: 'endpoint'\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:18.159183+00:00"
+    },
+    "api:liveblocks-collaboration-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:18.600511+00:00"
+    },
+    "api:ably-realtime-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: unittest failed:\n\n..E\n======================================================================\nERROR: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-9hsnx249/test_mock.py\", line 53, in test_successful_call_and_auth_header\n    result = api_client.request_json('https://rest.ably.io/time', **kwargs)\nTypeError: request_json() missing 1 required positional argument: 'config'\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:18.984276+00:00"
+    },
+    "api:posthog-analytics-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:19.348513+00:00"
+    },
+    "api:sentry-error-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: unittest failed:\n\nWARNING:api_client:HTTPError 500: server error. Retrying...\nWARNING:api_client:HTTPError 500: server error. Retrying...\nWARNING:api_client:HTTPError 500: server error. Retrying...\nWARNING:api_client:HTTPError 500: server error. Retrying...\nWARNING:api_client:HTTPError 500: server error. Retrying...\nERROR:api_client:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-q92aieoz/test_mock.py\", line 75, in test_http_error_is_handled\n    result = api_client.request_json(\"https://api.example.com/v1/test\")\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-q92aieoz/api_client.py\", line 64, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:19.635798+00:00"
+    },
+    "api:launchdarkly-feature-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: Retrying in 1 seconds...\nWARNING:root:HTTPError 500: Retrying in 2 seconds...\nWARNING:root:HTTPError 500: Retrying in 4 seconds...\nWARNING:root:HTTPError 500: Retrying in 8 seconds...\nWARNING:root:HTTPError 500: Retrying in 16 seconds...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-h_hnsvrk/test_mock.py\", line 75, in test_http_error_is_handled\n    result = api_client.request_json(\"https://api.example.com/v1/test\")\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-h_hnsvrk/api_client.py\", line 64, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:20.015109+00:00"
+    },
+    "api:doppler-secrets-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:20.637057+00:00"
+    },
+    "api:openai-batch-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:21.067624+00:00"
+    },
+    "api:google-sheets-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "requests.http: does not use the endpoint host 'sheets.googleapis.com'"
+      ],
+      "checked_at": "2026-11-07T09:19:21.411647+00:00"
+    },
+    "api:slack-web-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-tmss1zoc/test_mock.py\", line 75, in test_http_error_is_handled\n    result = api_client.request_json(\"https://api.example.com/v1/test\")\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-tmss1zoc/api_client.py\", line 61, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:21.726167+00:00"
+    },
+    "api:hubspot-crm-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "requests.http: does not use the endpoint host 'api.hubapi.com'"
+      ],
+      "checked_at": "2026-11-07T09:19:22.094017+00:00"
+    },
+    "api:zendesk-support-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not implement the endpoint host '{subdomain}.zendesk.com'",
+        "requests.http: does not use the endpoint host '{subdomain}.zendesk.com'",
+        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-9jnlnvoe/test_mock.py\", line 75, in test_http_error_is_handled\n    result = api_client.request_json(\"https://api.example.com/v1/test\")\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-9jnlnvoe/api_client.py\", line 70, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:22.451162+00:00"
+    },
+    "api:salesforce-rest-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ptu3mu7m/test_mock.py\", line 75, in test_http_error_is_handled\n    result = api_client.request_json(\"https://api.example.com/v1/test\")\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ptu3mu7m/api_client.py\", line 58, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:22.917106+00:00"
+    },
+    "api:discord-bot-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: api_client.py --dry-run failed:\nusage: api_client.py [-h] channel_id message_content\napi_client.py: error: the following arguments are required: channel_id, message_content"
+      ],
+      "checked_at": "2026-11-07T09:19:23.291907+00:00"
+    },
+    "api:telegram-bot-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "requests.http: does not use the endpoint host 'api.telegram.org'",
+        "API kit file 'requests.http' is <= 100 bytes",
+        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying in 2 seconds...\nWARNING:root:HTTPError 500: server error. Retrying in 4 seconds...\nWARNING:root:HTTPError 500: server error. Retrying in 8 seconds...\nWARNING:root:HTTPError 500: server error. Retrying in 16 seconds...\nWARNING:root:HTTPError 500: server error. Retrying in 32 seconds...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-aqfe7xg3/test_mock.py\", line 75, in test_http_error_is_handled\n    result = api_client.request_json(\"https://api.example.com/v1/test\")\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-aqfe7xg3/api_client.py\", line 53, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:23.582043+00:00"
+    },
+    "api:github-rest-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:25.866073+00:00"
+    },
+    "api:linear-graphql-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not implement the endpoint host 'api.linear.app'",
+        "requests.http: does not use the endpoint host 'api.linear.app'"
+      ],
+      "checked_at": "2026-11-07T09:19:26.308093+00:00"
+    },
+    "api:microsoft-graph-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py contains a generic placeholder domain",
+        "API sandbox failed: unittest failed:\n\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-7wqveenr/test_mock.py\", line 78, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-7wqveenr/test_mock.py\", line 54, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: GraphAPIResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:26.799038+00:00"
+    },
+    "api:openai-dall-e-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:27.403155+00:00"
+    },
+    "api:microsoft-azure-cognitive-services-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: unittest failed:\n\n..F\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-1vrny_5s/test_mock.py\", line 54, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: CognitiveServiceResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:27.717710+00:00"
+    },
+    "api:openai-gpt-4-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-91fhzp2k/test_mock.py\", line 75, in test_http_error_is_handled\n    result = api_client.request_json(\"https://api.example.com/v1/test\")\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-91fhzp2k/api_client.py\", line 48, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:28.007486+00:00"
+    },
+    "api:openai-embeddings-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: unittest failed:\n\n..E\n======================================================================\nERROR: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-qwqqzvxl/test_mock.py\", line 53, in test_successful_call_and_auth_header\n    result = api_client.request_json('https://api.openai.com/v1/embeddings', **kwargs)\nTypeError: request_json() missing 1 required positional argument: 'method'\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:28.392093+00:00"
+    },
+    "api:twitch-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:29.192700+00:00"
+    },
+    "api:aws-s3-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: unittest failed:\n\n..E\n======================================================================\nERROR: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-soykiyx7/test_mock.py\", line 53, in test_successful_call_and_auth_header\n    result = api_client.request_json('https://s3.amazonaws.com', **kwargs)\nTypeError: request_json() missing 1 required positional argument: 'uri'\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:29.523335+00:00"
+    },
+    "api:ibm-watson-text-to-speech-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not implement the endpoint host 'api.us-south.text-to-speech.watson.cloud.ibm.com'",
+        "requests.http: does not use the endpoint host 'api.us-south.text-to-speech.watson.cloud.ibm.com'"
+      ],
+      "checked_at": "2026-11-07T09:19:29.963284+00:00"
+    },
+    "api:aws-lambda-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: unittest failed:\n\n..E\n======================================================================\nERROR: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-z4kiriby/test_mock.py\", line 53, in test_successful_call_and_auth_header\n    result = api_client.request_json('https://lambda.us-east-1.amazonaws.com', **kwargs)\nTypeError: request_json() missing 1 required positional argument: 'uri'\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:30.282587+00:00"
+    },
+    "api:paypal-payments-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not implement the endpoint host 'api.paypal.com'",
+        "requests.http: does not use the endpoint host 'api.paypal.com'"
+      ],
+      "checked_at": "2026-11-07T09:19:30.656926+00:00"
+    },
+    "api:ibm-cloud-object-storage-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: unittest failed:\n\n..E\n======================================================================\nERROR: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-uwq7q3tc/test_mock.py\", line 53, in test_successful_call_and_auth_header\n    result = api_client.request_json('https://s3.us.cloud-object-storage.appdomain.cloud', **kwargs)\nTypeError: request_json() missing 1 required positional argument: 'url'\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:31.519404+00:00"
+    },
+    "api:aws-rekognition-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "requests.http: does not use the endpoint host 'rekognition.us-west-2.amazonaws.com'",
+        "API sandbox failed: unittest failed:\n\n..E\n======================================================================\nERROR: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-mq7a3uky/test_mock.py\", line 53, in test_successful_call_and_auth_header\n    result = api_client.request_json('https://rekognition.us-west-2.amazonaws.com', **kwargs)\nTypeError: request_json() missing 1 required positional argument: 'url'\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:31.838741+00:00"
+    },
+    "api:aws-ses-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "requests.http: does not use the endpoint host 'email.us-east-1.amazonaws.com'",
+        "API sandbox failed: unittest failed:\n\n..E\n======================================================================\nERROR: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-5ljo40q3/test_mock.py\", line 53, in test_successful_call_and_auth_header\n    result = api_client.request_json('https://email.us-east-1.amazonaws.com', **kwargs)\nTypeError: request_json() missing 1 required positional argument: 'url'\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:32.174723+00:00"
+    },
+    "api:yelp-fusion-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-tk5emf6o/test_mock.py\", line 75, in test_http_error_is_handled\n    result = api_client.request_json(\"https://api.example.com/v1/test\")\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-tk5emf6o/api_client.py\", line 49, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:32.493772+00:00"
+    },
+    "api:ibm-watson-language-translator-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:32.934918+00:00"
+    },
+    "api:ibm-watson-assistant-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "requests.http: does not use the endpoint host 'api.us-south.assistant.watson.cloud.ibm.com'",
+        "API sandbox failed: P Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-v0hxe3zd/test_mock.py\", line 78, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-v0hxe3zd/test_mock.py\", line 54, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: WatsonAssistantResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:33.528113+00:00"
+    },
+    "api:ibm-watson-discovery-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:33.942114+00:00"
+    },
+    "api:azure-face-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:34.373488+00:00"
+    },
+    "api:aws-polly-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: unittest failed:\n\n..E\n======================================================================\nERROR: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-3h5zorhl/test_mock.py\", line 53, in test_successful_call_and_auth_header\n    result = api_client.request_json('https://polly.us-east-1.amazonaws.com', **kwargs)\nTypeError: request_json() missing 1 required positional argument: 'uri'\n\n----------------------------------------------------------------------\nRan 3 tests in 0.003s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:34.838075+00:00"
+    },
+    "api:azure-cosmos-db-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:35.243615+00:00"
+    },
+    "api:google-maps-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:36.029565+00:00"
+    },
+    "api:plaid-financial-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not implement the endpoint host 'production.plaid.com'",
+        "requests.http: does not use the endpoint host 'production.plaid.com'",
+        "API kit file 'requests.http' is <= 100 bytes",
+        "API sandbox failed: r 500: server error. Retrying in 16 seconds...\nWARNING:api_client:HTTPError 500: server error. Retrying in 32 seconds...\nERROR:api_client:Max retries exceeded.\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ne46itdp/test_mock.py\", line 78, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ne46itdp/test_mock.py\", line 54, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: ApiResponse(status='success', data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:36.342060+00:00"
+    },
+    "api:twilio-video-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nERROR:root:Max retries exceeded\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-zg46z1_9/test_mock.py\", line 75, in test_http_error_is_handled\n    result = api_client.request_json(\"https://api.example.com/v1/test\")\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-zg46z1_9/api_client.py\", line 65, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:36.743416+00:00"
+    },
+    "api:sendinblue-email-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not implement the endpoint host 'api.sendinblue.com'",
+        "api_client.py contains a generic placeholder domain",
+        "requests.http: does not use the endpoint host 'api.sendinblue.com'",
+        "API kit file 'requests.http' is <= 100 bytes"
+      ],
+      "checked_at": "2026-11-07T09:19:37.173517+00:00"
+    },
+    "api:aws-transcribe-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "requests.http: does not use the endpoint host 'transcribe.us-east-1.amazonaws.com'",
+        "API sandbox failed: unittest failed:\n\n..E\n======================================================================\nERROR: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-681_xv_o/test_mock.py\", line 53, in test_successful_call_and_auth_header\n    result = api_client.request_json('https://transcribe.us-east-1.amazonaws.com', **kwargs)\nTypeError: request_json() missing 1 required positional argument: 'url'\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:37.880482+00:00"
+    },
+    "api:notion-automation-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:38.339553+00:00"
+    },
+    "api:github-copilot-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not implement the endpoint host 'api.github.com'",
+        "requests.http: does not use the endpoint host 'api.github.com'",
+        "API kit file 'requests.http' is <= 100 bytes"
+      ],
+      "checked_at": "2026-11-07T09:19:38.769534+00:00"
+    },
+    "api:notion-forms-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not implement the endpoint host 'api.notion.com'",
+        "requests.http: does not use the endpoint host 'api.notion.com'"
+      ],
+      "checked_at": "2026-11-07T09:19:39.202844+00:00"
+    },
+    "api:twitch-api-kraken": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not implement the endpoint host 'api.twitch.tv'",
+        "requests.http: does not use the endpoint host 'api.twitch.tv'"
+      ],
+      "checked_at": "2026-11-07T09:19:39.561340+00:00"
+    },
+    "api:asana-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ck45m6sa/test_mock.py\", line 75, in test_http_error_is_handled\n    result = api_client.request_json(\"https://api.example.com/v1/test\")\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ck45m6sa/api_client.py\", line 67, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:39.880101+00:00"
+    },
+    "api:twelvedata-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:40.246164+00:00"
+    },
+    "api:pdf-generator-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:40.699504+00:00"
+    },
+    "api:weatherapi": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:41.238438+00:00"
+    },
+    "api:notion-api-for-automation": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not implement the endpoint host 'api.notion.com'",
+        "requests.http: does not use the endpoint host 'api.notion.com'"
+      ],
+      "checked_at": "2026-11-07T09:19:41.595427+00:00"
+    },
+    "api:twilio-conversations-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not implement the endpoint host 'conversations.twilio.com'",
+        "requests.http: does not use the endpoint host 'conversations.twilio.com'",
+        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-9d7vdzes/test_mock.py\", line 75, in test_http_error_is_handled\n    result = api_client.request_json(\"https://api.example.com/v1/test\")\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-9d7vdzes/api_client.py\", line 64, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:41.916699+00:00"
+    },
+    "api:asana-automation-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-jsvk_m8n/test_mock.py\", line 75, in test_http_error_is_handled\n    result = api_client.request_json(\"https://api.example.com/v1/test\")\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-jsvk_m8n/api_client.py\", line 70, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:42.228490+00:00"
+    },
+    "api:notion-api-for-automation-v2": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not implement the endpoint host 'api.notion.com'",
+        "requests.http: does not use the endpoint host 'api.notion.com'"
+      ],
+      "checked_at": "2026-11-07T09:19:42.656496+00:00"
+    },
+    "api:contentful-cms-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:43.108801+00:00"
+    },
+    "api:sendinblue-sms-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not implement the endpoint host 'api.sendinblue.com'",
+        "requests.http: does not use the endpoint host 'api.sendinblue.com'",
+        "API kit file 'requests.http' is <= 100 bytes"
+      ],
+      "checked_at": "2026-11-07T09:19:43.508531+00:00"
+    },
+    "api:tibber-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not implement the endpoint host 'api.tibber.com'",
+        "requests.http: does not use the endpoint host 'api.tibber.com'",
+        "API kit file 'requests.http' is <= 100 bytes",
+        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-45ke0yao/test_mock.py\", line 75, in test_http_error_is_handled\n    result = api_client.request_json(\"https://api.example.com/v1/test\")\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-45ke0yao/api_client.py\", line 47, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:43.876890+00:00"
+    },
+    "api:braintree-payments-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not implement the endpoint host 'api.braintreegateway.com'",
+        "requests.http: does not use the endpoint host 'api.braintreegateway.com'"
+      ],
+      "checked_at": "2026-11-07T09:19:44.261086+00:00"
+    },
+    "api:census-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:44.619240+00:00"
+    },
+    "api:finnhub-stock-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: api_client.py --dry-run failed:\nusage: api_client.py [-h] symbol\napi_client.py: error: the following arguments are required: symbol"
+      ],
+      "checked_at": "2026-11-07T09:19:44.977241+00:00"
+    },
+    "api:slack-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:45.400847+00:00"
+    },
+    "api:tinkr-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not implement the endpoint host 'api.tink.com'",
+        "requests.http: does not use the endpoint host 'api.tink.com'",
+        "API kit file 'requests.http' is <= 100 bytes"
+      ],
+      "checked_at": "2026-11-07T09:19:45.834828+00:00"
+    },
+    "api:finnhub-crypto-api": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:46.255474+00:00"
+    },
+    "api:squarespace-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: unittest failed:\n\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-t6ekmi42/test_mock.py\", line 78, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-t6ekmi42/test_mock.py\", line 54, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: ApiResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:46.553463+00:00"
+    },
+    "api:twitch-helix-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not implement the endpoint host 'api.twitch.tv'",
+        "requests.http: does not use the endpoint host 'api.twitch.tv'",
+        "API kit file 'requests.http' is <= 100 bytes"
+      ],
+      "checked_at": "2026-11-07T09:19:47.009107+00:00"
+    },
+    "api:pdf-co-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not implement the endpoint host 'api.pdf.co'",
+        "api_client.py contains a generic placeholder domain",
+        "requests.http: does not use the endpoint host 'api.pdf.co'"
+      ],
+      "checked_at": "2026-11-07T09:19:47.414600+00:00"
+    },
+    "api:aiven-kafka-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nERROR:root:Max retries exceeded\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-9qj0muq9/test_mock.py\", line 75, in test_http_error_is_handled\n    result = api_client.request_json(\"https://api.example.com/v1/test\")\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-9qj0muq9/api_client.py\", line 50, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:47.808665+00:00"
+    },
+    "api:api-ai-image-generator": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not mention the API title",
+        "API sandbox failed: unittest failed:\n\n..E\n======================================================================\nERROR: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-1ohf_u8w/test_mock.py\", line 53, in test_successful_call_and_auth_header\n    result = api_client.request_json('https://api.deepai.org/api/text2img', **kwargs)\nTypeError: request_json() missing 1 required positional argument: 'data'\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:48.904401+00:00"
+    },
+    "api:sentry-performance-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "API kit file 'requests.http' is <= 100 bytes",
+        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nERROR:root:Max retries exceeded\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-1b8tivhh/test_mock.py\", line 75, in test_http_error_is_handled\n    result = api_client.request_json(\"https://api.example.com/v1/test\")\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-1b8tivhh/api_client.py\", line 50, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+      ],
+      "checked_at": "2026-11-07T09:19:49.267558+00:00"
+    },
+    "api:twitch-analytics-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py does not implement the endpoint host 'api.twitch.tv'",
+        "requests.http: does not use the endpoint host 'api.twitch.tv'"
+      ],
+      "checked_at": "2026-11-07T09:19:49.624982+00:00"
+    },
+    "api:jira-rest-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "requests.http: does not use the endpoint host '{your-domain}.atlassian.net'"
+      ],
+      "checked_at": "2026-11-07T09:19:50.090100+00:00"
+    },
+    "api:convertkit-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py contains a generic placeholder domain"
+      ],
+      "checked_at": "2026-11-07T09:19:50.556173+00:00"
+    },
+    "api:klaviyo-api": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "api_client.py contains a generic placeholder domain"
+      ],
+      "checked_at": "2026-11-07T09:19:50.998325+00:00"
+    },
+    "alternative:zapier-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:53.109304+00:00"
+    },
+    "alternative:figma-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:53.524972+00:00"
+    },
+    "alternative:slack-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:56.480965+00:00"
+    },
+    "alternative:airtable-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:57.195306+00:00"
+    },
+    "alternative:mailchimp-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:19:57.203166+00:00"
+    },
+    "alternative:trello-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:19:57.206401+00:00"
+    },
+    "alternative:google-analytics-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:19:57.209187+00:00"
+    },
+    "alternative:hubspot-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:19:57.212203+00:00"
+    },
+    "alternative:asana-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:19:57.214890+00:00"
+    },
+    "alternative:dropbox-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:19:57.217791+00:00"
+    },
+    "alternative:calendly-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:19:57.220445+00:00"
+    },
+    "alternative:wordpress-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:19:57.226979+00:00"
+    },
+    "alternative:shopify-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:19:57.248919+00:00"
+    },
+    "alternative:monday-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:19:57.252386+00:00"
+    },
+    "alternative:clickup-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:19:57.260496+00:00"
+    },
+    "alternative:miro-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:19:57.263286+00:00"
+    },
+    "alternative:loom-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:19:57.265984+00:00"
+    },
+    "alternative:intercom-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:19:57.268355+00:00"
+    },
+    "alternative:zendesk-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:19:57.270944+00:00"
+    },
+    "alternative:jira-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:19:57.273504+00:00"
+    },
+    "alternative:github-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:19:57.275961+00:00"
+    },
+    "alternative:gitlab-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:19:57.278386+00:00"
+    },
+    "alternative:bitbucket-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:19:57.280887+00:00"
+    },
+    "alternative:netlify-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:19:57.283376+00:00"
+    },
+    "alternative:vercel-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:19:57.285797+00:00"
+    },
+    "alternative:openai-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:57.913767+00:00"
+    },
+    "alternative:stripe-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:19:59.677453+00:00"
+    },
+    "alternative:supabase-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:00.818354+00:00"
+    },
+    "alternative:postman-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:01.531755+00:00"
+    },
+    "alternative:obsidian-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:01.768137+00:00"
+    },
+    "alternative:auth0-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:02.234163+00:00"
+    },
+    "alternative:algolia-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:03.321988+00:00"
+    },
+    "alternative:deepgram-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:03.928819+00:00"
+    },
+    "alternative:elevenlabs-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:20:03.935813+00:00"
+    },
+    "alternative:pinecone-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:20:03.938330+00:00"
+    },
+    "alternative:adobe-photoshop-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:06.159478+00:00"
+    },
+    "alternative:zoom-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:06.769003+00:00"
+    },
+    "alternative:salesforce-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:07.558423+00:00"
+    },
+    "alternative:google-drive-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:11.510919+00:00"
+    },
+    "alternative:microsoft-teams-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:11.938430+00:00"
+    },
+    "alternative:adobe-acrobat-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:14.087427+00:00"
+    },
+    "alternative:docusign-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:15.363233+00:00"
+    },
+    "alternative:visual-studio-code-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:16.492881+00:00"
+    },
+    "alternative:microsoft-excel-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:17.591694+00:00"
+    },
+    "alternative:adobe-illustrator-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:20:17.599766+00:00"
+    },
+    "alternative:docker-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:18.034905+00:00"
+    },
+    "alternative:quickbooks-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:19.703032+00:00"
+    },
+    "alternative:zoominfo-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:21.740159+00:00"
+    },
+    "alternative:autodesk-autocad-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:23.294163+00:00"
+    },
+    "alternative:dropbox-paper-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:24.836729+00:00"
+    },
+    "alternative:microsoft-word-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:25.972006+00:00"
+    },
+    "alternative:notepad-plus-plus-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:27.392642+00:00"
+    },
+    "alternative:adobe-premiere-pro-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:29.122225+00:00"
+    },
+    "alternative:adobe-lightroom-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:29.862033+00:00"
+    },
+    "alternative:sketch-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:20:29.869903+00:00"
+    },
+    "alternative:basecamp-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:31.137850+00:00"
+    },
+    "alternative:aws-ec2-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:20:31.144524+00:00"
+    },
+    "alternative:adobe-after-effects-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:20:31.147185+00:00"
+    },
+    "alternative:tiktok-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:32.699062+00:00"
+    },
+    "alternative:canva-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:34.087773+00:00"
+    },
+    "alternative:evernote-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:34.908191+00:00"
+    },
+    "alternative:notability-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:37.031695+00:00"
+    },
+    "alternative:microsoft-onedrive-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:37.568498+00:00"
+    },
+    "alternative:notion-api-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:39.800813+00:00"
+    },
+    "alternative:figma-plugin-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:20:39.808032+00:00"
+    },
+    "alternative:figma-x-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:20:39.810392+00:00"
+    },
+    "alternative:clickmeeting-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:40.126418+00:00"
+    },
+    "alternative:notion-software-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:40.134227+00:00"
+    },
+    "alternative:figma-studio-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:20:40.136626+00:00"
+    },
+    "alternative:notion-forms-alternatives": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "alternative item 2 URL is unreachable: https://www.google.com/forms?ref=flowmatrix"
+      ],
+      "checked_at": "2026-11-07T09:20:40.702388+00:00"
+    },
+    "alternative:notion-ai-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:20:40.711258+00:00"
+    },
+    "alternative:notion-templates-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:41.949073+00:00"
+    },
+    "alternative:microsoft-access-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:43.713238+00:00"
+    },
+    "alternative:notion-wiki-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:44.520920+00:00"
+    },
+    "alternative:airtable-api-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:20:44.527575+00:00"
+    },
+    "alternative:notion-boards-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:44.531666+00:00"
+    },
+    "alternative:figma-figjam-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:45.367319+00:00"
+    },
+    "alternative:figma-digital-asset-management-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:20:45.374282+00:00"
+    },
+    "alternative:microsoft-teams-apps-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:46.147753+00:00"
+    },
+    "alternative:microsoft-azure-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:47.281329+00:00"
+    },
+    "alternative:notion-database-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:20:47.288701+00:00"
+    },
+    "alternative:microsoft-outlook-alternatives": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "alternative item 1 URL is unreachable: https://www.google.com/gmail/?ref=flowmatrix"
+      ],
+      "checked_at": "2026-11-07T09:20:48.126475+00:00"
+    },
+    "alternative:whatsapp-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:20:58.229307+00:00"
+    },
+    "alternative:moodle-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:01.845713+00:00"
+    },
+    "alternative:figma-figjam-plugin-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:02.196917+00:00"
+    },
+    "alternative:notion-ai-plugin-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:02.204869+00:00"
+    },
+    "alternative:microsoft-onenote-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:02.476023+00:00"
+    },
+    "alternative:figma-figma-design-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:21:02.482487+00:00"
+    },
+    "alternative:notion-forms-advanced-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:03.447169+00:00"
+    },
+    "alternative:figma-plugins-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:21:03.452893+00:00"
+    },
+    "alternative:notion-automations-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:04.769153+00:00"
+    },
+    "alternative:notion-boards-advanced-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:05.205611+00:00"
+    },
+    "alternative:notion-forms-advanced-pro-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:05.212112+00:00"
+    },
+    "alternative:microsoft-surface-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:21:05.214652+00:00"
+    },
+    "alternative:canva-website-design-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "Alternative: item 1 needs a full http(s) URL",
+        "Alternative: item 2 needs a full http(s) URL",
+        "Alternative: item 3 needs a full http(s) URL"
+      ],
+      "checked_at": "2026-11-07T09:21:05.217102+00:00"
+    },
+    "alternative:notepad-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:05.348790+00:00"
+    },
+    "alternative:clickup-api-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:06.113109+00:00"
+    },
+    "alternative:canva-video-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:07.303384+00:00"
+    },
+    "alternative:airtable-forms-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:07.310251+00:00"
+    },
+    "alternative:microsoft-teams-rooms-alternatives": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:10.103580+00:00"
+    },
+    "alternative:figma-ux-research-alternatives": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "alternative item 2 URL is unreachable: https://lookback.io?ref=flowmatrix"
+      ],
+      "checked_at": "2026-11-07T09:21:11.975292+00:00"
+    },
+    "alternative:canva-whiteboard-alternatives": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "alternative item 3 URL is unreachable: https://jamboard.google.com?ref=flowmatrix"
+      ],
+      "checked_at": "2026-11-07T09:21:12.653183+00:00"
+    },
+    "alternative:redis-alternatives": {
+      "status": "verified_clean",
+      "healed": false,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:12.655721+00:00"
+    },
+    "alternative:framer-alternatives": {
+      "status": "verified_clean",
+      "healed": false,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:12.657872+00:00"
+    },
+    "alternative:microsoft-alternatives": {
+      "status": "verified_clean",
+      "healed": false,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:12.659676+00:00"
+    },
+    "alternative:sendgrid-alternatives": {
+      "status": "verified_clean",
+      "healed": false,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:12.661917+00:00"
+    },
+    "alternative:together-ai-alternatives": {
+      "status": "verified_clean",
+      "healed": false,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:12.664139+00:00"
+    },
+    "alternative:mistral-ai-alternatives": {
+      "status": "verified_clean",
+      "healed": false,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:12.666572+00:00"
+    },
+    "alternative:doppler-alternatives": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "alternative item 3 URL is unreachable: https://azure.microsoft.com/en-us/products/key-vault?ref=flowmatrix"
+      ],
+      "checked_at": "2026-11-07T09:21:12.673389+00:00"
+    },
+    "alternative:firebase-alternatives": {
+      "status": "verified_clean",
+      "healed": false,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:12.675720+00:00"
+    },
+    "alternative:planetscale-alternatives": {
+      "status": "verified_clean",
+      "healed": false,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:12.678379+00:00"
+    },
+    "alternative:twitch-alternatives": {
+      "status": "verified_clean",
+      "healed": false,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:12.680855+00:00"
+    },
+    "workflow:multi-model-prompt-router": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:13.108450+00:00"
+    },
+    "workflow:llm-evaluation-benchmark": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "workflow.py --dry-run failed: Traceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-b04a_20v/workflow.py\", line 195, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-b04a_20v/workflow.py\", line 187, in main\n    run_workflow()\n    ~~~~~~~~~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-b04a_20v/workflow.py\", line 98, in run_workflow\n    openai_responses = run_openai_baseline(prompts)\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-b04a_20v/workflow.py\", line 95, in run_openai_baseline\n    responses.append(result.get('choices', [{}])[0].get('message', {}).get('content', ''))\n                     ^^^^^^^^^^\nAttributeError: 'list' object has no attribute 'get'"
+      ],
+      "checked_at": "2026-11-07T09:21:13.408712+00:00"
+    },
+    "workflow:batch-llm-processing": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:33.774499+00:00"
+    },
+    "workflow:ai-customer-insights": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:34.044185+00:00"
+    },
+    "workflow:claude-document-summarizer": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:34.319470+00:00"
+    },
+    "workflow:gemini-multimodal-analyzer": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:34.590417+00:00"
+    },
+    "workflow:watson-assistant-helpdesk": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "workflow kit file 'requests.http' is <= 100 bytes"
+      ],
+      "checked_at": "2026-11-07T09:21:34.867071+00:00"
+    },
+    "workflow:podcast-transcription-pipeline": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:35.138526+00:00"
+    },
+    "workflow:ai-voiceover-production": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:36.197806+00:00"
+    },
+    "workflow:ai-image-generation-pipeline": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "workflow.py --dry-run failed: Traceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-507_9vfd/workflow.py\", line 181, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-507_9vfd/workflow.py\", line 173, in main\n    run_workflow()\n    ~~~~~~~~~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-507_9vfd/workflow.py\", line 129, in run_workflow\n    manifest = upload_to_vercel_blob(images)\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-507_9vfd/workflow.py\", line 125, in upload_to_vercel_blob\n    manifest.append(response_data.get('url'))\n                    ^^^^^^^^^^^^^^^^^\nAttributeError: 'list' object has no attribute 'get'"
+      ],
+      "checked_at": "2026-11-07T09:21:36.467298+00:00"
+    },
+    "workflow:semantic-search-knowledge-base": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "title missing on PDF cover (page 1)"
+      ],
+      "checked_at": "2026-11-07T09:21:36.753342+00:00"
+    },
+    "workflow:hybrid-search-product-catalog": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "workflow kit file 'requests.http' is <= 100 bytes"
+      ],
+      "checked_at": "2026-11-07T09:21:37.035685+00:00"
+    },
+    "workflow:rag-document-assistant": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:37.314426+00:00"
+    },
+    "workflow:content-similarity-audit": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "workflow kit file 'requests.http' is <= 100 bytes",
+        "workflow.py --dry-run failed: Loaded 3 articles.\n{'id': '1', 'text': 'This is the first article.'}\n\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-1hlite21/workflow.py\", line 183, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-1hlite21/workflow.py\", line 175, in main\n    run_workflow()\n    ~~~~~~~~~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-1hlite21/workflow.py\", line 103, in run_workflow\n    embeddings = embed_articles(articles)\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-1hlite21/workflow.py\", line 101, in embed_articles\n    return response_data.get('embeddings', [])  # Use .get() to avoid KeyError\n           ^^^^^^^^^^^^^^^^^\nAttributeError: 'list' object has no attribute 'get'"
+      ],
+      "checked_at": "2026-11-07T09:21:37.598394+00:00"
+    },
+    "workflow:transactional-email-delivery": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:37.869402+00:00"
+    },
+    "workflow:email-campaign-automation": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:38.157568+00:00"
+    },
+    "workflow:sms-alert-system": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:38.442667+00:00"
+    },
+    "workflow:slack-incident-notifications": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:38.799336+00:00"
+    },
+    "workflow:telegram-community-bot": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:39.120982+00:00"
+    },
+    "workflow:video-call-summarizer": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:39.399378+00:00"
+    },
+    "workflow:conversational-messaging-hub": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:39.671140+00:00"
+    },
+    "workflow:crm-lead-scoring": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:39.943644+00:00"
+    },
+    "workflow:salesforce-pipeline-sync": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:40.213733+00:00"
+    },
+    "workflow:personalized-outreach-engine": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:40.498384+00:00"
+    },
+    "workflow:support-ticket-triage": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:40.788230+00:00"
+    },
+    "workflow:ai-help-center-search": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:41.072368+00:00"
+    },
+    "workflow:csat-feedback-analysis": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:41.356856+00:00"
+    },
+    "workflow:subscription-billing-automation": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "title missing on PDF cover (page 1)"
+      ],
+      "checked_at": "2026-11-07T09:21:41.635473+00:00"
+    },
+    "workflow:invoice-reconciliation": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:41.914453+00:00"
+    },
+    "workflow:paypal-payout-monitoring": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:42.186937+00:00"
+    },
+    "workflow:stock-market-alerts": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:42.467763+00:00"
+    },
+    "workflow:crypto-portfolio-tracker": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "workflow kit file 'requests.http' is <= 100 bytes"
+      ],
+      "checked_at": "2026-11-07T09:21:42.752193+00:00"
+    },
+    "workflow:bank-transaction-enrichment": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "workflow.py --dry-run failed: Traceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-cf073ycs/workflow.py\", line 207, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-cf073ycs/workflow.py\", line 199, in main\n    run_workflow()\n    ~~~~~~~~~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-cf073ycs/workflow.py\", line 114, in run_workflow\n    categorized_merchants = categorize_merchants(transactions)\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-cf073ycs/workflow.py\", line 110, in categorize_merchants\n    category = json.loads(response.read().decode('utf-8')).get('choices', [{}])[0].get('message', {}).get('content', '')\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'list' object has no attribute 'get'"
+      ],
+      "checked_at": "2026-11-07T09:21:43.044290+00:00"
+    },
+    "workflow:supabase-realtime-dashboard": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:43.323447+00:00"
+    },
+    "workflow:airtable-content-sync": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:43.596956+00:00"
+    },
+    "workflow:mongodb-data-pipeline": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "workflow kit file 'mock_data.json' is <= 100 bytes",
+        "workflow kit file 'requests.http' is <= 100 bytes",
+        "step 1: technical_explanation too short (0 < 250 chars)",
+        "step 1: 'what you need to do' actions missing",
+        "step 1: checklist missing",
+        "step 1: expected result missing",
+        "step 1: links missing",
+        "step 2: technical_explanation too short (0 < 250 chars)",
+        "step 2: 'what you need to do' actions missing",
+        "step 2: checklist missing",
+        "step 2: expected result missing",
+        "step 2: links missing",
+        "step 3: technical_explanation too short (0 < 250 chars)",
+        "step 3: 'what you need to do' actions missing",
+        "step 3: checklist missing",
+        "step 3: expected result missing",
+        "step 3: links missing",
+        "step 4: technical_explanation too short (0 < 250 chars)",
+        "step 4: 'what you need to do' actions missing",
+        "step 4: checklist missing"
+      ],
+      "checked_at": "2026-11-07T09:21:43.836060+00:00"
+    },
+    "workflow:postgres-backup-reporting": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "workflow kit file 'mock_data.json' is <= 100 bytes"
+      ],
+      "checked_at": "2026-11-07T09:21:44.108473+00:00"
+    },
+    "workflow:redis-rate-limit-store": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:44.396266+00:00"
+    },
+    "workflow:google-sheets-reporting-hub": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:44.683866+00:00"
+    },
+    "workflow:deployment-monitoring-alerts": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:44.963901+00:00"
+    },
+    "workflow:feature-flag-rollout": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "workflow kit file 'mock_data.json' is <= 100 bytes",
+        "workflow kit file 'requests.http' is <= 100 bytes"
+      ],
+      "checked_at": "2026-11-07T09:21:45.257141+00:00"
+    },
+    "workflow:secrets-rotation-audit": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:45.531813+00:00"
+    },
+    "workflow:serverless-job-scheduler": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "workflow kit file 'mock_data.json' is <= 100 bytes",
+        "step 1: technical_explanation too short (0 < 250 chars)",
+        "step 1: 'what you need to do' actions missing",
+        "step 1: checklist missing",
+        "step 1: expected result missing",
+        "step 1: links missing",
+        "step 2: technical_explanation too short (0 < 250 chars)",
+        "step 2: 'what you need to do' actions missing",
+        "step 2: checklist missing",
+        "step 2: expected result missing",
+        "step 2: links missing",
+        "step 3: technical_explanation too short (0 < 250 chars)",
+        "step 3: code_snippet has fewer than 8 lines",
+        "step 3: 'what you need to do' actions missing",
+        "step 3: checklist missing",
+        "step 3: expected result missing",
+        "step 3: links missing",
+        "step 4: technical_explanation too short (0 < 250 chars)",
+        "step 4: 'what you need to do' actions missing",
+        "step 4: checklist missing"
+      ],
+      "checked_at": "2026-11-07T09:21:45.777423+00:00"
+    },
+    "workflow:api-health-monitoring": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:46.066827+00:00"
+    },
+    "workflow:linear-roadmap-sync": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:46.358346+00:00"
+    },
+    "workflow:release-notes-generator": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:46.636461+00:00"
+    },
+    "workflow:programmatic-seo-pipeline": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:46.921834+00:00"
+    },
+    "workflow:ai-content-automation": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:47.205586+00:00"
+    },
+    "workflow:seo-content-audit": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:47.476919+00:00"
+    },
+    "workflow:blog-cms-publishing": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:47.748397+00:00"
+    },
+    "workflow:local-seo-landing-pages": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:48.028725+00:00"
+    },
+    "workflow:newsletter-automation": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:48.315204+00:00"
+    },
+    "workflow:content-localization-pipeline": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "workflow kit file 'requests.http' is <= 100 bytes"
+      ],
+      "checked_at": "2026-11-07T09:21:48.596710+00:00"
+    },
+    "workflow:meeting-notes-automation": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:48.876192+00:00"
+    },
+    "workflow:notion-task-sync": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "workflow.py --dry-run failed: Traceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-e2b5wz0d/workflow.py\", line 208, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-e2b5wz0d/workflow.py\", line 200, in main\n    run_workflow()\n    ~~~~~~~~~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-e2b5wz0d/workflow.py\", line 118, in run_workflow\n    sync_tasks_with_asana(open_tasks)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-e2b5wz0d/workflow.py\", line 90, in sync_tasks_with_asana\n    task_id = task.get('external_id')\n              ^^^^^^^^\nAttributeError: 'str' object has no attribute 'get'"
+      ],
+      "checked_at": "2026-11-07T09:21:49.149158+00:00"
+    },
+    "workflow:document-approval-workflow": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:49.424183+00:00"
+    },
+    "workflow:form-submission-routing": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:49.695264+00:00"
+    },
+    "workflow:team-wiki-search": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:49.977019+00:00"
+    },
+    "workflow:design-feedback-collection": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:50.261763+00:00"
+    },
+    "workflow:collaboration-presence-sync": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:50.615739+00:00"
+    },
+    "workflow:product-analytics-dashboard": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:50.909284+00:00"
+    },
+    "workflow:error-tracking-alerts": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:51.188490+00:00"
+    },
+    "workflow:website-performance-reporting": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "title missing on PDF cover (page 1)"
+      ],
+      "checked_at": "2026-11-07T09:21:51.494579+00:00"
+    },
+    "workflow:social-media-analytics": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:51.770338+00:00"
+    },
+    "workflow:shopify-order-automation": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:52.068369+00:00"
+    },
+    "workflow:inventory-sync-automation": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:52.356202+00:00"
+    },
+    "workflow:weather-driven-ops-alerts": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:52.630553+00:00"
+    },
+    "workflow:store-locator-geocoding": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "workflow kit file 'requests.http' is <= 100 bytes"
+      ],
+      "checked_at": "2026-11-07T09:21:52.899559+00:00"
+    },
+    "workflow:asset-backup-automation": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:53.174941+00:00"
+    },
+    "workflow:s3-static-site-publishing": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:53.462236+00:00"
+    },
+    "workflow:auth0-sso-provisioning": {
+      "status": "failed",
+      "healed": true,
+      "errors": [
+        "workflow kit file 'mock_data.json' is <= 100 bytes",
+        "workflow kit file 'requests.http' is <= 100 bytes",
+        "step 1: technical_explanation too short (0 < 250 chars)",
+        "step 1: 'what you need to do' actions missing",
+        "step 1: checklist missing",
+        "step 1: expected result missing",
+        "step 1: links missing",
+        "step 2: technical_explanation too short (0 < 250 chars)",
+        "step 2: 'what you need to do' actions missing",
+        "step 2: checklist missing",
+        "step 2: expected result missing",
+        "step 2: links missing",
+        "step 3: technical_explanation too short (0 < 250 chars)",
+        "step 3: 'what you need to do' actions missing",
+        "step 3: checklist missing",
+        "step 3: expected result missing",
+        "step 3: links missing",
+        "step 4: technical_explanation too short (0 < 250 chars)",
+        "step 4: 'what you need to do' actions missing",
+        "step 4: checklist missing"
+      ],
+      "checked_at": "2026-11-07T09:21:53.711364+00:00"
+    },
+    "workflow:clerk-user-onboarding": {
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T09:21:53.985936+00:00"
+    },
+    "workflow:slack-twitch-automation-pipeline": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "title missing on PDF cover (page 1)"
+      ],
+      "checked_at": "2026-11-07T09:21:54.320023+00:00"
+    },
+    "workflow:sentry-performance-airtable-automation-pipeline": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "title missing on PDF cover (page 1)",
+        "title missing on PDF overview (page 2)"
+      ],
+      "checked_at": "2026-11-07T09:21:54.660982+00:00"
+    },
+    "workflow:pdf-generator-to-twelve-data-with-deepai-image-generator-orchestration": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "title missing on PDF cover (page 1)",
+        "title missing on PDF overview (page 2)"
+      ],
+      "checked_at": "2026-11-07T09:21:55.005421+00:00"
+    },
+    "workflow:shopify-admin-twilio-conversations-automation-pipeline": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "title missing on PDF cover (page 1)",
+        "title missing on PDF overview (page 2)"
+      ],
+      "checked_at": "2026-11-07T09:21:55.319799+00:00"
+    },
+    "workflow:braintree-payments-to-airtable-with-contentful-content-management-system-orchestration": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "title missing on PDF cover (page 1)",
+        "title missing on PDF overview (page 2)"
+      ],
+      "checked_at": "2026-11-07T09:21:55.649465+00:00"
+    },
+    "workflow:slack-ibm-watson-language-translator-automation-pipeline": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "title missing on PDF cover (page 1)",
+        "title missing on PDF overview (page 2)"
+      ],
+      "checked_at": "2026-11-07T09:21:55.978540+00:00"
+    },
+    "workflow:slack-microsoft-azure-face-automation-pipeline": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "title missing on PDF cover (page 1)",
+        "title missing on PDF overview (page 2)"
+      ],
+      "checked_at": "2026-11-07T09:21:56.289318+00:00"
+    },
+    "workflow:shopify-admin-amazon-polly-automation-pipeline": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "title missing on PDF cover (page 1)",
+        "title missing on PDF overview (page 2)"
+      ],
+      "checked_at": "2026-11-07T09:21:56.638345+00:00"
+    },
+    "workflow:weatherapi-launchdarkly-feature-automation-pipeline": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "title missing on PDF cover (page 1)",
+        "title missing on PDF overview (page 2)"
+      ],
+      "checked_at": "2026-11-07T09:21:56.937398+00:00"
+    },
+    "workflow:salesforce-rest-weatherapi-automation-pipeline": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "title missing on PDF cover (page 1)",
+        "title missing on PDF overview (page 2)",
+        "workflow kit file 'requests.http' is <= 100 bytes"
+      ],
+      "checked_at": "2026-11-07T09:21:57.265637+00:00"
+    },
+    "workflow:jira-rest-twilio-conversations-automation-pipeline": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "title missing on PDF cover (page 1)",
+        "title missing on PDF overview (page 2)"
+      ],
+      "checked_at": "2026-11-07T09:21:57.618527+00:00"
+    },
+    "workflow:jira-rest-notion-api-for-automation-automation-pipeline": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "title missing on PDF cover (page 1)",
+        "title missing on PDF overview (page 2)",
+        "workflow kit file 'requests.http' is <= 100 bytes"
+      ],
+      "checked_at": "2026-11-07T09:21:57.960264+00:00"
+    },
+    "workflow:convertkit-github-copilot-automation-pipeline": {
+      "status": "failed",
+      "healed": false,
+      "errors": [
+        "title missing on PDF cover (page 1)",
+        "title missing on PDF overview (page 2)"
+      ],
+      "checked_at": "2026-11-07T09:21:58.268314+00:00"
+    }
+  },
+  "updated_at": "2026-11-07T09:21:58.370089+00:00"
+}
