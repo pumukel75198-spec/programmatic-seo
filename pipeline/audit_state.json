@@ -4,1840 +4,1808 @@
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:47.234366+00:00"
+      "checked_at": "2026-11-07T17:40:30.034874+00:00"
     },
     "api:openai-whisper-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:14:04.975657+00:00"
+      "checked_at": "2026-11-07T17:32:14.769345+00:00"
     },
     "alternative:notion-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.845006+00:00"
+      "checked_at": "2026-11-07T17:40:29.645710+00:00"
     },
     "api:stripe-payments-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:14:09.725046+00:00"
+      "checked_at": "2026-11-07T17:32:19.621674+00:00"
     },
     "api:supabase-database-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:14:14.134282+00:00"
+      "checked_at": "2026-11-07T17:32:24.358493+00:00"
     },
     "api:anthropic-claude-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:14:18.689327+00:00"
+      "checked_at": "2026-11-07T17:32:28.986925+00:00"
     },
     "api:google-gemini-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:14:23.924062+00:00"
+      "checked_at": "2026-11-07T17:32:33.490557+00:00"
     },
     "api:resend-email-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:14:28.677240+00:00"
+      "checked_at": "2026-11-07T17:32:38.181304+00:00"
     },
     "api:clerk-authentication-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:14:33.246633+00:00"
+      "checked_at": "2026-11-07T17:32:42.889722+00:00"
     },
     "api:cloudflare-workers-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:14:38.167294+00:00"
+      "checked_at": "2026-11-07T17:32:47.779651+00:00"
     },
     "api:mapbox-maps-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:14:42.989329+00:00"
+      "checked_at": "2026-11-07T17:32:52.727957+00:00"
     },
     "api:twilio-messaging-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:14:47.821276+00:00"
+      "checked_at": "2026-11-07T17:32:57.485970+00:00"
     },
     "api:hugging-face-inference-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:14:52.940583+00:00"
+      "checked_at": "2026-11-07T17:33:02.172707+00:00"
     },
     "api:cohere-embed-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:14:57.638431+00:00"
+      "checked_at": "2026-11-07T17:33:06.787116+00:00"
     },
     "api:pinecone-vector-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:15:02.556540+00:00"
+      "checked_at": "2026-11-07T17:33:12.036653+00:00"
     },
     "api:auth0-authentication-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:15:07.364694+00:00"
+      "checked_at": "2026-11-07T17:33:17.128302+00:00"
     },
     "api:sendgrid-email-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:15:12.161257+00:00"
+      "checked_at": "2026-11-07T17:33:21.796821+00:00"
     },
     "api:algolia-search-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:15:16.978845+00:00"
+      "checked_at": "2026-11-07T17:33:26.424160+00:00"
     },
     "api:openweather-weather-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:15:21.792636+00:00"
+      "checked_at": "2026-11-07T17:33:31.222576+00:00"
     },
     "api:shopify-admin-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:15:26.829119+00:00"
+      "checked_at": "2026-11-07T17:33:36.217759+00:00"
     },
     "api:notion-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:15:31.628664+00:00"
+      "checked_at": "2026-11-07T17:33:41.068534+00:00"
     },
     "api:airtable-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:15:36.265353+00:00"
+      "checked_at": "2026-11-07T17:33:45.697593+00:00"
     },
     "api:mistral-ai-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:15:41.260390+00:00"
+      "checked_at": "2026-11-07T17:33:50.466785+00:00"
     },
     "api:groq-inference-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:15:45.974542+00:00"
+      "checked_at": "2026-11-07T17:33:55.039902+00:00"
     },
     "api:together-ai-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:15:50.782712+00:00"
+      "checked_at": "2026-11-07T17:33:59.953581+00:00"
     },
     "api:replicate-model-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:15:55.476048+00:00"
+      "checked_at": "2026-11-07T17:34:04.610719+00:00"
     },
     "api:elevenlabs-voice-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:16:00.196796+00:00"
+      "checked_at": "2026-11-07T17:34:09.434324+00:00"
     },
     "api:deepgram-speech-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:16:05.091434+00:00"
+      "checked_at": "2026-11-07T17:34:14.173234+00:00"
     },
     "api:stability-ai-image-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:16:10.199762+00:00"
+      "checked_at": "2026-11-07T17:34:18.942440+00:00"
     },
     "api:weaviate-vector-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:16:15.024960+00:00"
+      "checked_at": "2026-11-07T17:34:23.777872+00:00"
     },
     "api:qdrant-vector-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:16:20.241464+00:00"
+      "checked_at": "2026-11-07T17:34:28.470223+00:00"
     },
     "api:mongodb-atlas-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:16:25.466986+00:00"
-    },
-    "api:neon-postgres-api": {
-      "status": "failed",
-      "healed": true,
-      "errors": [
-        "test_mock.py: does not use the endpoint host 'neon.tech'"
-      ],
-      "checked_at": "2026-11-07T17:17:06.297099+00:00"
-    },
-    "api:planetscale-database-api": {
-      "status": "failed",
-      "healed": true,
-      "errors": [
-        "test_mock.py: does not use the endpoint host 'planetscale.com'"
-      ],
-      "checked_at": "2026-11-07T17:17:37.220845+00:00"
+      "checked_at": "2026-11-07T17:34:33.318564+00:00"
     },
     "api:upstash-redis-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:17:37.552867+00:00"
+      "checked_at": "2026-11-07T17:34:38.004558+00:00"
     },
     "api:vercel-blob-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:17:43.149539+00:00"
+      "checked_at": "2026-11-07T17:34:42.810288+00:00"
     },
     "api:liveblocks-collaboration-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:17:47.995157+00:00"
+      "checked_at": "2026-11-07T17:34:47.874179+00:00"
     },
     "api:ably-realtime-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:17:52.563354+00:00"
+      "checked_at": "2026-11-07T17:34:53.027057+00:00"
     },
     "api:posthog-analytics-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:17:57.224325+00:00"
+      "checked_at": "2026-11-07T17:34:57.772216+00:00"
     },
     "api:sentry-error-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:18:02.279483+00:00"
+      "checked_at": "2026-11-07T17:35:03.023290+00:00"
     },
     "api:launchdarkly-feature-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:18:07.171971+00:00"
+      "checked_at": "2026-11-07T17:35:07.820268+00:00"
     },
     "api:doppler-secrets-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:18:12.790577+00:00"
+      "checked_at": "2026-11-07T17:35:12.704542+00:00"
     },
     "api:openai-batch-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:18:17.622770+00:00"
+      "checked_at": "2026-11-07T17:35:17.604692+00:00"
     },
     "api:google-sheets-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:18:22.316341+00:00"
+      "checked_at": "2026-11-07T17:35:22.544699+00:00"
     },
     "api:slack-web-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:18:26.945863+00:00"
+      "checked_at": "2026-11-07T17:35:27.248228+00:00"
     },
     "api:hubspot-crm-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:18:31.848063+00:00"
+      "checked_at": "2026-11-07T17:35:32.163460+00:00"
     },
     "api:zendesk-support-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:18:36.567504+00:00"
+      "checked_at": "2026-11-07T17:35:37.281376+00:00"
     },
     "api:salesforce-rest-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:18:41.282771+00:00"
+      "checked_at": "2026-11-07T17:35:41.740722+00:00"
     },
     "api:discord-bot-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:18:46.129813+00:00"
+      "checked_at": "2026-11-07T17:35:46.528621+00:00"
     },
     "api:telegram-bot-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:18:50.882523+00:00"
+      "checked_at": "2026-11-07T17:35:51.729188+00:00"
     },
     "api:github-rest-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:18:57.642746+00:00"
+      "checked_at": "2026-11-07T17:35:58.390795+00:00"
     },
     "api:linear-graphql-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:19:02.592063+00:00"
+      "checked_at": "2026-11-07T17:36:03.289234+00:00"
     },
     "api:microsoft-graph-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:19:07.566632+00:00"
+      "checked_at": "2026-11-07T17:36:08.579983+00:00"
     },
     "api:openai-dall-e-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:19:12.297479+00:00"
+      "checked_at": "2026-11-07T17:36:13.527476+00:00"
     },
     "api:microsoft-azure-cognitive-services-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:19:17.248799+00:00"
+      "checked_at": "2026-11-07T17:36:18.298275+00:00"
     },
     "api:openai-gpt-4-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:19:21.916949+00:00"
+      "checked_at": "2026-11-07T17:36:23.020090+00:00"
     },
     "api:openai-embeddings-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:19:26.522219+00:00"
+      "checked_at": "2026-11-07T17:36:27.568726+00:00"
     },
     "api:twitch-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:19:31.348642+00:00"
+      "checked_at": "2026-11-07T17:36:32.601554+00:00"
     },
     "api:aws-s3-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:19:36.177142+00:00"
+      "checked_at": "2026-11-07T17:36:38.045886+00:00"
     },
     "api:ibm-watson-text-to-speech-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:19:41.010545+00:00"
+      "checked_at": "2026-11-07T17:36:43.524446+00:00"
     },
     "api:aws-lambda-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:19:46.098131+00:00"
+      "checked_at": "2026-11-07T17:36:48.491690+00:00"
     },
     "api:paypal-payments-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:19:50.620563+00:00"
+      "checked_at": "2026-11-07T17:36:53.611253+00:00"
     },
     "api:ibm-cloud-object-storage-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:19:55.378194+00:00"
+      "checked_at": "2026-11-07T17:36:58.318555+00:00"
     },
     "api:aws-rekognition-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:20:00.071378+00:00"
+      "checked_at": "2026-11-07T17:37:03.030890+00:00"
     },
     "api:aws-ses-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:20:06.391333+00:00"
+      "checked_at": "2026-11-07T17:37:08.167677+00:00"
     },
     "api:yelp-fusion-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:20:11.653561+00:00"
+      "checked_at": "2026-11-07T17:37:12.894821+00:00"
     },
     "api:ibm-watson-language-translator-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:20:16.614209+00:00"
+      "checked_at": "2026-11-07T17:37:17.521824+00:00"
     },
     "api:ibm-watson-assistant-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:20:21.498825+00:00"
+      "checked_at": "2026-11-07T17:37:22.280101+00:00"
     },
     "api:ibm-watson-discovery-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:20:26.114239+00:00"
+      "checked_at": "2026-11-07T17:37:26.752073+00:00"
     },
     "api:azure-face-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:20:30.832713+00:00"
+      "checked_at": "2026-11-07T17:37:31.481759+00:00"
     },
     "api:aws-polly-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:20:36.177034+00:00"
+      "checked_at": "2026-11-07T17:37:36.328643+00:00"
     },
     "api:azure-cosmos-db-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:20:41.069227+00:00"
+      "checked_at": "2026-11-07T17:37:41.650243+00:00"
     },
     "api:google-maps-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:20:45.776672+00:00"
+      "checked_at": "2026-11-07T17:37:46.224939+00:00"
     },
     "api:plaid-financial-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:20:50.687203+00:00"
+      "checked_at": "2026-11-07T17:37:50.980163+00:00"
     },
     "api:twilio-video-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:20:55.439190+00:00"
+      "checked_at": "2026-11-07T17:37:55.553453+00:00"
     },
     "api:sendinblue-email-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:21:26.439149+00:00"
+      "checked_at": "2026-11-07T17:38:00.140378+00:00"
     },
     "api:aws-transcribe-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:21:31.591345+00:00"
+      "checked_at": "2026-11-07T17:38:05.024161+00:00"
     },
     "api:notion-automation-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:21:36.286330+00:00"
+      "checked_at": "2026-11-07T17:38:09.457626+00:00"
     },
     "api:github-copilot-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:21:41.016215+00:00"
+      "checked_at": "2026-11-07T17:38:14.346821+00:00"
     },
     "api:notion-forms-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:21:45.700540+00:00"
+      "checked_at": "2026-11-07T17:38:19.056797+00:00"
     },
     "api:twitch-api-kraken": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:21:50.419378+00:00"
+      "checked_at": "2026-11-07T17:38:23.703529+00:00"
     },
     "api:asana-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:21:54.963875+00:00"
+      "checked_at": "2026-11-07T17:38:28.231569+00:00"
     },
     "api:twelvedata-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:21:59.565926+00:00"
+      "checked_at": "2026-11-07T17:38:32.800089+00:00"
     },
     "api:pdf-generator-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:22:04.455092+00:00"
+      "checked_at": "2026-11-07T17:38:37.554179+00:00"
     },
     "api:weatherapi": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:22:09.219754+00:00"
+      "checked_at": "2026-11-07T17:38:42.007042+00:00"
     },
     "api:notion-api-for-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:22:13.851915+00:00"
+      "checked_at": "2026-11-07T17:38:46.536152+00:00"
     },
     "api:twilio-conversations-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:22:18.586835+00:00"
+      "checked_at": "2026-11-07T17:38:51.391349+00:00"
     },
     "api:asana-automation-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:22:23.897222+00:00"
+      "checked_at": "2026-11-07T17:38:55.973081+00:00"
     },
     "api:notion-api-for-automation-v2": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:22:28.801860+00:00"
+      "checked_at": "2026-11-07T17:39:00.266695+00:00"
     },
     "api:contentful-cms-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:22:33.501280+00:00"
-    },
-    "api:sendinblue-sms-api": {
-      "status": "failed",
-      "healed": true,
-      "errors": [
-        "api_client.py does not implement the endpoint host 'api.sendinblue.com'"
-      ],
-      "checked_at": "2026-11-07T17:23:05.402199+00:00"
+      "checked_at": "2026-11-07T17:39:04.762084+00:00"
     },
     "api:tibber-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:23:05.596254+00:00"
+      "checked_at": "2026-11-07T17:39:09.620288+00:00"
     },
     "api:braintree-payments-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:23:31.615613+00:00"
+      "checked_at": "2026-11-07T17:39:14.315046+00:00"
     },
     "api:census-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:23:36.400231+00:00"
+      "checked_at": "2026-11-07T17:39:19.009683+00:00"
     },
     "api:finnhub-stock-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:23:41.113616+00:00"
+      "checked_at": "2026-11-07T17:39:23.714528+00:00"
     },
     "api:slack-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:23:45.756064+00:00"
+      "checked_at": "2026-11-07T17:39:28.240649+00:00"
     },
     "api:tinkr-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:23:50.219119+00:00"
+      "checked_at": "2026-11-07T17:39:33.041233+00:00"
     },
     "api:finnhub-crypto-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:23:55.138872+00:00"
+      "checked_at": "2026-11-07T17:39:37.457145+00:00"
     },
     "api:squarespace-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:23:59.973230+00:00"
+      "checked_at": "2026-11-07T17:39:41.919588+00:00"
     },
     "api:twitch-helix-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:04.908509+00:00"
+      "checked_at": "2026-11-07T17:39:46.525605+00:00"
     },
     "api:pdf-co-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:09.982341+00:00"
+      "checked_at": "2026-11-07T17:39:51.375057+00:00"
     },
     "api:aiven-kafka-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:14.513008+00:00"
+      "checked_at": "2026-11-07T17:39:55.892188+00:00"
     },
     "api:api-ai-image-generator": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:19.171721+00:00"
+      "checked_at": "2026-11-07T17:40:00.568312+00:00"
     },
     "api:sentry-performance-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:23.695042+00:00"
+      "checked_at": "2026-11-07T17:40:05.563870+00:00"
     },
     "api:twitch-analytics-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:28.193211+00:00"
+      "checked_at": "2026-11-07T17:40:10.536702+00:00"
     },
     "api:jira-rest-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:32.750060+00:00"
+      "checked_at": "2026-11-07T17:40:15.311088+00:00"
     },
     "api:convertkit-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:37.555629+00:00"
+      "checked_at": "2026-11-07T17:40:19.972372+00:00"
     },
     "api:klaviyo-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:42.154617+00:00"
+      "checked_at": "2026-11-07T17:40:24.841437+00:00"
     },
     "alternative:zapier-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.847910+00:00"
+      "checked_at": "2026-11-07T17:40:29.648441+00:00"
     },
     "alternative:figma-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.850369+00:00"
+      "checked_at": "2026-11-07T17:40:29.650838+00:00"
     },
     "alternative:slack-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.852758+00:00"
+      "checked_at": "2026-11-07T17:40:29.653166+00:00"
     },
     "alternative:airtable-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.855344+00:00"
+      "checked_at": "2026-11-07T17:40:29.655881+00:00"
     },
     "alternative:mailchimp-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.857747+00:00"
+      "checked_at": "2026-11-07T17:40:29.658392+00:00"
     },
     "alternative:trello-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.860183+00:00"
+      "checked_at": "2026-11-07T17:40:29.660980+00:00"
     },
     "alternative:google-analytics-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.862311+00:00"
+      "checked_at": "2026-11-07T17:40:29.663116+00:00"
     },
     "alternative:hubspot-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.864432+00:00"
+      "checked_at": "2026-11-07T17:40:29.665134+00:00"
     },
     "alternative:asana-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.866556+00:00"
+      "checked_at": "2026-11-07T17:40:29.667245+00:00"
     },
     "alternative:dropbox-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.868453+00:00"
+      "checked_at": "2026-11-07T17:40:29.669347+00:00"
     },
     "alternative:calendly-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.870245+00:00"
+      "checked_at": "2026-11-07T17:40:29.671212+00:00"
     },
     "alternative:wordpress-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.871990+00:00"
+      "checked_at": "2026-11-07T17:40:29.672939+00:00"
     },
     "alternative:shopify-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.873733+00:00"
+      "checked_at": "2026-11-07T17:40:29.674685+00:00"
     },
     "alternative:monday-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.875515+00:00"
+      "checked_at": "2026-11-07T17:40:29.676575+00:00"
     },
     "alternative:clickup-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.877270+00:00"
+      "checked_at": "2026-11-07T17:40:29.678500+00:00"
     },
     "alternative:miro-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.878898+00:00"
+      "checked_at": "2026-11-07T17:40:29.680149+00:00"
     },
     "alternative:loom-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.880583+00:00"
+      "checked_at": "2026-11-07T17:40:29.681842+00:00"
     },
     "alternative:intercom-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.882165+00:00"
+      "checked_at": "2026-11-07T17:40:29.683413+00:00"
     },
     "alternative:zendesk-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.883783+00:00"
+      "checked_at": "2026-11-07T17:40:29.685150+00:00"
     },
     "alternative:jira-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.885372+00:00"
+      "checked_at": "2026-11-07T17:40:29.686865+00:00"
     },
     "alternative:github-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.886901+00:00"
+      "checked_at": "2026-11-07T17:40:29.688425+00:00"
     },
     "alternative:gitlab-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.888408+00:00"
+      "checked_at": "2026-11-07T17:40:29.689930+00:00"
     },
     "alternative:bitbucket-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.889980+00:00"
+      "checked_at": "2026-11-07T17:40:29.691507+00:00"
     },
     "alternative:netlify-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.891485+00:00"
+      "checked_at": "2026-11-07T17:40:29.693094+00:00"
     },
     "alternative:vercel-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.892884+00:00"
+      "checked_at": "2026-11-07T17:40:29.694543+00:00"
     },
     "alternative:openai-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.894376+00:00"
+      "checked_at": "2026-11-07T17:40:29.696034+00:00"
     },
     "alternative:stripe-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.895846+00:00"
+      "checked_at": "2026-11-07T17:40:29.697498+00:00"
     },
     "alternative:supabase-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.897302+00:00"
+      "checked_at": "2026-11-07T17:40:29.698939+00:00"
     },
     "alternative:postman-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.898751+00:00"
+      "checked_at": "2026-11-07T17:40:29.700378+00:00"
     },
     "alternative:obsidian-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.900166+00:00"
+      "checked_at": "2026-11-07T17:40:29.701821+00:00"
     },
     "alternative:auth0-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.901478+00:00"
+      "checked_at": "2026-11-07T17:40:29.703241+00:00"
     },
     "alternative:algolia-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.902808+00:00"
+      "checked_at": "2026-11-07T17:40:29.704681+00:00"
     },
     "alternative:deepgram-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.904178+00:00"
+      "checked_at": "2026-11-07T17:40:29.706063+00:00"
     },
     "alternative:elevenlabs-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.905541+00:00"
+      "checked_at": "2026-11-07T17:40:29.707424+00:00"
     },
     "alternative:pinecone-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.906778+00:00"
+      "checked_at": "2026-11-07T17:40:29.708656+00:00"
     },
     "alternative:adobe-photoshop-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.908555+00:00"
+      "checked_at": "2026-11-07T17:40:29.710439+00:00"
     },
     "alternative:zoom-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.909863+00:00"
+      "checked_at": "2026-11-07T17:40:29.711749+00:00"
     },
     "alternative:salesforce-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.911082+00:00"
+      "checked_at": "2026-11-07T17:40:29.712972+00:00"
     },
     "alternative:google-drive-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.912291+00:00"
+      "checked_at": "2026-11-07T17:40:29.714207+00:00"
     },
     "alternative:microsoft-teams-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.913521+00:00"
+      "checked_at": "2026-11-07T17:40:29.715474+00:00"
     },
     "alternative:adobe-acrobat-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.914690+00:00"
+      "checked_at": "2026-11-07T17:40:29.716628+00:00"
     },
     "alternative:docusign-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.915950+00:00"
+      "checked_at": "2026-11-07T17:40:29.717883+00:00"
     },
     "alternative:visual-studio-code-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.917127+00:00"
+      "checked_at": "2026-11-07T17:40:29.719083+00:00"
     },
     "alternative:microsoft-excel-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.918412+00:00"
+      "checked_at": "2026-11-07T17:40:29.720347+00:00"
     },
     "alternative:adobe-illustrator-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.919827+00:00"
+      "checked_at": "2026-11-07T17:40:29.721746+00:00"
     },
     "alternative:docker-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.920988+00:00"
+      "checked_at": "2026-11-07T17:40:29.722911+00:00"
     },
     "alternative:quickbooks-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.922410+00:00"
+      "checked_at": "2026-11-07T17:40:29.724325+00:00"
     },
     "alternative:zoominfo-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.923660+00:00"
+      "checked_at": "2026-11-07T17:40:29.725547+00:00"
     },
     "alternative:autodesk-autocad-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.924823+00:00"
+      "checked_at": "2026-11-07T17:40:29.726794+00:00"
     },
     "alternative:dropbox-paper-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.926020+00:00"
+      "checked_at": "2026-11-07T17:40:29.727994+00:00"
     },
     "alternative:microsoft-word-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.927248+00:00"
+      "checked_at": "2026-11-07T17:40:29.729213+00:00"
     },
     "alternative:notepad-plus-plus-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.928633+00:00"
+      "checked_at": "2026-11-07T17:40:29.730586+00:00"
     },
     "alternative:adobe-premiere-pro-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.929894+00:00"
+      "checked_at": "2026-11-07T17:40:29.731845+00:00"
     },
     "alternative:adobe-lightroom-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.931081+00:00"
+      "checked_at": "2026-11-07T17:40:29.732994+00:00"
     },
     "alternative:sketch-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.932375+00:00"
+      "checked_at": "2026-11-07T17:40:29.734280+00:00"
     },
     "alternative:basecamp-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.934112+00:00"
+      "checked_at": "2026-11-07T17:40:29.736035+00:00"
     },
     "alternative:aws-ec2-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.935391+00:00"
+      "checked_at": "2026-11-07T17:40:29.737296+00:00"
     },
     "alternative:adobe-after-effects-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.936747+00:00"
+      "checked_at": "2026-11-07T17:40:29.738641+00:00"
     },
     "alternative:tiktok-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.938178+00:00"
+      "checked_at": "2026-11-07T17:40:29.740097+00:00"
     },
     "alternative:canva-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.939517+00:00"
+      "checked_at": "2026-11-07T17:40:29.741425+00:00"
     },
     "alternative:evernote-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.940938+00:00"
+      "checked_at": "2026-11-07T17:40:29.742822+00:00"
     },
     "alternative:notability-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.942467+00:00"
+      "checked_at": "2026-11-07T17:40:29.744356+00:00"
     },
     "alternative:microsoft-onedrive-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.943998+00:00"
+      "checked_at": "2026-11-07T17:40:29.745877+00:00"
     },
     "alternative:notion-api-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.945308+00:00"
+      "checked_at": "2026-11-07T17:40:29.747165+00:00"
     },
     "alternative:figma-plugin-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.946525+00:00"
+      "checked_at": "2026-11-07T17:40:29.748400+00:00"
     },
     "alternative:figma-x-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.947734+00:00"
+      "checked_at": "2026-11-07T17:40:29.749596+00:00"
     },
     "alternative:clickmeeting-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.949349+00:00"
+      "checked_at": "2026-11-07T17:40:29.751205+00:00"
     },
     "alternative:notion-software-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.950936+00:00"
+      "checked_at": "2026-11-07T17:40:29.752803+00:00"
     },
     "alternative:figma-studio-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.952198+00:00"
+      "checked_at": "2026-11-07T17:40:29.754032+00:00"
     },
     "alternative:notion-forms-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.953560+00:00"
+      "checked_at": "2026-11-07T17:40:29.755366+00:00"
     },
     "alternative:notion-ai-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.954917+00:00"
+      "checked_at": "2026-11-07T17:40:29.756680+00:00"
     },
     "alternative:notion-templates-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.956739+00:00"
+      "checked_at": "2026-11-07T17:40:29.758508+00:00"
     },
     "alternative:microsoft-access-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.958080+00:00"
+      "checked_at": "2026-11-07T17:40:29.759841+00:00"
     },
     "alternative:notion-wiki-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.959471+00:00"
+      "checked_at": "2026-11-07T17:40:29.761225+00:00"
     },
     "alternative:airtable-api-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.960878+00:00"
+      "checked_at": "2026-11-07T17:40:29.762620+00:00"
     },
     "alternative:notion-boards-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.962712+00:00"
+      "checked_at": "2026-11-07T17:40:29.764443+00:00"
     },
     "alternative:figma-figjam-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.964035+00:00"
+      "checked_at": "2026-11-07T17:40:29.765776+00:00"
     },
     "alternative:figma-digital-asset-management-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.965306+00:00"
+      "checked_at": "2026-11-07T17:40:29.767049+00:00"
     },
     "alternative:microsoft-teams-apps-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.966591+00:00"
+      "checked_at": "2026-11-07T17:40:29.768335+00:00"
     },
     "alternative:microsoft-azure-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.967903+00:00"
+      "checked_at": "2026-11-07T17:40:29.769653+00:00"
     },
     "alternative:notion-database-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.969196+00:00"
+      "checked_at": "2026-11-07T17:40:29.770965+00:00"
     },
     "alternative:microsoft-outlook-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.970544+00:00"
+      "checked_at": "2026-11-07T17:40:29.772295+00:00"
     },
     "alternative:whatsapp-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.972017+00:00"
+      "checked_at": "2026-11-07T17:40:29.773770+00:00"
     },
     "alternative:moodle-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.973348+00:00"
+      "checked_at": "2026-11-07T17:40:29.775069+00:00"
     },
     "alternative:figma-figjam-plugin-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.974755+00:00"
+      "checked_at": "2026-11-07T17:40:29.776478+00:00"
     },
     "alternative:notion-ai-plugin-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.976068+00:00"
+      "checked_at": "2026-11-07T17:40:29.777787+00:00"
     },
     "alternative:microsoft-onenote-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.977614+00:00"
+      "checked_at": "2026-11-07T17:40:29.779358+00:00"
     },
     "alternative:figma-figma-design-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.978806+00:00"
+      "checked_at": "2026-11-07T17:40:29.780555+00:00"
     },
     "alternative:notion-forms-advanced-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.980113+00:00"
+      "checked_at": "2026-11-07T17:40:29.781859+00:00"
     },
     "alternative:figma-plugins-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.981379+00:00"
+      "checked_at": "2026-11-07T17:40:29.783128+00:00"
     },
     "alternative:notion-automations-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.982687+00:00"
+      "checked_at": "2026-11-07T17:40:29.784439+00:00"
     },
     "alternative:notion-boards-advanced-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.984599+00:00"
+      "checked_at": "2026-11-07T17:40:29.786326+00:00"
     },
     "alternative:notion-forms-advanced-pro-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.985935+00:00"
+      "checked_at": "2026-11-07T17:40:29.787650+00:00"
     },
     "alternative:microsoft-surface-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.987239+00:00"
+      "checked_at": "2026-11-07T17:40:29.788936+00:00"
     },
     "alternative:canva-website-design-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.988493+00:00"
+      "checked_at": "2026-11-07T17:40:29.790186+00:00"
     },
     "alternative:notepad-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.990067+00:00"
+      "checked_at": "2026-11-07T17:40:29.791760+00:00"
     },
     "alternative:clickup-api-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.991391+00:00"
+      "checked_at": "2026-11-07T17:40:29.793094+00:00"
     },
     "alternative:canva-video-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.993010+00:00"
+      "checked_at": "2026-11-07T17:40:29.794723+00:00"
     },
     "alternative:airtable-forms-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.994318+00:00"
+      "checked_at": "2026-11-07T17:40:29.795979+00:00"
     },
     "alternative:microsoft-teams-rooms-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.995845+00:00"
+      "checked_at": "2026-11-07T17:40:29.797430+00:00"
     },
     "alternative:figma-ux-research-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.997296+00:00"
+      "checked_at": "2026-11-07T17:40:29.798809+00:00"
     },
     "alternative:canva-whiteboard-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:46.998750+00:00"
+      "checked_at": "2026-11-07T17:40:29.800241+00:00"
     },
     "alternative:redis-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:47.000841+00:00"
+      "checked_at": "2026-11-07T17:40:29.802367+00:00"
     },
     "alternative:framer-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:47.002870+00:00"
+      "checked_at": "2026-11-07T17:40:29.804428+00:00"
     },
     "alternative:microsoft-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:47.004650+00:00"
+      "checked_at": "2026-11-07T17:40:29.806193+00:00"
     },
     "alternative:sendgrid-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:47.006762+00:00"
+      "checked_at": "2026-11-07T17:40:29.808327+00:00"
     },
     "alternative:together-ai-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:47.008839+00:00"
+      "checked_at": "2026-11-07T17:40:29.810410+00:00"
     },
     "alternative:mistral-ai-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:47.011205+00:00"
+      "checked_at": "2026-11-07T17:40:29.812773+00:00"
     },
     "alternative:doppler-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:47.014524+00:00"
+      "checked_at": "2026-11-07T17:40:29.816148+00:00"
     },
     "alternative:firebase-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:47.016815+00:00"
+      "checked_at": "2026-11-07T17:40:29.818463+00:00"
     },
     "alternative:planetscale-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:47.019415+00:00"
+      "checked_at": "2026-11-07T17:40:29.821143+00:00"
     },
     "alternative:twitch-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:47.021842+00:00"
+      "checked_at": "2026-11-07T17:40:29.823573+00:00"
     },
     "workflow:multi-model-prompt-router": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:50.559029+00:00"
+      "checked_at": "2026-11-07T17:40:33.168321+00:00"
     },
     "workflow:llm-evaluation-benchmark": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:24:53.865394+00:00"
+      "checked_at": "2026-11-07T17:40:36.249261+00:00"
     },
     "workflow:batch-llm-processing": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:25:17.256000+00:00"
+      "checked_at": "2026-11-07T17:40:59.672182+00:00"
     },
     "workflow:ai-customer-insights": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:25:20.660832+00:00"
+      "checked_at": "2026-11-07T17:41:03.267133+00:00"
     },
     "workflow:claude-document-summarizer": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:25:23.960307+00:00"
+      "checked_at": "2026-11-07T17:41:06.420159+00:00"
     },
     "workflow:gemini-multimodal-analyzer": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:25:27.256539+00:00"
+      "checked_at": "2026-11-07T17:41:09.654539+00:00"
     },
     "workflow:watson-assistant-helpdesk": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:25:30.561708+00:00"
+      "checked_at": "2026-11-07T17:41:12.883710+00:00"
     },
     "workflow:podcast-transcription-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:25:33.765341+00:00"
+      "checked_at": "2026-11-07T17:41:16.008753+00:00"
     },
     "workflow:ai-voiceover-production": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:25:37.934872+00:00"
+      "checked_at": "2026-11-07T17:41:20.084443+00:00"
     },
     "workflow:ai-image-generation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:25:41.321727+00:00"
+      "checked_at": "2026-11-07T17:41:23.251023+00:00"
     },
     "workflow:semantic-search-knowledge-base": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:25:44.493439+00:00"
+      "checked_at": "2026-11-07T17:41:26.597205+00:00"
     },
     "workflow:hybrid-search-product-catalog": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:25:47.816963+00:00"
+      "checked_at": "2026-11-07T17:41:30.000771+00:00"
     },
     "workflow:rag-document-assistant": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:25:51.372633+00:00"
+      "checked_at": "2026-11-07T17:41:33.467789+00:00"
     },
     "workflow:content-similarity-audit": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:25:54.597478+00:00"
+      "checked_at": "2026-11-07T17:41:36.630283+00:00"
     },
     "workflow:transactional-email-delivery": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:25:57.542313+00:00"
+      "checked_at": "2026-11-07T17:41:39.725078+00:00"
     },
     "workflow:email-campaign-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:26:00.715162+00:00"
+      "checked_at": "2026-11-07T17:41:42.885148+00:00"
     },
     "workflow:sms-alert-system": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:26:03.830419+00:00"
+      "checked_at": "2026-11-07T17:41:45.953877+00:00"
     },
     "workflow:slack-incident-notifications": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:26:07.066776+00:00"
+      "checked_at": "2026-11-07T17:41:49.018310+00:00"
     },
     "workflow:telegram-community-bot": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:26:10.728274+00:00"
+      "checked_at": "2026-11-07T17:41:52.093610+00:00"
     },
     "workflow:video-call-summarizer": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:26:14.076007+00:00"
+      "checked_at": "2026-11-07T17:41:55.268037+00:00"
     },
     "workflow:conversational-messaging-hub": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:26:17.277861+00:00"
+      "checked_at": "2026-11-07T17:41:58.500826+00:00"
     },
     "workflow:crm-lead-scoring": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:26:20.373439+00:00"
+      "checked_at": "2026-11-07T17:42:01.604257+00:00"
     },
     "workflow:salesforce-pipeline-sync": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:26:23.542490+00:00"
+      "checked_at": "2026-11-07T17:42:04.689967+00:00"
     },
     "workflow:personalized-outreach-engine": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:26:26.513921+00:00"
+      "checked_at": "2026-11-07T17:42:07.872487+00:00"
     },
     "workflow:support-ticket-triage": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:26:29.545076+00:00"
+      "checked_at": "2026-11-07T17:42:10.889461+00:00"
     },
     "workflow:ai-help-center-search": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:26:32.751425+00:00"
+      "checked_at": "2026-11-07T17:42:14.007914+00:00"
     },
     "workflow:csat-feedback-analysis": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:26:36.081119+00:00"
+      "checked_at": "2026-11-07T17:42:17.150765+00:00"
     },
     "workflow:subscription-billing-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:26:39.300588+00:00"
+      "checked_at": "2026-11-07T17:42:20.244014+00:00"
     },
     "workflow:invoice-reconciliation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:26:42.235913+00:00"
+      "checked_at": "2026-11-07T17:42:23.333058+00:00"
     },
     "workflow:paypal-payout-monitoring": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:26:45.344661+00:00"
+      "checked_at": "2026-11-07T17:42:26.632754+00:00"
     },
     "workflow:stock-market-alerts": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:26:48.688185+00:00"
+      "checked_at": "2026-11-07T17:42:29.633377+00:00"
     },
     "workflow:crypto-portfolio-tracker": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:26:51.983543+00:00"
+      "checked_at": "2026-11-07T17:42:32.684422+00:00"
     },
     "workflow:bank-transaction-enrichment": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:26:54.907398+00:00"
+      "checked_at": "2026-11-07T17:42:36.060518+00:00"
     },
     "workflow:supabase-realtime-dashboard": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:26:57.942065+00:00"
+      "checked_at": "2026-11-07T17:42:39.283985+00:00"
     },
     "workflow:airtable-content-sync": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:27:01.194393+00:00"
+      "checked_at": "2026-11-07T17:42:42.375645+00:00"
     },
     "workflow:mongodb-data-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:27:04.285306+00:00"
-    },
-    "workflow:postgres-backup-reporting": {
-      "status": "failed",
-      "healed": true,
-      "errors": [
-        "workflow kit file 'mock_data.json' is <= 100 bytes"
-      ],
-      "checked_at": "2026-11-07T17:27:18.228733+00:00"
+      "checked_at": "2026-11-07T17:42:45.648515+00:00"
     },
     "workflow:redis-rate-limit-store": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:27:18.439319+00:00"
+      "checked_at": "2026-11-07T17:42:48.841780+00:00"
     },
     "workflow:google-sheets-reporting-hub": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:27:21.645961+00:00"
+      "checked_at": "2026-11-07T17:42:52.240376+00:00"
     },
     "workflow:deployment-monitoring-alerts": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:27:24.905480+00:00"
+      "checked_at": "2026-11-07T17:42:55.715138+00:00"
     },
     "workflow:feature-flag-rollout": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:27:28.136744+00:00"
+      "checked_at": "2026-11-07T17:42:58.898532+00:00"
     },
     "workflow:secrets-rotation-audit": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:27:31.627160+00:00"
+      "checked_at": "2026-11-07T17:43:02.130398+00:00"
     },
     "workflow:serverless-job-scheduler": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:27:34.796549+00:00"
+      "checked_at": "2026-11-07T17:43:05.723173+00:00"
     },
     "workflow:api-health-monitoring": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:27:37.884020+00:00"
+      "checked_at": "2026-11-07T17:43:08.898821+00:00"
     },
     "workflow:linear-roadmap-sync": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:27:41.018929+00:00"
+      "checked_at": "2026-11-07T17:43:12.176512+00:00"
     },
     "workflow:release-notes-generator": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:27:44.321666+00:00"
+      "checked_at": "2026-11-07T17:43:15.560718+00:00"
     },
     "workflow:programmatic-seo-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:27:47.401827+00:00"
+      "checked_at": "2026-11-07T17:43:18.570496+00:00"
     },
     "workflow:ai-content-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:27:50.516972+00:00"
+      "checked_at": "2026-11-07T17:43:21.630078+00:00"
     },
     "workflow:seo-content-audit": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:27:53.639540+00:00"
+      "checked_at": "2026-11-07T17:43:24.767246+00:00"
     },
     "workflow:blog-cms-publishing": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:27:56.916986+00:00"
+      "checked_at": "2026-11-07T17:43:27.736170+00:00"
     },
     "workflow:local-seo-landing-pages": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:27:59.878157+00:00"
+      "checked_at": "2026-11-07T17:43:30.947766+00:00"
     },
     "workflow:newsletter-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:28:03.110597+00:00"
+      "checked_at": "2026-11-07T17:43:33.963093+00:00"
     },
     "workflow:content-localization-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:28:06.446735+00:00"
+      "checked_at": "2026-11-07T17:43:37.068657+00:00"
     },
     "workflow:meeting-notes-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:28:09.508565+00:00"
+      "checked_at": "2026-11-07T17:43:40.144052+00:00"
     },
     "workflow:notion-task-sync": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:28:13.007211+00:00"
+      "checked_at": "2026-11-07T17:43:43.739677+00:00"
     },
     "workflow:document-approval-workflow": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:28:16.018984+00:00"
+      "checked_at": "2026-11-07T17:43:46.779280+00:00"
     },
     "workflow:form-submission-routing": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:28:19.127529+00:00"
+      "checked_at": "2026-11-07T17:43:49.792854+00:00"
     },
     "workflow:team-wiki-search": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:28:22.206813+00:00"
+      "checked_at": "2026-11-07T17:43:52.945173+00:00"
     },
     "workflow:design-feedback-collection": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:28:25.280332+00:00"
+      "checked_at": "2026-11-07T17:43:55.963062+00:00"
     },
     "workflow:collaboration-presence-sync": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:28:28.496920+00:00"
+      "checked_at": "2026-11-07T17:43:59.075558+00:00"
     },
     "workflow:product-analytics-dashboard": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:28:31.579263+00:00"
+      "checked_at": "2026-11-07T17:44:02.209830+00:00"
     },
     "workflow:error-tracking-alerts": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:28:34.823348+00:00"
+      "checked_at": "2026-11-07T17:44:05.216123+00:00"
     },
     "workflow:website-performance-reporting": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:28:38.316496+00:00"
+      "checked_at": "2026-11-07T17:44:08.496620+00:00"
     },
     "workflow:social-media-analytics": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:28:41.426559+00:00"
+      "checked_at": "2026-11-07T17:44:11.558878+00:00"
     },
     "workflow:shopify-order-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:28:44.430996+00:00"
+      "checked_at": "2026-11-07T17:44:14.544547+00:00"
     },
     "workflow:inventory-sync-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:28:47.321552+00:00"
+      "checked_at": "2026-11-07T17:44:17.738353+00:00"
     },
     "workflow:weather-driven-ops-alerts": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:28:50.485411+00:00"
+      "checked_at": "2026-11-07T17:44:20.813394+00:00"
     },
     "workflow:store-locator-geocoding": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:28:53.531934+00:00"
+      "checked_at": "2026-11-07T17:44:23.859585+00:00"
     },
     "workflow:asset-backup-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:28:56.579775+00:00"
+      "checked_at": "2026-11-07T17:44:26.934612+00:00"
     },
     "workflow:s3-static-site-publishing": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:28:59.588430+00:00"
+      "checked_at": "2026-11-07T17:44:30.004761+00:00"
     },
     "workflow:auth0-sso-provisioning": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:29:02.658303+00:00"
+      "checked_at": "2026-11-07T17:44:33.172859+00:00"
     },
     "workflow:clerk-user-onboarding": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:29:06.223299+00:00"
+      "checked_at": "2026-11-07T17:44:36.336852+00:00"
     },
     "workflow:slack-twitch-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:29:09.567847+00:00"
+      "checked_at": "2026-11-07T17:44:39.449514+00:00"
     },
     "workflow:sentry-performance-airtable-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:29:12.900534+00:00"
+      "checked_at": "2026-11-07T17:44:42.703437+00:00"
     },
     "workflow:pdf-generator-to-twelve-data-with-deepai-image-generator-orchestration": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:29:16.212325+00:00"
+      "checked_at": "2026-11-07T17:44:45.815941+00:00"
     },
     "workflow:shopify-admin-twilio-conversations-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:29:19.392217+00:00"
+      "checked_at": "2026-11-07T17:44:48.880293+00:00"
     },
     "workflow:braintree-payments-to-airtable-with-contentful-content-management-system-orchestration": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:29:22.560709+00:00"
+      "checked_at": "2026-11-07T17:44:52.039058+00:00"
     },
     "workflow:slack-ibm-watson-language-translator-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:29:25.901459+00:00"
+      "checked_at": "2026-11-07T17:44:55.272915+00:00"
     },
     "workflow:slack-microsoft-azure-face-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:29:29.190860+00:00"
+      "checked_at": "2026-11-07T17:44:58.568799+00:00"
     },
     "workflow:shopify-admin-amazon-polly-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:29:32.295618+00:00"
+      "checked_at": "2026-11-07T17:45:02.402001+00:00"
     },
     "workflow:weatherapi-launchdarkly-feature-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:29:35.549213+00:00"
+      "checked_at": "2026-11-07T17:45:05.959527+00:00"
     },
     "workflow:salesforce-rest-weatherapi-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:29:38.662654+00:00"
+      "checked_at": "2026-11-07T17:45:09.549522+00:00"
     },
     "workflow:jira-rest-twilio-conversations-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:29:41.821330+00:00"
+      "checked_at": "2026-11-07T17:45:12.811361+00:00"
     },
     "workflow:jira-rest-notion-api-for-automation-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:29:44.929314+00:00"
+      "checked_at": "2026-11-07T17:45:16.493239+00:00"
     },
     "workflow:convertkit-github-copilot-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T17:29:48.232995+00:00"
+      "checked_at": "2026-11-07T17:45:20.043054+00:00"
     }
   },
-  "updated_at": "2026-11-07T17:29:51.253697+00:00"
+  "updated_at": "2026-11-07T17:45:23.554059+00:00"
 }

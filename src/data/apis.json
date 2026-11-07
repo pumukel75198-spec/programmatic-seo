@@ -860,62 +860,6 @@
     "created_and_verified_at": "2026-11-07 09:19 UTC"
   },
   {
-    "slug": "neon-postgres-api",
-    "title": "Neon Postgres API",
-    "description": "Neon is a serverless Postgres platform with branching, autoscaling and a simple API for modern application backends.",
-    "category": "Databases",
-    "tags": ["postgresql", "serverless", "database", "branching"],
-    "details": {
-      "provider": "Neon",
-      "pricing": "Free tier, then usage-based",
-      "features": [
-        "Serverless Postgres",
-        "Database branching",
-        "Autoscaling",
-        "REST and SQL access"
-      ],
-      "useCase": "Serverless apps, preview environments and modern backends",
-      "website": "https://neon.tech",
-      "endpoint": "postgresql://neon.tech/{database}",
-      "authentication": "PostgreSQL password or IAM",
-      "sdkLanguages": ["Node.js", "Python", "Go", "Rust"],
-      "docsUrl": "https://neon.tech/docs/reference/api-reference",
-      "lastVerified": "2026-10-31",
-      "price": 29.99,
-      "disclaimer": "Verification & Link Validity Notice: This workflow blueprint was generated and technically verified on 2026-11-07 09:19 UTC. At the exact time of creation, all referenced domains, API endpoints, and external resource links were tested and confirmed reachable. Because third-party APIs and web services evolve continuously, domains, endpoints, or links inside this document may change or become unavailable over time."
-    },
-    "price": 29.99,
-    "created_and_verified_at": "2026-11-07 09:19 UTC"
-  },
-  {
-    "slug": "planetscale-database-api",
-    "title": "PlanetScale Database API",
-    "description": "PlanetScale offers a MySQL-compatible serverless database with branching, safe schema changes and a developer-friendly API.",
-    "category": "Databases",
-    "tags": ["mysql", "serverless", "database", "branching"],
-    "details": {
-      "provider": "PlanetScale",
-      "pricing": "Free tier, then usage-based",
-      "features": [
-        "MySQL-compatible serverless DB",
-        "Database branching",
-        "Non-blocking schema changes",
-        "Connection management"
-      ],
-      "useCase": "Scalable SaaS backends and safe schema migrations",
-      "website": "https://planetscale.com",
-      "endpoint": "mysql://planetscale.com/{database}",
-      "authentication": "Database password or IAM",
-      "sdkLanguages": ["Node.js", "Python", "Go", "Ruby"],
-      "docsUrl": "https://planetscale.com/docs/api/reference",
-      "lastVerified": "2026-10-31",
-      "price": 29.99,
-      "disclaimer": "Verification & Link Validity Notice: This workflow blueprint was generated and technically verified on 2026-11-07 09:19 UTC. At the exact time of creation, all referenced domains, API endpoints, and external resource links were tested and confirmed reachable. Because third-party APIs and web services evolve continuously, domains, endpoints, or links inside this document may change or become unavailable over time."
-    },
-    "price": 29.99,
-    "created_and_verified_at": "2026-11-07 09:19 UTC"
-  },
-  {
     "slug": "upstash-redis-api",
     "title": "Upstash Redis API",
     "description": "Upstash provides serverless Redis and Kafka with REST APIs and pay-per-request pricing for edge and serverless apps.",
@@ -2540,37 +2484,6 @@
       "rateLimit": "100 requests/minute",
       "endpoint": "https://api.contentful.com/v1",
       "docsUrl": "https://www.contentful.com/developers/docs/references/content-delivery-api/",
-      "price": 29.99,
-      "lastVerified": "2026-11-07 09:19 UTC",
-      "disclaimer": "Verification & Link Validity Notice: This workflow blueprint was generated and technically verified on 2026-11-07 09:19 UTC. At the exact time of creation, all referenced domains, API endpoints, and external resource links were tested and confirmed reachable. Because third-party APIs and web services evolve continuously, domains, endpoints, or links inside this document may change or become unavailable over time."
-    },
-    "price": 29.99,
-    "created_and_verified_at": "2026-11-07 09:19 UTC"
-  },
-  {
-    "slug": "sendinblue-sms-api",
-    "title": "Sendinblue SMS API",
-    "description": "The Sendinblue SMS API enables businesses to send and manage SMS campaigns effectively. It provides detailed tracking and reporting features.",
-    "category": "Communication",
-    "tags": ["sms", "communication", "marketing"],
-    "details": {
-      "provider": "Sendinblue",
-      "pricing": "Pay-as-you-go pricing with a free tier available.",
-      "features": [
-        "SMS sending",
-        "Delivery tracking",
-        "Campaign management",
-        "Number validation",
-        "Templates"
-      ],
-      "useCase": "This API is used to send promotional and transactional SMS messages to customers. It helps enhance customer engagement.",
-      "website": "https://www.sendinblue.com",
-      "authentication": "Bearer API key",
-      "apiKeyRequired": true,
-      "sdkLanguages": ["JavaScript", "Python"],
-      "rateLimit": "200 requests/minute",
-      "endpoint": "https://api.sendinblue.com/v3/sms",
-      "docsUrl": "https://developers.brevo.com/",
       "price": 29.99,
       "lastVerified": "2026-11-07 09:19 UTC",
       "disclaimer": "Verification & Link Validity Notice: This workflow blueprint was generated and technically verified on 2026-11-07 09:19 UTC. At the exact time of creation, all referenced domains, API endpoints, and external resource links were tested and confirmed reachable. Because third-party APIs and web services evolve continuously, domains, endpoints, or links inside this document may change or become unavailable over time."
