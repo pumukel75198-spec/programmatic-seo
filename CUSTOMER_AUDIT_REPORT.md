@@ -1,14 +1,14 @@
 # Customer Audit Report
 
-Generated: 2026-11-07 14:27 UTC
+Generated: 2026-11-07 14:46 UTC
 
 ## Summary
 
 | Product type | Checked | OK | Auto-healed | Failed |
 | --- | ---: | ---: | ---: | ---: |
-| APIs | 106 | 80/106 OK | 6 | 26 |
-| Alternatives | 113 | 113/113 OK | 0 | 0 |
-| Workflows | 86 | 80/86 OK | 5 | 6 |
+| APIs | 0 | 0/0 OK | 0 | 0 |
+| Alternatives | 0 | 0/0 OK | 0 | 0 |
+| Workflows | 6 | 2/6 OK | 6 | 4 |
 
 - `npm run build`: OK
 - git commit & push: OK
@@ -382,102 +382,29 @@ FAILED (failures=2)
 
 
 ### workflow:auth0-sso-provisioning
-- step 1: technical_explanation too short (0 < 250 chars)
-- step 1: 'what you need to do' actions missing
-- step 1: checklist missing
-- step 1: expected result missing
-- step 1: links missing
-- step 2: technical_explanation too short (0 < 250 chars)
-- step 2: 'what you need to do' actions missing
-- step 2: checklist missing
-- step 2: expected result missing
-- step 2: links missing
-- step 3: technical_explanation too short (0 < 250 chars)
-- step 3: 'what you need to do' actions missing
-- step 3: checklist missing
-- step 3: expected result missing
-- step 3: links missing
-- step 4: technical_explanation too short (0 < 250 chars)
-- step 4: 'what you need to do' actions missing
-- step 4: checklist missing
-- step 4: expected result missing
-- step 4: links missing
-
-### workflow:bank-transaction-enrichment
-- workflow.py --dry-run failed: Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-aq1ndhpf/workflow.py", line 207, in <module>
-    main()
-    ~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-aq1ndhpf/workflow.py", line 199, in main
-    run_workflow()
-    ~~~~~~~~~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-aq1ndhpf/workflow.py", line 155, in run_workflow
-    summary = summarize_spending(categorized_merchants)
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-aq1ndhpf/workflow.py", line 149, in summarize_spending
-    if category in spending_summary:
-       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-TypeError: cannot use 'dict' as a dict key (unhashable type: 'dict')
+- step 3: code_snippet has fewer than 8 lines
 
 ### workflow:mongodb-data-pipeline
-- step 1: technical_explanation too short (0 < 250 chars)
-- step 1: 'what you need to do' actions missing
-- step 1: checklist missing
-- step 1: expected result missing
 - step 1: links missing
-- step 2: technical_explanation too short (0 < 250 chars)
-- step 2: 'what you need to do' actions missing
-- step 2: checklist missing
-- step 2: expected result missing
 - step 2: links missing
-- step 3: technical_explanation too short (0 < 250 chars)
-- step 3: 'what you need to do' actions missing
-- step 3: checklist missing
-- step 3: expected result missing
 - step 3: links missing
-- step 4: technical_explanation too short (0 < 250 chars)
-- step 4: 'what you need to do' actions missing
-- step 4: checklist missing
-- step 4: expected result missing
+- step 4: code_snippet has fewer than 8 lines
 - step 4: links missing
+- all steps share the exact same links (copy-paste detected)
 
 ### workflow:notion-task-sync
 - workflow.py --dry-run failed: Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-aj4j0mdr/workflow.py", line 208, in <module>
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-56zwpz67/workflow.py", line 202, in <module>
     main()
     ~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-aj4j0mdr/workflow.py", line 200, in main
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-56zwpz67/workflow.py", line 194, in main
     run_workflow()
     ~~~~~~~~~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-aj4j0mdr/workflow.py", line 118, in run_workflow
-    sync_tasks_with_asana(open_tasks)
-    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-aj4j0mdr/workflow.py", line 90, in sync_tasks_with_asana
-    task_id = task.get('external_id')
-              ^^^^^^^^
-AttributeError: 'str' object has no attribute 'get'
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-56zwpz67/workflow.py", line 128, in run_workflow
+    overdue_tasks = detect_overdue_tasks(open_tasks)
+                                         ^^^^^^^^^^
+NameError: name 'open_tasks' is not defined
 
 ### workflow:postgres-backup-reporting
 - workflow kit file 'mock_data.json' is <= 100 bytes
-
-### workflow:serverless-job-scheduler
-- workflow kit file 'mock_data.json' is <= 100 bytes
-- step 1: technical_explanation too short (0 < 250 chars)
-- step 1: 'what you need to do' actions missing
-- step 1: checklist missing
-- step 1: expected result missing
-- step 1: links missing
-- step 2: technical_explanation too short (0 < 250 chars)
-- step 2: 'what you need to do' actions missing
-- step 2: checklist missing
-- step 2: expected result missing
-- step 2: links missing
-- step 3: technical_explanation too short (0 < 250 chars)
-- step 3: code_snippet has fewer than 8 lines
-- step 3: 'what you need to do' actions missing
-- step 3: checklist missing
-- step 3: expected result missing
-- step 3: links missing
-- step 4: technical_explanation too short (0 < 250 chars)
-- step 4: 'what you need to do' actions missing
-- step 4: checklist missing
 

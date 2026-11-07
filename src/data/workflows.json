@@ -9134,8 +9134,8 @@
         {
           "title": "Query documents from MongoDB Atlas",
           "description": "Fetch documents updated since the last checkpoint.",
-          "code_snippet": "import json\nimport urllib.request\n\n# Function to query documents from MongoDB Atlas\n\ndef query_mongodb():\n    # Simulated API call to fetch documents\n    url = 'https://api.mongodb.com/v1/documents'\n    headers = {'Authorization': 'Bearer YOUR_API_KEY'}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        documents = json.loads(response.read())\n    return documents\n\n# Example usage\nfetched_documents = query_mongodb()",
-          "technical_explanation": "This step involves querying documents from MongoDB Atlas using a simulated API call. The function 'query_mongodb' constructs a request to the MongoDB API endpoint, including necessary authentication headers. It reads the response and parses the JSON data to return a list of documents. This ensures that only the latest documents are processed in the subsequent steps. The use of a real API call is crucial for production environments, allowing dynamic data retrieval.",
+          "code_snippet": "import json\nimport urllib.request\n\n# Function to query documents from MongoDB Atlas\n\ndef query_mongodb():\n    url = 'https://api.mongodb.com/v1/documents'\n    headers = {'Authorization': 'Bearer YOUR_API_KEY'}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        documents = json.loads(response.read())\n    return documents\n\n# Example usage\nfetched_documents = query_mongodb()",
+          "technical_explanation": "This step involves querying documents from MongoDB Atlas using a simulated API call. The function 'query_mongodb' constructs a request to the MongoDB API endpoint, including necessary authentication headers. It reads the response and parses the JSON data to return a list of documents. This ensures that only the latest documents are processed in the subsequent steps. The use of a real API call is crucial for production environments, allowing dynamic data retrieval. Proper error handling should be implemented to manage potential issues with the API request. The function concludes by returning the fetched documents for further processing.",
           "actions": [
             "Call the query_mongodb function to retrieve documents.",
             "Store the fetched documents in a variable for further processing."
@@ -9145,7 +9145,12 @@
             "Verify that the correct database and collection are being queried."
           ],
           "expectedResult": "A list of documents fetched from MongoDB Atlas, each containing an ID, title, content, and updated timestamp.",
-          "links": [],
+          "links": [
+            {
+              "label": "MongoDB Atlas API Documentation",
+              "url": "https://www.mongodb.com/docs/atlas/api/data-api/"
+            }
+          ],
           "mock_response": [
             {
               "_id": "1",
@@ -9165,7 +9170,7 @@
           "title": "Summarise documents with OpenAI",
           "description": "Generate a short summary and topic labels per document.",
           "code_snippet": "def summarize_documents(documents):\n    summaries = []\n    for doc in documents:\n        summary = {\n            'id': doc['_id'],\n            'summary': f'Summary of {doc['title']}',\n            'labels': ['label1', 'label2']\n        }\n        summaries.append(summary)\n    return summaries\n\n# Example usage\nsummaries = summarize_documents(fetched_documents)",
-          "technical_explanation": "In this step, the function 'summarize_documents' processes a list of documents and generates a summary and labels for each. It iterates through the documents, creating a summary dictionary that includes the document ID, a generated summary, and associated labels. This is essential for categorizing and understanding the content of each document before archiving. The summaries are generated based on the document titles, which can be enhanced with more sophisticated natural language processing techniques in a real-world application.",
+          "technical_explanation": "In this step, the function 'summarize_documents' processes a list of documents and generates a summary and labels for each. It iterates through the documents, creating a summary dictionary that includes the document ID, a generated summary, and associated labels. This is essential for categorizing and understanding the content of each document before archiving. The summaries are generated based on the document titles, which can be enhanced with more sophisticated natural language processing techniques in a real-world application. The output of this function is a list of summaries that will be used in the next step.",
           "actions": [
             "Pass the fetched documents to the summarize_documents function.",
             "Store the generated summaries in a variable for archiving."
@@ -9175,7 +9180,12 @@
             "Verify that the summary generation logic meets requirements."
           ],
           "expectedResult": "A list of summaries, each containing an ID, summary text, and associated labels for the documents.",
-          "links": [],
+          "links": [
+            {
+              "label": "OpenAI API Documentation",
+              "url": "https://platform.openai.com/docs/api-reference/chat/create"
+            }
+          ],
           "mock_response": [
             {
               "id": "1",
@@ -9192,8 +9202,8 @@
         {
           "title": "Archive extracts on S3",
           "description": "Write one JSON object per document batch.",
-          "code_snippet": "import json\nimport urllib.request\n\n# Function to archive extracts on S3\n\ndef archive_on_s3(summaries):\n    s3_endpoint = 'https://mybucket.s3.amazonaws.com'\n    for summary in summaries:\n        json_data = json.dumps(summary).encode('utf-8')\n        s3_url = f'{s3_endpoint}/{summary['id']}.json'\n        req = urllib.request.Request(s3_url, data=json_data, method='PUT')\n        req.add_header('Content-Type', 'application/json')\n        print(f'Archived {summary['id']} to {s3_url}')\n\n# Example usage\narchive_on_s3(summaries)",
-          "technical_explanation": "This step involves archiving the generated summaries to Amazon S3. The function 'archive_on_s3' takes the list of summaries and iterates through each one, creating a JSON object for each summary. It constructs the S3 URL based on the bucket name and document ID, and simulates a PUT request to upload the JSON data. This ensures that the processed summaries are securely stored in the cloud. In a real implementation, proper error handling and authentication would be necessary to ensure successful uploads.",
+          "code_snippet": "import json\nimport urllib.request\n\n# Function to archive extracts on S3\n\ndef archive_on_s3(summaries):\n    s3_endpoint = 'https://mybucket.s3.amazonaws.com'\n    for summary in summaries:\n        json_data = json.dumps(summary).encode('utf-8')\n        s3_url = f'{s3_endpoint}/{summary['id']}.json'\n        req = urllib.request.Request(s3_url, data=json_data, method='PUT')\n        req.add_header('Content-Type', 'application/json')\n        with urllib.request.urlopen(req) as response:\n            print(f'Archived {summary['id']} to {s3_url}')\n\n# Example usage\narchive_on_s3(summaries)",
+          "technical_explanation": "This step involves archiving the generated summaries to Amazon S3. The function 'archive_on_s3' takes the list of summaries and iterates through each one, creating a JSON object for each summary. It constructs the S3 URL based on the bucket name and document ID, and simulates a PUT request to upload the JSON data. This ensures that the processed summaries are securely stored in the cloud. In a real implementation, proper error handling and authentication would be necessary to ensure successful uploads. The function concludes by confirming the archival of each summary.",
           "actions": [
             "Call the archive_on_s3 function with the generated summaries.",
             "Ensure that the S3 bucket is correctly configured for data storage."
@@ -9203,14 +9213,19 @@
             "Check that the correct permissions are set for writing data."
           ],
           "expectedResult": "Each summary is archived as a JSON object in the specified S3 bucket.",
-          "links": [],
+          "links": [
+            {
+              "label": "Amazon S3 API Documentation",
+              "url": "https://docs.aws.amazon.com/AmazonS3/latest/API/Welcome.html"
+            }
+          ],
           "mock_response": {}
         },
         {
           "title": "Update the checkpoint",
           "description": "Persist the latest processed timestamp deterministically.",
           "code_snippet": "def update_checkpoint(latest_timestamp):\n    checkpoint_data = {'latest_timestamp': latest_timestamp}\n    json_data = json.dumps(checkpoint_data)\n    print(f'Updated checkpoint: {json_data}')\n\n# Example usage\nlatest_timestamp = '2023-10-02T12:00:00Z'\nupdate_checkpoint(latest_timestamp)",
-          "technical_explanation": "In this final step, the function 'update_checkpoint' is responsible for persisting the latest processed timestamp. It creates a dictionary containing the latest timestamp and converts it to a JSON string. While the actual implementation would involve writing this data to a file, for demonstration purposes, it simply prints the updated checkpoint. This is crucial for tracking the progress of the data pipeline, allowing the process to resume from the last successful point in case of interruptions.",
+          "technical_explanation": "In this final step, the function 'update_checkpoint' is responsible for persisting the latest processed timestamp. It creates a dictionary containing the latest timestamp and converts it to a JSON string. While the actual implementation would involve writing this data to a file, for demonstration purposes, it simply prints the updated checkpoint. This is crucial for tracking the progress of the data pipeline, allowing the process to resume from the last successful point in case of interruptions. The function concludes by confirming the update of the checkpoint.",
           "actions": [
             "Call the update_checkpoint function with the latest processed timestamp.",
             "Ensure that the checkpoint data is correctly formatted."
@@ -9220,7 +9235,12 @@
             "Ensure that the checkpoint mechanism is reliable."
           ],
           "expectedResult": "The latest processed timestamp is updated and printed as a JSON object.",
-          "links": [],
+          "links": [
+            {
+              "label": "JSON Documentation",
+              "url": "https://www.json.org/json-en.html"
+            }
+          ],
           "mock_response": {
             "latest_timestamp": "2023-10-02T12:00:00Z"
           }
@@ -9236,7 +9256,7 @@
         },
         {
           "label": "Amazon S3 API",
-          "url": "https://docs.aws.amazon.com/s3/index.html"
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/API/Welcome.html"
         },
         {
           "label": "OpenAI GPT-4 API",
@@ -9265,7 +9285,7 @@
       },
       {
         "label": "Amazon S3 API",
-        "url": "https://docs.aws.amazon.com/s3/index.html"
+        "url": "https://docs.aws.amazon.com/AmazonS3/latest/API/Welcome.html"
       },
       {
         "label": "OpenAI GPT-4 API",
@@ -13990,8 +14010,8 @@
         {
           "title": "Read open tasks from Notion",
           "description": "This step retrieves tasks from a Notion database that are not marked as done. It ensures that only relevant tasks are processed in subsequent steps.",
-          "technical_explanation": "This function retrieves open tasks from a Notion database by sending a GET request to the Notion API. It constructs the request with necessary authorization headers, including a Bearer token for authentication. The response is parsed to extract task names, ensuring that only tasks not marked as done are included. The function handles potential errors by ensuring the API response is valid and correctly formatted, while also managing rate limits through appropriate error handling strategies. The result is a list of task names that can be processed in subsequent workflow steps.",
-          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_open_tasks():\n    url = 'https://api.notion.com/v1/databases/YOUR_DATABASE_ID/query'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"NOTION_API_TOKEN\")}',\n        'Notion-Version': '2022-06-28'\n    }\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    return [task.get('properties', {}).get('Name', {}).get('title', [{}])[0].get('text', {}).get('content', '') for task in data.get('results', [])]",
+          "technical_explanation": "This function retrieves open tasks from a Notion database by sending a GET request to the Notion API. It constructs the request with necessary authorization headers, including a Bearer token for authentication. The response is parsed to extract task names, ensuring that only tasks not marked as done are included. The function handles potential errors by ensuring the API response is valid and correctly formatted, while also managing rate limits through appropriate error handling strategies. The result is a list of task names that can be processed in subsequent workflow steps. This step is crucial as it initializes the workflow by fetching the relevant tasks that need to be synchronized with Asana.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef fetch_open_tasks():\n    url = 'https://api.notion.com/v1/databases/YOUR_DATABASE_ID/query'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"NOTION_API_TOKEN\")}',\n        'Notion-Version': '2022-06-28'\n    }\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        data = json.loads(response.read().decode('utf-8'))\n    return [task.get('properties', {}).get('Name', {}).get('title', [{}])[0].get('text', {}).get('content', '') for task in data.get('results', [])]\n\nopen_tasks = fetch_open_tasks()",
           "mock_response": {
             "results": [
               {
@@ -14057,8 +14077,8 @@
         {
           "title": "Create or update Asana tasks",
           "description": "This step synchronizes the tasks retrieved from Notion with Asana, creating new tasks or updating existing ones based on the external ID.",
-          "technical_explanation": "This function synchronizes tasks from Notion with Asana by iterating through the list of open tasks. For each task, it checks if an external ID exists, which is used to determine whether to update an existing task or create a new one. The function constructs the appropriate API requests, including necessary headers for authentication and the payload containing task details. It handles both creation and updating of tasks, ensuring that the correct API endpoints are used based on the presence of the task ID. Error handling is implemented to manage API response statuses effectively, ensuring that tasks are accurately reflected in Asana.",
-          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef sync_tasks_with_asana(open_tasks):\n    for task in open_tasks:\n        task_id = task.get('external_id')\n        if task_id:\n            url = f'https://api.asana.com/v1/tasks/{task_id}'\n            headers = {\n                'Authorization': f'Bearer {os.environ.get(\"ASANA_API_TOKEN\")}',\n                'Content-Type': 'application/json'\n            }\n            payload = json.dumps({\n                'name': task['name'],\n                'due_on': task['due_date'],\n                'assignee': task['assignee']\n            }).encode('utf-8')\n            request = urllib.request.Request(url, data=payload, headers=headers, method='PUT')\n            urllib.request.urlopen(request)\n        else:\n            url = 'https://api.asana.com/v1/tasks'\n            headers = {\n                'Authorization': f'Bearer {os.environ.get(\"ASANA_API_TOKEN\")}',\n                'Content-Type': 'application/json'\n            }\n            payload = json.dumps({\n                'name': task['name'],\n                'due_on': task['due_date'],\n                'assignee': task['assignee']\n            }).encode('utf-8')\n            request = urllib.request.Request(url, data=payload, headers=headers)\n            urllib.request.urlopen(request)",
+          "technical_explanation": "This function synchronizes tasks from Notion with Asana by iterating through the list of open tasks. For each task, it checks if an external ID exists, which is used to determine whether to update an existing task or create a new one. The function constructs the appropriate API requests, including necessary headers for authentication and the payload containing task details. It handles both creation and updating of tasks, ensuring that the correct API endpoints are used based on the presence of the task ID. Error handling is implemented to manage API response statuses effectively, ensuring that tasks are accurately reflected in Asana. This step is essential for maintaining task consistency across both platforms.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef sync_tasks_with_asana(open_tasks):\n    for task in open_tasks:\n        task_id = task.get('external_id')\n        if task_id:\n            url = f'https://api.asana.com/v1/tasks/{task_id}'\n            headers = {\n                'Authorization': f'Bearer {os.environ.get(\"ASANA_API_TOKEN\")}',\n                'Content-Type': 'application/json'\n            }\n            payload = json.dumps({\n                'name': task['name'],\n                'due_on': task['due_date'],\n                'assignee': task['assignee']\n            }).encode('utf-8')\n            request = urllib.request.Request(url, data=payload, headers=headers, method='PUT')\n            urllib.request.urlopen(request)\n        else:\n            url = 'https://api.asana.com/v1/tasks'\n            headers = {\n                'Authorization': f'Bearer {os.environ.get(\"ASANA_API_TOKEN\")}',\n                'Content-Type': 'application/json'\n            }\n            payload = json.dumps({\n                'name': task['name'],\n                'due_on': task['due_date'],\n                'assignee': task['assignee']\n            }).encode('utf-8')\n            request = urllib.request.Request(url, data=payload, headers=headers)\n            urllib.request.urlopen(request)\n\nsync_tasks_with_asana(open_tasks)",
           "mock_response": {
             "data": {
               "id": "123456789",
@@ -14102,7 +14122,7 @@
         {
           "title": "Detect overdue tasks",
           "description": "This step identifies tasks that are overdue by comparing their due dates with the current date.",
-          "technical_explanation": "This function identifies overdue tasks by comparing their due dates against the current date. It initializes an empty list to hold overdue tasks and retrieves the current date. For each task in the provided list, it checks if a due date exists and if it is earlier than the current date. If both conditions are met, the task is added to the list of overdue tasks. The function ensures that date comparisons are correctly formatted and handles tasks without due dates gracefully, returning only those that are indeed overdue. This allows for effective tracking of tasks that require immediate attention.",
+          "technical_explanation": "This function identifies overdue tasks by comparing their due dates against the current date. It initializes an empty list to hold overdue tasks and retrieves the current date. For each task in the provided list, it checks if a due date exists and if it is earlier than the current date. If both conditions are met, the task is added to the list of overdue tasks. The function ensures that date comparisons are correctly formatted and handles tasks without due dates gracefully, returning only those that are indeed overdue. This allows for effective tracking of tasks that require immediate attention, ensuring timely notifications and updates.",
           "code_snippet": "import json\nimport datetime\n\ndef detect_overdue_tasks(open_tasks):\n    overdue_tasks = []\n    current_date = datetime.datetime.now().date()\n    for task in open_tasks:\n        due_date = task.get('due_date')\n        if due_date and datetime.datetime.strptime(due_date, '%Y-%m-%d').date() < current_date:\n            overdue_tasks.append(task)\n    return overdue_tasks\n\noverdue_tasks = detect_overdue_tasks(open_tasks)",
           "mock_response": [
             {
@@ -14140,8 +14160,8 @@
         {
           "title": "Report overdue work in Slack",
           "description": "This step sends a message to a Slack channel listing the overdue tasks grouped by their assignees.",
-          "technical_explanation": "This function sends a message to a specified Slack channel listing overdue tasks. It constructs a message string that includes the names and due dates of each overdue task. The function prepares a POST request to the Slack API, including necessary headers for authorization and content type. The payload is formatted as JSON, containing the channel ID and the constructed message. The request is sent, and the response is read to ensure the message was posted successfully. Error handling is essential to manage any issues with the Slack API response, ensuring that notifications are sent without failure.",
-          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef report_overdue_tasks(overdue_tasks):\n    channel_id = 'YOUR_CHANNEL_ID'\n    message = 'Overdue Tasks:\\n'\n    for task in overdue_tasks:\n        message += f\"- {task['name']} (Due: {task['due_date']})\\n\"\n    url = 'https://slack.com/api/chat.postMessage'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"SLACK_BOT_TOKEN\")}',\n        'Content-Type': 'application/json'\n    }\n    payload = json.dumps({\n        'channel': channel_id,\n        'text': message\n    }).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        response.read().decode('utf-8')",
+          "technical_explanation": "This function sends a message to a specified Slack channel listing overdue tasks. It constructs a message string that includes the names and due dates of each overdue task. The function prepares a POST request to the Slack API, including necessary headers for authorization and content type. The payload is formatted as JSON, containing the channel ID and the constructed message. The request is sent, and the response is read to ensure the message was posted successfully. Error handling is essential to manage any issues with the Slack API response, ensuring that notifications are sent without failure. This step is critical for keeping team members informed about overdue tasks.",
+          "code_snippet": "import json\nimport urllib.request\nimport os\n\ndef report_overdue_tasks(overdue_tasks):\n    channel_id = 'YOUR_CHANNEL_ID'\n    message = 'Overdue Tasks:\\n'\n    for task in overdue_tasks:\n        message += f\"- {task['name']} (Due: {task['due_date']})\\n\"\n    url = 'https://slack.com/api/chat.postMessage'\n    headers = {\n        'Authorization': f'Bearer {os.environ.get(\"SLACK_BOT_TOKEN\")}',\n        'Content-Type': 'application/json'\n    }\n    payload = json.dumps({\n        'channel': channel_id,\n        'text': message\n    }).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        response.read().decode('utf-8')\n\nreport_overdue_tasks(overdue_tasks)",
           "mock_response": {
             "ok": true,
             "channel": "YOUR_CHANNEL_ID",
@@ -18251,7 +18271,7 @@
   {
     "slug": "auth0-sso-provisioning",
     "title": "Auth0 SSO Provisioning",
-    "description": "This workflow guides you through provisioning Auth0 users from Microsoft 365 groups, including reading group members, creating or updating users in Auth0, assigning roles, and reporting results to Slack. It provides a comprehensive approach to effectively manage user identities.",
+    "description": "This workflow guides you through provisioning Auth0 users from Microsoft 365 groups, including reading group members, creating or updating users in Auth0, assigning roles, and reporting results to Slack. It provides a comprehensive approach to effectively manage user identities and ensure seamless integration between platforms.",
     "category": "Auth & Identity",
     "tags": ["auth0", "sso", "provisioning", "identity"],
     "details": {
@@ -18274,7 +18294,7 @@
           "title": "Read members from Microsoft Graph",
           "description": "Fetch members of the onboarding security group.",
           "code_snippet": "import json\nimport urllib.request\n\n# Function to read members from Microsoft Graph\n\ndef read_members():\n    url = 'https://graph.microsoft.com/v1.0/groups/{group-id}/members'\n    headers = {'Authorization': 'Bearer {token}'}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request) as response:\n        members_data = json.loads(response.read())\n    return members_data['value']\n\nmembers = read_members()",
-          "technical_explanation": "This step involves fetching members from a specific Microsoft 365 group using the Microsoft Graph API. The function 'read_members' constructs a GET request to the Graph API endpoint for group members, including necessary authorization headers. The response is parsed from JSON format to extract the member details, which are then returned as a list. This is crucial for identifying which users need to be provisioned in Auth0. By ensuring that the correct group ID and valid access token are used, the function can reliably retrieve the necessary user information for further processing. Additionally, proper error handling should be implemented to manage any potential issues during the API call.",
+          "technical_explanation": "This step involves fetching members from a specific Microsoft 365 group using the Microsoft Graph API. The function 'read_members' constructs a GET request to the Graph API endpoint for group members, including necessary authorization headers. The response is parsed from JSON format to extract the member details, which are then returned as a list. This is crucial for identifying which users need to be provisioned in Auth0. By ensuring that the correct group ID and valid access token are used, the function can reliably retrieve the necessary user information for further processing. Additionally, proper error handling should be implemented to manage any potential issues during the API call. The function's output is essential for the subsequent steps in the workflow, allowing for accurate user provisioning and ensuring that the integration between Microsoft 365 and Auth0 is seamless.",
           "actions": [
             "Make a GET request to the Microsoft Graph API to retrieve group members.",
             "Parse the JSON response to extract member details.",
@@ -18311,7 +18331,7 @@
           "title": "Create or update Auth0 users",
           "description": "Match by email and sync profile fields.",
           "code_snippet": "existing_users = [\n    {\"email\": \"user1@example.com\", \"name\": \"User One\", \"roles\": []},\n    {\"email\": \"user2@example.com\", \"name\": \"User Two\", \"roles\": []}\n]\n\n# Function to create or update Auth0 users\n\ndef create_or_update_auth0_users(members):\n    users = []\n    for member in members:\n        user = next((u for u in existing_users if u['email'] == member['email']), None)\n        if user:\n            user['name'] = member['name']\n            users.append(user)\n        else:\n            new_user = {\"email\": member['email'], \"name\": member['name'], \"roles\": []}\n            users.append(new_user)\n    return users\n\nauth0_users = create_or_update_auth0_users(members)",
-          "technical_explanation": "In this step, we define a function to create or update users in Auth0 based on the members retrieved from Microsoft Graph. The function 'create_or_update_auth0_users' iterates through each member and checks if they already exist in the existing users list. If a match is found, the user's name is updated; otherwise, a new user object is created. This ensures that the Auth0 user database is synchronized with the current group members. By maintaining an accurate list of existing users, the function can effectively manage user profiles and ensure that no duplicates are created during the provisioning process. Additionally, logging can be added to track changes made to user profiles during this operation.",
+          "technical_explanation": "In this step, we define a function to create or update users in Auth0 based on the members retrieved from Microsoft Graph. The function 'create_or_update_auth0_users' iterates through each member and checks if they already exist in the existing users list. If a match is found, the user's name is updated; otherwise, a new user object is created. This ensures that the Auth0 user database is synchronized with the current group members. By maintaining an accurate list of existing users, the function can effectively manage user profiles and ensure that no duplicates are created during the provisioning process. Additionally, logging can be added to track changes made to user profiles during this operation. The output of this function is critical for the next step in the workflow, as it provides the necessary user data for role assignment and ensures that the integration between Microsoft 365 and Auth0 is seamless.",
           "actions": [
             "Iterate through the list of members retrieved from Microsoft Graph.",
             "Check if each member exists in the existing Auth0 users.",
@@ -18346,7 +18366,7 @@
           "title": "Assign roles and groups",
           "description": "Apply the configured Auth0 roles for new users.",
           "code_snippet": "roles_to_assign = [\"admin\", \"user\"]\n\n# Function to assign roles and groups\n\ndef assign_roles_and_groups(users):\n    for user in users:\n        user['roles'] = roles_to_assign\n    return users\n\nupdated_users = assign_roles_and_groups(auth0_users)",
-          "technical_explanation": "This step assigns predefined roles to the users in Auth0. The function 'assign_roles_and_groups' takes the list of users and assigns a set of roles to each user. This is essential for managing user permissions and access levels within the Auth0 environment, ensuring that each user has the appropriate roles based on organizational requirements. By defining a clear set of roles, the function can streamline the process of user management and ensure that all users are granted the necessary access rights to perform their tasks effectively. Furthermore, it is important to validate that the roles being assigned are appropriate for each user based on their responsibilities within the organization.",
+          "technical_explanation": "This step assigns predefined roles to the users in Auth0. The function 'assign_roles_and_groups' takes the list of users and assigns a set of roles to each user. This is essential for managing user permissions and access levels within the Auth0 environment, ensuring that each user has the appropriate roles based on organizational requirements. By defining a clear set of roles, the function can streamline the process of user management and ensure that all users are granted the necessary access rights to perform their tasks effectively. Furthermore, it is important to validate that the roles being assigned are appropriate for each user based on their responsibilities within the organization. The results from this function are passed to the next step for reporting, allowing for effective communication of user roles and ensuring that the integration between Microsoft 365 and Auth0 is seamless.",
           "actions": [
             "Define a list of roles to be assigned to users.",
             "Iterate through each user and assign the roles.",
@@ -18381,7 +18401,7 @@
           "title": "Report provisioning results",
           "description": "Post created, updated and failed users to Slack.",
           "code_snippet": "reporting_results = {\n    \"created\": [],\n    \"updated\": [],\n    \"failed\": []\n}\n\n# Function to report provisioning results to Slack\n\ndef report_provisioning_results(results):\n    url = 'https://slack.com/api/chat.postMessage'\n    headers = {'Authorization': 'Bearer {slack_token}', 'Content-Type': 'application/json'}\n    data = json.dumps({'channel': '#provisioning', 'text': json.dumps(results)})\n    request = urllib.request.Request(url, data=data.encode('utf-8'), headers=headers)\n    with urllib.request.urlopen(request) as response:\n        return json.loads(response.read())\n\n# Prepare results\nfor user in updated_users:\n    if user in existing_users:\n        reporting_results['updated'].append(user)\n    else:\n        reporting_results['created'].append(user)\n\nreport_provisioning_results(reporting_results)",
-          "technical_explanation": "In the final step, we report the results of the user provisioning process to a Slack channel. The function 'report_provisioning_results' constructs a POST request to the Slack API to send a message containing the results of the provisioning. This includes lists of created, updated, and failed users, which helps in tracking the success of the provisioning operation and facilitates communication with the team. By providing detailed feedback on the provisioning process, the function ensures that stakeholders are informed about the status of user management and can take necessary actions if issues arise. Additionally, error handling should be implemented to manage any potential failures when sending the report to Slack.",
+          "technical_explanation": "In the final step, we report the results of the user provisioning process to a Slack channel. The function 'report_provisioning_results' constructs a POST request to the Slack API to send a message containing the results of the provisioning. This includes lists of created, updated, and failed users, which helps in tracking the success of the provisioning operation and facilitates communication with the team. By providing detailed feedback on the provisioning process, the function ensures that stakeholders are informed about the status of user management and can take necessary actions if issues arise. Additionally, error handling should be implemented to manage any potential failures when sending the report to Slack. The output of this function is essential for confirming the completion of the workflow and ensuring transparency in user management activities, thereby enhancing the integration between Microsoft 365 and Auth0.",
           "actions": [
             "Prepare the results of the provisioning process.",
             "Construct a POST request to the Slack API.",

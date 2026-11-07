@@ -1184,6 +1184,8 @@ HARD RULES
 - 100% English, no German words or umlauts.
 - Python standard library only; no requests/openai/supabase/httpx/pandas/random.
 - Every step needs >= 8 lines of real code and >= 250 characters of technical explanation.
+- Every step MUST end with a top-level assignment that passes its result to the next step (e.g. `open_tasks = fetch_open_tasks()`), so the concatenated workflow executes without NameError.
+- Every step needs at least one specific link (real tool documentation URL); links must differ between steps.
 - Use only real, reachable domains. Never invent a domain.
 - Do not include any blacklisted phrase such as "pip install", "Dummy", "gpt-3.5-turbo".
 """

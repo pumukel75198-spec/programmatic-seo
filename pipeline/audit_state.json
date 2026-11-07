@@ -1590,22 +1590,17 @@
       "status": "failed",
       "healed": true,
       "errors": [
-        "step 1: links missing",
-        "step 2: links missing",
-        "step 3: links missing",
-        "step 4: code_snippet has fewer than 8 lines",
-        "step 4: links missing",
-        "all steps share the exact same links (copy-paste detected)"
+        "step 4: code_snippet has fewer than 8 lines"
       ],
-      "checked_at": "2026-11-07T14:40:34.428801+00:00"
+      "checked_at": "2026-11-07T14:50:48.948352+00:00"
     },
     "workflow:postgres-backup-reporting": {
       "status": "failed",
-      "healed": true,
+      "healed": false,
       "errors": [
         "workflow kit file 'mock_data.json' is <= 100 bytes"
       ],
-      "checked_at": "2026-11-07T14:41:31.597338+00:00"
+      "checked_at": "2026-11-07T14:51:16.910327+00:00"
     },
     "workflow:redis-rate-limit-store": {
       "status": "verified_clean",
@@ -1713,9 +1708,9 @@
       "status": "failed",
       "healed": true,
       "errors": [
-        "workflow.py --dry-run failed: Traceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-56zwpz67/workflow.py\", line 202, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-56zwpz67/workflow.py\", line 194, in main\n    run_workflow()\n    ~~~~~~~~~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-56zwpz67/workflow.py\", line 128, in run_workflow\n    overdue_tasks = detect_overdue_tasks(open_tasks)\n                                         ^^^^^^^^^^\nNameError: name 'open_tasks' is not defined"
+        "workflow.py --dry-run failed: Traceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-wn89b69w/workflow.py\", line 208, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-wn89b69w/workflow.py\", line 200, in main\n    run_workflow()\n    ~~~~~~~~~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-wn89b69w/workflow.py\", line 118, in run_workflow\n    sync_tasks_with_asana(open_tasks)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-wn89b69w/workflow.py\", line 90, in sync_tasks_with_asana\n    task_id = task.get('external_id')\n              ^^^^^^^^\nAttributeError: 'str' object has no attribute 'get'"
       ],
-      "checked_at": "2026-11-07T14:44:37.306496+00:00"
+      "checked_at": "2026-11-07T14:52:22.154128+00:00"
     },
     "workflow:document-approval-workflow": {
       "status": "verified_clean",
@@ -1813,7 +1808,7 @@
       "errors": [
         "step 3: code_snippet has fewer than 8 lines"
       ],
-      "checked_at": "2026-11-07T14:46:12.394832+00:00"
+      "checked_at": "2026-11-07T14:53:53.689330+00:00"
     },
     "workflow:clerk-user-onboarding": {
       "status": "verified_clean",
@@ -1900,5 +1895,5 @@
       "checked_at": "2026-11-07T14:27:13.475236+00:00"
     }
   },
-  "updated_at": "2026-11-07T14:46:12.501567+00:00"
+  "updated_at": "2026-11-07T14:53:53.793171+00:00"
 }
