@@ -47,6 +47,8 @@ import sys
 import tempfile
 import time
 import traceback
+import urllib.error
+import urllib.request
 import zipfile
 from collections import Counter
 from datetime import datetime, timezone
@@ -86,11 +88,17 @@ if __package__ in (None, ""):
 from . import bundle_builder, config as cfg, llm_client, prompts, validator
 from . import run_batch
 from .code_hardener import harden_code
+from .secret_sanitizer import (
+    sanitize_records,
+    sanitize_value,
+    sanitize_workflow,
+)
 
 # --------------------------------------------------------------------------- #
 # Constants
 # --------------------------------------------------------------------------- #
 DAEMON_LOG = _ROOT / "pipeline" / "daemon.log"
+DAEMON_RUNS_LOG = _ROOT / "pipeline" / "daemon_runs.log"
 STATE_FILE = _ROOT / "pipeline" / "daemon_state.json"
 PLIST_NAME = "com.flowmatrix.autobatch.plist"
 PLIST_PATH = _ROOT / "pipeline" / PLIST_NAME
@@ -129,8 +137,9 @@ def log(message: str) -> None:
     line = f"[{stamp}] {message}"
     print(line, flush=True)
     DAEMON_LOG.parent.mkdir(parents=True, exist_ok=True)
-    with DAEMON_LOG.open("a", encoding="utf-8") as handle:
-        handle.write(line + "\n")
+    for path in (DAEMON_LOG, DAEMON_RUNS_LOG):
+        with path.open("a", encoding="utf-8") as handle:
+            handle.write(line + "\n")
 
 
 def _now() -> str:
@@ -235,6 +244,60 @@ def git_commit_and_push(message: str, attempts: int = 3) -> bool:
             f"{(push.stderr or push.stdout).strip()[:400]}"
         )
         time.sleep(2 ** (attempt - 1))
+    return False
+
+
+def sanitize_datasets() -> None:
+    """Remove credential-shaped legacy values before every commit.
+
+    Older records may contain a realistic-looking mock SID from a previous
+    run. GitHub Push Protection scans the whole pushed diff, so the cleanup
+    must cover the complete datasets, not only the new batch.
+    """
+    for path in (cfg.APIS_FILE, cfg.ALTERNATIVES_FILE, cfg.WORKFLOWS_FILE):
+        if not path.exists():
+            continue
+        try:
+            data = run_batch.load_json(path)
+        except Exception as error:  # noqa: BLE001
+            log(f"[SECRETS] could not read {path.name}: {error}")
+            continue
+        cleaned = sanitize_records(data)
+        if cleaned != data:
+            run_batch.save_json(path, cleaned)
+            log(f"[SECRETS] sanitized credential-like values in {path.name}")
+
+
+def format_generated_content(attempts: int = 2) -> bool:
+    """Run Prettier on every tracked file the pipeline writes.
+
+    The CI gate ``npm run format:check`` runs Prettier over the whole repo.
+    ``json.dumps(indent=2)`` produces a different layout than Prettier, so an
+    unformatted ``workflows.json`` aborts the GitHub Actions deploy before the
+    Astro build and before Cloudflare Pages ever sees the revision. Formatting
+    is therefore a hard delivery gate, not a cosmetic step.
+    """
+    targets = [
+        "src/data/apis.json",
+        "src/data/alternatives.json",
+        "src/data/workflows.json",
+        "pipeline/README.md",
+    ]
+    for attempt in range(1, attempts + 1):
+        try:
+            result = _run(
+                ["npx", "prettier", "--write", *targets], timeout=180
+            )
+        except Exception as error:  # noqa: BLE001
+            log(f"[FORMAT] attempt {attempt} failed: {error}")
+            continue
+        if result.returncode == 0:
+            log("[FORMAT] prettier --write src/data/workflows.json README: OK")
+            return True
+        log(
+            f"[FORMAT] attempt {attempt} failed: "
+            f"{(result.stderr or result.stdout).strip()[-400:]}"
+        )
     return False
 
 
@@ -1103,7 +1166,9 @@ def assemble_candidate(
     # Enforce the binding final prerequisite as the last entry.
     run_batch._normalize_workflow(candidate)  # noqa: SLF001
     details["before_you_start"] = list(details["prerequisites"])
-    return candidate
+    # Remove credential-shaped mock values before anything is persisted or
+    # committed. GitHub Push Protection rejects such commits outright.
+    return sanitize_workflow(candidate)
 
 
 # --------------------------------------------------------------------------- #
@@ -1351,6 +1416,612 @@ def upload_artifacts(pdf_path: Path, kit_path: Path, slug: str) -> list[str]:
 
 
 # --------------------------------------------------------------------------- #
+# API kit phase (3 new API production kits per full batch)
+# --------------------------------------------------------------------------- #
+ALTERNATIVE_ORIGINALS: tuple[str, ...] = (
+    "OpenAI",
+    "Anthropic",
+    "Google Gemini",
+    "Mistral AI",
+    "Cohere",
+    "Groq",
+    "Together AI",
+    "Replicate",
+    "Hugging Face",
+    "ElevenLabs",
+    "Deepgram",
+    "Stability AI",
+    "Pinecone",
+    "Weaviate",
+    "Qdrant",
+    "Supabase",
+    "Firebase",
+    "MongoDB",
+    "PostgreSQL",
+    "Redis",
+    "Neon",
+    "PlanetScale",
+    "Upstash",
+    "Vercel",
+    "Netlify",
+    "Cloudflare",
+    "Stripe",
+    "Twilio",
+    "Resend",
+    "SendGrid",
+    "Mailchimp",
+    "ConvertKit",
+    "Klaviyo",
+    "Clerk",
+    "Auth0",
+    "Algolia",
+    "Mapbox",
+    "OpenWeather",
+    "Shopify",
+    "Notion",
+    "Airtable",
+    "Linear",
+    "Figma",
+    "Zapier",
+    "Make",
+    "n8n",
+    "HubSpot",
+    "Salesforce",
+    "Jira",
+    "Trello",
+    "Asana",
+    "Monday.com",
+    "ClickUp",
+    "Miro",
+    "Loom",
+    "Calendly",
+    "Intercom",
+    "Zendesk",
+    "WordPress",
+    "Webflow",
+    "Framer",
+    "Bubble",
+    "Retool",
+    "PostHog",
+    "Sentry",
+    "LaunchDarkly",
+    "Doppler",
+)
+
+
+def _slugify(value: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", str(value).lower()).strip("-") or "item"
+
+
+def strict_url_ok(url: str, timeout: int = 10) -> tuple[bool, str]:
+    """Strict live check for alternative tool URLs (2xx/3xx only)."""
+    if not url:
+        return False, "missing URL"
+    request = urllib.request.Request(
+        url,
+        method="GET",
+        headers={"User-Agent": "FlowMatrix-DomainCheck/1.0"},
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            code = response.getcode()
+            return 200 <= code < 400, f"HTTP {code}"
+    except urllib.error.HTTPError as error:
+        return False, f"HTTP {error.code}"
+    except Exception as error:  # noqa: BLE001
+        return False, f"{type(error).__name__}: {error}"
+
+
+def build_api_candidate_pool(
+    apis: list[dict[str, Any]],
+    count: int,
+    seed: int,
+    exclude_slugs: set[str] | None = None,
+) -> list[dict[str, Any]]:
+    exclude = set(exclude_slugs or set())
+    usable = [
+        api
+        for api in apis
+        if str((api.get("details") or {}).get("endpoint") or "").strip()
+        and str(
+            (api.get("details") or {}).get("docsUrl")
+            or (api.get("details") or {}).get("website")
+            or ""
+        ).strip()
+        and str(api.get("slug") or "") not in exclude
+    ]
+    usable.sort(key=lambda api: str(api.get("slug") or ""))
+    rng = random.Random(seed)
+    rng.shuffle(usable)
+    return usable[: max(count * 5, 15)]
+
+
+def _api_metadata(api: dict[str, Any]) -> dict[str, Any]:
+    timestamp = run_batch._now_timestamp()  # noqa: SLF001
+    api["created_and_verified_at"] = timestamp
+    api["price"] = float(cfg.SCRIPT_PRICE)
+    details = api.setdefault("details", {})
+    details["lastVerified"] = timestamp
+    details["disclaimer"] = cfg.LINK_DISCLAIMER.format(timestamp=timestamp)
+    return api
+
+
+def _api_kit_ast_ok(script: str, test_script: str) -> tuple[bool, str]:
+    for name, text in (("api_client.py", script), ("test_mock.py", test_script)):
+        try:
+            tree = ast.parse(text)
+        except SyntaxError as error:
+            return False, f"{name}: SyntaxError: {error.msg}"
+        for node in ast.walk(tree):
+            names: list[str] = []
+            if isinstance(node, ast.Import):
+                names = [alias.name for alias in node.names]
+            elif isinstance(node, ast.ImportFrom) and node.module:
+                names = [node.module]
+            for imported in names:
+                top = imported.split(".")[0]
+                if top in cfg.FORBIDDEN_IMPORTS:
+                    return False, f"{name}: forbidden import '{imported}'"
+                if top not in cfg.STDLIB_MODULES and top != "api_client":
+                    return False, f"{name}: non-stdlib import '{imported}'"
+    return True, ""
+
+
+def _api_kit_sandbox(
+    kit_path: Path, api: dict[str, Any]
+) -> tuple[bool, str, str]:
+    """Extract the API kit and run unittest + ``api_client.py --dry-run``."""
+    try:
+        with zipfile.ZipFile(kit_path, "r") as archive:
+            with tempfile.TemporaryDirectory(prefix="flowmatrix-api-kit-") as tmp:
+                archive.extractall(tmp)
+                script_path = Path(tmp) / "api_client.py"
+                test_path = Path(tmp) / "test_mock.py"
+                script = script_path.read_text(encoding="utf-8")
+                test_script = test_path.read_text(encoding="utf-8")
+                ok, error = _api_kit_ast_ok(script, test_script)
+                if not ok:
+                    return False, error, script
+
+                env = os.environ.copy()
+                env["PYTHONDONTWRITEBYTECODE"] = "1"
+                for name in bundle_builder._env_names(script):  # noqa: SLF001
+                    env.setdefault(
+                        name,
+                        bundle_builder._dry_run_env_value(name),  # noqa: SLF001
+                    )
+                try:
+                    unit = subprocess.run(
+                        [sys.executable, "-m", "unittest", "test_mock.py"],
+                        cwd=tmp,
+                        capture_output=True,
+                        text=True,
+                        timeout=120,
+                        env=env,
+                    )
+                except subprocess.TimeoutExpired:
+                    return False, "unittest timed out after 120s", script
+                if unit.returncode != 0:
+                    return (
+                        False,
+                        f"unittest failed:\n{unit.stdout}\n{unit.stderr}",
+                        script,
+                    )
+                try:
+                    dry = subprocess.run(
+                        [sys.executable, "api_client.py", "--dry-run"],
+                        cwd=tmp,
+                        capture_output=True,
+                        text=True,
+                        timeout=120,
+                        env=env,
+                    )
+                except subprocess.TimeoutExpired:
+                    return False, "api_client.py --dry-run timed out after 120s", script
+                output = f"{dry.stdout}\n{dry.stderr}".strip()
+                if dry.returncode != 0 or "Traceback (most recent call last)" in output:
+                    return False, f"api_client.py --dry-run failed:\n{output}", script
+                return True, "", script
+    except Exception as error:  # noqa: BLE001
+        return False, f"{type(error).__name__}: {error}", ""
+
+
+def _repair_api_script(
+    api: dict[str, Any], script: str, output: str, attempt: int
+) -> str | None:
+    try:
+        repaired = llm_client.chat_code(
+            prompts.CODE_REPAIR_SYSTEM,
+            prompts.build_api_script_repair_prompt(api, script, output, attempt),
+        )
+    except llm_client.LLMError as error:
+        log(f"  [API-HEAL] repair attempt {attempt} failed: {error}")
+        return None
+    hardened, stats = harden_code(repaired)
+    with _LiveChecksDisabled():
+        result = validator.validate_api_script(hardened)
+    if result.ok:
+        log(
+            f"  [API-HEAL] repaired api_client.py "
+            f"({stats.get('imports', 0)} import(s) added)"
+        )
+        return hardened
+    log(f"  [API-HEAL] repaired script rejected: {'; '.join(result.errors)[:300]}")
+    return None
+
+
+def verify_api_pdf(
+    pdf_path: Path, api: dict[str, Any]
+) -> tuple[bool, int, str]:
+    if not pdf_path.exists():
+        return False, 0, f"PDF missing: {pdf_path}"
+    data = pdf_path.read_bytes()
+    if not data.startswith(b"%PDF"):
+        return False, 0, "PDF header is invalid"
+    pages = len(re.findall(rb"/Type\s*/Page\b", data))
+    if pages < 2:
+        return False, pages, f"API PDF has only {pages} page(s)"
+    if len(data) < 8000:
+        return False, pages, f"API PDF is too small ({len(data)} bytes)"
+    for marker in (
+        b"Premium Kit",
+        b"Created & Verified on",
+        b"Verification & Link Validity Notice",
+    ):
+        if marker not in data:
+            return False, pages, f"API PDF is missing marker {marker!r}"
+    return True, pages, ""
+
+
+def upload_api_artifacts(
+    script_path: Path, kit_path: Path, pdf_path: Path, slug: str
+) -> list[str]:
+    targets = [
+        (script_path, f"api-scripts/{slug}/{slug}.py"),
+        (kit_path, f"api-kits/{slug}-kit.zip"),
+        (pdf_path, f"api-kits/{slug}-cheatsheet.pdf"),
+        (pdf_path, f"api-kits/{slug}.pdf"),
+    ]
+    failed: list[str] = []
+    for path, key in targets:
+        if not upload_with_retry(path, key):
+            failed.append(key)
+    return failed
+
+
+def process_api_candidate(
+    api: dict[str, Any],
+    apis: list[dict[str, Any]],
+    *,
+    skip_r2: bool = False,
+) -> tuple[bool, str, dict[str, Any] | None]:
+    slug = str(api.get("slug") or "")
+    log(f"[API-CANDIDATE] {slug} | {api.get('title')}")
+
+    live_errors = live_domain_check([api])
+    if live_errors:
+        return False, "live domain check failed: " + "; ".join(live_errors), None
+
+    with _LiveChecksDisabled():
+        script, errors, _attempts = run_batch.generate_api_script(
+            api, {}, max_attempts=3
+        )
+    if not script:
+        return (
+            False,
+            "API script generation failed: " + "; ".join(errors)[-1200:],
+            None,
+        )
+
+    hardened, _stats = harden_code(script)
+    with _LiveChecksDisabled():
+        result = validator.validate_api_script(hardened)
+    if not result.ok:
+        for round_number in range(1, MAX_SELF_HEAL_ROUNDS + 1):
+            repaired = _repair_api_script(
+                api, hardened, "; ".join(result.errors), round_number
+            )
+            if not repaired:
+                continue
+            hardened = repaired
+            with _LiveChecksDisabled():
+                result = validator.validate_api_script(hardened)
+            if result.ok:
+                break
+    if not result.ok:
+        return (
+            False,
+            "API script validation failed: " + "; ".join(result.errors)[-1200:],
+            None,
+        )
+
+    api = sanitize_value(_api_metadata(api))
+    script_path = run_batch.write_api_script(api, hardened)
+    kit_path, pdf_path = bundle_builder.build_api_kit(
+        api, script_path, cfg.API_KITS_DIR
+    )
+    kit_result = validator.validate_kit_zip(kit_path, cfg.API_KIT_FILES)
+    if not kit_result.ok:
+        return (
+            False,
+            "API kit validation failed: " + "; ".join(kit_result.errors),
+            None,
+        )
+    pdf_ok, pages, pdf_error = verify_api_pdf(pdf_path, api)
+    if not pdf_ok:
+        return False, f"API PDF gate failed: {pdf_error}", None
+
+    for round_number in range(1, MAX_SELF_HEAL_ROUNDS + 2):
+        sandbox_ok, output, current_script = _api_kit_sandbox(kit_path, api)
+        if sandbox_ok:
+            break
+        if round_number > MAX_SELF_HEAL_ROUNDS:
+            return False, f"API sandbox failed: {output[-1500:]}", None
+        log(
+            f"  [API-HEAL] sandbox failed – repairing api_client.py "
+            f"(round {round_number}/{MAX_SELF_HEAL_ROUNDS})"
+        )
+        repaired = _repair_api_script(api, current_script, output, round_number)
+        if not repaired:
+            continue
+        script_path = run_batch.write_api_script(api, repaired)
+        kit_path, pdf_path = bundle_builder.build_api_kit(
+            api, script_path, cfg.API_KITS_DIR
+        )
+        kit_result = validator.validate_kit_zip(kit_path, cfg.API_KIT_FILES)
+        if not kit_result.ok:
+            return (
+                False,
+                "API kit validation failed after repair: "
+                + "; ".join(kit_result.errors),
+                None,
+            )
+        pdf_ok, pages, pdf_error = verify_api_pdf(pdf_path, api)
+        if not pdf_ok:
+            return False, f"API PDF gate failed after repair: {pdf_error}", None
+    else:
+        return False, "API sandbox failed after all repair rounds", None
+
+    if skip_r2:
+        log("  [R2] API upload skipped by --skip-r2 (debug only)")
+    else:
+        failed = upload_api_artifacts(script_path, kit_path, pdf_path, slug)
+        if failed:
+            return False, "API R2 upload failed: " + ", ".join(failed), None
+
+    index = next(
+        (position for position, item in enumerate(apis) if item.get("slug") == slug),
+        None,
+    )
+    if index is None:
+        apis.append(api)
+    else:
+        apis[index] = api
+    run_batch.save_json(cfg.APIS_FILE, apis)
+    log(f"  [API-OK] {slug} persisted (PDF {pages} pages, kit {kit_path.name})")
+    return True, "", api
+
+
+# --------------------------------------------------------------------------- #
+# Alternatives phase (4 new alternatives per full batch)
+# --------------------------------------------------------------------------- #
+def build_alternative_candidate_pool(
+    alternatives: list[dict[str, Any]],
+    apis: list[dict[str, Any]],
+    count: int,
+    seed: int,
+) -> list[dict[str, Any]]:
+    existing = {
+        str((alt.get("details") or {}).get("original") or "").strip().lower()
+        for alt in alternatives
+    }
+    seen = set(existing)
+    candidates: list[dict[str, Any]] = []
+
+    for api in apis:
+        details = api.get("details") or {}
+        provider = str(details.get("provider") or "").strip()
+        if not provider:
+            provider = re.sub(r"\s+API$", "", str(api.get("title") or "")).strip()
+        key = provider.lower()
+        if provider and key not in seen:
+            seen.add(key)
+            candidates.append(
+                {
+                    "original": provider,
+                    "category": str(api.get("category") or "Productivity"),
+                    "tags": [str(tag) for tag in (api.get("tags") or [])][:4],
+                }
+            )
+
+    for name in ALTERNATIVE_ORIGINALS:
+        key = name.lower()
+        if key not in seen:
+            seen.add(key)
+            candidates.append(
+                {
+                    "original": name,
+                    "category": "Productivity",
+                    "tags": ["alternatives", _slugify(name)],
+                }
+            )
+
+    rng = random.Random(seed)
+    rng.shuffle(candidates)
+    return candidates[: max(count * 5, 20)]
+
+
+def _alternative_skeleton(
+    candidate: dict[str, Any], alternatives: list[dict[str, Any]]
+) -> dict[str, Any]:
+    original = str(candidate.get("original") or "").strip()
+    existing_slugs = {str(alt.get("slug") or "") for alt in alternatives}
+    slug = _unique_slug(f"{_slugify(original)}-alternatives", existing_slugs)
+    return {
+        "slug": slug,
+        "title": f"{original} Alternatives",
+        "description": "",
+        "category": str(candidate.get("category") or "Productivity"),
+        "tags": [str(tag) for tag in (candidate.get("tags") or [])][:6],
+        "details": {
+            "original": original,
+            "alternatives": [],
+            "bestFor": "",
+            "pricing": "",
+            "features": [],
+        },
+    }
+
+
+def _merge_alternative(
+    skeleton: dict[str, Any], data: dict[str, Any]
+) -> dict[str, Any]:
+    candidate = json.loads(json.dumps(skeleton))
+    candidate["description"] = str(data.get("description") or "").strip()
+    if data.get("tags"):
+        candidate["tags"] = [
+            str(tag) for tag in data["tags"] if str(tag).strip()
+        ]
+    details = candidate["details"]
+    for key in ("bestFor", "pricing"):
+        details[key] = str(data.get(key) or "").strip()
+    details["features"] = [
+        str(item) for item in (data.get("features") or []) if str(item).strip()
+    ]
+    items: list[dict[str, Any]] = []
+    for item in data.get("alternatives") or []:
+        if not isinstance(item, dict):
+            continue
+        entry = dict(item)
+        url = str(entry.get("url") or "").strip()
+        if url.startswith(("http://", "https://")) and "ref=flowmatrix" not in url:
+            separator = "&" if "?" in url else "?"
+            entry["url"] = f"{url}{separator}ref=flowmatrix"
+        items.append(entry)
+    details["alternatives"] = items
+    return candidate
+
+
+def _alternative_dead_urls(candidate: dict[str, Any]) -> list[str]:
+    dead: list[str] = []
+    for item in (candidate.get("details") or {}).get("alternatives") or []:
+        if not isinstance(item, dict):
+            continue
+        url = str(item.get("url") or "").split("?")[0]
+        ok, reason = strict_url_ok(url)
+        if not ok:
+            dead.append(f"{item.get('name') or 'tool'}: {url} ({reason})")
+    return dead
+
+
+def process_alternative_candidate(
+    candidate_seed: dict[str, Any],
+    alternatives: list[dict[str, Any]],
+) -> tuple[bool, str, dict[str, Any] | None]:
+    skeleton = _alternative_skeleton(candidate_seed, alternatives)
+    feedback: str | None = None
+    last_errors: list[str] = []
+
+    for attempt in range(1, MAX_GENERATION_ATTEMPTS + 1):
+        log(
+            f"  [ALT-GEN] attempt {attempt}/{MAX_GENERATION_ATTEMPTS} "
+            f"for {skeleton['slug']}"
+        )
+        try:
+            data = llm_client.chat_json(
+                prompts.ALTERNATIVE_SYSTEM,
+                prompts.build_alternative_prompt(skeleton, feedback),
+            )
+        except llm_client.LLMError as error:
+            feedback = str(error)
+            last_errors = [feedback]
+            continue
+
+        candidate = sanitize_value(_merge_alternative(skeleton, data))
+        result = validator.validate_alternative(candidate)
+        result.errors.extend(
+            validator.check_duplicate(
+                str(candidate.get("slug") or ""),
+                str(candidate.get("title") or ""),
+                alternatives,
+            )
+        )
+        dead = _alternative_dead_urls(candidate)
+        if result.ok and not dead:
+            alternatives.append(candidate)
+            run_batch.save_json(cfg.ALTERNATIVES_FILE, alternatives)
+            log(f"  [ALT-OK] {candidate['slug']} persisted")
+            return True, "", candidate
+
+        last_errors = result.errors + dead
+        feedback = "; ".join(last_errors)
+        log(f"  [ALT-RETRY] {skeleton['slug']}: {feedback[:500]}")
+
+    return False, "; ".join(last_errors)[-1500:], None
+
+
+# --------------------------------------------------------------------------- #
+# Preferred workflow concepts (include the freshly generated APIs)
+# --------------------------------------------------------------------------- #
+def build_preferred_concepts(
+    preferred_apis: list[dict[str, Any]],
+    apis: list[dict[str, Any]],
+    alternatives: list[dict[str, Any]],
+    workflows: list[dict[str, Any]],
+    count: int,
+    seed: int,
+) -> list[dict[str, Any]]:
+    if not preferred_apis or count <= 0:
+        return []
+    existing_slugs = {str(item.get("slug") or "") for item in workflows}
+    existing_titles = {
+        str(item.get("title") or "").strip().lower() for item in workflows
+    }
+    existing_combos: set[frozenset[str]] = set()
+    for workflow in workflows:
+        slugs = [
+            str(slug)
+            for slug in ((workflow.get("details") or {}).get("api_slugs") or [])
+            if str(slug).strip()
+        ]
+        if 2 <= len(slugs) <= 4:
+            existing_combos.add(frozenset(slugs))
+
+    usable = [
+        api
+        for api in apis
+        if str((api.get("details") or {}).get("endpoint") or "").strip()
+    ]
+    rng = random.Random(seed)
+    concepts: list[dict[str, Any]] = []
+    for api in preferred_apis[:count]:
+        partners = [
+            partner
+            for partner in usable
+            if partner.get("slug") != api.get("slug")
+        ]
+        rng.shuffle(partners)
+        added = 0
+        for partner in partners:
+            combo = _order_combo([api, partner])
+            key = frozenset(str(item.get("slug")) for item in combo)
+            if key in existing_combos:
+                continue
+            existing_combos.add(key)
+            concepts.append(
+                build_concept(
+                    combo, alternatives, existing_slugs, existing_titles
+                )
+            )
+            added += 1
+            # Several fallbacks per new API so a dead partner domain cannot
+            # silently remove the new API from the workflow batch.
+            if added >= 3:
+                break
+    return concepts
+
+
+# --------------------------------------------------------------------------- #
 # Full validation
 # --------------------------------------------------------------------------- #
 def validate_candidate(
@@ -1537,9 +2208,17 @@ def process_candidate(
 # --------------------------------------------------------------------------- #
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Unattended FlowMatrix 3-day workflow daemon"
+        description="Unattended FlowMatrix 3-day batch daemon"
     )
-    parser.add_argument("--target-count", type=int, default=3)
+    parser.add_argument("--apis", type=int, default=3)
+    parser.add_argument("--alternatives", type=int, default=4)
+    parser.add_argument("--workflows", type=int, default=3)
+    parser.add_argument(
+        "--target-count",
+        type=int,
+        default=None,
+        help="Alias for --workflows (backwards compatible)",
+    )
     parser.add_argument("--pool-size", type=int, default=MIN_POOL_SIZE)
     parser.add_argument(
         "--model",
@@ -1552,7 +2231,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--plan-only",
         action="store_true",
-        help="Build and print the candidate pool without calling the LLM",
+        help="Build and print all candidate pools without calling the LLM",
     )
     parser.add_argument("--skip-git", action="store_true", help="Skip pull/commit/push")
     parser.add_argument("--skip-build", action="store_true", help="Skip npm run build")
@@ -1569,12 +2248,39 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help="Also deploy dist/ to Cloudflare Pages directly (GitHub Actions already deploys)",
     )
-    return parser.parse_args(sys.argv[1:] if argv is None else argv)
+    args = parser.parse_args(sys.argv[1:] if argv is None else argv)
+    if args.target_count is not None:
+        args.workflows = args.target_count
+    return args
+
+
+def _new_record_count(path: Path, head_path: str) -> int:
+    try:
+        current = json.loads(path.read_text(encoding="utf-8"))
+        previous = json.loads(
+            subprocess.check_output(
+                ["git", "show", f"HEAD:{head_path}"],
+                cwd=str(_ROOT),
+                text=True,
+            )
+        )
+    except Exception:  # noqa: BLE001
+        return 0
+    previous_slugs = {str(item.get("slug") or "") for item in previous}
+    return len(
+        [
+            item
+            for item in current
+            if str(item.get("slug") or "") not in previous_slugs
+        ]
+    )
 
 
 def _finalize(
     args: argparse.Namespace,
-    successful: list[str],
+    successful_apis: list[str],
+    successful_alternatives: list[str],
+    successful_workflows: list[str],
 ) -> tuple[bool, bool]:
     git_ok = True
     build_ok = True
@@ -1583,13 +2289,33 @@ def _finalize(
         # ``git_commit_and_push`` performs its own pull --rebase immediately
         # before pushing; an additional pull here must not become a hard gate.
         git_pull()
+
+    # Hard gate: the CI runs ``prettier --check .`` before it builds or
+    # deploys. Unformatted generated JSON must never be pushed.
+    sanitize_datasets()
+    format_ok = format_generated_content()
+
     if not args.skip_build:
         build_ok = build_frontend()
     if not args.skip_git:
-        message = (
-            f"chore(auto-batch): add {len(successful)} verified implementation kits"
+        api_count = len(successful_apis)
+        alternative_count = len(successful_alternatives)
+        workflow_count = _new_record_count(
+            cfg.WORKFLOWS_FILE, "src/data/workflows.json"
         )
-        git_ok = git_commit_and_push(message)
+        message = (
+            f"chore(auto-batch): add {api_count} API kit"
+            f"{'s' if api_count != 1 else ''}, {alternative_count} alternative"
+            f"{'s' if alternative_count != 1 else ''}, {workflow_count} workflow kit"
+            f"{'s' if workflow_count != 1 else ''} (verified)"
+        )
+        if format_ok:
+            git_ok = git_commit_and_push(message)
+        else:
+            log("[FORMAT] refusing to commit unformatted content")
+            git_ok = False
+    else:
+        git_ok = format_ok
     if args.cloudflare_deploy and build_ok:
         try:
             run_batch.run_deploy()
@@ -1602,154 +2328,378 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     cfg.load_env()
     cfg.LLM_MODEL = args.model
+    # Keep unattended runs responsive: a stalled LLM call must not block the
+    # whole batch for 12+ minutes. The daemon has its own outer retry loop.
+    cfg.LLM_TIMEOUT = int(os.environ.get("AUTO_BATCH_LLM_TIMEOUT", "90"))
+    cfg.LLM_MAX_ATTEMPTS = int(os.environ.get("AUTO_BATCH_LLM_ATTEMPTS", "1"))
+
+    targets = {
+        "apis": max(0, args.apis),
+        "alternatives": max(0, args.alternatives),
+        "workflows": max(0, args.workflows),
+    }
     log("=" * 78)
     log(
-        f"AUTO 3-DAY DAEMON START | target={args.target_count} "
-        f"pool={max(MIN_POOL_SIZE, args.pool_size)} model={cfg.LLM_MODEL}"
+        f"AUTO 3-DAY BATCH START | apis={targets['apis']} "
+        f"alternatives={targets['alternatives']} workflows={targets['workflows']} "
+        f"model={cfg.LLM_MODEL}"
     )
 
     if not os.environ.get("OPENROUTER_API_KEY", "").strip():
         log("[FATAL] OPENROUTER_API_KEY is not set")
         return 2
 
-    state = _load_state()
-    state.update(
-        {
-            "status": "running",
-            "started_at": _now(),
-            "target": args.target_count,
-            "model": cfg.LLM_MODEL,
-            "successful": [],
-            "rejected": [],
-        }
-    )
-    _save_state(state)
-
     python_bin = Path(sys.executable)
-
     if not args.skip_git:
         if not git_pull():
             log("[WARN] initial git pull failed – continuing with the local tree")
 
-    workflows = run_batch.load_json(cfg.WORKFLOWS_FILE) if cfg.WORKFLOWS_FILE.exists() else []
+    workflows = (
+        run_batch.load_json(cfg.WORKFLOWS_FILE)
+        if cfg.WORKFLOWS_FILE.exists()
+        else []
+    )
     apis = run_batch.load_json(cfg.APIS_FILE)
     alternatives = run_batch.load_json(cfg.ALTERNATIVES_FILE)
 
     seed = args.seed if args.seed is not None else int(time.time() // 86400)
     pool_size = max(MIN_POOL_SIZE, args.pool_size)
-    pool = build_candidate_pool(apis, alternatives, workflows, pool_size, seed)
-    log(f"[POOL] prepared {len(pool)} candidate concept(s) (minimum {MIN_POOL_SIZE})")
-    if not pool:
-        log("[FATAL] no candidate concepts could be built")
-        state["status"] = "failed"
-        state["last_error"] = "empty candidate pool"
+
+    prior = _load_state()
+    resumable = (
+        prior.get("status") == "running"
+        and prior.get("targets") == targets
+        and isinstance(prior.get("batch"), dict)
+    )
+    if resumable:
+        batch = prior["batch"]
+        successful_apis = [
+            slug
+            for slug in batch.get("apis", [])
+            if any(api.get("slug") == slug for api in apis)
+        ]
+        successful_alternatives = [
+            slug
+            for slug in batch.get("alternatives", [])
+            if any(alt.get("slug") == slug for alt in alternatives)
+        ]
+        successful_workflows = [
+            slug
+            for slug in batch.get("workflows", [])
+            if any(wf.get("slug") == slug for wf in workflows)
+        ]
+        rejected = batch.get(
+            "rejected", {"apis": [], "alternatives": [], "workflows": []}
+        )
+        log(
+            f"[RESUME] apis={len(successful_apis)} "
+            f"alternatives={len(successful_alternatives)} "
+            f"workflows={len(successful_workflows)}"
+        )
+    else:
+        successful_apis = []
+        successful_alternatives = []
+        successful_workflows = []
+        rejected = {"apis": [], "alternatives": [], "workflows": []}
+
+    state: dict[str, Any] = {
+        "status": "running",
+        "started_at": prior.get("started_at") if resumable else _now(),
+        "targets": targets,
+        "model": cfg.LLM_MODEL,
+        "batch": {
+            "apis": list(successful_apis),
+            "alternatives": list(successful_alternatives),
+            "workflows": list(successful_workflows),
+            "rejected": rejected,
+        },
+    }
+
+    def sync_state() -> None:
+        state["batch"] = {
+            "apis": list(successful_apis),
+            "alternatives": list(successful_alternatives),
+            "workflows": list(successful_workflows),
+            "rejected": rejected,
+        }
         _save_state(state)
-        return 1
+
+    sync_state()
 
     if args.plan_only:
-        for index, concept in enumerate(pool, start=1):
+        api_pool = build_api_candidate_pool(
+            apis, targets["apis"], seed, set(successful_apis)
+        )
+        alt_pool = build_alternative_candidate_pool(
+            alternatives, apis, targets["alternatives"], seed + 1
+        )
+        wf_pool = build_candidate_pool(
+            apis, alternatives, workflows, pool_size, seed + 2
+        )
+        log(f"[PLAN] API candidates: {len(api_pool)}")
+        for index, api in enumerate(api_pool[:10], start=1):
+            log(f"  API {index:02d}. {api.get('slug')} | {api.get('title')}")
+        log(f"[PLAN] Alternative candidates: {len(alt_pool)}")
+        for index, item in enumerate(alt_pool[:10], start=1):
+            log(f"  ALT {index:02d}. {item.get('original')}")
+        log(f"[PLAN] Workflow candidates: {len(wf_pool)}")
+        for index, concept in enumerate(wf_pool[:10], start=1):
             log(
-                f"  {index:02d}. {concept['slug']} | {concept['difficulty']} | "
-                f"€{concept['price']:.2f} | "
+                f"  WF {index:02d}. {concept['slug']} | "
+                f"{concept['difficulty']} | €{concept['price']:.2f} | "
                 f"{', '.join(payload['slug'] for payload in concept['payloads'])}"
             )
         state["status"] = "plan-only"
-        state["pool_size"] = len(pool)
-        _save_state(state)
+        sync_state()
         return 0
 
-    successful: list[str] = []
-    rejected: list[dict[str, Any]] = []
-    attempt_counter = 0
-    extension = 0
-
-    while len(successful) < args.target_count:
-        if not pool:
-            # Extend the pool deterministically instead of aborting. The first
-            # pool is always >= 10; extensions only add resilience.
-            extension += 1
-            if extension > 6:
-                log("[FATAL] candidate pool exhausted after six extensions")
-                break
-            extra = build_candidate_pool(
-                apis,
-                alternatives,
-                workflows,
-                pool_size,
-                seed + extension * 7919,
-            )
-            known = {
-                str(item.get("slug"))
-                for item in workflows
-            } | {concept["slug"] for concept in pool}
-            extra = [concept for concept in extra if concept["slug"] not in known]
-            if not extra:
-                log("[FATAL] could not extend the candidate pool")
-                break
-            pool.extend(extra)
-            log(f"[POOL] extended by {len(extra)} candidate(s)")
-
-        concept = pool.pop(0)
-        attempt_counter += 1
-        state["attempts"] = attempt_counter
-        _save_state(state)
-
-        try:
-            ok, reason, candidate = process_candidate(
-                concept,
-                workflows,
-                alternatives,
-                skip_r2=args.skip_r2,
-            )
-        except Exception as error:  # noqa: BLE001 - never abort the loop
-            ok = False
-            candidate = None
-            reason = (
-                f"{type(error).__name__}: {error}\n"
-                f"{traceback.format_exc()[-1200:]}"
-            )
-            log(f"  [FAIL] unexpected error for {concept['slug']}: {reason}")
-
-        if ok and candidate is not None:
-            successful.append(str(candidate["slug"]))
-            state["successful"] = list(successful)
-            log(
-                f"[SUCCESS {len(successful)}/{args.target_count}] "
-                f"{candidate['slug']}"
-            )
-        else:
-            rejected.append(
-                {
-                    "slug": concept["slug"],
-                    "reason": reason[-1500:],
-                    "timestamp": _now(),
-                }
-            )
-            state["rejected"] = list(rejected)
-            log(f"  [DISCARD] {concept['slug']}: {reason[-500:]}")
-            # Drop the candidate from workflows.json if a partial record exists.
-            workflows[:] = [
-                item
-                for item in workflows
-                if item.get("slug") != concept["slug"]
-            ]
-        _save_state(state)
-
-    if len(successful) < args.target_count:
-        log(
-            f"[FATAL] only {len(successful)}/{args.target_count} workflows "
-            "passed every gate – nothing was committed or pushed"
+    # ------------------------------------------------------------------ #
+    # Phase 1: API production kits
+    # ------------------------------------------------------------------ #
+    if targets["apis"] > 0:
+        api_pool = build_api_candidate_pool(
+            apis, targets["apis"], seed, set(successful_apis)
         )
-        state["status"] = "incomplete"
-        state["finished_at"] = _now()
-        _save_state(state)
-        return 1
+        extension = 0
+        while len(successful_apis) < targets["apis"]:
+            if not api_pool:
+                extension += 1
+                if extension > 6:
+                    break
+                extra = build_api_candidate_pool(
+                    apis,
+                    targets["apis"],
+                    seed + extension * 7919,
+                    set(successful_apis),
+                )
+                known = {str(api.get("slug")) for api in api_pool}
+                extra = [
+                    api for api in extra if str(api.get("slug")) not in known
+                ]
+                if not extra:
+                    break
+                api_pool.extend(extra)
+                log(f"[API-POOL] extended by {len(extra)} candidate(s)")
+            api = api_pool.pop(0)
+            try:
+                ok, reason, _ = process_api_candidate(
+                    api, apis, skip_r2=args.skip_r2
+                )
+            except Exception as error:  # noqa: BLE001
+                ok = False
+                reason = (
+                    f"{type(error).__name__}: {error}\n"
+                    f"{traceback.format_exc()[-1200:]}"
+                )
+            if ok:
+                successful_apis.append(str(api.get("slug")))
+                log(
+                    f"[API-SUCCESS {len(successful_apis)}/{targets['apis']}] "
+                    f"{api.get('slug')}"
+                )
+            else:
+                rejected["apis"].append(
+                    {
+                        "slug": api.get("slug"),
+                        "reason": reason[-1500:],
+                        "timestamp": _now(),
+                    }
+                )
+                log(f"  [API-DISCARD] {api.get('slug')}: {reason[-500:]}")
+            sync_state()
+        if len(successful_apis) < targets["apis"]:
+            log(
+                f"[FATAL] only {len(successful_apis)}/{targets['apis']} API kits "
+                "passed every gate – nothing was committed or pushed"
+            )
+            state["status"] = "incomplete"
+            state["finished_at"] = _now()
+            sync_state()
+            return 1
 
-    log(f"[DELIVERY] {len(successful)} perfect workflows ready – starting git sync")
+    # ------------------------------------------------------------------ #
+    # Phase 2: Alternatives
+    # ------------------------------------------------------------------ #
+    if targets["alternatives"] > 0:
+        alt_pool = build_alternative_candidate_pool(
+            alternatives, apis, targets["alternatives"], seed + 1
+        )
+        extension = 0
+        while len(successful_alternatives) < targets["alternatives"]:
+            if not alt_pool:
+                extension += 1
+                if extension > 6:
+                    break
+                extra = build_alternative_candidate_pool(
+                    alternatives,
+                    apis,
+                    targets["alternatives"],
+                    seed + 1 + extension * 7919,
+                )
+                known = {str(item.get("original")) for item in alt_pool}
+                extra = [
+                    item
+                    for item in extra
+                    if str(item.get("original")) not in known
+                ]
+                if not extra:
+                    break
+                alt_pool.extend(extra)
+                log(f"[ALT-POOL] extended by {len(extra)} candidate(s)")
+            candidate_seed = alt_pool.pop(0)
+            try:
+                ok, reason, candidate = process_alternative_candidate(
+                    candidate_seed, alternatives
+                )
+            except Exception as error:  # noqa: BLE001
+                ok = False
+                candidate = None
+                reason = (
+                    f"{type(error).__name__}: {error}\n"
+                    f"{traceback.format_exc()[-1200:]}"
+                )
+            if ok and candidate is not None:
+                successful_alternatives.append(str(candidate.get("slug")))
+                log(
+                    f"[ALT-SUCCESS {len(successful_alternatives)}/"
+                    f"{targets['alternatives']}] {candidate.get('slug')}"
+                )
+            else:
+                rejected["alternatives"].append(
+                    {
+                        "slug": candidate_seed.get("original"),
+                        "reason": reason[-1500:],
+                        "timestamp": _now(),
+                    }
+                )
+                log(
+                    f"  [ALT-DISCARD] {candidate_seed.get('original')}: "
+                    f"{reason[-500:]}"
+                )
+            sync_state()
+        if len(successful_alternatives) < targets["alternatives"]:
+            log(
+                f"[FATAL] only {len(successful_alternatives)}/"
+                f"{targets['alternatives']} alternatives passed every gate – "
+                "nothing was committed or pushed"
+            )
+            state["status"] = "incomplete"
+            state["finished_at"] = _now()
+            sync_state()
+            return 1
+
+    # ------------------------------------------------------------------ #
+    # Phase 3: Workflow kits (prefer the freshly generated APIs)
+    # ------------------------------------------------------------------ #
+    if targets["workflows"] > 0:
+        new_api_records = [
+            api for api in apis if str(api.get("slug")) in successful_apis
+        ]
+        pool = build_candidate_pool(
+            apis, alternatives, workflows, pool_size, seed + 2
+        )
+        preferred = build_preferred_concepts(
+            new_api_records,
+            apis,
+            alternatives,
+            workflows,
+            targets["workflows"],
+            seed + 3,
+        )
+        preferred_slugs = {concept["slug"] for concept in preferred}
+        pool = preferred + [
+            concept for concept in pool if concept["slug"] not in preferred_slugs
+        ]
+        log(
+            f"[WF-POOL] prepared {len(pool)} candidate concept(s) "
+            f"({len(preferred)} include a new API)"
+        )
+        extension = 0
+        while len(successful_workflows) < targets["workflows"]:
+            if not pool:
+                extension += 1
+                if extension > 6:
+                    break
+                extra = build_candidate_pool(
+                    apis,
+                    alternatives,
+                    workflows,
+                    pool_size,
+                    seed + 2 + extension * 7919,
+                )
+                known = {str(item.get("slug")) for item in workflows} | {
+                    concept["slug"] for concept in pool
+                }
+                extra = [
+                    concept for concept in extra if concept["slug"] not in known
+                ]
+                if not extra:
+                    break
+                pool.extend(extra)
+                log(f"[WF-POOL] extended by {len(extra)} candidate(s)")
+            concept = pool.pop(0)
+            try:
+                ok, reason, candidate = process_candidate(
+                    concept,
+                    workflows,
+                    alternatives,
+                    skip_r2=args.skip_r2,
+                )
+            except Exception as error:  # noqa: BLE001
+                ok = False
+                candidate = None
+                reason = (
+                    f"{type(error).__name__}: {error}\n"
+                    f"{traceback.format_exc()[-1200:]}"
+                )
+            if ok and candidate is not None:
+                successful_workflows.append(str(candidate.get("slug")))
+                log(
+                    f"[WF-SUCCESS {len(successful_workflows)}/"
+                    f"{targets['workflows']}] {candidate.get('slug')}"
+                )
+            else:
+                rejected["workflows"].append(
+                    {
+                        "slug": concept["slug"],
+                        "reason": reason[-1500:],
+                        "timestamp": _now(),
+                    }
+                )
+                log(f"  [WF-DISCARD] {concept['slug']}: {reason[-500:]}")
+                workflows[:] = [
+                    item
+                    for item in workflows
+                    if item.get("slug") != concept["slug"]
+                ]
+            sync_state()
+        if len(successful_workflows) < targets["workflows"]:
+            log(
+                f"[FATAL] only {len(successful_workflows)}/"
+                f"{targets['workflows']} workflows passed every gate – "
+                "nothing was committed or pushed"
+            )
+            state["status"] = "incomplete"
+            state["finished_at"] = _now()
+            sync_state()
+            return 1
+
+    # ------------------------------------------------------------------ #
+    # Delivery
+    # ------------------------------------------------------------------ #
+    log(
+        f"[DELIVERY] {len(successful_apis)} API kits, "
+        f"{len(successful_alternatives)} alternatives, "
+        f"{len(successful_workflows)} workflow kits ready – starting git sync"
+    )
     if not args.no_launchd:
-        # Written before the commit so the launchd definition is versioned.
         write_plist(python_bin)
-    git_ok, build_ok = _finalize(args, successful)
+    git_ok, build_ok = _finalize(
+        args,
+        successful_apis,
+        successful_alternatives,
+        successful_workflows,
+    )
     if not (git_ok and build_ok):
         log(
             "[FATAL] delivery step failed "
@@ -1760,24 +2710,22 @@ def main(argv: list[str] | None = None) -> int:
         state["git_ok"] = git_ok
         state["build_ok"] = build_ok
         state["finished_at"] = _now()
-        _save_state(state)
+        sync_state()
         return 1
 
     state["status"] = "success"
     state["finished_at"] = _now()
-    state["pool_size"] = len(pool)
-    _save_state(state)
+    sync_state()
 
-    # Activate the launchd job only after a fully successful proof/delivery run.
-    # This guarantees that a broken revision can never be scheduled every 72h.
     if not args.no_launchd:
         try:
             load_plist()
         except Exception as error:  # noqa: BLE001 - scheduling must not block work
             log(f"[LAUNCHD] could not load job: {error}")
     log(
-        f"AUTO 3-DAY DAEMON COMPLETE | {len(successful)} workflows | "
-        f"{len(rejected)} candidate(s) discarded"
+        f"AUTO 3-DAY BATCH COMPLETE | {len(successful_apis)} API kits | "
+        f"{len(successful_alternatives)} alternatives | "
+        f"{len(successful_workflows)} workflow kits"
     )
     log("=" * 78)
     return 0

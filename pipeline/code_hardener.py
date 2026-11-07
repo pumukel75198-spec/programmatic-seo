@@ -26,6 +26,11 @@ import ast
 import re
 from typing import Any
 
+try:  # package import
+    from .secret_sanitizer import sanitize_text
+except ImportError:  # direct execution: python pipeline/code_hardener.py
+    from secret_sanitizer import sanitize_text
+
 # --------------------------------------------------------------------------- #
 # Heuristics
 # --------------------------------------------------------------------------- #
@@ -588,6 +593,8 @@ def harden_code(source: str) -> tuple[str, dict[str, Any]]:
         except Exception as error:  # noqa: BLE001 - hardening must never break
             stats["error"] = f"{type(error).__name__}: {error}"
 
+    # Remove credential-shaped mock strings before the AST/import gates run.
+    hardened = sanitize_text(hardened, code=True)
     hardened, env_count = _hardening_regex(hardened)
     stats["environment"] = env_count
     hardened, import_count = ensure_imports(hardened)

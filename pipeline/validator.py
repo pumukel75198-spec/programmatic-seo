@@ -1070,6 +1070,17 @@ def validate_api_script(script: str) -> ValidationResult:
         result.add('API script: missing executable `if __name__ == "__main__"` block')
     if "os.environ" not in script:
         result.add("API script: configuration must use os.environ")
+    if "--dry-run" not in script:
+        result.add(
+            "API script: missing mandatory `--dry-run` argparse mode "
+            "(the sandbox executes `python3 api_client.py --dry-run`)"
+        )
+    if "argparse" not in script:
+        result.add("API script: --dry-run mode must use argparse")
+    if "def request_json(" not in script:
+        result.add(
+            "API script: missing the mandatory top-level `request_json(...)` helper"
+        )
 
     try:
         tree = ast.parse(script)
@@ -1808,9 +1819,49 @@ def validate_alternative(alternative: dict[str, Any]) -> ValidationResult:
         result.add("Alternative: missing slug")
     if not str(alternative.get("description", "")).strip():
         result.add("Alternative: missing description")
-    items = (alternative.get("details") or {}).get("alternatives") or []
+
+    details = alternative.get("details") or {}
+    for key in ("original", "bestFor", "pricing"):
+        if not str(details.get(key) or "").strip():
+            result.add(f"Alternative: details.{key} is missing")
+    features = details.get("features") or []
+    if len(features) < 3:
+        result.add(
+            f"Alternative: details.features needs at least 3 entries, "
+            f"found {len(features)}"
+        )
+
+    items = details.get("alternatives") or []
     if len(items) < 3:
         result.add("Alternative: needs at least 3 alternatives")
+    for index, item in enumerate(items, start=1):
+        if isinstance(item, str):
+            result.add(
+                f"Alternative: item {index} must be an object with name, "
+                "description, pros, cons, bestFor and url"
+            )
+            continue
+        if not isinstance(item, dict):
+            result.add(f"Alternative: item {index} is not an object")
+            continue
+        for key in ("name", "description", "bestFor"):
+            if not str(item.get(key) or "").strip():
+                result.add(f"Alternative: item {index} is missing {key}")
+        pros = item.get("pros") or []
+        cons = item.get("cons") or []
+        if len(pros) < 2:
+            result.add(f"Alternative: item {index} needs at least 2 pros")
+        if len(cons) < 2:
+            result.add(f"Alternative: item {index} needs at least 2 cons")
+        url = str(item.get("url") or "").strip()
+        if not url.startswith(("http://", "https://")):
+            result.add(f"Alternative: item {index} needs a full http(s) URL")
+        elif "ref=flowmatrix" not in url:
+            result.add(
+                f"Alternative: item {index} URL must carry the affiliate "
+                "parameter `?ref=flowmatrix`"
+            )
+
     for message in scan_blacklist(alternative):
         result.add(message)
     for message in validate_english(alternative, "Alternative"):

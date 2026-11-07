@@ -2283,8 +2283,12 @@
       "sdkLanguages": ["JavaScript", "Python", "Ruby"],
       "rateLimit": "50 requests/second",
       "endpoint": "https://slack.com/api",
-      "docsUrl": "https://api.slack.com/docs"
-    }
+      "docsUrl": "https://api.slack.com/docs",
+      "lastVerified": "2026-11-07 07:15 UTC",
+      "disclaimer": "Verification & Link Validity Notice: This workflow blueprint was generated and technically verified on 2026-11-07 07:15 UTC. At the exact time of creation, all referenced domains, API endpoints, and external resource links were tested and confirmed reachable. Because third-party APIs and web services evolve continuously, domains, endpoints, or links inside this document may change or become unavailable over time."
+    },
+    "created_and_verified_at": "2026-11-07 07:15 UTC",
+    "price": 29.99
   },
   {
     "slug": "tinkr-api",

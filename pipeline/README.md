@@ -7,18 +7,18 @@ generators, PDF layouts, validators and batch scripts have been removed.
 
 ## Modules
 
-| File                     | Responsibility                                                                                                                                      |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `config.py`              | Paths, binding prices, import whitelist, blacklist, variable step bounds, timestamp/disclaimer, placeholder→base-domain map                         |
-| `schemas.py`             | Strict Pydantic models (variable step count, `resources`, `created_and_verified_at`)                                                                |
-| `prompts.py`             | The only valid LLM system prompts (100 % English, didactic depth, tool consistency, correct API patterns, binding step assignment)                  |
-| `llm_client.py`          | OpenRouter client (standard library, retries, backoff)                                                                                              |
-| `validator.py`           | Hard gatekeeper: AST per step + concatenated, stdlib imports, mock execution, blacklist, dummy/random ban, tool consistency, live HTTP reachability |
-| `code_hardener.py`       | AST transformer that rewrites every JSON subscript read into `.get(key, default)` and every `os.environ["X"]` into a defaulting accessor            |
-| `pdf_renderer.py`        | The only PDF layout – dynamic, content-driven page count, H1 title, timestamp, link disclaimer                                                      |
-| `bundle_builder.py`      | Builds the `<slug>-kit.zip` Implementation Kits (workflow + API)                                                                                    |
-| `run_batch.py`           | Batch entry point: generate → validate → retry → store → PDF → kit → R2 → build → deploy                                                             |
-| `auto_3day_daemon.py`    | **Unattended production daemon**: deterministic metadata, replacement pool, traceback self-healing, R2/PDF/kit gates, git sync, launchd installation |
+| File                  | Responsibility                                                                                                                                       |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `config.py`           | Paths, binding prices, import whitelist, blacklist, variable step bounds, timestamp/disclaimer, placeholder→base-domain map                          |
+| `schemas.py`          | Strict Pydantic models (variable step count, `resources`, `created_and_verified_at`)                                                                 |
+| `prompts.py`          | The only valid LLM system prompts (100 % English, didactic depth, tool consistency, correct API patterns, binding step assignment)                   |
+| `llm_client.py`       | OpenRouter client (standard library, retries, backoff)                                                                                               |
+| `validator.py`        | Hard gatekeeper: AST per step + concatenated, stdlib imports, mock execution, blacklist, dummy/random ban, tool consistency, live HTTP reachability  |
+| `code_hardener.py`    | AST transformer that rewrites every JSON subscript read into `.get(key, default)` and every `os.environ["X"]` into a defaulting accessor             |
+| `pdf_renderer.py`     | The only PDF layout – dynamic, content-driven page count, H1 title, timestamp, link disclaimer                                                       |
+| `bundle_builder.py`   | Builds the `<slug>-kit.zip` Implementation Kits (workflow + API)                                                                                     |
+| `run_batch.py`        | Batch entry point: generate → validate → retry → store → PDF → kit → R2 → build → deploy                                                             |
+| `auto_3day_daemon.py` | **Unattended production daemon**: deterministic metadata, replacement pool, traceback self-healing, R2/PDF/kit gates, git sync, launchd installation |
 
 ## Setup
 
@@ -71,7 +71,7 @@ system interpreter lacks `reportlab`/`pydantic`. Its contract:
    three successes exist.
 5. **Delivery** – `git pull --rebase --autostash origin main`, `npm run build`,
    `git add -A && git commit -m "chore(auto-batch): add 3 verified
-   implementation kits" && git push origin main`, then installation of
+implementation kits" && git push origin main`, then installation of
    `pipeline/com.flowmatrix.autobatch.plist` as a launchd job with
    `StartInterval = 259200` seconds (72 hours).
 

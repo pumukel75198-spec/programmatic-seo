@@ -888,6 +888,17 @@ def generate_alternative(
             candidate["tags"] = data["tags"]
         if data.get("alternatives"):
             details["alternatives"] = data["alternatives"]
+        for key in ("bestFor", "pricing", "features"):
+            if data.get(key):
+                details[key] = data[key]
+        # Enforce the affiliate parameter on every real tool URL.
+        for item in details.get("alternatives") or []:
+            if not isinstance(item, dict):
+                continue
+            url = str(item.get("url") or "").strip()
+            if url.startswith(("http://", "https://")) and "ref=flowmatrix" not in url:
+                separator = "&" if "?" in url else "?"
+                item["url"] = f"{url}{separator}ref=flowmatrix"
 
         result = validator.validate_alternative(candidate)
         result.errors.extend(

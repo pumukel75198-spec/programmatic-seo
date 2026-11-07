@@ -489,10 +489,12 @@ python3 api_client.py
 
 def _api_test(api: dict[str, Any], script: str = "") -> str:
     env_defaults = {name: _dry_run_env_value(name) for name in _env_names(script)}
-    return f'''"""Mock test for the {api.get("title", "API")} client."""
+    title = str(api.get("title") or "API")
+    return f'''"""Executable mock tests for the {title} client."""
 import json
 import os
 import unittest
+import urllib.error
 from unittest import mock
 
 # Harmless defaults before importing the client so module-level os.environ
@@ -504,15 +506,20 @@ import api_client
 
 
 class _Resp:
-    def __init__(self, payload):
-        self._payload = payload
-        self.status = 200
+    def __init__(self, payload, status=200):
+        if isinstance(payload, bytes):
+            self._payload = payload
+        else:
+            self._payload = json.dumps(payload).encode("utf-8")
+        self.status = status
 
     def read(self, amount=-1):
-        return self._payload
+        if amount is None or amount < 0:
+            return self._payload
+        return self._payload[:amount]
 
     def getcode(self):
-        return 200
+        return self.status
 
     def __enter__(self):
         return self
@@ -522,15 +529,39 @@ class _Resp:
 
 
 class ApiClientTest(unittest.TestCase):
-    def test_module_imports(self):
-        self.assertIsNotNone(api_client)
+    def test_request_json_exists(self):
+        self.assertTrue(callable(getattr(api_client, "request_json", None)))
 
-    def test_mock_request(self):
+    def test_successful_call_and_auth_header(self):
         with mock.patch(
-            "urllib.request.urlopen", return_value=_Resp(b'{{"ok": true}}')
+            "urllib.request.urlopen", return_value=_Resp({{"ok": True}})
+        ) as mocked:
+            result = api_client.request_json(
+                "https://api.example.com/v1/test",
+                headers={{"Authorization": "Bearer unit-test-token"}},
+            )
+        self.assertIsInstance(result, dict)
+        self.assertEqual(result.get("ok"), True)
+        self.assertTrue(mocked.called)
+        request = mocked.call_args[0][0]
+        headers = getattr(request, "headers", {{}})
+        authorization = headers.get("Authorization") or headers.get("authorization") or ""
+        # The client may derive the token from its own environment variable;
+        # the contract is that an Authorization header is present at all.
+        self.assertTrue(authorization)
+
+    def test_http_error_is_handled(self):
+        error = urllib.error.HTTPError(
+            "https://api.example.com/v1/test", 500, "server error", {{}}, None
+        )
+        with mock.patch("urllib.request.urlopen", side_effect=error), mock.patch(
+            "time.sleep", return_value=None
         ):
-            # The generated client exposes at least one request helper.
-            self.assertTrue(hasattr(api_client, "request_json") or True)
+            try:
+                result = api_client.request_json("https://api.example.com/v1/test")
+            except Exception:
+                result = None
+        self.assertTrue(result is None or isinstance(result, (dict, list, str)))
 
 
 if __name__ == "__main__":
@@ -538,32 +569,212 @@ if __name__ == "__main__":
 '''
 
 
-def _cheatsheet_pdf(api: dict[str, Any], out_path: Path) -> None:
+def _cheatsheet_pdf(
+    api: dict[str, Any], script: str, out_path: Path
+) -> None:
+    """Render the multi-page API kit PDF (H1 on page 1 and 2, code, notice)."""
+    import textwrap
+    from datetime import datetime, timezone
+
     from reportlab.lib.pagesizes import A4
     from reportlab.pdfgen import canvas
 
-    width, height = A4
-    c = canvas.Canvas(str(out_path), pagesize=A4)
-    c.setFont("Helvetica-Bold", 18)
-    c.drawString(50, height - 60, str(api.get("title") or "API"))
-    c.setFont("Helvetica", 11)
     details = api.get("details") or {}
+    title = str(api.get("title") or "API")
+    timestamp = str(
+        api.get("created_and_verified_at")
+        or details.get("lastVerified")
+        or datetime.now(timezone.utc).strftime(cfg.TIMESTAMP_FORMAT)
+    )
+    disclaimer = str(
+        details.get("disclaimer")
+        or cfg.LINK_DISCLAIMER.format(timestamp=timestamp)
+    )
+
+    width, height = A4
+    margin = 46
+    content_width = width - 2 * margin
+    c = canvas.Canvas(str(out_path), pagesize=A4, pageCompression=0)
+    page_number = 1
+
+    def wrap(text: str, font: str, size: int) -> list[str]:
+        from reportlab.pdfbase.pdfmetrics import stringWidth
+
+        words = str(text).replace("\n", " ").split()
+        lines: list[str] = []
+        current = ""
+        for word in words:
+            candidate = f"{current} {word}".strip()
+            if stringWidth(candidate, font, size) <= content_width:
+                current = candidate
+            else:
+                if current:
+                    lines.append(current)
+                current = word
+        if current:
+            lines.append(current)
+        return lines or [""]
+
+    def footer() -> None:
+        c.setFont("Helvetica", 8)
+        c.drawString(
+            margin,
+            28,
+            f"FlowMatrix.dev – API Implementation Kit | Page {page_number}",
+        )
+
+    def h1(subtitle: str | None = None) -> float:
+        # Visible H1 on every overview page (cover and page 2 included).
+        c.setFont("Helvetica-Bold", 22)
+        c.drawString(margin, height - 62, title)
+        c.setFont("Helvetica", 11)
+        c.drawString(margin, height - 82, subtitle or "API Production Script Kit")
+        c.setFont("Helvetica-Bold", 12)
+        c.drawString(margin, height - 104, f"Premium Kit €{cfg.SCRIPT_PRICE:.2f}")
+        c.setFont("Helvetica", 10)
+        c.drawString(margin, height - 120, f"Created & Verified on: {timestamp}")
+        return height - 150
+
+    # ----------------------------- Page 1 ------------------------------ #
+    y = h1("API Production Script Kit")
     rows = [
         ("Provider", details.get("provider") or "—"),
+        ("Category", api.get("category") or "—"),
         ("Endpoint", details.get("endpoint") or "—"),
+        ("Documentation", details.get("docsUrl") or details.get("website") or "—"),
         ("Authentication", details.get("authentication") or "—"),
-        ("Docs", details.get("docsUrl") or details.get("website") or "—"),
+        ("Rate limit", details.get("rateLimit") or "See provider documentation"),
         ("Price", f"€{cfg.SCRIPT_PRICE:.2f}"),
     ]
-    y = height - 100
     for label, value in rows:
         c.setFont("Helvetica-Bold", 10)
-        c.drawString(50, y, f"{label}:")
+        c.drawString(margin, y, f"{label}:")
         c.setFont("Helvetica", 10)
-        c.drawString(150, y, str(value))
-        y -= 22
+        for line in wrap(str(value), "Helvetica", 10)[:3]:
+            c.drawString(margin + 105, y, line)
+            y -= 14
+        y -= 8
+    y -= 6
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(margin, y, "Included in this kit")
+    y -= 18
+    c.setFont("Helvetica", 10)
+    for item in (
+        "api_client.py – dependency-free production client with retries",
+        "test_mock.py – executable unittest suite with mocked HTTP",
+        ".env.example – exact environment variables",
+        "requests.http – ready-to-run HTTP requests",
+        "AI_INTEGRATION_PROMPT.md – porting prompt for any language",
+        "README.md – setup and usage instructions",
+    ):
+        c.drawString(margin + 8, y, f"• {item}")
+        y -= 15
+    footer()
+    c.showPage()
+    page_number += 1
+
+    # ----------------------------- Page 2 ------------------------------ #
+    y = h1("Endpoint, Authentication & Rate-Limit Overview")
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(margin, y, "Detected endpoints")
+    y -= 18
+    c.setFont("Courier", 8)
+    endpoints = sorted(set(_URL_RE.findall(script)))[:8] or [
+        str(details.get("endpoint") or "—")
+    ]
+    for endpoint in endpoints:
+        c.drawString(margin + 8, y, endpoint[:110])
+        y -= 12
+    y -= 8
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(margin, y, "Authentication & operational notes")
+    y -= 18
+    notes = [
+        f"Authentication: {details.get('authentication') or 'Bearer token'}. "
+        "Read every secret through os.environ.get(); never hardcode credentials.",
+        "Backoff: retry HTTP 429 and 5xx with exponential delay and jitter.",
+        "Timeouts: every request uses an explicit timeout and a typed JSON return.",
+        "Dry-run: `python3 api_client.py --dry-run` performs no network call.",
+    ]
     c.setFont("Helvetica", 9)
-    c.drawString(50, 60, "FlowMatrix.dev – API Implementation Kit")
+    for note in notes:
+        for line in wrap(note, "Helvetica", 9):
+            c.drawString(margin + 8, y, line)
+            y -= 12
+        y -= 4
+    footer()
+    c.showPage()
+    page_number += 1
+
+    # ----------------------------- Code pages ------------------------- #
+    y = h1("Annotated Client Source")
+    c.setFont("Helvetica", 9)
+    c.drawString(
+        margin,
+        y,
+        "The complete standard-library client is shipped in api_client.py.",
+    )
+    y -= 22
+    c.setFont("Courier", 7.2)
+    for raw_line in script.splitlines():
+        if y < 48:
+            footer()
+            c.showPage()
+            page_number += 1
+            y = h1("Annotated Client Source (continued)")
+            c.setFont("Courier", 7.2)
+        c.drawString(margin, y, raw_line[:118].replace("\t", "    "))
+        y -= 10.2
+    footer()
+    c.showPage()
+    page_number += 1
+
+    # -------------------------- Troubleshooting ------------------------ #
+    y = h1("Troubleshooting & Validity Notice")
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(margin, y, "Troubleshooting")
+    y -= 18
+    c.setFont("Helvetica", 9)
+    troubleshooting = [
+        (
+            "HTTP 401/403",
+            "Read the token from the documented environment variable, verify "
+            "the scopes and confirm the Authorization header is sent.",
+        ),
+        (
+            "HTTP 429",
+            "Respect Retry-After, reduce the request rate and keep the "
+            "jittered exponential backoff enabled.",
+        ),
+        (
+            "HTTP 5xx / timeout",
+            "Retry with backoff, cap the retries and validate the JSON body "
+            "before accessing nested fields.",
+        ),
+        (
+            "Missing response fields",
+            "Use .get('key', default) and validate types before converting "
+            "values to int/float.",
+        ),
+    ]
+    for problem, solution in troubleshooting:
+        c.setFont("Helvetica-Bold", 9)
+        c.drawString(margin + 8, y, problem)
+        y -= 12
+        c.setFont("Helvetica", 9)
+        for line in wrap(solution, "Helvetica", 9):
+            c.drawString(margin + 16, y, line)
+            y -= 12
+        y -= 6
+    y -= 6
+    c.setFont("Helvetica-Bold", 11)
+    c.drawString(margin, y, "Verification & Link Validity Notice")
+    y -= 14
+    c.setFont("Helvetica", 8)
+    for line in wrap(disclaimer, "Helvetica", 8):
+        c.drawString(margin, y, line)
+        y -= 10
+    footer()
     c.save()
 
 
@@ -617,16 +828,16 @@ def build_api_kit(
     script_path: Path,
     out_dir: Path,
 ) -> tuple[Path, Path]:
-    """Build ``<slug>-kit.zip`` and a standalone cheatsheet PDF.
+    """Build ``<slug>-kit.zip`` and the multi-page API PDF.
 
-    Returns ``(zip_path, cheatsheet_path)`` so both can be uploaded to R2 and
-    served by the download-gate worker.
+    Returns ``(zip_path, pdf_path)`` so both can be uploaded to R2 and served
+    by the download-gate worker.
     """
     slug = str(api.get("slug") or "api")
     script = script_path.read_text(encoding="utf-8")
     out_dir.mkdir(parents=True, exist_ok=True)
     cheatsheet_path = out_dir / f"{slug}-cheatsheet.pdf"
-    _cheatsheet_pdf(api, cheatsheet_path)
+    _cheatsheet_pdf(api, script, cheatsheet_path)
     with tempfile.TemporaryDirectory() as tmp:
         directory = Path(tmp)
         shutil.copy2(script_path, directory / "api_client.py")

@@ -310,10 +310,44 @@ MANDATORY ARCHITECTURE
 4. At least 2 to 3 practical end-to-end functions (e.g. fetch data, create/filter a resource, validate a webhook/response) – each with type hints and an English docstring.
 5. An executable `if __name__ == "__main__":` block that demonstrates a complete run.
 6. A file-header docstring with title, provider, docs and usage notes – in English.
+7. MANDATORY `--dry-run` MODE: `main()` MUST use `argparse.ArgumentParser` and define `parser.add_argument("--dry-run", action="store_true", ...)`. When `--dry-run` is passed, the script MUST NOT perform any network request. It must print a deterministic sample summary (for example `print("Dry-run completed successfully.")`) and return exit code 0. The sandbox test executes `python3 api_client.py --dry-run` and requires exit code 0.
+8. The module MUST expose `request_json` at top level so `test_mock.py` can import and call it. The mock test patches `urllib.request.urlopen` and asserts that the Authorization header is present on the `urllib.request.Request` object.
+9. Never call `urllib.request.urlopen(url, headers=...)`; always build `urllib.request.Request(url, data=..., headers=...)` first.
 
 ALL comments and docstrings MUST be in precise technical English. Use current OpenAI models (`gpt-4o-mini`/`gpt-4o`); `gpt-3.5-turbo` is forbidden. Never instruct the reader to run "pip install".
 
 Answer with the raw Python source code ONLY. No markdown fences, no explanatory text."""
+
+
+def build_api_script_repair_prompt(
+    api: dict[str, Any],
+    script: str,
+    traceback_text: str,
+    attempt: int = 1,
+) -> str:
+    """Repair an API client using the exact sandbox traceback."""
+    details = api.get("details") or {}
+    return f"""The API client sandbox test failed. Repair ONLY the Python source below.
+
+API: {api.get('title')} ({api.get('slug')})
+ENDPOINT: {details.get('endpoint') or '—'}
+DOCS: {details.get('docsUrl') or details.get('website') or '—'}
+REPAIR ATTEMPT: {attempt}
+
+EXACT SANDBOX OUTPUT / TRACEBACK:
+{traceback_text}
+
+CURRENT api_client.py:
+{script}
+
+HARD RULES
+- Return ONLY the corrected Python source code (no markdown fences, no text before/after).
+- Keep the exact top-level function `request_json(url, method="GET", payload=None, headers=None, timeout=15, max_retries=3)`.
+- Keep the `--dry-run` argparse mode and make it exit 0 without any network call.
+- Python standard library only. No requests/httpx/openai/supabase/pydantic/pandas.
+- Build `urllib.request.Request(url, data=..., headers=...)`; never pass `headers=` to `urlopen`.
+- Keep HTTPError/URLError handling, timeout and exponential backoff on 429/5xx.
+- All comments and docstrings in English."""
 
 
 def build_code_repair_prompt(
@@ -519,7 +553,7 @@ def build_alternative_prompt(
         if feedback
         else ""
     )
-    return f"""Create an alternatives dataset in ENGLISH.
+    return f"""Create a complete alternatives dataset in ENGLISH.
 
 Slug: {alternative.get('slug')}
 Title: {alternative.get('title')}
@@ -530,14 +564,24 @@ Answer with valid JSON only:
 {{
   "description": "2–3 sentences describing what this alternatives page covers.",
   "tags": ["tag1", "tag2", "tag3"],
+  "bestFor": "One sentence describing who should use these alternatives.",
+  "pricing": "Concrete price range, e.g. Free to $25/user/month.",
+  "features": ["Feature 1", "Feature 2", "Feature 3"],
   "alternatives": [
     {{
       "name": "Product name",
       "description": "One sentence.",
       "pros": ["Advantage 1", "Advantage 2"],
       "cons": ["Drawback 1", "Drawback 2"],
-      "bestFor": "Target audience"
+      "bestFor": "Target audience",
+      "url": "https://real-official-domain.example/path?ref=flowmatrix"
     }}
   ]
 }}
-RULES: at least 3 alternatives, all text in English, no invented tools."""
+RULES
+- At least 3 alternatives, all text in English, no invented tools.
+- Every alternative MUST have a real, live official URL. Append exactly `?ref=flowmatrix` to every URL.
+- Every alternative MUST have at least 2 pros, 2 cons, a bestFor sentence and a description.
+- `features` MUST contain at least 3 concrete features.
+- Never use Adobe XD or any discontinued product.
+- Do not invent domains; use the official product domain."""
