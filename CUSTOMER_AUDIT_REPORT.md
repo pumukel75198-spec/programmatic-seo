@@ -1,6 +1,6 @@
 # Customer Audit Report
 
-Generated: 2026-11-07 15:12 UTC
+Generated: 2026-11-07 15:15 UTC
 
 ## Summary
 
@@ -8,7 +8,7 @@ Generated: 2026-11-07 15:12 UTC
 | --- | ---: | ---: | ---: | ---: |
 | APIs | 0 | 0/0 OK | 0 | 0 |
 | Alternatives | 0 | 0/0 OK | 0 | 0 |
-| Workflows | 1 | 0/1 OK | 0 | 1 |
+| Workflows | 1 | 0/1 OK | 1 | 1 |
 
 - `npm run build`: OK
 - git commit & push: OK
