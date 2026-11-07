@@ -37,3 +37,6 @@ src/data/insights.json
 src/data/insights-archive.json
 src/data/translation-coverage.json
 src/i18n/de-overrides.generated.json
+
+# Generated audit output
+AUDIT_REPORT.md

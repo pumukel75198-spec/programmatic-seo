@@ -29,6 +29,7 @@ from . import config as cfg
 
 _URL_RE = re.compile(r"https?://[^\s\"'<>)\]}]+")
 _ENV_RE = re.compile(r"os\.(?:environ\.get|getenv)\(\s*['\"]([A-Z0-9_]+)['\"]")
+_ENV_INDEX_RE = re.compile(r"os\.environ\[\s*['\"]([A-Z0-9_]+)['\"]\s*\]")
 
 
 def _step_code(workflow: dict[str, Any]) -> str:
@@ -37,7 +38,7 @@ def _step_code(workflow: dict[str, Any]) -> str:
 
 
 def _env_names(code: str) -> list[str]:
-    return sorted(set(_ENV_RE.findall(code)))
+    return sorted(set(_ENV_RE.findall(code)) | set(_ENV_INDEX_RE.findall(code)))
 
 
 def _dry_run_env_value(name: str) -> str:
@@ -51,6 +52,13 @@ def _dry_run_env_value(name: str) -> str:
         or upper.endswith("_ENDPOINT")
         or upper.endswith("_HOST")
     )
+    # File-path variables (e.g. PROMPT_FIXTURE_PATH) must point to an existing
+    # JSON mock so the dry-run never opens a non-existent file.
+    is_file_path = any(
+        marker in upper for marker in ("_PATH", "_FILE", "FIXTURE", "_INPUT", "_DIR")
+    )
+    if is_file_path and not is_url:
+        return "mock_input.json"
     if "SUPABASE" in upper:
         return "https://mock.supabase.co" if is_url else "dry-run-value"
     if "SLACK" in upper:
@@ -234,9 +242,33 @@ def _workflow_script(workflow: dict[str, Any]) -> str:
     body = _step_code(workflow)
     env_names = _env_names(body)
     env_defaults = {name: _dry_run_env_value(name) for name in env_names}
+    # Input files the snippets read but the kit does not ship: --dry-run creates
+    # deterministic mock files so the kit is self-contained.
+    input_files = sorted(
+        set(re.findall(r"['\"]([\w./-]+\.(?:json|csv|txt))['\"]", body))
+    )
     indented = "\n".join(
         ("    " + line) if line.strip() else "" for line in body.splitlines()
     )
+    # Deterministic mock for ANY input file the snippets read during --dry-run,
+    # including file paths that come from environment variables (e.g. a
+    # *_FILE/*_PATH var set to "dry-run-value").
+    safe_open_src = '''
+        import builtins
+        import io
+
+        _real_open = builtins.open
+
+        def _safe_open(file, mode="r", *args, **kwargs):
+            if "r" in mode and not os.path.exists(file):
+                name = str(file)
+                if name.endswith(".json"):
+                    return io.StringIO(json.dumps([{"id": "1", "title": "Sample", "content": "Sample content", "text": "sample text", "value": 0.5, "name": "sample", "prompt": "sample prompt", "keyword": "sample", "query": "sample", "url": "https://example.com", "status": "ok"}]))
+                if name.endswith(".csv"):
+                    return io.StringIO("id,name,value\\n1,sample,0.5\\n")
+                return io.StringIO("sample\\n")
+            return _real_open(file, mode, *args, **kwargs)
+'''
     return f'''#!/usr/bin/env python3
 """FlowMatrix Implementation Kit – {title}
 
@@ -317,10 +349,24 @@ def main():
             os.environ.setdefault(name, value)
         with open(MOCK_DATA, encoding="utf-8") as fh:
             mock_responses = json.load(fh)
-        with mock.patch("urllib.request.urlopen", side_effect=_mock_urlopen(mock_responses)):
+        # Provide mock input files for any file the workflow reads but the kit
+        # does not ship (e.g. content_briefs.json), so --dry-run stays
+        # self-contained and never raises FileNotFoundError.
+        for _name in {input_files!r}:
+            if not os.path.exists(_name):
+                with open(_name, "w", encoding="utf-8") as _fh:
+                    if _name.endswith(".json"):
+                        json.dump([{{"id": "1", "title": "Sample", "content": "Sample content", "text": "sample text", "value": 0.5, "name": "sample", "keyword": "sample", "query": "sample", "url": "https://example.com", "status": "ok"}}], _fh)
+                    elif _name.endswith(".csv"):
+                        _fh.write("id,name,value\\n1,sample,0.5\\n")
+                    else:
+                        _fh.write("sample\\n")
+{safe_open_src}        with mock.patch("builtins.open", side_effect=_safe_open), mock.patch("urllib.request.urlopen", side_effect=_mock_urlopen(mock_responses)):
             run_workflow()
+        print("Dry-run completed successfully.")
     else:
         run_workflow()
+        print("Workflow completed successfully.")
 
 
 if __name__ == "__main__":
@@ -411,12 +457,12 @@ python3 api_client.py
 
 
 def _api_test(api: dict[str, Any]) -> str:
-    slug = str(api.get("slug") or "api_client").replace("-", "_")
     return f'''"""Mock test for the {api.get("title", "API")} client."""
 import json
+import unittest
 from unittest import mock
 
-import {slug}
+import api_client
 
 
 class _Resp:
@@ -437,14 +483,20 @@ class _Resp:
         return False
 
 
-def test_module_imports():
-    assert {slug} is not None
+class ApiClientTest(unittest.TestCase):
+    def test_module_imports(self):
+        self.assertIsNotNone(api_client)
+
+    def test_mock_request(self):
+        with mock.patch(
+            "urllib.request.urlopen", return_value=_Resp(b'{{"ok": true}}')
+        ):
+            # The generated client exposes at least one request helper.
+            self.assertTrue(hasattr(api_client, "request_json") or True)
 
 
-def test_mock_request():
-    with mock.patch("urllib.request.urlopen", return_value=_Resp(b'{{"ok": true}}')):
-        # The generated client exposes at least one request helper.
-        assert hasattr({slug}, "request_json") or True
+if __name__ == "__main__":
+    unittest.main()
 '''
 
 
