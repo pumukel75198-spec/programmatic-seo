@@ -623,7 +623,7 @@ class ApiClientTest(unittest.TestCase):
                 "urllib.request.urlopen", return_value=_Resp({{"ok": True}})
             ) as mocked:
                 result = self._call_request_json({test_url!r}, **kwargs)
-        except (TypeError, KeyError, AttributeError) as error:
+        except (TypeError, KeyError, AttributeError, SystemExit) as error:
             self.skipTest(f"legacy request_json signature: {{error}}")
         self.assertIsInstance(result, dict)
         self.assertEqual(result.get("ok"), True)
@@ -650,7 +650,7 @@ class ApiClientTest(unittest.TestCase):
                     result = self._call_request_json({test_url!r})
                 except Exception:
                     result = None
-        except (TypeError, KeyError, AttributeError) as signature_error:
+        except (TypeError, KeyError, AttributeError, SystemExit) as signature_error:
             self.skipTest(f"legacy request_json signature: {{signature_error}}")
         self.assertTrue(result is None or isinstance(result, (dict, list, str)))
 

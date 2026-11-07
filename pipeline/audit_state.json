@@ -4,53 +4,49 @@
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.692837+00:00"
+      "checked_at": "2026-11-07T14:14:08.278041+00:00"
     },
     "api:openai-whisper-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:23:46.088331+00:00"
+      "checked_at": "2026-11-07T14:05:15.422674+00:00"
     },
     "alternative:notion-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.329788+00:00"
+      "checked_at": "2026-11-07T14:14:07.965938+00:00"
     },
     "api:stripe-payments-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:23:46.269055+00:00"
+      "checked_at": "2026-11-07T14:05:15.625582+00:00"
     },
     "api:supabase-database-api": {
-      "status": "failed",
-      "healed": true,
-      "errors": [
-        "api_client.py contains a generic placeholder domain"
-      ],
-      "checked_at": "2026-11-07T10:24:27.355138+00:00"
+      "status": "verified_clean",
+      "healed": false,
+      "errors": [],
+      "checked_at": "2026-11-07T14:05:15.813670+00:00"
     },
     "api:anthropic-claude-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:24:27.535214+00:00"
+      "checked_at": "2026-11-07T14:05:15.998015+00:00"
     },
     "api:google-gemini-api": {
-      "status": "failed",
-      "healed": true,
-      "errors": [
-        "api_client.py contains a generic placeholder domain"
-      ],
-      "checked_at": "2026-11-07T10:25:13.314586+00:00"
+      "status": "verified_clean",
+      "healed": false,
+      "errors": [],
+      "checked_at": "2026-11-07T14:05:16.192752+00:00"
     },
     "api:resend-email-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:25:13.527988+00:00"
+      "checked_at": "2026-11-07T14:05:16.386388+00:00"
     },
     "api:clerk-authentication-api": {
       "status": "failed",
@@ -59,77 +55,72 @@
         "api_client.py does not mention the API title",
         "API kit file 'requests.http' is <= 100 bytes"
       ],
-      "checked_at": "2026-11-07T10:25:55.843360+00:00"
+      "checked_at": "2026-11-07T14:06:16.742535+00:00"
     },
     "api:cloudflare-workers-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:25:56.048235+00:00"
+      "checked_at": "2026-11-07T14:06:16.926054+00:00"
     },
     "api:mapbox-maps-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:25:56.268610+00:00"
+      "checked_at": "2026-11-07T14:06:17.139093+00:00"
     },
     "api:twilio-messaging-api": {
       "status": "failed",
       "healed": true,
       "errors": [
-        "requests.http: does not use the endpoint host 'api.twilio.com'",
-        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-pahgvjb8/test_mock.py\", line 98, in test_http_error_is_handled\n    result = self._call_request_json('https://api.twilio.com/2010-04-01')\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-pahgvjb8/test_mock.py\", line 60, in _call_request_json\n    return api_client.request_json(*args, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-pahgvjb8/api_client.py\", line 58, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nFAILED (errors=1)\n"
+        "requests.http: does not use the endpoint host 'api.twilio.com'"
       ],
-      "checked_at": "2026-11-07T10:26:32.613067+00:00"
+      "checked_at": "2026-11-07T14:07:04.256587+00:00"
     },
     "api:hugging-face-inference-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:26:32.849237+00:00"
+      "checked_at": "2026-11-07T14:07:04.470719+00:00"
     },
     "api:cohere-embed-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:26:33.040391+00:00"
+      "checked_at": "2026-11-07T14:07:04.665329+00:00"
     },
     "api:pinecone-vector-api": {
       "status": "failed",
       "healed": true,
       "errors": [
         "api_client.py does not mention the API title",
-        "api_client.py does not implement the endpoint host 'docs.pinecone.io'",
-        "requests.http: does not use the endpoint host 'docs.pinecone.io'",
         "API kit file 'requests.http' is <= 100 bytes"
       ],
-      "checked_at": "2026-11-07T10:26:56.390336+00:00"
+      "checked_at": "2026-11-07T14:08:01.598922+00:00"
     },
     "api:auth0-authentication-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:26:56.580837+00:00"
+      "checked_at": "2026-11-07T14:08:01.808967+00:00"
     },
     "api:sendgrid-email-api": {
-      "status": "failed",
-      "healed": true,
-      "errors": [
-        "api_client.py contains a generic placeholder domain"
-      ],
-      "checked_at": "2026-11-07T10:27:30.785949+00:00"
+      "status": "verified_clean",
+      "healed": false,
+      "errors": [],
+      "checked_at": "2026-11-07T14:08:02.050839+00:00"
     },
     "api:algolia-search-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:27:30.968967+00:00"
+      "checked_at": "2026-11-07T14:08:02.249546+00:00"
     },
     "api:openweather-weather-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:27:31.187863+00:00"
+      "checked_at": "2026-11-07T14:08:02.443760+00:00"
     },
     "api:shopify-admin-api": {
       "status": "failed",
@@ -138,33 +129,31 @@
         "requests.http: does not use the endpoint host '{shop}.myshopify.com'",
         "API kit file 'requests.http' is <= 100 bytes"
       ],
-      "checked_at": "2026-11-07T10:28:52.605945+00:00"
+      "checked_at": "2026-11-07T14:09:33.167103+00:00"
     },
     "api:notion-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:28:52.812673+00:00"
+      "checked_at": "2026-11-07T14:09:33.377579+00:00"
     },
     "api:airtable-api": {
-      "status": "failed",
-      "healed": true,
-      "errors": [
-        "requests.http: does not use the endpoint host 'api.airtable.com'"
-      ],
-      "checked_at": "2026-11-07T10:29:33.857485+00:00"
+      "status": "verified_clean",
+      "healed": false,
+      "errors": [],
+      "checked_at": "2026-11-07T14:09:33.588541+00:00"
     },
     "api:mistral-ai-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:29:34.068280+00:00"
+      "checked_at": "2026-11-07T14:09:33.791994+00:00"
     },
     "api:groq-inference-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:29:34.306832+00:00"
+      "checked_at": "2026-11-07T14:09:33.991964+00:00"
     },
     "api:together-ai-api": {
       "status": "failed",
@@ -172,136 +161,131 @@
       "errors": [
         "API kit file 'requests.http' is <= 100 bytes"
       ],
-      "checked_at": "2026-11-07T10:29:58.668151+00:00"
+      "checked_at": "2026-11-07T14:10:10.103188+00:00"
     },
     "api:replicate-model-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:29:58.878593+00:00"
+      "checked_at": "2026-11-07T14:10:10.286701+00:00"
     },
     "api:elevenlabs-voice-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:29:59.083364+00:00"
+      "checked_at": "2026-11-07T14:10:10.501458+00:00"
     },
     "api:deepgram-speech-api": {
       "status": "failed",
       "healed": true,
       "errors": [
-        "API sandbox failed: ing...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nERROR:root:Max attempts reached. Request failed.\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ns6kcp16/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ns6kcp16/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: DeepgramResponse(status='success', data={'ok': True}) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nFAILED (failures=2)\n"
+        "API sandbox failed: ing...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nERROR:root:Max attempts reached. Request failed.\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-5t1k_7l9/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-5t1k_7l9/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: DeepgramResponse(status='success', data={'ok': True}) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
       ],
-      "checked_at": "2026-11-07T10:30:27.268026+00:00"
+      "checked_at": "2026-11-07T14:10:43.152572+00:00"
     },
     "api:stability-ai-image-api": {
       "status": "failed",
-      "healed": false,
+      "healed": true,
       "errors": [
-        "API sandbox failed: NING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ysfo9r_w/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ysfo9r_w/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: ApiResponse(status='success', data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+        "api_client.py does not mention the API title",
+        "API sandbox failed: NING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-0ndgd04_/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-0ndgd04_/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: ApiResponse(status='success', data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
       ],
-      "checked_at": "2026-11-07T10:30:27.599965+00:00"
+      "checked_at": "2026-11-07T14:11:23.879589+00:00"
     },
     "api:weaviate-vector-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:30:27.805382+00:00"
+      "checked_at": "2026-11-07T14:11:24.066239+00:00"
     },
     "api:qdrant-vector-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:30:28.022946+00:00"
+      "checked_at": "2026-11-07T14:11:24.306043+00:00"
     },
     "api:mongodb-atlas-api": {
       "status": "failed",
-      "healed": false,
+      "healed": true,
       "errors": [
-        "api_client.py does not implement the endpoint host 'data.mongodb-api.com'",
-        "requests.http: does not use the endpoint host 'data.mongodb-api.com'",
-        "API sandbox failed: RNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-8vrevc8y/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-8vrevc8y/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: ApiResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+        "API sandbox failed: RNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-466ogvls/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-466ogvls/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: ApiResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
       ],
-      "checked_at": "2026-11-07T10:30:28.379830+00:00"
+      "checked_at": "2026-11-07T14:12:26.345902+00:00"
     },
     "api:neon-postgres-api": {
       "status": "failed",
-      "healed": false,
+      "healed": true,
       "errors": [
         "test_mock.py: does not use the endpoint host 'neon.tech'"
       ],
-      "checked_at": "2026-11-07T10:30:32.355342+00:00"
+      "checked_at": "2026-11-07T14:13:10.133196+00:00"
     },
     "api:planetscale-database-api": {
       "status": "failed",
-      "healed": false,
+      "healed": true,
       "errors": [
         "test_mock.py: does not use the endpoint host 'planetscale.com'"
       ],
-      "checked_at": "2026-11-07T10:30:32.781129+00:00"
+      "checked_at": "2026-11-07T14:13:43.700221+00:00"
     },
     "api:upstash-redis-api": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "API sandbox failed: unittest failed:\n\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ydhhyq94/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ydhhyq94/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: RedisResponse(status='success', data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+        "API sandbox failed: unittest failed:\n\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-qrgdphsh/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-qrgdphsh/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: RedisResponse(status='success', data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
       ],
-      "checked_at": "2026-11-07T10:30:43.083964+00:00"
+      "checked_at": "2026-11-07T14:13:43.984225+00:00"
     },
     "api:vercel-blob-api": {
       "status": "failed",
       "healed": false,
       "errors": [
         "API kit file 'requests.http' is <= 100 bytes",
-        "API sandbox failed: .\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-fphdtl4s/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-fphdtl4s/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: BlobResponse(status=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+        "API sandbox failed: .\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-c604j9m_/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-c604j9m_/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: BlobResponse(status=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nFAILED (failures=2)\n"
       ],
-      "checked_at": "2026-11-07T10:30:43.341969+00:00"
+      "checked_at": "2026-11-07T14:13:44.267285+00:00"
     },
     "api:liveblocks-collaboration-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:30:46.733994+00:00"
+      "checked_at": "2026-11-07T14:13:44.508937+00:00"
     },
     "api:ably-realtime-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:30:49.196642+00:00"
+      "checked_at": "2026-11-07T14:13:44.726455+00:00"
     },
     "api:posthog-analytics-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:30:49.418824+00:00"
+      "checked_at": "2026-11-07T14:13:44.966986+00:00"
     },
     "api:sentry-error-api": {
-      "status": "failed",
-      "healed": false,
-      "errors": [
-        "API sandbox failed: unittest failed:\n\nWARNING:api_client:HTTPError 500: server error. Retrying...\nWARNING:api_client:HTTPError 500: server error. Retrying...\nWARNING:api_client:HTTPError 500: server error. Retrying...\nWARNING:api_client:HTTPError 500: server error. Retrying...\nWARNING:api_client:HTTPError 500: server error. Retrying...\nERROR:api_client:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-suiircv2/test_mock.py\", line 98, in test_http_error_is_handled\n    result = self._call_request_json('https://sentry.io/api/0/')\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-suiircv2/test_mock.py\", line 60, in _call_request_json\n    return api_client.request_json(*args, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-suiircv2/api_client.py\", line 64, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nFAILED (errors=1)\n"
-      ],
-      "checked_at": "2026-11-07T10:30:49.697677+00:00"
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T14:13:45.303822+00:00"
     },
     "api:launchdarkly-feature-api": {
-      "status": "failed",
-      "healed": false,
-      "errors": [
-        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: Retrying in 1 seconds...\nWARNING:root:HTTPError 500: Retrying in 2 seconds...\nWARNING:root:HTTPError 500: Retrying in 4 seconds...\nWARNING:root:HTTPError 500: Retrying in 8 seconds...\nWARNING:root:HTTPError 500: Retrying in 16 seconds...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-cdapu1qz/test_mock.py\", line 98, in test_http_error_is_handled\n    result = self._call_request_json('https://app.launchdarkly.com/api/v2/')\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-cdapu1qz/test_mock.py\", line 60, in _call_request_json\n    return api_client.request_json(*args, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-cdapu1qz/api_client.py\", line 64, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nFAILED (errors=1)\n"
-      ],
-      "checked_at": "2026-11-07T10:30:49.988555+00:00"
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T14:13:45.697968+00:00"
     },
     "api:doppler-secrets-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:30:50.200655+00:00"
+      "checked_at": "2026-11-07T14:13:45.908425+00:00"
     },
     "api:openai-batch-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:30:50.422773+00:00"
+      "checked_at": "2026-11-07T14:13:46.121824+00:00"
     },
     "api:google-sheets-api": {
       "status": "failed",
@@ -309,15 +293,13 @@
       "errors": [
         "requests.http: does not use the endpoint host 'sheets.googleapis.com'"
       ],
-      "checked_at": "2026-11-07T10:30:50.829465+00:00"
+      "checked_at": "2026-11-07T14:13:46.530595+00:00"
     },
     "api:slack-web-api": {
-      "status": "failed",
-      "healed": false,
-      "errors": [
-        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-di58atpd/test_mock.py\", line 98, in test_http_error_is_handled\n    result = self._call_request_json('https://slack.com/api/chat.postMessage')\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-di58atpd/test_mock.py\", line 60, in _call_request_json\n    return api_client.request_json(*args, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-di58atpd/api_client.py\", line 61, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nFAILED (errors=1)\n"
-      ],
-      "checked_at": "2026-11-07T10:30:51.113960+00:00"
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T14:13:46.885338+00:00"
     },
     "api:hubspot-crm-api": {
       "status": "failed",
@@ -325,148 +307,125 @@
       "errors": [
         "requests.http: does not use the endpoint host 'api.hubapi.com'"
       ],
-      "checked_at": "2026-11-07T10:30:51.628118+00:00"
+      "checked_at": "2026-11-07T14:13:47.357094+00:00"
     },
     "api:zendesk-support-api": {
-      "status": "failed",
-      "healed": false,
-      "errors": [
-        "api_client.py does not implement the endpoint host '{subdomain}.zendesk.com'",
-        "requests.http: does not use the endpoint host '{subdomain}.zendesk.com'",
-        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ih22vr7h/test_mock.py\", line 98, in test_http_error_is_handled\n    result = self._call_request_json('https://{subdomain}.zendesk.com/api/v2/tickets.json')\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ih22vr7h/test_mock.py\", line 60, in _call_request_json\n    return api_client.request_json(*args, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ih22vr7h/api_client.py\", line 70, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nFAILED (errors=1)\n"
-      ],
-      "checked_at": "2026-11-07T10:30:51.897031+00:00"
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T14:13:47.704766+00:00"
     },
     "api:salesforce-rest-api": {
-      "status": "failed",
-      "healed": false,
-      "errors": [
-        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-co28xfh4/test_mock.py\", line 98, in test_http_error_is_handled\n    result = self._call_request_json('https://developer.salesforce.com/services/data/v62.0/sobjects/Account')\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-co28xfh4/test_mock.py\", line 60, in _call_request_json\n    return api_client.request_json(*args, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-co28xfh4/api_client.py\", line 58, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
-      ],
-      "checked_at": "2026-11-07T10:30:52.210063+00:00"
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T14:13:48.100587+00:00"
     },
     "api:discord-bot-api": {
-      "status": "failed",
-      "healed": false,
-      "errors": [
-        "API sandbox failed: api_client.py --dry-run failed:\nusage: api_client.py [-h] channel_id message_content\napi_client.py: error: the following arguments are required: channel_id, message_content"
-      ],
-      "checked_at": "2026-11-07T10:30:52.635440+00:00"
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T14:13:48.571566+00:00"
     },
     "api:telegram-bot-api": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "requests.http: does not use the endpoint host 'api.telegram.org'",
-        "API kit file 'requests.http' is <= 100 bytes",
-        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying in 2 seconds...\nWARNING:root:HTTPError 500: server error. Retrying in 4 seconds...\nWARNING:root:HTTPError 500: server error. Retrying in 8 seconds...\nWARNING:root:HTTPError 500: server error. Retrying in 16 seconds...\nWARNING:root:HTTPError 500: server error. Retrying in 32 seconds...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ln6cd8kb/test_mock.py\", line 98, in test_http_error_is_handled\n    result = self._call_request_json('https://api.telegram.org/bot{token}/sendMessage')\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ln6cd8kb/test_mock.py\", line 60, in _call_request_json\n    return api_client.request_json(*args, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ln6cd8kb/api_client.py\", line 53, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
+        "API kit file 'requests.http' is <= 100 bytes"
       ],
-      "checked_at": "2026-11-07T10:30:52.915074+00:00"
+      "checked_at": "2026-11-07T14:13:48.976620+00:00"
     },
     "api:github-rest-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:30:55.048093+00:00"
+      "checked_at": "2026-11-07T14:13:51.128888+00:00"
     },
     "api:linear-graphql-api": {
-      "status": "failed",
+      "status": "verified_clean",
       "healed": false,
-      "errors": [
-        "api_client.py does not implement the endpoint host 'api.linear.app'",
-        "requests.http: does not use the endpoint host 'api.linear.app'"
-      ],
-      "checked_at": "2026-11-07T10:30:55.466135+00:00"
+      "errors": [],
+      "checked_at": "2026-11-07T14:13:51.345909+00:00"
     },
     "api:microsoft-graph-api": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "api_client.py contains a generic placeholder domain",
-        "API sandbox failed: unittest failed:\n\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-nnh8c8a8/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-nnh8c8a8/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: GraphAPIResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+        "API sandbox failed: unittest failed:\n\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-5yh0ypcp/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-5yh0ypcp/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: GraphAPIResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
       ],
-      "checked_at": "2026-11-07T10:30:55.738423+00:00"
+      "checked_at": "2026-11-07T14:13:51.628153+00:00"
     },
     "api:openai-dall-e-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:30:55.925927+00:00"
+      "checked_at": "2026-11-07T14:13:51.826153+00:00"
     },
     "api:microsoft-azure-cognitive-services-api": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "API sandbox failed: unittest failed:\n\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-g87ged51/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-g87ged51/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: CognitiveServiceResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+        "API sandbox failed: unittest failed:\n\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-nsaj77cr/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-nsaj77cr/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: CognitiveServiceResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
       ],
-      "checked_at": "2026-11-07T10:30:56.195283+00:00"
+      "checked_at": "2026-11-07T14:13:52.113766+00:00"
     },
     "api:openai-gpt-4-api": {
-      "status": "failed",
-      "healed": false,
-      "errors": [
-        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-j5zk3yll/test_mock.py\", line 98, in test_http_error_is_handled\n    result = self._call_request_json('https://api.openai.com/v1/chat/completions')\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-j5zk3yll/test_mock.py\", line 60, in _call_request_json\n    return api_client.request_json(*args, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-j5zk3yll/api_client.py\", line 48, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nFAILED (errors=1)\n"
-      ],
-      "checked_at": "2026-11-07T10:30:56.445037+00:00"
-    },
-    "api:openai-embeddings-api": {
       "status": "verified_clean",
       "healed": true,
       "errors": [],
-      "checked_at": "2026-11-07T10:30:56.770872+00:00"
+      "checked_at": "2026-11-07T14:13:52.446150+00:00"
+    },
+    "api:openai-embeddings-api": {
+      "status": "verified_clean",
+      "healed": false,
+      "errors": [],
+      "checked_at": "2026-11-07T14:13:52.651170+00:00"
     },
     "api:twitch-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:30:56.984198+00:00"
+      "checked_at": "2026-11-07T14:13:52.867207+00:00"
     },
     "api:aws-s3-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:30:57.356679+00:00"
+      "checked_at": "2026-11-07T14:13:53.147598+00:00"
     },
     "api:ibm-watson-text-to-speech-api": {
-      "status": "failed",
+      "status": "verified_clean",
       "healed": false,
-      "errors": [
-        "api_client.py does not implement the endpoint host 'api.us-south.text-to-speech.watson.cloud.ibm.com'",
-        "requests.http: does not use the endpoint host 'api.us-south.text-to-speech.watson.cloud.ibm.com'"
-      ],
-      "checked_at": "2026-11-07T10:30:57.821084+00:00"
+      "errors": [],
+      "checked_at": "2026-11-07T14:13:53.404751+00:00"
     },
     "api:aws-lambda-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:30:58.187004+00:00"
+      "checked_at": "2026-11-07T14:13:53.646699+00:00"
     },
     "api:paypal-payments-api": {
-      "status": "failed",
+      "status": "verified_clean",
       "healed": false,
-      "errors": [
-        "api_client.py does not implement the endpoint host 'api.paypal.com'",
-        "requests.http: does not use the endpoint host 'api.paypal.com'"
-      ],
-      "checked_at": "2026-11-07T10:30:58.598551+00:00"
+      "errors": [],
+      "checked_at": "2026-11-07T14:13:53.892737+00:00"
     },
     "api:ibm-cloud-object-storage-api": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "API sandbox failed: RNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-zbzykie9/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-zbzykie9/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: ApiResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nFAILED (failures=2)\n"
+        "API sandbox failed: RNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-wmjf4mt7/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-wmjf4mt7/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: ApiResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
       ],
-      "checked_at": "2026-11-07T10:30:59.025305+00:00"
+      "checked_at": "2026-11-07T14:13:54.330608+00:00"
     },
     "api:aws-rekognition-api": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "requests.http: does not use the endpoint host 'rekognition.us-west-2.amazonaws.com'",
-        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nERROR:root:Max retries exceeded\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-m_mx5dgn/test_mock.py\", line 98, in test_http_error_is_handled\n    result = self._call_request_json('https://rekognition.us-west-2.amazonaws.com')\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-m_mx5dgn/test_mock.py\", line 60, in _call_request_json\n    return api_client.request_json(*args, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-m_mx5dgn/api_client.py\", line 64, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nFAILED (errors=1)\n"
+        "requests.http: does not use the endpoint host 'rekognition.us-west-2.amazonaws.com'"
       ],
-      "checked_at": "2026-11-07T10:30:59.376868+00:00"
+      "checked_at": "2026-11-07T14:13:54.705219+00:00"
     },
     "api:aws-ses-api": {
       "status": "failed",
@@ -474,90 +433,82 @@
       "errors": [
         "requests.http: does not use the endpoint host 'email.us-east-1.amazonaws.com'"
       ],
-      "checked_at": "2026-11-07T10:30:59.792452+00:00"
+      "checked_at": "2026-11-07T14:13:55.140887+00:00"
     },
     "api:yelp-fusion-api": {
-      "status": "failed",
-      "healed": false,
-      "errors": [
-        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-_tml0z73/test_mock.py\", line 98, in test_http_error_is_handled\n    result = self._call_request_json('https://api.yelp.com/v3')\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-_tml0z73/test_mock.py\", line 60, in _call_request_json\n    return api_client.request_json(*args, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-_tml0z73/api_client.py\", line 49, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nFAILED (errors=1)\n"
-      ],
-      "checked_at": "2026-11-07T10:31:00.155261+00:00"
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T14:13:55.494083+00:00"
     },
     "api:ibm-watson-language-translator-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:00.391191+00:00"
+      "checked_at": "2026-11-07T14:13:55.713932+00:00"
     },
     "api:ibm-watson-assistant-api": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "requests.http: does not use the endpoint host 'api.us-south.assistant.watson.cloud.ibm.com'",
-        "API sandbox failed:  Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-8rmqkljb/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-8rmqkljb/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: WatsonAssistantResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nFAILED (failures=2)\n"
+        "API sandbox failed:  Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-09a8qc5z/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-09a8qc5z/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: WatsonAssistantResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
       ],
-      "checked_at": "2026-11-07T10:31:00.728083+00:00"
+      "checked_at": "2026-11-07T14:13:56.048492+00:00"
     },
     "api:ibm-watson-discovery-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:00.951632+00:00"
+      "checked_at": "2026-11-07T14:13:56.286389+00:00"
     },
     "api:azure-face-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:01.165410+00:00"
+      "checked_at": "2026-11-07T14:13:56.486415+00:00"
     },
     "api:aws-polly-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:01.553772+00:00"
+      "checked_at": "2026-11-07T14:13:56.713631+00:00"
     },
     "api:azure-cosmos-db-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:01.770457+00:00"
+      "checked_at": "2026-11-07T14:13:56.916960+00:00"
     },
     "api:google-maps-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:01.977365+00:00"
+      "checked_at": "2026-11-07T14:13:57.117376+00:00"
     },
     "api:plaid-financial-api": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "api_client.py does not implement the endpoint host 'production.plaid.com'",
-        "requests.http: does not use the endpoint host 'production.plaid.com'",
         "API kit file 'requests.http' is <= 100 bytes",
-        "API sandbox failed:  500: server error. Retrying in 16 seconds...\nWARNING:api_client:HTTPError 500: server error. Retrying in 32 seconds...\nERROR:api_client:Max retries exceeded.\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-e_jw2ivc/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-e_jw2ivc/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: ApiResponse(status='success', data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+        "API sandbox failed:  500: server error. Retrying in 16 seconds...\nWARNING:api_client:HTTPError 500: server error. Retrying in 32 seconds...\nERROR:api_client:Max retries exceeded.\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-n6cy3u65/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-n6cy3u65/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: ApiResponse(status='success', data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
       ],
-      "checked_at": "2026-11-07T10:31:02.269596+00:00"
+      "checked_at": "2026-11-07T14:13:57.485595+00:00"
     },
     "api:twilio-video-api": {
-      "status": "failed",
-      "healed": false,
-      "errors": [
-        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nERROR:root:Max retries exceeded\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-oiaq_rkg/test_mock.py\", line 98, in test_http_error_is_handled\n    result = self._call_request_json('https://video.twilio.com/v1')\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-oiaq_rkg/test_mock.py\", line 60, in _call_request_json\n    return api_client.request_json(*args, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-oiaq_rkg/api_client.py\", line 65, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nFAILED (errors=1)\n"
-      ],
-      "checked_at": "2026-11-07T10:31:02.596639+00:00"
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T14:13:57.877831+00:00"
     },
     "api:sendinblue-email-api": {
       "status": "failed",
       "healed": false,
       "errors": [
         "api_client.py does not implement the endpoint host 'api.sendinblue.com'",
-        "api_client.py contains a generic placeholder domain",
         "requests.http: does not use the endpoint host 'api.sendinblue.com'",
         "API kit file 'requests.http' is <= 100 bytes"
       ],
-      "checked_at": "2026-11-07T10:31:03.017487+00:00"
+      "checked_at": "2026-11-07T14:13:58.374489+00:00"
     },
     "api:aws-transcribe-api": {
       "status": "failed",
@@ -565,108 +516,85 @@
       "errors": [
         "requests.http: does not use the endpoint host 'transcribe.us-east-1.amazonaws.com'"
       ],
-      "checked_at": "2026-11-07T10:31:03.429605+00:00"
+      "checked_at": "2026-11-07T14:13:58.829520+00:00"
     },
     "api:notion-automation-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:03.623958+00:00"
+      "checked_at": "2026-11-07T14:13:59.062387+00:00"
     },
     "api:github-copilot-api": {
-      "status": "failed",
+      "status": "verified_clean",
       "healed": false,
-      "errors": [
-        "api_client.py does not implement the endpoint host 'api.github.com'",
-        "requests.http: does not use the endpoint host 'api.github.com'"
-      ],
-      "checked_at": "2026-11-07T10:31:04.031630+00:00"
+      "errors": [],
+      "checked_at": "2026-11-07T14:13:59.262403+00:00"
     },
     "api:notion-forms-api": {
-      "status": "failed",
+      "status": "verified_clean",
       "healed": false,
-      "errors": [
-        "api_client.py does not implement the endpoint host 'api.notion.com'",
-        "requests.http: does not use the endpoint host 'api.notion.com'"
-      ],
-      "checked_at": "2026-11-07T10:31:04.436310+00:00"
+      "errors": [],
+      "checked_at": "2026-11-07T14:13:59.463318+00:00"
     },
     "api:twitch-api-kraken": {
-      "status": "failed",
+      "status": "verified_clean",
       "healed": false,
-      "errors": [
-        "api_client.py does not implement the endpoint host 'api.twitch.tv'",
-        "requests.http: does not use the endpoint host 'api.twitch.tv'"
-      ],
-      "checked_at": "2026-11-07T10:31:04.848924+00:00"
+      "errors": [],
+      "checked_at": "2026-11-07T14:13:59.665640+00:00"
     },
     "api:asana-api": {
-      "status": "failed",
-      "healed": false,
-      "errors": [
-        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-3nz0e0i5/test_mock.py\", line 98, in test_http_error_is_handled\n    result = self._call_request_json('https://api.asana.com/v1')\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-3nz0e0i5/test_mock.py\", line 60, in _call_request_json\n    return api_client.request_json(*args, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-3nz0e0i5/api_client.py\", line 67, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (errors=1)\n"
-      ],
-      "checked_at": "2026-11-07T10:31:05.143924+00:00"
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T14:14:00.140761+00:00"
     },
     "api:twelvedata-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:05.355685+00:00"
+      "checked_at": "2026-11-07T14:14:00.350977+00:00"
     },
     "api:pdf-generator-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:05.580777+00:00"
+      "checked_at": "2026-11-07T14:14:00.574514+00:00"
     },
     "api:weatherapi": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:05.850790+00:00"
+      "checked_at": "2026-11-07T14:14:00.847739+00:00"
     },
     "api:notion-api-for-automation": {
-      "status": "failed",
+      "status": "verified_clean",
       "healed": false,
-      "errors": [
-        "api_client.py does not implement the endpoint host 'api.notion.com'",
-        "requests.http: does not use the endpoint host 'api.notion.com'"
-      ],
-      "checked_at": "2026-11-07T10:31:06.248107+00:00"
+      "errors": [],
+      "checked_at": "2026-11-07T14:14:01.043520+00:00"
     },
     "api:twilio-conversations-api": {
-      "status": "failed",
-      "healed": false,
-      "errors": [
-        "api_client.py does not implement the endpoint host 'conversations.twilio.com'",
-        "requests.http: does not use the endpoint host 'conversations.twilio.com'",
-        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-yb_5neiw/test_mock.py\", line 98, in test_http_error_is_handled\n    result = self._call_request_json('https://conversations.twilio.com/v1')\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-yb_5neiw/test_mock.py\", line 60, in _call_request_json\n    return api_client.request_json(*args, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-yb_5neiw/api_client.py\", line 64, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nFAILED (errors=1)\n"
-      ],
-      "checked_at": "2026-11-07T10:31:06.591898+00:00"
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T14:14:01.428342+00:00"
     },
     "api:asana-automation-api": {
-      "status": "failed",
-      "healed": false,
-      "errors": [
-        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-y2khxni0/test_mock.py\", line 98, in test_http_error_is_handled\n    result = self._call_request_json('https://app.asana.com/api/1.0')\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-y2khxni0/test_mock.py\", line 60, in _call_request_json\n    return api_client.request_json(*args, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-y2khxni0/api_client.py\", line 70, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nFAILED (errors=1)\n"
-      ],
-      "checked_at": "2026-11-07T10:31:06.925260+00:00"
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T14:14:01.783868+00:00"
     },
     "api:notion-api-for-automation-v2": {
-      "status": "failed",
+      "status": "verified_clean",
       "healed": false,
-      "errors": [
-        "api_client.py does not implement the endpoint host 'api.notion.com'",
-        "requests.http: does not use the endpoint host 'api.notion.com'"
-      ],
-      "checked_at": "2026-11-07T10:31:07.392405+00:00"
+      "errors": [],
+      "checked_at": "2026-11-07T14:14:01.981219+00:00"
     },
     "api:contentful-cms-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:07.629787+00:00"
+      "checked_at": "2026-11-07T14:14:02.206502+00:00"
     },
     "api:sendinblue-sms-api": {
       "status": "failed",
@@ -676,18 +604,15 @@
         "requests.http: does not use the endpoint host 'api.sendinblue.com'",
         "API kit file 'requests.http' is <= 100 bytes"
       ],
-      "checked_at": "2026-11-07T10:31:08.097287+00:00"
+      "checked_at": "2026-11-07T14:14:02.581698+00:00"
     },
     "api:tibber-api": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "api_client.py does not implement the endpoint host 'api.tibber.com'",
-        "requests.http: does not use the endpoint host 'api.tibber.com'",
-        "API kit file 'requests.http' is <= 100 bytes",
-        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-iqini4q7/test_mock.py\", line 98, in test_http_error_is_handled\n    result = self._call_request_json('https://api.tibber.com/v1')\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-iqini4q7/test_mock.py\", line 60, in _call_request_json\n    return api_client.request_json(*args, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-iqini4q7/api_client.py\", line 47, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nFAILED (errors=1)\n"
+        "API kit file 'requests.http' is <= 100 bytes"
       ],
-      "checked_at": "2026-11-07T10:31:08.389471+00:00"
+      "checked_at": "2026-11-07T14:14:02.930257+00:00"
     },
     "api:braintree-payments-api": {
       "status": "failed",
@@ -696,872 +621,849 @@
         "api_client.py does not implement the endpoint host 'api.braintreegateway.com'",
         "requests.http: does not use the endpoint host 'api.braintreegateway.com'"
       ],
-      "checked_at": "2026-11-07T10:31:08.875548+00:00"
+      "checked_at": "2026-11-07T14:14:03.407003+00:00"
     },
     "api:census-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:09.103525+00:00"
+      "checked_at": "2026-11-07T14:14:03.662754+00:00"
     },
     "api:finnhub-stock-api": {
-      "status": "failed",
-      "healed": false,
-      "errors": [
-        "API sandbox failed: api_client.py --dry-run failed:\nusage: api_client.py [-h] symbol\napi_client.py: error: the following arguments are required: symbol"
-      ],
-      "checked_at": "2026-11-07T10:31:09.546396+00:00"
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T14:14:04.080447+00:00"
     },
     "api:slack-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:09.777034+00:00"
+      "checked_at": "2026-11-07T14:14:04.310126+00:00"
     },
     "api:tinkr-api": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "api_client.py does not implement the endpoint host 'api.tink.com'",
-        "requests.http: does not use the endpoint host 'api.tink.com'",
         "API kit file 'requests.http' is <= 100 bytes"
       ],
-      "checked_at": "2026-11-07T10:31:10.220569+00:00"
+      "checked_at": "2026-11-07T14:14:04.731590+00:00"
     },
     "api:finnhub-crypto-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:10.446889+00:00"
+      "checked_at": "2026-11-07T14:14:04.946664+00:00"
     },
     "api:squarespace-api": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "API sandbox failed: unittest failed:\n\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-g8sdjvj3/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-g8sdjvj3/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: ApiResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+        "API sandbox failed: unittest failed:\n\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-wnr_0tus/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-wnr_0tus/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: ApiResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
       ],
-      "checked_at": "2026-11-07T10:31:10.742848+00:00"
+      "checked_at": "2026-11-07T14:14:05.332565+00:00"
     },
     "api:twitch-helix-api": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "api_client.py does not implement the endpoint host 'api.twitch.tv'",
-        "requests.http: does not use the endpoint host 'api.twitch.tv'",
         "API kit file 'requests.http' is <= 100 bytes"
       ],
-      "checked_at": "2026-11-07T10:31:11.157953+00:00"
+      "checked_at": "2026-11-07T14:14:05.742696+00:00"
     },
     "api:pdf-co-api": {
-      "status": "failed",
+      "status": "verified_clean",
       "healed": false,
-      "errors": [
-        "api_client.py does not implement the endpoint host 'api.pdf.co'",
-        "api_client.py contains a generic placeholder domain",
-        "requests.http: does not use the endpoint host 'api.pdf.co'"
-      ],
-      "checked_at": "2026-11-07T10:31:11.547241+00:00"
+      "errors": [],
+      "checked_at": "2026-11-07T14:14:05.923758+00:00"
     },
     "api:aiven-kafka-api": {
-      "status": "failed",
-      "healed": false,
-      "errors": [
-        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nERROR:root:Max retries exceeded\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-emxyi4mu/test_mock.py\", line 98, in test_http_error_is_handled\n    result = self._call_request_json('https://api.aiven.io/v1/project')\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-emxyi4mu/test_mock.py\", line 60, in _call_request_json\n    return api_client.request_json(*args, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-emxyi4mu/api_client.py\", line 50, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nFAILED (errors=1)\n"
-      ],
-      "checked_at": "2026-11-07T10:31:11.836290+00:00"
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T14:14:06.289752+00:00"
     },
     "api:api-ai-image-generator": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "api_client.py does not mention the API title",
-        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nERROR:root:Max retries exceeded.\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ebghq2rr/test_mock.py\", line 98, in test_http_error_is_handled\n    result = self._call_request_json('https://api.deepai.org/api/text2img')\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ebghq2rr/test_mock.py\", line 60, in _call_request_json\n    return api_client.request_json(*args, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ebghq2rr/api_client.py\", line 51, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nFAILED (errors=1)\n"
+        "api_client.py does not mention the API title"
       ],
-      "checked_at": "2026-11-07T10:31:12.107355+00:00"
+      "checked_at": "2026-11-07T14:14:06.648013+00:00"
     },
     "api:sentry-performance-api": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "API kit file 'requests.http' is <= 100 bytes",
-        "API sandbox failed: unittest failed:\n\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nERROR:root:Max retries exceeded\nE..\n======================================================================\nERROR: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-k4hoz1a6/test_mock.py\", line 98, in test_http_error_is_handled\n    result = self._call_request_json('https://sentry.io/api/0/')\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-k4hoz1a6/test_mock.py\", line 60, in _call_request_json\n    return api_client.request_json(*args, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-k4hoz1a6/api_client.py\", line 50, in request_json\n    sys.exit(1)\n    ~~~~~~~~^^^\nSystemExit: 1\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nFAILED (errors=1)\n"
+        "API kit file 'requests.http' is <= 100 bytes"
       ],
-      "checked_at": "2026-11-07T10:31:12.370458+00:00"
+      "checked_at": "2026-11-07T14:14:06.988234+00:00"
     },
     "api:twitch-analytics-api": {
-      "status": "failed",
+      "status": "verified_clean",
       "healed": false,
-      "errors": [
-        "api_client.py does not implement the endpoint host 'api.twitch.tv'",
-        "requests.http: does not use the endpoint host 'api.twitch.tv'"
-      ],
-      "checked_at": "2026-11-07T10:31:12.779288+00:00"
+      "errors": [],
+      "checked_at": "2026-11-07T14:14:07.184505+00:00"
     },
     "api:jira-rest-api": {
-      "status": "failed",
+      "status": "verified_clean",
       "healed": false,
-      "errors": [
-        "requests.http: does not use the endpoint host '{your-domain}.atlassian.net'"
-      ],
-      "checked_at": "2026-11-07T10:31:13.279548+00:00"
+      "errors": [],
+      "checked_at": "2026-11-07T14:14:07.448270+00:00"
     },
     "api:convertkit-api": {
-      "status": "failed",
+      "status": "verified_clean",
       "healed": false,
-      "errors": [
-        "api_client.py contains a generic placeholder domain"
-      ],
-      "checked_at": "2026-11-07T10:31:13.796963+00:00"
+      "errors": [],
+      "checked_at": "2026-11-07T14:14:07.723020+00:00"
     },
     "api:klaviyo-api": {
-      "status": "failed",
+      "status": "verified_clean",
       "healed": false,
-      "errors": [
-        "api_client.py contains a generic placeholder domain"
-      ],
-      "checked_at": "2026-11-07T10:31:14.327649+00:00"
+      "errors": [],
+      "checked_at": "2026-11-07T14:14:07.963830+00:00"
     },
     "alternative:zapier-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.331171+00:00"
+      "checked_at": "2026-11-07T14:14:07.967556+00:00"
     },
     "alternative:figma-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.332576+00:00"
+      "checked_at": "2026-11-07T14:14:07.969184+00:00"
     },
     "alternative:slack-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.333950+00:00"
+      "checked_at": "2026-11-07T14:14:07.970819+00:00"
     },
     "alternative:airtable-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.335794+00:00"
+      "checked_at": "2026-11-07T14:14:07.972387+00:00"
     },
     "alternative:mailchimp-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.337513+00:00"
+      "checked_at": "2026-11-07T14:14:07.973922+00:00"
     },
     "alternative:trello-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.339067+00:00"
+      "checked_at": "2026-11-07T14:14:07.975632+00:00"
     },
     "alternative:google-analytics-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.340534+00:00"
+      "checked_at": "2026-11-07T14:14:07.977235+00:00"
     },
     "alternative:hubspot-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.342043+00:00"
+      "checked_at": "2026-11-07T14:14:07.978676+00:00"
     },
     "alternative:asana-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.343559+00:00"
+      "checked_at": "2026-11-07T14:14:07.980170+00:00"
     },
     "alternative:dropbox-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.345257+00:00"
+      "checked_at": "2026-11-07T14:14:07.981725+00:00"
     },
     "alternative:calendly-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.346722+00:00"
+      "checked_at": "2026-11-07T14:14:07.983168+00:00"
     },
     "alternative:wordpress-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.348147+00:00"
+      "checked_at": "2026-11-07T14:14:07.984520+00:00"
     },
     "alternative:shopify-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.349553+00:00"
+      "checked_at": "2026-11-07T14:14:07.985874+00:00"
     },
     "alternative:monday-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.351106+00:00"
+      "checked_at": "2026-11-07T14:14:07.987268+00:00"
     },
     "alternative:clickup-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.353081+00:00"
+      "checked_at": "2026-11-07T14:14:07.988674+00:00"
     },
     "alternative:miro-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.354647+00:00"
+      "checked_at": "2026-11-07T14:14:07.989968+00:00"
     },
     "alternative:loom-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.356135+00:00"
+      "checked_at": "2026-11-07T14:14:07.991410+00:00"
     },
     "alternative:intercom-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.357557+00:00"
+      "checked_at": "2026-11-07T14:14:07.992814+00:00"
     },
     "alternative:zendesk-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.359137+00:00"
+      "checked_at": "2026-11-07T14:14:07.994232+00:00"
     },
     "alternative:jira-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.360789+00:00"
+      "checked_at": "2026-11-07T14:14:07.995621+00:00"
     },
     "alternative:github-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.362320+00:00"
+      "checked_at": "2026-11-07T14:14:07.996901+00:00"
     },
     "alternative:gitlab-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.363765+00:00"
+      "checked_at": "2026-11-07T14:14:07.998198+00:00"
     },
     "alternative:bitbucket-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.365318+00:00"
+      "checked_at": "2026-11-07T14:14:07.999590+00:00"
     },
     "alternative:netlify-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.366791+00:00"
+      "checked_at": "2026-11-07T14:14:08.001003+00:00"
     },
     "alternative:vercel-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.368394+00:00"
+      "checked_at": "2026-11-07T14:14:08.002304+00:00"
     },
     "alternative:openai-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.370098+00:00"
+      "checked_at": "2026-11-07T14:14:08.003641+00:00"
     },
     "alternative:stripe-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.371611+00:00"
+      "checked_at": "2026-11-07T14:14:08.004989+00:00"
     },
     "alternative:supabase-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.373079+00:00"
+      "checked_at": "2026-11-07T14:14:08.006386+00:00"
     },
     "alternative:postman-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.374587+00:00"
+      "checked_at": "2026-11-07T14:14:08.007831+00:00"
     },
     "alternative:obsidian-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.376099+00:00"
+      "checked_at": "2026-11-07T14:14:08.009293+00:00"
     },
     "alternative:auth0-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.377743+00:00"
+      "checked_at": "2026-11-07T14:14:08.010620+00:00"
     },
     "alternative:algolia-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.379274+00:00"
+      "checked_at": "2026-11-07T14:14:08.011923+00:00"
     },
     "alternative:deepgram-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.380862+00:00"
+      "checked_at": "2026-11-07T14:14:08.013257+00:00"
     },
     "alternative:elevenlabs-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.382368+00:00"
+      "checked_at": "2026-11-07T14:14:08.014602+00:00"
     },
     "alternative:pinecone-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.383648+00:00"
+      "checked_at": "2026-11-07T14:14:08.015847+00:00"
     },
     "alternative:adobe-photoshop-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.385952+00:00"
+      "checked_at": "2026-11-07T14:14:08.017671+00:00"
     },
     "alternative:zoom-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.387532+00:00"
+      "checked_at": "2026-11-07T14:14:08.019084+00:00"
     },
     "alternative:salesforce-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.388869+00:00"
+      "checked_at": "2026-11-07T14:14:08.020292+00:00"
     },
     "alternative:google-drive-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.390199+00:00"
+      "checked_at": "2026-11-07T14:14:08.021503+00:00"
     },
     "alternative:microsoft-teams-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.391617+00:00"
+      "checked_at": "2026-11-07T14:14:08.022739+00:00"
     },
     "alternative:adobe-acrobat-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.392903+00:00"
+      "checked_at": "2026-11-07T14:14:08.023864+00:00"
     },
     "alternative:docusign-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.394603+00:00"
+      "checked_at": "2026-11-07T14:14:08.025265+00:00"
     },
     "alternative:visual-studio-code-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.395927+00:00"
+      "checked_at": "2026-11-07T14:14:08.026520+00:00"
     },
     "alternative:microsoft-excel-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.397317+00:00"
+      "checked_at": "2026-11-07T14:14:08.027812+00:00"
     },
     "alternative:adobe-illustrator-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.398897+00:00"
+      "checked_at": "2026-11-07T14:14:08.029179+00:00"
     },
     "alternative:docker-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.400154+00:00"
+      "checked_at": "2026-11-07T14:14:08.030324+00:00"
     },
     "alternative:quickbooks-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.402131+00:00"
+      "checked_at": "2026-11-07T14:14:08.031800+00:00"
     },
     "alternative:zoominfo-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.403815+00:00"
+      "checked_at": "2026-11-07T14:14:08.033072+00:00"
     },
     "alternative:autodesk-autocad-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.405167+00:00"
+      "checked_at": "2026-11-07T14:14:08.034558+00:00"
     },
     "alternative:dropbox-paper-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.406496+00:00"
+      "checked_at": "2026-11-07T14:14:08.035847+00:00"
     },
     "alternative:microsoft-word-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.407992+00:00"
+      "checked_at": "2026-11-07T14:14:08.037135+00:00"
     },
     "alternative:notepad-plus-plus-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.409562+00:00"
+      "checked_at": "2026-11-07T14:14:08.038539+00:00"
     },
     "alternative:adobe-premiere-pro-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.411210+00:00"
+      "checked_at": "2026-11-07T14:14:08.039782+00:00"
     },
     "alternative:adobe-lightroom-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.412588+00:00"
+      "checked_at": "2026-11-07T14:14:08.041065+00:00"
     },
     "alternative:sketch-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.414076+00:00"
+      "checked_at": "2026-11-07T14:14:08.042498+00:00"
     },
     "alternative:basecamp-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.416015+00:00"
+      "checked_at": "2026-11-07T14:14:08.044291+00:00"
     },
     "alternative:aws-ec2-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.417387+00:00"
+      "checked_at": "2026-11-07T14:14:08.045577+00:00"
     },
     "alternative:adobe-after-effects-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.419337+00:00"
+      "checked_at": "2026-11-07T14:14:08.046942+00:00"
     },
     "alternative:tiktok-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.421119+00:00"
+      "checked_at": "2026-11-07T14:14:08.048426+00:00"
     },
     "alternative:canva-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.422555+00:00"
+      "checked_at": "2026-11-07T14:14:08.049838+00:00"
     },
     "alternative:evernote-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.424270+00:00"
+      "checked_at": "2026-11-07T14:14:08.051393+00:00"
     },
     "alternative:notability-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.426065+00:00"
+      "checked_at": "2026-11-07T14:14:08.053060+00:00"
     },
     "alternative:microsoft-onedrive-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.428177+00:00"
+      "checked_at": "2026-11-07T14:14:08.054623+00:00"
     },
     "alternative:notion-api-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.429672+00:00"
+      "checked_at": "2026-11-07T14:14:08.055947+00:00"
     },
     "alternative:figma-plugin-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.431064+00:00"
+      "checked_at": "2026-11-07T14:14:08.057142+00:00"
     },
     "alternative:figma-x-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.432509+00:00"
+      "checked_at": "2026-11-07T14:14:08.058537+00:00"
     },
     "alternative:clickmeeting-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.434540+00:00"
+      "checked_at": "2026-11-07T14:14:08.060253+00:00"
     },
     "alternative:notion-software-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.436454+00:00"
+      "checked_at": "2026-11-07T14:14:08.061816+00:00"
     },
     "alternative:figma-studio-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.437814+00:00"
+      "checked_at": "2026-11-07T14:14:08.063060+00:00"
     },
     "alternative:notion-forms-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.439301+00:00"
+      "checked_at": "2026-11-07T14:14:08.064493+00:00"
     },
     "alternative:notion-ai-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.440782+00:00"
+      "checked_at": "2026-11-07T14:14:08.065865+00:00"
     },
     "alternative:notion-templates-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.442907+00:00"
+      "checked_at": "2026-11-07T14:14:08.067813+00:00"
     },
     "alternative:microsoft-access-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.444793+00:00"
+      "checked_at": "2026-11-07T14:14:08.069292+00:00"
     },
     "alternative:notion-wiki-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.446412+00:00"
+      "checked_at": "2026-11-07T14:14:08.070778+00:00"
     },
     "alternative:airtable-api-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.448054+00:00"
+      "checked_at": "2026-11-07T14:14:08.072246+00:00"
     },
     "alternative:notion-boards-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.450476+00:00"
+      "checked_at": "2026-11-07T14:14:08.074070+00:00"
     },
     "alternative:figma-figjam-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.452135+00:00"
+      "checked_at": "2026-11-07T14:14:08.075617+00:00"
     },
     "alternative:figma-digital-asset-management-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.453512+00:00"
+      "checked_at": "2026-11-07T14:14:08.076967+00:00"
     },
     "alternative:microsoft-teams-apps-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.454906+00:00"
+      "checked_at": "2026-11-07T14:14:08.078246+00:00"
     },
     "alternative:microsoft-azure-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.456318+00:00"
+      "checked_at": "2026-11-07T14:14:08.079550+00:00"
     },
     "alternative:notion-database-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.457867+00:00"
+      "checked_at": "2026-11-07T14:14:08.080891+00:00"
     },
     "alternative:microsoft-outlook-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.459730+00:00"
+      "checked_at": "2026-11-07T14:14:08.082323+00:00"
     },
     "alternative:whatsapp-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.461606+00:00"
+      "checked_at": "2026-11-07T14:14:08.083930+00:00"
     },
     "alternative:moodle-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.463097+00:00"
+      "checked_at": "2026-11-07T14:14:08.085359+00:00"
     },
     "alternative:figma-figjam-plugin-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.464687+00:00"
+      "checked_at": "2026-11-07T14:14:08.086845+00:00"
     },
     "alternative:notion-ai-plugin-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.466443+00:00"
+      "checked_at": "2026-11-07T14:14:08.088213+00:00"
     },
     "alternative:microsoft-onenote-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.468429+00:00"
+      "checked_at": "2026-11-07T14:14:08.089812+00:00"
     },
     "alternative:figma-figma-design-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.469811+00:00"
+      "checked_at": "2026-11-07T14:14:08.091190+00:00"
     },
     "alternative:notion-forms-advanced-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.471224+00:00"
+      "checked_at": "2026-11-07T14:14:08.092615+00:00"
     },
     "alternative:figma-plugins-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.472643+00:00"
+      "checked_at": "2026-11-07T14:14:08.093977+00:00"
     },
     "alternative:notion-automations-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.474137+00:00"
+      "checked_at": "2026-11-07T14:14:08.095297+00:00"
     },
     "alternative:notion-boards-advanced-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.476284+00:00"
+      "checked_at": "2026-11-07T14:14:08.097244+00:00"
     },
     "alternative:notion-forms-advanced-pro-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.478276+00:00"
+      "checked_at": "2026-11-07T14:14:08.098656+00:00"
     },
     "alternative:microsoft-surface-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.479740+00:00"
+      "checked_at": "2026-11-07T14:14:08.100087+00:00"
     },
     "alternative:canva-website-design-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.481192+00:00"
+      "checked_at": "2026-11-07T14:14:08.101594+00:00"
     },
     "alternative:notepad-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.482971+00:00"
+      "checked_at": "2026-11-07T14:14:08.103331+00:00"
     },
     "alternative:clickup-api-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.484514+00:00"
+      "checked_at": "2026-11-07T14:14:08.104753+00:00"
     },
     "alternative:canva-video-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.486632+00:00"
+      "checked_at": "2026-11-07T14:14:08.106547+00:00"
     },
     "alternative:airtable-forms-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.488136+00:00"
+      "checked_at": "2026-11-07T14:14:08.108068+00:00"
     },
     "alternative:microsoft-teams-rooms-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.489825+00:00"
+      "checked_at": "2026-11-07T14:14:08.109791+00:00"
     },
     "alternative:figma-ux-research-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.491477+00:00"
+      "checked_at": "2026-11-07T14:14:08.111406+00:00"
     },
     "alternative:canva-whiteboard-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.493251+00:00"
+      "checked_at": "2026-11-07T14:14:08.112982+00:00"
     },
     "alternative:redis-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.495794+00:00"
+      "checked_at": "2026-11-07T14:14:08.115189+00:00"
     },
     "alternative:framer-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.498102+00:00"
+      "checked_at": "2026-11-07T14:14:08.117410+00:00"
     },
     "alternative:microsoft-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.500026+00:00"
+      "checked_at": "2026-11-07T14:14:08.119405+00:00"
     },
     "alternative:sendgrid-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.502706+00:00"
+      "checked_at": "2026-11-07T14:14:08.121755+00:00"
     },
     "alternative:together-ai-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.505075+00:00"
+      "checked_at": "2026-11-07T14:14:08.124031+00:00"
     },
     "alternative:mistral-ai-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.507761+00:00"
+      "checked_at": "2026-11-07T14:14:08.126838+00:00"
     },
     "alternative:doppler-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.511932+00:00"
+      "checked_at": "2026-11-07T14:14:08.130606+00:00"
     },
     "alternative:firebase-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.514518+00:00"
+      "checked_at": "2026-11-07T14:14:08.133083+00:00"
     },
     "alternative:planetscale-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.517427+00:00"
+      "checked_at": "2026-11-07T14:14:08.136008+00:00"
     },
     "alternative:twitch-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.520399+00:00"
+      "checked_at": "2026-11-07T14:14:08.138560+00:00"
     },
     "workflow:multi-model-prompt-router": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:14.851521+00:00"
+      "checked_at": "2026-11-07T14:14:08.412636+00:00"
     },
     "workflow:llm-evaluation-benchmark": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "workflow.py --dry-run failed: Traceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ed8peviu/workflow.py\", line 195, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ed8peviu/workflow.py\", line 187, in main\n    run_workflow()\n    ~~~~~~~~~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ed8peviu/workflow.py\", line 98, in run_workflow\n    openai_responses = run_openai_baseline(prompts)\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ed8peviu/workflow.py\", line 95, in run_openai_baseline\n    responses.append(result.get('choices', [{}])[0].get('message', {}).get('content', ''))\n                     ^^^^^^^^^^\nAttributeError: 'list' object has no attribute 'get'"
+        "workflow.py --dry-run failed: Traceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ppq0v50x/workflow.py\", line 195, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ppq0v50x/workflow.py\", line 187, in main\n    run_workflow()\n    ~~~~~~~~~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ppq0v50x/workflow.py\", line 98, in run_workflow\n    openai_responses = run_openai_baseline(prompts)\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ppq0v50x/workflow.py\", line 95, in run_openai_baseline\n    responses.append(result.get('choices', [{}])[0].get('message', {}).get('content', ''))\n                     ^^^^^^^^^^\nAttributeError: 'list' object has no attribute 'get'"
       ],
-      "checked_at": "2026-11-07T10:31:15.190650+00:00"
+      "checked_at": "2026-11-07T14:14:08.717897+00:00"
     },
     "workflow:batch-llm-processing": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:25.439461+00:00"
+      "checked_at": "2026-11-07T14:14:18.950510+00:00"
     },
     "workflow:ai-customer-insights": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:25.602637+00:00"
+      "checked_at": "2026-11-07T14:14:19.099519+00:00"
     },
     "workflow:claude-document-summarizer": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:25.749350+00:00"
+      "checked_at": "2026-11-07T14:14:19.233162+00:00"
     },
     "workflow:gemini-multimodal-analyzer": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:25.893217+00:00"
+      "checked_at": "2026-11-07T14:14:19.365017+00:00"
     },
     "workflow:watson-assistant-helpdesk": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:26.205597+00:00"
+      "checked_at": "2026-11-07T14:14:19.501318+00:00"
     },
     "workflow:podcast-transcription-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:26.348972+00:00"
+      "checked_at": "2026-11-07T14:14:19.635379+00:00"
     },
     "workflow:ai-voiceover-production": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:26.930168+00:00"
+      "checked_at": "2026-11-07T14:14:20.204964+00:00"
     },
     "workflow:ai-image-generation-pipeline": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "workflow.py --dry-run failed: Traceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-il90c_eq/workflow.py\", line 181, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-il90c_eq/workflow.py\", line 173, in main\n    run_workflow()\n    ~~~~~~~~~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-il90c_eq/workflow.py\", line 129, in run_workflow\n    manifest = upload_to_vercel_blob(images)\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-il90c_eq/workflow.py\", line 125, in upload_to_vercel_blob\n    manifest.append(response_data.get('url'))\n                    ^^^^^^^^^^^^^^^^^\nAttributeError: 'list' object has no attribute 'get'"
+        "workflow.py --dry-run failed: Traceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-dy2fskct/workflow.py\", line 181, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-dy2fskct/workflow.py\", line 173, in main\n    run_workflow()\n    ~~~~~~~~~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-dy2fskct/workflow.py\", line 129, in run_workflow\n    manifest = upload_to_vercel_blob(images)\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-dy2fskct/workflow.py\", line 125, in upload_to_vercel_blob\n    manifest.append(response_data.get('url'))\n                    ^^^^^^^^^^^^^^^^^\nAttributeError: 'list' object has no attribute 'get'"
       ],
-      "checked_at": "2026-11-07T10:31:27.258098+00:00"
+      "checked_at": "2026-11-07T14:14:20.508260+00:00"
     },
     "workflow:semantic-search-knowledge-base": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:27.410062+00:00"
+      "checked_at": "2026-11-07T14:14:20.645600+00:00"
     },
     "workflow:hybrid-search-product-catalog": {
       "status": "failed",
@@ -1569,150 +1471,150 @@
       "errors": [
         "workflow kit file 'requests.http' is <= 100 bytes"
       ],
-      "checked_at": "2026-11-07T10:31:27.728014+00:00"
+      "checked_at": "2026-11-07T14:14:20.944307+00:00"
     },
     "workflow:rag-document-assistant": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:27.872767+00:00"
+      "checked_at": "2026-11-07T14:14:21.096481+00:00"
     },
     "workflow:content-similarity-audit": {
       "status": "failed",
       "healed": false,
       "errors": [
         "workflow kit file 'requests.http' is <= 100 bytes",
-        "workflow.py --dry-run failed: Loaded 3 articles.\n{'id': '1', 'text': 'This is the first article.'}\n\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-5rl6di9v/workflow.py\", line 183, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-5rl6di9v/workflow.py\", line 175, in main\n    run_workflow()\n    ~~~~~~~~~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-5rl6di9v/workflow.py\", line 103, in run_workflow\n    embeddings = embed_articles(articles)\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-5rl6di9v/workflow.py\", line 101, in embed_articles\n    return response_data.get('embeddings', [])  # Use .get() to avoid KeyError\n           ^^^^^^^^^^^^^^^^^\nAttributeError: 'list' object has no attribute 'get'"
+        "workflow.py --dry-run failed: Loaded 3 articles.\n{'id': '1', 'text': 'This is the first article.'}\n\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-77t54hj7/workflow.py\", line 183, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-77t54hj7/workflow.py\", line 175, in main\n    run_workflow()\n    ~~~~~~~~~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-77t54hj7/workflow.py\", line 103, in run_workflow\n    embeddings = embed_articles(articles)\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-77t54hj7/workflow.py\", line 101, in embed_articles\n    return response_data.get('embeddings', [])  # Use .get() to avoid KeyError\n           ^^^^^^^^^^^^^^^^^\nAttributeError: 'list' object has no attribute 'get'"
       ],
-      "checked_at": "2026-11-07T10:31:28.200428+00:00"
+      "checked_at": "2026-11-07T14:14:21.397032+00:00"
     },
     "workflow:transactional-email-delivery": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:28.341954+00:00"
+      "checked_at": "2026-11-07T14:14:21.532554+00:00"
     },
     "workflow:email-campaign-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:28.491547+00:00"
+      "checked_at": "2026-11-07T14:14:21.689702+00:00"
     },
     "workflow:sms-alert-system": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:28.631612+00:00"
+      "checked_at": "2026-11-07T14:14:21.923427+00:00"
     },
     "workflow:slack-incident-notifications": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:28.771685+00:00"
+      "checked_at": "2026-11-07T14:14:22.060572+00:00"
     },
     "workflow:telegram-community-bot": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:28.907104+00:00"
+      "checked_at": "2026-11-07T14:14:22.196564+00:00"
     },
     "workflow:video-call-summarizer": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:29.044234+00:00"
+      "checked_at": "2026-11-07T14:14:22.332324+00:00"
     },
     "workflow:conversational-messaging-hub": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:29.183047+00:00"
+      "checked_at": "2026-11-07T14:14:22.468047+00:00"
     },
     "workflow:crm-lead-scoring": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:29.338867+00:00"
+      "checked_at": "2026-11-07T14:14:22.604247+00:00"
     },
     "workflow:salesforce-pipeline-sync": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:29.489125+00:00"
+      "checked_at": "2026-11-07T14:14:22.737976+00:00"
     },
     "workflow:personalized-outreach-engine": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:29.635644+00:00"
+      "checked_at": "2026-11-07T14:14:22.873422+00:00"
     },
     "workflow:support-ticket-triage": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:29.777412+00:00"
+      "checked_at": "2026-11-07T14:14:23.010528+00:00"
     },
     "workflow:ai-help-center-search": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:29.937395+00:00"
+      "checked_at": "2026-11-07T14:14:23.147186+00:00"
     },
     "workflow:csat-feedback-analysis": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:30.083928+00:00"
+      "checked_at": "2026-11-07T14:14:23.320136+00:00"
     },
     "workflow:subscription-billing-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:30.239428+00:00"
+      "checked_at": "2026-11-07T14:14:23.456519+00:00"
     },
     "workflow:invoice-reconciliation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:30.378508+00:00"
+      "checked_at": "2026-11-07T14:14:23.592787+00:00"
     },
     "workflow:paypal-payout-monitoring": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:30.543284+00:00"
+      "checked_at": "2026-11-07T14:14:23.735405+00:00"
     },
     "workflow:stock-market-alerts": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:30.681108+00:00"
+      "checked_at": "2026-11-07T14:14:23.919046+00:00"
     },
     "workflow:crypto-portfolio-tracker": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:30.985816+00:00"
+      "checked_at": "2026-11-07T14:14:24.061345+00:00"
     },
     "workflow:bank-transaction-enrichment": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "workflow.py --dry-run failed: Traceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ebwmnr5m/workflow.py\", line 207, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ebwmnr5m/workflow.py\", line 199, in main\n    run_workflow()\n    ~~~~~~~~~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ebwmnr5m/workflow.py\", line 114, in run_workflow\n    categorized_merchants = categorize_merchants(transactions)\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ebwmnr5m/workflow.py\", line 110, in categorize_merchants\n    category = json.loads(response.read().decode('utf-8')).get('choices', [{}])[0].get('message', {}).get('content', '')\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'list' object has no attribute 'get'"
+        "workflow.py --dry-run failed: Traceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-yop39jvo/workflow.py\", line 207, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-yop39jvo/workflow.py\", line 199, in main\n    run_workflow()\n    ~~~~~~~~~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-yop39jvo/workflow.py\", line 114, in run_workflow\n    categorized_merchants = categorize_merchants(transactions)\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-yop39jvo/workflow.py\", line 110, in categorize_merchants\n    category = json.loads(response.read().decode('utf-8')).get('choices', [{}])[0].get('message', {}).get('content', '')\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'list' object has no attribute 'get'"
       ],
-      "checked_at": "2026-11-07T10:31:31.293290+00:00"
+      "checked_at": "2026-11-07T14:14:24.363031+00:00"
     },
     "workflow:supabase-realtime-dashboard": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:31.431665+00:00"
+      "checked_at": "2026-11-07T14:14:24.498649+00:00"
     },
     "workflow:airtable-content-sync": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:31.572255+00:00"
+      "checked_at": "2026-11-07T14:14:24.633925+00:00"
     },
     "workflow:mongodb-data-pipeline": {
       "status": "failed",
@@ -1739,7 +1641,7 @@
         "step 4: checklist missing",
         "step 4: expected result missing"
       ],
-      "checked_at": "2026-11-07T10:31:31.841640+00:00"
+      "checked_at": "2026-11-07T14:14:24.893649+00:00"
     },
     "workflow:postgres-backup-reporting": {
       "status": "failed",
@@ -1747,25 +1649,25 @@
       "errors": [
         "workflow kit file 'mock_data.json' is <= 100 bytes"
       ],
-      "checked_at": "2026-11-07T10:31:32.139364+00:00"
+      "checked_at": "2026-11-07T14:14:25.184904+00:00"
     },
     "workflow:redis-rate-limit-store": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:32.274579+00:00"
+      "checked_at": "2026-11-07T14:14:25.317580+00:00"
     },
     "workflow:google-sheets-reporting-hub": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:32.432222+00:00"
+      "checked_at": "2026-11-07T14:14:25.465378+00:00"
     },
     "workflow:deployment-monitoring-alerts": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:32.595498+00:00"
+      "checked_at": "2026-11-07T14:14:25.604561+00:00"
     },
     "workflow:feature-flag-rollout": {
       "status": "failed",
@@ -1774,13 +1676,13 @@
         "workflow kit file 'mock_data.json' is <= 100 bytes",
         "workflow kit file 'requests.http' is <= 100 bytes"
       ],
-      "checked_at": "2026-11-07T10:31:32.895055+00:00"
+      "checked_at": "2026-11-07T14:14:25.885564+00:00"
     },
     "workflow:secrets-rotation-audit": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:33.029858+00:00"
+      "checked_at": "2026-11-07T14:14:26.021037+00:00"
     },
     "workflow:serverless-job-scheduler": {
       "status": "failed",
@@ -1807,171 +1709,171 @@
         "step 4: 'what you need to do' actions missing",
         "step 4: checklist missing"
       ],
-      "checked_at": "2026-11-07T10:31:33.290293+00:00"
+      "checked_at": "2026-11-07T14:14:26.280980+00:00"
     },
     "workflow:api-health-monitoring": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:33.436420+00:00"
+      "checked_at": "2026-11-07T14:14:26.418111+00:00"
     },
     "workflow:linear-roadmap-sync": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:33.575003+00:00"
+      "checked_at": "2026-11-07T14:14:26.550968+00:00"
     },
     "workflow:release-notes-generator": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:33.712836+00:00"
+      "checked_at": "2026-11-07T14:14:26.684156+00:00"
     },
     "workflow:programmatic-seo-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:33.849206+00:00"
+      "checked_at": "2026-11-07T14:14:26.818515+00:00"
     },
     "workflow:ai-content-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:33.987128+00:00"
+      "checked_at": "2026-11-07T14:14:26.962649+00:00"
     },
     "workflow:seo-content-audit": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:34.141037+00:00"
+      "checked_at": "2026-11-07T14:14:27.104717+00:00"
     },
     "workflow:blog-cms-publishing": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:34.284479+00:00"
+      "checked_at": "2026-11-07T14:14:27.239987+00:00"
     },
     "workflow:local-seo-landing-pages": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:34.423405+00:00"
+      "checked_at": "2026-11-07T14:14:27.374898+00:00"
     },
     "workflow:newsletter-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:34.560399+00:00"
+      "checked_at": "2026-11-07T14:14:27.510133+00:00"
     },
     "workflow:content-localization-pipeline": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:34.856389+00:00"
+      "checked_at": "2026-11-07T14:14:27.644057+00:00"
     },
     "workflow:meeting-notes-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:34.994188+00:00"
+      "checked_at": "2026-11-07T14:14:27.779851+00:00"
     },
     "workflow:notion-task-sync": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "workflow.py --dry-run failed: Traceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-mbb9o2mk/workflow.py\", line 208, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-mbb9o2mk/workflow.py\", line 200, in main\n    run_workflow()\n    ~~~~~~~~~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-mbb9o2mk/workflow.py\", line 118, in run_workflow\n    sync_tasks_with_asana(open_tasks)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-mbb9o2mk/workflow.py\", line 90, in sync_tasks_with_asana\n    task_id = task.get('external_id')\n              ^^^^^^^^\nAttributeError: 'str' object has no attribute 'get'"
+        "workflow.py --dry-run failed: Traceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-84409r0a/workflow.py\", line 208, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-84409r0a/workflow.py\", line 200, in main\n    run_workflow()\n    ~~~~~~~~~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-84409r0a/workflow.py\", line 118, in run_workflow\n    sync_tasks_with_asana(open_tasks)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-84409r0a/workflow.py\", line 90, in sync_tasks_with_asana\n    task_id = task.get('external_id')\n              ^^^^^^^^\nAttributeError: 'str' object has no attribute 'get'"
       ],
-      "checked_at": "2026-11-07T10:31:35.286048+00:00"
+      "checked_at": "2026-11-07T14:14:28.072873+00:00"
     },
     "workflow:document-approval-workflow": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:35.427719+00:00"
+      "checked_at": "2026-11-07T14:14:28.207383+00:00"
     },
     "workflow:form-submission-routing": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:35.573354+00:00"
+      "checked_at": "2026-11-07T14:14:28.351129+00:00"
     },
     "workflow:team-wiki-search": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:35.715321+00:00"
+      "checked_at": "2026-11-07T14:14:28.485553+00:00"
     },
     "workflow:design-feedback-collection": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:35.865787+00:00"
+      "checked_at": "2026-11-07T14:14:28.620755+00:00"
     },
     "workflow:collaboration-presence-sync": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:36.015040+00:00"
+      "checked_at": "2026-11-07T14:14:28.760060+00:00"
     },
     "workflow:product-analytics-dashboard": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:36.153994+00:00"
+      "checked_at": "2026-11-07T14:14:28.898376+00:00"
     },
     "workflow:error-tracking-alerts": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:36.289973+00:00"
+      "checked_at": "2026-11-07T14:14:29.033412+00:00"
     },
     "workflow:website-performance-reporting": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:36.428481+00:00"
+      "checked_at": "2026-11-07T14:14:29.171324+00:00"
     },
     "workflow:social-media-analytics": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:36.578535+00:00"
+      "checked_at": "2026-11-07T14:14:29.306835+00:00"
     },
     "workflow:shopify-order-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:36.751206+00:00"
+      "checked_at": "2026-11-07T14:14:29.454677+00:00"
     },
     "workflow:inventory-sync-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:36.886708+00:00"
+      "checked_at": "2026-11-07T14:14:29.601891+00:00"
     },
     "workflow:weather-driven-ops-alerts": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:37.025321+00:00"
+      "checked_at": "2026-11-07T14:14:29.750059+00:00"
     },
     "workflow:store-locator-geocoding": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:37.326768+00:00"
+      "checked_at": "2026-11-07T14:14:29.886368+00:00"
     },
     "workflow:asset-backup-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:37.469178+00:00"
+      "checked_at": "2026-11-07T14:14:30.023308+00:00"
     },
     "workflow:s3-static-site-publishing": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:37.606139+00:00"
+      "checked_at": "2026-11-07T14:14:30.189641+00:00"
     },
     "workflow:auth0-sso-provisioning": {
       "status": "failed",
@@ -1998,92 +1900,92 @@
         "step 4: checklist missing",
         "step 4: expected result missing"
       ],
-      "checked_at": "2026-11-07T10:31:37.865531+00:00"
+      "checked_at": "2026-11-07T14:14:30.448660+00:00"
     },
     "workflow:clerk-user-onboarding": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:38.000173+00:00"
+      "checked_at": "2026-11-07T14:14:30.583710+00:00"
     },
     "workflow:slack-twitch-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:38.156256+00:00"
+      "checked_at": "2026-11-07T14:14:30.737907+00:00"
     },
     "workflow:sentry-performance-airtable-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:38.336097+00:00"
+      "checked_at": "2026-11-07T14:14:30.896011+00:00"
     },
     "workflow:pdf-generator-to-twelve-data-with-deepai-image-generator-orchestration": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:38.509458+00:00"
+      "checked_at": "2026-11-07T14:14:31.059459+00:00"
     },
     "workflow:shopify-admin-twilio-conversations-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:38.664235+00:00"
+      "checked_at": "2026-11-07T14:14:31.216490+00:00"
     },
     "workflow:braintree-payments-to-airtable-with-contentful-content-management-system-orchestration": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:38.822046+00:00"
+      "checked_at": "2026-11-07T14:14:31.375539+00:00"
     },
     "workflow:slack-ibm-watson-language-translator-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:38.987540+00:00"
+      "checked_at": "2026-11-07T14:14:31.531071+00:00"
     },
     "workflow:slack-microsoft-azure-face-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:39.143337+00:00"
+      "checked_at": "2026-11-07T14:14:31.681736+00:00"
     },
     "workflow:shopify-admin-amazon-polly-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:39.302985+00:00"
+      "checked_at": "2026-11-07T14:14:31.842959+00:00"
     },
     "workflow:weatherapi-launchdarkly-feature-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:39.447009+00:00"
+      "checked_at": "2026-11-07T14:14:31.987602+00:00"
     },
     "workflow:salesforce-rest-weatherapi-automation-pipeline": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:39.794681+00:00"
+      "checked_at": "2026-11-07T14:14:32.145499+00:00"
     },
     "workflow:jira-rest-twilio-conversations-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:39.971042+00:00"
+      "checked_at": "2026-11-07T14:14:32.313242+00:00"
     },
     "workflow:jira-rest-notion-api-for-automation-automation-pipeline": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:40.309986+00:00"
+      "checked_at": "2026-11-07T14:14:32.477088+00:00"
     },
     "workflow:convertkit-github-copilot-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T10:31:40.460949+00:00"
+      "checked_at": "2026-11-07T14:14:32.639544+00:00"
     }
   },
-  "updated_at": "2026-11-07T10:31:40.566274+00:00"
+  "updated_at": "2026-11-07T14:14:32.746383+00:00"
 }
