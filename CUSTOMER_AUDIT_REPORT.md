@@ -1,14 +1,14 @@
 # Customer Audit Report
 
-Generated: 2026-11-07 15:15 UTC
+Generated: 2026-11-07 15:18 UTC
 
 ## Summary
 
 | Product type | Checked | OK | Auto-healed | Failed |
 | --- | ---: | ---: | ---: | ---: |
-| APIs | 0 | 0/0 OK | 0 | 0 |
-| Alternatives | 0 | 0/0 OK | 0 | 0 |
-| Workflows | 1 | 0/1 OK | 1 | 1 |
+| APIs | 106 | 80/106 OK | 0 | 26 |
+| Alternatives | 113 | 113/113 OK | 0 | 0 |
+| Workflows | 86 | 85/86 OK | 0 | 1 |
 
 - `npm run build`: OK
 - git commit & push: OK
@@ -44,7 +44,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-sao43qee/test_mock.py", line 103, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-8u2esucs/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -53,7 +53,7 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-sao43qee/test_mock.py", line 76, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-8u2esucs/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: DeepgramResponse(status='success', data={'ok': True}) is not an instance of <class 'dict'>
@@ -79,7 +79,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-4le3gqpy/test_mock.py", line 103, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ixv3idg6/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -88,13 +88,13 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-4le3gqpy/test_mock.py", line 76, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ixv3idg6/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: ApiResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>
 
 ----------------------------------------------------------------------
-Ran 3 tests in 0.002s
+Ran 3 tests in 0.001s
 
 FAILED (failures=2)
 
@@ -108,7 +108,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-176obli8/test_mock.py", line 103, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-bfbf4qxh/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -117,7 +117,7 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-176obli8/test_mock.py", line 76, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-bfbf4qxh/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: WatsonAssistantResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>
@@ -136,7 +136,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-6s1dcopw/test_mock.py", line 103, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-b3v2jreu/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -145,7 +145,7 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-6s1dcopw/test_mock.py", line 76, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-b3v2jreu/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: CognitiveServiceResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>
@@ -164,7 +164,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-0qlnzsrb/test_mock.py", line 103, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-6mmyw3nb/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -173,7 +173,7 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-0qlnzsrb/test_mock.py", line 76, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-6mmyw3nb/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: GraphAPIResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>
@@ -193,7 +193,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-fogasq21/test_mock.py", line 103, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-5lvg1ljt/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -202,7 +202,7 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-fogasq21/test_mock.py", line 76, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-5lvg1ljt/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: ApiResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>
@@ -228,7 +228,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-czsifmyg/test_mock.py", line 103, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-pio46t6a/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -237,7 +237,7 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-czsifmyg/test_mock.py", line 76, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-pio46t6a/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: ApiResponse(status='success', data={'ok': True}, error=None) is not an instance of <class 'dict'>
@@ -270,7 +270,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-oxd7_cfy/test_mock.py", line 103, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-jut52wgv/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -279,7 +279,7 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-oxd7_cfy/test_mock.py", line 76, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-jut52wgv/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: ApiResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>
@@ -300,7 +300,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-m8deditd/test_mock.py", line 103, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-bqwwuxjj/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -309,7 +309,7 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-m8deditd/test_mock.py", line 76, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-bqwwuxjj/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: ApiResponse(status='success', data={'ok': True}, error=None) is not an instance of <class 'dict'>
@@ -331,7 +331,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-jn6e77n3/test_mock.py", line 103, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-dstvdv_e/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -340,7 +340,7 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-jn6e77n3/test_mock.py", line 76, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-dstvdv_e/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: RedisResponse(status='success', data={'ok': True}, error=None) is not an instance of <class 'dict'>
@@ -361,7 +361,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-nee9wewp/test_mock.py", line 103, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-oxtp6g_6/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -370,7 +370,7 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-nee9wewp/test_mock.py", line 76, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-oxtp6g_6/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: BlobResponse(status=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>
