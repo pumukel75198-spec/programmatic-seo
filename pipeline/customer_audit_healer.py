@@ -1215,6 +1215,54 @@ def _llm_repair_workflow_traceback(
     return False
 
 
+def _llm_repair_workflow_mock(
+    workflow: dict[str, Any],
+    errors: list[str],
+    round_number: int,
+    counters: dict[str, int],
+) -> bool:
+    """Ask the LLM for a realistic ``mock_response`` per step."""
+    if not any("mock_data.json" in error for error in errors):
+        return False
+    steps = (workflow.get("details") or {}).get("steps") or []
+    if not steps:
+        return False
+    system = (
+        "You are a Python test engineer. Return ONLY a valid JSON object. "
+        "Never add markdown fences."
+    )
+    user = f"""Add a realistic `mock_response` to every step of this workflow so
+the generated mock_data.json is substantial and the --dry-run is meaningful.
+
+ROUND: {round_number}
+WORKFLOW (JSON):
+{json.dumps(workflow, ensure_ascii=False)[:10000]}
+
+Return JSON: {{"steps": [{{"index": 1, "mock_response": <JSON value>}}, ...]}}
+Use only JSON-serialisable values. 100% English.
+"""
+    try:
+        patch = llm_client.chat_json(system, user)
+    except llm_client.LLMError as error:
+        log(f"  [LLM] mock repair failed: {error}")
+        return False
+    counters["llm_calls"] = counters.get("llm_calls", 0) + 1
+    changed = False
+    for update in patch.get("steps") or []:
+        if not isinstance(update, dict) or "mock_response" not in update:
+            continue
+        try:
+            index = int(update.get("index", 0)) - 1
+        except (TypeError, ValueError):
+            continue
+        if 0 <= index < len(steps):
+            steps[index]["mock_response"] = update["mock_response"]
+            changed = True
+    if changed:
+        log("  [LLM] added mock_response values")
+    return changed
+
+
 def _llm_repair_workflow_content(
     workflow: dict[str, Any],
     errors: list[str],
@@ -1517,6 +1565,10 @@ def audit_workflow(
         repaired = False
         if any("Traceback (most recent call last)" in error for error in errors):
             repaired = _llm_repair_workflow_traceback(
+                workflow, errors, round_number, counters
+            )
+        if not repaired:
+            repaired = _llm_repair_workflow_mock(
                 workflow, errors, round_number, counters
             )
         if not repaired:
