@@ -20233,5 +20233,817 @@
       ],
       "price": 9.99
     }
+  },
+  {
+    "slug": "shopify-admin-amazon-polly-automation-pipeline",
+    "title": "Shopify Admin + Amazon Polly Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects Shopify Admin with Amazon Polly and The Shopify Admin API lets you manage products, orders, customers and inventory programmatically for e-commerce automation. Amazon Polly converts text into lifelike speech, enabling applications to speak.",
+    "category": "E-commerce",
+    "tags": [
+      "ecommerce",
+      "orders",
+      "inventory",
+      "shopify",
+      "text-to-speech",
+      "ai",
+      "voice"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-07 07:47 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["Shopify Admin API", "Amazon Polly API"],
+      "api_slugs": ["shopify-admin-api", "aws-polly-api"],
+      "alternative_slugs": ["shopify-alternatives", "deepgram-alternatives"],
+      "useCase": "E-commerce automation, integrations and storefronts. Then Used to add speech capabilities to applications, making them more interactive and accessible.",
+      "steps": [
+        {
+          "title": "Ingest source records from Shopify Admin",
+          "description": "Implement the Shopify Admin contract, validate the response and hand normalized records to the next stage. The code reads product records from the Shopify Admin API, strips HTML from descriptions and converts numeric IDs to strings. The resulting products list is the only input for the Polly enrichment step.",
+          "technical_explanation": "This step is the ingestion boundary of the pipeline: it authenticates to the Shopify Admin API, requests product records, and converts each product into a normalized dictionary that later steps can consume without depending on Shopify-specific HTML or numeric IDs. The code performs a GET request to https://{shop}.myshopify.com/admin/api/2024-10/products.json?limit=50 with the X-Shopify-Access-Token header and an Accept: application/json header; the response shape is a JSON object with a products array, where each product contains id, title, body_html, handle and status. Edge cases include HTTP 429 responses with a Retry-After header, empty product arrays, missing body_html values, HTML markup that must be stripped before speech synthesis, and numeric product IDs that are converted to strings for stable downstream keys. The snippet requests the first page with limit=50; for larger catalogs, follow the Link header rel=next until no next page remains.",
+          "code_snippet": "import json\nimport os\nimport re\nimport time\nimport urllib.error\nimport urllib.parse\nimport urllib.request\n\nSHOPIFY_API_VERSION = '2024-10'\n\n\ndef _env_int(name, default):\n    # Guarded int conversion so malformed env values do not crash the workflow\n    raw = os.environ.get(name, str(default))\n    try:\n        return int(str(raw).strip())\n    except (TypeError, ValueError):\n        return default\n\n\nSHOPIFY_PRODUCT_LIMIT = _env_int('SHOPIFY_PRODUCT_LIMIT', 50)\n\n\ndef strip_html(value):\n    text = re.sub(r'<[^>]+>', ' ', value or '')\n    return re.sub(r'\\s+', ' ', text).strip()\n\n\ndef _retry_after_seconds(header_value, default=2):\n    # Guarded conversion of Retry-After header to an integer number of seconds\n    try:\n        seconds = int(str(header_value).strip())\n        return seconds if seconds >= 0 else default\n    except (TypeError, ValueError):\n        return default\n\n\ndef fetch_shopify_products():\n    shop = os.environ.get('SHOPIFY_SHOP_DOMAIN', '')\n    token = os.environ.get('SHOPIFY_ACCESS_TOKEN', '')\n    if not shop or not token:\n        raise RuntimeError('SHOPIFY_SHOP_DOMAIN and SHOPIFY_ACCESS_TOKEN must be set')\n    url = f'https://{shop}/admin/api/{SHOPIFY_API_VERSION}/products.json'\n    query = urllib.parse.urlencode({'limit': SHOPIFY_PRODUCT_LIMIT})\n    request = urllib.request.Request(url + '?' + query, headers={'X-Shopify-Access-Token': token, 'Accept': 'application/json'})\n    try:\n        with urllib.request.urlopen(request, timeout=30) as response:\n            status = getattr(response, 'status', 200)\n            if status != 200:\n                raise RuntimeError(f'Shopify Admin API returned status {status}')\n            payload = json.loads(response.read().decode('utf-8'))\n    except urllib.error.HTTPError as error:\n        if error.code == 429:\n            retry_after = _retry_after_seconds(error.headers.get('Retry-After', '2'))\n            time.sleep(retry_after)\n            return fetch_shopify_products()\n        raise\n    records = []\n    for product in payload.get('products', []):\n        if not isinstance(product, dict):\n            continue\n        product_id = product.get('id', '')\n        title = product.get('title', '')\n        description = strip_html(product.get('body_html', ''))\n        if not description:\n            description = title\n        records.append({\n            'product_id': str(product_id),\n            'title': title,\n            'description': description,\n            'handle': product.get('handle', ''),\n            'status': product.get('status', ''),\n        })\n    return records\n\n\nproducts = fetch_shopify_products()",
+          "mock_response": "{\"products\":[{\"id\":1234567890,\"title\":\"Trail Running Shoes\",\"body_html\":\"<p>Lightweight trail shoes with grippy soles.</p>\",\"handle\":\"trail-running-shoes\",\"status\":\"active\"},{\"id\":1234567891,\"title\":\"Insulated Water Bottle\",\"body_html\":\"<p>Keeps drinks cold for 24 hours.</p>\",\"handle\":\"insulated-water-bottle\",\"status\":\"active\"}]}",
+          "actions": [
+            "Set SHOPIFY_SHOP_DOMAIN and SHOPIFY_ACCESS_TOKEN in the environment before running the script.",
+            "Call GET /admin/api/2024-10/products.json with limit=50 and the X-Shopify-Access-Token header.",
+            "Strip HTML from body_html and fall back to the product title when the description is empty.",
+            "Convert numeric product IDs to strings and return a normalized products list."
+          ],
+          "commands": [
+            {
+              "label": "Set Shopify environment",
+              "language": "bash",
+              "code": "export SHOPIFY_SHOP_DOMAIN='<shop>.myshopify.com'\nexport SHOPIFY_ACCESS_TOKEN='<shopify-admin-api-access-token>'"
+            },
+            {
+              "label": "Run pipeline",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SHOPIFY_SHOP_DOMAIN",
+              "value": "<shop>.myshopify.com",
+              "description": "Full Shopify store host used to build the Admin API base URL."
+            },
+            {
+              "key": "SHOPIFY_ACCESS_TOKEN",
+              "value": "<shopify-admin-api-access-token>",
+              "description": "Admin API access token sent in the X-Shopify-Access-Token header."
+            },
+            {
+              "key": "SHOPIFY_API_VERSION",
+              "value": "2024-10",
+              "description": "Shopify Admin API version segment used in the request path."
+            },
+            {
+              "key": "SHOPIFY_PRODUCT_LIMIT",
+              "value": "50",
+              "description": "Maximum number of product records requested on the first page."
+            }
+          ],
+          "tools": ["Shopify Admin API"],
+          "checklist": [
+            "SHOPIFY_SHOP_DOMAIN and SHOPIFY_ACCESS_TOKEN are present in the environment.",
+            "The products variable contains at least one normalized record with a string product_id.",
+            "No raw HTML remains in the description field."
+          ],
+          "expectedResult": "A normalized list of Shopify product records is available in the products variable.",
+          "links": [
+            {
+              "label": "Shopify Admin API Documentation",
+              "url": "https://shopify.dev/docs/api/admin"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with Amazon Polly",
+          "description": "Implement the Amazon Polly contract, validate the response and hand normalized records to the next stage. The code signs each SynthesizeSpeech request with AWS Signature Version 4, saves the returned audio stream and records the byte count. The resulting polly_results list is the only input for the final aggregation step.",
+          "technical_explanation": "This step is the enrichment boundary: it consumes the normalized product records from step 1 and calls Amazon Polly SynthesizeSpeech to convert each product description into an MP3 audio file. The code sends a POST request to https://polly.us-east-1.amazonaws.com/v1/speech with AWS Signature Version 4 headers, a JSON body containing Engine, OutputFormat, Text and VoiceId, and it reads the binary audio stream from the response instead of JSON. Edge cases include missing AWS credentials, HTTP 403 signature mismatches, HTTP 429 throttling, empty descriptions that fall back to the product title, text longer than the Polly limit that is truncated to 3000 characters, and binary writes that must be checked by byte count. The function limits processing to POLLY_MAX_PRODUCTS so a dry run stays fast and predictable.",
+          "code_snippet": "import time\nimport datetime\nimport hashlib\nimport hmac\nimport json\nimport os\nimport re\nimport urllib.error\nimport urllib.parse\nimport urllib.request\n\nPOLLY_ENDPOINT = 'https://polly.us-east-1.amazonaws.com'\nPOLLY_REGION = 'us-east-1'\nPOLLY_SERVICE = 'polly'\nPOLLY_VOICE_ID = os.environ.get('POLLY_VOICE_ID', 'Joanna')\nPOLLY_OUTPUT_FORMAT = os.environ.get('POLLY_OUTPUT_FORMAT', 'mp3')\n\ndef _env_int(name, default):\n    raw = os.environ.get(name)\n    if raw is None:\n        return default\n    try:\n        return int(raw)\n    except (TypeError, ValueError):\n        return default\n\nPOLLY_MAX_PRODUCTS = _env_int('POLLY_MAX_PRODUCTS', 3)\nAUDIO_DIR = os.environ.get('AUDIO_DIR', 'polly_audio')\n\ndef sign_polly_request(method, url, body, headers):\n    access_key = os.environ.get('AWS_ACCESS_KEY_ID', '')\n    secret_key = os.environ.get('AWS_SECRET_ACCESS_KEY', '')\n    session_token = os.environ.get('AWS_SESSION_TOKEN', '')\n    if not access_key or not secret_key:\n        raise RuntimeError('AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY must be set')\n    now = datetime.datetime.utcnow()\n    amz_date = now.strftime('%Y%m%dT%H%M%SZ')\n    date_stamp = now.strftime('%Y%m%d')\n    headers['X-Amz-Date'] = amz_date\n    if session_token:\n        headers['X-Amz-Security-Token'] = session_token\n    parsed = urllib.parse.urlparse(url)\n    canonical_uri = parsed.path or '/'\n    canonical_querystring = parsed.query\n    canonical_headers = ''.join(f'{key.lower()}:{headers[key].strip()}' + chr(10) for key in sorted(headers))\n    signed_headers = ';'.join(key.lower() for key in sorted(headers))\n    payload_hash = hashlib.sha256(body).hexdigest()\n    canonical_request = chr(10).join([method, canonical_uri, canonical_querystring, canonical_headers, signed_headers, payload_hash])\n    credential_scope = f'{date_stamp}/{POLLY_REGION}/{POLLY_SERVICE}/aws4_request'\n    string_to_sign = chr(10).join(['AWS4-HMAC-SHA256', amz_date, credential_scope, hashlib.sha256(canonical_request.encode('utf-8')).hexdigest()])\n    def sign(key, message):\n        return hmac.new(key, message.encode('utf-8'), hashlib.sha256).digest()\n    k_date = sign(('AWS4' + secret_key).encode('utf-8'), date_stamp)\n    k_region = sign(k_date, POLLY_REGION)\n    k_service = sign(k_region, POLLY_SERVICE)\n    k_signing = sign(k_service, 'aws4_request')\n    signature = hmac.new(k_signing, string_to_sign.encode('utf-8'), hashlib.sha256).hexdigest()\n    headers['Authorization'] = f'AWS4-HMAC-SHA256 Credential={access_key}/{credential_scope}, SignedHeaders={signed_headers}, Signature={signature}'\n    return headers\n\ndef synthesize_product_audio(records):\n    os.makedirs(AUDIO_DIR, exist_ok=True)\n    results = []\n    for record in records[:POLLY_MAX_PRODUCTS]:\n        text = record.get('description', '') or record.get('title', '')\n        if not text:\n            continue\n        body = json.dumps({\n            'Engine': 'standard',\n            'OutputFormat': POLLY_OUTPUT_FORMAT,\n            'Text': text[:3000],\n            'VoiceId': POLLY_VOICE_ID,\n        }).encode('utf-8')\n        headers = {'Content-Type': 'application/json', 'Host': 'polly.us-east-1.amazonaws.com'}\n        signed_headers = sign_polly_request('POST', POLLY_ENDPOINT + '/v1/speech', body, headers)\n        request = urllib.request.Request(POLLY_ENDPOINT + '/v1/speech', data=body, headers=signed_headers, method='POST')\n        try:\n            with urllib.request.urlopen(request, timeout=60) as response:\n                audio_bytes = response.read()\n                content_type = response.headers.get('Content-Type', '')\n                status_code = response.status\n        except urllib.error.HTTPError as error:\n            error_body = error.read().decode('utf-8', errors='replace')\n            raise RuntimeError(f'Amazon Polly API error {error.code}: {error_body}')\n        safe_id = re.sub(r'[^A-Za-z0-9_-]', '_', record.get('product_id', 'product'))\n        audio_path = os.path.join(AUDIO_DIR, safe_id + '.' + POLLY_OUTPUT_FORMAT)\n        with open(audio_path, 'wb') as audio_file:\n            audio_file.write(audio_bytes)\n        results.append({\n            'product_id': record.get('product_id', ''),\n            'title': record.get('title', ''),\n            'voice_id': POLLY_VOICE_ID,\n            'output_format': POLLY_OUTPUT_FORMAT,\n            'content_type': content_type,\n            'status_code': status_code,\n            'audio_path': audio_path,\n            'bytes_written': len(audio_bytes),\n        })\n    return results\n\npolly_results = synthesize_product_audio(products)",
+          "mock_response": "{\"status_code\":200,\"content_type\":\"audio/mpeg\",\"audio_bytes\":24576,\"saved_path\":\"polly_audio/1234567890.mp3\",\"voice_id\":\"Joanna\",\"output_format\":\"mp3\"}",
+          "actions": [
+            "Set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY with permission for polly:SynthesizeSpeech.",
+            "Build a SigV4-signed POST request to https://polly.us-east-1.amazonaws.com/v1/speech.",
+            "Send Engine, OutputFormat, Text and VoiceId in the JSON request body.",
+            "Write the binary audio response to polly_audio and return structured metadata in polly_results."
+          ],
+          "commands": [
+            {
+              "label": "Set AWS environment",
+              "language": "bash",
+              "code": "export AWS_ACCESS_KEY_ID='<aws-access-key-id>'\nexport AWS_SECRET_ACCESS_KEY='<aws-secret-access-key>'\nexport AWS_REGION='us-east-1'"
+            },
+            {
+              "label": "Run pipeline",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "AWS_ACCESS_KEY_ID",
+              "value": "<aws-access-key-id>",
+              "description": "AWS access key used to derive the SigV4 signing key."
+            },
+            {
+              "key": "AWS_SECRET_ACCESS_KEY",
+              "value": "<aws-secret-access-key>",
+              "description": "AWS secret key used to derive the SigV4 signing key."
+            },
+            {
+              "key": "AWS_REGION",
+              "value": "us-east-1",
+              "description": "AWS region used in the SigV4 credential scope and Polly host."
+            },
+            {
+              "key": "POLLY_VOICE_ID",
+              "value": "Joanna",
+              "description": "Amazon Polly voice identifier used for speech synthesis."
+            },
+            {
+              "key": "POLLY_OUTPUT_FORMAT",
+              "value": "mp3",
+              "description": "Audio format requested from Amazon Polly."
+            },
+            {
+              "key": "POLLY_MAX_PRODUCTS",
+              "value": "3",
+              "description": "Maximum number of product records synthesized in one run."
+            },
+            {
+              "key": "AUDIO_DIR",
+              "value": "polly_audio",
+              "description": "Local directory where synthesized audio files are written."
+            }
+          ],
+          "tools": ["Amazon Polly API"],
+          "checklist": [
+            "polly_results contains one record per processed product and no more than POLLY_MAX_PRODUCTS records.",
+            "Each audio_path exists on disk and bytes_written is greater than zero.",
+            "Every status_code is 200 for successful synthesis."
+          ],
+          "expectedResult": "Audio files and structured Polly metadata are available in polly_results.",
+          "links": [
+            {
+              "label": "Amazon Polly API Documentation",
+              "url": "https://docs.aws.amazon.com/polly/"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Aggregate the normalized records from all previous steps, validate the schema and persist the final operational summary. The code checks required keys, counts status codes and sums bytes written. The final summary is written to polly_summary.json for inspection.",
+          "technical_explanation": "This step is the persistence boundary: it consumes the structured Polly metadata from step 2, validates that every record contains the required keys, and writes an idempotent JSON summary to disk. No external API is called here; the code uses only the Python standard library to count status codes, sum bytes written, collect invalid records and serialize the final operational summary. Edge cases include an empty polly_results list, records with missing keys, non-integer or zero byte counts, and repeated runs that overwrite the same summary file instead of appending duplicate data. The summary is the artifact an operator can inspect to confirm that Shopify ingestion and Polly synthesis completed correctly.",
+          "code_snippet": "import collections\nimport json\nimport os\n\nDEFAULT_SUMMARY_PATH = 'polly_summary.json'\nSUMMARY_PATH = os.environ.get('SUMMARY_PATH', DEFAULT_SUMMARY_PATH)\n\n\ndef _is_file_target(path):\n    \"\"\"Return True when the path can be used as a regular file target.\"\"\"\n    if not path:\n        return False\n    try:\n        return not os.path.isdir(path)\n    except OSError:\n        return False\n\n\ndef _resolve_summary_path(path):\n    \"\"\"Pick a safe file path for the summary, never an existing directory.\"\"\"\n    candidates = [path, DEFAULT_SUMMARY_PATH, os.path.join(os.getcwd(), DEFAULT_SUMMARY_PATH)]\n    for candidate in candidates:\n        if not _is_file_target(candidate):\n            continue\n        parent = os.path.dirname(os.path.abspath(candidate))\n        if parent and not os.path.isdir(parent):\n            try:\n                os.makedirs(parent, exist_ok=True)\n            except OSError:\n                continue\n        return candidate\n    return os.path.join(os.getcwd(), DEFAULT_SUMMARY_PATH)\n\n\ndef _coerce_bytes(value):\n    \"\"\"Convert a possibly textual byte count into a non-negative int.\"\"\"\n    try:\n        number = int(float(value))\n    except (TypeError, ValueError):\n        return 0\n    return number if number > 0 else 0\n\n\ndef persist_summary(results):\n    required_keys = {'product_id', 'title', 'voice_id', 'output_format', 'audio_path', 'bytes_written'}\n    valid_records = []\n    invalid_records = []\n    for record in results or []:\n        if not isinstance(record, dict):\n            invalid_records.append({'product_id': '', 'missing': sorted(required_keys)})\n            continue\n        missing = sorted(required_keys.difference(record.keys()))\n        if missing:\n            invalid_records.append({'product_id': record.get('product_id', ''), 'missing': missing})\n            continue\n        bytes_written = _coerce_bytes(record.get('bytes_written', 0))\n        if bytes_written <= 0:\n            invalid_records.append({'product_id': record.get('product_id', ''), 'missing': ['bytes_written']})\n            continue\n        normalized = dict(record)\n        normalized['bytes_written'] = bytes_written\n        valid_records.append(normalized)\n    status_counts = collections.Counter(record.get('status_code', 0) for record in valid_records)\n    target_path = _resolve_summary_path(SUMMARY_PATH)\n    summary = {\n        'total_products_processed': len(valid_records),\n        'total_bytes_written': sum(record.get('bytes_written', 0) for record in valid_records),\n        'status_counts': dict(status_counts),\n        'invalid_records': invalid_records,\n        'records': valid_records,\n        'summary_path': target_path,\n    }\n    try:\n        with open(target_path, 'w', encoding='utf-8') as summary_file:\n            json.dump(summary, summary_file, indent=2, sort_keys=True)\n    except OSError:\n        fallback_path = os.path.join(os.getcwd(), DEFAULT_SUMMARY_PATH)\n        with open(fallback_path, 'w', encoding='utf-8') as summary_file:\n            json.dump(summary, summary_file, indent=2, sort_keys=True)\n        summary['summary_path'] = fallback_path\n    return summary\n\n\nsummary = persist_summary(polly_results)",
+          "mock_response": "{\"total_products_processed\":2,\"total_bytes_written\":49152,\"status_counts\":{\"200\":2},\"invalid_records\":[],\"records\":[{\"product_id\":\"1234567890\",\"title\":\"Trail Running Shoes\",\"voice_id\":\"Joanna\",\"output_format\":\"mp3\",\"content_type\":\"audio/mpeg\",\"status_code\":200,\"audio_path\":\"polly_audio/1234567890.mp3\",\"bytes_written\":24576}]}",
+          "actions": [
+            "Validate each polly_results record against the required key set.",
+            "Aggregate total products, total bytes and status counts with collections.Counter.",
+            "Write the final summary to polly_summary.json with json.dump."
+          ],
+          "commands": [
+            {
+              "label": "Inspect summary",
+              "language": "bash",
+              "code": "cat polly_summary.json"
+            },
+            {
+              "label": "Validate JSON",
+              "language": "bash",
+              "code": "python -m json.tool polly_summary.json"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUMMARY_PATH",
+              "value": "polly_summary.json",
+              "description": "Local path where the final validated operational summary is written."
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "polly_summary.json exists and parses as valid JSON.",
+            "total_products_processed equals the number of valid records.",
+            "invalid_records is empty for a clean run."
+          ],
+          "expectedResult": "A validated JSON summary is written to polly_summary.json.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A Shopify Admin API account with API credentials (documentation: shopify.dev)",
+        "A Amazon Polly API account with API credentials (documentation: docs.aws.amazon.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A Shopify Admin API account with API credentials (documentation: shopify.dev)",
+        "A Amazon Polly API account with API credentials (documentation: docs.aws.amazon.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "AWS Signature Version 4",
+          "definition": "A signing process that hashes the request payload and canonical headers with a derived secret key so Amazon Polly can authenticate each HTTP request."
+        },
+        {
+          "term": "Shopify Admin API Access Token",
+          "definition": "A scoped credential sent in the X-Shopify-Access-Token header that authorizes product reads for a specific Shopify store."
+        },
+        {
+          "term": "Polly SynthesizeSpeech",
+          "definition": "An Amazon Polly operation that accepts text plus voice and output parameters and returns a binary audio stream."
+        },
+        {
+          "term": "Idempotent Persistence",
+          "definition": "A write pattern that overwrites a deterministic summary file so repeated runs produce the same final artifact without duplicate records."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A retry strategy that waits for the server-provided Retry-After interval before repeating a throttled request."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Shopify returns HTTP 401 or 403.",
+          "solution": "Verify SHOPIFY_ACCESS_TOKEN is a valid Admin API access token for the same store as SHOPIFY_SHOP_DOMAIN and that the app has read_products scope."
+        },
+        {
+          "problem": "Amazon Polly returns HTTP 403 SignatureDoesNotMatch.",
+          "solution": "Check AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION=us-east-1 and that the Host header is polly.us-east-1.amazonaws.com; regenerate the signature after any header change."
+        },
+        {
+          "problem": "Amazon Polly returns HTTP 429 Throttling.",
+          "solution": "Reduce POLLY_MAX_PRODUCTS, add exponential backoff around the POST /v1/speech call, and retry after the service-provided delay."
+        },
+        {
+          "problem": "polly_results is empty.",
+          "solution": "Confirm Shopify returned products with non-empty body_html or title and that POLLY_MAX_PRODUCTS is greater than zero."
+        },
+        {
+          "problem": "Audio files are missing or zero bytes.",
+          "solution": "Check that AUDIO_DIR is writable and that the Polly response status is 200 before writing the binary stream."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Shopify Admin API",
+          "url": "https://shopify.dev/docs/api/admin"
+        },
+        {
+          "label": "Amazon Polly API",
+          "url": "https://docs.aws.amazon.com/polly/"
+        }
+      ],
+      "price": 9.99
+    }
+  },
+  {
+    "slug": "weatherapi-launchdarkly-feature-automation-pipeline",
+    "title": "WeatherAPI + LaunchDarkly Feature Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects WeatherAPI with LaunchDarkly Feature and WeatherAPI offers real-time weather data and forecasts globally. LaunchDarkly lets teams ship features safely with feature flags, targeting rules, experiments and gradual rollouts.",
+    "category": "Weather",
+    "tags": [
+      "weather",
+      "forecast",
+      "api",
+      "feature-flags",
+      "devops",
+      "experimentation",
+      "rollouts"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-07 08:00 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["WeatherAPI", "LaunchDarkly Feature API"],
+      "api_slugs": ["weatherapi", "launchdarkly-feature-api"],
+      "alternative_slugs": ["algolia-alternatives", "openai-alternatives"],
+      "useCase": "WeatherAPI is used for retrieving current weather conditions and forecasts for applications. It helps developers integrate weather data easily. Then Safe releases, A/B tests and kill switches.",
+      "steps": [
+        {
+          "title": "Ingest source records from WeatherAPI",
+          "description": "Fetch real-time weather data from WeatherAPI and normalize the nested location and current objects into a flat list of records. This step establishes the weather_records variable that the rest of the pipeline consumes.",
+          "technical_explanation": "This step is the ingestion layer of the pipeline and exists to fetch real-time weather data from WeatherAPI before any feature-flag enrichment occurs. It consumes no previous variables and produces the weather_records list that step 2 and step 3 depend on. The API contract is a GET request to https://api.weatherapi.com/v1/current.json with query parameters key and q, plus an Authorization: Bearer header; the JSON response contains a location object and a current object with nested condition data. Edge cases include HTTP 401 for invalid keys, HTTP 429 rate limits, empty or missing current objects, and string-to-float conversion for temp_c and wind_kph; every nested access uses .get with a default to avoid KeyError.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\nimport urllib.parse\n\ndef fetch_weather():\n    api_key = os.environ.get(\"WEATHERAPI_API_KEY\")\n    location = os.environ.get(\"WEATHERAPI_LOCATION\", \"London\")\n    if not api_key:\n        raise ValueError(\"WEATHERAPI_API_KEY is not set\")\n    base_url = \"https://api.weatherapi.com/v1/current.json\"\n    query = urllib.parse.urlencode({\"key\": api_key, \"q\": location, \"aqi\": \"no\"})\n    url = f\"{base_url}?{query}\"\n    headers = {\"Authorization\": f\"Bearer {api_key}\", \"Accept\": \"application/json\"}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request, timeout=30) as response:\n        payload = json.loads(response.read().decode(\"utf-8\"))\n    location_data = payload.get(\"location\", {})\n    current_data = payload.get(\"current\", {})\n    record = {\n        \"location_name\": location_data.get(\"name\", \"\"),\n        \"region\": location_data.get(\"region\", \"\"),\n        \"country\": location_data.get(\"country\", \"\"),\n        \"temp_c\": float(current_data.get(\"temp_c\", 0.0)),\n        \"condition_text\": current_data.get(\"condition\", {}).get(\"text\", \"\"),\n        \"humidity\": int(current_data.get(\"humidity\", 0)),\n        \"wind_kph\": float(current_data.get(\"wind_kph\", 0.0)),\n        \"last_updated\": current_data.get(\"last_updated\", \"\")\n    }\n    return [record]\n\nweather_records = fetch_weather()",
+          "mock_response": {
+            "location": {
+              "name": "London",
+              "region": "City of London, Greater London",
+              "country": "United Kingdom",
+              "lat": 51.52,
+              "lon": -0.11,
+              "tz_id": "Europe/London",
+              "localtime_epoch": 1730956680,
+              "localtime": "2026-11-07 7:58"
+            },
+            "current": {
+              "last_updated_epoch": 1730955900,
+              "last_updated": "2026-11-07 07:45",
+              "temp_c": 12.0,
+              "temp_f": 53.6,
+              "is_day": 1,
+              "condition": {
+                "text": "Partly cloudy",
+                "icon": "//cdn.weatherapi.com/weather/64x64/day/116.png",
+                "code": 1003
+              },
+              "wind_mph": 11.9,
+              "wind_kph": 19.1,
+              "wind_degree": 240,
+              "wind_dir": "WSW",
+              "pressure_mb": 1015.0,
+              "pressure_in": 29.97,
+              "precip_mm": 0.0,
+              "precip_in": 0.0,
+              "humidity": 76,
+              "cloud": 75,
+              "feelslike_c": 10.0,
+              "feelslike_f": 50.0,
+              "vis_km": 10.0,
+              "vis_miles": 6.0,
+              "uv": 1.0,
+              "gust_mph": 16.1,
+              "gust_kph": 25.9
+            }
+          },
+          "actions": [
+            "Set the WEATHERAPI_API_KEY and WEATHERAPI_LOCATION environment variables before running the script.",
+            "Call the WeatherAPI current.json endpoint with a GET request and Bearer authentication header.",
+            "Normalize the nested location and current objects into a flat list of weather records.",
+            "Validate that temp_c and wind_kph are converted to floats and humidity to an integer."
+          ],
+          "commands": [
+            {
+              "label": "Run step 1",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "WEATHERAPI_API_KEY",
+              "value": "<your-weatherapi-api-key>",
+              "description": "API key for WeatherAPI authentication"
+            },
+            {
+              "key": "WEATHERAPI_LOCATION",
+              "value": "London",
+              "description": "Location query for the current weather request"
+            }
+          ],
+          "tools": ["WeatherAPI"],
+          "checklist": [
+            "The script exits without a ValueError for missing WEATHERAPI_API_KEY.",
+            "weather_records contains one dictionary with keys location_name, temp_c, humidity and last_updated."
+          ],
+          "expectedResult": "A normalized list of weather records is stored in the weather_records variable.",
+          "links": [
+            {
+              "label": "WeatherAPI Documentation",
+              "url": "https://www.weatherapi.com/docs/"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with LaunchDarkly Feature",
+          "description": "Fetch feature flag state from LaunchDarkly and normalize each flag into a flat record with key, name, on state, targets count and rules count. This step produces the feature_flags variable used by the final aggregation.",
+          "technical_explanation": "This step is the enrichment layer that reads LaunchDarkly feature flag state and attaches it to the pipeline output. It consumes the weather_records variable only indirectly by running after step 1, and it produces feature_flags for step 3. The API contract is a GET request to https://app.launchdarkly.com/api/v2/flags/{projectKey}?env={environmentKey} with an Authorization: Bearer header; the JSON response contains an items array where each item has key, name and an environments object keyed by environment. Edge cases include empty items arrays, missing environment keys, pagination via the Link header, and HTTP 429 rate limits; the code uses .get for every nested lookup and converts the on field to a boolean.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\nimport urllib.parse\n\ndef fetch_feature_flags():\n    api_token = os.environ.get(\"LAUNCHDARKLY_API_TOKEN\")\n    project_key = os.environ.get(\"LAUNCHDARKLY_PROJECT_KEY\")\n    env_key = os.environ.get(\"LAUNCHDARKLY_ENVIRONMENT_KEY\", \"production\")\n    if not api_token or not project_key:\n        raise ValueError(\"LAUNCHDARKLY_API_TOKEN and LAUNCHDARKLY_PROJECT_KEY must be set\")\n    base_url = f\"https://app.launchdarkly.com/api/v2/flags/{project_key}\"\n    query = urllib.parse.urlencode({\"env\": env_key})\n    url = f\"{base_url}?{query}\"\n    headers = {\"Authorization\": f\"Bearer {api_token}\", \"Accept\": \"application/json\"}\n    request = urllib.request.Request(url, headers=headers)\n    with urllib.request.urlopen(request, timeout=30) as response:\n        payload = json.loads(response.read().decode(\"utf-8\"))\n    items = payload.get(\"items\", [])\n    flags = []\n    for item in items:\n        env_state = item.get(\"environments\", {}).get(env_key, {})\n        flag = {\n            \"key\": item.get(\"key\", \"\"),\n            \"name\": item.get(\"name\", \"\"),\n            \"on\": bool(env_state.get(\"on\", False)),\n            \"targets_count\": len(env_state.get(\"targets\", [])),\n            \"rules_count\": len(env_state.get(\"rules\", []))\n        }\n        flags.append(flag)\n    return flags\n\nfeature_flags = fetch_feature_flags()",
+          "mock_response": {
+            "items": [
+              {
+                "key": "new-checkout-flow",
+                "name": "New Checkout Flow",
+                "environments": {
+                  "production": {
+                    "on": true,
+                    "targets": [
+                      {
+                        "values": ["user-123"],
+                        "variation": 0
+                      }
+                    ],
+                    "rules": [
+                      {
+                        "clauses": [
+                          {
+                            "attribute": "country",
+                            "op": "in",
+                            "values": ["US"]
+                          }
+                        ],
+                        "variation": 1
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "key": "winter-sale-banner",
+                "name": "Winter Sale Banner",
+                "environments": {
+                  "production": {
+                    "on": false,
+                    "targets": [],
+                    "rules": []
+                  }
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Set LAUNCHDARKLY_API_TOKEN, LAUNCHDARKLY_PROJECT_KEY and LAUNCHDARKLY_ENVIRONMENT_KEY.",
+            "Call the LaunchDarkly Feature API flags endpoint with a GET request and Bearer token.",
+            "Extract each flag key, name, on state, targets count and rules count from the environments object.",
+            "Handle empty items arrays and missing environment keys with .get defaults."
+          ],
+          "commands": [
+            {
+              "label": "Run step 2",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "LAUNCHDARKLY_API_TOKEN",
+              "value": "<your-launchdarkly-api-token>",
+              "description": "API access token for LaunchDarkly"
+            },
+            {
+              "key": "LAUNCHDARKLY_PROJECT_KEY",
+              "value": "default",
+              "description": "LaunchDarkly project key"
+            },
+            {
+              "key": "LAUNCHDARKLY_ENVIRONMENT_KEY",
+              "value": "production",
+              "description": "LaunchDarkly environment key"
+            }
+          ],
+          "tools": ["LaunchDarkly Feature API"],
+          "checklist": [
+            "feature_flags is a list of dictionaries with key, name, on, targets_count and rules_count.",
+            "The script does not raise KeyError when a flag lacks an environments entry."
+          ],
+          "expectedResult": "A normalized list of feature flag records is stored in the feature_flags variable.",
+          "links": [
+            {
+              "label": "LaunchDarkly Feature API Documentation",
+              "url": "https://apidocs.launchdarkly.com/"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Consume weather_records and feature_flags, validate their types, compute an operational summary and persist it to summary.json. This step performs no external API call and completes the pipeline.",
+          "technical_explanation": "This step is the aggregation and persistence layer and performs no external API call. It consumes weather_records from step 1 and feature_flags from step 2, validates that both are lists, and computes a summary with record counts, average temperature, flag counts and location names. Edge cases include empty weather_records, which would otherwise cause statistics.mean to raise StatisticsError, and missing keys in individual records; the code guards with a conditional mean and uses .get defaults. The summary is persisted to summary.json with json.dump so downstream systems can read a stable artifact.",
+          "code_snippet": "import os\nimport json\nimport statistics\n\ndef aggregate_and_persist(weather_records, feature_flags):\n    if not isinstance(weather_records, list):\n        raise TypeError(\"weather_records must be a list\")\n    if not isinstance(feature_flags, list):\n        raise TypeError(\"feature_flags must be a list\")\n    temps = [float(r.get(\"temp_c\", 0.0)) for r in weather_records if isinstance(r, dict)]\n    avg_temp = statistics.mean(temps) if temps else 0.0\n    flags_on = sum(1 for f in feature_flags if isinstance(f, dict) and f.get(\"on\", False))\n    summary = {\n        \"weather_record_count\": len(weather_records),\n        \"average_temp_c\": round(avg_temp, 2),\n        \"feature_flag_count\": len(feature_flags),\n        \"feature_flags_on\": flags_on,\n        \"locations\": [r.get(\"location_name\", \"\") for r in weather_records if isinstance(r, dict)]\n    }\n    output_path = os.environ.get(\"OUTPUT_PATH\", \"summary.json\")\n    with open(output_path, \"w\", encoding=\"utf-8\") as handle:\n        json.dump(summary, handle, indent=2)\n    return summary\n\nsummary = aggregate_and_persist(weather_records, feature_flags)",
+          "mock_response": {
+            "weather_record_count": 1,
+            "average_temp_c": 12.0,
+            "feature_flag_count": 2,
+            "feature_flags_on": 1,
+            "locations": ["London"]
+          },
+          "actions": [
+            "Validate that weather_records and feature_flags are lists before aggregation.",
+            "Compute the average temperature with statistics.mean and guard against an empty list.",
+            "Count how many feature flags are on and collect location names.",
+            "Persist the summary dictionary to summary.json using json.dump."
+          ],
+          "commands": [
+            {
+              "label": "Run step 3",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "OUTPUT_PATH",
+              "value": "summary.json",
+              "description": "File path for the persisted operational summary"
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "summary.json exists and contains weather_record_count, average_temp_c, feature_flag_count and feature_flags_on.",
+            "The script completes without a ZeroDivisionError when weather_records is empty."
+          ],
+          "expectedResult": "A validated operational summary is written to summary.json and returned in the summary variable.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A WeatherAPI account with API credentials (documentation: www.weatherapi.com)",
+        "A LaunchDarkly Feature API account with API credentials (documentation: apidocs.launchdarkly.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A WeatherAPI account with API credentials (documentation: www.weatherapi.com)",
+        "A LaunchDarkly Feature API account with API credentials (documentation: apidocs.launchdarkly.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Feature Flag Targeting",
+          "definition": "A LaunchDarkly mechanism that evaluates flag variations for individual users or segments based on attributes and rules."
+        },
+        {
+          "term": "Gradual Rollout",
+          "definition": "A controlled release strategy that incrementally exposes a feature to a percentage of users to limit blast radius."
+        },
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "An HTTP authentication scheme where the client sends a token in the Authorization header to prove identity."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A retry strategy that waits progressively longer after receiving HTTP 429 responses to avoid overwhelming an API."
+        },
+        {
+          "term": "Idempotent Persistence",
+          "definition": "A write operation that produces the same stored state when repeated, preventing duplicate records during retries."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "HTTP 401 Unauthorized from WeatherAPI or LaunchDarkly.",
+          "solution": "Verify that WEATHERAPI_API_KEY and LAUNCHDARKLY_API_TOKEN are set in the environment and that the Bearer header uses the exact token value without extra whitespace."
+        },
+        {
+          "problem": "HTTP 429 Too Many Requests.",
+          "solution": "Implement exponential backoff with time.sleep and reduce request frequency; WeatherAPI free tiers have per-minute limits."
+        },
+        {
+          "problem": "KeyError or TypeError when reading nested JSON.",
+          "solution": "Use .get('key', default) for every dictionary access and validate types with isinstance before arithmetic."
+        },
+        {
+          "problem": "Empty items array from LaunchDarkly.",
+          "solution": "Check that LAUNCHDARKLY_PROJECT_KEY and LAUNCHDARKLY_ENVIRONMENT_KEY are correct and that the token has read access to the project."
+        }
+      ],
+      "resources": [
+        {
+          "label": "WeatherAPI",
+          "url": "https://www.weatherapi.com/docs/"
+        },
+        {
+          "label": "LaunchDarkly Feature API",
+          "url": "https://apidocs.launchdarkly.com/"
+        }
+      ],
+      "price": 9.99
+    }
+  },
+  {
+    "slug": "salesforce-rest-weatherapi-automation-pipeline",
+    "title": "Salesforce REST + WeatherAPI Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects Salesforce REST with WeatherAPI and The Salesforce REST API exposes objects, records and queries over HTTP – the standard way to integrate Salesforce data with other systems. WeatherAPI offers real-time weather data and forecasts globally.",
+    "category": "CRM & Enterprise",
+    "tags": [
+      "crm",
+      "salesforce",
+      "enterprise",
+      "rest",
+      "weather",
+      "forecast",
+      "api"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-07 08:01 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["Salesforce REST API", "WeatherAPI"],
+      "api_slugs": ["salesforce-rest-api", "weatherapi"],
+      "alternative_slugs": ["postman-alternatives", "algolia-alternatives"],
+      "useCase": "Enterprise CRM sync, reporting and workflow automation. Then WeatherAPI is used for retrieving current weather conditions and forecasts for applications. It helps developers integrate weather data easily.",
+      "steps": [
+        {
+          "title": "Ingest source records from Salesforce REST",
+          "description": "Authenticate to Salesforce, validate access to the Account sObject resource, and query recent Account records for downstream weather enrichment. Normalize the raw Salesforce fields into stable lowercase keys so the next step does not depend on Salesforce-specific naming. Return the normalized list as salesforce_accounts.",
+          "technical_explanation": "Step 1 is the ingestion boundary: it authenticates to Salesforce, validates the Account sObject resource, and converts raw Account rows into stable dictionaries consumed by step 2. The contract starts with a GET request to https://{instance}.salesforce.com/services/data/v62.0/sobjects/Account using the Authorization: Bearer access token and Accept: application/json headers, with no request body. The authenticated session then calls the documented /services/data/v62.0/query path with a SOQL SELECT in the q parameter; the response shape contains totalSize, done, records and nextRecordsUrl. Edge cases include expired OAuth tokens returning HTTP 401, API limits and throttling returning HTTP 403, empty records arrays, null billing fields that must become empty strings, and pagination that must follow nextRecordsUrl until done is true.",
+          "code_snippet": "import json\nimport os\nimport urllib.parse\nimport urllib.request\n\nSALESFORCE_API_VERSION = 'v62.0'\n\ndef fetch_salesforce_accounts():\n    instance = os.environ.get('SALESFORCE_INSTANCE')\n    token = os.environ.get('SALESFORCE_ACCESS_TOKEN')\n    if not instance or not token:\n        raise RuntimeError('SALESFORCE_INSTANCE and SALESFORCE_ACCESS_TOKEN must be set')\n    base = f'https://{instance}.salesforce.com/services/data/{SALESFORCE_API_VERSION}'\n    # Probe the Account sObject endpoint to validate OAuth scope and object access.\n    metadata_request = urllib.request.Request(\n        f'{base}/sobjects/Account',\n        headers={'Authorization': f'Bearer {token}', 'Accept': 'application/json'},\n    )\n    with urllib.request.urlopen(metadata_request, timeout=20) as metadata_response:\n        metadata = json.loads(metadata_response.read().decode('utf-8'))\n    # Fetch records through the documented query path below the Salesforce REST base URL.\n    soql = urllib.parse.urlencode({'q': 'SELECT Id, Name, BillingCity, BillingState, BillingCountry, Website, LastModifiedDate FROM Account ORDER BY LastModifiedDate DESC LIMIT 200'})\n    query_url = f'{base}/query?{soql}'\n    records = []\n    while query_url:\n        request = urllib.request.Request(\n            query_url,\n            headers={'Authorization': f'Bearer {token}', 'Accept': 'application/json'},\n        )\n        with urllib.request.urlopen(request, timeout=20) as response:\n            payload = json.loads(response.read().decode('utf-8'))\n        for item in payload.get('records', []):\n            records.append({\n                'id': item.get('Id', ''),\n                'name': item.get('Name', ''),\n                'city': item.get('BillingCity', '') or '',\n                'state': item.get('BillingState', '') or '',\n                'country': item.get('BillingCountry', '') or '',\n                'website': item.get('Website', '') or '',\n                'last_modified': item.get('LastModifiedDate', ''),\n            })\n        next_records = payload.get('nextRecordsUrl', '')\n        query_url = f'https://{instance}.salesforce.com{next_records}' if next_records else ''\n    return records\n\nsalesforce_accounts = fetch_salesforce_accounts()",
+          "mock_response": "{\"metadata\": {\"name\": \"Account\", \"label\": \"Account\", \"labelPlural\": \"Accounts\", \"keyPrefix\": \"001\", \"fields\": [{\"name\": \"Id\", \"type\": \"id\"}, {\"name\": \"Name\", \"type\": \"string\"}, {\"name\": \"BillingCity\", \"type\": \"string\"}]}, \"query\": {\"totalSize\": 2, \"done\": true, \"records\": [{\"Id\": \"0015g00000Example1\", \"Name\": \"Northwind Traders\", \"BillingCity\": \"Seattle\", \"BillingState\": \"WA\", \"BillingCountry\": \"United States\", \"Website\": \"https://www.northwindtraders.com\", \"LastModifiedDate\": \"2026-11-05T14:22:10.000+0000\"}, {\"Id\": \"0015g00000Example2\", \"Name\": \"Contoso GmbH\", \"BillingCity\": \"Berlin\", \"BillingState\": null, \"BillingCountry\": \"Germany\", \"Website\": null, \"LastModifiedDate\": \"2026-11-06T09:10:44.000+0000\"}], \"nextRecordsUrl\": null}}",
+          "actions": [
+            "Export SALESFORCE_INSTANCE and SALESFORCE_ACCESS_TOKEN before running the script.",
+            "Call the Account sObject endpoint to validate object access and OAuth scope.",
+            "Execute the SOQL query, follow nextRecordsUrl, and normalize Id, Name, Billing fields and LastModifiedDate.",
+            "Convert null billing fields to empty strings and retain stable key names for downstream enrichment."
+          ],
+          "commands": [
+            {
+              "label": "Export Salesforce settings",
+              "language": "bash",
+              "code": "export SALESFORCE_INSTANCE='mycompany.my'\nexport SALESFORCE_ACCESS_TOKEN=$(cat .salesforce_access_token)"
+            },
+            {
+              "label": "Run pipeline",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SALESFORCE_INSTANCE",
+              "value": "mycompany.my",
+              "description": "Salesforce My Domain prefix used to build https://{instance}.salesforce.com."
+            },
+            {
+              "key": "SALESFORCE_ACCESS_TOKEN",
+              "value": "<OAuth 2.0 access token>",
+              "description": "Short-lived OAuth 2.0 bearer token authorized to read Account records."
+            }
+          ],
+          "tools": ["Salesforce REST API"],
+          "checklist": [
+            "The Account sObject probe returns HTTP 200 with JSON metadata.",
+            "The SOQL query returns records or an empty records array without raising an exception.",
+            "Each normalized record contains id, name, city, state, country, website and last_modified keys."
+          ],
+          "expectedResult": "A normalized Python list named salesforce_accounts is available for weather enrichment.",
+          "links": [
+            {
+              "label": "Salesforce REST API Documentation",
+              "url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with WeatherAPI",
+          "description": "Consume salesforce_accounts and resolve each non-empty billing location against WeatherAPI current conditions. Preserve every source field and add a normalized weather object with status, temperature, humidity, wind speed and condition text. Return the enriched list as enriched_accounts.",
+          "technical_explanation": "Step 2 is the enrichment boundary: it consumes salesforce_accounts from step 1 and resolves each billing location against WeatherAPI without mutating the source records. The contract is a GET request to https://api.weatherapi.com/v1/current.json with query parameters key and q, plus Authorization: Bearer WeatherAPI key and Accept: application/json headers; the request has no request body. The JSON response contains location and current objects, where current exposes temp_c, humidity, wind_kph, condition.text and last_updated. Edge cases include missing city values, which are marked skipped without an API call; HTTP 401 or 403 key failures; HTTP 429 rate limiting; no-match locations; and numeric fields that must be preserved as int or float for safe aggregation later.",
+          "code_snippet": "import json\nimport os\nimport urllib.parse\nimport urllib.request\n\ndef enrich_accounts_with_weather(accounts):\n    api_key = os.environ.get('WEATHERAPI_KEY')\n    if not api_key:\n        raise RuntimeError('WEATHERAPI_KEY must be set')\n    enriched = []\n    for account in accounts:\n        city = account.get('city', '').strip()\n        country = account.get('country', '').strip()\n        if not city:\n            record = dict(account)\n            record['weather'] = {'status': 'skipped', 'reason': 'missing_city'}\n            enriched.append(record)\n            continue\n        location = f'{city}, {country}' if country else city\n        params = urllib.parse.urlencode({'key': api_key, 'q': location, 'aqi': 'no'})\n        url = f'https://api.weatherapi.com/v1/current.json?{params}'\n        request = urllib.request.Request(\n            url,\n            headers={'Authorization': f'Bearer {api_key}', 'Accept': 'application/json'},\n        )\n        try:\n            with urllib.request.urlopen(request, timeout=15) as response:\n                payload = json.loads(response.read().decode('utf-8'))\n        except Exception as exc:\n            record = dict(account)\n            record['weather'] = {'status': 'error', 'reason': str(exc)}\n            enriched.append(record)\n            continue\n        current = payload.get('current', {}) or {}\n        condition = current.get('condition', {}) or {}\n        location_data = payload.get('location', {}) or {}\n        record = dict(account)\n        record['weather'] = {\n            'status': 'ok',\n            'temperature_c': current.get('temp_c', None),\n            'humidity': current.get('humidity', None),\n            'wind_kph': current.get('wind_kph', None),\n            'condition': condition.get('text', ''),\n            'observed_at': current.get('last_updated', ''),\n            'resolved_name': location_data.get('name', ''),\n        }\n        enriched.append(record)\n    return enriched\n\nenriched_accounts = enrich_accounts_with_weather(salesforce_accounts)",
+          "mock_response": "{\"location\": {\"name\": \"Seattle\", \"region\": \"Washington\", \"country\": \"United States of America\", \"lat\": 47.61, \"lon\": -122.33}, \"current\": {\"last_updated\": \"2026-11-06 23:30\", \"temp_c\": 8.4, \"humidity\": 84, \"wind_kph\": 11.2, \"condition\": {\"text\": \"Light rain\", \"code\": 1063}}}",
+          "actions": [
+            "Read WEATHERAPI_KEY from the environment before starting enrichment.",
+            "For each account with a non-empty city, call WeatherAPI /v1/current.json with q and aqi=no.",
+            "Store a weather object with status ok, skipped or error and preserve numeric temperature, humidity and wind speed.",
+            "Keep every source account field unchanged so the aggregation step can audit the full record."
+          ],
+          "commands": [
+            {
+              "label": "Export WeatherAPI key",
+              "language": "bash",
+              "code": "export WEATHERAPI_KEY=$(cat .weatherapi_key)\npython workflow.py"
+            },
+            {
+              "label": "Rerun pipeline",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "WEATHERAPI_KEY",
+              "value": "<WeatherAPI API key>",
+              "description": "WeatherAPI key used in the key query parameter and Authorization bearer header."
+            }
+          ],
+          "tools": ["WeatherAPI"],
+          "checklist": [
+            "Accounts with an empty city receive weather.status skipped without a WeatherAPI call.",
+            "Accounts with a resolvable city receive weather.status ok and numeric temperature_c.",
+            "WeatherAPI failures are captured as weather.status error with a reason string."
+          ],
+          "expectedResult": "A list named enriched_accounts contains every Salesforce account with a normalized weather object.",
+          "links": [
+            {
+              "label": "WeatherAPI Documentation",
+              "url": "https://www.weatherapi.com/docs/"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Consume enriched_accounts, validate the expected record shape, count weather statuses and average only finite numeric temperatures. Build a deterministic summary object and persist it as summary.json. Return the summary object for logging or downstream verification.",
+          "technical_explanation": "Step 3 is the persistence and validation boundary: it consumes enriched_accounts, checks the expected weather status and numeric temperature fields, computes a deterministic summary, and writes summary.json for downstream reporting. No remote API is called; the contract is an in-process Python function that rejects non-list input and counts ok, skipped, error and any unknown statuses while averaging only finite numeric temperatures. Edge cases include an empty account list, records with missing weather objects, string temperatures that must be excluded, and zero valid temperatures, which produce a null average rather than a division error. The output is written with UTF-8 encoding, sorted keys and a trailing newline so the file is stable across repeated runs.",
+          "code_snippet": "import time\nimport datetime\nimport json\nimport os\nimport statistics\n\nSUMMARY_PATH = os.environ.get('SUMMARY_PATH', 'summary.json')\n\ndef validate_and_persist_summary(records):\n    if not isinstance(records, list):\n        raise ValueError('records must be a list')\n    status_counts = {'ok': 0, 'skipped': 0, 'error': 0}\n    temperatures = []\n    account_rows = []\n    for record in records:\n        weather = record.get('weather', {}) or {}\n        status = weather.get('status', 'unknown')\n        status_counts[status] = status_counts.get(status, 0) + 1\n        temperature = weather.get('temperature_c', None)\n        is_number = isinstance(temperature, (int, float)) and not isinstance(temperature, bool)\n        if is_number:\n            temperatures.append(float(temperature))\n        account_rows.append({\n            'id': record.get('id', ''),\n            'name': record.get('name', ''),\n            'city': record.get('city', ''),\n            'country': record.get('country', ''),\n            'temperature_c': float(temperature) if is_number else None,\n            'condition': weather.get('condition', '') or '',\n        })\n    average_temperature = statistics.mean(temperatures) if temperatures else None\n    generated_at = datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat().replace('+00:00', 'Z')\n    summary = {\n        'generated_at_utc': generated_at,\n        'total_accounts': len(records),\n        'weather_status_counts': status_counts,\n        'average_temperature_c': round(average_temperature, 2) if average_temperature is not None else None,\n        'accounts': account_rows,\n    }\n    with open(SUMMARY_PATH, 'w', encoding='utf-8') as handle:\n        json.dump(summary, handle, indent=2, sort_keys=True)\n        handle.write('\\n')\n    return summary\n\nsummary = validate_and_persist_summary(enriched_accounts)\ntotal_accounts = summary.get('total_accounts', 0)\nprint(f'Persisted {total_accounts} accounts to {SUMMARY_PATH}')",
+          "mock_response": "{\"generated_at_utc\": \"2026-11-07T08:00:00Z\", \"total_accounts\": 2, \"weather_status_counts\": {\"ok\": 1, \"skipped\": 1, \"error\": 0}, \"average_temperature_c\": 8.4, \"accounts\": [{\"id\": \"0015g00000Example1\", \"name\": \"Northwind Traders\", \"city\": \"Seattle\", \"country\": \"United States\", \"temperature_c\": 8.4, \"condition\": \"Light rain\"}, {\"id\": \"0015g00000Example2\", \"name\": \"Contoso GmbH\", \"city\": \"\", \"country\": \"Germany\", \"temperature_c\": null, \"condition\": \"\"}]}",
+          "actions": [
+            "Validate that enriched_accounts is a list and that each record carries a weather object.",
+            "Count ok, skipped and error weather statuses and collect only finite numeric temperatures.",
+            "Compute the average temperature only when at least one valid numeric value exists.",
+            "Write summary.json with UTF-8 encoding, sorted keys and a trailing newline."
+          ],
+          "commands": [
+            {
+              "label": "Set summary path",
+              "language": "bash",
+              "code": "export SUMMARY_PATH='summary.json'"
+            },
+            {
+              "label": "Inspect summary",
+              "language": "bash",
+              "code": "python -m json.tool summary.json"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUMMARY_PATH",
+              "value": "summary.json",
+              "description": "Filesystem path where the final operational summary is persisted."
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "summary.json exists and contains total_accounts, weather_status_counts and average_temperature_c.",
+            "The average_temperature_c value is null when no valid numeric temperatures are present.",
+            "The accounts array contains one row for every enriched account with stable id, name, city, country, temperature_c and condition keys."
+          ],
+          "expectedResult": "summary.json is written and the returned summary object reports validated counts and average temperature.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A Salesforce REST API account with API credentials (documentation: developer.salesforce.com)",
+        "A WeatherAPI account with API credentials (documentation: www.weatherapi.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A Salesforce REST API account with API credentials (documentation: developer.salesforce.com)",
+        "A WeatherAPI account with API credentials (documentation: www.weatherapi.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "OAuth 2.0 Bearer Token Flow",
+          "definition": "A delegated authorization pattern where the caller sends a short-lived access token in the Authorization header to Salesforce instead of embedding user credentials in the request."
+        },
+        {
+          "term": "SOQL Cursor Pagination",
+          "definition": "A Salesforce query pagination technique where nextRecordsUrl is followed until done is true, allowing a client to retrieve result sets larger than one response batch."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A retry strategy that waits after HTTP 429 or throttling responses, usually with increasing delays, before repeating a request to avoid exhausting a provider quota."
+        },
+        {
+          "term": "Geocoding Location Resolution",
+          "definition": "The process of converting a free-form city, state or country string into a provider-resolved location used for weather lookup."
+        },
+        {
+          "term": "Null-Safe Record Normalization",
+          "definition": "A transformation pattern that converts missing or null API fields into stable defaults so downstream steps can process every record without KeyError or TypeError."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Salesforce returns 401 invalid_session_id or INVALID_SESSION_ID.",
+          "solution": "Refresh the OAuth 2.0 access token, confirm that SALESFORCE_INSTANCE uses the correct My Domain value without the .salesforce.com suffix, and rerun the script after exporting the new token."
+        },
+        {
+          "problem": "WeatherAPI returns 401 or 403 despite a valid-looking key.",
+          "solution": "Verify that WEATHERAPI_KEY is exported in the current shell and that the request includes the key query parameter; regenerate the key if the WeatherAPI dashboard shows it as disabled."
+        },
+        {
+          "problem": "Many accounts are marked skipped because city is empty.",
+          "solution": "Inspect the Salesforce BillingCity values for nulls or whitespace, normalize known fallback fields, and keep the skipped status so the aggregation step reports the data gap instead of failing."
+        },
+        {
+          "problem": "summary.json is not found after the run.",
+          "solution": "Check the current working directory or set SUMMARY_PATH to an absolute path, then rerun the final step and inspect the returned summary object."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Salesforce REST API",
+          "url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/"
+        },
+        {
+          "label": "WeatherAPI",
+          "url": "https://www.weatherapi.com/docs/"
+        }
+      ],
+      "price": 9.99
+    }
   }
 ]
