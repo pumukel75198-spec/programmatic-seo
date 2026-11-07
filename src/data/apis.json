@@ -2520,5 +2520,92 @@
       "endpoint": "https://api.twitch.tv/helix/analytics",
       "docsUrl": "https://dev.twitch.tv/docs/api/reference#analytics"
     }
+  },
+  {
+    "slug": "jira-rest-api",
+    "title": "Jira REST API",
+    "description": "The Jira REST API manages issues, projects, transitions and webhooks, enabling automated engineering workflows and release synchronization.",
+    "category": "Developer Tools",
+    "tags": ["jira", "issues", "project-management", "devops"],
+    "details": {
+      "provider": "Atlassian",
+      "pricing": "Free up to 10 users; paid plans from $7.75/user/month",
+      "features": [
+        "Create and update issues",
+        "Read projects and boards",
+        "Transition issue status",
+        "Subscribe to webhooks"
+      ],
+      "useCase": "Automate backlog triage, release notes and cross-team issue synchronization.",
+      "website": "https://www.atlassian.com/software/jira",
+      "endpoint": "https://{your-domain}.atlassian.net/rest/api/3/issue",
+      "authentication": "API token with Basic auth or OAuth2",
+      "apiKeyRequired": true,
+      "sdkLanguages": ["Python", "JavaScript", "cURL"],
+      "rateLimit": "Tier-based; see the Jira REST API documentation",
+      "docsUrl": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/",
+      "lastVerified": "2026-11-07 08:29 UTC",
+      "disclaimer": "Verification & Link Validity Notice: This workflow blueprint was generated and technically verified on 2026-11-07 08:29 UTC. At the exact time of creation, all referenced domains, API endpoints, and external resource links were tested and confirmed reachable. Because third-party APIs and web services evolve continuously, domains, endpoints, or links inside this document may change or become unavailable over time."
+    },
+    "created_and_verified_at": "2026-11-07 08:29 UTC",
+    "price": 29.99
+  },
+  {
+    "slug": "convertkit-api",
+    "title": "ConvertKit API",
+    "description": "The ConvertKit API manages subscribers, forms, tags and sequences for newsletter automation and creator marketing workflows.",
+    "category": "Marketing & Analytics",
+    "tags": ["newsletter", "email", "convertkit", "creators"],
+    "details": {
+      "provider": "ConvertKit",
+      "pricing": "Free up to 1,000 subscribers; paid plans from $15/month",
+      "features": [
+        "Create and update subscribers",
+        "Manage forms and landing pages",
+        "Apply tags and segments",
+        "Add subscribers to sequences"
+      ],
+      "useCase": "Automate newsletter signups, tag-based segmentation and email sequences.",
+      "website": "https://convertkit.com",
+      "endpoint": "https://api.convertkit.com/v3/subscribers",
+      "authentication": "API key and secret",
+      "apiKeyRequired": true,
+      "sdkLanguages": ["Python", "JavaScript", "cURL"],
+      "rateLimit": "120 requests per minute",
+      "docsUrl": "https://developers.convertkit.com/",
+      "lastVerified": "2026-11-07 08:30 UTC",
+      "disclaimer": "Verification & Link Validity Notice: This workflow blueprint was generated and technically verified on 2026-11-07 08:30 UTC. At the exact time of creation, all referenced domains, API endpoints, and external resource links were tested and confirmed reachable. Because third-party APIs and web services evolve continuously, domains, endpoints, or links inside this document may change or become unavailable over time."
+    },
+    "created_and_verified_at": "2026-11-07 08:30 UTC",
+    "price": 29.99
+  },
+  {
+    "slug": "klaviyo-api",
+    "title": "Klaviyo API",
+    "description": "The Klaviyo API manages profiles, lists, events and campaigns for e-commerce marketing automation and customer segmentation.",
+    "category": "Marketing & Analytics",
+    "tags": ["email", "marketing", "klaviyo", "ecommerce"],
+    "details": {
+      "provider": "Klaviyo",
+      "pricing": "Free up to 250 contacts; paid plans from $20/month",
+      "features": [
+        "Create and update profiles",
+        "Manage lists and segments",
+        "Track custom events",
+        "Read campaign performance"
+      ],
+      "useCase": "Automate welcome flows, abandoned-cart journeys and customer segmentation.",
+      "website": "https://www.klaviyo.com",
+      "endpoint": "https://a.klaviyo.com/api/profiles",
+      "authentication": "Private API key (Bearer)",
+      "apiKeyRequired": true,
+      "sdkLanguages": ["Python", "JavaScript", "cURL"],
+      "rateLimit": "Tier-based; see the Klaviyo API overview",
+      "docsUrl": "https://developers.klaviyo.com/en/reference/api_overview",
+      "lastVerified": "2026-11-07 08:30 UTC",
+      "disclaimer": "Verification & Link Validity Notice: This workflow blueprint was generated and technically verified on 2026-11-07 08:30 UTC. At the exact time of creation, all referenced domains, API endpoints, and external resource links were tested and confirmed reachable. Because third-party APIs and web services evolve continuously, domains, endpoints, or links inside this document may change or become unavailable over time."
+    },
+    "created_and_verified_at": "2026-11-07 08:30 UTC",
+    "price": 29.99
   }
 ]

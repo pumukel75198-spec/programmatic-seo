@@ -21045,5 +21045,862 @@
       ],
       "price": 9.99
     }
+  },
+  {
+    "slug": "jira-rest-twilio-conversations-automation-pipeline",
+    "title": "Jira REST + Twilio Conversations Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects Jira REST with Twilio Conversations and The Jira REST API manages issues, projects, transitions and webhooks, enabling automated engineering workflows and release synchronization. Manage multi-channel conversations across SMS, Messenger, and more.",
+    "category": "Developer Tools",
+    "tags": [
+      "jira",
+      "issues",
+      "project-management",
+      "devops",
+      "messaging",
+      "conversations",
+      "customer-engagement"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-07 08:34 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["Jira REST API", "Twilio Conversations API"],
+      "api_slugs": ["jira-rest-api", "twilio-conversations-api"],
+      "alternative_slugs": [
+        "microsoft-alternatives",
+        "notepad-plus-plus-alternatives"
+      ],
+      "useCase": "Automate backlog triage, release notes and cross-team issue synchronization. Then Create and manage interactive conversations across various messaging channels. Enhance customer engagement through seamless communication.",
+      "steps": [
+        {
+          "title": "Ingest source records from Jira REST",
+          "description": "Authenticate against Jira Cloud with Basic auth, create a release-sync tracking issue through POST /rest/api/3/issue, then read it back through GET /rest/api/3/issue/{issueIdOrKey}. Flatten the nested Atlassian payload into a single normalized record list named jira_records so that every later stage works with a stable, flat schema.",
+          "technical_explanation": "This step is the ingestion boundary of the pipeline: it authenticates against Jira Cloud, creates a release-sync tracking issue and immediately reads it back so that every downstream stage consumes one normalized record shape instead of raw Atlassian payloads. The contract is POST https://{your-domain}.atlassian.net/rest/api/3/issue with Basic authentication (base64 of email:api_token), an Accept: application/json header and a JSON body whose fields.project.key, fields.summary, fields.issuetype.name and fields.description are mandatory; the v3 API rejects plain-string descriptions, so the description is sent as an Atlassian Document Format document. The create response returns id, key and self, and the follow-up GET /rest/api/3/issue/{issueIdOrKey} returns the full field set including fields.status.name, fields.project.key and fields.updated. Edge cases: Jira Cloud enforces per-tenant rate limits and answers with 429 plus a Retry-After header, so the caller must back off; an unknown or archived project key yields 400; and optional blocks such as status or project may be absent, so every nested lookup uses .get() with an explicit default.",
+          "code_snippet": "import time\nimport base64\nimport json\nimport os\nimport urllib.error\nimport urllib.parse\nimport urllib.request\n\n# Literal Jira Cloud issue endpoint; the site name is injected from the environment at runtime.\nJIRA_ISSUE_URL = \"https://{your-domain}.atlassian.net/rest/api/3/issue\".replace(\n    \"{your-domain}\", os.environ.get(\"JIRA_DOMAIN\", \"\")\n)\nJIRA_EMAIL = os.environ.get(\"JIRA_EMAIL\", \"\")\nJIRA_API_TOKEN = os.environ.get(\"JIRA_API_TOKEN\", \"\")\nJIRA_PROJECT_KEY = os.environ.get(\"JIRA_PROJECT_KEY\", \"ENG\")\n\n\ndef jira_headers():\n    # Jira Cloud Basic auth is base64(\"email:api_token\"); raw credentials are rejected with 401.\n    raw = (JIRA_EMAIL + \":\" + JIRA_API_TOKEN).encode(\"utf-8\")\n    encoded = base64.b64encode(raw).decode(\"ascii\")\n    return {\n        \"Authorization\": \"Basic \" + encoded,\n        \"Accept\": \"application/json\",\n        \"Content-Type\": \"application/json\",\n    }\n\n\ndef create_release_issue(summary_text, description_text):\n    # The v3 create endpoint requires description to be an Atlassian Document Format document.\n    payload = {\n        \"fields\": {\n            \"project\": {\"key\": JIRA_PROJECT_KEY},\n            \"summary\": summary_text,\n            \"issuetype\": {\"name\": \"Task\"},\n            \"description\": {\n                \"type\": \"doc\",\n                \"version\": 1,\n                \"content\": [\n                    {\n                        \"type\": \"paragraph\",\n                        \"content\": [{\"type\": \"text\", \"text\": description_text}],\n                    }\n                ],\n            },\n        }\n    }\n    data = json.dumps(payload).encode(\"utf-8\")\n    request = urllib.request.Request(JIRA_ISSUE_URL, data=data, headers=jira_headers(), method=\"POST\")\n    try:\n        with urllib.request.urlopen(request, timeout=30) as response:\n            if response.status not in (200, 201):\n                raise RuntimeError(\"Jira create returned status \" + str(response.status))\n            return json.loads(response.read().decode(\"utf-8\"))\n    except urllib.error.HTTPError as error:\n        raise RuntimeError(\"Jira create failed: \" + str(error.code) + \" \" + error.read().decode(\"utf-8\"))\n\n\ndef fetch_issue(issue_key):\n    # GET /rest/api/3/issue/{issueIdOrKey} returns the full field set we normalize below.\n    url = JIRA_ISSUE_URL + \"/\" + urllib.parse.quote(issue_key)\n    request = urllib.request.Request(url, headers=jira_headers(), method=\"GET\")\n    with urllib.request.urlopen(request, timeout=30) as response:\n        return json.loads(response.read().decode(\"utf-8\"))\n\n\ndef ingest_jira_records():\n    created = create_release_issue(\"Release sync 2026-11-07\", \"Automated release synchronization tracking issue.\")\n    issue_key = created.get(\"key\", \"\")\n    detail = fetch_issue(issue_key)\n    fields = detail.get(\"fields\", {})\n    status_block = fields.get(\"status\") or {}\n    project_block = fields.get(\"project\") or {}\n    record = {\n        \"issue_key\": detail.get(\"key\", issue_key),\n        \"issue_id\": detail.get(\"id\", \"\"),\n        \"summary\": fields.get(\"summary\", \"\"),\n        \"status\": status_block.get(\"name\", \"Unknown\"),\n        \"project_key\": project_block.get(\"key\", \"\"),\n        \"updated\": fields.get(\"updated\", \"\"),\n    }\n    return [record]\n\n\njira_records = ingest_jira_records()\nprint(json.dumps(jira_records, indent=2))",
+          "mock_response": {
+            "id": "10234",
+            "key": "ENG-412",
+            "self": "https://your-domain.atlassian.net/rest/api/3/issue/10234",
+            "fields": {
+              "summary": "Release sync 2026-11-07",
+              "status": {
+                "name": "In Progress",
+                "id": "3"
+              },
+              "project": {
+                "key": "ENG",
+                "name": "Engineering"
+              },
+              "issuetype": {
+                "name": "Task"
+              },
+              "updated": "2026-11-07T08:32:00.000+0000"
+            }
+          },
+          "actions": [
+            "Export JIRA_DOMAIN, JIRA_EMAIL, JIRA_API_TOKEN and JIRA_PROJECT_KEY before executing the script.",
+            "Send POST /rest/api/3/issue with an ADF description document and capture the returned issue key.",
+            "Send GET /rest/api/3/issue/{issueIdOrKey} and flatten fields.status.name, fields.project.key and fields.updated into a flat record.",
+            "Print the normalized list so the next step consumes the jira_records variable directly."
+          ],
+          "commands": [
+            {
+              "label": "Run the ingestion step",
+              "language": "bash",
+              "code": "python3 workflow.py"
+            },
+            {
+              "label": "Export Jira credentials for the current shell",
+              "language": "bash",
+              "code": "export JIRA_DOMAIN=your-domain JIRA_EMAIL=you@example.com JIRA_API_TOKEN=*** JIRA_PROJECT_KEY=ENG"
+            }
+          ],
+          "config": [
+            {
+              "key": "JIRA_DOMAIN",
+              "value": "<your-domain>",
+              "description": "The Atlassian Cloud site name that replaces the {your-domain} placeholder in the issue endpoint."
+            },
+            {
+              "key": "JIRA_EMAIL",
+              "value": "<account-email>",
+              "description": "The Atlassian account email used as the Basic auth username."
+            },
+            {
+              "key": "JIRA_API_TOKEN",
+              "value": "<api-token>",
+              "description": "The Atlassian API token used as the Basic auth password."
+            },
+            {
+              "key": "JIRA_PROJECT_KEY",
+              "value": "ENG",
+              "description": "The project key that receives the release-sync tracking issue."
+            }
+          ],
+          "tools": ["Jira REST API"],
+          "checklist": [
+            "The script prints a list with exactly one record containing issue_key, status and project_key.",
+            "The created issue is visible in the Jira project referenced by JIRA_PROJECT_KEY.",
+            "No plain-string description is sent, so the create call returns 201 instead of 400."
+          ],
+          "expectedResult": "A normalized jira_records list containing the created and re-read Jira issue is available for the next stage.",
+          "links": [
+            {
+              "label": "Jira REST API Documentation",
+              "url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with Twilio Conversations",
+          "description": "For every normalized Jira record, create a Twilio Conversations conversation named after the issue key and post a status notification message into it. Capture the conversation SID, its state, the messages link and the message index into a second normalized list named twilio_records that keeps the issue_key as the join key.",
+          "technical_explanation": "This step is the enrichment and fan-out stage: it consumes the jira_records list produced by step 1 and materializes one multi-channel conversation per issue so that engineering status changes become visible to SMS, Messenger and chat participants. The contract is POST https://conversations.twilio.com/v1/Conversations with an Authorization: Bearer header, Accept: application/json and a form-encoded body containing FriendlyName, followed by POST https://conversations.twilio.com/v1/Conversations/{ConversationSid}/Messages with form-encoded Author and Body fields. The conversation response returns sid, account_sid, friendly_name, state, date_created and a links object with participants and messages URLs; the message response returns sid, index, author, body and date_created. Edge cases: the Conversations resource is form-encoded, so sending JSON yields 400; the API is rate limited per account and returns 429 with Retry-After; a conversation SID must be URL-quoted before being placed in the messages path; and links or index may be absent, so every access uses .get() with a default.",
+          "code_snippet": "import json\nimport os\nimport urllib.error\nimport urllib.parse\nimport urllib.request\n\n# Base URL only; every call appends a documented Conversations resource path.\nTWILIO_CONVERSATIONS_URL = \"https://conversations.twilio.com/v1\"\nTWILIO_API_KEY = os.environ.get(\"TWILIO_API_KEY\", \"\")\n\n\ndef twilio_headers():\n    # Conversations accepts a Bearer API key and requires form encoding for POST bodies.\n    return {\n        \"Authorization\": \"Bearer \" + TWILIO_API_KEY,\n        \"Accept\": \"application/json\",\n        \"Content-Type\": \"application/x-www-form-urlencoded\",\n    }\n\n\ndef create_conversation(friendly_name):\n    body = urllib.parse.urlencode({\"FriendlyName\": friendly_name}).encode(\"utf-8\")\n    url = TWILIO_CONVERSATIONS_URL + \"/Conversations\"\n    request = urllib.request.Request(url, data=body, headers=twilio_headers(), method=\"POST\")\n    try:\n        with urllib.request.urlopen(request, timeout=30) as response:\n            if response.status not in (200, 201):\n                raise RuntimeError(\"Twilio create returned status \" + str(response.status))\n            return json.loads(response.read().decode(\"utf-8\"))\n    except urllib.error.HTTPError as error:\n        raise RuntimeError(\"Twilio create failed: \" + str(error.code) + \" \" + error.read().decode(\"utf-8\"))\n\n\ndef post_message(conversation_sid, author, text):\n    body = urllib.parse.urlencode({\"Author\": author, \"Body\": text}).encode(\"utf-8\")\n    url = TWILIO_CONVERSATIONS_URL + \"/Conversations/\" + urllib.parse.quote(conversation_sid) + \"/Messages\"\n    request = urllib.request.Request(url, data=body, headers=twilio_headers(), method=\"POST\")\n    with urllib.request.urlopen(request, timeout=30) as response:\n        return json.loads(response.read().decode(\"utf-8\"))\n\n\ndef sync_conversations(records):\n    synced = []\n    for record in records:\n        issue_key = record.get(\"issue_key\", \"\")\n        status = record.get(\"status\", \"Unknown\")\n        conversation = create_conversation(\"release-\" + issue_key)\n        conversation_sid = conversation.get(\"sid\", \"\")\n        text = \"Issue \" + issue_key + \" is now \" + status\n        message = post_message(conversation_sid, \"jira-bot\", text)\n        links = conversation.get(\"links\") or {}\n        synced.append({\n            \"issue_key\": issue_key,\n            \"conversation_sid\": conversation_sid,\n            \"conversation_state\": conversation.get(\"state\", \"unknown\"),\n            \"messages_url\": links.get(\"messages\", \"\"),\n            \"message_sid\": message.get(\"sid\", \"\"),\n            \"message_index\": message.get(\"index\", 0),\n        })\n    return synced\n\n\ntwilio_records = sync_conversations(jira_records)\nprint(json.dumps(twilio_records, indent=2))",
+          "mock_response": {
+            "sid": "MOCK_TWILIO_RESOURCE_SID",
+            "account_sid": "MOCK_TWILIO_ACCOUNT_SID",
+            "friendly_name": "release-ENG-412",
+            "state": "active",
+            "date_created": "2026-11-07T08:33:10Z",
+            "links": {
+              "participants": "https://conversations.twilio.com/v1/Conversations/MOCK_TWILIO_RESOURCE_SID/Participants",
+              "messages": "https://conversations.twilio.com/v1/Conversations/MOCK_TWILIO_RESOURCE_SID/Messages"
+            }
+          },
+          "actions": [
+            "Create one Conversations conversation per Jira issue with POST /v1/Conversations and a FriendlyName derived from the issue key.",
+            "Post the status notification with POST /v1/Conversations/{ConversationSid}/Messages using the Author and Body form fields.",
+            "Capture sid, state, links.messages and the message index into the twilio_records list.",
+            "Preserve issue_key on every Twilio record so step 3 can join both datasets deterministically."
+          ],
+          "commands": [
+            {
+              "label": "Run the enrichment step",
+              "language": "bash",
+              "code": "python3 workflow.py"
+            },
+            {
+              "label": "Export the Twilio API key secret",
+              "language": "bash",
+              "code": "export TWILIO_API_KEY=***"
+            }
+          ],
+          "config": [
+            {
+              "key": "TWILIO_API_KEY",
+              "value": "<api-key-secret>",
+              "description": "The Twilio API Key secret presented as a Bearer credential on every Conversations call."
+            }
+          ],
+          "tools": ["Twilio Conversations API"],
+          "checklist": [
+            "The script prints one twilio_records entry per jira_records entry, each with a non-empty conversation_sid.",
+            "The conversation appears in the Twilio Console with state 'active' and friendly_name 'release-<issue_key>'.",
+            "The posted message body contains the issue key and the current Jira status."
+          ],
+          "expectedResult": "A twilio_records list linking every Jira issue key to a live Twilio conversation SID and message SID is available for aggregation.",
+          "links": [
+            {
+              "label": "Twilio Conversations API Documentation",
+              "url": "https://www.twilio.com/docs/conversations"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Consume jira_records and twilio_records, validate that both are non-empty lists with the required join keys, join them on issue_key and count statuses with collections.Counter. Persist the resulting operational summary as indented JSON under output/jira_twilio_summary.json and print the persisted path.",
+          "technical_explanation": "This step is the pure-Python aggregation and persistence stage: it performs no network call and instead consumes the two in-memory structures produced by steps 1 and 2, which makes the whole pipeline deterministic and replayable from a saved payload. The contract is internal: validate_inputs checks that both lists are non-empty and that every record carries issue_key or conversation_sid, build_summary joins the datasets on issue_key and derives issue_count, conversation_count, linked_issue_count and a status_breakdown built with collections.Counter, and persist_summary writes the result with json.dump using indent and sort_keys for stable diffs. Edge cases: an empty list from an upstream failure must abort before writing a misleading file; duplicate issue keys collapse to the last conversation SID because the join uses a dictionary; a missing output directory is created with parents enabled; and every dictionary access uses .get() with a default so a partially populated record never raises KeyError.",
+          "code_snippet": "import json\nimport os\nfrom collections import Counter\nfrom pathlib import Path\n\nOUTPUT_DIR = Path(os.environ.get(\"OUTPUT_DIR\", \"output\"))\n\n\ndef _coerce_list(value):\n    # Defensive: upstream stages may hand us a JSON string or a non-list payload.\n    if isinstance(value, list):\n        return value\n    if isinstance(value, str):\n        try:\n            parsed = json.loads(value)\n            if isinstance(parsed, list):\n                return parsed\n        except (ValueError, TypeError):\n            pass\n    return []\n\n\ndef _has_key(record, key):\n    # Defensive: only treat a dict with a non-empty string key as usable.\n    if not isinstance(record, dict):\n        return False\n    value = record.get(key, \"\")\n    if not isinstance(value, str):\n        return False\n    return value.strip() != \"\"\n\n\ndef validate_inputs(jira_records, twilio_records):\n    # Fail fast only when an upstream stage produced no usable container at all.\n    problems = []\n    if not isinstance(jira_records, list) or len(jira_records) == 0:\n        problems.append(\"jira_records must be a non-empty list\")\n    if not isinstance(twilio_records, list) or len(twilio_records) == 0:\n        problems.append(\"twilio_records must be a non-empty list\")\n    return problems\n\n\ndef build_summary(jira_records, twilio_records):\n    # Skip records missing join keys instead of aborting the whole pipeline.\n    valid_jira = [r for r in _coerce_list(jira_records) if _has_key(r, \"issue_key\")]\n    valid_twilio = [r for r in _coerce_list(twilio_records) if _has_key(r, \"issue_key\")]\n    # Counter gives a deterministic status histogram without any third-party dependency.\n    status_counts = Counter(record.get(\"status\", \"Unknown\") for record in valid_jira)\n    conversations = {}\n    for record in valid_twilio:\n        key = record.get(\"issue_key\", \"\")\n        if key:\n            conversations[key] = record.get(\"conversation_sid\", \"\")\n    jira_keys = set(record.get(\"issue_key\", \"\") for record in valid_jira)\n    linked = [key for key in conversations if key in jira_keys]\n    summary = {\n        \"issue_count\": len(valid_jira),\n        \"conversation_count\": len(valid_twilio),\n        \"linked_issue_count\": len(linked),\n        \"status_breakdown\": dict(status_counts),\n        \"conversations\": conversations,\n    }\n    return summary\n\n\ndef persist_summary(summary):\n    # parents=True keeps the script runnable on a clean checkout without manual mkdir.\n    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)\n    target = OUTPUT_DIR / \"jira_twilio_summary.json\"\n    with target.open(\"w\", encoding=\"utf-8\") as handle:\n        json.dump(summary, handle, indent=2, sort_keys=True)\n    return str(target)\n\n\n# Prefer the current execution namespace, then fall back to module globals.\njira_records = _coerce_list(locals().get(\"jira_records\", globals().get(\"jira_records\", [])))\ntwilio_records = _coerce_list(locals().get(\"twilio_records\", globals().get(\"twilio_records\", [])))\nproblems = validate_inputs(jira_records, twilio_records)\nif problems:\n    raise SystemExit(\"Validation failed: \" + \"; \".join(problems))\nsummary = build_summary(jira_records, twilio_records)\nsummary_path = persist_summary(summary)\nprint(json.dumps({\"summary_path\": summary_path, \"summary\": summary}, indent=2))",
+          "mock_response": {
+            "summary_path": "output/jira_twilio_summary.json",
+            "summary": {
+              "issue_count": 1,
+              "conversation_count": 1,
+              "linked_issue_count": 1,
+              "status_breakdown": {
+                "In Progress": 1
+              },
+              "conversations": {
+                "ENG-412": "MOCK_TWILIO_RESOURCE_SID"
+              }
+            }
+          },
+          "actions": [
+            "Validate that jira_records and twilio_records are non-empty lists carrying issue_key and conversation_sid.",
+            "Join both datasets on issue_key and compute the status histogram with collections.Counter.",
+            "Write the summary with json.dump using indent=2 and sort_keys=True to output/jira_twilio_summary.json.",
+            "Print the persisted path and payload so the operator log records the final state."
+          ],
+          "commands": [
+            {
+              "label": "Run the aggregation step",
+              "language": "bash",
+              "code": "python3 workflow.py"
+            },
+            {
+              "label": "Inspect the persisted summary",
+              "language": "bash",
+              "code": "cat output/jira_twilio_summary.json"
+            }
+          ],
+          "config": [
+            {
+              "key": "OUTPUT_DIR",
+              "value": "output",
+              "description": "Directory that receives jira_twilio_summary.json; created automatically when missing."
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "output/jira_twilio_summary.json exists and parses as valid JSON.",
+            "issue_count equals the length of jira_records and conversation_count equals the length of twilio_records.",
+            "The conversations map contains one entry per issue key with a non-empty conversation SID."
+          ],
+          "expectedResult": "A validated, joined operational summary is persisted to output/jira_twilio_summary.json and printed to the terminal.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A Jira REST API account with API credentials (documentation: developer.atlassian.com)",
+        "A Twilio Conversations API account with API credentials (documentation: www.twilio.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A Jira REST API account with API credentials (documentation: developer.atlassian.com)",
+        "A Twilio Conversations API account with API credentials (documentation: www.twilio.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Atlassian Document Format (ADF)",
+          "definition": "A versioned document tree that Jira Cloud v3 requires for rich-text fields such as description, instead of a plain string value."
+        },
+        {
+          "term": "Basic Authentication with API Token",
+          "definition": "An Authorization header scheme that base64-encodes the account email and an Atlassian API token as one credential pair on every request."
+        },
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "An Authorization header scheme where a pre-issued key is presented directly, without a username component, on every request."
+        },
+        {
+          "term": "Idempotent Conversation Reconciliation",
+          "definition": "A join strategy that maps each source record key to exactly one conversation identifier so repeated runs update existing threads instead of duplicating them."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A retry strategy that waits for the server-advertised Retry-After interval after a 429 response before repeating the same request."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Jira returns 401 Unauthorized even though the API token is valid.",
+          "solution": "Verify that JIRA_EMAIL is the exact Atlassian account email and that the credential is base64-encoded as email:token before being placed after the literal 'Basic ' prefix; a raw token without the email produces 401."
+        },
+        {
+          "problem": "Jira returns 400 with 'Operation value must be an Atlassian Document' when creating the issue.",
+          "solution": "The v3 create endpoint rejects plain-string descriptions; wrap the text in an ADF document with type 'doc', version 1 and a paragraph content node containing a text node."
+        },
+        {
+          "problem": "Twilio returns 401 or 20003 on POST /v1/Conversations.",
+          "solution": "Confirm that TWILIO_API_KEY contains the API Key secret (not the Account Auth Token) and that the header is exactly 'Authorization: Bearer <secret>'; also confirm the body is form-encoded rather than JSON."
+        },
+        {
+          "problem": "Step 3 raises 'Validation failed: jira_records must be a non-empty list'.",
+          "solution": "Run step 1 in isolation and inspect the printed payload; an empty list means the create call succeeded but the follow-up GET used an empty issue key, so check that created.get('key', '') is populated before fetching."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Jira REST API",
+          "url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/"
+        },
+        {
+          "label": "Twilio Conversations API",
+          "url": "https://www.twilio.com/docs/conversations"
+        }
+      ],
+      "price": 9.99
+    }
+  },
+  {
+    "slug": "jira-rest-notion-api-for-automation-automation-pipeline",
+    "title": "Jira REST + Notion API for Automation Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects Jira REST with Notion API for Automation and The Jira REST API manages issues, projects, transitions and webhooks, enabling automated engineering workflows and release synchronization. Automate workflows and integrate with various tools using the Notion API.",
+    "category": "Developer Tools",
+    "tags": [
+      "jira",
+      "issues",
+      "project-management",
+      "devops",
+      "automation",
+      "integration",
+      "workflow"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-07 08:38 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["Jira REST API", "Notion API for Automation"],
+      "api_slugs": ["jira-rest-api", "notion-api-for-automation"],
+      "alternative_slugs": [
+        "microsoft-alternatives",
+        "notepad-plus-plus-alternatives"
+      ],
+      "useCase": "Automate backlog triage, release notes and cross-team issue synchronization. Then This API is used to automate tasks and workflows within Notion and integrate with external applications.",
+      "steps": [
+        {
+          "title": "Ingest source records from Jira REST",
+          "description": "Fetch one or more Jira issues by key from the Jira REST API, normalize the fields required by the pipeline, and expose the resulting list as jira_issues. The step uses Basic authentication with an email and API token, validates the response shape, and fails fast on missing credentials or HTTP errors.",
+          "technical_explanation": "This step is the ingestion boundary of the pipeline: it consumes no prior step output and produces the canonical jira_issues list that every later stage depends on. The code calls GET https://{your-domain}.atlassian.net/rest/api/3/issue/{issueKey} for each key in JIRA_ISSUE_KEYS, sends Accept: application/json and Authorization: Basic base64(email:token), and reads a Jira issue object whose fields include summary, status.name, priority.name, assignee.displayName and updated. Edge cases include 401 for invalid credentials, 404 for an unknown issue key, 429 with a Retry-After header, and missing nested objects such as assignee or priority; the code uses .get with defaults so absent fields become empty strings or Unknown instead of raising KeyError.",
+          "code_snippet": "import base64\nimport json\nimport os\nimport urllib.error\nimport urllib.parse\nimport urllib.request\n\n# JIRA_BASE_URL must be https://{your-domain}.atlassian.net\nJIRA_BASE_URL = os.environ.get('JIRA_BASE_URL', '').rstrip('/')\nJIRA_EMAIL = os.environ.get('JIRA_EMAIL', '')\nJIRA_API_TOKEN = os.environ.get('JIRA_API_TOKEN', '')\nJIRA_ISSUE_KEYS = [key.strip() for key in os.environ.get('JIRA_ISSUE_KEYS', '').split(',') if key.strip()]\n\ndef fetch_jira_issues():\n    if not JIRA_BASE_URL or not JIRA_EMAIL or not JIRA_API_TOKEN:\n        raise RuntimeError('JIRA_BASE_URL, JIRA_EMAIL and JIRA_API_TOKEN must be set')\n    if not JIRA_ISSUE_KEYS:\n        raise RuntimeError('JIRA_ISSUE_KEYS must contain at least one issue key')\n    credentials = f'{JIRA_EMAIL}:{JIRA_API_TOKEN}'.encode('utf-8')\n    auth_header = 'Basic ' + base64.b64encode(credentials).decode('ascii')\n    headers = {'Accept': 'application/json', 'Authorization': auth_header}\n    issues = []\n    for issue_key in JIRA_ISSUE_KEYS:\n        url = f'{JIRA_BASE_URL}/rest/api/3/issue/{urllib.parse.quote(issue_key)}'\n        request = urllib.request.Request(url, headers=headers, method='GET')\n        try:\n            with urllib.request.urlopen(request, timeout=30) as response:\n                payload = json.loads(response.read().decode('utf-8'))\n        except urllib.error.HTTPError as error:\n            if error.code == 429:\n                retry_after = error.headers.get('Retry-After', '1')\n                raise RuntimeError(f'Jira rate limit reached; retry after {retry_after} seconds')\n            raise RuntimeError(f'Jira request failed for {issue_key}: {error.code}')\n        fields = payload.get('fields', {})\n        status = fields.get('status', {})\n        priority = fields.get('priority', {})\n        assignee = fields.get('assignee', {}) or {}\n        issues.append({\n            'key': payload.get('key', issue_key),\n            'summary': fields.get('summary', ''),\n            'status': status.get('name', 'Unknown'),\n            'priority': priority.get('name', 'Unknown'),\n            'assignee': assignee.get('displayName', 'Unassigned'),\n            'updated': fields.get('updated', '')\n        })\n    return issues\n\njira_issues = fetch_jira_issues()",
+          "mock_response": {
+            "id": "10042",
+            "key": "ENG-142",
+            "self": "https://acme.atlassian.net/rest/api/3/issue/10042",
+            "fields": {
+              "summary": "Add release synchronization webhook",
+              "status": {
+                "name": "In Progress"
+              },
+              "priority": {
+                "name": "High"
+              },
+              "assignee": {
+                "displayName": "Alex Chen"
+              },
+              "updated": "2026-11-06T14:22:31.000+0000"
+            }
+          },
+          "actions": [
+            "Create a .env file with JIRA_BASE_URL, JIRA_EMAIL, JIRA_API_TOKEN and JIRA_ISSUE_KEYS.",
+            "Implement fetch_jira_issues to call GET /rest/api/3/issue/{issueKey} with Basic authentication.",
+            "Normalize summary, status, priority, assignee and updated into flat fields.",
+            "Raise a clear error on 401, 404 or 429 responses."
+          ],
+          "commands": [
+            {
+              "label": "Run Jira ingestion",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "JIRA_BASE_URL",
+              "value": "https://<your-domain>.atlassian.net",
+              "description": "Atlassian site base URL without a trailing slash."
+            },
+            {
+              "key": "JIRA_EMAIL",
+              "value": "<account-email>",
+              "description": "Atlassian account email used for Basic authentication."
+            },
+            {
+              "key": "JIRA_API_TOKEN",
+              "value": "<jira-api-token>",
+              "description": "Jira API token paired with the account email."
+            },
+            {
+              "key": "JIRA_ISSUE_KEYS",
+              "value": "ENG-142,ENG-143",
+              "description": "Comma-separated Jira issue keys to ingest."
+            }
+          ],
+          "tools": ["Jira REST API"],
+          "checklist": [
+            "jira_issues contains one dictionary per configured Jira issue key.",
+            "Each dictionary includes key, summary, status, priority, assignee and updated.",
+            "Missing assignee or priority values are normalized to Unassigned or Unknown."
+          ],
+          "expectedResult": "A normalized jira_issues list is available for enrichment.",
+          "links": [
+            {
+              "label": "Jira REST API Documentation",
+              "url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with Notion API for Automation",
+          "description": "Query the Notion data source, extract page metadata, and merge it into the Jira records by matching the Notion Jira Key property to the Jira issue key. The step exposes the enriched list as notion_records for final validation and persistence.",
+          "technical_explanation": "This step is the enrichment boundary: it consumes jira_issues from step 1, queries the Notion data source, and merges Notion page metadata into each Jira record by matching the Notion Jira Key property to the Jira issue key. The code calls POST https://api.notion.com/v1/databases/{database_id}/query with Authorization: Bearer <token>, Notion-Version: 2022-06-28, Content-Type: application/json, and a JSON body containing page_size and optional start_cursor; the response contains results, has_more and next_cursor. Edge cases include empty results, pages without a Jira Key value, rich_text arrays with zero elements, 429 rate limiting, and pagination when has_more is true; the code follows next_cursor until has_more is false and uses .get defaults for every property access.",
+          "code_snippet": "import json\nimport os\nimport urllib.error\nimport urllib.request\n\nNOTION_TOKEN = os.environ.get('NOTION_TOKEN', '')\nNOTION_DATABASE_ID = os.environ.get('NOTION_DATABASE_ID', '')\nNOTION_VERSION = '2022-06-28'\n\ndef extract_notion_title(properties):\n    title_items = properties.get('Name', {}).get('title', [])\n    if not title_items:\n        return ''\n    return title_items[0].get('plain_text', '')\n\ndef extract_notion_rich_text(properties, property_name):\n    rich_items = properties.get(property_name, {}).get('rich_text', [])\n    if not rich_items:\n        return ''\n    return rich_items[0].get('plain_text', '')\n\ndef fetch_notion_pages():\n    if not NOTION_TOKEN or not NOTION_DATABASE_ID:\n        raise RuntimeError('NOTION_TOKEN and NOTION_DATABASE_ID must be set')\n    url = f'https://api.notion.com/v1/databases/{NOTION_DATABASE_ID}/query'\n    headers = {\n        'Authorization': f'Bearer {NOTION_TOKEN}',\n        'Notion-Version': NOTION_VERSION,\n        'Content-Type': 'application/json'\n    }\n    pages = []\n    next_cursor = None\n    while True:\n        body_dict = {'page_size': 100}\n        if next_cursor:\n            body_dict['start_cursor'] = next_cursor\n        body = json.dumps(body_dict).encode('utf-8')\n        request = urllib.request.Request(url, data=body, headers=headers, method='POST')\n        try:\n            with urllib.request.urlopen(request, timeout=30) as response:\n                payload = json.loads(response.read().decode('utf-8'))\n        except urllib.error.HTTPError as error:\n            if error.code == 429:\n                retry_after = error.headers.get('Retry-After', '1')\n                raise RuntimeError(f'Notion rate limit reached; retry after {retry_after} seconds')\n            raise RuntimeError(f'Notion request failed: {error.code}')\n        for page in payload.get('results', []):\n            properties = page.get('properties', {})\n            pages.append({\n                'page_id': page.get('id', ''),\n                'jira_key': extract_notion_rich_text(properties, 'Jira Key'),\n                'title': extract_notion_title(properties),\n                'release': extract_notion_rich_text(properties, 'Release'),\n                'owner': extract_notion_rich_text(properties, 'Owner')\n            })\n        if not payload.get('has_more', False):\n            break\n        next_cursor = payload.get('next_cursor')\n        if not next_cursor:\n            break\n    return pages\n\ndef enrich_with_notion(jira_records):\n    notion_pages = fetch_notion_pages()\n    by_key = {}\n    for page in notion_pages:\n        key = page.get('jira_key', '')\n        if key:\n            by_key[key] = page\n    enriched = []\n    for issue in jira_records:\n        key = issue.get('key', '')\n        page = by_key.get(key, {})\n        enriched.append({\n            'key': key,\n            'summary': issue.get('summary', ''),\n            'status': issue.get('status', 'Unknown'),\n            'priority': issue.get('priority', 'Unknown'),\n            'assignee': issue.get('assignee', 'Unassigned'),\n            'updated': issue.get('updated', ''),\n            'notion_page_id': page.get('page_id', ''),\n            'notion_title': page.get('title', ''),\n            'release': page.get('release', ''),\n            'owner': page.get('owner', '')\n        })\n    return enriched\n\nnotion_records = enrich_with_notion(jira_issues)",
+          "mock_response": {
+            "object": "list",
+            "results": [
+              {
+                "object": "page",
+                "id": "8f3c2a1e-9b7d-4c6a-8e2f-1a2b3c4d5e6f",
+                "properties": {
+                  "Name": {
+                    "type": "title",
+                    "title": [
+                      {
+                        "plain_text": "Release synchronization"
+                      }
+                    ]
+                  },
+                  "Jira Key": {
+                    "type": "rich_text",
+                    "rich_text": [
+                      {
+                        "plain_text": "ENG-142"
+                      }
+                    ]
+                  },
+                  "Release": {
+                    "type": "rich_text",
+                    "rich_text": [
+                      {
+                        "plain_text": "2026.11"
+                      }
+                    ]
+                  },
+                  "Owner": {
+                    "type": "rich_text",
+                    "rich_text": [
+                      {
+                        "plain_text": "Platform Team"
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "has_more": false,
+            "next_cursor": null
+          },
+          "actions": [
+            "Create a Notion integration and share the target data source with it.",
+            "Implement fetch_notion_pages to call POST /v1/databases/{database_id}/query with Bearer authentication.",
+            "Follow next_cursor while has_more is true.",
+            "Merge Notion page metadata into jira_issues by matching Jira Key."
+          ],
+          "commands": [
+            {
+              "label": "Run Notion enrichment",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "NOTION_TOKEN",
+              "value": "<notion-integration-token>",
+              "description": "Bearer token for the Notion integration."
+            },
+            {
+              "key": "NOTION_DATABASE_ID",
+              "value": "<notion-database-id>",
+              "description": "Identifier of the Notion data source to query."
+            },
+            {
+              "key": "NOTION_VERSION",
+              "value": "2022-06-28",
+              "description": "Notion API version header required by the query endpoint."
+            }
+          ],
+          "tools": ["Notion API for Automation"],
+          "checklist": [
+            "notion_records contains every jira_issues record plus notion_page_id, notion_title, release and owner.",
+            "The Notion query follows pagination until has_more is false.",
+            "Records without a matching Notion Jira Key still appear with empty Notion fields."
+          ],
+          "expectedResult": "A notion_records list merges Jira issue data with matching Notion page metadata.",
+          "links": [
+            {
+              "label": "Notion API for Automation Documentation",
+              "url": "https://developers.notion.com/reference/intro"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Validate the enriched records, aggregate counts by status, priority and release, and persist the final operational summary to final_summary.json. This step is pure Python and performs no external API call.",
+          "technical_explanation": "This step is the persistence boundary: it consumes notion_records from step 2, validates that every record contains the required flat fields, aggregates counts by status, priority and release, and writes final_summary.json. There is no external API call in this step; the contract is a pure Python function that accepts a list of dictionaries and returns a summary dictionary with total_records, linked_notion_pages, status_counts, priority_counts, release_counts and records. Edge cases include an empty input list, records missing required keys, duplicate status values, and file-system write errors; the validation gate drops malformed records before aggregation and json.dump writes deterministic, indented output.",
+          "code_snippet": "import json\nimport os\nfrom collections import Counter\n\ndef validate_records(records):\n    required = ['key', 'summary', 'status', 'priority', 'assignee', 'updated', 'notion_page_id', 'notion_title', 'release', 'owner']\n    validated = []\n    for record in records:\n        if not isinstance(record, dict):\n            continue\n        missing = [field for field in required if field not in record]\n        if missing:\n            continue\n        validated.append(record)\n    return validated\n\ndef build_summary(records):\n    validated = validate_records(records)\n    status_counts = Counter(record.get('status', 'Unknown') for record in validated)\n    priority_counts = Counter(record.get('priority', 'Unknown') for record in validated)\n    release_counts = Counter(record.get('release', '') or 'Unassigned' for record in validated)\n    linked_pages = sum(1 for record in validated if record.get('notion_page_id', ''))\n    summary = {\n        'total_records': len(validated),\n        'linked_notion_pages': linked_pages,\n        'status_counts': dict(status_counts),\n        'priority_counts': dict(priority_counts),\n        'release_counts': dict(release_counts),\n        'records': validated\n    }\n    return summary\n\ndef persist_summary(summary):\n    output_path = os.environ.get('SUMMARY_OUTPUT_PATH', 'final_summary.json')\n    with open(output_path, 'w', encoding='utf-8') as handle:\n        json.dump(summary, handle, indent=2, sort_keys=True)\n    return summary\n\nfinal_summary = persist_summary(build_summary(notion_records))",
+          "mock_response": {
+            "total_records": 1,
+            "linked_notion_pages": 1,
+            "status_counts": {
+              "In Progress": 1
+            },
+            "priority_counts": {
+              "High": 1
+            },
+            "release_counts": {
+              "2026.11": 1
+            },
+            "records": [
+              {
+                "key": "ENG-142",
+                "summary": "Add release synchronization webhook",
+                "status": "In Progress",
+                "priority": "High",
+                "assignee": "Alex Chen",
+                "updated": "2026-11-06T14:22:31.000+0000",
+                "notion_page_id": "8f3c2a1e-9b7d-4c6a-8e2f-1a2b3c4d5e6f",
+                "notion_title": "Release synchronization",
+                "release": "2026.11",
+                "owner": "Platform Team"
+              }
+            ]
+          },
+          "actions": [
+            "Validate that each record contains the required flat fields.",
+            "Aggregate status, priority and release counts with collections.Counter.",
+            "Write final_summary.json with deterministic indentation and sorted keys.",
+            "Inspect the persisted summary for verification."
+          ],
+          "commands": [
+            {
+              "label": "Persist and inspect summary",
+              "language": "bash",
+              "code": "python workflow.py && cat final_summary.json"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUMMARY_OUTPUT_PATH",
+              "value": "final_summary.json",
+              "description": "Local path where the validated summary is persisted."
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "final_summary.json exists and is valid JSON.",
+            "total_records equals the number of validated records.",
+            "status_counts, priority_counts and release_counts are dictionaries of integer counts."
+          ],
+          "expectedResult": "A validated final_summary.json file is persisted with aggregate counts and full records.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A Jira REST API account with API credentials (documentation: developer.atlassian.com)",
+        "A Notion API for Automation account with API credentials (documentation: developers.notion.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A Jira REST API account with API credentials (documentation: developer.atlassian.com)",
+        "A Notion API for Automation account with API credentials (documentation: developers.notion.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Basic Token Authentication",
+          "definition": "A Jira authentication pattern that encodes the account email and token into an Authorization header for each request."
+        },
+        {
+          "term": "Cursor-Based Pagination",
+          "definition": "A pagination strategy that uses an opaque next_cursor value to request the next page without offset drift."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A retry strategy that waits for the server-provided Retry-After interval before sending another request after a 429 response."
+        },
+        {
+          "term": "Schema Validation Gate",
+          "definition": "A deterministic check that rejects records missing required fields before aggregation and persistence."
+        },
+        {
+          "term": "Property Value Normalization",
+          "definition": "The conversion of provider-specific property objects into flat scalar fields for downstream processing."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Jira returns 401 Unauthorized",
+          "solution": "Verify JIRA_EMAIL and JIRA_API_TOKEN, confirm the token belongs to the same Atlassian account, and rebuild the Basic auth header from email:token."
+        },
+        {
+          "problem": "Notion returns 400 validation_error for a property",
+          "solution": "Confirm the property names Jira Key, Release and Owner exist in the target data source and match the expected rich_text or title type."
+        },
+        {
+          "problem": "The final summary contains zero records",
+          "solution": "Check that JIRA_ISSUE_KEYS contains valid issue keys and that the Notion Jira Key property values exactly match the Jira issue keys."
+        },
+        {
+          "problem": "HTTP 429 from either provider",
+          "solution": "Read the Retry-After header, pause the process for that many seconds, and reduce page_size or issue batch size before retrying."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Jira REST API",
+          "url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/"
+        },
+        {
+          "label": "Notion API for Automation",
+          "url": "https://developers.notion.com/reference/intro"
+        }
+      ],
+      "price": 9.99
+    }
+  },
+  {
+    "slug": "convertkit-github-copilot-automation-pipeline",
+    "title": "ConvertKit + GitHub Copilot Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects ConvertKit with GitHub Copilot and The ConvertKit API manages subscribers, forms, tags and sequences for newsletter automation and creator marketing workflows. GitHub Copilot helps developers by providing AI-powered code suggestions in real-time.",
+    "category": "Marketing & Analytics",
+    "tags": [
+      "newsletter",
+      "email",
+      "convertkit",
+      "creators",
+      "ai",
+      "coding",
+      "automation",
+      "developer-tools"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-07 08:39 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["ConvertKit API", "GitHub Copilot API"],
+      "api_slugs": ["convertkit-api", "github-copilot-api"],
+      "alternative_slugs": ["airtable-alternatives", "deepgram-alternatives"],
+      "useCase": "Automate newsletter signups, tag-based segmentation and email sequences. Then The API is used to enhance coding efficiency by providing intelligent code suggestions. It is designed for developers seeking to streamline their workflow.",
+      "steps": [
+        {
+          "title": "Ingest source records from ConvertKit",
+          "description": "Fetch subscribers from the ConvertKit v3 API with page-based pagination and normalize each item into a stable internal record. The step fails fast when CONVERTKIT_API_SECRET is absent so credential errors surface before any downstream work. It returns a list of dictionaries that step 2 can enrich without knowing ConvertKit field names.",
+          "technical_explanation": "Step 1 is the ingestion boundary of the pipeline: it authenticates to ConvertKit, paginates the subscriber collection, and normalizes each subscriber into a stable record with subscriber_id, email, first_name, state, and created_at so later stages never depend on ConvertKit-specific field names. The API contract is GET https://api.convertkit.com/v3/subscribers with the api_secret query parameter, page and sort_order query parameters, an Accept: application/json header, and a JSON response shaped as subscribers[], total_subscribers, page, and total_pages. Edge cases include HTTP 401 or 429 responses, an empty subscribers array on the final page, missing first_name values, total_pages arriving as a string, and the MAX_PAGES cap that prevents unbounded pagination loops.",
+          "code_snippet": "import json\nimport os\nimport urllib.parse\nimport urllib.request\n\nCONVERTKIT_SUBSCRIBERS_URL = 'https://api.convertkit.com/v3/subscribers'\n\n\ndef _safe_positive_int(value, default):\n    try:\n        parsed = int(value)\n    except (TypeError, ValueError):\n        return default\n    return parsed if parsed > 0 else default\n\n\ndef fetch_subscribers(max_pages=None):\n    api_secret = os.environ.get('CONVERTKIT_API_SECRET', '')\n    if not api_secret:\n        raise RuntimeError('CONVERTKIT_API_SECRET is not set')\n    limit_source = max_pages if max_pages is not None else os.environ.get('MAX_PAGES', '5')\n    limit = _safe_positive_int(limit_source, 5)\n    subscribers = []\n    page = 1\n    while page <= limit:\n        query = urllib.parse.urlencode({'api_secret': api_secret, 'page': page, 'sort_order': 'desc'})\n        request = urllib.request.Request(f'{CONVERTKIT_SUBSCRIBERS_URL}?{query}', headers={'Accept': 'application/json'})\n        with urllib.request.urlopen(request, timeout=30) as response:\n            if response.status != 200:\n                raise RuntimeError(f'ConvertKit HTTP {response.status}')\n            payload = json.loads(response.read().decode('utf-8'))\n        batch = payload.get('subscribers', [])\n        for item in batch:\n            record = {\n                'subscriber_id': item.get('id', 0),\n                'email': item.get('email_address', ''),\n                'first_name': item.get('first_name', '') or '',\n                'state': item.get('state', 'unknown'),\n                'created_at': item.get('created_at', ''),\n            }\n            subscribers.append(record)\n        try:\n            total_pages = int(payload.get('total_pages', 1) or 1)\n        except (TypeError, ValueError):\n            total_pages = 1\n        if not batch or page >= total_pages:\n            break\n        page += 1\n    return subscribers\n\n\nsubscribers = fetch_subscribers()",
+          "mock_response": "{\"subscribers\":[{\"id\":1001,\"first_name\":\"Alice\",\"email_address\":\"alice@example.com\",\"state\":\"active\",\"created_at\":\"2026-10-01T09:15:00Z\"},{\"id\":1002,\"first_name\":\"Bob\",\"email_address\":\"bob@example.com\",\"state\":\"active\",\"created_at\":\"2026-10-03T14:22:00Z\"},{\"id\":1003,\"first_name\":\"\",\"email_address\":\"carol@example.com\",\"state\":\"inactive\",\"created_at\":\"2026-10-08T18:05:00Z\"}],\"total_subscribers\":3,\"page\":1,\"total_pages\":1}",
+          "actions": [
+            "Read CONVERTKIT_API_SECRET from the environment and raise an error when it is absent.",
+            "Build the subscriber URL with urllib.parse.urlencode using api_secret, page, and sort_order.",
+            "Normalize each item with .get() into subscriber_id, email, first_name, state, and created_at.",
+            "Terminate pagination when the page reaches total_pages or the subscribers array is empty."
+          ],
+          "commands": [
+            {
+              "label": "Load environment variables",
+              "language": "bash",
+              "code": "set -a; source .env; set +a"
+            },
+            {
+              "label": "Run workflow script",
+              "language": "bash",
+              "code": "python3 workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "CONVERTKIT_API_SECRET",
+              "value": "<convertkit-api-secret>",
+              "description": "ConvertKit v3 API secret sent as the api_secret query parameter."
+            },
+            {
+              "key": "CONVERTKIT_SUBSCRIBERS_URL",
+              "value": "https://api.convertkit.com/v3/subscribers",
+              "description": "Base subscriber collection endpoint."
+            },
+            {
+              "key": "MAX_PAGES",
+              "value": "5",
+              "description": "Upper bound on pagination requests to avoid unbounded loops."
+            }
+          ],
+          "tools": ["ConvertKit API"],
+          "checklist": [
+            "The function returns a list of dictionaries with subscriber_id and email keys.",
+            "Pagination stops at total_pages and never exceeds MAX_PAGES.",
+            "Missing first_name values become empty strings instead of None."
+          ],
+          "expectedResult": "A normalized subscriber list is available in the subscribers variable for the enrichment step.",
+          "links": [
+            {
+              "label": "ConvertKit API Documentation",
+              "url": "https://developers.convertkit.com/"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with GitHub Copilot",
+          "description": "Call the GitHub Copilot usage endpoint and reduce daily suggestion counts into one acceptance rate. Attach that rate, a derived engagement score, and a segment label to every subscriber record from step 1. The function returns a new list and leaves the original subscriber data unchanged.",
+          "technical_explanation": "Step 2 consumes the normalized subscriber list from step 1 and enriches every record with GitHub Copilot usage signals, which turns a plain newsletter list into a segmented audience for creator marketing follow-up. The API contract is GET https://api.github.com/copilot/v1/usage with Accept: application/vnd.github+json, Authorization: Bearer <token>, and X-GitHub-Api-Version headers, returning a JSON object with a usage[] array of daily suggestion and acceptance counts. Edge cases include HTTP 403 or 404 for tokens without Copilot metrics permission, an empty usage array, numeric values arriving as strings, and a zero suggestion total that must produce an acceptance rate of 0.0 instead of a division error.",
+          "code_snippet": "import json\nimport os\nimport urllib.request\n\nCOPILOT_USAGE_URL = 'https://api.github.com/copilot/v1/usage'\n\ndef _as_int(value):\n    try:\n        return int(value or 0)\n    except (TypeError, ValueError):\n        return 0\n\ndef fetch_copilot_usage():\n    token = os.environ.get('GITHUB_COPILOT_TOKEN', '')\n    if not token:\n        raise RuntimeError('GITHUB_COPILOT_TOKEN is not set')\n    headers = {\n        'Accept': 'application/vnd.github+json',\n        'Authorization': f'Bearer {token}',\n        'X-GitHub-Api-Version': os.environ.get('GITHUB_API_VERSION', '2022-11-28'),\n    }\n    request = urllib.request.Request(COPILOT_USAGE_URL, headers=headers)\n    with urllib.request.urlopen(request, timeout=30) as response:\n        if response.status != 200:\n            raise RuntimeError(f'GitHub Copilot HTTP {response.status}')\n        payload = json.loads(response.read().decode('utf-8'))\n    suggestions = 0\n    acceptances = 0\n    for row in payload.get('usage', []):\n        suggestions += _as_int(row.get('suggestions', 0))\n        acceptances += _as_int(row.get('acceptances', 0))\n    rate = round(acceptances / suggestions, 4) if suggestions > 0 else 0.0\n    return {'acceptance_rate': rate, 'suggestions': suggestions, 'acceptances': acceptances}\n\ndef enrich_with_copilot(subscribers):\n    usage = fetch_copilot_usage()\n    rate = float(usage.get('acceptance_rate', 0.0))\n    enriched = []\n    for subscriber in subscribers:\n        state = subscriber.get('state', 'unknown')\n        score = round(rate * 100.0 + (10.0 if state == 'active' else 0.0), 2)\n        record = dict(subscriber)\n        record['copilot_acceptance_rate'] = rate\n        record['engagement_score'] = score\n        if score >= 50.0:\n            record['segment'] = 'high-intent'\n        elif score >= 20.0:\n            record['segment'] = 'nurture'\n        else:\n            record['segment'] = 'low-intent'\n        enriched.append(record)\n    return enriched\n\nenriched = enrich_with_copilot(subscribers)",
+          "mock_response": "{\"usage\":[{\"day\":\"2026-11-01\",\"user\":\"octocat\",\"suggestions\":180,\"acceptances\":72,\"lines_accepted\":540},{\"day\":\"2026-11-02\",\"user\":\"octocat\",\"suggestions\":220,\"acceptances\":110,\"lines_accepted\":780}],\"total\":2}",
+          "actions": [
+            "Read GITHUB_COPILOT_TOKEN and construct a urllib.request.Request with Accept, Authorization, and X-GitHub-Api-Version headers.",
+            "Aggregate suggestions and acceptances from the usage array into a single acceptance_rate.",
+            "Copy each subscriber record and attach copilot_acceptance_rate, engagement_score, and segment.",
+            "Return the enriched list without mutating the original subscribers list."
+          ],
+          "commands": [
+            {
+              "label": "Load environment variables",
+              "language": "bash",
+              "code": "set -a; source .env; set +a"
+            },
+            {
+              "label": "Run workflow script",
+              "language": "bash",
+              "code": "python3 workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "GITHUB_COPILOT_TOKEN",
+              "value": "<github-copilot-token>",
+              "description": "Bearer token for the GitHub REST API with Copilot metrics permission."
+            },
+            {
+              "key": "COPILOT_USAGE_URL",
+              "value": "https://api.github.com/copilot/v1/usage",
+              "description": "GitHub Copilot usage metrics endpoint."
+            },
+            {
+              "key": "GITHUB_API_VERSION",
+              "value": "2022-11-28",
+              "description": "GitHub REST API version header value."
+            }
+          ],
+          "tools": ["GitHub Copilot API"],
+          "checklist": [
+            "Every record contains copilot_acceptance_rate, engagement_score, and segment.",
+            "acceptance_rate is 0.0 when total_suggestions is zero.",
+            "The original subscribers list is unchanged."
+          ],
+          "expectedResult": "An enriched subscriber list with Copilot-derived engagement scores is stored in the enriched variable.",
+          "links": [
+            {
+              "label": "GitHub Copilot API Documentation",
+              "url": "https://docs.github.com/en/copilot"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Validate the enriched records, count segments, and compute average, minimum, and maximum engagement scores. Write the result to SUMMARY_PATH as formatted JSON and print the same payload to stdout. Finish by reading the file back to confirm the operational summary is persisted.",
+          "technical_explanation": "Step 3 is the pure-Python aggregation and persistence boundary: it consumes the enriched list from step 2, verifies that every record still carries the required keys, and writes one deterministic operational summary instead of forwarding raw API payloads. There is no network call here; the contract is an in-memory list of dictionaries with subscriber_id, email, segment, and engagement_score, plus a JSON file written to SUMMARY_PATH. Edge cases include an empty enriched list, a missing required field, non-numeric engagement scores, an unwritable output path, and repeated runs that must overwrite the same summary file idempotently.",
+          "code_snippet": "import time\nimport datetime\nimport json\nimport os\nfrom collections import Counter\n\ndef aggregate_and_persist(enriched):\n    if enriched is None:\n        enriched = []\n    if not isinstance(enriched, list):\n        raise TypeError('enriched must be a list')\n    required = ('subscriber_id', 'email', 'segment', 'engagement_score')\n    for record in enriched:\n        if not isinstance(record, dict):\n            raise TypeError('each enriched record must be a dictionary')\n        for field in required:\n            if field not in record:\n                raise KeyError(f'missing required field: {field}')\n    segment_counts = Counter(record.get('segment', 'unknown') for record in enriched)\n    scores = []\n    for record in enriched:\n        try:\n            score = float(record.get('engagement_score', 0.0))\n        except (TypeError, ValueError):\n            score = 0.0\n        scores.append(score)\n    if scores:\n        average_score = round(sum(scores) / len(scores), 2)\n        max_score = round(max(scores), 2)\n        min_score = round(min(scores), 2)\n    else:\n        average_score = 0.0\n        max_score = 0.0\n        min_score = 0.0\n    summary = {\n        'total_subscribers': len(enriched),\n        'segment_counts': dict(segment_counts),\n        'average_engagement_score': average_score,\n        'max_engagement_score': max_score,\n        'min_engagement_score': min_score,\n        'generated_at': datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat(),\n    }\n    output_path = os.environ.get('SUMMARY_PATH', 'summary.json')\n    with open(output_path, 'w', encoding='utf-8') as handle:\n        json.dump(summary, handle, indent=2, sort_keys=True)\n    print(json.dumps(summary, indent=2, sort_keys=True))\n    with open(output_path, 'r', encoding='utf-8') as handle:\n        persisted = json.load(handle)\n    if persisted.get('total_subscribers') != summary.get('total_subscribers'):\n        raise ValueError('persisted summary mismatch')\n    return summary\n\nenriched = globals().get('enriched', [])\nsummary = aggregate_and_persist(enriched)",
+          "mock_response": "{\"total_subscribers\":3,\"segment_counts\":{\"high-intent\":2,\"nurture\":1},\"average_engagement_score\":43.4,\"max_engagement_score\":50.0,\"min_engagement_score\":30.0,\"generated_at\":\"2026-11-07T08:38:00+00:00\"}",
+          "actions": [
+            "Validate required fields on every enriched record before aggregation.",
+            "Count segments with collections.Counter and convert the result to a plain dictionary.",
+            "Compute average, minimum, and maximum engagement scores with Python built-ins.",
+            "Write the summary to SUMMARY_PATH and print the same JSON to stdout."
+          ],
+          "commands": [
+            {
+              "label": "Run workflow script",
+              "language": "bash",
+              "code": "python3 workflow.py"
+            },
+            {
+              "label": "Validate persisted JSON",
+              "language": "bash",
+              "code": "python3 -m json.tool summary.json"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUMMARY_PATH",
+              "value": "summary.json",
+              "description": "Filesystem path where the final operational summary is persisted."
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "summary.json exists and parses with python3 -m json.tool.",
+            "segment_counts values sum to total_subscribers.",
+            "All score fields are numeric floats.",
+            "The script prints the same payload that it writes to disk."
+          ],
+          "expectedResult": "A validated operational summary is persisted to summary.json and printed to stdout.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A ConvertKit API account with API credentials (documentation: developers.convertkit.com)",
+        "A GitHub Copilot API account with API credentials (documentation: docs.github.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A ConvertKit API account with API credentials (documentation: developers.convertkit.com)",
+        "A GitHub Copilot API account with API credentials (documentation: docs.github.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Page-Based Pagination with Total-Page Termination",
+          "definition": "A pagination strategy that increments the page number until the response page equals total_pages or the returned collection is empty."
+        },
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "An authentication scheme that sends an access token in the Authorization header using the literal prefix Bearer followed by the token value."
+        },
+        {
+          "term": "Defensive Key Access",
+          "definition": "Reading every API field through dict.get(key, default) so missing or null fields never raise a KeyError during processing."
+        },
+        {
+          "term": "Acceptance-Rate Segmentation",
+          "definition": "Bucketing records by a score derived from Copilot suggestion acceptance counts so marketing follow-up can target intent levels."
+        },
+        {
+          "term": "Idempotent Summary Persistence",
+          "definition": "Writing the same computed summary to a fixed output path so repeated workflow runs overwrite rather than duplicate the result."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "ConvertKit returns HTTP 401 or 403",
+          "solution": "Confirm CONVERTKIT_API_SECRET contains the v3 API secret, send it as the api_secret query parameter instead of an Authorization header, and verify the key has subscriber read access."
+        },
+        {
+          "problem": "GitHub Copilot returns HTTP 403 or 404",
+          "solution": "Verify GITHUB_COPILOT_TOKEN is a token with Copilot usage metrics permission for the organization and confirm that Copilot usage reporting is enabled for that organization."
+        },
+        {
+          "problem": "The subscribers array is empty but the account has records",
+          "solution": "Check that page numbering starts at 1, inspect total_pages in the raw response, and raise MAX_PAGES if the account contains more than five pages of subscribers."
+        },
+        {
+          "problem": "summary.json is not created",
+          "solution": "Run the script from a writable working directory and confirm SUMMARY_PATH does not point to a read-only directory or a path whose parent folder is missing."
+        }
+      ],
+      "resources": [
+        {
+          "label": "ConvertKit API",
+          "url": "https://developers.convertkit.com/"
+        },
+        {
+          "label": "GitHub Copilot API",
+          "url": "https://docs.github.com/en/copilot"
+        }
+      ],
+      "price": 9.99
+    }
   }
 ]

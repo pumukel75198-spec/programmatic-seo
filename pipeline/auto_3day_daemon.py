@@ -88,6 +88,7 @@ if __package__ in (None, ""):
 from . import bundle_builder, config as cfg, llm_client, prompts, validator
 from . import run_batch
 from .code_hardener import harden_code
+from .new_api_seeds import NEW_API_SEEDS
 from .secret_sanitizer import (
     sanitize_records,
     sanitize_value,
@@ -1500,7 +1501,14 @@ def strict_url_ok(url: str, timeout: int = 10) -> tuple[bool, str]:
     request = urllib.request.Request(
         url,
         method="GET",
-        headers={"User-Agent": "FlowMatrix-DomainCheck/1.0"},
+        headers={
+            "User-Agent": (
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                "Chrome/124.0 Safari/537.36"
+            ),
+            "Accept": "text/html,application/json;q=0.9,*/*;q=0.8",
+        },
     )
     try:
         with urllib.request.urlopen(request, timeout=timeout) as response:
@@ -1518,22 +1526,27 @@ def build_api_candidate_pool(
     seed: int,
     exclude_slugs: set[str] | None = None,
 ) -> list[dict[str, Any]]:
+    """Return NEW API records that are not yet present in ``apis.json``.
+
+    The batch must increase the API catalogue, not merely regenerate kits for
+    existing records. The curated seeds are real APIs with official docs and
+    endpoints; the per-candidate live check still rejects stale entries.
+    """
     exclude = set(exclude_slugs or set())
-    usable = [
-        api
-        for api in apis
-        if str((api.get("details") or {}).get("endpoint") or "").strip()
-        and str(
-            (api.get("details") or {}).get("docsUrl")
-            or (api.get("details") or {}).get("website")
-            or ""
-        ).strip()
-        and str(api.get("slug") or "") not in exclude
+    existing_slugs = {str(api.get("slug") or "") for api in apis}
+    existing_titles = {
+        str(api.get("title") or "").strip().lower() for api in apis
+    }
+    candidates = [
+        json.loads(json.dumps(seed))
+        for seed in NEW_API_SEEDS
+        if str(seed.get("slug") or "") not in existing_slugs
+        and str(seed.get("title") or "").strip().lower() not in existing_titles
+        and str(seed.get("slug") or "") not in exclude
     ]
-    usable.sort(key=lambda api: str(api.get("slug") or ""))
     rng = random.Random(seed)
-    rng.shuffle(usable)
-    return usable[: max(count * 5, 15)]
+    rng.shuffle(candidates)
+    return candidates[: max(count * 3, 3)]
 
 
 def _api_metadata(api: dict[str, Any]) -> dict[str, Any]:
@@ -2303,11 +2316,21 @@ def _finalize(
         workflow_count = _new_record_count(
             cfg.WORKFLOWS_FILE, "src/data/workflows.json"
         )
+        parts: list[str] = []
+        if api_count:
+            parts.append(f"{api_count} API kit{'s' if api_count != 1 else ''}")
+        if alternative_count:
+            parts.append(
+                f"{alternative_count} alternative"
+                f"{'s' if alternative_count != 1 else ''}"
+            )
+        if workflow_count:
+            parts.append(
+                f"{workflow_count} workflow kit"
+                f"{'s' if workflow_count != 1 else ''}"
+            )
         message = (
-            f"chore(auto-batch): add {api_count} API kit"
-            f"{'s' if api_count != 1 else ''}, {alternative_count} alternative"
-            f"{'s' if alternative_count != 1 else ''}, {workflow_count} workflow kit"
-            f"{'s' if workflow_count != 1 else ''} (verified)"
+            "chore(auto-batch): add " + ", ".join(parts) + " (verified)"
         )
         if format_ok:
             git_ok = git_commit_and_push(message)

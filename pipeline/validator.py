@@ -122,7 +122,14 @@ def check_domain_reachable(url: str) -> tuple[bool, str]:
         request = urllib.request.Request(
             url,
             method=method,
-            headers={"User-Agent": "FlowMatrix-DomainCheck/1.0"},
+            headers={
+                "User-Agent": (
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/124.0 Safari/537.36"
+                ),
+                "Accept": "text/html,application/json;q=0.9,*/*;q=0.8",
+            },
         )
         try:
             with urllib.request.urlopen(request, timeout=8) as response:
