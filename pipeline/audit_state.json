@@ -4,288 +4,282 @@
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.278041+00:00"
+      "checked_at": "2026-11-07T14:26:49.057326+00:00"
     },
     "api:openai-whisper-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:05:15.422674+00:00"
+      "checked_at": "2026-11-07T14:26:20.500768+00:00"
     },
     "alternative:notion-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.965938+00:00"
+      "checked_at": "2026-11-07T14:26:48.757873+00:00"
     },
     "api:stripe-payments-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:05:15.625582+00:00"
+      "checked_at": "2026-11-07T14:26:20.706221+00:00"
     },
     "api:supabase-database-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:05:15.813670+00:00"
+      "checked_at": "2026-11-07T14:26:20.900445+00:00"
     },
     "api:anthropic-claude-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:05:15.998015+00:00"
+      "checked_at": "2026-11-07T14:26:21.094641+00:00"
     },
     "api:google-gemini-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:05:16.192752+00:00"
+      "checked_at": "2026-11-07T14:26:21.290843+00:00"
     },
     "api:resend-email-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:05:16.386388+00:00"
+      "checked_at": "2026-11-07T14:26:21.487228+00:00"
     },
     "api:clerk-authentication-api": {
       "status": "failed",
-      "healed": true,
+      "healed": false,
       "errors": [
-        "api_client.py does not mention the API title",
-        "API kit file 'requests.http' is <= 100 bytes"
+        "api_client.py does not mention the API title"
       ],
-      "checked_at": "2026-11-07T14:06:16.742535+00:00"
+      "checked_at": "2026-11-07T14:26:21.886690+00:00"
     },
     "api:cloudflare-workers-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:06:16.926054+00:00"
+      "checked_at": "2026-11-07T14:26:22.080142+00:00"
     },
     "api:mapbox-maps-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:06:17.139093+00:00"
+      "checked_at": "2026-11-07T14:26:22.271795+00:00"
     },
     "api:twilio-messaging-api": {
       "status": "failed",
-      "healed": true,
+      "healed": false,
       "errors": [
         "requests.http: does not use the endpoint host 'api.twilio.com'"
       ],
-      "checked_at": "2026-11-07T14:07:04.256587+00:00"
+      "checked_at": "2026-11-07T14:26:22.669586+00:00"
     },
     "api:hugging-face-inference-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:07:04.470719+00:00"
+      "checked_at": "2026-11-07T14:26:22.861330+00:00"
     },
     "api:cohere-embed-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:07:04.665329+00:00"
+      "checked_at": "2026-11-07T14:26:23.049897+00:00"
     },
     "api:pinecone-vector-api": {
       "status": "failed",
-      "healed": true,
+      "healed": false,
       "errors": [
-        "api_client.py does not mention the API title",
-        "API kit file 'requests.http' is <= 100 bytes"
+        "api_client.py does not mention the API title"
       ],
-      "checked_at": "2026-11-07T14:08:01.598922+00:00"
+      "checked_at": "2026-11-07T14:26:23.453056+00:00"
     },
     "api:auth0-authentication-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:08:01.808967+00:00"
+      "checked_at": "2026-11-07T14:26:23.661796+00:00"
     },
     "api:sendgrid-email-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:08:02.050839+00:00"
+      "checked_at": "2026-11-07T14:26:23.870763+00:00"
     },
     "api:algolia-search-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:08:02.249546+00:00"
+      "checked_at": "2026-11-07T14:26:24.071978+00:00"
     },
     "api:openweather-weather-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:08:02.443760+00:00"
+      "checked_at": "2026-11-07T14:26:24.267001+00:00"
     },
     "api:shopify-admin-api": {
       "status": "failed",
-      "healed": true,
+      "healed": false,
       "errors": [
-        "requests.http: does not use the endpoint host '{shop}.myshopify.com'",
-        "API kit file 'requests.http' is <= 100 bytes"
+        "requests.http: does not use the endpoint host '{shop}.myshopify.com'"
       ],
-      "checked_at": "2026-11-07T14:09:33.167103+00:00"
+      "checked_at": "2026-11-07T14:26:24.762978+00:00"
     },
     "api:notion-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:09:33.377579+00:00"
+      "checked_at": "2026-11-07T14:26:24.958248+00:00"
     },
     "api:airtable-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:09:33.588541+00:00"
+      "checked_at": "2026-11-07T14:26:25.152164+00:00"
     },
     "api:mistral-ai-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:09:33.791994+00:00"
+      "checked_at": "2026-11-07T14:26:25.458394+00:00"
     },
     "api:groq-inference-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:09:33.991964+00:00"
+      "checked_at": "2026-11-07T14:26:25.667636+00:00"
     },
     "api:together-ai-api": {
-      "status": "failed",
+      "status": "verified_clean",
       "healed": true,
-      "errors": [
-        "API kit file 'requests.http' is <= 100 bytes"
-      ],
-      "checked_at": "2026-11-07T14:10:10.103188+00:00"
+      "errors": [],
+      "checked_at": "2026-11-07T14:26:26.051167+00:00"
     },
     "api:replicate-model-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:10:10.286701+00:00"
+      "checked_at": "2026-11-07T14:26:26.236321+00:00"
     },
     "api:elevenlabs-voice-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:10:10.501458+00:00"
+      "checked_at": "2026-11-07T14:26:26.419138+00:00"
     },
     "api:deepgram-speech-api": {
       "status": "failed",
-      "healed": true,
+      "healed": false,
       "errors": [
-        "API sandbox failed: ing...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nERROR:root:Max attempts reached. Request failed.\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-5t1k_7l9/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-5t1k_7l9/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: DeepgramResponse(status='success', data={'ok': True}) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+        "API sandbox failed: ing...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nERROR:root:Max attempts reached. Request failed.\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-sao43qee/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-sao43qee/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: DeepgramResponse(status='success', data={'ok': True}) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
       ],
-      "checked_at": "2026-11-07T14:10:43.152572+00:00"
+      "checked_at": "2026-11-07T14:26:26.688262+00:00"
     },
     "api:stability-ai-image-api": {
       "status": "failed",
-      "healed": true,
+      "healed": false,
       "errors": [
         "api_client.py does not mention the API title",
-        "API sandbox failed: NING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-0ndgd04_/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-0ndgd04_/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: ApiResponse(status='success', data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+        "API sandbox failed: NING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-m8deditd/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-m8deditd/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: ApiResponse(status='success', data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
       ],
-      "checked_at": "2026-11-07T14:11:23.879589+00:00"
+      "checked_at": "2026-11-07T14:26:26.930477+00:00"
     },
     "api:weaviate-vector-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:11:24.066239+00:00"
+      "checked_at": "2026-11-07T14:26:27.114961+00:00"
     },
     "api:qdrant-vector-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:11:24.306043+00:00"
+      "checked_at": "2026-11-07T14:26:27.304993+00:00"
     },
     "api:mongodb-atlas-api": {
       "status": "failed",
-      "healed": true,
+      "healed": false,
       "errors": [
-        "API sandbox failed: RNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-466ogvls/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-466ogvls/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: ApiResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+        "API sandbox failed: RNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-fogasq21/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-fogasq21/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: ApiResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
       ],
-      "checked_at": "2026-11-07T14:12:26.345902+00:00"
+      "checked_at": "2026-11-07T14:26:27.564564+00:00"
     },
     "api:neon-postgres-api": {
       "status": "failed",
-      "healed": true,
+      "healed": false,
       "errors": [
         "test_mock.py: does not use the endpoint host 'neon.tech'"
       ],
-      "checked_at": "2026-11-07T14:13:10.133196+00:00"
+      "checked_at": "2026-11-07T14:26:27.956525+00:00"
     },
     "api:planetscale-database-api": {
       "status": "failed",
-      "healed": true,
+      "healed": false,
       "errors": [
         "test_mock.py: does not use the endpoint host 'planetscale.com'"
       ],
-      "checked_at": "2026-11-07T14:13:43.700221+00:00"
+      "checked_at": "2026-11-07T14:26:28.332867+00:00"
     },
     "api:upstash-redis-api": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "API sandbox failed: unittest failed:\n\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-qrgdphsh/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-qrgdphsh/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: RedisResponse(status='success', data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+        "API sandbox failed: unittest failed:\n\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-jn6e77n3/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-jn6e77n3/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: RedisResponse(status='success', data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
       ],
-      "checked_at": "2026-11-07T14:13:43.984225+00:00"
+      "checked_at": "2026-11-07T14:26:28.599974+00:00"
     },
     "api:vercel-blob-api": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "API kit file 'requests.http' is <= 100 bytes",
-        "API sandbox failed: .\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-c604j9m_/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-c604j9m_/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: BlobResponse(status=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nFAILED (failures=2)\n"
+        "API sandbox failed: .\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-nee9wewp/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-nee9wewp/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: BlobResponse(status=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
       ],
-      "checked_at": "2026-11-07T14:13:44.267285+00:00"
+      "checked_at": "2026-11-07T14:26:28.860533+00:00"
     },
     "api:liveblocks-collaboration-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:44.508937+00:00"
+      "checked_at": "2026-11-07T14:26:29.054408+00:00"
     },
     "api:ably-realtime-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:44.726455+00:00"
+      "checked_at": "2026-11-07T14:26:29.251210+00:00"
     },
     "api:posthog-analytics-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:44.966986+00:00"
+      "checked_at": "2026-11-07T14:26:29.447315+00:00"
     },
     "api:sentry-error-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:45.303822+00:00"
+      "checked_at": "2026-11-07T14:26:29.645306+00:00"
     },
     "api:launchdarkly-feature-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:45.697968+00:00"
+      "checked_at": "2026-11-07T14:26:29.837244+00:00"
     },
     "api:doppler-secrets-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:45.908425+00:00"
+      "checked_at": "2026-11-07T14:26:30.030871+00:00"
     },
     "api:openai-batch-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:46.121824+00:00"
+      "checked_at": "2026-11-07T14:26:30.237341+00:00"
     },
     "api:google-sheets-api": {
       "status": "failed",
@@ -293,13 +287,13 @@
       "errors": [
         "requests.http: does not use the endpoint host 'sheets.googleapis.com'"
       ],
-      "checked_at": "2026-11-07T14:13:46.530595+00:00"
+      "checked_at": "2026-11-07T14:26:30.598069+00:00"
     },
     "api:slack-web-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:46.885338+00:00"
+      "checked_at": "2026-11-07T14:26:30.789015+00:00"
     },
     "api:hubspot-crm-api": {
       "status": "failed",
@@ -307,117 +301,115 @@
       "errors": [
         "requests.http: does not use the endpoint host 'api.hubapi.com'"
       ],
-      "checked_at": "2026-11-07T14:13:47.357094+00:00"
+      "checked_at": "2026-11-07T14:26:31.173897+00:00"
     },
     "api:zendesk-support-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:47.704766+00:00"
+      "checked_at": "2026-11-07T14:26:31.369045+00:00"
     },
     "api:salesforce-rest-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:48.100587+00:00"
+      "checked_at": "2026-11-07T14:26:31.580281+00:00"
     },
     "api:discord-bot-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:48.571566+00:00"
+      "checked_at": "2026-11-07T14:26:31.806166+00:00"
     },
     "api:telegram-bot-api": {
-      "status": "failed",
-      "healed": false,
-      "errors": [
-        "API kit file 'requests.http' is <= 100 bytes"
-      ],
-      "checked_at": "2026-11-07T14:13:48.976620+00:00"
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T14:26:32.223196+00:00"
     },
     "api:github-rest-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:51.128888+00:00"
+      "checked_at": "2026-11-07T14:26:34.313161+00:00"
     },
     "api:linear-graphql-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:51.345909+00:00"
+      "checked_at": "2026-11-07T14:26:34.504943+00:00"
     },
     "api:microsoft-graph-api": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "API sandbox failed: unittest failed:\n\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-5yh0ypcp/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-5yh0ypcp/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: GraphAPIResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+        "API sandbox failed: unittest failed:\n\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-0qlnzsrb/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-0qlnzsrb/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: GraphAPIResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
       ],
-      "checked_at": "2026-11-07T14:13:51.628153+00:00"
+      "checked_at": "2026-11-07T14:26:34.763312+00:00"
     },
     "api:openai-dall-e-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:51.826153+00:00"
+      "checked_at": "2026-11-07T14:26:34.955491+00:00"
     },
     "api:microsoft-azure-cognitive-services-api": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "API sandbox failed: unittest failed:\n\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-nsaj77cr/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-nsaj77cr/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: CognitiveServiceResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+        "API sandbox failed: unittest failed:\n\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-6s1dcopw/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-6s1dcopw/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: CognitiveServiceResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
       ],
-      "checked_at": "2026-11-07T14:13:52.113766+00:00"
+      "checked_at": "2026-11-07T14:26:35.231406+00:00"
     },
     "api:openai-gpt-4-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:52.446150+00:00"
+      "checked_at": "2026-11-07T14:26:35.420275+00:00"
     },
     "api:openai-embeddings-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:52.651170+00:00"
+      "checked_at": "2026-11-07T14:26:35.611760+00:00"
     },
     "api:twitch-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:52.867207+00:00"
+      "checked_at": "2026-11-07T14:26:35.809488+00:00"
     },
     "api:aws-s3-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:53.147598+00:00"
+      "checked_at": "2026-11-07T14:26:36.031051+00:00"
     },
     "api:ibm-watson-text-to-speech-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:53.404751+00:00"
+      "checked_at": "2026-11-07T14:26:36.254234+00:00"
     },
     "api:aws-lambda-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:53.646699+00:00"
+      "checked_at": "2026-11-07T14:26:36.485588+00:00"
     },
     "api:paypal-payments-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:53.892737+00:00"
+      "checked_at": "2026-11-07T14:26:36.688500+00:00"
     },
     "api:ibm-cloud-object-storage-api": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "API sandbox failed: RNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-wmjf4mt7/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-wmjf4mt7/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: ApiResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+        "API sandbox failed: RNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nWARNING:root:HTTPError 500: server error. Retrying...\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-4le3gqpy/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-4le3gqpy/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: ApiResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nFAILED (failures=2)\n"
       ],
-      "checked_at": "2026-11-07T14:13:54.330608+00:00"
+      "checked_at": "2026-11-07T14:26:37.079466+00:00"
     },
     "api:aws-rekognition-api": {
       "status": "failed",
@@ -425,7 +417,7 @@
       "errors": [
         "requests.http: does not use the endpoint host 'rekognition.us-west-2.amazonaws.com'"
       ],
-      "checked_at": "2026-11-07T14:13:54.705219+00:00"
+      "checked_at": "2026-11-07T14:26:37.508641+00:00"
     },
     "api:aws-ses-api": {
       "status": "failed",
@@ -433,82 +425,80 @@
       "errors": [
         "requests.http: does not use the endpoint host 'email.us-east-1.amazonaws.com'"
       ],
-      "checked_at": "2026-11-07T14:13:55.140887+00:00"
+      "checked_at": "2026-11-07T14:26:37.937516+00:00"
     },
     "api:yelp-fusion-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:55.494083+00:00"
+      "checked_at": "2026-11-07T14:26:38.133233+00:00"
     },
     "api:ibm-watson-language-translator-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:55.713932+00:00"
+      "checked_at": "2026-11-07T14:26:38.350547+00:00"
     },
     "api:ibm-watson-assistant-api": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "API sandbox failed:  Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-09a8qc5z/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-09a8qc5z/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: WatsonAssistantResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+        "API sandbox failed:  Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nWARNING:root:HTTP Error 500: server error. Retrying...\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-176obli8/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-176obli8/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: WatsonAssistantResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
       ],
-      "checked_at": "2026-11-07T14:13:56.048492+00:00"
+      "checked_at": "2026-11-07T14:26:38.639322+00:00"
     },
     "api:ibm-watson-discovery-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:56.286389+00:00"
+      "checked_at": "2026-11-07T14:26:38.840957+00:00"
     },
     "api:azure-face-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:56.486415+00:00"
+      "checked_at": "2026-11-07T14:26:39.042050+00:00"
     },
     "api:aws-polly-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:56.713631+00:00"
+      "checked_at": "2026-11-07T14:26:39.241445+00:00"
     },
     "api:azure-cosmos-db-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:56.916960+00:00"
+      "checked_at": "2026-11-07T14:26:39.438969+00:00"
     },
     "api:google-maps-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:57.117376+00:00"
+      "checked_at": "2026-11-07T14:26:39.611768+00:00"
     },
     "api:plaid-financial-api": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "API kit file 'requests.http' is <= 100 bytes",
-        "API sandbox failed:  500: server error. Retrying in 16 seconds...\nWARNING:api_client:HTTPError 500: server error. Retrying in 32 seconds...\nERROR:api_client:Max retries exceeded.\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-n6cy3u65/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-n6cy3u65/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: ApiResponse(status='success', data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+        "API sandbox failed:  500: server error. Retrying in 16 seconds...\nWARNING:api_client:HTTPError 500: server error. Retrying in 32 seconds...\nERROR:api_client:Max retries exceeded.\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-czsifmyg/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-czsifmyg/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: ApiResponse(status='success', data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
       ],
-      "checked_at": "2026-11-07T14:13:57.485595+00:00"
+      "checked_at": "2026-11-07T14:26:39.865386+00:00"
     },
     "api:twilio-video-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:57.877831+00:00"
+      "checked_at": "2026-11-07T14:26:40.136431+00:00"
     },
     "api:sendinblue-email-api": {
       "status": "failed",
       "healed": false,
       "errors": [
         "api_client.py does not implement the endpoint host 'api.sendinblue.com'",
-        "requests.http: does not use the endpoint host 'api.sendinblue.com'",
-        "API kit file 'requests.http' is <= 100 bytes"
+        "requests.http: does not use the endpoint host 'api.sendinblue.com'"
       ],
-      "checked_at": "2026-11-07T14:13:58.374489+00:00"
+      "checked_at": "2026-11-07T14:26:40.536113+00:00"
     },
     "api:aws-transcribe-api": {
       "status": "failed",
@@ -516,103 +506,100 @@
       "errors": [
         "requests.http: does not use the endpoint host 'transcribe.us-east-1.amazonaws.com'"
       ],
-      "checked_at": "2026-11-07T14:13:58.829520+00:00"
+      "checked_at": "2026-11-07T14:26:40.955683+00:00"
     },
     "api:notion-automation-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:59.062387+00:00"
+      "checked_at": "2026-11-07T14:26:41.236897+00:00"
     },
     "api:github-copilot-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:59.262403+00:00"
+      "checked_at": "2026-11-07T14:26:41.427654+00:00"
     },
     "api:notion-forms-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:59.463318+00:00"
+      "checked_at": "2026-11-07T14:26:41.619812+00:00"
     },
     "api:twitch-api-kraken": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:13:59.665640+00:00"
+      "checked_at": "2026-11-07T14:26:41.813517+00:00"
     },
     "api:asana-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:00.140761+00:00"
+      "checked_at": "2026-11-07T14:26:42.004814+00:00"
     },
     "api:twelvedata-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:00.350977+00:00"
+      "checked_at": "2026-11-07T14:26:42.197445+00:00"
     },
     "api:pdf-generator-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:00.574514+00:00"
+      "checked_at": "2026-11-07T14:26:42.389425+00:00"
     },
     "api:weatherapi": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:00.847739+00:00"
+      "checked_at": "2026-11-07T14:26:42.633783+00:00"
     },
     "api:notion-api-for-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:01.043520+00:00"
+      "checked_at": "2026-11-07T14:26:42.824041+00:00"
     },
     "api:twilio-conversations-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:01.428342+00:00"
+      "checked_at": "2026-11-07T14:26:43.057512+00:00"
     },
     "api:asana-automation-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:01.783868+00:00"
+      "checked_at": "2026-11-07T14:26:43.254882+00:00"
     },
     "api:notion-api-for-automation-v2": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:01.981219+00:00"
+      "checked_at": "2026-11-07T14:26:43.445236+00:00"
     },
     "api:contentful-cms-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:02.206502+00:00"
+      "checked_at": "2026-11-07T14:26:43.639363+00:00"
     },
     "api:sendinblue-sms-api": {
       "status": "failed",
       "healed": false,
       "errors": [
         "api_client.py does not implement the endpoint host 'api.sendinblue.com'",
-        "requests.http: does not use the endpoint host 'api.sendinblue.com'",
-        "API kit file 'requests.http' is <= 100 bytes"
+        "requests.http: does not use the endpoint host 'api.sendinblue.com'"
       ],
-      "checked_at": "2026-11-07T14:14:02.581698+00:00"
+      "checked_at": "2026-11-07T14:26:43.999902+00:00"
     },
     "api:tibber-api": {
-      "status": "failed",
-      "healed": false,
-      "errors": [
-        "API kit file 'requests.http' is <= 100 bytes"
-      ],
-      "checked_at": "2026-11-07T14:14:02.930257+00:00"
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T14:26:44.385477+00:00"
     },
     "api:braintree-payments-api": {
       "status": "failed",
@@ -621,67 +608,63 @@
         "api_client.py does not implement the endpoint host 'api.braintreegateway.com'",
         "requests.http: does not use the endpoint host 'api.braintreegateway.com'"
       ],
-      "checked_at": "2026-11-07T14:14:03.407003+00:00"
+      "checked_at": "2026-11-07T14:26:44.819438+00:00"
     },
     "api:census-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:03.662754+00:00"
+      "checked_at": "2026-11-07T14:26:45.020931+00:00"
     },
     "api:finnhub-stock-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:04.080447+00:00"
+      "checked_at": "2026-11-07T14:26:45.222195+00:00"
     },
     "api:slack-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:04.310126+00:00"
+      "checked_at": "2026-11-07T14:26:45.441117+00:00"
     },
     "api:tinkr-api": {
-      "status": "failed",
-      "healed": false,
-      "errors": [
-        "API kit file 'requests.http' is <= 100 bytes"
-      ],
-      "checked_at": "2026-11-07T14:14:04.731590+00:00"
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T14:26:45.843536+00:00"
     },
     "api:finnhub-crypto-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:04.946664+00:00"
+      "checked_at": "2026-11-07T14:26:46.038207+00:00"
     },
     "api:squarespace-api": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "API sandbox failed: unittest failed:\n\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-wnr_0tus/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-wnr_0tus/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: ApiResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+        "API sandbox failed: unittest failed:\n\nF.F\n======================================================================\nFAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-oxd7_cfy/test_mock.py\", line 103, in test_http_error_is_handled\n    self.assertTrue(result is None or isinstance(result, (dict, list, str)))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-oxd7_cfy/test_mock.py\", line 76, in test_successful_call_and_auth_header\n    self.assertIsInstance(result, dict)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\nAssertionError: ApiResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
       ],
-      "checked_at": "2026-11-07T14:14:05.332565+00:00"
+      "checked_at": "2026-11-07T14:26:46.293860+00:00"
     },
     "api:twitch-helix-api": {
-      "status": "failed",
-      "healed": false,
-      "errors": [
-        "API kit file 'requests.http' is <= 100 bytes"
-      ],
-      "checked_at": "2026-11-07T14:14:05.742696+00:00"
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T14:26:46.685937+00:00"
     },
     "api:pdf-co-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:05.923758+00:00"
+      "checked_at": "2026-11-07T14:26:46.866807+00:00"
     },
     "api:aiven-kafka-api": {
       "status": "verified_clean",
-      "healed": true,
+      "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:06.289752+00:00"
+      "checked_at": "2026-11-07T14:26:47.067048+00:00"
     },
     "api:api-ai-image-generator": {
       "status": "failed",
@@ -689,938 +672,926 @@
       "errors": [
         "api_client.py does not mention the API title"
       ],
-      "checked_at": "2026-11-07T14:14:06.648013+00:00"
+      "checked_at": "2026-11-07T14:26:47.462443+00:00"
     },
     "api:sentry-performance-api": {
-      "status": "failed",
-      "healed": false,
-      "errors": [
-        "API kit file 'requests.http' is <= 100 bytes"
-      ],
-      "checked_at": "2026-11-07T14:14:06.988234+00:00"
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T14:26:47.864982+00:00"
     },
     "api:twitch-analytics-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.184505+00:00"
+      "checked_at": "2026-11-07T14:26:48.058126+00:00"
     },
     "api:jira-rest-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.448270+00:00"
+      "checked_at": "2026-11-07T14:26:48.280744+00:00"
     },
     "api:convertkit-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.723020+00:00"
+      "checked_at": "2026-11-07T14:26:48.533814+00:00"
     },
     "api:klaviyo-api": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.963830+00:00"
+      "checked_at": "2026-11-07T14:26:48.755852+00:00"
     },
     "alternative:zapier-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.967556+00:00"
+      "checked_at": "2026-11-07T14:26:48.759438+00:00"
     },
     "alternative:figma-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.969184+00:00"
+      "checked_at": "2026-11-07T14:26:48.761021+00:00"
     },
     "alternative:slack-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.970819+00:00"
+      "checked_at": "2026-11-07T14:26:48.762570+00:00"
     },
     "alternative:airtable-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.972387+00:00"
+      "checked_at": "2026-11-07T14:26:48.764146+00:00"
     },
     "alternative:mailchimp-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.973922+00:00"
+      "checked_at": "2026-11-07T14:26:48.765713+00:00"
     },
     "alternative:trello-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.975632+00:00"
+      "checked_at": "2026-11-07T14:26:48.767520+00:00"
     },
     "alternative:google-analytics-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.977235+00:00"
+      "checked_at": "2026-11-07T14:26:48.769052+00:00"
     },
     "alternative:hubspot-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.978676+00:00"
+      "checked_at": "2026-11-07T14:26:48.770479+00:00"
     },
     "alternative:asana-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.980170+00:00"
+      "checked_at": "2026-11-07T14:26:48.771961+00:00"
     },
     "alternative:dropbox-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.981725+00:00"
+      "checked_at": "2026-11-07T14:26:48.773451+00:00"
     },
     "alternative:calendly-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.983168+00:00"
+      "checked_at": "2026-11-07T14:26:48.774779+00:00"
     },
     "alternative:wordpress-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.984520+00:00"
+      "checked_at": "2026-11-07T14:26:48.776037+00:00"
     },
     "alternative:shopify-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.985874+00:00"
+      "checked_at": "2026-11-07T14:26:48.777311+00:00"
     },
     "alternative:monday-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.987268+00:00"
+      "checked_at": "2026-11-07T14:26:48.778695+00:00"
     },
     "alternative:clickup-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.988674+00:00"
+      "checked_at": "2026-11-07T14:26:48.780096+00:00"
     },
     "alternative:miro-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.989968+00:00"
+      "checked_at": "2026-11-07T14:26:48.781400+00:00"
     },
     "alternative:loom-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.991410+00:00"
+      "checked_at": "2026-11-07T14:26:48.782754+00:00"
     },
     "alternative:intercom-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.992814+00:00"
+      "checked_at": "2026-11-07T14:26:48.784154+00:00"
     },
     "alternative:zendesk-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.994232+00:00"
+      "checked_at": "2026-11-07T14:26:48.785726+00:00"
     },
     "alternative:jira-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.995621+00:00"
+      "checked_at": "2026-11-07T14:26:48.787116+00:00"
     },
     "alternative:github-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.996901+00:00"
+      "checked_at": "2026-11-07T14:26:48.788430+00:00"
     },
     "alternative:gitlab-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.998198+00:00"
+      "checked_at": "2026-11-07T14:26:48.789713+00:00"
     },
     "alternative:bitbucket-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:07.999590+00:00"
+      "checked_at": "2026-11-07T14:26:48.791039+00:00"
     },
     "alternative:netlify-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.001003+00:00"
+      "checked_at": "2026-11-07T14:26:48.792401+00:00"
     },
     "alternative:vercel-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.002304+00:00"
+      "checked_at": "2026-11-07T14:26:48.793673+00:00"
     },
     "alternative:openai-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.003641+00:00"
+      "checked_at": "2026-11-07T14:26:48.794994+00:00"
     },
     "alternative:stripe-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.004989+00:00"
+      "checked_at": "2026-11-07T14:26:48.796324+00:00"
     },
     "alternative:supabase-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.006386+00:00"
+      "checked_at": "2026-11-07T14:26:48.797659+00:00"
     },
     "alternative:postman-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.007831+00:00"
+      "checked_at": "2026-11-07T14:26:48.798974+00:00"
     },
     "alternative:obsidian-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.009293+00:00"
+      "checked_at": "2026-11-07T14:26:48.800397+00:00"
     },
     "alternative:auth0-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.010620+00:00"
+      "checked_at": "2026-11-07T14:26:48.801821+00:00"
     },
     "alternative:algolia-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.011923+00:00"
+      "checked_at": "2026-11-07T14:26:48.803130+00:00"
     },
     "alternative:deepgram-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.013257+00:00"
+      "checked_at": "2026-11-07T14:26:48.804465+00:00"
     },
     "alternative:elevenlabs-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.014602+00:00"
+      "checked_at": "2026-11-07T14:26:48.805769+00:00"
     },
     "alternative:pinecone-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.015847+00:00"
+      "checked_at": "2026-11-07T14:26:48.806977+00:00"
     },
     "alternative:adobe-photoshop-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.017671+00:00"
+      "checked_at": "2026-11-07T14:26:48.808682+00:00"
     },
     "alternative:zoom-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.019084+00:00"
+      "checked_at": "2026-11-07T14:26:48.809939+00:00"
     },
     "alternative:salesforce-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.020292+00:00"
+      "checked_at": "2026-11-07T14:26:48.811100+00:00"
     },
     "alternative:google-drive-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.021503+00:00"
+      "checked_at": "2026-11-07T14:26:48.812346+00:00"
     },
     "alternative:microsoft-teams-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.022739+00:00"
+      "checked_at": "2026-11-07T14:26:48.813690+00:00"
     },
     "alternative:adobe-acrobat-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.023864+00:00"
+      "checked_at": "2026-11-07T14:26:48.814888+00:00"
     },
     "alternative:docusign-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.025265+00:00"
+      "checked_at": "2026-11-07T14:26:48.816195+00:00"
     },
     "alternative:visual-studio-code-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.026520+00:00"
+      "checked_at": "2026-11-07T14:26:48.817525+00:00"
     },
     "alternative:microsoft-excel-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.027812+00:00"
+      "checked_at": "2026-11-07T14:26:48.818851+00:00"
     },
     "alternative:adobe-illustrator-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.029179+00:00"
+      "checked_at": "2026-11-07T14:26:48.820253+00:00"
     },
     "alternative:docker-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.030324+00:00"
+      "checked_at": "2026-11-07T14:26:48.821395+00:00"
     },
     "alternative:quickbooks-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.031800+00:00"
+      "checked_at": "2026-11-07T14:26:48.822804+00:00"
     },
     "alternative:zoominfo-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.033072+00:00"
+      "checked_at": "2026-11-07T14:26:48.824008+00:00"
     },
     "alternative:autodesk-autocad-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.034558+00:00"
+      "checked_at": "2026-11-07T14:26:48.825148+00:00"
     },
     "alternative:dropbox-paper-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.035847+00:00"
+      "checked_at": "2026-11-07T14:26:48.826330+00:00"
     },
     "alternative:microsoft-word-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.037135+00:00"
+      "checked_at": "2026-11-07T14:26:48.827552+00:00"
     },
     "alternative:notepad-plus-plus-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.038539+00:00"
+      "checked_at": "2026-11-07T14:26:48.828911+00:00"
     },
     "alternative:adobe-premiere-pro-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.039782+00:00"
+      "checked_at": "2026-11-07T14:26:48.830180+00:00"
     },
     "alternative:adobe-lightroom-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.041065+00:00"
+      "checked_at": "2026-11-07T14:26:48.831342+00:00"
     },
     "alternative:sketch-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.042498+00:00"
+      "checked_at": "2026-11-07T14:26:48.832614+00:00"
     },
     "alternative:basecamp-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.044291+00:00"
+      "checked_at": "2026-11-07T14:26:48.834440+00:00"
     },
     "alternative:aws-ec2-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.045577+00:00"
+      "checked_at": "2026-11-07T14:26:48.835778+00:00"
     },
     "alternative:adobe-after-effects-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.046942+00:00"
+      "checked_at": "2026-11-07T14:26:48.837108+00:00"
     },
     "alternative:tiktok-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.048426+00:00"
+      "checked_at": "2026-11-07T14:26:48.838506+00:00"
     },
     "alternative:canva-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.049838+00:00"
+      "checked_at": "2026-11-07T14:26:48.839829+00:00"
     },
     "alternative:evernote-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.051393+00:00"
+      "checked_at": "2026-11-07T14:26:48.841252+00:00"
     },
     "alternative:notability-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.053060+00:00"
+      "checked_at": "2026-11-07T14:26:48.842764+00:00"
     },
     "alternative:microsoft-onedrive-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.054623+00:00"
+      "checked_at": "2026-11-07T14:26:48.844283+00:00"
     },
     "alternative:notion-api-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.055947+00:00"
+      "checked_at": "2026-11-07T14:26:48.845574+00:00"
     },
     "alternative:figma-plugin-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.057142+00:00"
+      "checked_at": "2026-11-07T14:26:48.846790+00:00"
     },
     "alternative:figma-x-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.058537+00:00"
+      "checked_at": "2026-11-07T14:26:48.848000+00:00"
     },
     "alternative:clickmeeting-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.060253+00:00"
+      "checked_at": "2026-11-07T14:26:48.849747+00:00"
     },
     "alternative:notion-software-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.061816+00:00"
+      "checked_at": "2026-11-07T14:26:48.851410+00:00"
     },
     "alternative:figma-studio-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.063060+00:00"
+      "checked_at": "2026-11-07T14:26:48.852642+00:00"
     },
     "alternative:notion-forms-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.064493+00:00"
+      "checked_at": "2026-11-07T14:26:48.853987+00:00"
     },
     "alternative:notion-ai-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.065865+00:00"
+      "checked_at": "2026-11-07T14:26:48.855304+00:00"
     },
     "alternative:notion-templates-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.067813+00:00"
+      "checked_at": "2026-11-07T14:26:48.857138+00:00"
     },
     "alternative:microsoft-access-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.069292+00:00"
+      "checked_at": "2026-11-07T14:26:48.858471+00:00"
     },
     "alternative:notion-wiki-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.070778+00:00"
+      "checked_at": "2026-11-07T14:26:48.859849+00:00"
     },
     "alternative:airtable-api-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.072246+00:00"
+      "checked_at": "2026-11-07T14:26:48.861274+00:00"
     },
     "alternative:notion-boards-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.074070+00:00"
+      "checked_at": "2026-11-07T14:26:48.863227+00:00"
     },
     "alternative:figma-figjam-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.075617+00:00"
+      "checked_at": "2026-11-07T14:26:48.864647+00:00"
     },
     "alternative:figma-digital-asset-management-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.076967+00:00"
+      "checked_at": "2026-11-07T14:26:48.865957+00:00"
     },
     "alternative:microsoft-teams-apps-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.078246+00:00"
+      "checked_at": "2026-11-07T14:26:48.867374+00:00"
     },
     "alternative:microsoft-azure-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.079550+00:00"
+      "checked_at": "2026-11-07T14:26:48.868806+00:00"
     },
     "alternative:notion-database-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.080891+00:00"
+      "checked_at": "2026-11-07T14:26:48.870099+00:00"
     },
     "alternative:microsoft-outlook-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.082323+00:00"
+      "checked_at": "2026-11-07T14:26:48.871435+00:00"
     },
     "alternative:whatsapp-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.083930+00:00"
+      "checked_at": "2026-11-07T14:26:48.872943+00:00"
     },
     "alternative:moodle-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.085359+00:00"
+      "checked_at": "2026-11-07T14:26:48.874265+00:00"
     },
     "alternative:figma-figjam-plugin-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.086845+00:00"
+      "checked_at": "2026-11-07T14:26:48.875669+00:00"
     },
     "alternative:notion-ai-plugin-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.088213+00:00"
+      "checked_at": "2026-11-07T14:26:48.876951+00:00"
     },
     "alternative:microsoft-onenote-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.089812+00:00"
+      "checked_at": "2026-11-07T14:26:48.878487+00:00"
     },
     "alternative:figma-figma-design-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.091190+00:00"
+      "checked_at": "2026-11-07T14:26:48.879718+00:00"
     },
     "alternative:notion-forms-advanced-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.092615+00:00"
+      "checked_at": "2026-11-07T14:26:48.881041+00:00"
     },
     "alternative:figma-plugins-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.093977+00:00"
+      "checked_at": "2026-11-07T14:26:48.882324+00:00"
     },
     "alternative:notion-automations-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.095297+00:00"
+      "checked_at": "2026-11-07T14:26:48.883852+00:00"
     },
     "alternative:notion-boards-advanced-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.097244+00:00"
+      "checked_at": "2026-11-07T14:26:48.885885+00:00"
     },
     "alternative:notion-forms-advanced-pro-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.098656+00:00"
+      "checked_at": "2026-11-07T14:26:48.887231+00:00"
     },
     "alternative:microsoft-surface-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.100087+00:00"
+      "checked_at": "2026-11-07T14:26:48.888504+00:00"
     },
     "alternative:canva-website-design-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.101594+00:00"
+      "checked_at": "2026-11-07T14:26:48.889791+00:00"
     },
     "alternative:notepad-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.103331+00:00"
+      "checked_at": "2026-11-07T14:26:48.891365+00:00"
     },
     "alternative:clickup-api-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.104753+00:00"
+      "checked_at": "2026-11-07T14:26:48.892663+00:00"
     },
     "alternative:canva-video-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.106547+00:00"
+      "checked_at": "2026-11-07T14:26:48.894246+00:00"
     },
     "alternative:airtable-forms-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.108068+00:00"
+      "checked_at": "2026-11-07T14:26:48.895586+00:00"
     },
     "alternative:microsoft-teams-rooms-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.109791+00:00"
+      "checked_at": "2026-11-07T14:26:48.897069+00:00"
     },
     "alternative:figma-ux-research-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.111406+00:00"
+      "checked_at": "2026-11-07T14:26:48.898463+00:00"
     },
     "alternative:canva-whiteboard-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.112982+00:00"
+      "checked_at": "2026-11-07T14:26:48.900079+00:00"
     },
     "alternative:redis-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.115189+00:00"
+      "checked_at": "2026-11-07T14:26:48.902260+00:00"
     },
     "alternative:framer-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.117410+00:00"
+      "checked_at": "2026-11-07T14:26:48.904299+00:00"
     },
     "alternative:microsoft-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.119405+00:00"
+      "checked_at": "2026-11-07T14:26:48.906075+00:00"
     },
     "alternative:sendgrid-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.121755+00:00"
+      "checked_at": "2026-11-07T14:26:48.908218+00:00"
     },
     "alternative:together-ai-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.124031+00:00"
+      "checked_at": "2026-11-07T14:26:48.910272+00:00"
     },
     "alternative:mistral-ai-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.126838+00:00"
+      "checked_at": "2026-11-07T14:26:48.912609+00:00"
     },
     "alternative:doppler-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.130606+00:00"
+      "checked_at": "2026-11-07T14:26:48.916017+00:00"
     },
     "alternative:firebase-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.133083+00:00"
+      "checked_at": "2026-11-07T14:26:48.918477+00:00"
     },
     "alternative:planetscale-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.136008+00:00"
+      "checked_at": "2026-11-07T14:26:48.921171+00:00"
     },
     "alternative:twitch-alternatives": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.138560+00:00"
+      "checked_at": "2026-11-07T14:26:48.923576+00:00"
     },
     "workflow:multi-model-prompt-router": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:08.412636+00:00"
+      "checked_at": "2026-11-07T14:26:49.186197+00:00"
     },
     "workflow:llm-evaluation-benchmark": {
-      "status": "failed",
-      "healed": false,
-      "errors": [
-        "workflow.py --dry-run failed: Traceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ppq0v50x/workflow.py\", line 195, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ppq0v50x/workflow.py\", line 187, in main\n    run_workflow()\n    ~~~~~~~~~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ppq0v50x/workflow.py\", line 98, in run_workflow\n    openai_responses = run_openai_baseline(prompts)\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ppq0v50x/workflow.py\", line 95, in run_openai_baseline\n    responses.append(result.get('choices', [{}])[0].get('message', {}).get('content', ''))\n                     ^^^^^^^^^^\nAttributeError: 'list' object has no attribute 'get'"
-      ],
-      "checked_at": "2026-11-07T14:14:08.717897+00:00"
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T14:26:49.480348+00:00"
     },
     "workflow:batch-llm-processing": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:18.950510+00:00"
+      "checked_at": "2026-11-07T14:26:59.667322+00:00"
     },
     "workflow:ai-customer-insights": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:19.099519+00:00"
+      "checked_at": "2026-11-07T14:26:59.835531+00:00"
     },
     "workflow:claude-document-summarizer": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:19.233162+00:00"
+      "checked_at": "2026-11-07T14:26:59.979654+00:00"
     },
     "workflow:gemini-multimodal-analyzer": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:19.365017+00:00"
+      "checked_at": "2026-11-07T14:27:00.123263+00:00"
     },
     "workflow:watson-assistant-helpdesk": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:19.501318+00:00"
+      "checked_at": "2026-11-07T14:27:00.262455+00:00"
     },
     "workflow:podcast-transcription-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:19.635379+00:00"
+      "checked_at": "2026-11-07T14:27:00.396715+00:00"
     },
     "workflow:ai-voiceover-production": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:20.204964+00:00"
+      "checked_at": "2026-11-07T14:27:00.973955+00:00"
     },
     "workflow:ai-image-generation-pipeline": {
-      "status": "failed",
-      "healed": false,
-      "errors": [
-        "workflow.py --dry-run failed: Traceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-dy2fskct/workflow.py\", line 181, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-dy2fskct/workflow.py\", line 173, in main\n    run_workflow()\n    ~~~~~~~~~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-dy2fskct/workflow.py\", line 129, in run_workflow\n    manifest = upload_to_vercel_blob(images)\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-dy2fskct/workflow.py\", line 125, in upload_to_vercel_blob\n    manifest.append(response_data.get('url'))\n                    ^^^^^^^^^^^^^^^^^\nAttributeError: 'list' object has no attribute 'get'"
-      ],
-      "checked_at": "2026-11-07T14:14:20.508260+00:00"
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T14:27:01.284270+00:00"
     },
     "workflow:semantic-search-knowledge-base": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:20.645600+00:00"
+      "checked_at": "2026-11-07T14:27:01.424024+00:00"
     },
     "workflow:hybrid-search-product-catalog": {
-      "status": "failed",
-      "healed": false,
-      "errors": [
-        "workflow kit file 'requests.http' is <= 100 bytes"
-      ],
-      "checked_at": "2026-11-07T14:14:20.944307+00:00"
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T14:27:01.750584+00:00"
     },
     "workflow:rag-document-assistant": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:21.096481+00:00"
+      "checked_at": "2026-11-07T14:27:01.890795+00:00"
     },
     "workflow:content-similarity-audit": {
-      "status": "failed",
-      "healed": false,
-      "errors": [
-        "workflow kit file 'requests.http' is <= 100 bytes",
-        "workflow.py --dry-run failed: Loaded 3 articles.\n{'id': '1', 'text': 'This is the first article.'}\n\nTraceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-77t54hj7/workflow.py\", line 183, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-77t54hj7/workflow.py\", line 175, in main\n    run_workflow()\n    ~~~~~~~~~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-77t54hj7/workflow.py\", line 103, in run_workflow\n    embeddings = embed_articles(articles)\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-77t54hj7/workflow.py\", line 101, in embed_articles\n    return response_data.get('embeddings', [])  # Use .get() to avoid KeyError\n           ^^^^^^^^^^^^^^^^^\nAttributeError: 'list' object has no attribute 'get'"
-      ],
-      "checked_at": "2026-11-07T14:14:21.397032+00:00"
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T14:27:02.183418+00:00"
     },
     "workflow:transactional-email-delivery": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:21.532554+00:00"
+      "checked_at": "2026-11-07T14:27:02.332226+00:00"
     },
     "workflow:email-campaign-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:21.689702+00:00"
+      "checked_at": "2026-11-07T14:27:02.481842+00:00"
     },
     "workflow:sms-alert-system": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:21.923427+00:00"
+      "checked_at": "2026-11-07T14:27:02.619275+00:00"
     },
     "workflow:slack-incident-notifications": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:22.060572+00:00"
+      "checked_at": "2026-11-07T14:27:02.760495+00:00"
     },
     "workflow:telegram-community-bot": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:22.196564+00:00"
+      "checked_at": "2026-11-07T14:27:02.898012+00:00"
     },
     "workflow:video-call-summarizer": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:22.332324+00:00"
+      "checked_at": "2026-11-07T14:27:03.034239+00:00"
     },
     "workflow:conversational-messaging-hub": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:22.468047+00:00"
+      "checked_at": "2026-11-07T14:27:03.177270+00:00"
     },
     "workflow:crm-lead-scoring": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:22.604247+00:00"
+      "checked_at": "2026-11-07T14:27:03.312881+00:00"
     },
     "workflow:salesforce-pipeline-sync": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:22.737976+00:00"
+      "checked_at": "2026-11-07T14:27:03.446628+00:00"
     },
     "workflow:personalized-outreach-engine": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:22.873422+00:00"
+      "checked_at": "2026-11-07T14:27:03.580782+00:00"
     },
     "workflow:support-ticket-triage": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:23.010528+00:00"
+      "checked_at": "2026-11-07T14:27:03.718834+00:00"
     },
     "workflow:ai-help-center-search": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:23.147186+00:00"
+      "checked_at": "2026-11-07T14:27:03.856449+00:00"
     },
     "workflow:csat-feedback-analysis": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:23.320136+00:00"
+      "checked_at": "2026-11-07T14:27:03.998978+00:00"
     },
     "workflow:subscription-billing-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:23.456519+00:00"
+      "checked_at": "2026-11-07T14:27:04.141208+00:00"
     },
     "workflow:invoice-reconciliation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:23.592787+00:00"
+      "checked_at": "2026-11-07T14:27:04.281075+00:00"
     },
     "workflow:paypal-payout-monitoring": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:23.735405+00:00"
+      "checked_at": "2026-11-07T14:27:04.414831+00:00"
     },
     "workflow:stock-market-alerts": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:23.919046+00:00"
+      "checked_at": "2026-11-07T14:27:04.552185+00:00"
     },
     "workflow:crypto-portfolio-tracker": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:24.061345+00:00"
+      "checked_at": "2026-11-07T14:27:04.686096+00:00"
     },
     "workflow:bank-transaction-enrichment": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "workflow.py --dry-run failed: Traceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-yop39jvo/workflow.py\", line 207, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-yop39jvo/workflow.py\", line 199, in main\n    run_workflow()\n    ~~~~~~~~~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-yop39jvo/workflow.py\", line 114, in run_workflow\n    categorized_merchants = categorize_merchants(transactions)\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-yop39jvo/workflow.py\", line 110, in categorize_merchants\n    category = json.loads(response.read().decode('utf-8')).get('choices', [{}])[0].get('message', {}).get('content', '')\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'list' object has no attribute 'get'"
+        "workflow.py --dry-run failed: Traceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-aq1ndhpf/workflow.py\", line 207, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-aq1ndhpf/workflow.py\", line 199, in main\n    run_workflow()\n    ~~~~~~~~~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-aq1ndhpf/workflow.py\", line 155, in run_workflow\n    summary = summarize_spending(categorized_merchants)\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-aq1ndhpf/workflow.py\", line 149, in summarize_spending\n    if category in spending_summary:\n       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTypeError: cannot use 'dict' as a dict key (unhashable type: 'dict')"
       ],
-      "checked_at": "2026-11-07T14:14:24.363031+00:00"
+      "checked_at": "2026-11-07T14:27:05.000407+00:00"
     },
     "workflow:supabase-realtime-dashboard": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:24.498649+00:00"
+      "checked_at": "2026-11-07T14:27:05.147826+00:00"
     },
     "workflow:airtable-content-sync": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:24.633925+00:00"
+      "checked_at": "2026-11-07T14:27:05.284275+00:00"
     },
     "workflow:mongodb-data-pipeline": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "workflow kit file 'mock_data.json' is <= 100 bytes",
         "step 1: technical_explanation too short (0 < 250 chars)",
         "step 1: 'what you need to do' actions missing",
         "step 1: checklist missing",
@@ -1639,9 +1610,10 @@
         "step 4: technical_explanation too short (0 < 250 chars)",
         "step 4: 'what you need to do' actions missing",
         "step 4: checklist missing",
-        "step 4: expected result missing"
+        "step 4: expected result missing",
+        "step 4: links missing"
       ],
-      "checked_at": "2026-11-07T14:14:24.893649+00:00"
+      "checked_at": "2026-11-07T14:27:05.545042+00:00"
     },
     "workflow:postgres-backup-reporting": {
       "status": "failed",
@@ -1649,40 +1621,37 @@
       "errors": [
         "workflow kit file 'mock_data.json' is <= 100 bytes"
       ],
-      "checked_at": "2026-11-07T14:14:25.184904+00:00"
+      "checked_at": "2026-11-07T14:27:05.852931+00:00"
     },
     "workflow:redis-rate-limit-store": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:25.317580+00:00"
+      "checked_at": "2026-11-07T14:27:05.987365+00:00"
     },
     "workflow:google-sheets-reporting-hub": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:25.465378+00:00"
+      "checked_at": "2026-11-07T14:27:06.123969+00:00"
     },
     "workflow:deployment-monitoring-alerts": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:25.604561+00:00"
+      "checked_at": "2026-11-07T14:27:06.264404+00:00"
     },
     "workflow:feature-flag-rollout": {
-      "status": "failed",
-      "healed": false,
-      "errors": [
-        "workflow kit file 'mock_data.json' is <= 100 bytes",
-        "workflow kit file 'requests.http' is <= 100 bytes"
-      ],
-      "checked_at": "2026-11-07T14:14:25.885564+00:00"
+      "status": "verified_clean",
+      "healed": true,
+      "errors": [],
+      "checked_at": "2026-11-07T14:27:06.545590+00:00"
     },
     "workflow:secrets-rotation-audit": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:26.021037+00:00"
+      "checked_at": "2026-11-07T14:27:06.681173+00:00"
     },
     "workflow:serverless-job-scheduler": {
       "status": "failed",
@@ -1709,177 +1678,176 @@
         "step 4: 'what you need to do' actions missing",
         "step 4: checklist missing"
       ],
-      "checked_at": "2026-11-07T14:14:26.280980+00:00"
+      "checked_at": "2026-11-07T14:27:06.944936+00:00"
     },
     "workflow:api-health-monitoring": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:26.418111+00:00"
+      "checked_at": "2026-11-07T14:27:07.084133+00:00"
     },
     "workflow:linear-roadmap-sync": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:26.550968+00:00"
+      "checked_at": "2026-11-07T14:27:07.230023+00:00"
     },
     "workflow:release-notes-generator": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:26.684156+00:00"
+      "checked_at": "2026-11-07T14:27:07.392390+00:00"
     },
     "workflow:programmatic-seo-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:26.818515+00:00"
+      "checked_at": "2026-11-07T14:27:07.537401+00:00"
     },
     "workflow:ai-content-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:26.962649+00:00"
+      "checked_at": "2026-11-07T14:27:07.678274+00:00"
     },
     "workflow:seo-content-audit": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:27.104717+00:00"
+      "checked_at": "2026-11-07T14:27:07.828523+00:00"
     },
     "workflow:blog-cms-publishing": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:27.239987+00:00"
+      "checked_at": "2026-11-07T14:27:07.978765+00:00"
     },
     "workflow:local-seo-landing-pages": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:27.374898+00:00"
+      "checked_at": "2026-11-07T14:27:08.117246+00:00"
     },
     "workflow:newsletter-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:27.510133+00:00"
+      "checked_at": "2026-11-07T14:27:08.252263+00:00"
     },
     "workflow:content-localization-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:27.644057+00:00"
+      "checked_at": "2026-11-07T14:27:08.384698+00:00"
     },
     "workflow:meeting-notes-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:27.779851+00:00"
+      "checked_at": "2026-11-07T14:27:08.520042+00:00"
     },
     "workflow:notion-task-sync": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "workflow.py --dry-run failed: Traceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-84409r0a/workflow.py\", line 208, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-84409r0a/workflow.py\", line 200, in main\n    run_workflow()\n    ~~~~~~~~~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-84409r0a/workflow.py\", line 118, in run_workflow\n    sync_tasks_with_asana(open_tasks)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-84409r0a/workflow.py\", line 90, in sync_tasks_with_asana\n    task_id = task.get('external_id')\n              ^^^^^^^^\nAttributeError: 'str' object has no attribute 'get'"
+        "workflow.py --dry-run failed: Traceback (most recent call last):\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-aj4j0mdr/workflow.py\", line 208, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-aj4j0mdr/workflow.py\", line 200, in main\n    run_workflow()\n    ~~~~~~~~~~~~^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-aj4j0mdr/workflow.py\", line 118, in run_workflow\n    sync_tasks_with_asana(open_tasks)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-aj4j0mdr/workflow.py\", line 90, in sync_tasks_with_asana\n    task_id = task.get('external_id')\n              ^^^^^^^^\nAttributeError: 'str' object has no attribute 'get'"
       ],
-      "checked_at": "2026-11-07T14:14:28.072873+00:00"
+      "checked_at": "2026-11-07T14:27:08.827490+00:00"
     },
     "workflow:document-approval-workflow": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:28.207383+00:00"
+      "checked_at": "2026-11-07T14:27:08.963360+00:00"
     },
     "workflow:form-submission-routing": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:28.351129+00:00"
+      "checked_at": "2026-11-07T14:27:09.098911+00:00"
     },
     "workflow:team-wiki-search": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:28.485553+00:00"
+      "checked_at": "2026-11-07T14:27:09.234358+00:00"
     },
     "workflow:design-feedback-collection": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:28.620755+00:00"
+      "checked_at": "2026-11-07T14:27:09.369008+00:00"
     },
     "workflow:collaboration-presence-sync": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:28.760060+00:00"
+      "checked_at": "2026-11-07T14:27:09.503683+00:00"
     },
     "workflow:product-analytics-dashboard": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:28.898376+00:00"
+      "checked_at": "2026-11-07T14:27:09.643013+00:00"
     },
     "workflow:error-tracking-alerts": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:29.033412+00:00"
+      "checked_at": "2026-11-07T14:27:09.778549+00:00"
     },
     "workflow:website-performance-reporting": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:29.171324+00:00"
+      "checked_at": "2026-11-07T14:27:09.916464+00:00"
     },
     "workflow:social-media-analytics": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:29.306835+00:00"
+      "checked_at": "2026-11-07T14:27:10.056416+00:00"
     },
     "workflow:shopify-order-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:29.454677+00:00"
+      "checked_at": "2026-11-07T14:27:10.208785+00:00"
     },
     "workflow:inventory-sync-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:29.601891+00:00"
+      "checked_at": "2026-11-07T14:27:10.347513+00:00"
     },
     "workflow:weather-driven-ops-alerts": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:29.750059+00:00"
+      "checked_at": "2026-11-07T14:27:10.493382+00:00"
     },
     "workflow:store-locator-geocoding": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:29.886368+00:00"
+      "checked_at": "2026-11-07T14:27:10.632492+00:00"
     },
     "workflow:asset-backup-automation": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:30.023308+00:00"
+      "checked_at": "2026-11-07T14:27:10.771664+00:00"
     },
     "workflow:s3-static-site-publishing": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:30.189641+00:00"
+      "checked_at": "2026-11-07T14:27:10.908104+00:00"
     },
     "workflow:auth0-sso-provisioning": {
       "status": "failed",
       "healed": false,
       "errors": [
-        "workflow kit file 'mock_data.json' is <= 100 bytes",
         "step 1: technical_explanation too short (0 < 250 chars)",
         "step 1: 'what you need to do' actions missing",
         "step 1: checklist missing",
@@ -1898,94 +1866,95 @@
         "step 4: technical_explanation too short (0 < 250 chars)",
         "step 4: 'what you need to do' actions missing",
         "step 4: checklist missing",
-        "step 4: expected result missing"
+        "step 4: expected result missing",
+        "step 4: links missing"
       ],
-      "checked_at": "2026-11-07T14:14:30.448660+00:00"
+      "checked_at": "2026-11-07T14:27:11.168426+00:00"
     },
     "workflow:clerk-user-onboarding": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:30.583710+00:00"
+      "checked_at": "2026-11-07T14:27:11.308405+00:00"
     },
     "workflow:slack-twitch-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:30.737907+00:00"
+      "checked_at": "2026-11-07T14:27:11.463300+00:00"
     },
     "workflow:sentry-performance-airtable-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:30.896011+00:00"
+      "checked_at": "2026-11-07T14:27:11.634795+00:00"
     },
     "workflow:pdf-generator-to-twelve-data-with-deepai-image-generator-orchestration": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:31.059459+00:00"
+      "checked_at": "2026-11-07T14:27:11.800345+00:00"
     },
     "workflow:shopify-admin-twilio-conversations-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:31.216490+00:00"
+      "checked_at": "2026-11-07T14:27:11.950555+00:00"
     },
     "workflow:braintree-payments-to-airtable-with-contentful-content-management-system-orchestration": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:31.375539+00:00"
+      "checked_at": "2026-11-07T14:27:12.106259+00:00"
     },
     "workflow:slack-ibm-watson-language-translator-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:31.531071+00:00"
+      "checked_at": "2026-11-07T14:27:12.264210+00:00"
     },
     "workflow:slack-microsoft-azure-face-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:31.681736+00:00"
+      "checked_at": "2026-11-07T14:27:12.504962+00:00"
     },
     "workflow:shopify-admin-amazon-polly-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:31.842959+00:00"
+      "checked_at": "2026-11-07T14:27:12.669571+00:00"
     },
     "workflow:weatherapi-launchdarkly-feature-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:31.987602+00:00"
+      "checked_at": "2026-11-07T14:27:12.814951+00:00"
     },
     "workflow:salesforce-rest-weatherapi-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:32.145499+00:00"
+      "checked_at": "2026-11-07T14:27:12.985286+00:00"
     },
     "workflow:jira-rest-twilio-conversations-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:32.313242+00:00"
+      "checked_at": "2026-11-07T14:27:13.166827+00:00"
     },
     "workflow:jira-rest-notion-api-for-automation-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:32.477088+00:00"
+      "checked_at": "2026-11-07T14:27:13.324680+00:00"
     },
     "workflow:convertkit-github-copilot-automation-pipeline": {
       "status": "verified_clean",
       "healed": false,
       "errors": [],
-      "checked_at": "2026-11-07T14:14:32.639544+00:00"
+      "checked_at": "2026-11-07T14:27:13.475236+00:00"
     }
   },
-  "updated_at": "2026-11-07T14:14:32.746383+00:00"
+  "updated_at": "2026-11-07T14:27:13.578387+00:00"
 }

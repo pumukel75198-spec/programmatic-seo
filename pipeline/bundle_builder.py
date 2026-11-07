@@ -96,13 +96,31 @@ def _env_example(code: str) -> str:
 
 
 def _shape_mock(step_code: str, mock: Any) -> Any:
-    """Shape a string mock into the structure the step code actually reads.
+    """Shape a mock into the structure the step code actually reads.
 
-    LLMs frequently document a plain string as ``mock_response`` while the
-    snippet expects an OpenAI/Anthropic response object. Serving the raw string
-    would raise ``AttributeError: 'str' object has no attribute 'get'`` in the
-    customer sandbox, so the mock is wrapped deterministically.
+    LLMs frequently document a plain string or a bare list as ``mock_response``
+    while the snippet expects an OpenAI/Anthropic response object. Serving the
+    raw value would raise ``AttributeError: 'str'/'list' object has no
+    attribute 'get'`` in the customer sandbox, so the mock is wrapped
+    deterministically under the key the snippet actually accesses.
     """
+    if isinstance(mock, list):
+        if ".get('choices'" in step_code or '.get("choices"' in step_code:
+            first = mock[0] if mock else ""
+            return {"choices": [{"message": {"content": first}}]}
+        if ".get('embeddings'" in step_code or '.get("embeddings"' in step_code:
+            return {"embeddings": mock}
+        if ".get('data'" in step_code or '.get("data"' in step_code:
+            return {"data": mock}
+        if ".get('url'" in step_code or '.get("url"' in step_code:
+            return {"url": mock[0] if mock else ""}
+        if ".get('results'" in step_code or '.get("results"' in step_code:
+            return {"results": mock}
+        if ".get('items'" in step_code or '.get("items"' in step_code:
+            return {"items": mock}
+        if ".get('documents'" in step_code or '.get("documents"' in step_code:
+            return {"documents": mock}
+        return mock
     if not isinstance(mock, str):
         return mock
     if ".get('choices'" in step_code or '.get("choices"' in step_code:
@@ -155,6 +173,14 @@ def _mock_data(workflow: dict[str, Any]) -> dict[str, Any]:
         data["supabase"] = []
     if "slack.com" in code:
         data["slack.com"] = "ok"
+    if not data:
+        data = {
+            "_note": (
+                "This workflow uses local data and does not call an external "
+                "API directly."
+            ),
+            "data": [{"id": "1", "text": "sample", "value": 0.5}],
+        }
     return data
 
 
@@ -238,7 +264,12 @@ def _schema_sql(workflow: dict[str, Any]) -> str:
 
 
 def _requests_http(code: str, title: str = "") -> str:
-    lines = [f"# {title}", ""] if title else ["### FlowMatrix API calls", ""]
+    lines = [
+        f"# {title}" if title else "# FlowMatrix API calls",
+        "# Use with VS Code REST Client, Bruno or Postman.",
+        "# Replace {{VARIABLES}} with the values from .env.example.",
+        "",
+    ]
     urls: list[str] = []
     for url in sorted(_URL_RE.findall(code)):
         if any(marker in url for marker in ("<", ">", "{", "}")):
