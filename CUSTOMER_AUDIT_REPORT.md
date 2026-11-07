@@ -1,6 +1,6 @@
 # Customer Audit Report
 
-Generated: 2026-11-07 14:54 UTC
+Generated: 2026-11-07 15:00 UTC
 
 ## Summary
 
@@ -8,7 +8,7 @@ Generated: 2026-11-07 14:54 UTC
 | --- | ---: | ---: | ---: | ---: |
 | APIs | 0 | 0/0 OK | 0 | 0 |
 | Alternatives | 0 | 0/0 OK | 0 | 0 |
-| Workflows | 4 | 0/4 OK | 3 | 4 |
+| Workflows | 4 | 1/4 OK | 1 | 3 |
 
 - `npm run build`: OK
 - git commit & push: OK
@@ -386,22 +386,6 @@ FAILED (failures=2)
 
 ### workflow:mongodb-data-pipeline
 - step 4: code_snippet has fewer than 8 lines
-
-### workflow:notion-task-sync
-- workflow.py --dry-run failed: Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-wn89b69w/workflow.py", line 208, in <module>
-    main()
-    ~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-wn89b69w/workflow.py", line 200, in main
-    run_workflow()
-    ~~~~~~~~~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-wn89b69w/workflow.py", line 118, in run_workflow
-    sync_tasks_with_asana(open_tasks)
-    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-wn89b69w/workflow.py", line 90, in sync_tasks_with_asana
-    task_id = task.get('external_id')
-              ^^^^^^^^
-AttributeError: 'str' object has no attribute 'get'
 
 ### workflow:postgres-backup-reporting
 - workflow kit file 'mock_data.json' is <= 100 bytes

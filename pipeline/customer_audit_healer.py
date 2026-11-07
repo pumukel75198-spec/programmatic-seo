@@ -1215,6 +1215,57 @@ def _llm_repair_workflow_traceback(
     return False
 
 
+def _llm_repair_workflow_content(
+    workflow: dict[str, Any],
+    errors: list[str],
+    round_number: int,
+    counters: dict[str, int],
+) -> bool:
+    """Targeted repair for short code snippets / short explanations."""
+    steps = (workflow.get("details") or {}).get("steps") or []
+    changed = False
+    for error in errors:
+        match = re.search(r"step (\d+): code_snippet has fewer than", error)
+        if match:
+            index = int(match.group(1)) - 1
+            if 0 <= index < len(steps):
+                try:
+                    repaired = llm_client.chat_code(
+                        prompts.CODE_REPAIR_SYSTEM,
+                        prompts.build_code_repair_prompt(steps[index], error),
+                    )
+                except llm_client.LLMError as exc:
+                    log(f"  [LLM] code repair failed: {exc}")
+                    continue
+                counters["llm_calls"] = counters.get("llm_calls", 0) + 1
+                if repaired and repaired.strip() != str(
+                    steps[index].get("code_snippet") or ""
+                ).strip():
+                    steps[index]["code_snippet"] = repaired
+                    changed = True
+                    log(f"  [LLM] expanded step {index + 1} code snippet")
+        match = re.search(r"step (\d+): technical_explanation too short", error)
+        if match:
+            index = int(match.group(1)) - 1
+            if 0 <= index < len(steps):
+                try:
+                    repaired = llm_client.chat_code(
+                        prompts.CODE_REPAIR_SYSTEM,
+                        prompts.build_technical_explanation_repair_prompt(
+                            steps[index]
+                        ),
+                    )
+                except llm_client.LLMError as exc:
+                    log(f"  [LLM] explanation repair failed: {exc}")
+                    continue
+                counters["llm_calls"] = counters.get("llm_calls", 0) + 1
+                if repaired:
+                    steps[index]["technical_explanation"] = repaired
+                    changed = True
+                    log(f"  [LLM] expanded step {index + 1} explanation")
+    return changed
+
+
 def _llm_repair_workflow(
     workflow: dict[str, Any],
     errors: list[str],
@@ -1465,6 +1516,10 @@ def audit_workflow(
         repaired = False
         if any("Traceback (most recent call last)" in error for error in errors):
             repaired = _llm_repair_workflow_traceback(
+                workflow, errors, round_number, counters
+            )
+        if not repaired:
+            repaired = _llm_repair_workflow_content(
                 workflow, errors, round_number, counters
             )
         if not repaired:
