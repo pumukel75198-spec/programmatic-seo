@@ -1154,6 +1154,67 @@ def _llm_allowed(args: argparse.Namespace, counters: dict[str, int]) -> bool:
     return bool(os.environ.get("OPENROUTER_API_KEY", "").strip())
 
 
+_TRACEBACK_LINE = re.compile(r'File ".*?", line (\d+)')
+
+
+def _step_from_traceback(
+    traceback_text: str, workflow_py: str, steps: list[dict[str, Any]]
+) -> int:
+    line_numbers = [int(value) for value in _TRACEBACK_LINE.findall(traceback_text)]
+    source_lines = workflow_py.splitlines()
+    source = ""
+    for line_number in reversed(line_numbers):
+        if 1 <= line_number <= len(source_lines):
+            source = source_lines[line_number - 1].strip()
+            if source:
+                break
+    if source:
+        for index, step in enumerate(steps):
+            step_code = str(step.get("code_snippet") or "")
+            if any(line.strip() == source for line in step_code.splitlines()):
+                return index
+    return max(0, len(steps) - 1)
+
+
+def _llm_repair_workflow_traceback(
+    workflow: dict[str, Any],
+    errors: list[str],
+    round_number: int,
+    counters: dict[str, int],
+) -> bool:
+    """Targeted repair of the exact step that raised the dry-run traceback."""
+    traceback_text = "\n".join(errors)
+    if "Traceback (most recent call last)" not in traceback_text:
+        return False
+    kit = _workflow_kit_path(str(workflow.get("slug") or ""))
+    try:
+        with zipfile.ZipFile(kit, "r") as archive:
+            workflow_py = archive.read("workflow.py").decode("utf-8", "replace")
+    except Exception:  # noqa: BLE001
+        return False
+    steps = (workflow.get("details") or {}).get("steps") or []
+    if not steps:
+        return False
+    index = _step_from_traceback(traceback_text, workflow_py, steps)
+    step = steps[index]
+    try:
+        repaired = llm_client.chat_code(
+            prompts.CODE_REPAIR_SYSTEM,
+            prompts.build_traceback_repair_prompt(
+                step, traceback_text, index + 1, None, round_number
+            ),
+        )
+    except llm_client.LLMError as error:
+        log(f"  [LLM] traceback repair failed: {error}")
+        return False
+    counters["llm_calls"] = counters.get("llm_calls", 0) + 1
+    if repaired and repaired.strip() != str(step.get("code_snippet") or "").strip():
+        step["code_snippet"] = repaired
+        log(f"  [LLM] repaired step {index + 1} from traceback")
+        return True
+    return False
+
+
 def _llm_repair_workflow(
     workflow: dict[str, Any],
     errors: list[str],
@@ -1401,7 +1462,16 @@ def audit_workflow(
         if not _llm_allowed(args, counters):
             break
         log(f"  [LLM] repairing workflow {slug} (round {round_number})")
-        if not _llm_repair_workflow(workflow, errors, round_number, counters):
+        repaired = False
+        if any("Traceback (most recent call last)" in error for error in errors):
+            repaired = _llm_repair_workflow_traceback(
+                workflow, errors, round_number, counters
+            )
+        if not repaired:
+            repaired = _llm_repair_workflow(
+                workflow, errors, round_number, counters
+            )
+        if not repaired:
             break
         healed = True
         try:

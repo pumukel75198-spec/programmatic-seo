@@ -1,6 +1,6 @@
 # Customer Audit Report
 
-Generated: 2026-11-07 14:46 UTC
+Generated: 2026-11-07 14:54 UTC
 
 ## Summary
 
@@ -8,7 +8,7 @@ Generated: 2026-11-07 14:46 UTC
 | --- | ---: | ---: | ---: | ---: |
 | APIs | 0 | 0/0 OK | 0 | 0 |
 | Alternatives | 0 | 0/0 OK | 0 | 0 |
-| Workflows | 6 | 2/6 OK | 6 | 4 |
+| Workflows | 4 | 0/4 OK | 3 | 4 |
 
 - `npm run build`: OK
 - git commit & push: OK
@@ -385,25 +385,23 @@ FAILED (failures=2)
 - step 3: code_snippet has fewer than 8 lines
 
 ### workflow:mongodb-data-pipeline
-- step 1: links missing
-- step 2: links missing
-- step 3: links missing
 - step 4: code_snippet has fewer than 8 lines
-- step 4: links missing
-- all steps share the exact same links (copy-paste detected)
 
 ### workflow:notion-task-sync
 - workflow.py --dry-run failed: Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-56zwpz67/workflow.py", line 202, in <module>
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-wn89b69w/workflow.py", line 208, in <module>
     main()
     ~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-56zwpz67/workflow.py", line 194, in main
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-wn89b69w/workflow.py", line 200, in main
     run_workflow()
     ~~~~~~~~~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-56zwpz67/workflow.py", line 128, in run_workflow
-    overdue_tasks = detect_overdue_tasks(open_tasks)
-                                         ^^^^^^^^^^
-NameError: name 'open_tasks' is not defined
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-wn89b69w/workflow.py", line 118, in run_workflow
+    sync_tasks_with_asana(open_tasks)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-wn89b69w/workflow.py", line 90, in sync_tasks_with_asana
+    task_id = task.get('external_id')
+              ^^^^^^^^
+AttributeError: 'str' object has no attribute 'get'
 
 ### workflow:postgres-backup-reporting
 - workflow kit file 'mock_data.json' is <= 100 bytes
