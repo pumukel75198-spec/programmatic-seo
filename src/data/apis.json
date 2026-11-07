@@ -2994,5 +2994,92 @@
     },
     "created_and_verified_at": "2026-11-07 08:30 UTC",
     "price": 29.99
+  },
+  {
+    "slug": "calendly-api",
+    "title": "Calendly API",
+    "description": "The Calendly API exposes scheduled events, invitees, availability and webhooks so teams can automate meeting workflows and CRM synchronization.",
+    "category": "Scheduling & Productivity",
+    "tags": ["scheduling", "meetings", "calendly", "webhooks"],
+    "details": {
+      "provider": "Calendly",
+      "pricing": "Free; paid plans from $10/seat/month",
+      "features": [
+        "List scheduled events",
+        "Read invitee details",
+        "Query availability",
+        "Subscribe to webhooks"
+      ],
+      "useCase": "Automate meeting follow-ups, CRM synchronization and reminder workflows.",
+      "website": "https://calendly.com",
+      "endpoint": "https://api.calendly.com/scheduled_events",
+      "authentication": "OAuth2 or personal access token (Bearer)",
+      "apiKeyRequired": true,
+      "sdkLanguages": ["Python", "JavaScript", "cURL"],
+      "rateLimit": "Tier-based; see the Calendly developer documentation",
+      "docsUrl": "https://developer.calendly.com/api-docs",
+      "lastVerified": "2026-11-07 18:09 UTC",
+      "disclaimer": "Verification & Link Validity Notice: This workflow blueprint was generated and technically verified on 2026-11-07 18:09 UTC. At the exact time of creation, all referenced domains, API endpoints, and external resource links were tested and confirmed reachable. Because third-party APIs and web services evolve continuously, domains, endpoints, or links inside this document may change or become unavailable over time."
+    },
+    "created_and_verified_at": "2026-11-07 18:09 UTC",
+    "price": 29.99
+  },
+  {
+    "slug": "figma-rest-api",
+    "title": "Figma REST API",
+    "description": "The Figma REST API exposes files, components, styles and comments so teams can automate design handoff, asset export and design-system audits.",
+    "category": "Design & Collaboration",
+    "tags": ["design", "figma", "assets", "design-system"],
+    "details": {
+      "provider": "Figma",
+      "pricing": "Free; paid plans from $12/editor/month",
+      "features": [
+        "Read file and node trees",
+        "Export frames and image assets",
+        "Create and resolve comments",
+        "Inspect components and styles"
+      ],
+      "useCase": "Automate design-to-code handoff, asset export and design-system consistency checks.",
+      "website": "https://www.figma.com",
+      "endpoint": "https://api.figma.com/v1/files/{file_key}",
+      "authentication": "OAuth2 or personal access token (Bearer)",
+      "apiKeyRequired": true,
+      "sdkLanguages": ["Python", "JavaScript", "cURL"],
+      "rateLimit": "Tier-based; see the Figma developer documentation",
+      "docsUrl": "https://www.figma.com/developers/api",
+      "lastVerified": "2026-11-07 18:09 UTC",
+      "disclaimer": "Verification & Link Validity Notice: This workflow blueprint was generated and technically verified on 2026-11-07 18:09 UTC. At the exact time of creation, all referenced domains, API endpoints, and external resource links were tested and confirmed reachable. Because third-party APIs and web services evolve continuously, domains, endpoints, or links inside this document may change or become unavailable over time."
+    },
+    "created_and_verified_at": "2026-11-07 18:09 UTC",
+    "price": 29.99
+  },
+  {
+    "slug": "webflow-api",
+    "title": "Webflow API",
+    "description": "The Webflow API manages sites, collections, CMS items and publishing, so content teams can automate programmatic SEO and CMS workflows.",
+    "category": "Content & SEO",
+    "tags": ["cms", "seo", "webflow", "publishing"],
+    "details": {
+      "provider": "Webflow",
+      "pricing": "Free; paid site plans from $14/site/month",
+      "features": [
+        "List and read sites",
+        "Manage CMS collections",
+        "Create and update items",
+        "Publish site changes"
+      ],
+      "useCase": "Automate programmatic SEO pages, CMS publishing and content synchronization.",
+      "website": "https://webflow.com",
+      "endpoint": "https://api.webflow.com/v2/sites",
+      "authentication": "OAuth2 or site API token (Bearer)",
+      "apiKeyRequired": true,
+      "sdkLanguages": ["Python", "JavaScript", "cURL"],
+      "rateLimit": "60 requests per minute by default",
+      "docsUrl": "https://developers.webflow.com/data/reference",
+      "lastVerified": "2026-11-07 18:10 UTC",
+      "disclaimer": "Verification & Link Validity Notice: This workflow blueprint was generated and technically verified on 2026-11-07 18:10 UTC. At the exact time of creation, all referenced domains, API endpoints, and external resource links were tested and confirmed reachable. Because third-party APIs and web services evolve continuously, domains, endpoints, or links inside this document may change or become unavailable over time."
+    },
+    "created_and_verified_at": "2026-11-07 18:10 UTC",
+    "price": 29.99
   }
 ]

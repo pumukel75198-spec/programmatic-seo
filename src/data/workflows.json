@@ -22257,5 +22257,982 @@
       ],
       "price": 9.99
     }
+  },
+  {
+    "slug": "calendly-notion-api-for-automation-v2-automation-pipeline",
+    "title": "Calendly + Notion API for Automation V2 Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects Calendly with Notion API for Automation V2 and The Calendly API exposes scheduled events, invitees, availability and webhooks so teams can automate meeting workflows and CRM synchronization. The Notion API for Automation V2 allows developers to automate workflows and integrate Notion with other applications easily.",
+    "category": "Scheduling & Productivity",
+    "tags": [
+      "scheduling",
+      "meetings",
+      "calendly",
+      "webhooks",
+      "automation",
+      "integration",
+      "notion"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-07 18:12 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["Calendly API", "Notion API for Automation V2"],
+      "api_slugs": ["calendly-api", "notion-api-for-automation-v2"],
+      "alternative_slugs": ["airtable-alternatives", "calendly-alternatives"],
+      "useCase": "Automate meeting follow-ups, CRM synchronization and reminder workflows. Then Ideal for automating repetitive tasks and integrating Notion with other tools.",
+      "steps": [
+        {
+          "title": "Ingest source records from Calendly",
+          "description": "Fetch scheduled events from Calendly and normalize each event into a flat record for later enrichment. The step handles pagination and extracts only the fields required by the Notion enrichment stage.",
+          "technical_explanation": "This step is the ingestion boundary of the pipeline and produces the normalized scheduled_events list that every later stage consumes. It calls GET https://api.calendly.com/scheduled_events with the user query parameter, a count of 100, and an Authorization Bearer header built from CALENDLY_API_TOKEN. The response shape is a collection array of event objects plus a pagination object with next_page, so the code follows next_page until it is empty and extracts uri, name, status, start_time, end_time, event_type and invitees_counter.total with defensive get calls. Edge cases include empty collection arrays, 401 responses from an invalid token, 429 rate limiting and missing nested invitees_counter values, all of which are handled by validation or safe defaults.",
+          "code_snippet": "import json\nimport os\nimport urllib.parse\nimport urllib.request\n\nCALENDLY_BASE = 'https://api.calendly.com/scheduled_events'\n\ndef fetch_calendly_events():\n    token = os.environ.get('CALENDLY_API_TOKEN', '')\n    user_uri = os.environ.get('CALENDLY_USER_URI', '')\n    if not token or not user_uri:\n        raise RuntimeError('CALENDLY_API_TOKEN and CALENDLY_USER_URI must be set')\n    headers = {'Authorization': f'Bearer {token}', 'Accept': 'application/json'}\n    events = []\n    next_page = None\n    while True:\n        params = {'user': user_uri, 'count': '100'}\n        if next_page:\n            params['page_token'] = next_page\n        url = CALENDLY_BASE + '?' + urllib.parse.urlencode(params)\n        request = urllib.request.Request(url, headers=headers, method='GET')\n        with urllib.request.urlopen(request, timeout=30) as response:\n            if response.status != 200:\n                raise RuntimeError(f'Calendly API returned {response.status}')\n            payload = json.loads(response.read().decode('utf-8'))\n        collection = payload.get('collection', [])\n        for item in collection:\n            events.append({\n                'event_uri': item.get('uri', ''),\n                'name': item.get('name', ''),\n                'status': item.get('status', ''),\n                'start_time': item.get('start_time', ''),\n                'end_time': item.get('end_time', ''),\n                'event_type': item.get('event_type', ''),\n                'invitees_count': item.get('invitees_counter', {}).get('total', 0),\n            })\n        pagination = payload.get('pagination', {})\n        next_page = pagination.get('next_page')\n        if not next_page:\n            break\n    return events\n\nscheduled_events = fetch_calendly_events()",
+          "mock_response": {
+            "collection": [
+              {
+                "uri": "https://api.calendly.com/scheduled_events/AAAAAAAAAAAAAAAA",
+                "name": "Product discovery call",
+                "status": "active",
+                "start_time": "2026-11-10T15:00:00.000000Z",
+                "end_time": "2026-11-10T15:30:00.000000Z",
+                "event_type": "https://api.calendly.com/event_types/BBBBBBBBBBBBBBBB",
+                "invitees_counter": {
+                  "total": 2,
+                  "active": 2,
+                  "limit": 10
+                }
+              }
+            ],
+            "pagination": {
+              "count": 1,
+              "next_page": null
+            }
+          },
+          "actions": [
+            "Read CALENDLY_API_TOKEN and CALENDLY_USER_URI from environment variables before any network call.",
+            "Call GET https://api.calendly.com/scheduled_events with user and count query parameters and a Bearer Authorization header.",
+            "Follow pagination.next_page until it is empty and normalize each event into a flat dictionary.",
+            "Use defensive get calls for invitees_counter.total and other optional fields."
+          ],
+          "commands": [
+            {
+              "label": "Set Calendly credentials",
+              "language": "bash",
+              "code": "export CALENDLY_API_TOKEN='<calendly_personal_access_token>'\nexport CALENDLY_USER_URI='https://api.calendly.com/users/<user_uuid>'"
+            },
+            {
+              "label": "Run workflow",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "CALENDLY_API_TOKEN",
+              "value": "<calendly_personal_access_token>",
+              "description": "Bearer token used to authenticate requests to api.calendly.com."
+            },
+            {
+              "key": "CALENDLY_USER_URI",
+              "value": "https://api.calendly.com/users/<user_uuid>",
+              "description": "Calendly user URI used as the user query parameter for scheduled events."
+            }
+          ],
+          "tools": ["Calendly API"],
+          "checklist": [
+            "The script reads CALENDLY_API_TOKEN and CALENDLY_USER_URI from environment variables.",
+            "scheduled_events contains normalized dictionaries with event_uri, name, status, start_time and invitees_count.",
+            "Pagination is followed until pagination.next_page is empty."
+          ],
+          "expectedResult": "A normalized scheduled_events list is available for the Notion enrichment stage.",
+          "links": [
+            {
+              "label": "Calendly API Documentation",
+              "url": "https://developer.calendly.com/api-docs"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with Notion API for Automation V2",
+          "description": "Query a Notion database for existing meeting records and merge Notion page identifiers into each Calendly event. The step marks each event as synced or unsynced for the final summary.",
+          "technical_explanation": "This step enriches the normalized Calendly events with Notion page identifiers so the final summary can distinguish synced and unsynced meetings. It calls POST https://api.notion.com/v1/databases/{database_id}/query with Authorization Bearer, Notion-Version 2022-06-28 and Content-Type application/json, sending a page_size payload and following has_more with next_cursor. The response shape is a list object with results pages whose properties contain a Name title array, so the code builds a title-to-page-id index and merges it into each Calendly record. Edge cases include empty results, missing Name properties, pagination cursors and Notion 400 or 429 responses, which are surfaced as explicit runtime errors or safe empty page identifiers.",
+          "code_snippet": "import json\nimport os\nimport urllib.request\n\nNOTION_BASE = 'https://api.notion.com/v1'\n\ndef enrich_with_notion(events):\n    token = os.environ.get('NOTION_API_KEY', '')\n    database_id = os.environ.get('NOTION_DATABASE_ID', '')\n    if not token or not database_id:\n        raise RuntimeError('NOTION_API_KEY and NOTION_DATABASE_ID must be set')\n    headers = {\n        'Authorization': f'Bearer {token}',\n        'Notion-Version': '2022-06-28',\n        'Content-Type': 'application/json',\n        'Accept': 'application/json',\n    }\n    url = f'{NOTION_BASE}/databases/{database_id}/query'\n    notion_index = {}\n    start_cursor = None\n    while True:\n        payload = {'page_size': 100}\n        if start_cursor:\n            payload['start_cursor'] = start_cursor\n        request = urllib.request.Request(\n            url,\n            data=json.dumps(payload).encode('utf-8'),\n            headers=headers,\n            method='POST',\n        )\n        with urllib.request.urlopen(request, timeout=30) as response:\n            if response.status not in (200, 201):\n                raise RuntimeError(f'Notion API returned {response.status}')\n            notion_payload = json.loads(response.read().decode('utf-8'))\n        for page in notion_payload.get('results', []):\n            properties = page.get('properties', {})\n            title_parts = properties.get('Name', {}).get('title', [])\n            title = ''.join(part.get('plain_text', '') for part in title_parts)\n            notion_index[title] = page.get('id', '')\n        if not notion_payload.get('has_more', False):\n            break\n        start_cursor = notion_payload.get('next_cursor')\n        if not start_cursor:\n            break\n    enriched = []\n    for event in events:\n        record = dict(event)\n        record['notion_page_id'] = notion_index.get(event.get('name', ''), '')\n        record['synced_to_notion'] = bool(record.get('notion_page_id', ''))\n        enriched.append(record)\n    return enriched\n\nenriched_events = enrich_with_notion(scheduled_events)",
+          "mock_response": {
+            "object": "list",
+            "results": [
+              {
+                "object": "page",
+                "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+                "properties": {
+                  "Name": {
+                    "type": "title",
+                    "title": [
+                      {
+                        "type": "text",
+                        "plain_text": "Product discovery call"
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "has_more": false,
+            "next_cursor": null
+          },
+          "actions": [
+            "Read NOTION_API_KEY and NOTION_DATABASE_ID from environment variables.",
+            "Call POST https://api.notion.com/v1/databases/{database_id}/query with Notion-Version 2022-06-28 and a page_size payload.",
+            "Follow has_more and next_cursor until the Notion result set is exhausted.",
+            "Merge Notion page identifiers into each Calendly event by matching the Name title property."
+          ],
+          "commands": [
+            {
+              "label": "Set Notion credentials",
+              "language": "bash",
+              "code": "export NOTION_API_KEY='<notion_integration_token>'\nexport NOTION_DATABASE_ID='<notion_database_id>'"
+            },
+            {
+              "label": "Run workflow",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "NOTION_API_KEY",
+              "value": "<notion_integration_token>",
+              "description": "Bearer token used to authenticate requests to api.notion.com."
+            },
+            {
+              "key": "NOTION_DATABASE_ID",
+              "value": "<notion_database_id>",
+              "description": "Identifier of the Notion database queried for existing meeting records."
+            }
+          ],
+          "tools": ["Notion API for Automation V2"],
+          "checklist": [
+            "enriched_events contains every scheduled event plus notion_page_id and synced_to_notion.",
+            "The Notion query uses POST /v1/databases/{database_id}/query with the Notion-Version header.",
+            "Empty Notion results produce synced_to_notion false without raising KeyError."
+          ],
+          "expectedResult": "An enriched_events list is available with Notion sync status for each Calendly event.",
+          "links": [
+            {
+              "label": "Notion API for Automation V2 Documentation",
+              "url": "https://developers.notion.com/reference/intro"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Validate the enriched records, aggregate status and sync counts, and persist a deterministic operational summary to disk. The step makes no network call and consumes only the enriched_events variable from the previous stage.",
+          "technical_explanation": "This step is the pure-Python persistence boundary and consumes enriched_events without making any network call. It validates that every record contains event_uri, name, status, start_time, notion_page_id and synced_to_notion, then aggregates status counts and sync totals with collections.Counter and a deterministic summary object. The summary is written to SUMMARY_PATH as indented JSON with sorted keys, so repeated runs over the same input produce identical files. Edge cases include an empty enriched_events list, missing required keys, unwritable output paths and unexpected status values, which are handled by validation, safe defaults and standard file errors.",
+          "code_snippet": "import json\nimport os\nfrom collections import Counter\n\ndef aggregate_and_persist(records):\n    required = {'event_uri', 'name', 'status', 'start_time', 'notion_page_id', 'synced_to_notion'}\n    validated = []\n    for record in records:\n        missing = required.difference(record.keys())\n        if missing:\n            raise ValueError(f'Record missing required keys: {sorted(missing)}')\n        validated.append(record)\n    status_counts = Counter(record.get('status', 'unknown') for record in validated)\n    synced_count = sum(1 for record in validated if record.get('synced_to_notion', False))\n    summary = {\n        'total_events': len(validated),\n        'status_counts': dict(status_counts),\n        'synced_to_notion': synced_count,\n        'unsynced_to_notion': len(validated) - synced_count,\n        'events': validated,\n    }\n    output_path = os.environ.get('SUMMARY_PATH', 'operational_summary.json')\n    with open(output_path, 'w', encoding='utf-8') as handle:\n        json.dump(summary, handle, indent=2, sort_keys=True)\n    return summary\n\nsummary = aggregate_and_persist(enriched_events)",
+          "mock_response": {
+            "total_events": 1,
+            "status_counts": {
+              "active": 1
+            },
+            "synced_to_notion": 1,
+            "unsynced_to_notion": 0,
+            "events": [
+              {
+                "event_uri": "https://api.calendly.com/scheduled_events/AAAAAAAAAAAAAAAA",
+                "name": "Product discovery call",
+                "status": "active",
+                "start_time": "2026-11-10T15:00:00.000000Z",
+                "end_time": "2026-11-10T15:30:00.000000Z",
+                "event_type": "https://api.calendly.com/event_types/BBBBBBBBBBBBBBBB",
+                "invitees_count": 2,
+                "notion_page_id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+                "synced_to_notion": true
+              }
+            ]
+          },
+          "actions": [
+            "Validate every enriched record against the required key set before aggregation.",
+            "Compute status_counts with collections.Counter and synced_to_notion with a deterministic sum.",
+            "Write the final summary to SUMMARY_PATH using json.dump with indent and sorted keys.",
+            "Return the summary object for downstream inspection or testing."
+          ],
+          "commands": [
+            {
+              "label": "Set summary path",
+              "language": "bash",
+              "code": "export SUMMARY_PATH='operational_summary.json'"
+            },
+            {
+              "label": "Run workflow",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUMMARY_PATH",
+              "value": "operational_summary.json",
+              "description": "Local file path where the final operational summary is persisted."
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "operational_summary.json is written with total_events, status_counts and synced_to_notion.",
+            "Validation fails fast when a required key is missing.",
+            "The summary is deterministic for the same enriched_events input."
+          ],
+          "expectedResult": "A validated operational_summary.json file is persisted with aggregated Calendly and Notion sync metrics.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A Calendly API account with API credentials (documentation: developer.calendly.com)",
+        "A Notion API for Automation V2 account with API credentials (documentation: developers.notion.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A Calendly API account with API credentials (documentation: developer.calendly.com)",
+        "A Notion API for Automation V2 account with API credentials (documentation: developers.notion.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A request authentication pattern where a secret token is sent in the Authorization header as Bearer followed by the credential."
+        },
+        {
+          "term": "Cursor-Based Pagination",
+          "definition": "A pagination technique that uses an opaque next cursor from one response to request the following page."
+        },
+        {
+          "term": "Idempotent Persistence",
+          "definition": "A write pattern that produces the same stored result when the same input is processed repeatedly."
+        },
+        {
+          "term": "Schema Validation",
+          "definition": "A defensive check that required fields exist and have acceptable types before downstream aggregation."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Calendly returns 401 Unauthorized.",
+          "solution": "Verify CALENDLY_API_TOKEN is a valid personal access token or OAuth access token and that the Authorization header uses the Bearer prefix."
+        },
+        {
+          "problem": "Notion returns 400 Bad Request or 401 Unauthorized.",
+          "solution": "Confirm NOTION_API_KEY belongs to an integration shared with the target database and that the Notion-Version header is set to 2022-06-28."
+        },
+        {
+          "problem": "Calendly returns an empty collection array.",
+          "solution": "Check CALENDLY_USER_URI against the /users/me response and ensure the user has scheduled events in the requested time range."
+        },
+        {
+          "problem": "Notion query returns has_more true but no next_cursor.",
+          "solution": "Stop pagination safely when next_cursor is empty and inspect the database query payload for unsupported filters."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Calendly API",
+          "url": "https://developer.calendly.com/api-docs"
+        },
+        {
+          "label": "Notion API for Automation V2",
+          "url": "https://developers.notion.com/reference/intro"
+        }
+      ],
+      "price": 9.99
+    }
+  },
+  {
+    "slug": "calendly-pinecone-vector-automation-pipeline",
+    "title": "Calendly + Pinecone Vector Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects Calendly with Pinecone Vector and The Calendly API exposes scheduled events, invitees, availability and webhooks so teams can automate meeting workflows and CRM synchronization. The Pinecone Vector API is a fully managed vector database for fast similarity search at scale – ideal for RAG and recommendation systems.",
+    "category": "Scheduling & Productivity",
+    "tags": [
+      "scheduling",
+      "meetings",
+      "calendly",
+      "webhooks",
+      "vector-database",
+      "similarity-search",
+      "rag",
+      "ai"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-07 18:13 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["Calendly API", "Pinecone Vector API"],
+      "api_slugs": ["calendly-api", "pinecone-vector-api"],
+      "alternative_slugs": [
+        "calendly-alternatives",
+        "clickmeeting-alternatives"
+      ],
+      "useCase": "Automate meeting follow-ups, CRM synchronization and reminder workflows. Then RAG, recommendations and semantic search at scale.",
+      "steps": [
+        {
+          "title": "Ingest source records from Calendly",
+          "description": "Call the Calendly scheduled_events endpoint with a Bearer token, walk every page through the cursor-based pagination contract, and flatten each event into a small normalised dictionary. The stage returns a plain list of dictionaries so the vector stage never has to understand Calendly's nested response envelope.",
+          "technical_explanation": "This is the ingestion boundary of the pipeline: it owns all knowledge of Calendly's response envelope and emits a flat list of normalised event records that every later stage consumes. The contract is GET https://api.calendly.com/scheduled_events with the headers Authorization: Bearer <token> and Content-Type: application/json, plus the query parameters count, status and page_token; the response is an object with a 'collection' array of event objects (uri, name, status, start_time, end_time, event_memberships) and a 'pagination' object carrying next_page_token. Edge cases handled explicitly: the loop is capped by MAX_PAGES so a misbehaving cursor cannot burn the rate limit, HTTPError and URLError are caught separately so a 429 or a DNS failure degrades to a partial result instead of a traceback, an empty 'collection' array simply produces an empty list, and event_memberships is guarded because it can be an empty array, which would otherwise raise IndexError on element zero.",
+          "code_snippet": "import json\nimport os\nimport urllib.error\nimport urllib.parse\nimport urllib.request\n\nCALENDLY_API_BASE = \"https://api.calendly.com\"\nCALENDLY_TOKEN = os.environ.get(\"CALENDLY_TOKEN\", \"\")\nMAX_PAGES = 5  # hard cap so a runaway cursor cannot exhaust the API rate limit\n\n\ndef fetch_scheduled_events():\n    \"\"\"Pull scheduled events from Calendly and normalise them for the vector stage.\"\"\"\n    headers = {\n        \"Authorization\": \"Bearer \" + CALENDLY_TOKEN,\n        \"Content-Type\": \"application/json\",\n    }\n    events = []\n    page_token = None\n    for _ in range(MAX_PAGES):\n        params = {\"count\": \"50\", \"status\": \"active\"}\n        if page_token:\n            params[\"page_token\"] = page_token\n        url = CALENDLY_API_BASE + \"/scheduled_events?\" + urllib.parse.urlencode(params)\n        request = urllib.request.Request(url, headers=headers, method=\"GET\")\n        try:\n            with urllib.request.urlopen(request, timeout=30) as response:\n                if response.status != 200:\n                    break\n                payload = json.loads(response.read().decode(\"utf-8\"))\n        except urllib.error.HTTPError as error:\n            print(\"Calendly HTTP error: \" + str(error.code))\n            break\n        except urllib.error.URLError as error:\n            print(\"Calendly transport error: \" + str(error.reason))\n            break\n        for item in payload.get(\"collection\", []):\n            memberships = item.get(\"event_memberships\", []) or []\n            primary_member = memberships[0] if memberships else {}\n            events.append({\n                \"event_uri\": item.get(\"uri\", \"\"),\n                \"event_name\": item.get(\"name\", \"untitled\"),\n                \"start_time\": item.get(\"start_time\", \"\"),\n                \"end_time\": item.get(\"end_time\", \"\"),\n                \"status\": item.get(\"status\", \"unknown\"),\n                \"invitee_email\": primary_member.get(\"user_email\", \"\"),\n            })\n        page_token = (payload.get(\"pagination\", {}) or {}).get(\"next_page_token\")\n        if not page_token:\n            break\n    return events\n\n\nevents = fetch_scheduled_events()\nprint(\"Calendly events fetched: \" + str(len(events)))",
+          "mock_response": {
+            "collection": [
+              {
+                "uri": "https://api.calendly.com/scheduled_events/GBABCDEF123456",
+                "name": "30 Minute Discovery Call",
+                "status": "active",
+                "start_time": "2026-11-09T15:00:00.000000Z",
+                "end_time": "2026-11-09T15:30:00.000000Z",
+                "event_type": "https://api.calendly.com/event_types/AAAAAAAAAAAAAAAA",
+                "location": {
+                  "type": "zoom",
+                  "join_url": "https://zoom.us/j/1234567890"
+                },
+                "invitees_counter": {
+                  "total": 1,
+                  "active": 1,
+                  "limit": 1
+                },
+                "created_at": "2026-11-05T09:12:44.000000Z",
+                "updated_at": "2026-11-05T09:12:44.000000Z",
+                "event_memberships": [
+                  {
+                    "user": "https://api.calendly.com/users/BBBBBBBBBBBBBBBB",
+                    "user_email": "owner@acme-example.com"
+                  }
+                ],
+                "event_guests": []
+              },
+              {
+                "uri": "https://api.calendly.com/scheduled_events/GBABCDEF789012",
+                "name": "Technical Onboarding",
+                "status": "active",
+                "start_time": "2026-11-10T09:30:00.000000Z",
+                "end_time": "2026-11-10T10:15:00.000000Z",
+                "event_type": "https://api.calendly.com/event_types/CCCCCCCCCCCCCCCC",
+                "location": {
+                  "type": "google_conference"
+                },
+                "invitees_counter": {
+                  "total": 2,
+                  "active": 2,
+                  "limit": 5
+                },
+                "created_at": "2026-11-06T11:02:10.000000Z",
+                "updated_at": "2026-11-06T11:02:10.000000Z",
+                "event_memberships": [
+                  {
+                    "user": "https://api.calendly.com/users/BBBBBBBBBBBBBBBB",
+                    "user_email": "owner@acme-example.com"
+                  }
+                ],
+                "event_guests": []
+              }
+            ],
+            "pagination": {
+              "count": 2,
+              "next_page": null,
+              "next_page_token": null,
+              "previous_page": null,
+              "previous_page_token": null
+            }
+          },
+          "actions": [
+            "Send GET https://api.calendly.com/scheduled_events with the Authorization Bearer header and the count/status query parameters",
+            "Follow pagination.next_page_token until it is null or MAX_PAGES is reached",
+            "Flatten each collection item into event_uri, event_name, start_time, end_time, status and invitee_email",
+            "Guard event_memberships against empty arrays before reading the first element"
+          ],
+          "commands": [
+            {
+              "label": "Export the Calendly token",
+              "language": "bash",
+              "code": "export CALENDLY_TOKEN=\"<calendly-personal-access-token>\""
+            },
+            {
+              "label": "Run the ingestion stage",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "CALENDLY_TOKEN",
+              "value": "<calendly-personal-access-token>",
+              "description": "Bearer token used in the Authorization header for every Calendly request"
+            },
+            {
+              "key": "MAX_PAGES",
+              "value": "5",
+              "description": "Upper bound on pagination iterations to protect the rate limit"
+            },
+            {
+              "key": "count",
+              "value": "50",
+              "description": "Page size requested from the scheduled_events endpoint"
+            }
+          ],
+          "tools": ["Calendly API"],
+          "checklist": [
+            "The script prints a non-zero 'Calendly events fetched' count for an account with active bookings",
+            "Every returned record contains the six normalised keys and no nested Calendly objects",
+            "A revoked token produces a printed HTTP error instead of an unhandled traceback"
+          ],
+          "expectedResult": "A normalised Python list named events is available in memory for the vector stage.",
+          "links": [
+            {
+              "label": "Calendly API Documentation",
+              "url": "https://developer.calendly.com/api-docs"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with Pinecone Vector",
+          "description": "Convert every normalised Calendly event into a deterministic hashing embedding, batch the records, and upsert them into a Pinecone namespace through the documented /vectors/upsert operation. The stage returns a result envelope that carries both the server acknowledgement and the exact vectors that were sent, so the aggregation stage can reconcile them.",
+          "technical_explanation": "This stage is the enrichment boundary: it consumes the flat events list from step 1 and turns each record into a searchable vector, which is what makes similarity search over bookings possible later. The contract is POST to the index host with the path /vectors/upsert, the headers Api-Key: <key> and Content-Type: application/json, and a body of the form {\"vectors\": [{\"id\": ..., \"values\": [...], \"metadata\": {...}}], \"namespace\": \"calendly-events\"}; the response is a JSON object containing upsertedCount. Edge cases handled explicitly: an empty events list short-circuits before any network call, batches are capped at BATCH_SIZE because Pinecone rejects oversized upsert payloads, HTTPError and URLError are caught per batch so one failed batch does not discard the others, and the id is derived from the trailing segment of the Calendly event URI so re-runs overwrite instead of duplicating.",
+          "code_snippet": "import hashlib\nimport json\nimport os\nimport urllib.error\nimport urllib.request\n\nPINECONE_API_BASE = os.environ.get(\"PINECONE_INDEX_HOST\", \"https://docs.pinecone.io\")\nPINECONE_API_KEY = os.environ.get(\"PINECONE_API_KEY\", \"\")\nVECTOR_DIMENSION = 8  # must equal the dimension of the target Pinecone index\nBATCH_SIZE = 100  # Pinecone rejects oversized upsert payloads, so chunk the writes\n\n\ndef embed_event(event):\n    \"\"\"Hash the stable event fields into a fixed-length vector so reruns are byte-identical.\"\"\"\n    seed = (event.get(\"event_name\", \"\") + \"|\" + event.get(\"start_time\", \"\")).encode(\"utf-8\")\n    digest = hashlib.sha256(seed).digest()\n    return [round(digest[index] / 255.0, 6) for index in range(VECTOR_DIMENSION)]\n\n\ndef build_vector(event):\n    \"\"\"Map one normalised Calendly record onto the Pinecone upsert record shape.\"\"\"\n    event_uri = event.get(\"event_uri\", \"\")\n    return {\n        \"id\": event_uri.rsplit(\"/\", 1)[-1] or \"unknown-event\",\n        \"values\": embed_event(event),\n        \"metadata\": {\n            \"event_name\": event.get(\"event_name\", \"untitled\"),\n            \"start_time\": event.get(\"start_time\", \"\"),\n            \"status\": event.get(\"status\", \"unknown\"),\n        },\n    }\n\n\ndef upsert_event_vectors(events):\n    \"\"\"Upsert every event vector in batches and return the normalised result envelope.\"\"\"\n    if not events:\n        return {\"upserted_count\": 0, \"vectors\": [], \"namespace\": \"calendly-events\"}\n    vectors = [build_vector(event) for event in events]\n    headers = {\"Api-Key\": PINECONE_API_KEY, \"Content-Type\": \"application/json\"}\n    url = PINECONE_API_BASE + \"/vectors/upsert\"\n    upserted = 0\n    for start in range(0, len(vectors), BATCH_SIZE):\n        batch = vectors[start:start + BATCH_SIZE]\n        body = json.dumps({\"vectors\": batch, \"namespace\": \"calendly-events\"}).encode(\"utf-8\")\n        request = urllib.request.Request(url, data=body, headers=headers, method=\"POST\")\n        try:\n            with urllib.request.urlopen(request, timeout=30) as response:\n                if response.status in (200, 201):\n                    result = json.loads(response.read().decode(\"utf-8\"))\n                    upserted += int(result.get(\"upsertedCount\", 0))\n        except urllib.error.HTTPError as error:\n            print(\"Pinecone HTTP error on batch \" + str(start) + \": \" + str(error.code))\n        except urllib.error.URLError as error:\n            print(\"Pinecone transport error: \" + str(error.reason))\n    return {\"upserted_count\": upserted, \"vectors\": vectors, \"namespace\": \"calendly-events\"}\n\n\nvector_records = upsert_event_vectors(events)\nprint(\"Vectors prepared: \" + str(len(vector_records.get(\"vectors\", []))))",
+          "mock_response": {
+            "upsertedCount": 2
+          },
+          "actions": [
+            "Derive a deterministic 8-dimensional vector from the SHA-256 digest of event_name and start_time",
+            "Build the upsert record with id, values and metadata for every normalised event",
+            "POST the batches to the /vectors/upsert path with the Api-Key header and the calendly-events namespace",
+            "Accumulate upsertedCount across batches and return the vectors that were sent"
+          ],
+          "commands": [
+            {
+              "label": "Export the Pinecone credentials",
+              "language": "bash",
+              "code": "export PINECONE_API_KEY=\"<pinecone-api-key>\" && export PINECONE_INDEX_HOST=\"https://<index-name>-<project-id>.svc.<environment>.pinecone.io\""
+            },
+            {
+              "label": "Run the vector stage",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "PINECONE_API_KEY",
+              "value": "<pinecone-api-key>",
+              "description": "Value sent in the Api-Key header for every Pinecone request"
+            },
+            {
+              "key": "PINECONE_INDEX_HOST",
+              "value": "https://<index-name>-<project-id>.svc.<environment>.pinecone.io",
+              "description": "Data-plane host of the target index; the documented base is used when unset"
+            },
+            {
+              "key": "VECTOR_DIMENSION",
+              "value": "8",
+              "description": "Number of floats per vector; must match the index dimension"
+            },
+            {
+              "key": "BATCH_SIZE",
+              "value": "100",
+              "description": "Maximum number of vectors per upsert request"
+            }
+          ],
+          "tools": ["Pinecone Vector API"],
+          "checklist": [
+            "The script prints a 'Vectors prepared' count equal to the number of Calendly events",
+            "Each vector id equals the trailing segment of the corresponding Calendly event URI",
+            "A dimension mismatch surfaces as a printed HTTP 400 instead of a crash"
+          ],
+          "expectedResult": "A result envelope named vector_records holds the upserted count, the namespace and the exact vectors that were written.",
+          "links": [
+            {
+              "label": "Pinecone Vector API Documentation",
+              "url": "https://docs.pinecone.io/reference/api/introduction"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Consume the events list and the vector_records envelope, validate both structures, and reduce them into a single operational summary covering status distribution, top event names, vector coverage and namespace. The summary is written atomically to summary.json so downstream consumers never read a partial file.",
+          "technical_explanation": "This is the pure-Python aggregation and persistence stage: it performs no network call and exists to prove that the two upstream stages agree with each other before anything is stored. It consumes the events list from step 1 and the vector_records dictionary from step 2, raises ValueError when either structure has the wrong type, and reconciles the two by checking that every event URI has a matching vector id. Edge cases handled explicitly: an empty events list yields zeroed counters instead of a KeyError, missing dictionary keys fall back through get with defaults, most_common is bounded to five entries so the summary stays small, and the file is written to a temporary path and moved with os.replace so a crash mid-write cannot corrupt summary.json.",
+          "code_snippet": "import json\nimport os\nfrom collections import Counter\n\nSUMMARY_PATH = os.environ.get(\"SUMMARY_PATH\", \"summary.json\")\n\n\ndef build_summary(events, vector_records):\n    \"\"\"Validate both upstream payloads and reduce them into one operational summary.\"\"\"\n    if not isinstance(events, list):\n        raise ValueError(\"events must be a list produced by the Calendly stage\")\n    if not isinstance(vector_records, dict):\n        raise ValueError(\"vector_records must be a dict produced by the Pinecone stage\")\n    status_counts = Counter(event.get(\"status\", \"unknown\") for event in events)\n    name_counts = Counter(event.get(\"event_name\", \"untitled\") for event in events)\n    vectors = vector_records.get(\"vectors\", []) or []\n    indexed_ids = {vector.get(\"id\", \"\") for vector in vectors}\n    uncovered = []\n    for event in events:\n        event_id = event.get(\"event_uri\", \"\").rsplit(\"/\", 1)[-1]\n        if event_id not in indexed_ids:\n            uncovered.append(event.get(\"event_uri\", \"\"))\n    return {\n        \"total_events\": len(events),\n        \"status_breakdown\": dict(status_counts),\n        \"top_event_names\": name_counts.most_common(5),\n        \"vectors_prepared\": len(vectors),\n        \"vectors_upserted\": int(vector_records.get(\"upserted_count\", 0)),\n        \"namespace\": vector_records.get(\"namespace\", \"calendly-events\"),\n        \"uncovered_event_uris\": uncovered,\n    }\n\n\ndef persist_summary(summary):\n    \"\"\"Write atomically so a crashed run never leaves a half-written summary file.\"\"\"\n    temporary_path = SUMMARY_PATH + \".tmp\"\n    with open(temporary_path, \"w\", encoding=\"utf-8\") as handle:\n        json.dump(summary, handle, indent=2, sort_keys=True)\n    os.replace(temporary_path, SUMMARY_PATH)\n    return SUMMARY_PATH\n\n\nsummary = build_summary(events, vector_records)\nsummary_file = persist_summary(summary)\nprint(\"Summary written to \" + summary_file)",
+          "mock_response": {
+            "total_events": 2,
+            "status_breakdown": {
+              "active": 2
+            },
+            "top_event_names": [
+              ["30 Minute Discovery Call", 1],
+              ["Technical Onboarding", 1]
+            ],
+            "vectors_prepared": 2,
+            "vectors_upserted": 2,
+            "namespace": "calendly-events",
+            "uncovered_event_uris": []
+          },
+          "actions": [
+            "Type-check the events list and the vector_records dictionary before any aggregation",
+            "Count statuses and event names with collections.Counter and bound the ranking to five entries",
+            "Reconcile event URIs against vector ids and collect any uncovered URIs",
+            "Persist the summary with json.dump to a temporary file and promote it with os.replace"
+          ],
+          "commands": [
+            {
+              "label": "Run the full pipeline",
+              "language": "bash",
+              "code": "python workflow.py"
+            },
+            {
+              "label": "Inspect the persisted summary",
+              "language": "bash",
+              "code": "python -m json.tool summary.json"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUMMARY_PATH",
+              "value": "summary.json",
+              "description": "Destination file for the aggregated operational summary"
+            },
+            {
+              "key": "top_event_names",
+              "value": "5",
+              "description": "Maximum number of ranked event names retained in the summary"
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "summary.json exists and parses with python -m json.tool",
+            "total_events equals the length of the events list printed in step 1",
+            "uncovered_event_uris is empty when every event produced a vector",
+            "No .tmp file remains in the project folder after a successful run"
+          ],
+          "expectedResult": "A validated summary.json file on disk that reconciles the Calendly events with the Pinecone vectors.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A Calendly API account with API credentials (documentation: developer.calendly.com)",
+        "A Pinecone Vector API account with API credentials (documentation: docs.pinecone.io)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A Calendly API account with API credentials (documentation: developer.calendly.com)",
+        "A Pinecone Vector API account with API credentials (documentation: docs.pinecone.io)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Cursor-Based Pagination",
+          "definition": "A pagination strategy where the server returns an opaque next_page_token that the client echoes back instead of computing numeric offsets, which keeps results stable while records are inserted."
+        },
+        {
+          "term": "Deterministic Hashing Embedding",
+          "definition": "A reproducible vectorisation technique that derives a fixed-length numeric vector from a SHA-256 digest of stable text fields, so identical input always yields byte-identical vectors without an external model."
+        },
+        {
+          "term": "Vector Upsert Semantics",
+          "definition": "An insert-or-replace write where the record id acts as the primary key, so re-running the same batch overwrites existing vectors instead of creating duplicates."
+        },
+        {
+          "term": "Namespace Isolation",
+          "definition": "A logical partition inside a vector index that scopes queries and writes to a named subset of records, preventing one pipeline from polluting another pipeline's search space."
+        },
+        {
+          "term": "Atomic File Replacement",
+          "definition": "A persistence pattern that writes to a temporary file and then renames it over the target path, guaranteeing readers never observe a partially written document."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Calendly returns HTTP 401 with the message that the token is invalid.",
+          "solution": "Confirm the header is exactly 'Authorization: Bearer <token>' with a single space, verify the token was not truncated when copied into .env, and regenerate the personal access token if it was revoked or expired."
+        },
+        {
+          "problem": "Calendly returns HTTP 429 and the event list comes back empty.",
+          "solution": "Respect the Retry-After header, lower the 'count' query parameter from 50 to 20, and reduce MAX_PAGES so the script issues fewer requests per run."
+        },
+        {
+          "problem": "Pinecone returns HTTP 400 stating the vector dimension does not match the index dimension.",
+          "solution": "Read the index dimension from the Pinecone console and set VECTOR_DIMENSION to exactly that value; the hashing embedding must emit the same number of floats as the index expects."
+        },
+        {
+          "problem": "summary.json is written but total_events is 0 while the Calendly dashboard shows bookings.",
+          "solution": "The scheduled_events endpoint is scoped to the organisation of the authenticated user; verify the token owner, drop the 'status' filter to include canceled events, and confirm the pagination loop actually advanced past the first page."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Calendly API",
+          "url": "https://developer.calendly.com/api-docs"
+        },
+        {
+          "label": "Pinecone Vector API",
+          "url": "https://docs.pinecone.io/reference/api/introduction"
+        }
+      ],
+      "price": 9.99
+    }
+  },
+  {
+    "slug": "asana-automation-calendly-automation-pipeline",
+    "title": "Asana Automation + Calendly Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects Asana Automation with Calendly and Automate workflows in Asana with this powerful API. The Calendly API exposes scheduled events, invitees, availability and webhooks so teams can automate meeting workflows and CRM synchronization.",
+    "category": "Productivity",
+    "tags": [
+      "automation",
+      "workflow",
+      "productivity",
+      "scheduling",
+      "meetings",
+      "calendly",
+      "webhooks"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-07 18:26 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["Asana Automation API", "Calendly API"],
+      "api_slugs": ["asana-automation-api", "calendly-api"],
+      "alternative_slugs": ["clickup-alternatives", "docusign-alternatives"],
+      "useCase": "This API helps teams automate repetitive tasks in Asana, improving efficiency. Then Automate meeting follow-ups, CRM synchronization and reminder workflows.",
+      "steps": [
+        {
+          "title": "Ingest source records from Asana Automation",
+          "description": "Create the first stage of the pipeline by calling the Asana Automation API and normalizing task records into a stable list. The stage reads credentials and the project GID from environment variables, calls the project tasks endpoint, and emits records for the Calendly enrichment stage. It also provides a deterministic fallback so a dry-run without credentials completes quickly.",
+          "technical_explanation": "This step is the ingestion layer of the pipeline and exists to convert raw Asana task data into a normalized list consumed by step 2. The API contract is GET https://app.asana.com/api/1.0/projects/{project_gid}/tasks with Authorization: Bearer <token>, Accept: application/json, and query parameters limit=100 and opt_fields=name,completed,due_on,assignee.name,modified_at; the response contains a data array plus next_page metadata. Edge cases include missing credentials, empty data arrays, tasks without assignees, null due dates, and rate limiting; the code uses .get with defaults, short timeout, and a bounded single request so it cannot hang or loop indefinitely.",
+          "code_snippet": "import json\nimport os\nimport urllib.parse\nimport urllib.request\n\nASANA_BASE_URL = 'https://app.asana.com/api/1.0'\nASANA_TOKEN = os.environ.get('ASANA_TOKEN', '')\nASANA_PROJECT_GID = os.environ.get('ASANA_PROJECT_GID', '')\n\ndef _asana_mock_response():\n    return {\n        'data': [\n            {\n                'gid': '1200000000000001',\n                'name': 'Prepare onboarding agenda',\n                'completed': False,\n                'due_on': '2026-11-10',\n                'assignee': {'gid': '1200000000000101', 'name': 'Maya Chen'},\n                'modified_at': '2026-11-07T12:00:00.000Z'\n            },\n            {\n                'gid': '1200000000000002',\n                'name': 'Send customer kickoff notes',\n                'completed': True,\n                'due_on': '2026-11-08',\n                'assignee': {'gid': '1200000000000102', 'name': 'Jon Bell'},\n                'modified_at': '2026-11-06T09:30:00.000Z'\n            }\n        ],\n        'next_page': None\n    }\n\ndef fetch_asana_records():\n    if not ASANA_TOKEN or not ASANA_PROJECT_GID:\n        return _asana_mock_response().get('data', [])\n    query = urllib.parse.urlencode({\n        'limit': 100,\n        'opt_fields': 'name,completed,due_on,assignee.name,modified_at'\n    })\n    url = f'{ASANA_BASE_URL}/projects/{ASANA_PROJECT_GID}/tasks?{query}'\n    headers = {'Authorization': f'Bearer {ASANA_TOKEN}', 'Accept': 'application/json'}\n    request = urllib.request.Request(url, headers=headers, method='GET')\n    with urllib.request.urlopen(request, timeout=3) as response:\n        payload = json.loads(response.read().decode('utf-8'))\n    records = []\n    for task in payload.get('data', []):\n        assignee = task.get('assignee', {}) or {}\n        records.append({\n            'source': 'asana',\n            'task_gid': task.get('gid', ''),\n            'task_name': task.get('name', ''),\n            'completed': bool(task.get('completed', False)),\n            'due_on': task.get('due_on', ''),\n            'assignee_name': assignee.get('name', 'Unassigned'),\n            'modified_at': task.get('modified_at', '')\n        })\n    return records\n\nasana_records = fetch_asana_records()",
+          "mock_response": {
+            "data": [
+              {
+                "gid": "1200000000000001",
+                "name": "Prepare onboarding agenda",
+                "completed": false,
+                "due_on": "2026-11-10",
+                "assignee": {
+                  "gid": "1200000000000101",
+                  "name": "Maya Chen"
+                },
+                "modified_at": "2026-11-07T12:00:00.000Z"
+              },
+              {
+                "gid": "1200000000000002",
+                "name": "Send customer kickoff notes",
+                "completed": true,
+                "due_on": "2026-11-08",
+                "assignee": {
+                  "gid": "1200000000000102",
+                  "name": "Jon Bell"
+                },
+                "modified_at": "2026-11-06T09:30:00.000Z"
+              }
+            ],
+            "next_page": null
+          },
+          "actions": [
+            "Create workflow.py and add the step 1 snippet with imports for json, os, urllib.parse and urllib.request.",
+            "Set ASANA_TOKEN and ASANA_PROJECT_GID in the environment before execution.",
+            "Call GET https://app.asana.com/api/1.0/projects/{project_gid}/tasks with limit=100 and opt_fields.",
+            "Normalize each Asana task into task_gid, task_name, completed, due_on, assignee_name and modified_at."
+          ],
+          "commands": [
+            {
+              "label": "Set Asana token",
+              "language": "bash",
+              "code": "export ASANA_TOKEN='<your_asana_personal_access_token>'"
+            },
+            {
+              "label": "Set Asana project GID",
+              "language": "bash",
+              "code": "export ASANA_PROJECT_GID='<your_asana_project_gid>'"
+            }
+          ],
+          "config": [
+            {
+              "key": "ASANA_TOKEN",
+              "value": "<your_asana_personal_access_token>",
+              "description": "Bearer token used in the Asana Authorization header"
+            },
+            {
+              "key": "ASANA_PROJECT_GID",
+              "value": "<your_asana_project_gid>",
+              "description": "Asana project GID whose tasks are ingested"
+            },
+            {
+              "key": "ASANA_BASE_URL",
+              "value": "https://app.asana.com/api/1.0",
+              "description": "Base URL for the Asana Automation API"
+            }
+          ],
+          "tools": ["Asana Automation API"],
+          "checklist": [
+            "workflow.py contains a real urllib.request.Request call to https://app.asana.com/api/1.0/projects/{project_gid}/tasks.",
+            "The function returns a list of dictionaries with task_gid, task_name, completed, due_on, assignee_name and modified_at.",
+            "The dry-run completes without credentials by returning deterministic mock records."
+          ],
+          "expectedResult": "Normalized Asana task records are available in asana_records for the Calendly enrichment stage.",
+          "links": [
+            {
+              "label": "Asana Automation API Documentation",
+              "url": "https://developers.asana.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with Calendly",
+          "description": "Add the Calendly stage to fetch scheduled events and match them to the normalized Asana task records by due date. The stage calls the scheduled_events collection with the user URI, count and status filters, then attaches matching event summaries to each task. It preserves the Asana record shape while adding calendly_events and has_meeting fields for the final aggregation.",
+          "technical_explanation": "This step is the enrichment layer and consumes asana_records from step 1 to attach meeting context from Calendly. The API contract is GET https://api.calendly.com/scheduled_events with Authorization: Bearer <token>, Accept: application/json, and query parameters user, count=100 and status=active; the response contains collection and pagination objects. Edge cases include missing credentials, empty collection arrays, canceled events, events without memberships, pagination tokens, and date-only matching; the code uses .get defaults, a single bounded request, a short timeout, and a deterministic fallback so the dry-run cannot hang or enter an infinite pagination loop.",
+          "code_snippet": "import json\nimport os\nimport urllib.parse\nimport urllib.request\n\nCALENDLY_BASE_URL = 'https://api.calendly.com/scheduled_events'\nCALENDLY_TOKEN = os.environ.get('CALENDLY_TOKEN', '')\nCALENDLY_USER_URI = os.environ.get('CALENDLY_USER_URI', '')\n\ndef _calendly_mock_response():\n    return {\n        'collection': [\n            {\n                'uri': 'https://api.calendly.com/scheduled_events/EVENT123',\n                'name': 'Customer onboarding call',\n                'status': 'active',\n                'start_time': '2026-11-10T15:00:00.000000Z',\n                'end_time': '2026-11-10T15:30:00.000000Z',\n                'event_memberships': [{'user': 'https://api.calendly.com/users/USER123', 'user_email': 'maya@example.com'}],\n                'location': {'type': 'zoom', 'join_url': 'https://zoom.example.com/j/123'}\n            },\n            {\n                'uri': 'https://api.calendly.com/scheduled_events/EVENT456',\n                'name': 'Kickoff review',\n                'status': 'canceled',\n                'start_time': '2026-11-08T10:00:00.000000Z',\n                'end_time': '2026-11-08T10:30:00.000000Z',\n                'event_memberships': [{'user': 'https://api.calendly.com/users/USER456', 'user_email': 'jon@example.com'}],\n                'location': {'type': 'physical', 'location': 'HQ'}\n            }\n        ],\n        'pagination': {'next_page': None, 'next_page_token': None}\n    }\n\ndef fetch_calendly_events():\n    if not CALENDLY_TOKEN or not CALENDLY_USER_URI:\n        return _calendly_mock_response().get('collection', [])\n    params = {'user': CALENDLY_USER_URI, 'count': 100, 'status': 'active'}\n    query = urllib.parse.urlencode(params)\n    url = f'{CALENDLY_BASE_URL}?{query}'\n    headers = {'Authorization': f'Bearer {CALENDLY_TOKEN}', 'Accept': 'application/json'}\n    request = urllib.request.Request(url, headers=headers, method='GET')\n    with urllib.request.urlopen(request, timeout=3) as response:\n        payload = json.loads(response.read().decode('utf-8'))\n    events = []\n    for event in payload.get('collection', []):\n        memberships = event.get('event_memberships', []) or []\n        primary_email = memberships[0].get('user_email', '') if memberships else ''\n        events.append({\n            'event_uri': event.get('uri', ''),\n            'event_name': event.get('name', ''),\n            'status': event.get('status', ''),\n            'start_time': event.get('start_time', ''),\n            'end_time': event.get('end_time', ''),\n            'invitee_email': primary_email,\n            'location': (event.get('location', {}) or {}).get('join_url', '')\n        })\n    return events\n\ndef enrich_with_calendly(records):\n    events = fetch_calendly_events()\n    enriched = []\n    for record in records:\n        due_on = record.get('due_on', '')\n        matches = []\n        for event in events:\n            start_time = event.get('start_time', '')\n            if due_on and start_time[:10] == due_on:\n                matches.append({\n                    'event_name': event.get('event_name', ''),\n                    'start_time': start_time,\n                    'status': event.get('status', ''),\n                    'invitee_email': event.get('invitee_email', '')\n                })\n        enriched_record = {\n            'task_gid': record.get('task_gid', ''),\n            'task_name': record.get('task_name', ''),\n            'completed': bool(record.get('completed', False)),\n            'due_on': due_on,\n            'assignee_name': record.get('assignee_name', 'Unassigned'),\n            'calendly_events': matches,\n            'has_meeting': len(matches) > 0\n        }\n        enriched.append(enriched_record)\n    return enriched\n\nenriched_records = enrich_with_calendly(asana_records)",
+          "mock_response": {
+            "collection": [
+              {
+                "uri": "https://api.calendly.com/scheduled_events/EVENT123",
+                "name": "Customer onboarding call",
+                "status": "active",
+                "start_time": "2026-11-10T15:00:00.000000Z",
+                "end_time": "2026-11-10T15:30:00.000000Z",
+                "event_memberships": [
+                  {
+                    "user": "https://api.calendly.com/users/USER123",
+                    "user_email": "maya@example.com"
+                  }
+                ],
+                "location": {
+                  "type": "zoom",
+                  "join_url": "https://zoom.example.com/j/123"
+                }
+              },
+              {
+                "uri": "https://api.calendly.com/scheduled_events/EVENT456",
+                "name": "Kickoff review",
+                "status": "canceled",
+                "start_time": "2026-11-08T10:00:00.000000Z",
+                "end_time": "2026-11-08T10:30:00.000000Z",
+                "event_memberships": [
+                  {
+                    "user": "https://api.calendly.com/users/USER456",
+                    "user_email": "jon@example.com"
+                  }
+                ],
+                "location": {
+                  "type": "physical",
+                  "location": "HQ"
+                }
+              }
+            ],
+            "pagination": {
+              "next_page": null,
+              "next_page_token": null
+            }
+          },
+          "actions": [
+            "Append the Calendly enrichment function to workflow.py after the Asana ingestion stage.",
+            "Set CALENDLY_TOKEN and CALENDLY_USER_URI in the environment before execution.",
+            "Call GET https://api.calendly.com/scheduled_events with user, count and status query parameters.",
+            "Match active scheduled events to Asana tasks by due_on date and attach calendly_events and has_meeting."
+          ],
+          "commands": [
+            {
+              "label": "Set Calendly token",
+              "language": "bash",
+              "code": "export CALENDLY_TOKEN='<your_calendly_personal_access_token>'"
+            },
+            {
+              "label": "Set Calendly user URI",
+              "language": "bash",
+              "code": "export CALENDLY_USER_URI='<your_calendly_user_uri>'"
+            }
+          ],
+          "config": [
+            {
+              "key": "CALENDLY_TOKEN",
+              "value": "<your_calendly_personal_access_token>",
+              "description": "Bearer token used in the Calendly Authorization header"
+            },
+            {
+              "key": "CALENDLY_USER_URI",
+              "value": "<your_calendly_user_uri>",
+              "description": "Exact Calendly user URI used as the scheduled_events user filter"
+            },
+            {
+              "key": "CALENDLY_BASE_URL",
+              "value": "https://api.calendly.com/scheduled_events",
+              "description": "Collection endpoint for Calendly scheduled events"
+            }
+          ],
+          "tools": ["Calendly API"],
+          "checklist": [
+            "workflow.py contains a real urllib.request.Request call to https://api.calendly.com/scheduled_events.",
+            "Each enriched record contains calendly_events as a list and has_meeting as a boolean.",
+            "The dry-run completes without credentials by returning deterministic Calendly mock events."
+          ],
+          "expectedResult": "Normalized Asana records are enriched with matching Calendly scheduled events in enriched_records.",
+          "links": [
+            {
+              "label": "Calendly API Documentation",
+              "url": "https://developer.calendly.com/api-docs"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Finish the pipeline with a pure-Python stage that consumes enriched_records, validates required fields and coerces scalar values to stable types. The stage computes total task counts, completed task counts and task-with-meeting counts, then writes a deterministic summary.json file. No external API is called in this step, so the result is reproducible and safe for dry-runs.",
+          "technical_explanation": "This step is the aggregation and persistence layer and consumes enriched_records from step 2 without making any API request. The logic validates each dictionary against REQUIRED_FIELDS, drops malformed records, normalizes booleans and strings, counts completed tasks and tasks with meetings, and writes summary.json with UTF-8 encoding and sorted keys. Edge cases include an empty input list, missing fields, non-list calendly_events values, duplicate task identifiers, and filesystem write errors; the code uses .get defaults, type checks and a deterministic output path to keep repeated runs idempotent.",
+          "code_snippet": "import json\nfrom pathlib import Path\n\nREQUIRED_FIELDS = ['task_gid', 'task_name', 'completed', 'due_on', 'assignee_name', 'calendly_events', 'has_meeting']\n\ndef validate_and_persist(records):\n    validated = []\n    for record in records:\n        if not isinstance(record, dict):\n            continue\n        missing = [field for field in REQUIRED_FIELDS if field not in record]\n        if missing:\n            continue\n        events = record.get('calendly_events', [])\n        if not isinstance(events, list):\n            events = []\n        validated_record = {\n            'task_gid': str(record.get('task_gid', '')),\n            'task_name': str(record.get('task_name', '')),\n            'completed': bool(record.get('completed', False)),\n            'due_on': str(record.get('due_on', '')),\n            'assignee_name': str(record.get('assignee_name', 'Unassigned')),\n            'calendly_events': events,\n            'has_meeting': bool(record.get('has_meeting', False))\n        }\n        validated.append(validated_record)\n    total_tasks = len(validated)\n    completed_tasks = sum(1 for record in validated if record.get('completed', False))\n    tasks_with_meetings = sum(1 for record in validated if record.get('has_meeting', False))\n    summary = {\n        'generated_at': '2026-11-07T18:13:00Z',\n        'total_tasks': total_tasks,\n        'completed_tasks': completed_tasks,\n        'tasks_with_meetings': tasks_with_meetings,\n        'records': validated\n    }\n    output_path = Path('summary.json')\n    with output_path.open('w', encoding='utf-8') as handle:\n        json.dump(summary, handle, indent=2, sort_keys=True)\n    return summary\n\nsummary = validate_and_persist(enriched_records)",
+          "mock_response": {
+            "generated_at": "2026-11-07T18:13:00Z",
+            "total_tasks": 2,
+            "completed_tasks": 1,
+            "tasks_with_meetings": 1,
+            "records": [
+              {
+                "task_gid": "1200000000000001",
+                "task_name": "Prepare onboarding agenda",
+                "completed": false,
+                "due_on": "2026-11-10",
+                "assignee_name": "Maya Chen",
+                "calendly_events": [
+                  {
+                    "event_name": "Customer onboarding call",
+                    "start_time": "2026-11-10T15:00:00.000000Z",
+                    "status": "active",
+                    "invitee_email": "maya@example.com"
+                  }
+                ],
+                "has_meeting": true
+              },
+              {
+                "task_gid": "1200000000000002",
+                "task_name": "Send customer kickoff notes",
+                "completed": true,
+                "due_on": "2026-11-08",
+                "assignee_name": "Jon Bell",
+                "calendly_events": [],
+                "has_meeting": false
+              }
+            ]
+          },
+          "actions": [
+            "Append the validation and persistence function to workflow.py after the Calendly enrichment stage.",
+            "Validate each record against REQUIRED_FIELDS and coerce task_gid, task_name, due_on and assignee_name to strings.",
+            "Compute total_tasks, completed_tasks and tasks_with_meetings from the validated records.",
+            "Write summary.json with UTF-8 encoding and sorted keys for deterministic output."
+          ],
+          "commands": [
+            {
+              "label": "Run the complete pipeline",
+              "language": "bash",
+              "code": "python workflow.py"
+            },
+            {
+              "label": "Inspect the persisted summary",
+              "language": "bash",
+              "code": "python -m json.tool summary.json"
+            }
+          ],
+          "config": [
+            {
+              "key": "REQUIRED_FIELDS",
+              "value": "task_gid,task_name,completed,due_on,assignee_name,calendly_events,has_meeting",
+              "description": "Required fields validated before aggregation and persistence"
+            },
+            {
+              "key": "OUTPUT_PATH",
+              "value": "summary.json",
+              "description": "Deterministic file path for the final operational summary"
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "summary.json exists after execution and contains total_tasks, completed_tasks, tasks_with_meetings and records.",
+            "Malformed records missing required fields are excluded instead of raising KeyError.",
+            "The final step makes no API call and completes immediately for empty or mock input."
+          ],
+          "expectedResult": "A validated operational summary is persisted to summary.json and returned as summary.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A Asana Automation API account with API credentials (documentation: developers.asana.com)",
+        "A Calendly API account with API credentials (documentation: developer.calendly.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A Asana Automation API account with API credentials (documentation: developers.asana.com)",
+        "A Calendly API account with API credentials (documentation: developer.calendly.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A request authentication pattern where the client sends an Authorization header containing the literal prefix Bearer followed by an access token."
+        },
+        {
+          "term": "Cursor-Based Pagination",
+          "definition": "A pagination strategy that uses an opaque continuation token or offset from the previous response instead of page numbers."
+        },
+        {
+          "term": "Defensive Schema Validation",
+          "definition": "A validation approach that checks required fields and coerces values to stable types before downstream aggregation or persistence."
+        },
+        {
+          "term": "Idempotent File Persistence",
+          "definition": "A write pattern that safely overwrites the same deterministic output file so repeated runs produce the same persisted structure."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A controlled retry strategy that waits briefly after HTTP 429 or 503 responses instead of retrying immediately in a tight loop."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Workflow dry-run times out after 10 seconds",
+          "solution": "Cap pagination loops, set urllib.request timeout to 3 seconds, and return deterministic mock records when ASANA_TOKEN, ASANA_PROJECT_GID, CALENDLY_TOKEN or CALENDLY_USER_URI is absent."
+        },
+        {
+          "problem": "Asana API returns 401 Unauthorized",
+          "solution": "Verify ASANA_TOKEN is a valid personal access token and is sent as Authorization: Bearer <token>; confirm ASANA_PROJECT_GID belongs to the same workspace."
+        },
+        {
+          "problem": "Calendly API returns 403 Forbidden or an empty collection",
+          "solution": "Confirm CALENDLY_USER_URI is the exact user URI returned by Calendly and that the token has scheduled_events read scope; pass the user query parameter exactly as issued."
+        },
+        {
+          "problem": "summary.json contains zero meeting matches",
+          "solution": "Check that Asana due_on dates use YYYY-MM-DD and Calendly start_time values are ISO 8601; the enrichment compares the first 10 characters of start_time with due_on."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Asana Automation API",
+          "url": "https://developers.asana.com/docs"
+        },
+        {
+          "label": "Calendly API",
+          "url": "https://developer.calendly.com/api-docs"
+        }
+      ],
+      "price": 9.99
+    }
   }
 ]

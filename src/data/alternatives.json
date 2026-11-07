@@ -6862,5 +6862,407 @@
         "Self-hosted streaming options"
       ]
     }
+  },
+  {
+    "slug": "discord-alternatives",
+    "title": "Discord Alternatives",
+    "description": "This page compares Discord alternatives for community chat, voice, video, and team messaging. It covers hosted and self-hosted options with different privacy, moderation, and integration strengths. Use it to find a platform that fits your community size, budget, and admin needs.",
+    "category": "Community & Messaging",
+    "tags": [
+      "community chat",
+      "team messaging",
+      "voice and video",
+      "self-hosted",
+      "privacy"
+    ],
+    "details": {
+      "original": "Discord",
+      "alternatives": [
+        {
+          "name": "Slack",
+          "description": "Slack is a team messaging platform built around channels, direct messages, huddles, and a large app ecosystem.",
+          "pros": [
+            "Polished user experience with strong search and notification controls",
+            "Large integration marketplace and useful voice huddles"
+          ],
+          "cons": [
+            "Free plan limits message history and some collaboration features",
+            "Paid plans can become costly for large communities"
+          ],
+          "bestFor": "Businesses and teams that need a mature workplace chat platform with broad integrations.",
+          "url": "https://slack.com/?ref=flowmatrix"
+        },
+        {
+          "name": "Microsoft Teams",
+          "description": "Microsoft Teams is a chat and collaboration hub that combines messaging, meetings, calls, and file collaboration.",
+          "pros": [
+            "Deep integration with Microsoft 365 apps and enterprise identity",
+            "Strong meetings, calls, and compliance features for organizations"
+          ],
+          "cons": [
+            "Can feel resource-heavy and complex for casual communities",
+            "Administration and licensing options can be complicated"
+          ],
+          "bestFor": "Organizations already using Microsoft 365 that want chat and meetings in one ecosystem.",
+          "url": "https://www.microsoft.com/en-us/microsoft-teams/group-chat-software?ref=flowmatrix"
+        },
+        {
+          "name": "Element",
+          "description": "Element is a secure Matrix-based messaging app with federation, end-to-end encryption, and self-hosting options.",
+          "pros": [
+            "End-to-end encryption and Matrix federation support",
+            "Can be self-hosted and bridged to other messaging networks"
+          ],
+          "cons": [
+            "Smaller app ecosystem than mainstream workplace chat tools",
+            "Federation and encryption settings can be complex to administer"
+          ],
+          "bestFor": "Privacy-focused communities and organizations that need secure, self-hosted messaging.",
+          "url": "https://element.io/?ref=flowmatrix"
+        },
+        {
+          "name": "Mattermost",
+          "description": "Mattermost is an open-source team messaging platform designed for secure, self-hosted, and compliant collaboration.",
+          "pros": [
+            "Open-source and self-hostable for strong infrastructure control",
+            "Strong security, compliance, and integration options"
+          ],
+          "cons": [
+            "Self-hosted deployments require ongoing admin and maintenance work",
+            "Native voice and video feel less seamless than Discord"
+          ],
+          "bestFor": "Security-conscious teams that want on-premises or private-cloud collaboration.",
+          "url": "https://mattermost.com/?ref=flowmatrix"
+        },
+        {
+          "name": "Rocket.Chat",
+          "description": "Rocket.Chat is an open-source communications platform with channels, omnichannel messaging, and self-hosting.",
+          "pros": [
+            "Open-source with both self-hosted and cloud deployment options",
+            "Omnichannel features support community and customer messaging"
+          ],
+          "cons": [
+            "Self-hosting requires maintenance, updates, and technical setup",
+            "Some advanced features require paid plans"
+          ],
+          "bestFor": "Organizations that need self-hosted community chat plus customer messaging capabilities.",
+          "url": "https://rocket.chat/?ref=flowmatrix"
+        },
+        {
+          "name": "Zulip",
+          "description": "Zulip is an open-source team chat app organized around threaded topics for structured conversations.",
+          "pros": [
+            "Threaded topics keep large conversations organized and searchable",
+            "Open-source and self-hostable with strong email integration"
+          ],
+          "cons": [
+            "Topic-based threading has a learning curve for new users",
+            "Smaller third-party ecosystem than Discord or Slack"
+          ],
+          "bestFor": "Distributed teams that prefer organized asynchronous discussions over fast-moving chat.",
+          "url": "https://zulip.com/?ref=flowmatrix"
+        }
+      ],
+      "bestFor": "Community managers, teams, and organizations looking for Discord-like chat with stronger control, compliance, or workplace integrations.",
+      "pricing": "Free to $25/user/month.",
+      "features": [
+        "Text channels, direct messages, and threaded replies",
+        "Voice and video calls or huddles",
+        "Roles, permissions, and moderation tools",
+        "File sharing, search, and integrations",
+        "Self-hosting or federation options where supported"
+      ]
+    }
+  },
+  {
+    "slug": "sendinblue-alternatives",
+    "title": "Sendinblue Alternatives",
+    "description": "This page compares Sendinblue alternatives for email marketing, marketing automation, SMS, and CRM. It covers tools for small businesses, e-commerce stores, and growing teams that need newsletter campaigns, automated journeys, and contact segmentation. Each alternative includes pros, cons, best-fit use cases, and an official link.",
+    "category": "Communication",
+    "tags": ["email marketing", "marketing automation", "CRM", "SMS marketing"],
+    "details": {
+      "original": "Sendinblue",
+      "alternatives": [
+        {
+          "name": "Mailchimp",
+          "description": "Popular all-in-one email marketing platform with campaign builder, automation, and audience management.",
+          "pros": [
+            "Strong brand recognition and easy campaign creation",
+            "Broad feature set including landing pages, forms, and basic CRM",
+            "Free plan available for small lists"
+          ],
+          "cons": [
+            "Costs rise quickly as contact counts grow",
+            "Advanced automation and segmentation can be complex on lower tiers",
+            "Deliverability and support can vary by plan"
+          ],
+          "bestFor": "Small businesses and creators that want an easy-to-use email marketing platform with room to grow.",
+          "url": "https://mailchimp.com/?ref=flowmatrix"
+        },
+        {
+          "name": "ActiveCampaign",
+          "description": "Email marketing and CRM platform known for advanced automation and sales pipeline features.",
+          "pros": [
+            "Powerful automation builder with conditional logic",
+            "Built-in CRM and sales automation",
+            "Good segmentation and personalization"
+          ],
+          "cons": [
+            "Steeper learning curve than simpler email tools",
+            "Pricing increases with contacts and features",
+            "Can be overkill for basic newsletters"
+          ],
+          "bestFor": "Growing businesses and sales teams that need sophisticated automation and CRM in one platform.",
+          "url": "https://www.activecampaign.com/?ref=flowmatrix"
+        },
+        {
+          "name": "MailerLite",
+          "description": "Affordable email marketing tool focused on newsletters, automation, and simple website builders.",
+          "pros": [
+            "Competitive pricing with a generous free plan",
+            "Clean, easy-to-use editor and automation builder",
+            "Includes landing pages and website builder"
+          ],
+          "cons": [
+            "Fewer advanced CRM and sales features",
+            "Limited e-commerce depth compared with specialized platforms",
+            "Support and integrations may be less extensive on lower tiers"
+          ],
+          "bestFor": "Small businesses, bloggers, and nonprofits that need affordable email marketing and simple automation.",
+          "url": "https://www.mailerlite.com/?ref=flowmatrix"
+        },
+        {
+          "name": "GetResponse",
+          "description": "Email marketing and online marketing suite with automation, landing pages, and webinar tools.",
+          "pros": [
+            "All-in-one toolkit including email, landing pages, and webinars",
+            "Strong automation and autoresponder features",
+            "Free plan and affordable entry tiers"
+          ],
+          "cons": [
+            "Interface can feel dated or complex in places",
+            "Some advanced features require higher plans",
+            "Deliverability and support quality can vary by plan"
+          ],
+          "bestFor": "Small to mid-sized businesses that want email marketing plus webinars and landing pages in one suite.",
+          "url": "https://www.getresponse.com/?ref=flowmatrix"
+        },
+        {
+          "name": "Klaviyo",
+          "description": "E-commerce-focused marketing automation platform built for personalized email and SMS campaigns.",
+          "pros": [
+            "Deep e-commerce integrations and customer data segmentation",
+            "Strong automated flows for abandoned carts and post-purchase",
+            "Advanced personalization and reporting"
+          ],
+          "cons": [
+            "Pricing can be high for large contact lists",
+            "Best value mainly for e-commerce businesses",
+            "Steeper setup for non-e-commerce use cases"
+          ],
+          "bestFor": "E-commerce brands that need advanced segmentation, automation, and SMS tied to online store data.",
+          "url": "https://www.klaviyo.com/?ref=flowmatrix"
+        }
+      ],
+      "bestFor": "Small businesses, e-commerce brands, and marketing teams looking for Sendinblue alternatives with stronger automation, deliverability, or e-commerce features.",
+      "pricing": "Free to $500+/month depending on contact volume and feature tier.",
+      "features": [
+        "Email campaign builder",
+        "Marketing automation workflows",
+        "Contact segmentation and list management",
+        "Landing pages and signup forms",
+        "SMS marketing",
+        "Analytics and reporting"
+      ]
+    }
+  },
+  {
+    "slug": "liveblocks-alternatives",
+    "title": "Liveblocks Alternatives",
+    "description": "This page compares Liveblocks alternatives for adding real-time collaboration, presence, and shared state to web apps. It covers managed realtime platforms, CRDT frameworks, and backend services, including pros, cons, and pricing considerations. Use it to shortlist the right infrastructure for multiplayer features such as cursors, comments, and live data sync.",
+    "category": "Realtime",
+    "tags": ["Realtime", "Collaboration", "WebSockets", "Presence", "CRDT"],
+    "details": {
+      "original": "Liveblocks",
+      "alternatives": [
+        {
+          "name": "Ably",
+          "description": "Ably is a managed realtime messaging platform with pub/sub, presence, and history for collaborative and live apps.",
+          "pros": [
+            "Global edge network with high reliability and low latency",
+            "Built-in presence, history, and connection recovery",
+            "Strong SDK coverage across web, mobile, and server"
+          ],
+          "cons": [
+            "Pricing scales with messages and connections and can get expensive at high volume",
+            "Not a turnkey CRDT or collaborative editing layer—requires custom sync logic"
+          ],
+          "bestFor": "Teams that need scalable pub/sub and presence infrastructure but want to build collaboration logic themselves.",
+          "url": "https://ably.com/?ref=flowmatrix"
+        },
+        {
+          "name": "Pusher",
+          "description": "Pusher Channels provides hosted WebSocket APIs for realtime features such as notifications, chat, and live updates.",
+          "pros": [
+            "Simple APIs and quick setup for realtime messaging",
+            "Managed WebSocket infrastructure with presence channels",
+            "Good documentation and broad client library support"
+          ],
+          "cons": [
+            "Limited built-in support for CRDTs or document collaboration",
+            "Can become costly for high concurrent connection or message volumes"
+          ],
+          "bestFor": "Developers adding realtime notifications, chat, or live updates without managing WebSocket servers.",
+          "url": "https://pusher.com/?ref=flowmatrix"
+        },
+        {
+          "name": "Supabase Realtime",
+          "description": "Supabase Realtime adds broadcast, presence, and Postgres change listeners to the Supabase platform.",
+          "pros": [
+            "Integrated with Postgres, auth, and storage in one platform",
+            "Generous free tier and open-source core",
+            "Presence and broadcast APIs are straightforward to adopt"
+          ],
+          "cons": [
+            "Not a full CRDT or multiplayer document editing solution out of the box",
+            "Scaling and operational behavior depend on your Supabase setup"
+          ],
+          "bestFor": "Teams already using Supabase or Postgres that need realtime broadcasts and presence.",
+          "url": "https://supabase.com/?ref=flowmatrix"
+        },
+        {
+          "name": "Firebase",
+          "description": "Firebase offers realtime database and Firestore listeners plus Cloud Messaging for live app updates.",
+          "pros": [
+            "Mature ecosystem with realtime listeners, auth, and hosting",
+            "Strong mobile SDKs and offline support in Firestore",
+            "Free tier and predictable Blaze usage pricing"
+          ],
+          "cons": [
+            "Realtime Database has limited querying and scaling characteristics compared with modern alternatives",
+            "Vendor lock-in and complex cost modeling at scale"
+          ],
+          "bestFor": "Mobile and web teams already in the Google or Firebase ecosystem needing live data sync.",
+          "url": "https://firebase.google.com/?ref=flowmatrix"
+        },
+        {
+          "name": "PubNub",
+          "description": "PubNub is a realtime communication platform for pub/sub messaging, presence, and live audience engagement.",
+          "pros": [
+            "Global network with low-latency messaging and presence",
+            "Supports chat, notifications, and IoT use cases",
+            "Robust SDKs and enterprise-grade reliability"
+          ],
+          "cons": [
+            "Usage-based pricing can escalate with high message or MAU counts",
+            "Collaborative editing and CRDT features require custom implementation"
+          ],
+          "bestFor": "Enterprises building chat, live events, or IoT realtime features at global scale.",
+          "url": "https://www.pubnub.com/?ref=flowmatrix"
+        },
+        {
+          "name": "Yjs",
+          "description": "Yjs is an open-source CRDT framework for building collaborative editing and shared state without a central conflict resolver.",
+          "pros": [
+            "Open-source and self-hostable with no vendor lock-in",
+            "Excellent CRDT performance for collaborative text and rich data",
+            "Integrates with many editors and awareness/presence providers"
+          ],
+          "cons": [
+            "You must build or host the realtime transport and persistence layer",
+            "Requires deeper understanding of CRDTs and conflict semantics"
+          ],
+          "bestFor": "Teams with engineering resources that want full control over collaborative editing infrastructure.",
+          "url": "https://yjs.dev/?ref=flowmatrix"
+        },
+        {
+          "name": "Socket.IO",
+          "description": "Socket.IO is an open-source realtime engine with fallback transports and rooms for building custom WebSocket apps.",
+          "pros": [
+            "Open-source, self-hostable, and widely adopted",
+            "Rooms, namespaces, and acknowledgements simplify realtime app design",
+            "Automatic reconnection and transport fallback"
+          ],
+          "cons": [
+            "You manage scaling, Redis adapters, and infrastructure yourself",
+            "No built-in presence, CRDT, or collaborative editing primitives"
+          ],
+          "bestFor": "Developers who want a flexible open-source realtime transport and are comfortable managing infrastructure.",
+          "url": "https://socket.io/?ref=flowmatrix"
+        }
+      ],
+      "bestFor": "Teams building collaborative web or mobile apps that need real-time presence, shared state, or messaging but want to evaluate Liveblocks alternatives.",
+      "pricing": "Free to $500/month; enterprise plans custom.",
+      "features": [
+        "Real-time presence and cursor tracking",
+        "Collaborative editing and shared state sync",
+        "Threaded comments, mentions, and notifications",
+        "Scalable WebSocket and pub/sub infrastructure",
+        "Conflict resolution with CRDTs or operational transforms",
+        "Auth, permissions, and access control integration"
+      ]
+    }
+  },
+  {
+    "slug": "google-gemini-alternatives",
+    "title": "Google Gemini Alternatives",
+    "description": "This page compares Google Gemini with other AI productivity assistants for writing, research, coding, and workflow support. It covers key features, pricing considerations, pros and cons, and ideal use cases for each alternative.",
+    "category": "Productivity",
+    "tags": ["AI assistants", "Productivity", "Research"],
+    "details": {
+      "original": "Google Gemini",
+      "alternatives": [
+        {
+          "name": "ChatGPT",
+          "description": "A general-purpose AI assistant for writing, analysis, coding, and image understanding.",
+          "pros": [
+            "Broad multimodal capabilities and a large tool ecosystem",
+            "Strong writing, coding, and data analysis support"
+          ],
+          "cons": [
+            "Free tier has usage limits and can be slower at peak times",
+            "Privacy and data-governance controls vary by plan"
+          ],
+          "bestFor": "Individuals and teams that need a flexible AI assistant for everyday knowledge work.",
+          "url": "https://chatgpt.com/?ref=flowmatrix"
+        },
+        {
+          "name": "Microsoft Copilot",
+          "description": "Microsoft's AI assistant integrated with Windows, Bing, and Microsoft 365 apps.",
+          "pros": [
+            "Deep integration with Microsoft 365 and Windows",
+            "Enterprise-grade security and admin controls in business plans"
+          ],
+          "cons": [
+            "Best features require a Microsoft 365 Copilot license",
+            "Consumer and work versions have different capabilities and limits"
+          ],
+          "bestFor": "Organizations already using Microsoft 365 that want AI embedded in familiar productivity tools.",
+          "url": "https://copilot.microsoft.com/?ref=flowmatrix"
+        },
+        {
+          "name": "Claude",
+          "description": "Anthropic's AI assistant focused on long-context document analysis, writing, and coding.",
+          "pros": [
+            "Strong long-document reasoning and analysis",
+            "Clear, careful writing style with useful artifact workflows"
+          ],
+          "cons": [
+            "No native image generation",
+            "Free plan has message limits during high demand"
+          ],
+          "bestFor": "Writers, researchers, and developers who need a reliable assistant for long documents and code.",
+          "url": "https://www.anthropic.com/claude?ref=flowmatrix"
+        }
+      ],
+      "bestFor": "Professionals, students, and teams who want AI assistance for writing, research, and workflow automation beyond Google Gemini.",
+      "pricing": "Free to $30/user/month.",
+      "features": [
+        "Multimodal chat with text, images, and files",
+        "Web-grounded answers with citations",
+        "Document drafting, summarization, and analysis",
+        "Integrations with productivity apps and APIs"
+      ]
+    }
   }
 ]
