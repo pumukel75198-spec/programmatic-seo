@@ -275,8 +275,18 @@ def _workflow_script(workflow: dict[str, Any]) -> str:
     env_defaults = {name: _dry_run_env_value(name) for name in env_names}
     # Input files the snippets read but the kit does not ship: --dry-run creates
     # deterministic mock files so the kit is self-contained.
+    # Only create mock inputs for RELATIVE paths. An absolute path such as
+    # ``/products.json`` cannot be created by the sandbox (read-only root) and
+    # is already covered by the _safe_open mock below, which intercepts every
+    # missing read and returns deterministic mock content.
     input_files = sorted(
-        set(re.findall(r"['\"]([\w./-]+\.(?:json|csv|txt))['\"]", body))
+        {
+            path
+            for path in re.findall(
+                r"['\"]([\w./-]+\.(?:json|csv|txt))['\"]", body
+            )
+            if not path.startswith(("/", "http://", "https://"))
+        }
     )
     indented = "\n".join(
         ("    " + line) if line.strip() else "" for line in body.splitlines()
