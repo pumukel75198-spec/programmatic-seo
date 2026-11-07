@@ -1,6 +1,6 @@
 # Customer Audit Report
 
-Generated: 2026-11-07 15:00 UTC
+Generated: 2026-11-07 15:05 UTC
 
 ## Summary
 
@@ -8,7 +8,7 @@ Generated: 2026-11-07 15:00 UTC
 | --- | ---: | ---: | ---: | ---: |
 | APIs | 0 | 0/0 OK | 0 | 0 |
 | Alternatives | 0 | 0/0 OK | 0 | 0 |
-| Workflows | 4 | 1/4 OK | 1 | 3 |
+| Workflows | 3 | 2/3 OK | 2 | 1 |
 
 - `npm run build`: OK
 - git commit & push: OK
@@ -380,12 +380,6 @@ Ran 3 tests in 0.001s
 
 FAILED (failures=2)
 
-
-### workflow:auth0-sso-provisioning
-- step 3: code_snippet has fewer than 8 lines
-
-### workflow:mongodb-data-pipeline
-- step 4: code_snippet has fewer than 8 lines
 
 ### workflow:postgres-backup-reporting
 - workflow kit file 'mock_data.json' is <= 100 bytes

@@ -1598,7 +1598,7 @@
       "errors": [
         "workflow kit file 'mock_data.json' is <= 100 bytes"
       ],
-      "checked_at": "2026-11-07T15:04:23.569048+00:00"
+      "checked_at": "2026-11-07T15:11:41.844139+00:00"
     },
     "workflow:redis-rate-limit-store": {
       "status": "verified_clean",
@@ -1889,5 +1889,5 @@
       "checked_at": "2026-11-07T14:27:13.475236+00:00"
     }
   },
-  "updated_at": "2026-11-07T15:04:26.209879+00:00"
+  "updated_at": "2026-11-07T15:11:41.985758+00:00"
 }
