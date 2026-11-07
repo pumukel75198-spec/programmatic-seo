@@ -1,8 +1,8 @@
 # FlowMatrix – 100 % Product Audit Report
 
-Generated: 2026-11-07 06:05 UTC
+Generated: 2026-11-07 06:12 UTC
 
-**Products checked:** 179 · **Passing:** 176 · **Failing:** 3
+**Products checked:** 176 · **Passing:** 176 · **Failing:** 0
 
 | Slug | Type | Price | Pages | Dry-Run Exit | ZIP OK | Domains OK | R2 Synced | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -16,7 +16,6 @@ Generated: 2026-11-07 06:05 UTC
 | watson-assistant-helpdesk | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
 | podcast-transcription-pipeline | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | ai-voiceover-production | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
-| meeting-transcription-summaries | workflow | €34.99 | 9 | 124 | no | yes | no | FAIL (2) |
 | ai-image-generation-pipeline | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | semantic-search-knowledge-base | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
 | hybrid-search-product-catalog | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
@@ -47,7 +46,6 @@ Generated: 2026-11-07 06:05 UTC
 | postgres-backup-reporting | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
 | redis-rate-limit-store | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
 | google-sheets-reporting-hub | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
-| github-issue-triage | workflow | €19.99 | 9 | 1 | no | yes | no | FAIL (3) |
 | deployment-monitoring-alerts | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
 | feature-flag-rollout | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | secrets-rotation-audit | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
@@ -75,7 +73,6 @@ Generated: 2026-11-07 06:05 UTC
 | social-media-analytics | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | shopify-order-automation | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | inventory-sync-automation | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
-| checkout-payment-recovery | workflow | €34.99 | 10 | 1 | no | yes | no | FAIL (3) |
 | weather-driven-ops-alerts | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | store-locator-geocoding | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | asset-backup-automation | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
@@ -185,20 +182,3 @@ Generated: 2026-11-07 06:05 UTC
 | api-ai-image-generator | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | sentry-performance-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | twitch-analytics-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
-
-## Findings
-
-### meeting-transcription-summaries (workflow)
-- [S1] sandbox exit code 124: TimeoutExpired after 25s: Command '['/Users/tribunus/Desktop/programmatic-seo/.venv/bin/python', 'workflow.py', '--dry-run']' timed out after 25 seconds
-- [S1] workflow --dry-run produced no stdout
-
-### github-issue-triage (workflow)
-- [S1] sandbox exit code 1: AttributeError: 'str' object has no attribute 'get'
-- [S1] sandbox stderr contains Traceback
-- [S1] workflow --dry-run produced no stdout
-
-### checkout-payment-recovery (workflow)
-- [S1] sandbox exit code 1: AttributeError: 'list' object has no attribute 'get'
-- [S1] sandbox stderr contains Traceback
-- [S1] workflow --dry-run produced no stdout
-
