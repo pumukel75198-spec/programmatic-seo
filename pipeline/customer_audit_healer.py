@@ -1178,7 +1178,7 @@ Return a JSON object with ONLY the fields that must change. Allowed keys:
 - "tools": full corrected list of tool names
 - "before_you_start": full corrected list of prerequisites
 - "resources": full corrected list of {{"label","url"}} objects
-- "steps": list of {{"index": 1-based, "code_snippet": "...", "technical_explanation": "...", "actions": [...], "checklist": [...], "expectedResult": "...", "links": [{{"label","url"}}]}}
+- "steps": list of {{"index": 1-based, "code_snippet": "...", "technical_explanation": "...", "actions": [...], "checklist": [...], "expectedResult": "...", "links": [{{"label","url"}}], "mock_response": <JSON value the snippet expects>}}
 
 HARD RULES
 - 100% English, no German words or umlauts.
@@ -1223,6 +1223,7 @@ HARD RULES
             "checklist",
             "expectedResult",
             "links",
+            "mock_response",
         ):
             if field in update and update[field] != steps[index].get(field):
                 steps[index][field] = update[field]

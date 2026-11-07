@@ -1,14 +1,14 @@
 # Customer Audit Report
 
-Generated: 2026-11-07 14:15 UTC
+Generated: 2026-11-07 14:27 UTC
 
 ## Summary
 
 | Product type | Checked | OK | Auto-healed | Failed |
 | --- | ---: | ---: | ---: | ---: |
-| APIs | 106 | 74/106 OK | 24 | 32 |
+| APIs | 106 | 80/106 OK | 6 | 26 |
 | Alternatives | 113 | 113/113 OK | 0 | 0 |
-| Workflows | 86 | 75/86 OK | 0 | 11 |
+| Workflows | 86 | 80/86 OK | 5 | 6 |
 
 - `npm run build`: OK
 - git commit & push: OK
@@ -33,7 +33,6 @@ Generated: 2026-11-07 14:15 UTC
 
 ### api:clerk-authentication-api
 - api_client.py does not mention the API title
-- API kit file 'requests.http' is <= 100 bytes
 
 ### api:deepgram-speech-api
 - API sandbox failed: ing...
@@ -45,7 +44,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-5t1k_7l9/test_mock.py", line 103, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-sao43qee/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -54,7 +53,7 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-5t1k_7l9/test_mock.py", line 76, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-sao43qee/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: DeepgramResponse(status='success', data={'ok': True}) is not an instance of <class 'dict'>
@@ -80,7 +79,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-wmjf4mt7/test_mock.py", line 103, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-4le3gqpy/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -89,13 +88,13 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-wmjf4mt7/test_mock.py", line 76, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-4le3gqpy/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: ApiResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>
 
 ----------------------------------------------------------------------
-Ran 3 tests in 0.001s
+Ran 3 tests in 0.002s
 
 FAILED (failures=2)
 
@@ -109,7 +108,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-09a8qc5z/test_mock.py", line 103, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-176obli8/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -118,7 +117,7 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-09a8qc5z/test_mock.py", line 76, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-176obli8/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: WatsonAssistantResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>
@@ -137,7 +136,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-nsaj77cr/test_mock.py", line 103, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-6s1dcopw/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -146,7 +145,7 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-nsaj77cr/test_mock.py", line 76, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-6s1dcopw/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: CognitiveServiceResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>
@@ -165,7 +164,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-5yh0ypcp/test_mock.py", line 103, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-0qlnzsrb/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -174,7 +173,7 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-5yh0ypcp/test_mock.py", line 76, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-0qlnzsrb/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: GraphAPIResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>
@@ -194,7 +193,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-466ogvls/test_mock.py", line 103, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-fogasq21/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -203,7 +202,7 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-466ogvls/test_mock.py", line 76, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-fogasq21/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: ApiResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>
@@ -219,10 +218,8 @@ FAILED (failures=2)
 
 ### api:pinecone-vector-api
 - api_client.py does not mention the API title
-- API kit file 'requests.http' is <= 100 bytes
 
 ### api:plaid-financial-api
-- API kit file 'requests.http' is <= 100 bytes
 - API sandbox failed:  500: server error. Retrying in 16 seconds...
 WARNING:api_client:HTTPError 500: server error. Retrying in 32 seconds...
 ERROR:api_client:Max retries exceeded.
@@ -231,7 +228,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-n6cy3u65/test_mock.py", line 103, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-czsifmyg/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -240,7 +237,7 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-n6cy3u65/test_mock.py", line 76, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-czsifmyg/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: ApiResponse(status='success', data={'ok': True}, error=None) is not an instance of <class 'dict'>
@@ -257,19 +254,13 @@ FAILED (failures=2)
 ### api:sendinblue-email-api
 - api_client.py does not implement the endpoint host 'api.sendinblue.com'
 - requests.http: does not use the endpoint host 'api.sendinblue.com'
-- API kit file 'requests.http' is <= 100 bytes
 
 ### api:sendinblue-sms-api
 - api_client.py does not implement the endpoint host 'api.sendinblue.com'
 - requests.http: does not use the endpoint host 'api.sendinblue.com'
-- API kit file 'requests.http' is <= 100 bytes
-
-### api:sentry-performance-api
-- API kit file 'requests.http' is <= 100 bytes
 
 ### api:shopify-admin-api
 - requests.http: does not use the endpoint host '{shop}.myshopify.com'
-- API kit file 'requests.http' is <= 100 bytes
 
 ### api:squarespace-api
 - API sandbox failed: unittest failed:
@@ -279,7 +270,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-wnr_0tus/test_mock.py", line 103, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-oxd7_cfy/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -288,7 +279,7 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-wnr_0tus/test_mock.py", line 76, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-oxd7_cfy/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: ApiResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>
@@ -309,7 +300,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-0ndgd04_/test_mock.py", line 103, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-m8deditd/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -318,7 +309,7 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-0ndgd04_/test_mock.py", line 76, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-m8deditd/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: ApiResponse(status='success', data={'ok': True}, error=None) is not an instance of <class 'dict'>
@@ -329,23 +320,8 @@ Ran 3 tests in 0.001s
 FAILED (failures=2)
 
 
-### api:telegram-bot-api
-- API kit file 'requests.http' is <= 100 bytes
-
-### api:tibber-api
-- API kit file 'requests.http' is <= 100 bytes
-
-### api:tinkr-api
-- API kit file 'requests.http' is <= 100 bytes
-
-### api:together-ai-api
-- API kit file 'requests.http' is <= 100 bytes
-
 ### api:twilio-messaging-api
 - requests.http: does not use the endpoint host 'api.twilio.com'
-
-### api:twitch-helix-api
-- API kit file 'requests.http' is <= 100 bytes
 
 ### api:upstash-redis-api
 - API sandbox failed: unittest failed:
@@ -355,7 +331,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-qrgdphsh/test_mock.py", line 103, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-jn6e77n3/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -364,7 +340,7 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-qrgdphsh/test_mock.py", line 76, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-jn6e77n3/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: RedisResponse(status='success', data={'ok': True}, error=None) is not an instance of <class 'dict'>
@@ -376,7 +352,6 @@ FAILED (failures=2)
 
 
 ### api:vercel-blob-api
-- API kit file 'requests.http' is <= 100 bytes
 - API sandbox failed: .
 WARNING:root:HTTPError 500: server error. Retrying...
 WARNING:root:HTTPError 500: server error. Retrying...
@@ -386,7 +361,7 @@ F.F
 FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-c604j9m_/test_mock.py", line 103, in test_http_error_is_handled
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-nee9wewp/test_mock.py", line 103, in test_http_error_is_handled
     self.assertTrue(result is None or isinstance(result, (dict, list, str)))
     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: False is not true
@@ -395,34 +370,18 @@ AssertionError: False is not true
 FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-c604j9m_/test_mock.py", line 76, in test_successful_call_and_auth_header
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-nee9wewp/test_mock.py", line 76, in test_successful_call_and_auth_header
     self.assertIsInstance(result, dict)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
 AssertionError: BlobResponse(status=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>
 
 ----------------------------------------------------------------------
-Ran 3 tests in 0.002s
+Ran 3 tests in 0.001s
 
 FAILED (failures=2)
 
 
-### workflow:ai-image-generation-pipeline
-- workflow.py --dry-run failed: Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-dy2fskct/workflow.py", line 181, in <module>
-    main()
-    ~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-dy2fskct/workflow.py", line 173, in main
-    run_workflow()
-    ~~~~~~~~~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-dy2fskct/workflow.py", line 129, in run_workflow
-    manifest = upload_to_vercel_blob(images)
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-dy2fskct/workflow.py", line 125, in upload_to_vercel_blob
-    manifest.append(response_data.get('url'))
-                    ^^^^^^^^^^^^^^^^^
-AttributeError: 'list' object has no attribute 'get'
-
 ### workflow:auth0-sso-provisioning
-- workflow kit file 'mock_data.json' is <= 100 bytes
 - step 1: technical_explanation too short (0 < 250 chars)
 - step 1: 'what you need to do' actions missing
 - step 1: checklist missing
@@ -442,65 +401,24 @@ AttributeError: 'list' object has no attribute 'get'
 - step 4: 'what you need to do' actions missing
 - step 4: checklist missing
 - step 4: expected result missing
+- step 4: links missing
 
 ### workflow:bank-transaction-enrichment
 - workflow.py --dry-run failed: Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-yop39jvo/workflow.py", line 207, in <module>
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-aq1ndhpf/workflow.py", line 207, in <module>
     main()
     ~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-yop39jvo/workflow.py", line 199, in main
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-aq1ndhpf/workflow.py", line 199, in main
     run_workflow()
     ~~~~~~~~~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-yop39jvo/workflow.py", line 114, in run_workflow
-    categorized_merchants = categorize_merchants(transactions)
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-yop39jvo/workflow.py", line 110, in categorize_merchants
-    category = json.loads(response.read().decode('utf-8')).get('choices', [{}])[0].get('message', {}).get('content', '')
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'list' object has no attribute 'get'
-
-### workflow:content-similarity-audit
-- workflow kit file 'requests.http' is <= 100 bytes
-- workflow.py --dry-run failed: Loaded 3 articles.
-{'id': '1', 'text': 'This is the first article.'}
-
-Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-77t54hj7/workflow.py", line 183, in <module>
-    main()
-    ~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-77t54hj7/workflow.py", line 175, in main
-    run_workflow()
-    ~~~~~~~~~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-77t54hj7/workflow.py", line 103, in run_workflow
-    embeddings = embed_articles(articles)
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-77t54hj7/workflow.py", line 101, in embed_articles
-    return response_data.get('embeddings', [])  # Use .get() to avoid KeyError
-           ^^^^^^^^^^^^^^^^^
-AttributeError: 'list' object has no attribute 'get'
-
-### workflow:feature-flag-rollout
-- workflow kit file 'mock_data.json' is <= 100 bytes
-- workflow kit file 'requests.http' is <= 100 bytes
-
-### workflow:hybrid-search-product-catalog
-- workflow kit file 'requests.http' is <= 100 bytes
-
-### workflow:llm-evaluation-benchmark
-- workflow.py --dry-run failed: Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ppq0v50x/workflow.py", line 195, in <module>
-    main()
-    ~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ppq0v50x/workflow.py", line 187, in main
-    run_workflow()
-    ~~~~~~~~~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ppq0v50x/workflow.py", line 98, in run_workflow
-    openai_responses = run_openai_baseline(prompts)
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-ppq0v50x/workflow.py", line 95, in run_openai_baseline
-    responses.append(result.get('choices', [{}])[0].get('message', {}).get('content', ''))
-                     ^^^^^^^^^^
-AttributeError: 'list' object has no attribute 'get'
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-aq1ndhpf/workflow.py", line 155, in run_workflow
+    summary = summarize_spending(categorized_merchants)
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-aq1ndhpf/workflow.py", line 149, in summarize_spending
+    if category in spending_summary:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: cannot use 'dict' as a dict key (unhashable type: 'dict')
 
 ### workflow:mongodb-data-pipeline
-- workflow kit file 'mock_data.json' is <= 100 bytes
 - step 1: technical_explanation too short (0 < 250 chars)
 - step 1: 'what you need to do' actions missing
 - step 1: checklist missing
@@ -520,19 +438,20 @@ AttributeError: 'list' object has no attribute 'get'
 - step 4: 'what you need to do' actions missing
 - step 4: checklist missing
 - step 4: expected result missing
+- step 4: links missing
 
 ### workflow:notion-task-sync
 - workflow.py --dry-run failed: Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-84409r0a/workflow.py", line 208, in <module>
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-aj4j0mdr/workflow.py", line 208, in <module>
     main()
     ~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-84409r0a/workflow.py", line 200, in main
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-aj4j0mdr/workflow.py", line 200, in main
     run_workflow()
     ~~~~~~~~~~~~^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-84409r0a/workflow.py", line 118, in run_workflow
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-aj4j0mdr/workflow.py", line 118, in run_workflow
     sync_tasks_with_asana(open_tasks)
     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-84409r0a/workflow.py", line 90, in sync_tasks_with_asana
+  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-wf-aj4j0mdr/workflow.py", line 90, in sync_tasks_with_asana
     task_id = task.get('external_id')
               ^^^^^^^^
 AttributeError: 'str' object has no attribute 'get'
