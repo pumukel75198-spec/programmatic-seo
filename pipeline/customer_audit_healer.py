@@ -2215,6 +2215,15 @@ def main(argv: list[str] | None = None) -> int:
             git_ok = _run_git()
     _write_report(counts, state, build_ok=build_ok, git_ok=git_ok)
 
+    failed = sum(
+        counts[kind]["total"] - counts[kind]["ok"]
+        for kind in ("api", "alternative", "workflow")
+    )
+    if build_ok is False:
+        failed += 1
+    if git_ok is False:
+        failed += 1
+
     log("=" * 78)
     log(
         "CUSTOMER AUDIT COMPLETE | "
@@ -2224,9 +2233,12 @@ def main(argv: list[str] | None = None) -> int:
         f"(healed {counts['alternative']['healed']}) | "
         f"Workflows {counts['workflow']['ok']}/{counts['workflow']['total']} "
         f"(healed {counts['workflow']['healed']}) | "
-        f"LLM calls {counters['llm_calls']}"
+        f"LLM calls {counters['llm_calls']} | "
+        f"failed {failed}"
     )
-    return 0
+    # A non-zero exit code is the hard pre-deploy gate: the daemon refuses to
+    # commit/push (and therefore to deploy) while any product still fails.
+    return 0 if failed == 0 else 1
 
 
 if __name__ == "__main__":

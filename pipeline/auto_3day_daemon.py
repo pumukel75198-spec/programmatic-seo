@@ -2348,23 +2348,27 @@ def _finalize(
 
 
 def run_customer_audit(args: argparse.Namespace) -> bool:
-    """Run the end-to-end customer audit as the final mandatory gate.
+    """Run the end-to-end customer audit as the mandatory **pre-deploy** gate.
 
-    Every future 3-day batch must end with the same customer-facing quality
-    control that a paying buyer would perform: open the PDF, unzip the kit and
-    execute the code. The audit heals defects autonomously and writes
-    ``CUSTOMER_AUDIT_REPORT.md``.
+    Every 3-day batch must be audited exactly the way a paying buyer would
+    experience it (open the PDF, unzip the kit, execute the code) **before**
+    anything is committed, pushed or deployed. The audit heals defects
+    autonomously and writes ``CUSTOMER_AUDIT_REPORT.md``.
+
+    ``--skip-git`` is always passed: the daemon performs the single final
+    commit/push (which triggers the Cloudflare Pages deploy) only after this
+    gate has passed. This guarantees that a failing audit can never reach
+    production.
     """
-    log("[AUDIT] starting end-to-end customer audit & auto-heal")
+    log("[AUDIT] starting end-to-end customer audit & auto-heal (pre-deploy gate)")
     try:
         from . import customer_audit_healer
     except Exception as error:  # noqa: BLE001 - never abort the batch here
         log(f"[AUDIT] could not import customer_audit_healer: {error}")
         return False
 
-    audit_args: list[str] = []
-    if getattr(args, "skip_git", False):
-        audit_args.append("--skip-git")
+    # The daemon owns the final git commit/push, so the audit must never push.
+    audit_args: list[str] = ["--skip-git"]
     if getattr(args, "skip_build", False):
         audit_args.append("--skip-build")
     try:
@@ -2737,12 +2741,36 @@ def main(argv: list[str] | None = None) -> int:
             return 1
 
     # ------------------------------------------------------------------ #
-    # Delivery
+    # Mandatory pre-deploy gate: end-to-end customer audit & auto-heal
     # ------------------------------------------------------------------ #
     log(
-        f"[DELIVERY] {len(successful_apis)} API kits, "
+        f"[AUDIT] {len(successful_apis)} API kits, "
         f"{len(successful_alternatives)} alternatives, "
-        f"{len(successful_workflows)} workflow kits ready – starting git sync"
+        f"{len(successful_workflows)} workflow kits ready – "
+        "running customer audit BEFORE delivery/deploy"
+    )
+    audit_ok = run_customer_audit(args)
+    state["customer_audit_ok"] = audit_ok
+    sync_state()
+    if not audit_ok:
+        log(
+            "[FATAL] customer audit failed – refusing to commit, push or deploy. "
+            "See CUSTOMER_AUDIT_REPORT.md; artifacts remain in R2 and will be "
+            "retried by the next launchd run."
+        )
+        state["status"] = "audit-failed"
+        state["finished_at"] = _now()
+        sync_state()
+        return 1
+
+    # ------------------------------------------------------------------ #
+    # Delivery (only after the audit passed)
+    # ------------------------------------------------------------------ #
+    log(
+        f"[DELIVERY] audit passed – committing and pushing "
+        f"{len(successful_apis)} API kits, "
+        f"{len(successful_alternatives)} alternatives, "
+        f"{len(successful_workflows)} workflow kits"
     )
     if not args.no_launchd:
         write_plist(python_bin)
@@ -2768,18 +2796,6 @@ def main(argv: list[str] | None = None) -> int:
     state["status"] = "success"
     state["finished_at"] = _now()
     sync_state()
-
-    # ------------------------------------------------------------------ #
-    # Mandatory final gate: end-to-end customer audit & auto-heal
-    # ------------------------------------------------------------------ #
-    audit_ok = run_customer_audit(args)
-    state["customer_audit_ok"] = audit_ok
-    sync_state()
-    if not audit_ok:
-        log(
-            "[AUDIT] customer audit reported remaining issues – see "
-            "CUSTOMER_AUDIT_REPORT.md (batch artifacts are still delivered)"
-        )
 
     if not args.no_launchd:
         try:
