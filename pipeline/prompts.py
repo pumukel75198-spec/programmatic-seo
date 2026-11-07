@@ -126,6 +126,8 @@ def build_workflow_prompt(
     available_tools: list[dict[str, Any]],
     feedback: str | None = None,
     related_alternatives: list[dict[str, Any]] | None = None,
+    step_assignment: str | None = None,
+    deterministic_block: str | None = None,
 ) -> str:
     details = workflow.get("details", {})
     step_list = "\n".join(
@@ -135,6 +137,19 @@ def build_workflow_prompt(
     feedback_block = (
         f"\nVALIDATOR CORRECTIONS (must be fixed):\n{feedback}\n"
         if feedback
+        else ""
+    )
+    assignment_block = (
+        "\nBINDING STEP ASSIGNMENT (selected by the pipeline – follow it exactly)\n"
+        f"{step_assignment}\n"
+        if step_assignment
+        else ""
+    )
+    deterministic_meta = (
+        "\nDETERMINISTIC METADATA (already written by Python into the record – "
+        "do NOT output, change or contradict it)\n"
+        f"{deterministic_block}\n"
+        if deterministic_block
         else ""
     )
 
@@ -152,7 +167,7 @@ Tools in this workflow: {', '.join(details.get('tools') or []) or '—'}
 
 MANDATORY API BUILDING BLOCKS (every one MUST be used in at least one step)
 {_api_building_blocks(available_tools)}
-
+{assignment_block}{deterministic_meta}
 EXISTING STEP OUTLINE
 {step_list}
 
@@ -206,7 +221,7 @@ Return a complete, practical guide for EVERY step. ALL text MUST be in precise t
 
 HARD RULES
 - STEP COUNT: choose the number of steps the topic genuinely requires, between {config.MIN_STEPS} and {config.MAX_STEPS}. A compact workflow may need 3–4 steps; a complex advanced workflow may need 6–8. Do NOT pad and do NOT abbreviate. Every necessary intermediate step (fetch, parse, transform, persist, alert) must be fully explained until the system is complete and rebuildable.
-- "prerequisites": at least {config.PREREQUISITES_MIN} entries. The LAST entry MUST be exactly: "{config.FINAL_PREREQUISITE}". Do not add any entry after it. 100 % DECKUNGSGLEICHHEIT AT "BEFORE YOU START": Every tool from "Tools in this workflow" (including Slack Webhooks, OpenAI API, etc.) MUST have its own dedicated bullet point here. Example for tools [n8n, OpenAI API, Supabase, Slack]: ["An n8n account and a webhook URL", "An OpenAI API key", "A Supabase project and service-role key", "A Slack incoming webhook URL", "{config.FINAL_PREREQUISITE}"].
+- "prerequisites": at least {config.PREREQUISITES_MIN} entries. The LAST entry MUST be exactly: "{config.FINAL_PREREQUISITE}". Do not add any entry after it. EXACT COVERAGE AT "BEFORE YOU START": Every tool from "Tools in this workflow" (including Slack Webhooks, OpenAI API, etc.) MUST have its own dedicated bullet point here. Example for tools [n8n, OpenAI API, Supabase, Slack]: ["An n8n account and a webhook URL", "An OpenAI API key", "A Supabase project and service-role key", "A Slack incoming webhook URL", "{config.FINAL_PREREQUISITE}"].
 - "glossary": at least {config.GLOSSARY_TERMS_MIN} ADVANCED terms with "term" and "definition". FORBIDDEN trivial terms (never use them): API, Database, Webhook, Server, Client, HTTP, JSON. If you need the webhook concept, use "Incoming Webhook Signature Verification" instead of "Webhook". Explain concepts actually used in this workflow (e.g. Bearer Token Authentication, Rate-Limit Backoff, PostgREST Upsert, Z-Score Spike Detection, Token-Bucket Pagination).
 - "troubleshooting": at least {config.TROUBLESHOOTING_MIN} objects with "problem" and "solution".
 - "resources": one entry per tool/API used, with the FULL official URL (https://...). Every tool in the workflow MUST appear here, and the label MUST exactly match the tool name (e.g. "X API", "OpenAI API", "Supabase", "Slack").
@@ -223,6 +238,8 @@ HARD RULES
 - TOOL CONSISTENCY: the tools listed in the workflow, the tools in "prerequisites", the APIs actually called in the code and the "resources" list MUST match 100 %. Never list a tool (e.g. n8n) that does not appear in the code. Never call an API in the code that is missing from the tool list.
 - GROUNDING RULE: the ONLY allowed API hosts and endpoints are those listed under AVAILABLE TOOLS. Every code URL MUST use one of those exact endpoints (or a documented path variant of it). Never invent a domain such as api.enrichmentservice.com or use a placeholder host such as api.example.com. The tools in "tools" MUST be a subset of AVAILABLE TOOLS, and each "links" entry MUST point to that tool's docs URL.
 - MANDATORY API USAGE: You MUST use EVERY API listed under MANDATORY API BUILDING BLOCKS in at least one step. Reference each API by its brand name, slug or domain in the step code and in the step "tools" list. Never omit a curated API.
+- BINDING STEP ASSIGNMENT: When a BINDING STEP ASSIGNMENT block is present, the statement "Step N MUST call ..." is a hard contract. Step N must contain a real `urllib.request` call to exactly that API endpoint (or a documented path below it), its `tools` list must contain exactly that API name for that step, and its code must mention the assigned API host. Do not move, merge or rename assigned steps. The final step may be a pure-Python aggregation step without an API call.
+- DETERMINISTIC METADATA: `api_slugs`, `tools`, `before_you_start`, `resources`, `price` and `created_and_verified_at` are owned by the Python pipeline. You must not invent or change them; return the editorial fields requested in the TASK JSON structure only.
 - NO UNGROUNDED APIS: if a step needs a capability that is not covered by AVAILABLE TOOLS, implement it with the Python standard library (e.g. regex for email syntax, socket for DNS/MX checks, collections/difflib for clustering). NEVER invent a new API host or service for that capability.
 - BASE URL RULE: an endpoint marked BASE is only a prefix. NEVER call it bare (e.g. never call https://api.stripe.com/v1). Always append a real documented resource path such as /v1/customers or /v1/invoices.
 - CREDENTIALS: every secret and every project-specific endpoint MUST be read through `os.environ.get("NAME")` – never hardcode `YOUR_X_API_TOKEN`, `YOUR_OPENAI_API_KEY`, `YOUR_SUPABASE_KEY` or `YOUR_SLACK_WEBHOOK_URL` in runnable code. Use UPPER_SNAKE_CASE names such as `X_API_TOKEN`, `OPENAI_API_KEY`, `SUPABASE_URL`, `SUPABASE_KEY`, `SLACK_WEBHOOK_URL`; the kit's `.env.example` is generated from these names. Keep public API hosts (`https://api.x.com`, `https://api.openai.com`) as constants.
@@ -331,6 +348,43 @@ HARD RULES
 - Syntactically valid: correct brackets, quotes and indentation.
 - Keep the technical intent of the snippet and use only real, reachable domains.
 - All comments in English."""
+
+
+def build_traceback_repair_prompt(
+    step: dict[str, Any],
+    traceback_text: str,
+    step_index: int,
+    assigned_api: str | None = None,
+    attempt: int = 1,
+) -> str:
+    """Repair one snippet using the exact runtime traceback from the dry-run."""
+    return f"""The workflow dry-run failed. Repair ONLY the Python snippet below.
+
+STEP NUMBER: {step_index}
+TITLE: {step.get('title') or '—'}
+DESCRIPTION: {step.get('description') or '—'}
+ASSIGNED API: {assigned_api or '— (pure Python aggregation step)'}
+REPAIR ATTEMPT: {attempt}
+
+EXACT PYTHON TRACEBACK FROM THE DRY-RUN:
+{traceback_text}
+
+CURRENT BROKEN CODE:
+{step.get('code_snippet') or ''}
+
+HARD RULES
+- Return ONLY the corrected Python source code (no markdown fences, no text before/after).
+- Fix the exact line/exception shown in the traceback. Do not remove the failing API call.
+- DEFENSIVE JSON: every access to a parsed JSON object MUST use `.get('key', default)`. Never use `obj['key']`.
+- TYPE SAFETY: if a value is fed into `float()`, `statistics.mean()`, `statistics.stdev()` or arithmetic, guarantee it is numeric. Convert with a guarded `float(...)` inside try/except where the API may return text.
+- ZERO-VARIANCE GUARD: before dividing by a standard deviation, check `if len(values) < 2 or stdev == 0: return`.
+- The snippet MUST end with a top-level statement that calls its function and assigns the result (e.g. `records = fetch_records()`), so the concatenated workflow executes.
+- The snippet MUST import every module it uses at the TOP (`json`, `urllib.request`, `urllib.parse`, `os`, `statistics`, ...).
+- Use ONLY the assigned API endpoint host; never invent a new domain. Standard library only (urllib.request, urllib.error, urllib.parse, http.client, json, os, sys, time, datetime, hmac, hashlib, base64, typing, dataclasses, logging, argparse, re, math, collections, difflib, statistics).
+- FORBIDDEN: requests, openai, supabase, httpx, aiohttp, pydantic, pandas, scikit-learn, sklearn, `import random`, "Dummy", "pip install".
+- Use `gpt-4o-mini` or `gpt-4o`, never `gpt-4` or `gpt-3.5-turbo`.
+- At least 10 non-empty lines. Syntactically valid Python with correct brackets and indentation.
+- Keep every existing English comment where possible and all comments in English."""
 
 
 def build_technical_explanation_repair_prompt(step: dict[str, Any]) -> str:

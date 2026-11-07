@@ -1,22 +1,24 @@
 # FlowMatrix Unified Pipeline
 
 Single Source of Truth for content generation, validation and delivery.
-Everything runs through `pipeline/run_batch.py` – there is no alternative code
-path or legacy fallback. All old JS generators, PDF layouts, validators and
-batch scripts have been removed.
+Batch generation and repair run through `pipeline/run_batch.py`; the unattended
+72-hour production cycle runs through `pipeline/auto_3day_daemon.py`. All old JS
+generators, PDF layouts, validators and batch scripts have been removed.
 
 ## Modules
 
-| File                | Responsibility                                                                                                                                      |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `config.py`         | Paths, binding prices, import whitelist, blacklist, variable step bounds, timestamp/disclaimer, placeholder→base-domain map                         |
-| `schemas.py`        | Strict Pydantic models (variable step count, `resources`, `created_and_verified_at`)                                                                |
-| `prompts.py`        | The only valid LLM system prompts (100 % English, didactic depth, tool consistency, correct API patterns)                                           |
-| `llm_client.py`     | OpenRouter client (standard library, retries, backoff)                                                                                              |
-| `validator.py`      | Hard gatekeeper: AST per step + concatenated, stdlib imports, mock execution, blacklist, dummy/random ban, tool consistency, live HTTP reachability |
-| `pdf_renderer.py`   | The only PDF layout – dynamic, content-driven page count, H1 title, timestamp, link disclaimer                                                      |
-| `bundle_builder.py` | Builds the `<slug>-kit.zip` Implementation Kits (workflow + API)                                                                                    |
-| `run_batch.py`      | Single entry point: generate → validate → retry → store → PDF → kit → R2 → build → deploy, with automatic topic replacement on domain failure       |
+| File                     | Responsibility                                                                                                                                      |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `config.py`              | Paths, binding prices, import whitelist, blacklist, variable step bounds, timestamp/disclaimer, placeholder→base-domain map                         |
+| `schemas.py`             | Strict Pydantic models (variable step count, `resources`, `created_and_verified_at`)                                                                |
+| `prompts.py`             | The only valid LLM system prompts (100 % English, didactic depth, tool consistency, correct API patterns, binding step assignment)                  |
+| `llm_client.py`          | OpenRouter client (standard library, retries, backoff)                                                                                              |
+| `validator.py`           | Hard gatekeeper: AST per step + concatenated, stdlib imports, mock execution, blacklist, dummy/random ban, tool consistency, live HTTP reachability |
+| `code_hardener.py`       | AST transformer that rewrites every JSON subscript read into `.get(key, default)` and every `os.environ["X"]` into a defaulting accessor            |
+| `pdf_renderer.py`        | The only PDF layout – dynamic, content-driven page count, H1 title, timestamp, link disclaimer                                                      |
+| `bundle_builder.py`      | Builds the `<slug>-kit.zip` Implementation Kits (workflow + API)                                                                                    |
+| `run_batch.py`           | Batch entry point: generate → validate → retry → store → PDF → kit → R2 → build → deploy                                                             |
+| `auto_3day_daemon.py`    | **Unattended production daemon**: deterministic metadata, replacement pool, traceback self-healing, R2/PDF/kit gates, git sync, launchd installation |
 
 ## Setup
 
@@ -37,6 +39,44 @@ python3 -m venv .venv
 # Full batch (3 workflows, 4 APIs, 2 alternatives) incl. build + deploy
 .venv/bin/python -m pipeline.run_batch --workflows 3 --apis 4 --alternatives 2
 ```
+
+## Unattended 3-day daemon
+
+```bash
+# Exactly three perfectly verified workflows, no manual intervention
+python3 pipeline/auto_3day_daemon.py --target-count 3
+
+# Inspect the deterministic candidate pool without spending LLM tokens
+python3 pipeline/auto_3day_daemon.py --plan-only --no-launchd --skip-git
+```
+
+The daemon automatically re-executes itself with `.venv/bin/python` when the
+system interpreter lacks `reportlab`/`pydantic`. Its contract:
+
+1. **Deterministic metadata** – Python selects 2–4 APIs from the verified
+   catalogue and owns `api_slugs`, `tools`, `before_you_start`, `resources`,
+   `price` (`9.99`/`19.99`/`34.99`) and `created_and_verified_at`. The LLM only
+   writes editorial text, glossary, troubleshooting and code snippets.
+2. **Binding step assignment** – every API is injected into an exact step
+   (`Step N MUST call <API> (<endpoint>)`); the final step is pure Python.
+3. **Self-healing** – `code_hardener.py` rewrites unsafe JSON access to
+   `.get(key, default)` before validation. Internal dry-run and
+   `workflow.py --dry-run` inside the extracted kit both feed the exact
+   traceback back to the LLM for up to three targeted repairs.
+4. **Replacement pool** – at least ten concepts are prepared. A candidate only
+   counts after live domain check, AST/stdlib gate, dry-run exit 0, a variable
+   multi-page PDF, a complete kit ZIP, and successful R2 uploads
+   (`pdfs/flowmatrix-<slug>.pdf`, `<slug>.pdf`, `kits/<slug>-kit.zip`).
+   Any failure discards the candidate and the loop continues until exactly
+   three successes exist.
+5. **Delivery** – `git pull --rebase --autostash origin main`, `npm run build`,
+   `git add -A && git commit -m "chore(auto-batch): add 3 verified
+   implementation kits" && git push origin main`, then installation of
+   `pipeline/com.flowmatrix.autobatch.plist` as a launchd job with
+   `StartInterval = 259200` seconds (72 hours).
+
+Logs: `pipeline/daemon.log` (rotated only by size) and
+`pipeline/daemon_state.json` (machine-readable run state).
 
 ## Binding rules
 

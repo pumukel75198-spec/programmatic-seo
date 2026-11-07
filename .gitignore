@@ -65,4 +65,7 @@ coverage/
 .venv/
 pipeline/__pycache__/
 pipeline/last_run.json
+pipeline/daemon_state.json
+pipeline/daemon.log
+pipeline/daemon.launchd.log
 private/downloads/test-blueprint.pdf
