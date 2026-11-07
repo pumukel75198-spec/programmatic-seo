@@ -19917,5 +19917,321 @@
       ],
       "price": 9.99
     }
+  },
+  {
+    "slug": "slack-microsoft-azure-face-automation-pipeline",
+    "title": "Slack + Microsoft Azure Face Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects Slack with Microsoft Azure Face and The Slack API allows developers to integrate with Slack's messaging platform, enabling automation and real-time communication. Provides facial recognition capabilities for detecting and analyzing human faces in images.",
+    "category": "Communication",
+    "tags": [
+      "slack",
+      "messaging",
+      "api",
+      "facial-recognition",
+      "image-analysis",
+      "azure"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-07 07:32 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["Slack API", "Microsoft Azure Face API"],
+      "api_slugs": ["slack-api", "azure-face-api"],
+      "alternative_slugs": [
+        "whatsapp-alternatives",
+        "clickmeeting-alternatives"
+      ],
+      "useCase": "Use the Slack API to build integrations that enhance team collaboration and productivity. Then Used for applications requiring facial recognition, such as security systems and user authentication.",
+      "steps": [
+        {
+          "title": "Ingest source records from Slack",
+          "description": "Authenticate to Slack, read recent channel history, and normalize only messages that contain an image reference. The output is a list of dictionaries with message_ts, user, text, and image_url for the Azure Face enrichment stage.",
+          "technical_explanation": "This step is the ingestion boundary: it authenticates to Slack, reads recent channel history, and normalizes only messages that carry an image reference so later stages receive a stable list of dictionaries. The code calls POST https://slack.com/api/conversations.history with an Authorization: Bearer token header and a form-encoded body containing channel, limit, and optional cursor; the response is a JSON object with ok, messages, has_more, and response_metadata.next_cursor. Edge cases include Slack error envelopes with ok=false, cursor-based pagination, empty messages arrays, and private file URLs that Azure cannot fetch unless they are publicly reachable; the code therefore extracts attachment image_url first and falls back to image files' url_private.",
+          "code_snippet": "import json\nimport os\nimport time\nimport urllib.error\nimport urllib.parse\nimport urllib.request\n\nSLACK_API_BASE = 'https://slack.com/api'\nMAX_RETRIES = 3\nMAX_PAGES = 50\n\n\ndef _safe_int(value, default):\n    # Guarded integer conversion; API headers / status may be text or missing.\n    try:\n        return int(value)\n    except (TypeError, ValueError):\n        return default\n\n\ndef _parse_slack_payload(raw):\n    # Defensive JSON parsing: never let an empty or malformed body crash the workflow.\n    if isinstance(raw, dict):\n        return raw\n    if isinstance(raw, (bytes, bytearray)):\n        try:\n            body = bytes(raw).decode('utf-8')\n        except UnicodeDecodeError:\n            return {}\n    elif isinstance(raw, str):\n        body = raw\n    elif raw is None:\n        body = ''\n    else:\n        try:\n            body = str(raw)\n        except Exception:\n            return {}\n    body = (body or '').strip()\n    if not body:\n        return {}\n    try:\n        parsed = json.loads(body)\n    except (ValueError, TypeError):\n        return {}\n    if isinstance(parsed, dict):\n        return parsed\n    return {}\n\n\ndef _extract_image_url(message):\n    # Normalize the image reference from attachments first, then files.\n    if not isinstance(message, dict):\n        return ''\n    attachments = message.get('attachments') or []\n    if isinstance(attachments, list):\n        for attachment in attachments:\n            if not isinstance(attachment, dict):\n                continue\n            candidate = attachment.get('image_url', '')\n            if candidate:\n                return candidate\n    files = message.get('files') or []\n    if isinstance(files, list):\n        for file_info in files:\n            if not isinstance(file_info, dict):\n                continue\n            mimetype = str(file_info.get('mimetype', ''))\n            if mimetype.startswith('image/'):\n                candidate = file_info.get('url_private', '')\n                if candidate:\n                    return candidate\n    return ''\n\n\ndef fetch_slack_messages():\n    token = os.environ.get('SLACK_BOT_TOKEN', '')\n    channel = os.environ.get('SLACK_CHANNEL_ID', '')\n    if not token or not channel:\n        raise RuntimeError('SLACK_BOT_TOKEN and SLACK_CHANNEL_ID must be set')\n    records = []\n    cursor = ''\n    retries = 0\n    pages = 0\n    while True:\n        pages += 1\n        if pages > MAX_PAGES:\n            break\n        form = {\n            'channel': channel,\n            'limit': str(os.environ.get('SLACK_HISTORY_LIMIT', '200')),\n        }\n        if cursor:\n            form['cursor'] = cursor\n        query = urllib.parse.urlencode(form)\n        url = f'{SLACK_API_BASE}/conversations.history?{query}'\n        headers = {\n            'Authorization': f'Bearer {token}',\n            'Content-Type': 'application/x-www-form-urlencoded',\n        }\n        request = urllib.request.Request(url, headers=headers, method='GET')\n        try:\n            with urllib.request.urlopen(request, timeout=30) as response:\n                status = _safe_int(getattr(response, 'status', 200), 200)\n                headers_obj = getattr(response, 'headers', None)\n                if status == 429:\n                    retry_after = 1\n                    if headers_obj is not None:\n                        retry_after = _safe_int(headers_obj.get('Retry-After', '1'), 1)\n                    retries += 1\n                    if retries > MAX_RETRIES:\n                        break\n                    time.sleep(retry_after)\n                    continue\n                raw_body = response.read()\n                payload = _parse_slack_payload(raw_body)\n        except urllib.error.HTTPError as exc:\n            if exc.code == 429:\n                if exc.headers:\n                    retry_after = _safe_int(exc.headers.get('Retry-After', '1'), 1)\n                else:\n                    retry_after = 1\n                retries += 1\n                if retries > MAX_RETRIES:\n                    break\n                time.sleep(retry_after)\n                continue\n            raise\n        retries = 0\n        if not payload:\n            # Empty or non-JSON response body: stop gracefully instead of raising.\n            break\n        if not payload.get('ok', False):\n            error = payload.get('error', 'unknown')\n            raise RuntimeError(f'Slack error: {error}')\n        for message in (payload.get('messages') or []):\n            image_url = _extract_image_url(message)\n            if image_url:\n                records.append({\n                    'message_ts': message.get('ts', ''),\n                    'user': message.get('user', ''),\n                    'text': message.get('text', ''),\n                    'image_url': image_url,\n                })\n        response_metadata = payload.get('response_metadata') or {}\n        if isinstance(response_metadata, dict):\n            cursor = response_metadata.get('next_cursor', '')\n        else:\n            cursor = ''\n        if not payload.get('has_more', False) or not cursor:\n            break\n    return records\n\n\nslack_records = fetch_slack_messages()\nprint(f'Fetched {len(slack_records)} Slack image records')",
+          "mock_response": {
+            "ok": true,
+            "messages": [
+              {
+                "type": "message",
+                "user": "U012AB3CD",
+                "text": "Team photo from the launch event",
+                "ts": "1730908800.000100",
+                "attachments": [
+                  {
+                    "id": 1,
+                    "image_url": "https://files.slack.com/files-pri/T01234567-F01234567/team-photo.jpg"
+                  }
+                ]
+              },
+              {
+                "type": "message",
+                "user": "U045EF6GH",
+                "text": "Badge scan image",
+                "ts": "1730908860.000200",
+                "files": [
+                  {
+                    "id": "F01234567",
+                    "mimetype": "image/jpeg",
+                    "url_private": "https://files.slack.com/files-pri/T01234567-F01234567/badge.jpg"
+                  }
+                ]
+              }
+            ],
+            "has_more": false,
+            "response_metadata": {
+              "next_cursor": ""
+            }
+          },
+          "actions": [
+            "Set SLACK_BOT_TOKEN and SLACK_CHANNEL_ID in the environment before running the script.",
+            "Call POST https://slack.com/api/conversations.history with form-encoded channel, limit, and cursor parameters.",
+            "Extract attachment image_url values first, then fall back to image file url_private values.",
+            "Follow response_metadata.next_cursor until has_more is false or the cursor is empty."
+          ],
+          "commands": [
+            {
+              "label": "Verify Slack environment",
+              "language": "bash",
+              "code": "python -c \"import os; assert os.environ.get('SLACK_BOT_TOKEN') and os.environ.get('SLACK_CHANNEL_ID')\""
+            }
+          ],
+          "config": [
+            {
+              "key": "SLACK_BOT_TOKEN",
+              "value": "<slack-bot-token>",
+              "description": "Bot token used in the Authorization Bearer header for Slack Web API calls."
+            },
+            {
+              "key": "SLACK_CHANNEL_ID",
+              "value": "<slack-channel-id>",
+              "description": "Channel ID whose message history is read for image records."
+            },
+            {
+              "key": "SLACK_HISTORY_LIMIT",
+              "value": "200",
+              "description": "Maximum number of messages requested per Slack history page."
+            }
+          ],
+          "tools": ["Slack API"],
+          "checklist": [
+            "SLACK_BOT_TOKEN and SLACK_CHANNEL_ID are present in the environment.",
+            "The function returns only records with a non-empty image_url.",
+            "Pagination stops when has_more is false or next_cursor is empty."
+          ],
+          "expectedResult": "A normalized list of Slack image records is ready for Azure Face enrichment.",
+          "links": [
+            {
+              "label": "Slack API Documentation",
+              "url": "https://api.slack.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with Microsoft Azure Face",
+          "description": "Send each normalized Slack image URL to Microsoft Azure Face, count detected faces, and attach face_count, face_ids, and face_status to every record. The enriched list becomes the input for the final aggregation and persistence step.",
+          "technical_explanation": "This step is the enrichment boundary: it consumes the normalized Slack records from step 1 and calls Microsoft Azure Face to count faces in each image URL. The code sends POST https://{region}.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false&detectionModel=detection_03 with the Ocp-Apim-Subscription-Key header and a JSON body of the form {\"url\": \"<image_url>\"}; the response is a JSON array of face objects, each with faceId and faceRectangle. Edge cases include 429 throttling with Retry-After, 400/401/403/404 responses for invalid or inaccessible images, empty arrays when no faces are detected, and the need to preserve the original Slack fields while adding face_count, face_ids, and face_status.",
+          "code_snippet": "import json\nimport os\nimport time\nimport urllib.error\nimport urllib.parse\nimport urllib.request\n\ndef detect_faces(records):\n    key = os.environ.get('AZURE_FACE_KEY', '')\n    region = os.environ.get('AZURE_FACE_REGION', '')\n    if not key or not region:\n        raise RuntimeError('AZURE_FACE_KEY and AZURE_FACE_REGION must be set')\n    detection_model = os.environ.get('AZURE_FACE_DETECTION_MODEL', 'detection_03')\n    query = urllib.parse.urlencode({\n        'returnFaceId': 'true',\n        'returnFaceLandmarks': 'false',\n        'detectionModel': detection_model,\n    })\n    url = f'https://{region}.api.cognitive.microsoft.com/face/v1.0/detect?{query}'\n    headers = {\n        'Ocp-Apim-Subscription-Key': key,\n        'Content-Type': 'application/json',\n    }\n    enriched = []\n    for record in records:\n        payload = {'url': record.get('image_url', '')}\n        request = urllib.request.Request(\n            url,\n            data=json.dumps(payload).encode('utf-8'),\n            headers=headers,\n            method='POST',\n        )\n        faces = []\n        for attempt in range(3):\n            try:\n                with urllib.request.urlopen(request, timeout=30) as response:\n                    parsed = json.loads(response.read().decode('utf-8'))\n                    faces = parsed if isinstance(parsed, list) else []\n                break\n            except urllib.error.HTTPError as exc:\n                if exc.code == 429:\n                    retry_after = int(exc.headers.get('Retry-After', '1'))\n                    time.sleep(retry_after)\n                    continue\n                if exc.code in (400, 404):\n                    faces = []\n                    break\n                if exc.code in (401, 403):\n                    raise\n                raise\n        face_ids = [face.get('faceId', '') for face in faces if face.get('faceId', '')]\n        enriched_record = dict(record)\n        enriched_record['face_count'] = len(faces)\n        enriched_record['face_ids'] = face_ids\n        enriched_record['face_status'] = 'ok' if faces else 'no_faces'\n        enriched.append(enriched_record)\n    return enriched\n\nface_results = detect_faces(slack_records)\nprint(f'Processed {len(face_results)} records with Azure Face')",
+          "mock_response": [
+            {
+              "faceId": "c5c24a82-6845-4031-9d5d-978df9175426",
+              "faceRectangle": {
+                "top": 54,
+                "left": 394,
+                "width": 78,
+                "height": 78
+              }
+            },
+            {
+              "faceId": "7a1b2c3d-4e5f-6789-abcd-ef0123456789",
+              "faceRectangle": {
+                "top": 120,
+                "left": 200,
+                "width": 90,
+                "height": 90
+              }
+            }
+          ],
+          "actions": [
+            "Set AZURE_FACE_KEY and AZURE_FACE_REGION in the environment.",
+            "POST each image_url to https://{region}.api.cognitive.microsoft.com/face/v1.0/detect with the subscription key header.",
+            "Retry HTTP 429 responses using the Retry-After header.",
+            "Add face_count, face_ids, and face_status to each Slack record."
+          ],
+          "commands": [
+            {
+              "label": "Verify Azure Face environment",
+              "language": "bash",
+              "code": "python -c \"import os; assert os.environ.get('AZURE_FACE_KEY') and os.environ.get('AZURE_FACE_REGION')\""
+            }
+          ],
+          "config": [
+            {
+              "key": "AZURE_FACE_KEY",
+              "value": "<azure-face-subscription-key>",
+              "description": "Subscription key sent in the Ocp-Apim-Subscription-Key header."
+            },
+            {
+              "key": "AZURE_FACE_REGION",
+              "value": "<azure-region>",
+              "description": "Azure region that hosts the Face resource, used in the endpoint host."
+            },
+            {
+              "key": "AZURE_FACE_DETECTION_MODEL",
+              "value": "detection_03",
+              "description": "Face detection model requested from the Azure Face detect endpoint."
+            }
+          ],
+          "tools": ["Microsoft Azure Face API"],
+          "checklist": [
+            "AZURE_FACE_KEY and AZURE_FACE_REGION are present.",
+            "Each record contains face_count, face_ids, and face_status.",
+            "HTTP 429 responses are retried with Retry-After."
+          ],
+          "expectedResult": "Every Slack image record is enriched with Azure Face detection results.",
+          "links": [
+            {
+              "label": "Microsoft Azure Face API Documentation",
+              "url": "https://learn.microsoft.com/azure/ai-services/computer-vision/overview-identity"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Validate the enriched records from Azure Face, compute operational totals, and persist a deterministic JSON summary. The summary includes total images, total faces, images with faces, average faces per image, and top users.",
+          "technical_explanation": "This step is the aggregation and persistence boundary: it consumes the enriched records from step 2, validates the required schema, and writes a deterministic operational summary to disk. The code uses only the Python standard library, checks that every record contains message_ts, user, text, image_url, face_count, face_ids, and face_status, and rejects malformed records before aggregation. Edge cases include an empty record list, missing optional user values, non-integer face_count values, and a zero-image denominator; the summary therefore uses a guarded average and a Counter for top users.",
+          "code_snippet": "import json\nimport os\nfrom collections import Counter\n\ndef summarize_and_persist(records):\n    required = {'message_ts', 'user', 'text', 'image_url', 'face_count', 'face_ids', 'face_status'}\n    valid_records = []\n    for record in records:\n        if not isinstance(record, dict):\n            raise TypeError('Record must be a dictionary')\n        if not required.issubset(record.keys()):\n            raise ValueError('Record missing required keys')\n        if not isinstance(record.get('face_count', 0), int):\n            raise TypeError('face_count must be an integer')\n        valid_records.append(record)\n    total_images = len(valid_records)\n    total_faces = sum(record.get('face_count', 0) for record in valid_records)\n    images_with_faces = sum(1 for record in valid_records if record.get('face_count', 0) > 0)\n    user_counter = Counter(record.get('user', 'unknown') for record in valid_records)\n    summary = {\n        'total_images': total_images,\n        'total_faces': total_faces,\n        'images_with_faces': images_with_faces,\n        'average_faces_per_image': round(total_faces / total_images, 4) if total_images else 0.0,\n        'top_users': user_counter.most_common(5),\n        'records': valid_records,\n    }\n    output_path = os.environ.get('SUMMARY_PATH', 'face_summary.json')\n    with open(output_path, 'w', encoding='utf-8') as handle:\n        json.dump(summary, handle, indent=2, ensure_ascii=False)\n    return summary\n\nsummary = summarize_and_persist(face_results)\ntotal_faces_value = summary.get('total_faces', 0)\nprint(f'Persisted summary with {total_faces_value} faces')",
+          "mock_response": {
+            "total_images": 2,
+            "total_faces": 3,
+            "images_with_faces": 2,
+            "average_faces_per_image": 1.5,
+            "top_users": [
+              ["U012AB3CD", 1],
+              ["U045EF6GH", 1]
+            ],
+            "records": [
+              {
+                "message_ts": "1730908800.000100",
+                "user": "U012AB3CD",
+                "text": "Team photo from the launch event",
+                "image_url": "https://files.slack.com/files-pri/T01234567-F01234567/team-photo.jpg",
+                "face_count": 2,
+                "face_ids": [
+                  "c5c24a82-6845-4031-9d5d-978df9175426",
+                  "7a1b2c3d-4e5f-6789-abcd-ef0123456789"
+                ],
+                "face_status": "ok"
+              },
+              {
+                "message_ts": "1730908860.000200",
+                "user": "U045EF6GH",
+                "text": "Badge scan image",
+                "image_url": "https://files.slack.com/files-pri/T01234567-F01234567/badge.jpg",
+                "face_count": 1,
+                "face_ids": ["c5c24a82-6845-4031-9d5d-978df9175426"],
+                "face_status": "ok"
+              }
+            ]
+          },
+          "actions": [
+            "Validate every enriched record against the required key set.",
+            "Compute total_images, total_faces, images_with_faces, and average_faces_per_image.",
+            "Write the final summary to SUMMARY_PATH as UTF-8 JSON.",
+            "Print the total face count for a quick operational check."
+          ],
+          "commands": [
+            {
+              "label": "Run the complete workflow",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUMMARY_PATH",
+              "value": "face_summary.json",
+              "description": "Filesystem path where the final operational summary is persisted."
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "face_summary.json exists and is valid JSON.",
+            "The summary contains total_images, total_faces, images_with_faces, and average_faces_per_image.",
+            "The average is 0.0 when no images are present."
+          ],
+          "expectedResult": "A validated face_summary.json file is persisted with the final operational totals.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A Slack API account with API credentials (documentation: api.slack.com)",
+        "A Microsoft Azure Face API account with API credentials (documentation: learn.microsoft.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A Slack API account with API credentials (documentation: api.slack.com)",
+        "A Microsoft Azure Face API account with API credentials (documentation: learn.microsoft.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A request authorization pattern where the caller sends a signed token in the Authorization header and the receiving service validates the token before processing the request."
+        },
+        {
+          "term": "Ocp-Apim-Subscription-Key Header Authentication",
+          "definition": "A Microsoft Azure gateway authentication pattern that requires a subscription key in the Ocp-Apim-Subscription-Key header for every request."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A retry strategy that waits for the server-provided Retry-After interval before repeating a request that was rejected with status 429."
+        },
+        {
+          "term": "Cursor-Based Pagination",
+          "definition": "A pagination technique that uses an opaque cursor returned by the service to request the next page without offset drift."
+        },
+        {
+          "term": "Idempotent Persistence",
+          "definition": "A write strategy that can be repeated safely without creating duplicate records or changing the final stored state."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Slack returns ok=false with error invalid_auth or missing_scope.",
+          "solution": "Verify that SLACK_BOT_TOKEN is a valid bot token and that the app has channels:history and files:read scopes, then reinstall the app to refresh the token."
+        },
+        {
+          "problem": "Azure Face returns HTTP 401 or 403 for every image.",
+          "solution": "Check that AZURE_FACE_KEY is the subscription key for the Face resource and that AZURE_FACE_REGION matches the resource region exactly."
+        },
+        {
+          "problem": "Azure Face returns HTTP 429 during a batch run.",
+          "solution": "Keep the Retry-After backoff in the enrichment loop and reduce concurrency or batch size so the subscription stays within its transaction limit."
+        },
+        {
+          "problem": "Azure Face cannot download a Slack image URL.",
+          "solution": "Use a publicly reachable image URL or a signed URL that does not require Slack authentication, because Azure Face fetches the image server-side without your Slack token."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Slack API",
+          "url": "https://api.slack.com/docs"
+        },
+        {
+          "label": "Microsoft Azure Face API",
+          "url": "https://learn.microsoft.com/azure/ai-services/computer-vision/overview-identity"
+        }
+      ],
+      "price": 9.99
+    }
   }
 ]
