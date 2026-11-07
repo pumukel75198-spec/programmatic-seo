@@ -2068,6 +2068,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--skip-live", action="store_true", help="Skip HTTP/DNS checks")
     parser.add_argument("--skip-sandbox", action="store_true", help="Skip code execution")
     parser.add_argument("--skip-r2", action="store_true", help="Skip R2 upload")
+    parser.add_argument(
+        "--r2-only-healed",
+        action="store_true",
+        help="Upload to R2 only products that were auto-healed (CI fast path)",
+    )
     parser.add_argument("--skip-build", action="store_true", help="Skip npm run build")
     parser.add_argument("--skip-git", action="store_true", help="Skip git commit & push")
     parser.add_argument("--dry-run", action="store_true", help="Audit only, no healing")
@@ -2133,7 +2138,9 @@ def main(argv: list[str] | None = None) -> int:
             ok, healed = audit_api(api, args, state, counters)
         counts["api"]["ok"] += int(ok)
         counts["api"]["healed"] += int(healed)
-        if ok and not args.dry_run:
+        if ok and not args.dry_run and (
+            not args.r2_only_healed or healed
+        ):
             failed = _sync_r2(
                 "api",
                 slug,
@@ -2182,7 +2189,9 @@ def main(argv: list[str] | None = None) -> int:
             ok, healed = audit_workflow(workflow, apis_by_slug, args, state, counters)
         counts["workflow"]["ok"] += int(ok)
         counts["workflow"]["healed"] += int(healed)
-        if ok and not args.dry_run:
+        if ok and not args.dry_run and (
+            not args.r2_only_healed or healed
+        ):
             failed = _sync_r2(
                 "workflow",
                 slug,
