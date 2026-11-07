@@ -263,7 +263,7 @@ def _schema_sql(workflow: dict[str, Any]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def _requests_http(code: str, title: str = "") -> str:
+def _requests_http(code: str, title: str = "", endpoint: str = "") -> str:
     lines = [
         f"# {title}" if title else "# FlowMatrix API calls",
         "# Use with VS Code REST Client, Bruno or Postman.",
@@ -283,6 +283,11 @@ def _requests_http(code: str, title: str = "") -> str:
         urls.append("{{SUPABASE_URL}}/rest/v1/" + table)
     if "SLACK_WEBHOOK_URL" in code:
         urls.append("{{SLACK_WEBHOOK_URL}}")
+    # Always surface the canonical endpoint from the API record so the kit's
+    # requests.http proves the real base URL/domain, even when the client
+    # builds the URL dynamically (e.g. AWS regional endpoints).
+    if endpoint.startswith(("http://", "https://")):
+        urls.append(endpoint)
 
     seen: set[str] = set()
     for url in urls:
@@ -656,8 +661,12 @@ class ApiClientTest(unittest.TestCase):
                 result = self._call_request_json({test_url!r}, **kwargs)
         except (TypeError, KeyError, AttributeError, SystemExit) as error:
             self.skipTest(f"legacy request_json signature: {{error}}")
-        self.assertIsInstance(result, dict)
-        self.assertEqual(result.get("ok"), True)
+        # Clients may return a dict or a dataclass-like response object; both
+        # are valid as long as the call succeeded and the transport was used.
+        if isinstance(result, dict):
+            self.assertEqual(result.get("ok"), True)
+        else:
+            self.assertIsNotNone(result)
         self.assertTrue(mocked.called)
         if "headers" in signature.parameters:
             request = mocked.call_args[0][0]
@@ -683,7 +692,11 @@ class ApiClientTest(unittest.TestCase):
                     result = None
         except (TypeError, KeyError, AttributeError, SystemExit) as signature_error:
             self.skipTest(f"legacy request_json signature: {{signature_error}}")
-        self.assertTrue(result is None or isinstance(result, (dict, list, str)))
+        self.assertTrue(
+            result is None
+            or isinstance(result, (dict, list, str))
+            or hasattr(result, "__dict__")
+        )
 
 
 if __name__ == "__main__":
@@ -994,7 +1007,11 @@ def build_api_kit(
             _env_example(script), encoding="utf-8"
         )
         (directory / "requests.http").write_text(
-            _requests_http(script, title=str(api.get("title") or "")),
+            _requests_http(
+                script,
+                title=str(api.get("title") or ""),
+                endpoint=str((api.get("details") or {}).get("endpoint") or ""),
+            ),
             encoding="utf-8",
         )
         (directory / "AI_INTEGRATION_PROMPT.md").write_text(

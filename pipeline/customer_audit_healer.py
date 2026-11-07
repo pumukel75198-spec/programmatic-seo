@@ -587,6 +587,156 @@ def _run_api_sandbox(kit_path: Path) -> tuple[bool, str]:
         return False, f"{type(error).__name__}: {error}"
 
 
+def _snippet_harness(workflow: dict[str, Any]) -> str:
+    """Build a standalone harness that executes the concatenated PDF snippets.
+
+    The PDF code snippets are the authoritative source a customer copies out of
+    the blueprint. Concatenating them and running them with a mocked
+    ``urllib.request.urlopen`` proves that step 1..N hand their variables and
+    data types (floats, extracted lists, HTTP 200/201/204 checks, Slack ``'ok'``)
+    to the next step without a ``NameError``/``TypeError``/``KeyError``.
+    """
+    steps = (workflow.get("details") or {}).get("steps") or []
+    body = "\n\n".join(str(step.get("code_snippet") or "") for step in steps)
+    env_names = bundle_builder._env_names(body)  # noqa: SLF001
+    env_defaults = {
+        name: bundle_builder._dry_run_env_value(name)  # noqa: SLF001
+        for name in env_names
+    }
+    input_files = sorted(
+        {
+            path
+            for path in re.findall(r"['\"]([\w./-]+\.(?:json|csv|txt))['\"]", body)
+            if not path.startswith(("/", "http://", "https://"))
+        }
+    )
+    indented = "\n".join(
+        ("    " + line) if line.strip() else "" for line in body.splitlines()
+    )
+    return f'''#!/usr/bin/env python3
+"""Customer-audit harness: execute the concatenated PDF step snippets."""
+import builtins
+import io
+import json
+import os
+import sys
+import urllib.request
+from unittest import mock
+
+MOCK_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mock_data.json")
+
+
+def _mock_urlopen(mock_responses):
+    class _Resp:
+        def __init__(self, payload, status=200):
+            self._payload = payload
+            self.status = status
+
+        def read(self, amount=-1):
+            return self._payload if amount is None or amount < 0 else self._payload[:amount]
+
+        def getcode(self):
+            return self.status
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            return False
+
+    def _open(request, *args, **kwargs):
+        url = getattr(request, "full_url", None) or str(request)
+        for key, payload in mock_responses.items():
+            if key in url:
+                if isinstance(payload, dict) and "__json_string__" in payload:
+                    body = json.dumps(payload["__json_string__"]).encode("utf-8")
+                elif isinstance(payload, str):
+                    body = payload.encode("utf-8")
+                else:
+                    body = json.dumps(payload).encode("utf-8")
+                return _Resp(body)
+        return _Resp(json.dumps({{"data": [{{"id": "1", "text": "sample", "value": 0.5}}], "choices": [{{"message": {{"content": "0.8"}}}}], "content": "0.8", "value": 0.5, "status": "ok", "ok": True}}).encode("utf-8"))
+
+    return _open
+
+
+_real_open = builtins.open
+
+
+def _safe_open(file, mode="r", *args, **kwargs):
+    if "r" in mode and not os.path.exists(file):
+        name = str(file)
+        if name.endswith(".json"):
+            return io.StringIO(json.dumps([{{"id": "1", "title": "Sample", "content": "Sample content", "text": "sample text", "value": 0.5, "name": "sample", "prompt": "sample prompt", "keyword": "sample", "query": "sample", "url": "https://example.com", "status": "ok"}}]))
+        if name.endswith(".csv"):
+            return io.StringIO("id,name,value\\n1,sample,0.5\\n")
+        return io.StringIO("sample\\n")
+    return _real_open(file, mode, *args, **kwargs)
+
+
+def run_snippets():
+{indented}
+
+
+def main():
+    for name, value in {env_defaults!r}.items():
+        os.environ.setdefault(name, value)
+    with open(MOCK_DATA, encoding="utf-8") as fh:
+        mock_responses = json.load(fh)
+    for _name in {input_files!r}:
+        if not os.path.exists(_name):
+            with open(_name, "w", encoding="utf-8") as _fh:
+                if _name.endswith(".json"):
+                    json.dump([{{"id": "1", "title": "Sample", "content": "Sample content", "text": "sample text", "value": 0.5, "name": "sample", "keyword": "sample", "query": "sample", "url": "https://example.com", "status": "ok"}}], _fh)
+                elif _name.endswith(".csv"):
+                    _fh.write("id,name,value\\n1,sample,0.5\\n")
+                else:
+                    _fh.write("sample\\n")
+    with mock.patch("builtins.open", side_effect=_safe_open), mock.patch("urllib.request.urlopen", side_effect=_mock_urlopen(mock_responses)):
+        run_snippets()
+    print("Snippet chain executed successfully.")
+
+
+if __name__ == "__main__":
+    main()
+'''
+
+
+def _run_concatenated_snippets(workflow: dict[str, Any]) -> tuple[bool, str]:
+    """Execute the concatenated PDF step snippets in a fresh sandbox."""
+    slug = str(workflow.get("slug") or "")
+    kit = _workflow_kit_path(slug)
+    if not kit.exists():
+        return False, f"workflow kit missing: {kit.name}"
+    try:
+        with zipfile.ZipFile(kit, "r") as archive:
+            with tempfile.TemporaryDirectory(prefix="fm-audit-snip-") as tmp:
+                archive.extractall(tmp)
+                harness = Path(tmp) / "_audit_snippets.py"
+                harness.write_text(_snippet_harness(workflow), encoding="utf-8")
+                env = os.environ.copy()
+                env["PYTHONDONTWRITEBYTECODE"] = "1"
+                try:
+                    result = subprocess.run(
+                        [sys.executable, "_audit_snippets.py"],
+                        cwd=tmp,
+                        capture_output=True,
+                        text=True,
+                        timeout=90,
+                        env=env,
+                    )
+                except subprocess.TimeoutExpired:
+                    return False, "concatenated snippet execution timed out after 90s"
+                output = f"{result.stdout}\n{result.stderr}".strip()
+                ok = (
+                    result.returncode == 0
+                    and "Traceback (most recent call last)" not in output
+                )
+                return ok, output
+    except Exception as error:  # noqa: BLE001
+        return False, f"{type(error).__name__}: {error}"
+
+
 def _workflow_sandbox(workflow: dict[str, Any], *, run_code: bool) -> list[str]:
     errors: list[str] = []
     slug = str(workflow.get("slug") or "")
@@ -644,6 +794,14 @@ def _workflow_sandbox(workflow: dict[str, Any], *, run_code: bool) -> list[str]:
         ok, output = _run_workflow_dryrun(kit)
         if not ok:
             errors.append(f"workflow.py --dry-run failed: {output[-1500:]}")
+        # Independently execute the concatenated PDF step snippets with a
+        # mocked urllib.request.urlopen to prove step 1..N pass their variables
+        # and data types to the next step without raising.
+        ok, output = _run_concatenated_snippets(workflow)
+        if not ok:
+            errors.append(
+                f"concatenated PDF step snippets failed: {output[-1500:]}"
+            )
 
     return errors
 
@@ -978,10 +1136,16 @@ def _deterministic_heal_workflow(
             tools.append(title)
             changed = True
 
+    # The PDF "Before you start" section renders ``prerequisites``; keep both
+    # lists in sync so every tool is visible to the customer in that section.
     before = details.setdefault("before_you_start", [])
+    prerequisites = details.setdefault("prerequisites", [])
     for title in titles:
         if not any(title.lower() in str(entry).lower() for entry in before):
             before.append(f"Access to {title}")
+            changed = True
+        if not any(title.lower() in str(entry).lower() for entry in prerequisites):
+            prerequisites.append(f"Access to {title}")
             changed = True
 
     resources = details.setdefault("resources", [])
@@ -1069,6 +1233,32 @@ def _ensure_api_dry_run(script: str) -> tuple[str, bool]:
     ]
     lines[insert_at:insert_at] = guard
     return "\n".join(lines) + "\n", True
+
+
+def _ensure_api_docstring(script: str, api: dict[str, Any]) -> tuple[str, bool]:
+    """Guarantee the client docstring names the exact API title, slug and host.
+
+    A customer opening ``api_client.py`` must immediately see which API the
+    script implements. Legacy clients sometimes ship without a module docstring
+    or with a slightly different title, which fails the cross-check.
+    """
+    title = str(api.get("title") or "")
+    if not title or _normalize(title) in _normalize(script):
+        return script, False
+    slug = str(api.get("slug") or "")
+    details = api.get("details") or {}
+    endpoint = str(details.get("endpoint") or "")
+    docs = str(details.get("docsUrl") or details.get("website") or "")
+    header = (
+        '"""\n'
+        f"Title: {title}\n"
+        f"Slug: {slug}\n"
+        f"Endpoint: {endpoint}\n"
+        f"Documentation: {docs}\n"
+        "Python standard library only. Run with --dry-run for a network-free check.\n"
+        '"""\n'
+    )
+    return header + script, True
 
 
 def _heal_dead_api_domain(api: dict[str, Any]) -> bool:
@@ -1635,10 +1825,14 @@ def audit_api(
     if script_path.exists():
         original = script_path.read_text(encoding="utf-8", errors="replace")
         patched, changed = _ensure_api_dry_run(original)
-        if changed:
+        patched, doc_changed = _ensure_api_docstring(patched, api)
+        if changed or doc_changed:
             script_path.write_text(patched, encoding="utf-8")
             healed = True
-            log(f"  [HEAL] injected --dry-run into {slug}/api_client.py")
+            if changed:
+                log(f"  [HEAL] injected --dry-run into {slug}/api_client.py")
+            if doc_changed:
+                log(f"  [HEAL] added canonical docstring to {slug}/api_client.py")
     if not args.skip_live and _heal_dead_api_domain(api):
         healed = True
     try:

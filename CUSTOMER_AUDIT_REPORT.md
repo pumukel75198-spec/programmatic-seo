@@ -1,28 +1,20 @@
 # Customer Audit Report
 
-Generated: 2026-11-07 15:18 UTC
+Generated: 2026-11-07 17:12 UTC
 
 ## Summary
 
 | Product type | Checked | OK | Auto-healed | Failed |
 | --- | ---: | ---: | ---: | ---: |
-| APIs | 106 | 80/106 OK | 0 | 26 |
-| Alternatives | 113 | 113/113 OK | 0 | 0 |
-| Workflows | 86 | 85/86 OK | 0 | 1 |
+| APIs | 15 | 15/15 OK | 2 | 0 |
+| Alternatives | 15 | 15/15 OK | 0 | 0 |
+| Workflows | 15 | 15/15 OK | 0 | 0 |
 
-- `npm run build`: OK
-- git commit & push: OK
 
 ## Remaining issues
 
-### api:api-ai-image-generator
-- api_client.py does not mention the API title
-
 ### api:aws-rekognition-api
 - requests.http: does not use the endpoint host 'rekognition.us-west-2.amazonaws.com'
-
-### api:aws-ses-api
-- requests.http: does not use the endpoint host 'email.us-east-1.amazonaws.com'
 
 ### api:aws-transcribe-api
 - requests.http: does not use the endpoint host 'transcribe.us-east-1.amazonaws.com'
@@ -31,73 +23,11 @@ Generated: 2026-11-07 15:18 UTC
 - api_client.py does not implement the endpoint host 'api.braintreegateway.com'
 - requests.http: does not use the endpoint host 'api.braintreegateway.com'
 
-### api:clerk-authentication-api
-- api_client.py does not mention the API title
-
-### api:deepgram-speech-api
-- API sandbox failed: ing...
-WARNING:root:HTTP Error 500: server error. Retrying...
-WARNING:root:HTTP Error 500: server error. Retrying...
-ERROR:root:Max attempts reached. Request failed.
-F.F
-======================================================================
-FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-8u2esucs/test_mock.py", line 103, in test_http_error_is_handled
-    self.assertTrue(result is None or isinstance(result, (dict, list, str)))
-    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AssertionError: False is not true
-
-======================================================================
-FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-8u2esucs/test_mock.py", line 76, in test_successful_call_and_auth_header
-    self.assertIsInstance(result, dict)
-    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
-AssertionError: DeepgramResponse(status='success', data={'ok': True}) is not an instance of <class 'dict'>
-
-----------------------------------------------------------------------
-Ran 3 tests in 0.001s
-
-FAILED (failures=2)
-
-
 ### api:google-sheets-api
 - requests.http: does not use the endpoint host 'sheets.googleapis.com'
 
 ### api:hubspot-crm-api
 - requests.http: does not use the endpoint host 'api.hubapi.com'
-
-### api:ibm-cloud-object-storage-api
-- API sandbox failed: RNING:root:HTTPError 500: server error. Retrying...
-WARNING:root:HTTPError 500: server error. Retrying...
-WARNING:root:HTTPError 500: server error. Retrying...
-F.F
-======================================================================
-FAIL: test_http_error_is_handled (test_mock.ApiClientTest.test_http_error_is_handled)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ixv3idg6/test_mock.py", line 103, in test_http_error_is_handled
-    self.assertTrue(result is None or isinstance(result, (dict, list, str)))
-    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AssertionError: False is not true
-
-======================================================================
-FAIL: test_successful_call_and_auth_header (test_mock.ApiClientTest.test_successful_call_and_auth_header)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/private/var/folders/q9/0ynj5p4d53gdzjpwn35lsgx00000gn/T/fm-audit-api-ixv3idg6/test_mock.py", line 76, in test_successful_call_and_auth_header
-    self.assertIsInstance(result, dict)
-    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
-AssertionError: ApiResponse(status_code=200, data={'ok': True}, error=None) is not an instance of <class 'dict'>
-
-----------------------------------------------------------------------
-Ran 3 tests in 0.001s
-
-FAILED (failures=2)
-
 
 ### api:ibm-watson-assistant-api
 - API sandbox failed:  Error 500: server error. Retrying...
@@ -216,9 +146,6 @@ FAILED (failures=2)
 ### api:neon-postgres-api
 - test_mock.py: does not use the endpoint host 'neon.tech'
 
-### api:pinecone-vector-api
-- api_client.py does not mention the API title
-
 ### api:plaid-financial-api
 - API sandbox failed:  500: server error. Retrying in 16 seconds...
 WARNING:api_client:HTTPError 500: server error. Retrying in 32 seconds...
@@ -319,9 +246,6 @@ Ran 3 tests in 0.001s
 
 FAILED (failures=2)
 
-
-### api:twilio-messaging-api
-- requests.http: does not use the endpoint host 'api.twilio.com'
 
 ### api:upstash-redis-api
 - API sandbox failed: unittest failed:
