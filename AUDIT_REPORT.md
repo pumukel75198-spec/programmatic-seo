@@ -1,33 +1,33 @@
 # FlowMatrix – 100 % Product Audit Report
 
-Generated: 2026-11-07 05:21 UTC
+Generated: 2026-11-07 06:05 UTC
 
-**Products checked:** 179 · **Passing:** 151 · **Failing:** 28
+**Products checked:** 179 · **Passing:** 176 · **Failing:** 3
 
 | Slug | Type | Price | Pages | Dry-Run Exit | ZIP OK | Domains OK | R2 Synced | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | ai-content-generation-pipeline | workflow | €19.99 | 10 | 0 | yes | yes | no | PASS |
-| multi-model-prompt-router | workflow | €34.99 | 9 | 0 | yes | yes | no | FAIL (3) |
+| multi-model-prompt-router | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
 | llm-evaluation-benchmark | workflow | €34.99 | 10 | 0 | yes | yes | no | PASS |
-| batch-llm-processing | workflow | €34.99 | 9 | 124 | no | yes | no | FAIL (3) |
+| batch-llm-processing | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
 | ai-customer-insights | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
 | claude-document-summarizer | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | gemini-multimodal-analyzer | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
 | watson-assistant-helpdesk | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
-| podcast-transcription-pipeline | workflow | €19.99 | 9 | 1 | no | yes | no | FAIL (4) |
-| ai-voiceover-production | workflow | €19.99 | 9 | 0 | yes | no | no | FAIL (3) |
-| meeting-transcription-summaries | workflow | €34.99 | 9 | 124 | no | yes | no | FAIL (3) |
+| podcast-transcription-pipeline | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
+| ai-voiceover-production | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
+| meeting-transcription-summaries | workflow | €34.99 | 9 | 124 | no | yes | no | FAIL (2) |
 | ai-image-generation-pipeline | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | semantic-search-knowledge-base | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
 | hybrid-search-product-catalog | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
 | rag-document-assistant | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
-| content-similarity-audit | workflow | €34.99 | 9 | 1 | no | yes | no | FAIL (3) |
+| content-similarity-audit | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
 | transactional-email-delivery | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | email-campaign-automation | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
-| sms-alert-system | workflow | €19.99 | 9 | 1 | no | yes | no | FAIL (4) |
-| slack-incident-notifications | workflow | €19.99 | 9 | 1 | no | yes | no | FAIL (4) |
+| sms-alert-system | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
+| slack-incident-notifications | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | telegram-community-bot | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
-| video-call-summarizer | workflow | €34.99 | 9 | 1 | no | yes | no | FAIL (4) |
+| video-call-summarizer | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
 | conversational-messaging-hub | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
 | crm-lead-scoring | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | salesforce-pipeline-sync | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
@@ -41,27 +41,27 @@ Generated: 2026-11-07 05:21 UTC
 | stock-market-alerts | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | crypto-portfolio-tracker | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | bank-transaction-enrichment | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
-| supabase-realtime-dashboard | workflow | €19.99 | 9 | 1 | no | yes | no | FAIL (4) |
+| supabase-realtime-dashboard | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | airtable-content-sync | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
-| mongodb-data-pipeline | workflow | €34.99 | 9 | 1 | no | yes | no | FAIL (11) |
+| mongodb-data-pipeline | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
 | postgres-backup-reporting | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
 | redis-rate-limit-store | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
 | google-sheets-reporting-hub | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
-| github-issue-triage | workflow | €19.99 | 9 | 1 | no | yes | no | FAIL (4) |
+| github-issue-triage | workflow | €19.99 | 9 | 1 | no | yes | no | FAIL (3) |
 | deployment-monitoring-alerts | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
-| feature-flag-rollout | workflow | €19.99 | 9 | 1 | no | yes | no | FAIL (4) |
+| feature-flag-rollout | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | secrets-rotation-audit | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
-| serverless-job-scheduler | workflow | €34.99 | 9 | 1 | no | yes | no | FAIL (11) |
+| serverless-job-scheduler | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
 | api-health-monitoring | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
-| linear-roadmap-sync | workflow | €34.99 | 9 | 1 | no | yes | no | FAIL (4) |
-| release-notes-generator | workflow | €19.99 | 9 | 1 | no | yes | no | FAIL (4) |
+| linear-roadmap-sync | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
+| release-notes-generator | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | programmatic-seo-pipeline | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
 | ai-content-automation | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | seo-content-audit | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | blog-cms-publishing | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
 | local-seo-landing-pages | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | newsletter-automation | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
-| content-localization-pipeline | workflow | €34.99 | 9 | 0 | yes | no | no | FAIL (3) |
+| content-localization-pipeline | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
 | meeting-notes-automation | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | notion-task-sync | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | document-approval-workflow | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
@@ -70,20 +70,20 @@ Generated: 2026-11-07 05:21 UTC
 | design-feedback-collection | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | collaboration-presence-sync | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
 | product-analytics-dashboard | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
-| error-tracking-alerts | workflow | €19.99 | 9 | 1 | no | yes | no | FAIL (4) |
-| website-performance-reporting | workflow | €19.99 | 9 | 1 | no | yes | no | FAIL (4) |
+| error-tracking-alerts | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
+| website-performance-reporting | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | social-media-analytics | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | shopify-order-automation | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | inventory-sync-automation | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
-| checkout-payment-recovery | workflow | €34.99 | 9 | 1 | no | yes | no | FAIL (4) |
-| weather-driven-ops-alerts | workflow | €19.99 | 9 | 1 | no | yes | no | FAIL (4) |
+| checkout-payment-recovery | workflow | €34.99 | 10 | 1 | no | yes | no | FAIL (3) |
+| weather-driven-ops-alerts | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | store-locator-geocoding | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | asset-backup-automation | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
 | s3-static-site-publishing | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
-| auth0-sso-provisioning | workflow | €34.99 | 9 | 1 | no | yes | no | FAIL (11) |
+| auth0-sso-provisioning | workflow | €34.99 | 9 | 0 | yes | yes | no | PASS |
 | clerk-user-onboarding | workflow | €19.99 | 9 | 0 | yes | yes | no | PASS |
 | openai-whisper-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
-| stripe-payments-api | api | €29.99 | 1 | 0 | yes | yes | no | FAIL (1) |
+| stripe-payments-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | supabase-database-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | anthropic-claude-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | google-gemini-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
@@ -94,7 +94,7 @@ Generated: 2026-11-07 05:21 UTC
 | twilio-messaging-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | hugging-face-inference-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | cohere-embed-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
-| pinecone-vector-api | api | €29.99 | 1 | 1 | no | yes | no | FAIL (2) |
+| pinecone-vector-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | auth0-authentication-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | sendgrid-email-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | algolia-search-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
@@ -115,7 +115,7 @@ Generated: 2026-11-07 05:21 UTC
 | neon-postgres-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | planetscale-database-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | upstash-redis-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
-| vercel-blob-api | api | €29.99 | 1 | 1 | no | yes | no | FAIL (2) |
+| vercel-blob-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | liveblocks-collaboration-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | ably-realtime-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | posthog-analytics-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
@@ -162,7 +162,7 @@ Generated: 2026-11-07 05:21 UTC
 | notion-forms-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | twitch-api-kraken | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | asana-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
-| twelvedata-api | api | €29.99 | 1 | 0 | yes | yes | no | FAIL (1) |
+| twelvedata-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | pdf-generator-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | weatherapi | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | notion-api-for-automation | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
@@ -179,179 +179,26 @@ Generated: 2026-11-07 05:21 UTC
 | tinkr-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | finnhub-crypto-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | squarespace-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
-| twitch-helix-api | api | €29.99 | 1 | 0 | yes | yes | no | FAIL (1) |
+| twitch-helix-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | pdf-co-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | aiven-kafka-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | api-ai-image-generator | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
-| sentry-performance-api | api | €29.99 | 1 | 0 | yes | yes | no | FAIL (1) |
+| sentry-performance-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 | twitch-analytics-api | api | €29.99 | 1 | 0 | yes | yes | no | PASS |
 
 ## Findings
 
-### multi-model-prompt-router (workflow)
-- [S2] code snippet #2 OpenAI chat call must use gpt-4o / gpt-4o-mini
-- [S2] code snippet #2 OpenAI chat call must use gpt-4o / gpt-4o-mini
-- [S5] auto-rebuild did not clear all findings (content review needed)
-
-### batch-llm-processing (workflow)
-- [S1] sandbox exit code 124: TimeoutExpired after 25s: Command '['/Users/tribunus/Desktop/programmatic-seo/.venv/bin/python', 'workflow.py', '--dry-run']' timed out after 25 seconds
-- [S1] workflow --dry-run produced no stdout
-- [S5] auto-rebuild did not clear all findings (content review needed)
-
-### podcast-transcription-pipeline (workflow)
-- [S1] sandbox exit code 1: KeyError: 'channel'
-- [S1] sandbox stderr contains Traceback
-- [S1] workflow --dry-run produced no stdout
-- [S5] auto-rebuild did not clear all findings (content review needed)
-
-### ai-voiceover-production (workflow)
-- [S4] URL unreachable (https://audio.elevenlabs.io/audio/123456): <urlopen error [Errno 8] nodename nor servname provided, or not known>
-- [S4] URL unreachable (https://audio.elevenlabs.io/audio/123456): <urlopen error [Errno 8] nodename nor servname provided, or not known>
-- [S5] auto-rebuild did not clear all findings (content review needed)
-
 ### meeting-transcription-summaries (workflow)
 - [S1] sandbox exit code 124: TimeoutExpired after 25s: Command '['/Users/tribunus/Desktop/programmatic-seo/.venv/bin/python', 'workflow.py', '--dry-run']' timed out after 25 seconds
 - [S1] workflow --dry-run produced no stdout
-- [S5] auto-rebuild did not clear all findings (content review needed)
-
-### content-similarity-audit (workflow)
-- [S1] sandbox exit code 1: KeyError: 'embeddings'
-- [S1] sandbox stderr contains Traceback
-- [S5] auto-rebuild did not clear all findings (content review needed)
-
-### sms-alert-system (workflow)
-- [S1] sandbox exit code 1: AttributeError: 'NoneType' object has no attribute 'get'
-- [S1] sandbox stderr contains Traceback
-- [S1] workflow --dry-run produced no stdout
-- [S5] auto-rebuild did not clear all findings (content review needed)
-
-### slack-incident-notifications (workflow)
-- [S1] sandbox exit code 1: AttributeError: 'str' object has no attribute 'get'
-- [S1] sandbox stderr contains Traceback
-- [S1] workflow --dry-run produced no stdout
-- [S5] auto-rebuild did not clear all findings (content review needed)
-
-### video-call-summarizer (workflow)
-- [S1] sandbox exit code 1: IndexError: list index out of range
-- [S1] sandbox stderr contains Traceback
-- [S1] workflow --dry-run produced no stdout
-- [S5] auto-rebuild did not clear all findings (content review needed)
-
-### supabase-realtime-dashboard (workflow)
-- [S1] sandbox exit code 1: KeyError: 'url'
-- [S1] sandbox stderr contains Traceback
-- [S1] workflow --dry-run produced no stdout
-- [S5] auto-rebuild did not clear all findings (content review needed)
-
-### mongodb-data-pipeline (workflow)
-- [S1] sandbox exit code 1: IndentationError: expected an indented block after function definition on line 64
-- [S1] workflow --dry-run produced no stdout
-- [S2] empty code snippet #1
-- [S2] empty code snippet #2
-- [S2] empty code snippet #3
-- [S2] empty code snippet #4
-- [S2] empty code snippet #1
-- [S2] empty code snippet #2
-- [S2] empty code snippet #3
-- [S2] empty code snippet #4
-- [S5] auto-rebuild did not clear all findings (content review needed)
 
 ### github-issue-triage (workflow)
 - [S1] sandbox exit code 1: AttributeError: 'str' object has no attribute 'get'
 - [S1] sandbox stderr contains Traceback
 - [S1] workflow --dry-run produced no stdout
-- [S5] auto-rebuild did not clear all findings (content review needed)
-
-### feature-flag-rollout (workflow)
-- [S1] sandbox exit code 1: KeyError: 0
-- [S1] sandbox stderr contains Traceback
-- [S1] workflow --dry-run produced no stdout
-- [S5] auto-rebuild did not clear all findings (content review needed)
-
-### serverless-job-scheduler (workflow)
-- [S1] sandbox exit code 1: IndentationError: expected an indented block after function definition on line 64
-- [S1] workflow --dry-run produced no stdout
-- [S2] empty code snippet #1
-- [S2] empty code snippet #2
-- [S2] empty code snippet #3
-- [S2] empty code snippet #4
-- [S2] empty code snippet #1
-- [S2] empty code snippet #2
-- [S2] empty code snippet #3
-- [S2] empty code snippet #4
-- [S5] auto-rebuild did not clear all findings (content review needed)
-
-### linear-roadmap-sync (workflow)
-- [S1] sandbox exit code 1: AttributeError: 'list' object has no attribute 'get'
-- [S1] sandbox stderr contains Traceback
-- [S1] workflow --dry-run produced no stdout
-- [S5] auto-rebuild did not clear all findings (content review needed)
-
-### release-notes-generator (workflow)
-- [S1] sandbox exit code 1: AttributeError: 'str' object has no attribute 'get'
-- [S1] sandbox stderr contains Traceback
-- [S1] workflow --dry-run produced no stdout
-- [S5] auto-rebuild did not clear all findings (content review needed)
-
-### content-localization-pipeline (workflow)
-- [S4] URL unreachable (https://api.us-south.language-translator.watson.cloud.ibm.com/instances/your_instance_id/v3/translate?version=2018-05-01): <urlopen error [Errno 8] nodename nor servname provided, or not known>
-- [S4] URL unreachable (https://api.us-south.language-translator.watson.cloud.ibm.com/instances/your_instance_id/v3/translate?version=2018-05-01): <urlopen error [Errno 8] nodename nor servname provided, or not known>
-- [S5] auto-rebuild did not clear all findings (content review needed)
-
-### error-tracking-alerts (workflow)
-- [S1] sandbox exit code 1: AttributeError: 'str' object has no attribute 'get'
-- [S1] sandbox stderr contains Traceback
-- [S1] workflow --dry-run produced no stdout
-- [S5] auto-rebuild did not clear all findings (content review needed)
-
-### website-performance-reporting (workflow)
-- [S1] sandbox exit code 1: IndexError: list index out of range
-- [S1] sandbox stderr contains Traceback
-- [S1] workflow --dry-run produced no stdout
-- [S5] auto-rebuild did not clear all findings (content review needed)
 
 ### checkout-payment-recovery (workflow)
 - [S1] sandbox exit code 1: AttributeError: 'list' object has no attribute 'get'
 - [S1] sandbox stderr contains Traceback
 - [S1] workflow --dry-run produced no stdout
-- [S5] auto-rebuild did not clear all findings (content review needed)
-
-### weather-driven-ops-alerts (workflow)
-- [S1] sandbox exit code 1: AttributeError: 'list' object has no attribute 'get'
-- [S1] sandbox stderr contains Traceback
-- [S1] workflow --dry-run produced no stdout
-- [S5] auto-rebuild did not clear all findings (content review needed)
-
-### auth0-sso-provisioning (workflow)
-- [S1] sandbox exit code 1: IndentationError: expected an indented block after function definition on line 64
-- [S1] workflow --dry-run produced no stdout
-- [S2] empty code snippet #1
-- [S2] empty code snippet #2
-- [S2] empty code snippet #3
-- [S2] empty code snippet #4
-- [S2] empty code snippet #1
-- [S2] empty code snippet #2
-- [S2] empty code snippet #3
-- [S2] empty code snippet #4
-- [S5] auto-rebuild did not clear all findings (content review needed)
-
-### stripe-payments-api (api)
-- [S2] code snippet #1 uses urlencode without 'import urllib.parse'
-
-### pinecone-vector-api (api)
-- [S1] sandbox exit code 1: ERROR:root:API_KEY environment variable is not set.
-- [S5] auto-rebuild did not clear all findings (content review needed)
-
-### vercel-blob-api (api)
-- [S1] sandbox exit code 1: ERROR:root:BLOB_READ_WRITE_TOKEN environment variable is not set.
-- [S5] auto-rebuild did not clear all findings (content review needed)
-
-### twelvedata-api (api)
-- [S2] code snippet #1 uses urlencode without 'import urllib.parse'
-
-### twitch-helix-api (api)
-- [S2] code snippet #1 uses urlencode without 'import urllib.parse'
-
-### sentry-performance-api (api)
-- [S2] code snippet #1 uses urlencode without 'import urllib.parse'
 

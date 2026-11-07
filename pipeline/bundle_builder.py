@@ -29,6 +29,17 @@ from . import config as cfg
 
 _URL_RE = re.compile(r"https?://[^\s\"'<>)\]}]+")
 _ENV_RE = re.compile(r"os\.(?:environ\.get|getenv)\(\s*['\"]([A-Z0-9_]+)['\"]")
+
+
+def _json_safe(value: Any) -> Any:
+    """Make mock data JSON-serialisable (LLMs sometimes emit Ellipsis)."""
+    if isinstance(value, dict):
+        return {key: _json_safe(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_json_safe(item) for item in value]
+    if value is Ellipsis:
+        return None
+    return value
 _ENV_INDEX_RE = re.compile(r"os\.environ\[\s*['\"]([A-Z0-9_]+)['\"]\s*\]")
 
 
@@ -80,8 +91,28 @@ def _env_example(code: str) -> str:
 
 
 def _mock_data(workflow: dict[str, Any]) -> dict[str, Any]:
-    code = _step_code(workflow).lower()
     data: dict[str, Any] = {}
+    # Prefer the per-step documented mock_response so --dry-run serves exactly
+    # the response structure each step expects (avoids KeyError/AttributeError).
+    for step in (workflow.get("details") or {}).get("steps") or []:
+        mock = step.get("mock_response")
+        step_code = str(step.get("code_snippet") or "")
+        if not mock:
+            continue
+        if isinstance(mock, str):
+            try:
+                mock = json.loads(mock)
+            except Exception:  # noqa: BLE001
+                try:
+                    import ast as _ast
+
+                    mock = _ast.literal_eval(mock)
+                except Exception:  # noqa: BLE001
+                    continue
+        mock = _json_safe(mock)
+        for url in _URL_RE.findall(step_code):
+            data.setdefault(url, mock)
+    code = _step_code(workflow).lower()
     if "x.com" in code or "twitter.com" in code:
         payload = {
             "data": [
@@ -456,11 +487,18 @@ python3 api_client.py
 """
 
 
-def _api_test(api: dict[str, Any]) -> str:
+def _api_test(api: dict[str, Any], script: str = "") -> str:
+    env_defaults = {name: _dry_run_env_value(name) for name in _env_names(script)}
     return f'''"""Mock test for the {api.get("title", "API")} client."""
 import json
+import os
 import unittest
 from unittest import mock
+
+# Harmless defaults before importing the client so module-level os.environ
+# lookups do not fail during the sandbox test.
+for _name, _value in {env_defaults!r}.items():
+    os.environ.setdefault(_name, _value)
 
 import api_client
 
@@ -593,7 +631,7 @@ def build_api_kit(
         directory = Path(tmp)
         shutil.copy2(script_path, directory / "api_client.py")
         (directory / "test_mock.py").write_text(
-            _api_test(api), encoding="utf-8"
+            _api_test(api, script), encoding="utf-8"
         )
         (directory / ".env.example").write_text(
             _env_example(script), encoding="utf-8"
