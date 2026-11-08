@@ -48,7 +48,7 @@ describe("productSchema (Lemon-Squeezy-Offer)", () => {
       name: "Premium PDF",
       description: "Test",
       url: "/en/workflows/test/",
-      price: "4.99",
+      price: "9.99",
       checkoutUrl: "https://flowmatrix.lemonsqueezy.com/checkout/buy/abc",
     });
     const offers = schema.offers as {
@@ -57,7 +57,7 @@ describe("productSchema (Lemon-Squeezy-Offer)", () => {
       url: string;
       availability: string;
     };
-    expect(offers.price).toBe("4.99");
+    expect(offers.price).toBe("9.99");
     expect(offers.priceCurrency).toBe("EUR");
     expect(offers.url).toContain("lemonsqueezy.com");
     expect(offers.availability).toBe("https://schema.org/InStock");

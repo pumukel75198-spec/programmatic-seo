@@ -42,7 +42,7 @@ export function getWorkflowTier(difficulty?: string | null): WorkflowTier {
   );
 }
 
-/** Numerischer Preis als String für JSON-LD (z. B. "12.99"). */
+/** Numerischer Preis als String für JSON-LD (z. B. "19.99"). */
 export function getWorkflowPriceValue(difficulty?: string | null): string {
   return getWorkflowTier(difficulty).price.toFixed(2);
 }

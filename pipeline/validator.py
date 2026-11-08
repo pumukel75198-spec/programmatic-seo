@@ -18,6 +18,7 @@ or deployed.
 from __future__ import annotations
 
 import ast
+import builtins
 import contextlib
 import io
 import json
@@ -952,6 +953,50 @@ def execute_workflow_dry_run(
         "__name__": "__main__",
         "__file__": "workflow.py",
     }
+
+    _real_open = builtins.open
+
+    def _safe_open(file: Any, mode: str = "r", *args: Any, **kwargs: Any) -> Any:
+        """Return deterministic mock content for missing input files.
+
+        Generated workflows often read local inputs such as
+        ``content_briefs.json`` that are not part of the dry-run sandbox. The
+        kit builder creates those files for ``workflow.py --dry-run``; the
+        validator must do the same so a missing input is not reported as a
+        runtime warning.
+        """
+        if "r" in mode and "b" not in mode:
+            try:
+                missing = not os.path.exists(file)
+            except (TypeError, ValueError):
+                missing = False
+            if missing:
+                name = str(file)
+                if name.endswith(".json"):
+                    return io.StringIO(
+                        json.dumps(
+                            [
+                                {
+                                    "id": "1",
+                                    "title": "Sample",
+                                    "content": "Sample content",
+                                    "text": "sample text",
+                                    "value": 0.5,
+                                    "name": "sample",
+                                    "prompt": "sample prompt",
+                                    "keyword": "sample",
+                                    "query": "sample",
+                                    "url": "https://example.com",
+                                    "status": "ok",
+                                }
+                            ]
+                        )
+                    )
+                if name.endswith(".csv"):
+                    return io.StringIO("id,name,value\n1,sample,0.5\n")
+                return io.StringIO("sample\n")
+        return _real_open(file, mode, *args, **kwargs)
+
     use_alarm = hasattr(signal, "SIGALRM")
     old_handler = None
     original_cwd = os.getcwd()
@@ -977,6 +1022,9 @@ def execute_workflow_dry_run(
                 return _wrap_mock(original_load(*args, **kwargs))
 
             stack.enter_context(mock.patch("json.load", side_effect=_smart_load))
+            stack.enter_context(
+                mock.patch("builtins.open", side_effect=_safe_open)
+            )
             stack.enter_context(
                 mock.patch("urllib.request.urlopen", side_effect=_urlopen)
             )

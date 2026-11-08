@@ -95,8 +95,8 @@ liegt in `insights-seed.json`.
 
 - Lemon-Squeezy-Checkout über `PUBLIC_LEMON_*`-Variablen.
 - Affiliate-Parameter zentral in [`src/lib/tools.ts`](src/lib/tools.ts).
-- Premium-Workflow-PDFs: 4,99 / 12,99 / 21,99 €.
-- API-Skripte: 19,99 €.
+- Premium-Workflow-PDFs: 9,99 / 19,99 / 34,99 € (Beginner / Intermediate / Advanced+Expert).
+- API-Skripte: 29,99 €.
 - Download-Gate-Worker prüft Lizenzschlüssel und streamt PDFs aus R2.
 
 ### Umgebungsvariablen
