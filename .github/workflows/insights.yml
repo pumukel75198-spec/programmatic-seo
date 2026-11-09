@@ -68,6 +68,9 @@ jobs:
           OPENROUTER_FALLBACK_MODEL: ${{ vars.OPENROUTER_FALLBACK_MODEL || 'openai/gpt-4o-mini' }}
         run: npm run insights:generate -- --limit=2
 
+      - name: Content quality audit
+        run: npm run content:audit
+
       - name: Build Astro project
         env:
           PUBLIC_VISITOR_COUNTER_URL: ${{ vars.PUBLIC_VISITOR_COUNTER_URL || 'https://flowmatrix-visitor-counter.pumukel75198.workers.dev' }}

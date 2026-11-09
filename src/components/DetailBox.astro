@@ -36,6 +36,16 @@ const entries = Object.entries(details).filter(([, value]) => {
 const isUrl = (value: unknown): value is string =>
   typeof value === "string" && /^https?:\/\//i.test(value);
 
+// Legacy snippets with placeholders or too little substance must never be
+// rendered publicly. They are replaced by the "included in the PDF" hint.
+const PLACEHOLDER_RE =
+  /YOUR_[A-Z0-9_]+|<YOUR|your-[a-z]|example\.com|lorem ipsum|\bdummy\b|\bplaceholder\b|TODO|FIXME|realistic fallback/i;
+
+function isPublishableSnippet(code: string): boolean {
+  if (PLACEHOLDER_RE.test(code)) return false;
+  return code.split("\n").filter((line) => line.trim()).length >= 10;
+}
+
 interface StepObject {
   title: string;
   description?: string;
@@ -85,9 +95,15 @@ const chipLinkClass =
                         </p>
                       )}
                       {step.code_snippet ? (
-                        <pre class="overflow-x-auto rounded-xl border border-white/10 bg-[#06070d] p-3 text-xs leading-relaxed text-slate-200 whitespace-pre-wrap">
-                          <code>{step.code_snippet}</code>
-                        </pre>
+                        isPublishableSnippet(step.code_snippet) ? (
+                          <pre class="overflow-x-auto rounded-xl border border-white/10 bg-[#06070d] p-3 text-xs leading-relaxed text-slate-200 whitespace-pre-wrap">
+                            <code>{step.code_snippet}</code>
+                          </pre>
+                        ) : (
+                          <p class="rounded-xl border border-white/10 bg-white/[0.02] p-3 text-xs italic text-slate-500">
+                            {codeHint}
+                          </p>
+                        )
                       ) : null}
                       {step.expectedResult && (
                         <p class="text-xs text-emerald-400 font-medium">

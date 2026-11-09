@@ -1,0 +1,4 @@
+Contact: mailto:Tribun692000@gmx.de
+Expires: 2027-12-31T23:59:59.000Z
+Preferred-Languages: en
+Canonical: https://flowmatrix.dev/.well-known/security.txt

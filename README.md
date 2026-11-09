@@ -122,6 +122,18 @@ PUBLIC_LEMON_WORKFLOW_CHECKOUT_EXPERT=...
 PUBLIC_AFFILIATE_REF=flowmatrix
 ```
 
+## Qualität & Security
+
+- `npm run content:audit` prüft sichtbare Platzhalter, Pflichtfelder, Duplikate
+  und Tool-Konsistenz und ist als CI-Gate in allen Deploy-Workflows aktiv.
+- `npm run security:audit` prüft Produktions-Dependencies (`npm audit --omit=dev`).
+- [`public/_headers`](public/_headers) setzt HSTS, CSP, Permissions-Policy,
+  COOP/CORP, `X-Frame-Options` und Cache-Regeln.
+- [`public/.well-known/security.txt`](public/.well-known/security.txt)
+  dokumentiert den Sicherheitskontakt.
+- Legacy-Code-Snippets mit Platzhaltern werden auf Workflow-Seiten **nicht**
+  gerendert; stattdessen erscheint der Kit-Hinweis (PDF/Code im Bundle).
+
 ## Deployment
 
 ```bash

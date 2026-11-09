@@ -1443,6 +1443,14 @@ def validate_workflow(workflow: dict[str, Any]) -> ValidationResult:
                 result.add(f"{context}: randomness is forbidden (real data flow required)")
             if "# Dummy" in code or "Dummy" in code:
                 result.add(f"{context}: dummy data is forbidden")
+            if re.search(
+                r"YOUR_[A-Z0-9_]+|<YOUR[^>]*>|example\.com|lorem ipsum|realistic fallback",
+                code,
+                re.IGNORECASE,
+            ):
+                result.add(
+                    f"{context}: code_snippet contains a placeholder/dummy value"
+                )
             if re.search(r"urlopen\([^)]*headers\s*=", code):
                 result.add(
                     f"{context}: urlopen() does not accept headers=; build "

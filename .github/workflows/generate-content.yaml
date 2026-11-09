@@ -75,6 +75,9 @@ jobs:
       - name: Format generated data
         run: npx prettier --write src/data
 
+      - name: Content quality audit
+        run: npm run content:audit
+
       # --- Qualitäts-Gates ---------------------------------------------------
       # Erst wenn diese Schritte grün sind, wird committet. Der Deploy erfolgt
       # danach über deploy.yaml (Push auf main) mit zusätzlichem Build und
