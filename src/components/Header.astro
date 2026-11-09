@@ -10,16 +10,18 @@ const lang = Astro.props.lang ?? "en";
 const discoverLabel = "Discover";
 
 const nav = [
-  { href: `/${lang}/discover`, label: discoverLabel },
-  { href: `/${lang}/apis`, label: t(lang, "nav.apis") },
-  { href: `/${lang}/alternatives`, label: t(lang, "nav.alternatives") },
-  { href: `/${lang}/workflows`, label: t(lang, "nav.workflows") },
-  { href: "/insights", label: "Insights" },
+  { href: `/${lang}/discover/`, label: discoverLabel },
+  { href: `/${lang}/apis/`, label: t(lang, "nav.apis") },
+  { href: `/${lang}/alternatives/`, label: t(lang, "nav.alternatives") },
+  { href: `/${lang}/workflows/`, label: t(lang, "nav.workflows") },
+  { href: "/insights/", label: "Insights" },
 ];
 
 const pathname = Astro.url.pathname;
-const isActive = (href: string) =>
-  pathname === href || pathname.startsWith(`${href}/`);
+const isActive = (href: string) => {
+  const base = href.endsWith("/") ? href : `${href}/`;
+  return pathname === base || pathname.startsWith(base);
+};
 ---
 
 <header class="sticky top-0 z-50 border-b border-white/5 bg-[#06070d]/80 backdrop-blur-xl">

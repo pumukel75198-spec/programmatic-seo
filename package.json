@@ -9,6 +9,7 @@
     "dev": "astro dev",
     "prebuild": "node scripts/generate-translation-manifest.mjs && node scripts/clean-public-downloads.mjs && node scripts/generate-og.mjs",
     "build": "astro build",
+    "postbuild": "node scripts/clean-dist-duplicates.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "typecheck": "astro check",
@@ -29,10 +30,11 @@
     "i18n:manifest": "node scripts/generate-translation-manifest.mjs",
     "i18n:translate": "node scripts/translate-de-overrides.mjs",
     "og:generate": "node scripts/generate-og.mjs",
+    "clean:dist": "node scripts/clean-dist-duplicates.mjs",
     "monetization:check": "node scripts/check-monetization.mjs",
     "monetization:check:warn": "node scripts/check-monetization.mjs --warn",
     "deploy:init": "wrangler pages project create programmatic-seo --production-branch=main",
-    "deploy": "npm run monetization:check:warn && npm run build && wrangler pages deploy dist --project-name=programmatic-seo",
+    "deploy": "npm run monetization:check:warn && npm run build && node scripts/clean-dist-duplicates.mjs && wrangler pages deploy dist --project-name=programmatic-seo",
     "cf:preview": "wrangler pages dev dist"
   },
   "dependencies": {

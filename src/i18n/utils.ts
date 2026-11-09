@@ -16,11 +16,14 @@ export function t(lang: string, key: TranslationKey): string {
   return translations[lang]?.[key] ?? translations.en[key];
 }
 
-/** Build a localized path, e.g. localizedPath("de", "/apis") -> "/de/apis". */
+/** Build a localized path, e.g. localizedPath("en", "/apis") -> "/en/apis/". */
 export function localizedPath(lang: string, path = "/"): string {
   const clean = path.startsWith("/") ? path : `/${path}`;
   if (clean === "/") return `/${lang}/`;
-  return `/${lang}${clean}`;
+  // Canonical URLs always end with a slash (Astro `directory` format). Using
+  // the trailing-slash form in internal links avoids an unnecessary 308 hop.
+  const normalized = clean.endsWith("/") ? clean : `${clean}/`;
+  return `/${lang}${normalized}`;
 }
 
 /** Replace the locale prefix of the current path. */

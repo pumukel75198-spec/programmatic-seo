@@ -52,7 +52,7 @@ const formatDate = (value: string) =>
       <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {insights.map((insight) => (
           <ContentCard
-            href={`/insights/${insight.slug}`}
+            href={`/insights/${insight.slug}/`}
             title={insight.title}
             description={insight.excerpt}
             meta={`${formatDate(insight.publishedAt)} · ${insight.source.name}`}

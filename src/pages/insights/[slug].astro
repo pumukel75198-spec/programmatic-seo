@@ -71,7 +71,7 @@ const jsonLd = {
         <Breadcrumb
           items={[
             { label: "Home", href: "/en/" },
-            { label: "Insights", href: "/insights" },
+            { label: "Insights", href: "/insights/" },
             { label: insight.title },
           ]}
         />
@@ -100,7 +100,7 @@ const jsonLd = {
           <span>
             By{" "}
             <a
-              href="/en/author"
+              href="/en/author/"
               class="text-brand-300 underline-offset-4 hover:underline"
             >
               Thorsten Riedel
@@ -125,7 +125,7 @@ const jsonLd = {
             </p>
           )}
           <a
-            href={`/en/workflows/${insight.relatedWorkflow.slug}`}
+            href={`/en/workflows/${insight.relatedWorkflow.slug}/`}
             class="mt-4 inline-flex items-center gap-2 rounded-xl bg-brand-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-400"
           >
             Open workflow
@@ -170,7 +170,7 @@ const jsonLd = {
         <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {related.map((item) => (
             <ContentCard
-              href={`/insights/${item.slug}`}
+              href={`/insights/${item.slug}/`}
               title={item.title}
               description={item.excerpt}
               meta={`${formatDate(item.publishedAt)} · ${item.source.name}`}

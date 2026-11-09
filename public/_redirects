@@ -22,6 +22,5 @@
 /imprint        /en/imprint/       301
 /privacy        /en/privacy/       301
 
-# Root is handled by src/pages/index.astro (meta refresh). If that asset is
-# not served, this rule provides the fallback.
-/               /en/               302
+# Root -> English home (permanent; English-only is the final locale decision).
+/              /en/               301
