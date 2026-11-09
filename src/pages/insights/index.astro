@@ -3,10 +3,10 @@ import Layout from "../../layouts/Layout.astro";
 import Badge from "../../components/Badge.astro";
 import ContentCard from "../../components/ContentCard.astro";
 import LemonButton from "../../components/LemonButton.astro";
-import { getAllInsights } from "../../lib/insights";
+import { getLatestInsights } from "../../lib/insights";
 import { resolvePlaybookCheckout } from "../../lib/monetization";
 
-const insights = getAllInsights();
+const insights = getLatestInsights();
 // Eigenes Playbook-Produkt, mit Fallback auf den generischen Checkout.
 const checkoutUrl = resolvePlaybookCheckout();
 

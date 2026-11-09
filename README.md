@@ -88,10 +88,18 @@ Lauf:
 
 ## Insights
 
-[`scripts/generate-insights.mjs`](scripts/generate-insights.mjs) liest
-[`src/data/feeds.json`](src/data/feeds.json), erzeugt Artikel über OpenRouter und
-schreibt [`src/data/insights.json`](src/data/insights.json). Der Seed-Bestand
-liegt in `insights-seed.json`.
+Die Insights werden 2× pro Woche (Mo & Do, 06:00 Berlin) über
+[`.github/workflows/insights.yml`](.github/workflows/insights.yml) erzeugt.
+Der Generator ([`scripts/generate-insights.mjs`](scripts/generate-insights.mjs))
+filtert Kandidaten über ein **Relevanz-Gate** (APIs, Automatisierung, Workflows,
+SEO), verwirft **ähnliche Titel** und expandiert zu kurze Artikel automatisch auf
+mindestens 700 Wörter. Ausscheidende Artikel wandern mit Volltext in
+[`src/data/insights-archive.json`](src/data/insights-archive.json) und behalten
+ihre indexierbaren Seiten (kein 301/404).
+
+Der Generator liest [`src/data/feeds.json`](src/data/feeds.json), erzeugt
+Artikel über OpenRouter und schreibt [`src/data/insights.json`](src/data/insights.json).
+Der Seed-Bestand liegt in `insights-seed.json`.
 
 ## Monetarisierung
 

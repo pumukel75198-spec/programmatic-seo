@@ -21,11 +21,17 @@ const insights = [
   ),
   ...JSON.parse(
     readFileSync(
+      new URL("./src/data/insights-archive.json", import.meta.url),
+      "utf8",
+    ),
+  ),
+  ...JSON.parse(
+    readFileSync(
       new URL("./src/data/insights-seed.json", import.meta.url),
       "utf8",
     ),
   ),
-];
+].filter((entry) => entry && typeof entry === "object");
 const BLOCKED_INSIGHT_TOPIC = /5-meo-dmt|lsd|psilocybin/i;
 const thinInsights = new Set(
   insights
@@ -48,9 +54,44 @@ const locales = ["en"];
 // Canonical production origin (also used for sitemap filtering).
 const SITE = "https://flowmatrix.dev";
 
-// Date of the last intentional content review. Keep this in sync with the
-// editorial workflow so search engines get a meaningful <lastmod>.
+// Date of the last intentional content review. Used as a fallback when a page
+// has no more specific timestamp.
 const CONTENT_UPDATED = "2026-10-31";
+
+const workflowsData = JSON.parse(
+  readFileSync(new URL("./src/data/workflows.json", import.meta.url), "utf8"),
+);
+const apisData = JSON.parse(
+  readFileSync(new URL("./src/data/apis.json", import.meta.url), "utf8"),
+);
+
+/**
+ * Convert "YYYY-MM-DD HH:MM UTC" / ISO / date-only to ISO, or null.
+ * @param {unknown} value
+ */
+const toIsoDate = (value) => {
+  if (typeof value !== "string" || !value.trim()) return null;
+  const normalized = value.replace(" UTC", "Z").replace(" ", "T");
+  const date = new Date(normalized);
+  return Number.isNaN(date.getTime()) ? null : date.toISOString();
+};
+
+// Per-page lastmod derived from real data timestamps.
+/** @type {Record<string, string>} */
+const lastmodByPath = {};
+for (const workflow of workflowsData) {
+  const iso = toIsoDate(workflow?.created_and_verified_at);
+  if (iso) lastmodByPath[`/en/workflows/${workflow.slug}/`] = iso;
+}
+for (const api of apisData) {
+  const iso = toIsoDate(api?.details?.lastVerified);
+  if (iso) lastmodByPath[`/en/apis/${api.slug}/`] = iso;
+}
+for (const insight of insights) {
+  if (!insight?.slug) continue;
+  const iso = toIsoDate(insight.updatedAt ?? insight.publishedAt);
+  if (iso) lastmodByPath[`/insights/${insight.slug}/`] = iso;
+}
 
 // These legacy paths are client-side redirect shims. They must never appear
 // in the sitemap and are additionally marked noindex in their page templates.
@@ -120,10 +161,13 @@ export default defineConfig({
           return true;
         });
 
+        const pathname = new URL(item.url).pathname;
+        const lastmod = lastmodByPath[pathname] ?? CONTENT_UPDATED;
+
         if (item.url.includes("/insights/")) {
-          return { ...item, lastmod: CONTENT_UPDATED, links: [] };
+          return { ...item, lastmod, links: [] };
         }
-        return { ...item, lastmod: CONTENT_UPDATED, links };
+        return { ...item, lastmod, links };
       },
       i18n: {
         defaultLocale: "en",

@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { getAllInsights } from "../../lib/insights";
+import { getLatestInsights } from "../../lib/insights";
 import { site } from "../../lib/site";
 
 // Build XML entities from parts so the source is not mangled by
@@ -21,7 +21,7 @@ const escapeXml = (value: string): string =>
 const absolute = (path: string): string => new URL(path, site.url).toString();
 
 export const GET: APIRoute = () => {
-  const insights = getAllInsights();
+  const insights = getLatestInsights(50);
   const feedUrl = absolute("/insights/rss.xml");
   const siteUrl = absolute("/insights/");
   const lastBuildDate = insights.length

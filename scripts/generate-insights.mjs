@@ -39,6 +39,13 @@ import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { XMLParser } from "fast-xml-parser";
+import {
+  MIN_ARTICLE_WORDS,
+  isDuplicateTitle,
+  isRelevant,
+  relevanceScore,
+  wordCount,
+} from "./lib/insights-rules.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
@@ -47,7 +54,6 @@ const feedsFile = join(root, "src", "data", "feeds.json");
 const insightsFile = join(root, "src", "data", "insights.json");
 const workflowsFile = join(root, "src", "data", "workflows.json");
 const archiveFile = join(root, "src", "data", "insights-archive.json");
-const redirectsFile = join(root, "public", "_redirects");
 
 // Lokale .env laden, falls vorhanden (Node >= 20.6).
 try {
@@ -59,13 +65,19 @@ try {
 const API_URL =
   process.env.OPENROUTER_BASE_URL?.replace(/\/$/, "") ??
   "https://openrouter.ai/api/v1";
-const MODEL = process.env.OPENROUTER_MODEL ?? "openai/gpt-4o-mini";
+const MODEL = process.env.OPENROUTER_MODEL ?? "openai/gpt-4o";
 const API_KEY = process.env.OPENROUTER_API_KEY;
 
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
-/** Anzahl der dauerhaft angezeigten Insights (Rolling Window). */
-const MAX_INSIGHTS = 6;
+/**
+ * Number of insights shown on the index page. Older entries move into the
+ * full-text archive and keep their own indexable pages (no 301/404).
+ */
+const MAX_INSIGHTS = 40;
+
+/** Minimum number of distinct niche terms for a candidate to be generated. */
+const DEFAULT_MIN_RELEVANCE = 2;
 
 const c = {
   reset: "\x1b[0m",
@@ -90,6 +102,8 @@ function parseArgs(argv) {
     model: MODEL,
     lang: "en",
     concurrency: 2,
+    minRelevance: DEFAULT_MIN_RELEVANCE,
+    allowOffTopic: false,
     help: false,
     selfTest: false,
   };
@@ -97,11 +111,14 @@ function parseArgs(argv) {
   for (const arg of argv) {
     if (arg === "--dry-run") opts.dryRun = true;
     else if (arg === "--self-test") opts.selfTest = true;
+    else if (arg === "--allow-off-topic") opts.allowOffTopic = true;
     else if (arg === "--help" || arg === "-h") opts.help = true;
     else if (arg.startsWith("--limit=")) opts.limit = Number(arg.slice(8));
     else if (arg.startsWith("--feed=")) opts.feed = arg.slice(7);
     else if (arg.startsWith("--max-age-days="))
       opts.maxAgeDays = Number(arg.slice(15));
+    else if (arg.startsWith("--min-relevance="))
+      opts.minRelevance = Number(arg.slice(16));
     else if (arg.startsWith("--model=")) opts.model = arg.slice(8);
     else if (arg.startsWith("--lang=")) opts.lang = arg.slice(7);
     else if (arg.startsWith("--concurrency="))
@@ -117,6 +134,8 @@ function parseArgs(argv) {
     opts.maxAgeDays = 14;
   if (!Number.isFinite(opts.concurrency) || opts.concurrency < 1)
     opts.concurrency = 1;
+  if (!Number.isFinite(opts.minRelevance) || opts.minRelevance < 0)
+    opts.minRelevance = DEFAULT_MIN_RELEVANCE;
 
   return opts;
 }
@@ -129,6 +148,8 @@ Optionen:
   --limit=N          Maximal N neue Artikel erzeugen (Default: 5)
   --feed=NAME        Nur Feeds verarbeiten, deren Name NAME enthält
   --max-age-days=N   Nur Einträge der letzten N Tage (Default: 14)
+  --min-relevance=N  Mindest-Nischenscore (Default: ${DEFAULT_MIN_RELEVANCE}, 0 = aus)
+  --allow-off-topic  Relevanz-Gate deaktivieren
   --model=ID         OpenRouter-Modell (Default: ${MODEL})
   --lang=CODE        Sprache der Artikel (Default: en)
   --concurrency=N    Parallele Requests (Default: 2)
@@ -340,7 +361,9 @@ BESTEHENDE WORKFLOWS (für interne Verlinkung)
 ${workflowList}
 
 AUFGABE
-1. Analysiere das Thema und schreibe einen originellen Artikel (ca. 600–900 Wörter). Kein Copy-Paste, keine bloße Zusammenfassung. Erkläre Hintergründe, ordne das Thema ein und gib konkrete, umsetzbare Erkenntnisse.
+1. Analysiere das Thema und schreibe einen originellen, tiefgehenden Artikel (ca. 850–1.100 Wörter). Kein Copy-Paste, keine bloße Zusammenfassung. Erkläre Hintergründe, ordne das Thema ein und gib konkrete, umsetzbare Erkenntnisse.
+   - Erfinde KEINE Fakten, Zahlen, Zitate, Studien oder Produktfeatures.
+   - Struktur: Einleitung, 3–5 H2-Abschnitte, „Key Takeaways" als Bulletlist, FAQ mit 3 Fragen, Fazit.
 2. Prüfe, ob GENAU EIN Workflow aus der Liste thematisch WIRKLICH passt. Ein Workflow passt nur, wenn das Thema des Artikels inhaltlich klar zu Titel, Tags oder Beschreibung des Workflows gehört. Im Zweifel setzt du "relatedWorkflowSlug" auf null. Weise NIEMALS willkürlich einen Workflow zu – lieber kein Link als ein falscher.
 3. Wenn ein Workflow wirklich passt, baue einen natürlichen, kontextbezogenen internen Link im Markdown ein: [Titel des Workflows](/en/workflows/SLUG). Wenn keiner passt, baue KEINEN Workflow-Link ein.
 4. Nutze Markdown mit einer H2-Gliederung (3–5 Abschnitte), kurzen Absätzen und ggf. einer Liste. Keine H1 (der Titel wird separat gerendert).
@@ -482,6 +505,76 @@ async function callOpenRouter({
   }
 
   return parsed;
+}
+
+/**
+ * Expands a too-short article to the required depth. Uses the same OpenRouter
+ * endpoint but a dedicated prompt and returns only excerpt/content.
+ */
+async function expandArticle({ model, article, lang }) {
+  const prompt = `Du bist ein erfahrener Tech-Redakteur für FlowMatrix (APIs, Alternativen und Automatisierungs-Workflows).
+Erweitere den folgenden englischsprachigen Artikel auf etwa 950 Wörter (850–1.100).
+Regeln:
+- Erfinde KEINE Fakten, Zahlen, Zitate, Studien oder Produktfeatures.
+- Nutze ausschließlich den vorhandenen Inhalt und allgemein bekannten Kontext.
+- Struktur: Einleitung, 3–5 H2-Abschnitte, Key Takeaways als Bulletlist, FAQ mit 3 Fragen, Fazit.
+- Natürliches, redaktionelles Englisch; kein Marketing-Sprech.
+- Antworte ausschließlich mit validem JSON: {"excerpt":"kurzer Teaser (max. 200 Zeichen)","content":"vollständiger Markdown-Artikel"}
+
+${JSON.stringify(
+  {
+    title: article.title,
+    excerpt: article.excerpt,
+    existingContent: article.content,
+    source: article.source,
+    category: article.category,
+    tags: article.tags,
+    lang,
+  },
+  null,
+  2,
+)}`;
+
+  let lastError;
+  for (let attempt = 1; attempt <= 2; attempt += 1) {
+    try {
+      const response = await fetch(`${API_URL}/chat/completions`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${API_KEY}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": "https://flowmatrix.dev",
+          "X-Title": "FlowMatrix insight expansion",
+        },
+        body: JSON.stringify({
+          model,
+          temperature: 0.4,
+          max_tokens: 4096,
+          response_format: { type: "json_object" },
+          messages: [{ role: "user", content: prompt }],
+        }),
+        signal: AbortSignal.timeout(120_000),
+      });
+      if (!response.ok) {
+        throw new Error(
+          `OpenRouter HTTP ${response.status}: ${(await response.text()).slice(0, 200)}`,
+        );
+      }
+      const payload = await response.json();
+      const parsed = extractJson(payload.choices?.[0]?.message?.content ?? "");
+      if (!parsed?.content || !parsed?.excerpt) {
+        throw new Error("Expansion ohne content/excerpt");
+      }
+      return {
+        excerpt: String(parsed.excerpt).trim(),
+        content: String(parsed.content).trim(),
+      };
+    } catch (error) {
+      lastError = error;
+      if (attempt < 2) await sleep(1500 * attempt);
+    }
+  }
+  throw lastError;
 }
 
 // ---------------------------------------------------------------------------
@@ -899,18 +992,15 @@ function runSelfTest() {
 }
 
 // ---------------------------------------------------------------------------
-// Redirects for insights that left the rolling window
+// Full-text archive for insights that leave the visible window
 // ---------------------------------------------------------------------------
 
-const REDIRECTS_BEGIN = "# BEGIN insights-redirects";
-const REDIRECTS_END = "# END insights-redirects";
-
 /**
- * Keeps a permanent archive of every insight slug ever generated and writes
- * 301 redirects for articles that dropped out of the rolling window, so old
- * URLs never turn into 404s.
+ * Moves insights that dropped out of the visible window into the archive,
+ * keeping their full content so their pages stay indexable (no 301, no 404).
+ * Returns the slugs that were newly archived.
  */
-async function updateInsightRedirects(previousInsights, mergedInsights) {
+async function updateInsightArchive(previousInsights, mergedInsights) {
   let archive = [];
   try {
     archive = JSON.parse(await readFile(archiveFile, "utf8"));
@@ -919,53 +1009,31 @@ async function updateInsightRedirects(previousInsights, mergedInsights) {
   }
   if (!Array.isArray(archive)) archive = [];
 
-  const archiveSet = new Set(archive.filter(isNonEmptyString));
-  for (const insight of previousInsights) {
-    if (isNonEmptyString(insight?.slug)) archiveSet.add(insight.slug);
-  }
-  for (const insight of mergedInsights) {
-    if (isNonEmptyString(insight?.slug)) archiveSet.add(insight.slug);
+  const bySlug = new Map();
+  for (const entry of archive) {
+    if (entry && typeof entry === "object" && isNonEmptyString(entry.slug)) {
+      bySlug.set(entry.slug, entry);
+    }
   }
 
   const mergedSlugs = new Set(mergedInsights.map((insight) => insight.slug));
-  const removed = [...archiveSet]
-    .filter((slug) => !mergedSlugs.has(slug))
-    .sort();
+  const removed = [];
+  for (const insight of previousInsights) {
+    if (!isNonEmptyString(insight?.slug) || mergedSlugs.has(insight.slug)) {
+      continue;
+    }
+    removed.push(insight.slug);
+    bySlug.set(insight.slug, {
+      ...insight,
+      archivedAt: new Date().toISOString(),
+    });
+  }
 
-  await writeFile(
-    archiveFile,
-    `${JSON.stringify([...archiveSet].sort(), null, 2)}\n`,
-    "utf8",
+  const ordered = [...bySlug.values()].sort((a, b) =>
+    String(a.publishedAt ?? "").localeCompare(String(b.publishedAt ?? "")),
   );
 
-  let content = "";
-  try {
-    content = await readFile(redirectsFile, "utf8");
-  } catch {
-    content = "";
-  }
-
-  const beginIndex = content.indexOf(REDIRECTS_BEGIN);
-  const endIndex = content.indexOf(REDIRECTS_END);
-  if (beginIndex !== -1 && endIndex !== -1 && endIndex > beginIndex) {
-    content = (
-      content.slice(0, beginIndex) +
-      content.slice(endIndex + REDIRECTS_END.length)
-    ).trimEnd();
-  }
-
-  if (removed.length > 0) {
-    const block = [
-      REDIRECTS_BEGIN,
-      ...removed.map((slug) => `/insights/${slug}/* /insights/ 301`),
-      REDIRECTS_END,
-    ].join("\n");
-    content = `${content}\n\n${block}\n`;
-  } else {
-    content = `${content}\n`;
-  }
-
-  await writeFile(redirectsFile, content, "utf8");
+  await writeFile(archiveFile, `${JSON.stringify(ordered, null, 2)}\n`, "utf8");
   return removed;
 }
 
@@ -1005,6 +1073,18 @@ async function main() {
   const insights = JSON.parse(await readFile(insightsFile, "utf8"));
   const workflows = JSON.parse(await readFile(workflowsFile, "utf8"));
 
+  let archived = [];
+  try {
+    archived = JSON.parse(await readFile(archiveFile, "utf8"));
+  } catch {
+    archived = [];
+  }
+  if (!Array.isArray(archived)) archived = [];
+  const archiveEntries = archived.filter(
+    (entry) =>
+      entry && typeof entry === "object" && isNonEmptyString(entry.slug),
+  );
+
   if (
     !Array.isArray(feeds) ||
     !Array.isArray(insights) ||
@@ -1031,16 +1111,22 @@ async function main() {
   );
 
   // 1. Feeds abrufen
+  const existingPool = [...insights, ...archiveEntries];
   const knownUrls = new Set(
-    insights.map((insight) => insight?.source?.url).filter(Boolean),
+    existingPool.map((insight) => insight?.source?.url).filter(Boolean),
   );
   const knownGuids = new Set(
-    insights.map((insight) => insight?.source?.guid).filter(Boolean),
+    existingPool.map((insight) => insight?.source?.guid).filter(Boolean),
   );
+  const knownTitles = existingPool
+    .map((insight) => insight?.title)
+    .filter(Boolean);
 
   const cutoff = Date.now() - opts.maxAgeDays * 24 * 60 * 60 * 1000;
   const candidates = [];
   const seenInRun = new Set();
+  let skippedOffTopic = 0;
+  let skippedDuplicates = 0;
 
   for (const feed of selectedFeeds) {
     try {
@@ -1052,7 +1138,17 @@ async function main() {
         if (seenInRun.has(item.url)) continue;
         if (new Date(item.publishedAt).getTime() < cutoff) continue;
 
+        if (!opts.allowOffTopic && !isRelevant(item, opts.minRelevance)) {
+          skippedOffTopic += 1;
+          continue;
+        }
+        if (isDuplicateTitle(item.title, knownTitles)) {
+          skippedDuplicates += 1;
+          continue;
+        }
+
         seenInRun.add(item.url);
+        knownTitles.push(item.title);
         candidates.push(item);
         fresh += 1;
       }
@@ -1065,6 +1161,12 @@ async function main() {
         `${c.yellow}  ⚠ ${feed.name}: Feed konnte nicht geladen werden (${err.message})${c.reset}`,
       );
     }
+  }
+
+  if (skippedOffTopic > 0 || skippedDuplicates > 0) {
+    console.log(
+      `  ${c.dim}übersprungen: ${skippedOffTopic} off-topic, ${skippedDuplicates} Duplikat(e)${c.reset}`,
+    );
   }
 
   candidates.sort(
@@ -1088,7 +1190,7 @@ async function main() {
   if (opts.dryRun) {
     for (const item of selected) {
       console.log(
-        `\n  ${c.bold}• ${item.title}${c.reset}\n    ${c.dim}${item.feed} · ${item.publishedAt}${c.reset}\n    ${c.dim}${item.url}${c.reset}`,
+        `\n  ${c.bold}• ${item.title}${c.reset}\n    ${c.dim}${item.feed} · ${item.publishedAt} · relevance ${relevanceScore(item)}${c.reset}\n    ${c.dim}${item.url}${c.reset}`,
       );
     }
     console.log(
@@ -1098,7 +1200,9 @@ async function main() {
   }
 
   // 2. Artikel generieren
-  const existingSlugs = new Set(insights.map((insight) => insight.slug));
+  const existingSlugs = new Set(
+    [...insights, ...archiveEntries].map((insight) => insight.slug),
+  );
   const created = [];
   const failures = [];
 
@@ -1160,10 +1264,32 @@ async function main() {
             content = stripWorkflowLinks(content);
           }
 
+          let excerpt = article.excerpt.trim();
+
+          // Quality gate: expand thin articles instead of publishing them.
+          if (wordCount(content) < MIN_ARTICLE_WORDS) {
+            console.log(
+              `  ${c.yellow}↻${c.reset} ${wordCount(content)} Wörter – expandiere auf ≥ ${MIN_ARTICLE_WORDS} …`,
+            );
+            const expanded = await expandArticle({
+              model: opts.model,
+              article: { ...article, content },
+              lang: opts.lang,
+            });
+            content = expanded.content;
+            if (isNonEmptyString(expanded.excerpt)) excerpt = expanded.excerpt;
+          }
+
+          if (wordCount(content) < MIN_ARTICLE_WORDS) {
+            throw new Error(
+              `Artikel zu kurz (${wordCount(content)} < ${MIN_ARTICLE_WORDS} Wörter)`,
+            );
+          }
+
           const insight = {
             slug: validation.slug,
             title: article.title.trim(),
-            excerpt: article.excerpt.trim(),
+            excerpt,
             content,
             category: article.category.trim(),
             tags: article.tags.map((tag) => String(tag).trim()).filter(Boolean),
@@ -1191,7 +1317,7 @@ async function main() {
           localCreated.push(insight);
 
           console.log(
-            `  ${c.green}✓${c.reset} ${insight.slug} ${c.dim}(${insight.content.length} Zeichen)${c.reset}`,
+            `  ${c.green}✓${c.reset} ${insight.slug} ${c.dim}(${wordCount(insight.content)} Wörter)${c.reset}`,
           );
           if (workflow) {
             console.log(
@@ -1246,10 +1372,10 @@ async function main() {
   await writeFile(tmpFile, `${JSON.stringify(merged, null, 2)}\n`, "utf8");
   await rename(tmpFile, insightsFile);
 
-  const removed = await updateInsightRedirects(insights, merged);
-  if (removed.length > 0) {
+  const archivedSlugs = await updateInsightArchive(insights, merged);
+  if (archivedSlugs.length > 0) {
     console.log(
-      `  ${c.dim}${removed.length} entfernte Insight(s) auf /insights/ umgeleitet.${c.reset}`,
+      `  ${c.dim}${archivedSlugs.length} ältere Insight(s) ins Volltext-Archiv verschoben (Seiten bleiben erreichbar).${c.reset}`,
     );
   }
 

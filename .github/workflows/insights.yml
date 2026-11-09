@@ -1,15 +1,15 @@
 name: Generate Insights
 
-# Ziel: 2x täglich um 06:00 und 18:00 Uhr Europe/Berlin (Qualität vor Volumen).
+# Ziel: 2x pro Woche (Mo & Do) um 06:00 Europe/Berlin – Qualität vor Volumen.
 # GitHub Actions interpretiert Cron-Ausdrücke immer in UTC. Da Deutschland
 # Sommer- (UTC+2) und Winterzeit (UTC+1) hat, laufen beide Varianten; der
-# Gate-Job lässt nur den Lauf durch, der in Berlin auf 06/18 fällt.
+# Gate-Job lässt nur den Lauf durch, der in Berlin auf 06 Uhr fällt.
 on:
   schedule:
-    # Sommerzeit (CEST, UTC+2): 04/16 UTC = 06/18 Berlin
-    - cron: "0 4,16 * * *"
-    # Winterzeit (CET, UTC+1): 05/17 UTC = 06/18 Berlin
-    - cron: "0 5,17 * * *"
+    # Sommerzeit (CEST, UTC+2): 04:00 UTC = 06:00 Berlin (Mo & Do)
+    - cron: "0 4 * * 1,4"
+    # Winterzeit (CET, UTC+1): 05:00 UTC = 06:00 Berlin (Mo & Do)
+    - cron: "0 5 * * 1,4"
   workflow_dispatch:
 
 permissions:
@@ -21,12 +21,12 @@ concurrency:
 
 jobs:
   gate:
-    name: Check Berlin time slot
+    name: Check Berlin time slot (06:00)
     runs-on: ubuntu-latest
     outputs:
       run: ${{ steps.check.outputs.run }}
     steps:
-      - name: Only run at 06/18 Europe/Berlin
+      - name: Only run at 06:00 Europe/Berlin
         id: check
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
@@ -36,7 +36,7 @@ jobs:
           HOUR=$(TZ=Europe/Berlin date +%H)
           echo "Berlin hour: $HOUR"
           case "$HOUR" in
-            06|18) echo "run=true" >> "$GITHUB_OUTPUT" ;;
+            06) echo "run=true" >> "$GITHUB_OUTPUT" ;;
             *) echo "run=false" >> "$GITHUB_OUTPUT" ;;
           esac
 
@@ -64,7 +64,7 @@ jobs:
       - name: Generate insights
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          OPENROUTER_MODEL: ${{ vars.OPENROUTER_MODEL || 'openai/gpt-4o-mini' }}
+          OPENROUTER_MODEL: ${{ vars.OPENROUTER_MODEL || 'openai/gpt-4o' }}
         run: npm run insights:generate -- --limit=2
 
       - name: Build Astro project
@@ -101,7 +101,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src/data/insights.json src/data/insights-archive.json public/_redirects
+          git add src/data/insights.json src/data/insights-archive.json
           if git diff --cached --quiet; then
             echo "No new insights to commit."
           else

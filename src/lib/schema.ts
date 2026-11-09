@@ -9,6 +9,19 @@ export type JsonLd = Record<string, unknown>;
 
 const absolute = (path: string) => new URL(path, site.url).toString();
 
+/**
+ * Converts "YYYY-MM-DD HH:MM UTC", ISO strings and date-only values to ISO.
+ * Falls back to the editorial review date when the value is missing/invalid.
+ */
+function toIsoDate(value?: string): string {
+  if (!value) return site.contentUpdated;
+  const normalized = value.replace(" UTC", "Z").replace(" ", "T");
+  const date = new Date(normalized);
+  return Number.isNaN(date.getTime())
+    ? site.contentUpdated
+    : date.toISOString();
+}
+
 export function websiteSchema(): JsonLd {
   return {
     "@context": "https://schema.org",
@@ -103,7 +116,7 @@ export function softwareApplicationSchema(api: ApiEntry, lang = "en"): JsonLd {
     operatingSystem: "Web",
     url: absolute(`/${lang}/apis/${api.slug}/`),
     keywords: api.tags.join(", "),
-    dateModified: site.contentUpdated,
+    dateModified: toIsoDate(api.details.lastVerified),
     // Deliberately no `offers`: API pricing is usage-based/custom and a
     // hard-coded price of 0 would be misleading structured data.
     featureList: api.details.features,
@@ -152,7 +165,7 @@ export function howToSchema(workflow: WorkflowEntry, lang = "en"): JsonLd {
     totalTime: workflow.details.duration,
     url: absolute(`/${lang}/workflows/${workflow.slug}/`),
     inLanguage: lang,
-    dateModified: site.contentUpdated,
+    dateModified: toIsoDate(workflow.created_and_verified_at),
     author: {
       "@type": "Organization",
       name: site.name,
