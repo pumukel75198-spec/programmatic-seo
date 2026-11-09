@@ -28,7 +28,7 @@
  *   --limit=N          Maximal N neue Artikel erzeugen (Default: 5)
  *   --feed=NAME        Nur Feeds verarbeiten, deren Name NAME enthält
  *   --max-age-days=N   Nur Einträge der letzten N Tage (Default: 14)
- *   --model=ID         OpenRouter-Modell (Default: openai/gpt-4o-mini)
+ *   --model=ID         OpenRouter-Modell (Default: deepseek/deepseek-v4.1-flash-1017)
  *   --lang=CODE        Sprache der Artikel (Default: en)
  *   --concurrency=N    Parallele Requests (Default: 2)
  *   --help             Hilfe anzeigen
@@ -65,7 +65,12 @@ try {
 const API_URL =
   process.env.OPENROUTER_BASE_URL?.replace(/\/$/, "") ??
   "https://openrouter.ai/api/v1";
-const MODEL = process.env.OPENROUTER_MODEL ?? "openai/gpt-4o";
+// Same primary model as the content pipeline. Falls back automatically when
+// the model is unavailable on the account, so scheduled runs keep working.
+const MODEL =
+  process.env.OPENROUTER_MODEL ?? "deepseek/deepseek-v4.1-flash-1017";
+const FALLBACK_MODEL =
+  process.env.OPENROUTER_FALLBACK_MODEL ?? "openai/gpt-4o-mini";
 const API_KEY = process.env.OPENROUTER_API_KEY;
 
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -447,6 +452,23 @@ async function callOpenRouter({
   if (!response.ok) {
     const text = await response.text().catch(() => "");
 
+    const modelUnavailable =
+      (response.status === 400 || response.status === 404) &&
+      /model|endpoint|not found/i.test(text);
+    if (modelUnavailable && model !== FALLBACK_MODEL) {
+      console.warn(
+        `${c.yellow}  ↻ Modell ${model} nicht verfügbar – Fallback auf ${FALLBACK_MODEL}${c.reset}`,
+      );
+      return callOpenRouter({
+        model: FALLBACK_MODEL,
+        item,
+        workflows,
+        lang,
+        attempt,
+        useJsonMode,
+      });
+    }
+
     if (response.status === 400 && useJsonMode) {
       console.warn(
         `${c.yellow}  ↻ HTTP 400 – wiederhole ohne response_format${c.reset}`,
@@ -536,6 +558,7 @@ ${JSON.stringify(
 )}`;
 
   let lastError;
+  let activeModel = model;
   for (let attempt = 1; attempt <= 2; attempt += 1) {
     try {
       const response = await fetch(`${API_URL}/chat/completions`, {
@@ -547,7 +570,7 @@ ${JSON.stringify(
           "X-Title": "FlowMatrix insight expansion",
         },
         body: JSON.stringify({
-          model,
+          model: activeModel,
           temperature: 0.4,
           max_tokens: 4096,
           response_format: { type: "json_object" },
@@ -556,8 +579,20 @@ ${JSON.stringify(
         signal: AbortSignal.timeout(120_000),
       });
       if (!response.ok) {
+        const errorText = await response.text();
+        if (
+          (response.status === 400 || response.status === 404) &&
+          /model|endpoint|not found/i.test(errorText) &&
+          activeModel !== FALLBACK_MODEL
+        ) {
+          console.warn(
+            `  ↻ Modell ${activeModel} nicht verfügbar – Fallback auf ${FALLBACK_MODEL}`,
+          );
+          activeModel = FALLBACK_MODEL;
+          continue;
+        }
         throw new Error(
-          `OpenRouter HTTP ${response.status}: ${(await response.text()).slice(0, 200)}`,
+          `OpenRouter HTTP ${response.status}: ${errorText.slice(0, 200)}`,
         );
       }
       const payload = await response.json();

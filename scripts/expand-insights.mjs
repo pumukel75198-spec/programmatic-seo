@@ -22,7 +22,8 @@ const root = join(__dirname, "..");
 const insightsPath = join(root, "src", "data", "insights.json");
 const seedPath = join(root, "src", "data", "insights-seed.json");
 
-const MODEL = process.env.OPENROUTER_MODEL || "openai/gpt-4o-mini";
+const MODEL =
+  process.env.OPENROUTER_MODEL || "deepseek/deepseek-v4.1-flash-1017";
 const BLOCKED = /5-meo-dmt|lsd|psilocybin/i;
 const TARGET_WORDS = 950;
 
