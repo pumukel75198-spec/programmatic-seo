@@ -27,7 +27,11 @@
       "aiven-kafka-api",
       "pdf-co-api",
       "twitch-helix-api",
-      "squarespace-api"
+      "squarespace-api",
+      "weatherapi",
+      "pdf-generator-api",
+      "twelvedata-api",
+      "asana-api"
     ],
     "workflows": [
       "seo-keyword-tracking-dashboard",
@@ -49,26 +53,32 @@
       "automated-api-rate-limiting-management",
       "automated-visual-content-approval",
       "automated-design-feedback-loop",
-      "automated-api-health-checks"
+      "automated-api-health-checks",
+      "api-driven-content-scheduling",
+      "real-time-error-detection-pipeline",
+      "continuous-deployment-monitoring",
+      "real-time-social-media-analytics"
     ]
   },
-  "lastSentAt": "2026-11-02T16:03:24.493Z",
+  "lastSentAt": "2026-11-02 17:33:50",
   "pendingCampaign": {
-    "id": "203046998128985279",
-    "createdAt": "2026-11-02T17:31:48.665Z",
+    "id": "203682660907746309",
+    "createdAt": "2026-11-09T17:55:24.196Z",
     "slugs": {
-      "insights": [],
+      "insights": [
+        "postman-plugin-claude-code-build-mock-test-gate"
+      ],
       "apis": [
-        "weatherapi",
-        "pdf-generator-api",
-        "twelvedata-api",
-        "asana-api"
+        "webflow-api",
+        "figma-rest-api",
+        "calendly-api",
+        "klaviyo-api"
       ],
       "workflows": [
-        "api-driven-content-scheduling",
-        "real-time-error-detection-pipeline",
-        "continuous-deployment-monitoring",
-        "real-time-social-media-analytics"
+        "asana-automation-calendly-automation-pipeline",
+        "calendly-pinecone-vector-automation-pipeline",
+        "calendly-notion-api-for-automation-v2-automation-pipeline",
+        "convertkit-github-copilot-automation-pipeline"
       ]
     }
   }
