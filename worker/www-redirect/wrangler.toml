@@ -1,0 +1,12 @@
+# Cloudflare Worker – 301-Redirect von www.flowmatrix.dev auf flowmatrix.dev
+#
+# Die Route liegt bewusst auf der www-Subdomain, damit der Pages-Alias für die
+# kanonische non-www-Domain unberührt bleibt.
+
+name = "flowmatrix-www-redirect"
+main = "index.js"
+compatibility_date = "2025-01-01"
+
+routes = [
+  { pattern = "www.flowmatrix.dev/*", zone_name = "flowmatrix.dev" },
+]
