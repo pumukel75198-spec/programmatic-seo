@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "prebuild": "node scripts/generate-translation-manifest.mjs && node scripts/clean-public-downloads.mjs && node scripts/generate-og.mjs",
+    "prebuild": "node scripts/clean-public-downloads.mjs && node scripts/generate-og.mjs",
     "build": "astro build",
     "postbuild": "node scripts/clean-dist-duplicates.mjs",
     "preview": "astro preview",
@@ -29,8 +29,6 @@
     "indexnow": "node scripts/indexnow.mjs",
     "insights:generate": "node scripts/generate-insights.mjs",
     "insights:expand": "node scripts/expand-insights.mjs",
-    "i18n:manifest": "node scripts/generate-translation-manifest.mjs",
-    "i18n:translate": "node scripts/translate-de-overrides.mjs",
     "og:generate": "node scripts/generate-og.mjs",
     "clean:dist": "node scripts/clean-dist-duplicates.mjs",
     "monetization:check": "node scripts/check-monetization.mjs",
