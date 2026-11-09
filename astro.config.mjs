@@ -43,7 +43,7 @@ const thinInsights = new Set(
 );
 
 /** @type {string[]} */
-const locales = ["en", "de"];
+const locales = ["en"];
 
 // Canonical production origin (also used for sitemap filtering).
 const SITE = "https://flowmatrix.dev";
@@ -76,14 +76,10 @@ export default defineConfig({
     },
   },
 
-  // Legacy paths without a locale prefix -> default locale (English).
-  redirects: {
-    "/apis": "/en/apis",
-    "/alternatives": "/en/alternatives",
-    "/workflows": "/en/workflows",
-    "/imprint": "/en/imprint",
-    "/privacy": "/en/privacy",
-  },
+  // Legacy unlocalized paths and all /de/* URLs are redirected with real
+  // HTTP 301s via public/_redirects (Cloudflare Pages). Astro's static
+  // `redirects` generated meta-refresh pages, which Google reports as
+  // "page with redirect" and which caused duplicate/404 URL signals.
 
   integrations: [
     sitemap({
@@ -133,7 +129,6 @@ export default defineConfig({
         defaultLocale: "en",
         locales: {
           en: "en-US",
-          de: "de-DE",
         },
       },
     }),

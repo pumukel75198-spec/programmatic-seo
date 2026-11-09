@@ -1,23 +1,27 @@
-# Legacy unlocalized content -> English equivalent (301)
-# These run before the static redirect shims and keep redirect URLs out of
-# the index. The matching page templates are additionally marked noindex.
-/apis /en/apis 301
-/apis/* /en/apis/:splat 301
-/alternatives /en/alternatives 301
-/alternatives/* /en/alternatives/:splat 301
-/workflows /en/workflows 301
-/workflows/* /en/workflows/:splat 301
-/imprint /en/imprint 301
-/privacy /en/privacy 301
+# FlowMatrix – English-only consolidation (Cloudflare Pages)
+#
+# The site used to be built in English and German. All German URLs are now
+# permanently redirected to their English counterparts so previously indexed
+# /de/... URLs never turn into 404s.
+#
+# Order matters: first match wins.
 
-# Removed locales -> English equivalent (301)
-/fr/* /en/:splat 301
-/es/* /en/:splat 301
-/it/* /en/:splat 301
-/pt/* /en/:splat 301
-/nl/* /en/:splat 301
-/pl/* /en/:splat 301
-/sv/* /en/:splat 301
-/tr/* /en/:splat 301
-/ja/* /en/:splat 301
-/zh/* /en/:splat 301
+# --- German locale -> English locale (permanent) ---
+/de/*           /en/:splat        301
+/de             /en/              301
+
+# --- Legacy unlocalized content paths (permanent) ---
+/apis           /en/apis/          301
+/apis/*         /en/apis/:splat    301
+/alternatives   /en/alternatives/  301
+/alternatives/* /en/alternatives/:splat 301
+/workflows      /en/workflows/     301
+/workflows/*    /en/workflows/:splat 301
+
+# --- Legacy legal pages (permanent) ---
+/imprint        /en/imprint/       301
+/privacy        /en/privacy/       301
+
+# Root is handled by src/pages/index.astro (meta refresh). If that asset is
+# not served, this rule provides the fallback.
+/               /en/               302

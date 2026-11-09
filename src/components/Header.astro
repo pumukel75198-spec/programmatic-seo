@@ -1,5 +1,4 @@
 ---
-import LanguageSwitcher from "./LanguageSwitcher.astro";
 import { t } from "../i18n/utils";
 
 interface Props {
@@ -8,7 +7,7 @@ interface Props {
 
 const lang = Astro.props.lang ?? "en";
 
-const discoverLabel = lang === "de" ? "Entdecken" : "Discover";
+const discoverLabel = "Discover";
 
 const nav = [
   { href: `/${lang}/discover`, label: discoverLabel },
@@ -57,7 +56,6 @@ const isActive = (href: string) =>
           </a>
         ))}
       </nav>
-      <LanguageSwitcher lang={lang} />
     </div>
   </div>
 </header>

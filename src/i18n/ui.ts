@@ -13,11 +13,12 @@ export interface Language {
   name: string;
 }
 
-// Active locales. Additional translations may exist below, but only these
-// locales are built and exposed in the language switcher.
+// English-only by design. The language switcher was removed; visitors with
+// another browser language can use the browser's built-in translation instead
+// of maintaining a partially translated parallel site (which produced
+// hundreds of noindex/duplicate URLs).
 export const languages: Language[] = [
   { code: "en", country: "GB", flag: "🇬🇧", name: "English" },
-  { code: "de", country: "DE", flag: "🇩🇪", name: "Deutsch" },
 ];
 
 export type TranslationKey =

@@ -1,7 +1,8 @@
 # FlowMatrix
 
 Ein **Astro + Tailwind CSS**-Projekt für Programmatic SEO mit drei dynamischen
-Routen-Kategorien, Mehrsprachigkeit und einem dunklen, responsiven UI.
+Routen-Kategorien, **Englisch als einziger Sprache** und einem dunklen,
+responsiven UI.
 
 ## Features
 
@@ -9,7 +10,8 @@ Routen-Kategorien, Mehrsprachigkeit und einem dunklen, responsiven UI.
 - 🎨 **Tailwind CSS 4** über die offizielle Vite-Integration
 - 🌙 **Dark Mode** als Standard-Design
 - 🧭 Drei dynamische Routen: **APIs**, **Alternativen**, **Workflows**
-- 🌍 **2 Sprachen** (`en`, `de`) mit lokalisierten Routen
+- 🌍 **Englisch-only** – alte `/de/...`- und Legacy-URLs werden per HTTP 301 auf
+  Englisch umgeleitet (siehe [`public/_redirects`](public/_redirects))
 - 🔍 SEO-freundlich: Canonical-URLs, Open-Graph/Twitter, JSON-LD, Sitemap, `robots.txt`
 - 🖼️ Automatisch generiertes Open-Graph-Bild aus SVG (`sharp`)
 

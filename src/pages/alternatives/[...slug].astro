@@ -1,29 +1,9 @@
 ---
-import { alternatives } from "../../lib/content";
-
+// Legacy unlocalized routes are permanently redirected to /en/... via
+// public/_redirects (real HTTP 301 on Cloudflare Pages). This route
+// intentionally generates no pages, so no soft/meta-refresh redirects are
+// emitted (Google reports those as "page with redirect").
 export function getStaticPaths() {
-  return alternatives.map((entry) => ({ params: { slug: entry.slug } }));
+  return [];
 }
-
-const slug = Astro.params.slug;
-const target = new URL(
-  `/en/alternatives/${slug}/`,
-  Astro.site ?? "https://flowmatrix.dev",
-).toString();
 ---
-
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="robots" content="noindex, follow" />
-    <meta http-equiv="refresh" content={`0;url=${target}`} />
-    <link rel="canonical" href={target} />
-    <title>Redirecting…</title>
-  </head>
-  <body>
-    <p>
-      Redirecting to <a href={target}>{target}</a>…
-    </p>
-  </body>
-</html>
