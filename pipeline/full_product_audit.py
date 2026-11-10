@@ -652,6 +652,8 @@ def _http_reachable(url: str) -> tuple[bool, str]:
 
 
 def audit_urls(product: dict[str, Any]) -> list[str]:
+    if os.environ.get("FLOWMATRIX_SKIP_LIVE") == "1":
+        return []
     problems: list[str] = []
     for url in _collect_urls(product):
         parsed = urlparse(url)
@@ -790,6 +792,7 @@ def sync_product_to_r2(product: dict[str, Any], kind: str) -> bool:
         pdf_path = cfg.DOWNLOADS_DIR / f"flowmatrix-{slug}.pdf"
         kit_path = cfg.KITS_DIR / f"{slug}-kit.zip"
         ok = _r2_put(pdf_path, f"pdfs/flowmatrix-{slug}.pdf")
+        ok = _r2_put(pdf_path, f"{slug}.pdf") and ok
         ok = _r2_put(kit_path, f"kits/{slug}-kit.zip") and ok
         return ok
     script_path = cfg.API_SCRIPTS_DIR / slug / f"{slug}.py"

@@ -1,0 +1,1927 @@
+[
+  {
+    "slug": "ai-content-generation-pipeline",
+    "title": "AI Content Generation Pipeline",
+    "difficulty": "Intermediate",
+    "steps": 5,
+    "code_lines": 119,
+    "explanation_chars": 2564,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 11,
+    "score": 94,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 1: deklariert Tool(s) ['Supabase Database API'], aber kein echter HTTP-Aufruf (urllib.request/http.client) im Code"
+      }
+    ]
+  },
+  {
+    "slug": "multi-model-prompt-router",
+    "title": "Multi-Model Prompt Router",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 56,
+    "explanation_chars": 1316,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "llm-evaluation-benchmark",
+    "title": "LLM Evaluation Benchmark",
+    "difficulty": "Advanced",
+    "steps": 5,
+    "code_lines": 82,
+    "explanation_chars": 2009,
+    "kit_ok": false,
+    "kit_dry_run": "1",
+    "pdf_pages": 10,
+    "score": 79,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 1: deklariert Tool(s) ['Airtable API'], aber kein echter HTTP-Aufruf (urllib.request/http.client) im Code"
+      },
+      {
+        "severity": "critical",
+        "area": "kit",
+        "message": "workflow.py --dry-run Exit 1: AttributeError: 'list' object has no attribute 'get'"
+      }
+    ]
+  },
+  {
+    "slug": "batch-llm-processing",
+    "title": "Batch LLM Processing",
+    "difficulty": "Advanced",
+    "steps": 5,
+    "code_lines": 212,
+    "explanation_chars": 3263,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 14,
+    "score": 94,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "tools",
+        "message": "Tool 'OpenAI GPT-4 API' wird in keinem Step verwendet"
+      }
+    ]
+  },
+  {
+    "slug": "ai-customer-insights",
+    "title": "AI Customer Insights",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 155,
+    "explanation_chars": 1428,
+    "kit_ok": false,
+    "kit_dry_run": "1",
+    "pdf_pages": 10,
+    "score": 79,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 3: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "critical",
+        "area": "kit",
+        "message": "workflow.py --dry-run Exit 1: step failed: FLOWMATRIX_STEP_INPUT is not valid JSON."
+      }
+    ]
+  },
+  {
+    "slug": "claude-document-summarizer",
+    "title": "Claude Document Summarizer",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 65,
+    "explanation_chars": 2151,
+    "kit_ok": false,
+    "kit_dry_run": "1",
+    "pdf_pages": 9,
+    "score": 79,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "critical",
+        "area": "kit",
+        "message": "workflow.py --dry-run Exit 1: KeyError: 'documents'"
+      }
+    ]
+  },
+  {
+    "slug": "gemini-multimodal-analyzer",
+    "title": "Gemini Multimodal Analyzer",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 142,
+    "explanation_chars": 1335,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 11,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "watson-assistant-helpdesk",
+    "title": "Watson Assistant Helpdesk",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 60,
+    "explanation_chars": 2051,
+    "kit_ok": false,
+    "kit_dry_run": "1",
+    "pdf_pages": 9,
+    "score": 67,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 3: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "critical",
+        "area": "kit",
+        "message": "workflow.py --dry-run Exit 1: FileNotFoundError: [Errno 2] No such file or directory: '.zendesk.com/api/v2/tickets.json'"
+      }
+    ]
+  },
+  {
+    "slug": "podcast-transcription-pipeline",
+    "title": "Podcast Transcription Pipeline",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 62,
+    "explanation_chars": 1859,
+    "kit_ok": false,
+    "kit_dry_run": "1",
+    "pdf_pages": 9,
+    "score": 79,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 1: deklariert Tool(s) ['OpenAI Whisper API'], aber kein echter HTTP-Aufruf (urllib.request/http.client) im Code"
+      },
+      {
+        "severity": "critical",
+        "area": "kit",
+        "message": "workflow.py --dry-run Exit 1: AttributeError: 'list' object has no attribute 'get'"
+      }
+    ]
+  },
+  {
+    "slug": "ai-voiceover-production",
+    "title": "AI Voiceover Production",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 335,
+    "explanation_chars": 1443,
+    "kit_ok": false,
+    "kit_dry_run": "1",
+    "pdf_pages": 12,
+    "score": 85,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "critical",
+        "area": "kit",
+        "message": "workflow.py --dry-run Exit 1: RuntimeError: Missing required environment variable: ELEVENLABS_API_KEY"
+      }
+    ]
+  },
+  {
+    "slug": "ai-image-generation-pipeline",
+    "title": "AI Image Generation Pipeline",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 52,
+    "explanation_chars": 1466,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "semantic-search-knowledge-base",
+    "title": "Semantic Search Knowledge Base",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 306,
+    "explanation_chars": 1644,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 94,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "hybrid-search-product-catalog",
+    "title": "Hybrid Search Product Catalog",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 60,
+    "explanation_chars": 1660,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 94,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "rag-document-assistant",
+    "title": "RAG Document Assistant",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 71,
+    "explanation_chars": 2220,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "content-similarity-audit",
+    "title": "Content Similarity Audit",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 243,
+    "explanation_chars": 1515,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "transactional-email-delivery",
+    "title": "Transactional Email Delivery",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 239,
+    "explanation_chars": 1370,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 88,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 3: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "email-campaign-automation",
+    "title": "Email Campaign Automation",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 172,
+    "explanation_chars": 2319,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 82,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 3: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "tools",
+        "message": "Tool 'Resend Email API' wird in keinem Step verwendet"
+      }
+    ]
+  },
+  {
+    "slug": "sms-alert-system",
+    "title": "SMS Alert System",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 252,
+    "explanation_chars": 1453,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 94,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "slack-incident-notifications",
+    "title": "Slack Incident Notifications",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 55,
+    "explanation_chars": 2057,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 88,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 1: deklariert Tool(s) ['Sentry Error API'], aber kein echter HTTP-Aufruf (urllib.request/http.client) im Code"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: deklariert Tool(s) ['Slack Web API'], aber kein echter HTTP-Aufruf (urllib.request/http.client) im Code"
+      }
+    ]
+  },
+  {
+    "slug": "telegram-community-bot",
+    "title": "Telegram Community Bot",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 75,
+    "explanation_chars": 1518,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 88,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 3: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "video-call-summarizer",
+    "title": "Video Call Summarizer",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 67,
+    "explanation_chars": 1676,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "conversational-messaging-hub",
+    "title": "Conversational Messaging Hub",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 56,
+    "explanation_chars": 1638,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 94,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "crm-lead-scoring",
+    "title": "CRM Lead Scoring",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 61,
+    "explanation_chars": 1597,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "salesforce-pipeline-sync",
+    "title": "Salesforce Pipeline Sync",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 59,
+    "explanation_chars": 1612,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "personalized-outreach-engine",
+    "title": "Personalized Outreach Engine",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 50,
+    "explanation_chars": 2037,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "support-ticket-triage",
+    "title": "Support Ticket Triage",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 67,
+    "explanation_chars": 1559,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "ai-help-center-search",
+    "title": "AI Help Center Search",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 225,
+    "explanation_chars": 2477,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 94,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "csat-feedback-analysis",
+    "title": "CSAT Feedback Analysis",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 68,
+    "explanation_chars": 1426,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 94,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: deklariert Tool(s) ['OpenAI GPT-4 API'], aber kein echter HTTP-Aufruf (urllib.request/http.client) im Code"
+      }
+    ]
+  },
+  {
+    "slug": "subscription-billing-automation",
+    "title": "Subscription Billing Automation",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 166,
+    "explanation_chars": 3453,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 94,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "invoice-reconciliation",
+    "title": "Invoice Reconciliation",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 240,
+    "explanation_chars": 1520,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 94,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "paypal-payout-monitoring",
+    "title": "PayPal Payout Monitoring",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 62,
+    "explanation_chars": 1631,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 94,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: deklariert Tool(s) ['PayPal Payments API'], aber kein echter HTTP-Aufruf (urllib.request/http.client) im Code"
+      }
+    ]
+  },
+  {
+    "slug": "stock-market-alerts",
+    "title": "Stock Market Alerts",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 55,
+    "explanation_chars": 1665,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 94,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "crypto-portfolio-tracker",
+    "title": "Crypto Portfolio Tracker",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 58,
+    "explanation_chars": 1596,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 94,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "bank-transaction-enrichment",
+    "title": "Bank Transaction Enrichment",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 74,
+    "explanation_chars": 2005,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 82,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 3: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "supabase-realtime-dashboard",
+    "title": "Supabase Realtime Dashboard",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 291,
+    "explanation_chars": 2066,
+    "kit_ok": false,
+    "kit_dry_run": "1",
+    "pdf_pages": 12,
+    "score": 73,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 3: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "critical",
+        "area": "kit",
+        "message": "workflow.py --dry-run Exit 1: RuntimeError: Missing required environment variable: POSTHOG_PROJECT_ID"
+      }
+    ]
+  },
+  {
+    "slug": "airtable-content-sync",
+    "title": "Airtable Content Sync",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 66,
+    "explanation_chars": 1488,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 94,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "mongodb-data-pipeline",
+    "title": "MongoDB Data Pipeline",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 82,
+    "explanation_chars": 2406,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 40,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "struktur",
+        "message": "nur 0 Prerequisites (min 4)"
+      },
+      {
+        "severity": "major",
+        "area": "struktur",
+        "message": "verbindliches Python-Prerequisite fehlt"
+      },
+      {
+        "severity": "major",
+        "area": "struktur",
+        "message": "nur 0 Glossar-Eintr\u00e4ge (min 4)"
+      },
+      {
+        "severity": "major",
+        "area": "struktur",
+        "message": "nur 0 Troubleshooting-Eintr\u00e4ge (min 3)"
+      },
+      {
+        "severity": "major",
+        "area": "didaktik",
+        "message": "Step 1: nur 2 Actions (min 3)"
+      },
+      {
+        "severity": "major",
+        "area": "didaktik",
+        "message": "Step 2: nur 2 Actions (min 3)"
+      },
+      {
+        "severity": "major",
+        "area": "didaktik",
+        "message": "Step 3: nur 2 Actions (min 3)"
+      },
+      {
+        "severity": "major",
+        "area": "didaktik",
+        "message": "Step 4: nur 2 Actions (min 3)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "tools",
+        "message": "Tool 'OpenAI GPT-4 API' wird in keinem Step verwendet"
+      }
+    ]
+  },
+  {
+    "slug": "redis-rate-limit-store",
+    "title": "Redis Rate Limit Store",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 273,
+    "explanation_chars": 1687,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 82,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 3: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "google-sheets-reporting-hub",
+    "title": "Google Sheets Reporting Hub",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 115,
+    "explanation_chars": 2051,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 94,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "deployment-monitoring-alerts",
+    "title": "Deployment Monitoring Alerts",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 59,
+    "explanation_chars": 1550,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 88,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "feature-flag-rollout",
+    "title": "Feature Flag Rollout",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 180,
+    "explanation_chars": 1577,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 88,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: deklariert Tool(s) ['LaunchDarkly Feature API'], aber kein echter HTTP-Aufruf (urllib.request/http.client) im Code"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 3: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "secrets-rotation-audit",
+    "title": "Secrets Rotation Audit",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 166,
+    "explanation_chars": 1752,
+    "kit_ok": false,
+    "kit_dry_run": "1",
+    "pdf_pages": 11,
+    "score": 85,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "critical",
+        "area": "kit",
+        "message": "workflow.py --dry-run Exit 1: AttributeError: '_Resp' object has no attribute 'headers'"
+      }
+    ]
+  },
+  {
+    "slug": "serverless-job-scheduler",
+    "title": "Serverless Job Scheduler",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 311,
+    "explanation_chars": 1955,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 46,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "struktur",
+        "message": "nur 0 Prerequisites (min 4)"
+      },
+      {
+        "severity": "major",
+        "area": "struktur",
+        "message": "verbindliches Python-Prerequisite fehlt"
+      },
+      {
+        "severity": "major",
+        "area": "struktur",
+        "message": "nur 0 Glossar-Eintr\u00e4ge (min 4)"
+      },
+      {
+        "severity": "major",
+        "area": "struktur",
+        "message": "nur 0 Troubleshooting-Eintr\u00e4ge (min 3)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 3: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "tools",
+        "message": "Tool 'Amazon AWS Lambda API' wird in keinem Step verwendet"
+      },
+      {
+        "severity": "major",
+        "area": "tools",
+        "message": "Tool 'Supabase Database API' wird in keinem Step verwendet"
+      },
+      {
+        "severity": "major",
+        "area": "tools",
+        "message": "Tool 'Sentry Error API' wird in keinem Step verwendet"
+      }
+    ]
+  },
+  {
+    "slug": "api-health-monitoring",
+    "title": "API Health Monitoring",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 47,
+    "explanation_chars": 2835,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 94,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "linear-roadmap-sync",
+    "title": "Linear Roadmap Sync",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 125,
+    "explanation_chars": 1585,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "release-notes-generator",
+    "title": "Release Notes Generator",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 360,
+    "explanation_chars": 2939,
+    "kit_ok": false,
+    "kit_dry_run": "1",
+    "pdf_pages": 13,
+    "score": 85,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "critical",
+        "area": "kit",
+        "message": "workflow.py --dry-run Exit 1: AttributeError: '_Resp' object has no attribute 'headers'"
+      }
+    ]
+  },
+  {
+    "slug": "programmatic-seo-pipeline",
+    "title": "Programmatic SEO Pipeline",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 66,
+    "explanation_chars": 1634,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 88,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 3: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "ai-content-automation",
+    "title": "AI Content Automation",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 266,
+    "explanation_chars": 2771,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 88,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "seo-content-audit",
+    "title": "SEO Content Audit",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 191,
+    "explanation_chars": 1458,
+    "kit_ok": false,
+    "kit_dry_run": "1",
+    "pdf_pages": 11,
+    "score": 73,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "critical",
+        "area": "kit",
+        "message": "workflow.py --dry-run Exit 1: RuntimeError: Algolia returned no indexed pages"
+      }
+    ]
+  },
+  {
+    "slug": "blog-cms-publishing",
+    "title": "Blog CMS Publishing",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 53,
+    "explanation_chars": 1448,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 82,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 3: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "local-seo-landing-pages",
+    "title": "Local SEO Landing Pages",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 57,
+    "explanation_chars": 1685,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 94,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "newsletter-automation",
+    "title": "Newsletter Automation",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 140,
+    "explanation_chars": 2532,
+    "kit_ok": false,
+    "kit_dry_run": "1",
+    "pdf_pages": 10,
+    "score": 79,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "critical",
+        "area": "kit",
+        "message": "workflow.py --dry-run Exit 1: RuntimeError: Missing required environment variable: NEWSLETTER_HTML"
+      }
+    ]
+  },
+  {
+    "slug": "content-localization-pipeline",
+    "title": "Content Localization Pipeline",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 50,
+    "explanation_chars": 1500,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 76,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: deklariert Tool(s) ['IBM Watson Language Translator API'], aber kein echter HTTP-Aufruf (urllib.request/http.client) im Code"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 3: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "meeting-notes-automation",
+    "title": "Meeting Notes Automation",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 69,
+    "explanation_chars": 2336,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "notion-task-sync",
+    "title": "Notion Task Sync",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 243,
+    "explanation_chars": 2752,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 10,
+    "score": 94,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 3: deklariert Tool(s) ['Notion API'], aber kein echter HTTP-Aufruf (urllib.request/http.client) im Code"
+      }
+    ]
+  },
+  {
+    "slug": "document-approval-workflow",
+    "title": "Document Approval Workflow",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 154,
+    "explanation_chars": 1606,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 88,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "form-submission-routing",
+    "title": "Form Submission Routing",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 96,
+    "explanation_chars": 1533,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 94,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "team-wiki-search",
+    "title": "Team Wiki Search",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 217,
+    "explanation_chars": 1980,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 94,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "design-feedback-collection",
+    "title": "Design Feedback Collection",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 112,
+    "explanation_chars": 1535,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "collaboration-presence-sync",
+    "title": "Collaboration Presence Sync",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 123,
+    "explanation_chars": 1741,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 10,
+    "score": 82,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 3: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "product-analytics-dashboard",
+    "title": "Product Analytics Dashboard",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 127,
+    "explanation_chars": 1588,
+    "kit_ok": false,
+    "kit_dry_run": "1",
+    "pdf_pages": 10,
+    "score": 67,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 3: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "critical",
+        "area": "kit",
+        "message": "workflow.py --dry-run Exit 1: RuntimeError: PostHog response is missing the 'results' list"
+      }
+    ]
+  },
+  {
+    "slug": "error-tracking-alerts",
+    "title": "Error Tracking Alerts",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 136,
+    "explanation_chars": 2310,
+    "kit_ok": false,
+    "kit_dry_run": "1",
+    "pdf_pages": 10,
+    "score": 73,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 3: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "critical",
+        "area": "kit",
+        "message": "workflow.py --dry-run Exit 1: RuntimeError: Missing required environment variable: SENTRY_BEARER_TOKEN"
+      }
+    ]
+  },
+  {
+    "slug": "website-performance-reporting",
+    "title": "Website Performance Reporting",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 97,
+    "explanation_chars": 1826,
+    "kit_ok": false,
+    "kit_dry_run": "1",
+    "pdf_pages": 10,
+    "score": 73,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "critical",
+        "area": "kit",
+        "message": "workflow.py --dry-run Exit 1: RuntimeError: No report HTML was provided by the previous workflow step"
+      }
+    ]
+  },
+  {
+    "slug": "social-media-analytics",
+    "title": "Social Media Analytics",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 115,
+    "explanation_chars": 1675,
+    "kit_ok": false,
+    "kit_dry_run": "1",
+    "pdf_pages": 10,
+    "score": 73,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "critical",
+        "area": "kit",
+        "message": "workflow.py --dry-run Exit 1: RuntimeError: Missing required environment variable: GOOGLE_SHEETS_OAUTH_TOKEN"
+      }
+    ]
+  },
+  {
+    "slug": "shopify-order-automation",
+    "title": "Shopify Order Automation",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 77,
+    "explanation_chars": 1533,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "inventory-sync-automation",
+    "title": "Inventory Sync Automation",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 109,
+    "explanation_chars": 2543,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "weather-driven-ops-alerts",
+    "title": "Weather-Driven Ops Alerts",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 126,
+    "explanation_chars": 1458,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 10,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "store-locator-geocoding",
+    "title": "Store Locator Geocoding",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 60,
+    "explanation_chars": 1315,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "asset-backup-automation",
+    "title": "Asset Backup Automation",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 183,
+    "explanation_chars": 2496,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "s3-static-site-publishing",
+    "title": "S3 Static Site Publishing",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 178,
+    "explanation_chars": 2762,
+    "kit_ok": false,
+    "kit_dry_run": "1",
+    "pdf_pages": 11,
+    "score": 67,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 3: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "critical",
+        "area": "kit",
+        "message": "workflow.py --dry-run Exit 1: RuntimeError: Missing required environment variable: CLOUDFLARE_ZONE_ID"
+      }
+    ]
+  },
+  {
+    "slug": "auth0-sso-provisioning",
+    "title": "Auth0 SSO Provisioning",
+    "difficulty": "Advanced",
+    "steps": 4,
+    "code_lines": 156,
+    "explanation_chars": 3652,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 58,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "struktur",
+        "message": "nur 0 Prerequisites (min 4)"
+      },
+      {
+        "severity": "major",
+        "area": "struktur",
+        "message": "verbindliches Python-Prerequisite fehlt"
+      },
+      {
+        "severity": "major",
+        "area": "struktur",
+        "message": "nur 0 Glossar-Eintr\u00e4ge (min 4)"
+      },
+      {
+        "severity": "major",
+        "area": "struktur",
+        "message": "nur 0 Troubleshooting-Eintr\u00e4ge (min 3)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 3: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "tools",
+        "message": "Tool 'Auth0 Authentication API' wird in keinem Step verwendet"
+      },
+      {
+        "severity": "major",
+        "area": "tools",
+        "message": "Tool 'Slack Web API' wird in keinem Step verwendet"
+      }
+    ]
+  },
+  {
+    "slug": "clerk-user-onboarding",
+    "title": "Clerk User Onboarding",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 149,
+    "explanation_chars": 2076,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 88,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 3: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      },
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 4: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "slack-twitch-automation-pipeline",
+    "title": "Slack + Twitch Automation Pipeline",
+    "difficulty": "Beginner",
+    "steps": 3,
+    "code_lines": 202,
+    "explanation_chars": 2099,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 11,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "sentry-performance-airtable-automation-pipeline",
+    "title": "Sentry Performance + Airtable Automation Pipeline",
+    "difficulty": "Beginner",
+    "steps": 3,
+    "code_lines": 168,
+    "explanation_chars": 2232,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 11,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "pdf-generator-to-twelve-data-with-deepai-image-generator-orchestration",
+    "title": "PDF Generator to Twelve Data with DeepAI Image Generator Orchestration",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 145,
+    "explanation_chars": 2799,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 13,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "shopify-admin-twilio-conversations-automation-pipeline",
+    "title": "Shopify Admin + Twilio Conversations Automation Pipeline",
+    "difficulty": "Beginner",
+    "steps": 3,
+    "code_lines": 114,
+    "explanation_chars": 2089,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 11,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "braintree-payments-to-airtable-with-contentful-content-management-system-orchestration",
+    "title": "Braintree Payments to Airtable with Contentful Content Management System Orchestration",
+    "difficulty": "Intermediate",
+    "steps": 4,
+    "code_lines": 144,
+    "explanation_chars": 3699,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 13,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "slack-ibm-watson-language-translator-automation-pipeline",
+    "title": "Slack + IBM Watson Language Translator Automation Pipeline",
+    "difficulty": "Beginner",
+    "steps": 3,
+    "code_lines": 180,
+    "explanation_chars": 3262,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 11,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "slack-microsoft-azure-face-automation-pipeline",
+    "title": "Slack + Microsoft Azure Face Automation Pipeline",
+    "difficulty": "Beginner",
+    "steps": 3,
+    "code_lines": 236,
+    "explanation_chars": 2107,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 11,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "shopify-admin-amazon-polly-automation-pipeline",
+    "title": "Shopify Admin + Amazon Polly Automation Pipeline",
+    "difficulty": "Beginner",
+    "steps": 3,
+    "code_lines": 232,
+    "explanation_chars": 2492,
+    "kit_ok": false,
+    "kit_dry_run": "1",
+    "pdf_pages": 11,
+    "score": 85,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "critical",
+        "area": "kit",
+        "message": "workflow.py --dry-run Exit 1: FileExistsError: [Errno 17] File exists: 'mock_input.json'"
+      }
+    ]
+  },
+  {
+    "slug": "weatherapi-launchdarkly-feature-automation-pipeline",
+    "title": "WeatherAPI + LaunchDarkly Feature Automation Pipeline",
+    "difficulty": "Beginner",
+    "steps": 3,
+    "code_lines": 84,
+    "explanation_chars": 2046,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 9,
+    "score": 94,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "major",
+        "area": "code",
+        "message": "Step 2: konsumiert keine Variable aus fr\u00fcheren Steps (Datenfluss unklar)"
+      }
+    ]
+  },
+  {
+    "slug": "salesforce-rest-weatherapi-automation-pipeline",
+    "title": "Salesforce REST + WeatherAPI Automation Pipeline",
+    "difficulty": "Beginner",
+    "steps": 3,
+    "code_lines": 135,
+    "explanation_chars": 2387,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 11,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "jira-rest-twilio-conversations-automation-pipeline",
+    "title": "Jira REST + Twilio Conversations Automation Pipeline",
+    "difficulty": "Beginner",
+    "steps": 3,
+    "code_lines": 249,
+    "explanation_chars": 3263,
+    "kit_ok": false,
+    "kit_dry_run": "1",
+    "pdf_pages": 11,
+    "score": 85,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "critical",
+        "area": "kit",
+        "message": "workflow.py --dry-run Exit 1: RuntimeError: Missing required environment variable: JIRA_PROJECT_KEY"
+      }
+    ]
+  },
+  {
+    "slug": "jira-rest-notion-api-for-automation-automation-pipeline",
+    "title": "Jira REST + Notion API for Automation Automation Pipeline",
+    "difficulty": "Beginner",
+    "steps": 3,
+    "code_lines": 217,
+    "explanation_chars": 2254,
+    "kit_ok": false,
+    "kit_dry_run": "1",
+    "pdf_pages": 11,
+    "score": 85,
+    "ok": false,
+    "findings": [
+      {
+        "severity": "critical",
+        "area": "kit",
+        "message": "workflow.py --dry-run Exit 1: RuntimeError: Jira response for dry-run-value is missing fields"
+      }
+    ]
+  },
+  {
+    "slug": "convertkit-github-copilot-automation-pipeline",
+    "title": "ConvertKit + GitHub Copilot Automation Pipeline",
+    "difficulty": "Beginner",
+    "steps": 3,
+    "code_lines": 146,
+    "explanation_chars": 2128,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 11,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "calendly-notion-api-for-automation-v2-automation-pipeline",
+    "title": "Calendly + Notion API for Automation V2 Automation Pipeline",
+    "difficulty": "Beginner",
+    "steps": 3,
+    "code_lines": 115,
+    "explanation_chars": 2181,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 10,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "calendly-pinecone-vector-automation-pipeline",
+    "title": "Calendly + Pinecone Vector Automation Pipeline",
+    "difficulty": "Beginner",
+    "steps": 3,
+    "code_lines": 138,
+    "explanation_chars": 2643,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 11,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "asana-automation-calendly-automation-pipeline",
+    "title": "Asana Automation + Calendly Automation Pipeline",
+    "difficulty": "Beginner",
+    "steps": 3,
+    "code_lines": 183,
+    "explanation_chars": 1948,
+    "kit_ok": true,
+    "kit_dry_run": "0",
+    "pdf_pages": 11,
+    "score": 100,
+    "ok": true,
+    "findings": []
+  }
+]

@@ -1,0 +1,1515 @@
+{
+  "live_checks": false,
+  "checked": 192,
+  "passing": 192,
+  "failing": 0,
+  "items": [
+    {
+      "slug": "ai-content-generation-pipeline",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 3: reassigns variable(s) from previous steps (draft) \u2013 verify the data flow",
+        "Step 4: reassigns variable(s) from previous steps (draft) \u2013 verify the data flow"
+      ]
+    },
+    {
+      "slug": "multi-model-prompt-router",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "llm-evaluation-benchmark",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "batch-llm-processing",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "ai-customer-insights",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 3: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 4: reassigns variable(s) from previous steps (insights) \u2013 verify the data flow"
+      ]
+    },
+    {
+      "slug": "claude-document-summarizer",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 4: does not consume any meaningful variable from previous steps (check the data flow)"
+      ]
+    },
+    {
+      "slug": "gemini-multimodal-analyzer",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 4: reassigns variable(s) from previous steps (GEMINI_API_KEY) \u2013 verify the data flow"
+      ]
+    },
+    {
+      "slug": "watson-assistant-helpdesk",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 3: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 4: does not consume any meaningful variable from previous steps (check the data flow)"
+      ]
+    },
+    {
+      "slug": "podcast-transcription-pipeline",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 3: reassigns variable(s) from previous steps (audio_queue) \u2013 verify the data flow"
+      ]
+    },
+    {
+      "slug": "ai-voiceover-production",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: reassigns variable(s) from previous steps (validate_script, validated_script) \u2013 verify the data flow",
+        "Step 3: reassigns variable(s) from previous steps (validate_script) \u2013 verify the data flow",
+        "Step 4: reassigns variable(s) from previous steps (NEWLINE) \u2013 verify the data flow"
+      ]
+    },
+    {
+      "slug": "ai-image-generation-pipeline",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: reassigns variable(s) from previous steps (validated_briefs) \u2013 verify the data flow",
+        "Step 3: reassigns variable(s) from previous steps (images) \u2013 verify the data flow",
+        "Step 4: reassigns variable(s) from previous steps (images) \u2013 verify the data flow"
+      ]
+    },
+    {
+      "slug": "semantic-search-knowledge-base",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "hybrid-search-product-catalog",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 4: does not consume any meaningful variable from previous steps (check the data flow)"
+      ]
+    },
+    {
+      "slug": "rag-document-assistant",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: reassigns variable(s) from previous steps (chunks) \u2013 verify the data flow",
+        "Step 3: reassigns variable(s) from previous steps (OPENAI_API_KEY, QDRANT_URL) \u2013 verify the data flow",
+        "Step 4: reassigns variable(s) from previous steps (OPENAI_API_KEY, context, question) \u2013 verify the data flow"
+      ]
+    },
+    {
+      "slug": "content-similarity-audit",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 4: reassigns variable(s) from previous steps (main) \u2013 verify the data flow",
+        "Workflow dry-run failed: ValueError: embedding must be a non-empty list of numbers\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 1195, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 146, in <module>\n  File \"workflow.py\", line 143, in main\n  File \"workflow.py\", line 129, in index_and_compare\n  File \"workflow.py\", line 103, in index_embeddings\n  File \"workflow.py\", line 86, in _validate_embedding\nValueError: embedding must be a non-empty list of numbers\n"
+      ]
+    },
+    {
+      "slug": "transactional-email-delivery",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "sms-alert-system",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 3: reassigns variable(s) from previous steps (main, send_sms_twilio) \u2013 verify the data flow",
+        "Step 4: reassigns variable(s) from previous steps (main) \u2013 verify the data flow",
+        "Workflow: API host 'sendinblue.com' resolves via DNS but is missing from resources",
+        "Workflow: API host 'sendinblue.com' resolves via DNS but is not listed in the curated API endpoints"
+      ]
+    },
+    {
+      "slug": "slack-incident-notifications",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 3: reassigns variable(s) from previous steps (formatted_blocks) \u2013 verify the data flow"
+      ]
+    },
+    {
+      "slug": "telegram-community-bot",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 3: does not consume any meaningful variable from previous steps (check the data flow)"
+      ]
+    },
+    {
+      "slug": "video-call-summarizer",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "conversational-messaging-hub",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 3: reassigns variable(s) from previous steps (messages) \u2013 verify the data flow",
+        "Step 4: does not consume any meaningful variable from previous steps (check the data flow)"
+      ]
+    },
+    {
+      "slug": "crm-lead-scoring",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "salesforce-pipeline-sync",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 4: reassigns variable(s) from previous steps (forecast) \u2013 verify the data flow"
+      ]
+    },
+    {
+      "slug": "personalized-outreach-engine",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "support-ticket-triage",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "ai-help-center-search",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 4: reassigns variable(s) from previous steps (OPENAI_API_KEY, PINECONE_API_KEY, PINECONE_HOST, PINECONE_NAMESPACE) \u2013 verify the data flow"
+      ]
+    },
+    {
+      "slug": "csat-feedback-analysis",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "subscription-billing-automation",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 4: does not consume any meaningful variable from previous steps (check the data flow)"
+      ]
+    },
+    {
+      "slug": "invoice-reconciliation",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: does not consume any meaningful variable from previous steps (check the data flow)"
+      ]
+    },
+    {
+      "slug": "paypal-payout-monitoring",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "stock-market-alerts",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 4: reassigns variable(s) from previous steps (alerts) \u2013 verify the data flow"
+      ]
+    },
+    {
+      "slug": "crypto-portfolio-tracker",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 4: does not consume any meaningful variable from previous steps (check the data flow)"
+      ]
+    },
+    {
+      "slug": "bank-transaction-enrichment",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "supabase-realtime-dashboard",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Workflow: API host 'w3.org' resolves via DNS but is missing from resources",
+        "Workflow: API host 'w3.org' resolves via DNS but is not listed in the curated API endpoints"
+      ]
+    },
+    {
+      "slug": "airtable-content-sync",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 4: does not consume any meaningful variable from previous steps (check the data flow)"
+      ]
+    },
+    {
+      "slug": "redis-rate-limit-store",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "google-sheets-reporting-hub",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "deployment-monitoring-alerts",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 3: reassigns variable(s) from previous steps (error_rates) \u2013 verify the data flow",
+        "Step 4: does not consume any meaningful variable from previous steps (check the data flow)"
+      ]
+    },
+    {
+      "slug": "feature-flag-rollout",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: reassigns variable(s) from previous steps (current_percentage) \u2013 verify the data flow",
+        "Step 3: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 4: reassigns variable(s) from previous steps (main) \u2013 verify the data flow",
+        "Workflow dry-run failed: ValueError: Flag rollout weights are not positive\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 1195, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 59, in <module>\n  File \"workflow.py\", line 56, in fetch_flag_rollout\n  File \"workflow.py\", line 44, in extract_rollout_percentage\nValueError: Flag rollout weights are not positive\n"
+      ]
+    },
+    {
+      "slug": "secrets-rotation-audit",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "serverless-job-scheduler",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "api-health-monitoring",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: does not consume any meaningful variable from previous steps (check the data flow)"
+      ]
+    },
+    {
+      "slug": "linear-roadmap-sync",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 3: reassigns variable(s) from previous steps (linear_projects, matched_milestones) \u2013 verify the data flow"
+      ]
+    },
+    {
+      "slug": "release-notes-generator",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 3: reassigns variable(s) from previous steps (main) \u2013 verify the data flow",
+        "Step 4: reassigns variable(s) from previous steps (main) \u2013 verify the data flow"
+      ]
+    },
+    {
+      "slug": "programmatic-seo-pipeline",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 3: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 4: reassigns variable(s) from previous steps (records) \u2013 verify the data flow"
+      ]
+    },
+    {
+      "slug": "ai-content-automation",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 4: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Workflow dry-run timed out after 10s \u2013 remove infinite loops or blocking waits from the step code",
+        "Workflow: API host 'notion.so' resolves via DNS but is missing from resources",
+        "Workflow: API host 'notion.so' resolves via DNS but is not listed in the curated API endpoints"
+      ]
+    },
+    {
+      "slug": "seo-content-audit",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 4: does not consume any meaningful variable from previous steps (check the data flow)"
+      ]
+    },
+    {
+      "slug": "blog-cms-publishing",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 3: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 4: does not consume any meaningful variable from previous steps (check the data flow)"
+      ]
+    },
+    {
+      "slug": "local-seo-landing-pages",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 4: does not consume any meaningful variable from previous steps (check the data flow)"
+      ]
+    },
+    {
+      "slug": "newsletter-automation",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 3: reassigns variable(s) from previous steps (summaries) \u2013 verify the data flow",
+        "Step 4: does not consume any meaningful variable from previous steps (check the data flow)"
+      ]
+    },
+    {
+      "slug": "content-localization-pipeline",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 3: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 4: does not consume any meaningful variable from previous steps (check the data flow)"
+      ]
+    },
+    {
+      "slug": "meeting-notes-automation",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "notion-task-sync",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: reassigns variable(s) from previous steps (open_tasks) \u2013 verify the data flow",
+        "Workflow dry-run timed out after 10s \u2013 remove infinite loops or blocking waits from the step code"
+      ]
+    },
+    {
+      "slug": "document-approval-workflow",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 4: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Workflow dry-run timed out after 10s \u2013 remove infinite loops or blocking waits from the step code"
+      ]
+    },
+    {
+      "slug": "form-submission-routing",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "team-wiki-search",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "design-feedback-collection",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 4: reassigns variable(s) from previous steps (grouped_feedback) \u2013 verify the data flow",
+        "Workflow dry-run failed: TypeError: object of type 'int' has no len()\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 1195, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 113, in <module>\n  File \"workflow.py\", line 105, in update_notion\nTypeError: object of type 'int' has no len()\n"
+      ]
+    },
+    {
+      "slug": "collaboration-presence-sync",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 3: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 4: does not consume any meaningful variable from previous steps (check the data flow)"
+      ]
+    },
+    {
+      "slug": "product-analytics-dashboard",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 3: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 4: does not consume any meaningful variable from previous steps (check the data flow)"
+      ]
+    },
+    {
+      "slug": "error-tracking-alerts",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "website-performance-reporting",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 3: reassigns variable(s) from previous steps (cloudflare_data, posthog_data) \u2013 verify the data flow",
+        "Step 4: does not consume any meaningful variable from previous steps (check the data flow)"
+      ]
+    },
+    {
+      "slug": "social-media-analytics",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 3: reassigns variable(s) from previous steps (analytics_data, channel_metadata) \u2013 verify the data flow",
+        "Step 4: does not consume any meaningful variable from previous steps (check the data flow)"
+      ]
+    },
+    {
+      "slug": "shopify-order-automation",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "inventory-sync-automation",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "weather-driven-ops-alerts",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Workflow dry-run failed: KeyError: 'condition'\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 1195, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 142, in <module>\n  File \"workflow.py\", line 133, in post_alerts\nKeyError: 'condition'\n"
+      ]
+    },
+    {
+      "slug": "store-locator-geocoding",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "asset-backup-automation",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Workflow dry-run failed: ValueError: Asset at index 0 is missing fields: size, checksum, verification_status\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 1195, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 200, in <module>\n  File \"workflow.py\", line 195, in main\n  File \"workflow.py\", line 101, in build_manifest\n  File \"workflow.py\", line 75, in _normalize_asset\nValueError: Asset at index 0 is missing fields: size, checksum, verification_status\n"
+      ]
+    },
+    {
+      "slug": "s3-static-site-publishing",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 3: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 4: does not consume any meaningful variable from previous steps (check the data flow)"
+      ]
+    },
+    {
+      "slug": "auth0-sso-provisioning",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "clerk-user-onboarding",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: reassigns variable(s) from previous steps (new_users) \u2013 verify the data flow",
+        "Step 3: does not consume any meaningful variable from previous steps (check the data flow)",
+        "Step 4: does not consume any meaningful variable from previous steps (check the data flow)"
+      ]
+    },
+    {
+      "slug": "slack-twitch-automation-pipeline",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "sentry-performance-airtable-automation-pipeline",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "pdf-generator-to-twelve-data-with-deepai-image-generator-orchestration",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "shopify-admin-twilio-conversations-automation-pipeline",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "braintree-payments-to-airtable-with-contentful-content-management-system-orchestration",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "slack-ibm-watson-language-translator-automation-pipeline",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "slack-microsoft-azure-face-automation-pipeline",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "shopify-admin-amazon-polly-automation-pipeline",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "weatherapi-launchdarkly-feature-automation-pipeline",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 2: does not consume any meaningful variable from previous steps (check the data flow)"
+      ]
+    },
+    {
+      "slug": "salesforce-rest-weatherapi-automation-pipeline",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "jira-rest-twilio-conversations-automation-pipeline",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 3: reassigns variable(s) from previous steps (jira_records, twilio_records) \u2013 verify the data flow"
+      ]
+    },
+    {
+      "slug": "jira-rest-notion-api-for-automation-automation-pipeline",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "convertkit-github-copilot-automation-pipeline",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "Step 3: reassigns variable(s) from previous steps (enriched) \u2013 verify the data flow"
+      ]
+    },
+    {
+      "slug": "calendly-notion-api-for-automation-v2-automation-pipeline",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "calendly-pinecone-vector-automation-pipeline",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "asana-automation-calendly-automation-pipeline",
+      "kind": "workflow",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "openai-whisper-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "stripe-payments-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "supabase-database-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "anthropic-claude-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "google-gemini-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "resend-email-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "clerk-authentication-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "cloudflare-workers-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "mapbox-maps-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "twilio-messaging-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "hugging-face-inference-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "API script raised EOFError: EOF when reading a line (mock warning)"
+      ]
+    },
+    {
+      "slug": "cohere-embed-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "pinecone-vector-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "auth0-authentication-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "sendgrid-email-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "algolia-search-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "openweather-weather-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "shopify-admin-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "notion-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "airtable-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "mistral-ai-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "groq-inference-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "together-ai-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "replicate-model-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "elevenlabs-voice-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "deepgram-speech-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "stability-ai-image-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "weaviate-vector-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "qdrant-vector-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "mongodb-atlas-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "upstash-redis-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "vercel-blob-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "liveblocks-collaboration-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "ably-realtime-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "posthog-analytics-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "sentry-error-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "launchdarkly-feature-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "doppler-secrets-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "openai-batch-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "google-sheets-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "API script raised EOFError: EOF when reading a line (mock warning)"
+      ]
+    },
+    {
+      "slug": "slack-web-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "hubspot-crm-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "zendesk-support-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "salesforce-rest-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "discord-bot-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "telegram-bot-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "github-rest-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "linear-graphql-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "microsoft-graph-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "openai-dall-e-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "microsoft-azure-cognitive-services-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "openai-gpt-4-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "API script raised EOFError: EOF when reading a line (mock warning)"
+      ]
+    },
+    {
+      "slug": "openai-embeddings-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "twitch-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "aws-s3-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "ibm-watson-text-to-speech-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "aws-lambda-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "paypal-payments-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "API script raised EOFError: EOF when reading a line (mock warning)"
+      ]
+    },
+    {
+      "slug": "ibm-cloud-object-storage-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "aws-rekognition-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "aws-ses-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "yelp-fusion-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "API script raised EOFError: EOF when reading a line (mock warning)"
+      ]
+    },
+    {
+      "slug": "ibm-watson-language-translator-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "ibm-watson-assistant-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "ibm-watson-discovery-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "azure-face-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "aws-polly-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "azure-cosmos-db-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "google-maps-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "plaid-financial-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "twilio-video-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "sendinblue-email-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "aws-transcribe-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "notion-automation-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "github-copilot-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "notion-forms-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "twitch-api-kraken",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "asana-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "twelvedata-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "pdf-generator-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "weatherapi",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "notion-api-for-automation",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "API script raised EOFError: EOF when reading a line (mock warning)"
+      ]
+    },
+    {
+      "slug": "twilio-conversations-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "asana-automation-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "notion-api-for-automation-v2",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "contentful-cms-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "tibber-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "braintree-payments-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "census-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "finnhub-stock-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "slack-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "tinkr-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "finnhub-crypto-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "squarespace-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "twitch-helix-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "pdf-co-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "aiven-kafka-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "api-ai-image-generator",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "sentry-performance-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "twitch-analytics-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "jira-rest-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "convertkit-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "klaviyo-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "calendly-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "figma-rest-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "slug": "webflow-api",
+      "kind": "api",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    }
+  ]
+}

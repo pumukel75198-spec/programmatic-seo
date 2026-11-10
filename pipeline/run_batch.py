@@ -21,6 +21,7 @@ Nothing is written/uploaded/deployed unless validator.py returns ok=True.
 from __future__ import annotations
 
 import argparse
+import ast
 import json
 import os
 import random
@@ -43,7 +44,7 @@ if __package__ in (None, ""):
     __package__ = "pipeline"
 
 from . import config as cfg
-from . import bundle_builder, llm_client, pdf_renderer, prompts, validator
+from . import bundle_builder, full_product_audit, llm_client, pdf_renderer, prompts, validator
 from . import seeds as seed_catalog
 
 
@@ -927,6 +928,89 @@ def write_pdf(workflow: dict[str, Any]) -> Path:
     return out
 
 
+def enforce_product_gate(product: dict[str, Any], kind: str) -> None:
+    """Hard gate: refuse to upload anything the deep audit flags."""
+    report = full_product_audit.audit_product(product, kind)
+    if not report.ok:
+        details = "; ".join(str(finding) for finding in report.findings)
+        raise RuntimeError(f"product gate failed: {details}")
+    print(f"  [GATE] {kind} {product.get('slug')} passed ({report.pages} pages)")
+
+
+def rebuild_artifacts(
+    workflows_to_rebuild: list[dict[str, Any]],
+    upload: bool = True,
+    skip_product_gate: bool = False,
+) -> int:
+    """Rebuild PDF/kit artifacts from existing records without calling the LLM.
+
+    Used by ``--rebuild-artifacts`` to refresh the delivered artifacts after a
+    data-only repair. It validates the record (live checks disabled), renders
+    the PDF, builds the kit and uploads all delivery keys used by the
+    download-gate worker.
+    """
+    previous_live = os.environ.get("FLOWMATRIX_SKIP_LIVE")
+    os.environ["FLOWMATRIX_SKIP_LIVE"] = "1"
+    failures: list[str] = []
+    successes = 0
+    try:
+        for index, workflow in enumerate(workflows_to_rebuild, start=1):
+            slug = str(workflow.get("slug"))
+            print(f"\n[{index}/{len(workflows_to_rebuild)}] {slug}")
+            try:
+                result = validator.validate_workflow(workflow)
+                if not result.ok:
+                    raise RuntimeError("; ".join(result.errors))
+
+                combined = "\n\n".join(
+                    str(step.get("code_snippet") or "")
+                    for step in (workflow.get("details") or {}).get("steps", [])
+                )
+                ast.parse(combined, feature_version=(3, 10))
+
+                pdf_path = write_pdf(workflow)
+                kit_path = bundle_builder.build_workflow_kit(
+                    workflow, pdf_path, cfg.KITS_DIR
+                )
+                kit_result = validator.validate_kit_zip(
+                    kit_path, cfg.WORKFLOW_KIT_FILES
+                )
+                if not kit_result.ok:
+                    raise RuntimeError("kit: " + "; ".join(kit_result.errors))
+
+                if not skip_product_gate:
+                    enforce_product_gate(workflow, "workflow")
+
+                if upload:
+                    targets = [
+                        (f"pdfs/flowmatrix-{slug}.pdf", pdf_path),
+                        (f"{slug}.pdf", pdf_path),
+                        (f"kits/{slug}-kit.zip", kit_path),
+                    ]
+                    for key, path in targets:
+                        if not upload_to_r2(path, key):
+                            raise RuntimeError(f"R2 upload failed: {key}")
+                        print(f"  [OK] uploaded to R2: {key}")
+
+                successes += 1
+                print(f"  [OK] {pdf_path.name}, {kit_path.name}")
+            except Exception as error:  # noqa: BLE001 - keep rebuilding
+                failures.append(f"{slug}: {error}")
+                print(f"  [FAIL] {slug}: {error}")
+    finally:
+        if previous_live is None:
+            os.environ.pop("FLOWMATRIX_SKIP_LIVE", None)
+        else:
+            os.environ["FLOWMATRIX_SKIP_LIVE"] = previous_live
+
+    print(
+        f"\nArtifact rebuild: {successes} succeeded, {len(failures)} failed."
+    )
+    for failure in failures:
+        print(f"  ✖ {failure}")
+    return 0 if not failures else 1
+
+
 def write_api_script(api: dict[str, Any], script: str) -> Path:
     directory = cfg.API_SCRIPTS_DIR / api["slug"]
     directory.mkdir(parents=True, exist_ok=True)
@@ -1125,10 +1209,20 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         action="store_true",
         help="Delete generated workflow/API artifacts from R2 before the run",
     )
+    parser.add_argument(
+        "--rebuild-artifacts",
+        action="store_true",
+        help="Rebuild PDF/kit/R2 artifacts for selected workflows without LLM",
+    )
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--skip-build", action="store_true")
     parser.add_argument("--skip-upload", action="store_true")
     parser.add_argument("--skip-deploy", action="store_true")
+    parser.add_argument(
+        "--skip-product-gate",
+        action="store_true",
+        help="Debug only: skip the strict PDF/kit gate before R2 upload",
+    )
     parser.add_argument("--seed", type=int, default=None)
     parser.add_argument(
         "--limit",
@@ -1220,7 +1314,7 @@ def _is_complete_workflow(item: dict[str, Any]) -> bool:
     )
 
 
-def run_limited_batch(limit: int) -> int:
+def run_limited_batch(limit: int, skip_product_gate: bool = False) -> int:
     """Process exactly ``limit`` open workflows from the 76-seed catalogue.
 
     Progress is persisted in ``pipeline/batch_progress.json``. A workflow that
@@ -1324,11 +1418,16 @@ def run_limited_batch(limit: int) -> int:
                     "kit validation failed: " + "; ".join(kit_result.errors)
                 )
 
+            if not skip_product_gate:
+                enforce_product_gate(candidate, "workflow")
+
             pdf_key = f"pdfs/flowmatrix-{slug}.pdf"
+            delivery_key = f"{slug}.pdf"
             kit_key = f"kits/{slug}-kit.zip"
             pdf_uploaded = upload_to_r2(pdf_path, pdf_key)
+            delivery_uploaded = upload_to_r2(pdf_path, delivery_key)
             kit_uploaded = upload_to_r2(kit_path, kit_key)
-            if not (pdf_uploaded and kit_uploaded):
+            if not (pdf_uploaded and delivery_uploaded and kit_uploaded):
                 print(
                     "  [WARN] R2 upload incomplete – local artifacts kept, "
                     "workflow still marked done"
@@ -1370,7 +1469,7 @@ def main(argv: list[str] | None = None) -> int:
     cfg.load_env()
     args = parse_args(sys.argv[1:] if argv is None else argv)
     if args.limit and args.limit > 0:
-        return run_limited_batch(args.limit)
+        return run_limited_batch(args.limit, args.skip_product_gate)
     if args.seed is not None:
         random.seed(args.seed)
 
@@ -1379,7 +1478,7 @@ def main(argv: list[str] | None = None) -> int:
         args.workflows or args.apis or args.alternatives
         or args.only_workflow or args.only_api or args.only_alternative
         or args.from_seeds
-    )
+    ) and not args.rebuild_artifacts
     if needs_llm and api_key_missing:
         print("[FAIL] OPENROUTER_API_KEY is not set.")
         return 2
@@ -1389,6 +1488,22 @@ def main(argv: list[str] | None = None) -> int:
     alternatives = load_json(cfg.ALTERNATIVES_FILE)
     overrides = load_json(cfg.API_ENDPOINTS_FILE) if cfg.API_ENDPOINTS_FILE.exists() else {}
     overrides.pop("_comment", None)
+
+    if args.rebuild_artifacts:
+        selected = [
+            item
+            for item in workflows
+            if not args.only_workflow
+            or item.get("slug") in set(args.only_workflow)
+        ]
+        if not selected:
+            print("[FAIL] --rebuild-artifacts matched no workflows")
+            return 2
+        return rebuild_artifacts(
+            selected,
+            upload=not args.skip_upload,
+            skip_product_gate=args.skip_product_gate,
+        )
 
     # Destructive cleanup happens before anything is regenerated. The R2 keys
     # are derived from the current catalogue, so no bucket listing is needed.
@@ -1572,6 +1687,15 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  [FAIL] Workflow kit validation failed: {kit_res.errors}")
             continue
 
+        if not args.skip_product_gate:
+            try:
+                enforce_product_gate(candidate, "workflow")
+            except Exception as error:  # noqa: BLE001
+                protocol.append({"kind": "workflow", "slug": slug, "ok": False,
+                                 "attempts": attempts, "errors": [str(error)]})
+                print(f"  [FAIL] {slug} product gate: {error}")
+                continue
+
         protocol.append({"kind": "workflow", "slug": slug, "ok": True,
                          "attempts": attempts, "warnings": result.warnings,
                          "pdf": str(pdf_path), "kit": str(kit_path),
@@ -1584,6 +1708,9 @@ def main(argv: list[str] | None = None) -> int:
             key = f"pdfs/flowmatrix-{candidate['slug']}.pdf"
             if upload_to_r2(pdf_path, key):
                 print(f"  [OK] uploaded to R2: {key}")
+            delivery_key = f"{candidate['slug']}.pdf"
+            if upload_to_r2(pdf_path, delivery_key):
+                print(f"  [OK] uploaded to R2: {delivery_key}")
             kit_key = f"kits/{candidate['slug']}-kit.zip"
             if upload_to_r2(kit_path, kit_key):
                 print(f"  [OK] uploaded to R2: {kit_key}")
@@ -1618,6 +1745,15 @@ def main(argv: list[str] | None = None) -> int:
                              "attempts": attempts, "errors": kit_res.errors})
             print(f"  [FAIL] API kit validation failed: {kit_res.errors}")
             continue
+
+        if not args.skip_product_gate:
+            try:
+                enforce_product_gate(api, "api")
+            except Exception as error:  # noqa: BLE001
+                protocol.append({"kind": "api", "slug": api["slug"], "ok": False,
+                                 "attempts": attempts, "errors": [str(error)]})
+                print(f"  [FAIL] {api['slug']} product gate: {error}")
+                continue
 
         protocol.append({"kind": "api", "slug": api["slug"], "ok": True,
                          "attempts": attempts, "warnings": warnings,

@@ -226,6 +226,7 @@ HARD RULES
 - "troubleshooting": at least {config.TROUBLESHOOTING_MIN} objects with "problem" and "solution".
 - "resources": one entry per tool/API used, with the FULL official URL (https://...). Every tool in the workflow MUST appear here, and the label MUST exactly match the tool name (e.g. "X API", "OpenAI API", "Supabase", "Slack").
 - "code_snippet": MANDATORY in EVERY step, at least 10 non-empty lines (blank lines do NOT count). Count the lines before answering and add real statements, not comment filler. Every step MUST import the modules it uses (`json`, `urllib.request`, `urllib.parse`, `http.client`, etc. - specifically `import urllib.parse` whenever `urllib.parse.urlencode` is used) at the TOP of that step's snippet, so the concatenated script runs from step 1. Each step MUST end with a top-level call that executes its function and assigns the result (e.g. `mentions = fetch_mentions()`), so the concatenated script runs end-to-end.
+- "code_snippet": DATA FLOW CONTRACT: Every step's snippet MUST assign at least one module-level variable, and the next step MUST consume that exact variable. Never reference a name that is not a builtin, an import, or a module-level assignment from the current or an earlier step. Keep API results in module-level variables (e.g. `briefs = load_briefs()`), never only inside function locals. The concatenation is executed end-to-end, so undefined names are a hard failure.
 - "code_snippet": DEFENSIVE CODING: Always use `.get('key', default_value)` when accessing dictionary keys from API responses. Never assume a key exists. This prevents KeyError during the dry-run. Apply this to EVERY dict access, including nested access such as `data.get('cohorts', [])`, `payload.get('assets', [])` or `response.get('id', '')`.
 - "code_snippet": API USAGE: You MUST build at least one dedicated step with a real `urllib.request` call for EVERY provided API. Each API must be explicitly called in the code.
 - "code_snippet": Python standard library ONLY. FORBIDDEN: requests, openai, supabase, httpx, aiohttp, pydantic, pandas, scikit-learn, sklearn, sentry_sdk and ANY other SDK/third-party package. NEVER tell the reader to run "pip install".
@@ -268,7 +269,24 @@ HARD RULES
 - If a step uses n8n, use an n8n webhook placeholder: "https://<your-n8n-instance>/webhook/<name>". Do not invent a generic API domain.
 - FORBIDDEN phrases: "scikit-learn", "pip install", "Dummy", "gpt-3.5-turbo", "File > New", "File > Save", "Make a Zap", "Adobe XD", "api.supabase.io", "ChatCompletion.create", "Node.js 18", "7.99".
 - No placeholders like "TODO", "Lorem Ipsum", "undefined".
-- No markdown code fences, no text outside the JSON."""
+- No markdown code fences, no text outside the JSON.
+
+SELF-CHECK BEFORE YOU ANSWER (each item is a hard mechanical validator check – a single miss rejects the whole record):
+1. "prerequisites" has at least {config.PREREQUISITES_MIN} entries and the LAST one is exactly "{config.FINAL_PREREQUISITE}".
+2. "glossary" has at least {config.GLOSSARY_TERMS_MIN} advanced terms; no trivial terms (API, Database, Webhook, Server, Client, HTTP, JSON).
+3. "troubleshooting" has at least {config.TROUBLESHOOTING_MIN} problem/solution pairs.
+4. Every step has 3–6 "actions" and 2–4 "checklist" points.
+5. Every "code_snippet" has at least 10 non-empty lines and imports every module it uses at the top of that snippet.
+6. Every function defined in a snippet is called at top level in the same snippet (e.g. `mentions = fetch_mentions()`).
+7. Every module-level variable referenced by a later step is assigned in the current or an earlier step.
+8. No `import random`, no dummy data, no third-party imports, no "pip install".
+9. Every tool in "tools" is actually called in the code and appears in "resources" with its full official URL.
+10. No PEP 701 f-strings: never reuse the same quote inside an f-string expression.
+11. When OpenAI output is converted with `float(...)`, the user message literally contains "Respond ONLY with a float between -1.0 and 1.0" and the conversion handles ValueError.
+12. Slack webhook responses are plain text "ok" – never call `json.loads()` on them.
+13. Supabase writes send `apikey`, `Authorization: Bearer ...` and `Prefer: return=representation`, and accept 200/201/204.
+14. Use only `gpt-4o-mini` or `gpt-4o`; `gpt-3.5-turbo` is forbidden.
+15. The concatenation of all snippets must run end-to-end without NameError, KeyError or TypeError."""
 
 
 def build_api_script_prompt(

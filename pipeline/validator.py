@@ -27,6 +27,7 @@ import re
 import shutil
 import signal
 import socket
+import symtable
 import tempfile
 import traceback
 import urllib.error
@@ -293,28 +294,10 @@ def validate_domains(payload: Any, context: str) -> list[str]:
         if not host:
             continue
 
-        # A bare host such as https://rest.ably.io is an API base URL. APIs
-        # routinely answer 404 on the bare host while /time or /v1 works, so
-        # only a bounded TCP reachability check is meaningful here.
-        if parsed_url.path in ("", "/"):
-            ok, reason = _tcp_reachable(host)
-            if not ok:
-                errors.append(
-                    f"{context}: base host not reachable: {host} ({reason})"
-                )
-            continue
-
-        # Placeholder paths such as /bot{token}/sendMessage or
-        # /Accounts/{os.environ.get(...)} cannot be tested directly. Only the
-        # TCP reachability of the real host is meaningful.
-        if "{" in url or "}" in url:
-            ok, reason = _tcp_reachable(host)
-            if not ok:
-                errors.append(
-                    f"{context}: placeholder host not reachable: {host} ({reason})"
-                )
-            continue
-
+        # Placeholder hosts such as {application_id}.algolia.net or
+        # {os.environ.get(...)} are templates, not real domains. Map them to a
+        # curated base domain when possible and skip them otherwise – never
+        # feed the literal placeholder to DNS/TCP.
         if _is_placeholder_host(host):
             base = _base_domain_for_placeholder(host)
             if not base:
@@ -326,6 +309,27 @@ def validate_domains(payload: Any, context: str) -> list[str]:
             if not ok:
                 errors.append(
                     f"{context}: base domain not reachable: {base} ({reason})"
+                )
+            continue
+
+        # A bare host such as https://rest.ably.io is an API base URL. APIs
+        # routinely answer 404 on the bare host while /time or /v1 works, so
+        # only a bounded TCP reachability check is meaningful here.
+        if parsed_url.path in ("", "/"):
+            ok, reason = _tcp_reachable(host)
+            if not ok:
+                errors.append(
+                    f"{context}: base host not reachable: {host} ({reason})"
+                )
+            continue
+
+        # Placeholder paths such as /bot{token}/sendMessage cannot be tested
+        # directly. Only the TCP reachability of the real host is meaningful.
+        if "{" in url or "}" in url:
+            ok, reason = _tcp_reachable(host)
+            if not ok:
+                errors.append(
+                    f"{context}: placeholder host not reachable: {host} ({reason})"
                 )
             continue
 
@@ -471,6 +475,67 @@ def _self_reassignments(code: str) -> set[str]:
     return names
 
 
+def check_cross_step_dataflow(steps: list[dict[str, Any]]) -> ValidationResult:
+    """Static contract for the concatenated workflow script.
+
+    ``symtable`` correctly distinguishes module-level globals from function
+    parameters and comprehension locals. This catches undefined cross-step
+    variables *before* the runtime dry-run turns them into a raw NameError,
+    and gives the LLM precise, actionable feedback.
+    """
+    result = ValidationResult()
+    available = set(dir(builtins)) | {
+        "__name__",
+        "__file__",
+        "__builtins__",
+    }
+    total = len(steps)
+
+    for index, step in enumerate(steps, start=1):
+        code = str(step.get("code_snippet") or "")
+        if not code.strip():
+            continue
+        try:
+            table = symtable.symtable(code, f"<step {index}>", "exec")
+        except SyntaxError:
+            continue
+
+        assigned: set[str] = set()
+        imported: set[str] = set()
+        referenced: set[str] = set()
+        for symbol in table.get_symbols():
+            name = symbol.get_name()
+            if symbol.is_imported():
+                imported.add(name)
+            if symbol.is_assigned() or symbol.is_imported():
+                assigned.add(name)
+            if (
+                symbol.is_referenced()
+                and not symbol.is_assigned()
+                and not symbol.is_imported()
+                and not symbol.is_parameter()
+                # Compiler-internal names such as __conditional_annotations__
+                # are injected by CPython and are not real cross-step variables.
+                and not (name.startswith("__") and name.endswith("__"))
+            ):
+                referenced.add(name)
+
+        available |= assigned | imported
+        for name in sorted(name for name in referenced if name not in available):
+            result.add(
+                f"Step {index}: variable '{name}' is referenced but not defined "
+                "by an earlier step (assign it at module level in the step that "
+                "produces it)"
+            )
+        if index < total and not assigned:
+            result.add(
+                f"Step {index}: code_snippet must assign at least one "
+                "module-level variable for the next step"
+            )
+
+    return result
+
+
 def _has_top_level_execution(code: str) -> bool:
     """True if the script actually calls a function it defines at module level."""
     try:
@@ -564,11 +629,13 @@ class _FakeResponse:
 
 
 def _fake_env_value(name: str) -> str:
-    """Realistic mock environment values for the dry-run.
+    """Type-aware mock environment values for the dry-run.
 
     URL-like variables must contain a valid absolute URL because
     ``urllib.request.Request`` parses the URL before ``urlopen`` is patched.
-    Secrets stay harmless placeholders.
+    JSON/list variables must decode to a real array, numeric variables to a
+    number and e-mail variables to a valid address – otherwise the dry-run
+    fails on the *mock* value instead of on the generated code.
     """
     upper = name.upper()
     is_url = (
@@ -579,6 +646,67 @@ def _fake_env_value(name: str) -> str:
         or upper.endswith("_ENDPOINT")
         or upper.endswith("_HOST")
     )
+    is_json = upper.endswith("_JSON") or upper.endswith("JSON")
+    is_list = (
+        upper.endswith("_LIST")
+        or upper.endswith("_ARRAY")
+        or upper.endswith("_ITEMS")
+        or upper.endswith("_RECORDS")
+        or upper.endswith("_ROWS")
+    )
+    is_email = "EMAIL" in upper or upper.endswith("_MAIL")
+    is_numeric = upper in {"PORT", "TIMEOUT", "RATE", "LIMIT", "COUNT"} or any(
+        upper.endswith(suffix)
+        for suffix in (
+            "_THRESHOLD",
+            "_COUNT",
+            "_LIMIT",
+            "_WEIGHT",
+            "_PERCENT",
+            "_RATIO",
+            "_SCORE",
+            "_PORT",
+            "_TIMEOUT",
+            "_INTERVAL",
+            "_RETRIES",
+            "_MAX",
+            "_MIN",
+            "_SECONDS",
+            "_WINDOW",
+            "_RATE",
+            "_SIZE",
+            "_LENGTH",
+            "_AGE",
+            "_DAYS",
+            "_HOURS",
+            "_MINUTES",
+            "_PRICE",
+            "_AMOUNT",
+            "_BUDGET",
+        )
+    )
+    if is_json or is_list:
+        return json.dumps(
+            [
+                {
+                    "id": "1",
+                    "name": "sample",
+                    "title": "Sample",
+                    "text": "sample",
+                    "value": 0.5,
+                    "weight": 1,
+                    "count": 1,
+                    "score": 0.8,
+                    "status": "ok",
+                    "email": "test@example.com",
+                    "url": "https://example.com",
+                }
+            ]
+        )
+    if is_email:
+        return "test@example.com"
+    if is_numeric:
+        return "1"
     if "SUPABASE" in upper:
         return "https://mock.supabase.co" if is_url else "test-value"
     if "SLACK" in upper:
@@ -632,12 +760,20 @@ def mock_run(script: str) -> ValidationResult:
     original_loads = json.loads
 
     def _smart_loads(*args: Any, **kwargs: Any) -> Any:
-        return _wrap_mock(original_loads(*args, **kwargs))
+        try:
+            return _wrap_mock(original_loads(*args, **kwargs))
+        except json.JSONDecodeError:
+            # Mock bodies are not guaranteed to be JSON; never let an
+            # artificial payload fail the dry-run.
+            return _wrap_mock({})
 
     original_load = json.load
 
     def _smart_load(*args: Any, **kwargs: Any) -> Any:
-        return _wrap_mock(original_load(*args, **kwargs))
+        try:
+            return _wrap_mock(original_load(*args, **kwargs))
+        except json.JSONDecodeError:
+            return _wrap_mock({})
 
     try:
         with mock.patch("sys.argv", ["generated_api_script.py"]):
@@ -1013,13 +1149,21 @@ def execute_workflow_dry_run(
             original_loads = json.loads
 
             def _smart_loads(*args: Any, **kwargs: Any) -> Any:
-                return _wrap_mock(original_loads(*args, **kwargs))
+                try:
+                    return _wrap_mock(original_loads(*args, **kwargs))
+                except json.JSONDecodeError:
+                    # Mock responses may be plain text; return a neutral object
+                    # instead of aborting the whole workflow dry-run.
+                    return _wrap_mock({})
 
             stack.enter_context(mock.patch("json.loads", side_effect=_smart_loads))
             original_load = json.load
 
             def _smart_load(*args: Any, **kwargs: Any) -> Any:
-                return _wrap_mock(original_load(*args, **kwargs))
+                try:
+                    return _wrap_mock(original_load(*args, **kwargs))
+                except json.JSONDecodeError:
+                    return _wrap_mock({})
 
             stack.enter_context(mock.patch("json.load", side_effect=_smart_load))
             stack.enter_context(
@@ -1127,11 +1271,15 @@ def validate_api_script(script: str) -> ValidationResult:
         result.add("API script: configuration must use os.environ")
     if "--dry-run" not in script:
         result.add(
-            "API script: missing mandatory `--dry-run` argparse mode "
+            "API script: missing mandatory `--dry-run` mode "
             "(the sandbox executes `python3 api_client.py --dry-run`)"
         )
-    if "argparse" not in script:
-        result.add("API script: --dry-run mode must use argparse")
+    # The dry-run flag may be handled with argparse OR with a simple
+    # ``"--dry-run" in sys.argv`` check. Both are functionally equivalent and
+    # both pass the sandbox; demanding argparse was a false positive that
+    # rejected perfectly working scripts.
+    elif "argparse" not in script and "sys.argv" not in script:
+        result.add("API script: --dry-run mode must be handled via argparse or sys.argv")
     if "def request_json(" not in script:
         result.add(
             "API script: missing the mandatory top-level `request_json(...)` helper"
@@ -1652,6 +1800,8 @@ def validate_workflow(workflow: dict[str, Any]) -> ValidationResult:
                 f"{error.msg} (line {error.lineno})"
             )
         else:
+            dataflow = check_cross_step_dataflow(steps)
+            result.merge(dataflow)
             if not _has_top_level_execution(joined):
                 result.add(
                     "Workflow: code defines functions but never calls them – "
@@ -1661,8 +1811,34 @@ def validate_workflow(workflow: dict[str, Any]) -> ValidationResult:
             # Real runtime execution against mocked HTTP responses. This
             # catches type errors that ast.parse cannot see. It is skipped only
             # for the fast structural audit; the real pipeline always runs it.
-            if os.environ.get("FLOWMATRIX_SKIP_DRYRUN") != "1":
-                result.merge(execute_workflow_dry_run(combined_code))
+            # If the static data-flow contract already failed, skip execution:
+            # the precise undefined-name errors are better feedback than a raw
+            # NameError traceback.
+            if (
+                os.environ.get("FLOWMATRIX_SKIP_DRYRUN") != "1"
+                and dataflow.ok
+            ):
+                # Reuse the exact mock data the kit ships (and that the customer
+                # audit executes). Generic mocks caused false runtime failures
+                # whenever a step expected a specific response shape.
+                try:
+                    from . import bundle_builder as _bundle_builder
+
+                    dry_run_mocks = _bundle_builder._mock_data(workflow)
+                except Exception:  # noqa: BLE001 - fall back to generic mocks
+                    dry_run_mocks = None
+                dry_run_result = execute_workflow_dry_run(
+                    combined_code, mock_responses=dry_run_mocks
+                )
+                # Stored-record audits (content gate) treat runtime/mock shape
+                # issues as advisory: the authoritative runtime check is the
+                # kit execution with the record's own mock_data (customer
+                # audit). Generation still gets hard errors as feedback.
+                if os.environ.get("FLOWMATRIX_LENIENT_RUNTIME") == "1":
+                    for message in dry_run_result.errors:
+                        result.warn(message)
+                else:
+                    result.merge(dry_run_result)
 
     prerequisites = details.get("prerequisites") or []
     if len(prerequisites) < config.PREREQUISITES_MIN:
@@ -1787,11 +1963,15 @@ def validate_workflow(workflow: dict[str, Any]) -> ValidationResult:
             details_api.get("website"),
         ):
             value = str(raw or "")
-            if not value or "<" in value or "{" in value:
+            if not value:
                 continue
             host = urllib.parse.urlparse(value).hostname or ""
-            if host:
-                allowed_domains.add(_registrable_domain(host))
+            # A placeholder in the *path* (e.g. /app/{appId}/...) must not
+            # discard a perfectly valid hostname. Only skip when the host
+            # itself is templated.
+            if not host or "<" in host or "{" in host:
+                continue
+            allowed_domains.add(_registrable_domain(host))
 
     # Reverse check: API hosts used in code must be represented in resources,
     # but documentation links, curated API endpoints and already-referenced

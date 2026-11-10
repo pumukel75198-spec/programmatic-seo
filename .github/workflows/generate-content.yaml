@@ -92,6 +92,12 @@ jobs:
       - name: Unit tests (with coverage)
         run: npm run test:coverage
 
+      # Re-validates every stored workflow/API with the real validator.
+      # Live link checks are off: the disclaimer only guarantees reachability
+      # on the day of generation. A stale record blocks the commit.
+      - name: Content gate (stored workflows & APIs)
+        run: python -m pipeline.content_gate
+
       # --- Customer audit & auto-heal (hard pre-deploy gate) ----------------
       # Runs the full six-level customer audit (PDF/ZIP cross-check, sandbox
       # execution, deep PDF inspection, live domains, autonomous healing)

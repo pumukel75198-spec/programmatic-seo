@@ -1,0 +1,200 @@
+# Product Gate Report
+
+Products checked: 194 · Passing: 168 · Failing: 26
+
+| Slug | Type | Pages | Dry-Run | ZIP | Status | Findings |
+| --- | --- | --- | --- | --- | --- | --- |
+| ai-content-generation-pipeline | workflow | 11 | 0 | yes | PASS | — |
+| multi-model-prompt-router | workflow | 9 | 0 | yes | PASS | — |
+| llm-evaluation-benchmark | workflow | 10 | 1 | no | FAIL | [S1] sandbox exit code 1: AttributeError: 'list' object has no attribute 'get'<br>[S1] sandbox stderr contains Traceback<br>[S1] workflow --dry-run produced no stdout |
+| batch-llm-processing | workflow | 14 | 0 | yes | PASS | — |
+| ai-customer-insights | workflow | 10 | 1 | no | FAIL | [S1] sandbox exit code 1: step failed: FLOWMATRIX_STEP_INPUT is not valid JSON.<br>[S1] workflow --dry-run produced no stdout |
+| claude-document-summarizer | workflow | 9 | 1 | no | FAIL | [S1] sandbox exit code 1: KeyError: 'documents'<br>[S1] sandbox stderr contains Traceback<br>[S1] workflow --dry-run produced no stdout |
+| gemini-multimodal-analyzer | workflow | 11 | 0 | yes | PASS | — |
+| watson-assistant-helpdesk | workflow | 9 | 1 | no | FAIL | [S1] sandbox exit code 1: FileNotFoundError: [Errno 2] No such file or directory: '.zendesk.com/api/v2/tickets.json'<br>[S1] sandbox stderr contains Traceback<br>[S1] workflow --dry-run produced no stdout |
+| podcast-transcription-pipeline | workflow | 9 | 1 | no | FAIL | [S1] sandbox exit code 1: AttributeError: 'list' object has no attribute 'get'<br>[S1] sandbox stderr contains Traceback<br>[S1] workflow --dry-run produced no stdout |
+| ai-voiceover-production | workflow | 12 | 1 | no | FAIL | [S1] sandbox exit code 1: RuntimeError: Missing required environment variable: ELEVENLABS_API_KEY<br>[S1] sandbox stderr contains Traceback |
+| ai-image-generation-pipeline | workflow | 9 | 0 | yes | PASS | — |
+| semantic-search-knowledge-base | workflow | 9 | 0 | yes | PASS | — |
+| hybrid-search-product-catalog | workflow | 9 | 0 | yes | PASS | — |
+| rag-document-assistant | workflow | 9 | 0 | yes | PASS | — |
+| content-similarity-audit | workflow | 9 | 0 | yes | PASS | — |
+| transactional-email-delivery | workflow | 9 | 0 | yes | PASS | — |
+| email-campaign-automation | workflow | 9 | 0 | yes | PASS | — |
+| sms-alert-system | workflow | 9 | 0 | yes | PASS | — |
+| slack-incident-notifications | workflow | 9 | 0 | yes | PASS | — |
+| telegram-community-bot | workflow | 9 | 0 | yes | PASS | — |
+| video-call-summarizer | workflow | 9 | 0 | yes | PASS | — |
+| conversational-messaging-hub | workflow | 9 | 0 | yes | PASS | — |
+| crm-lead-scoring | workflow | 9 | 0 | yes | PASS | — |
+| salesforce-pipeline-sync | workflow | 9 | 0 | yes | PASS | — |
+| personalized-outreach-engine | workflow | 9 | 0 | yes | PASS | — |
+| support-ticket-triage | workflow | 9 | 0 | yes | PASS | — |
+| ai-help-center-search | workflow | 9 | 0 | yes | PASS | — |
+| csat-feedback-analysis | workflow | 9 | 0 | yes | PASS | — |
+| subscription-billing-automation | workflow | 9 | 0 | yes | PASS | — |
+| invoice-reconciliation | workflow | 9 | 0 | yes | PASS | — |
+| paypal-payout-monitoring | workflow | 9 | 0 | yes | PASS | — |
+| stock-market-alerts | workflow | 9 | 0 | yes | PASS | — |
+| crypto-portfolio-tracker | workflow | 9 | 0 | no | FAIL | [S1] requests.http contains no valid HTTP requests |
+| bank-transaction-enrichment | workflow | 9 | 0 | yes | FAIL | [S2] code snippet #2 OpenAI chat model must be gpt-4o/gpt-4o-mini: ['gpt-4'] |
+| supabase-realtime-dashboard | workflow | 12 | 1 | no | FAIL | [S1] sandbox exit code 1: RuntimeError: Missing required environment variable: POSTHOG_PROJECT_ID<br>[S1] sandbox stderr contains Traceback<br>[S1] workflow --dry-run produced no stdout |
+| airtable-content-sync | workflow | 9 | 0 | yes | PASS | — |
+| mongodb-data-pipeline | workflow | 9 | 0 | yes | PASS | — |
+| redis-rate-limit-store | workflow | 9 | 0 | yes | PASS | — |
+| google-sheets-reporting-hub | workflow | 9 | 0 | yes | PASS | — |
+| deployment-monitoring-alerts | workflow | 9 | 0 | yes | PASS | — |
+| feature-flag-rollout | workflow | 9 | 0 | yes | PASS | — |
+| secrets-rotation-audit | workflow | 11 | 1 | no | FAIL | [S1] sandbox exit code 1: AttributeError: '_Resp' object has no attribute 'headers'<br>[S1] sandbox stderr contains Traceback<br>[S1] workflow --dry-run produced no stdout |
+| serverless-job-scheduler | workflow | 9 | 0 | yes | FAIL | [S2] code snippet #1 uses urlencode without 'import urllib.parse'<br>[S2] code snippet #1 Supabase write missing Prefer: return=representation |
+| api-health-monitoring | workflow | 9 | 0 | yes | PASS | — |
+| linear-roadmap-sync | workflow | 9 | 0 | yes | PASS | — |
+| release-notes-generator | workflow | 13 | 1 | no | FAIL | [S1] sandbox exit code 1: AttributeError: '_Resp' object has no attribute 'headers'<br>[S1] sandbox stderr contains Traceback<br>[S1] workflow --dry-run produced no stdout |
+| programmatic-seo-pipeline | workflow | 9 | 0 | yes | PASS | — |
+| ai-content-automation | workflow | 9 | 0 | yes | PASS | — |
+| seo-content-audit | workflow | 11 | 1 | no | FAIL | [S1] sandbox exit code 1: RuntimeError: Algolia returned no indexed pages<br>[S1] sandbox stderr contains Traceback<br>[S1] workflow --dry-run produced no stdout |
+| blog-cms-publishing | workflow | 9 | 0 | yes | PASS | — |
+| local-seo-landing-pages | workflow | 9 | 0 | yes | PASS | — |
+| newsletter-automation | workflow | 10 | 1 | no | FAIL | [S1] sandbox exit code 1: RuntimeError: Missing required environment variable: NEWSLETTER_HTML<br>[S1] sandbox stderr contains Traceback<br>[S1] workflow --dry-run produced no stdout |
+| content-localization-pipeline | workflow | 9 | 0 | no | FAIL | [S1] requests.http contains no valid HTTP requests |
+| meeting-notes-automation | workflow | 9 | 0 | yes | PASS | — |
+| notion-task-sync | workflow | 10 | 0 | yes | PASS | — |
+| document-approval-workflow | workflow | 9 | 0 | yes | PASS | — |
+| form-submission-routing | workflow | 9 | 0 | yes | PASS | — |
+| team-wiki-search | workflow | 9 | 0 | yes | PASS | — |
+| design-feedback-collection | workflow | 9 | 0 | yes | PASS | — |
+| collaboration-presence-sync | workflow | 10 | 0 | yes | PASS | — |
+| product-analytics-dashboard | workflow | 10 | 1 | no | FAIL | [S1] sandbox exit code 1: RuntimeError: PostHog response is missing the 'results' list<br>[S1] sandbox stderr contains Traceback<br>[S1] workflow --dry-run produced no stdout |
+| error-tracking-alerts | workflow | 10 | 1 | no | FAIL | [S1] sandbox exit code 1: RuntimeError: Missing required environment variable: SENTRY_BEARER_TOKEN<br>[S1] sandbox stderr contains Traceback<br>[S1] workflow --dry-run produced no stdout |
+| website-performance-reporting | workflow | 10 | 1 | no | FAIL | [S1] sandbox exit code 1: RuntimeError: No report HTML was provided by the previous workflow step<br>[S1] sandbox stderr contains Traceback<br>[S1] workflow --dry-run produced no stdout |
+| social-media-analytics | workflow | 10 | 1 | no | FAIL | [S1] sandbox exit code 1: RuntimeError: Missing required environment variable: GOOGLE_SHEETS_OAUTH_TOKEN<br>[S1] sandbox stderr contains Traceback<br>[S1] workflow --dry-run produced no stdout |
+| shopify-order-automation | workflow | 9 | 0 | yes | PASS | — |
+| inventory-sync-automation | workflow | 9 | 0 | yes | PASS | — |
+| weather-driven-ops-alerts | workflow | 10 | 0 | yes | PASS | — |
+| store-locator-geocoding | workflow | 9 | 0 | no | FAIL | [S1] requests.http contains no valid HTTP requests |
+| asset-backup-automation | workflow | 9 | 0 | yes | PASS | — |
+| s3-static-site-publishing | workflow | 11 | 1 | no | FAIL | [S1] sandbox exit code 1: RuntimeError: Missing required environment variable: CLOUDFLARE_ZONE_ID<br>[S1] sandbox stderr contains Traceback<br>[S1] workflow --dry-run produced no stdout |
+| auth0-sso-provisioning | workflow | 9 | 0 | yes | FAIL | [S2] code snippet #4 parses Slack webhook response as JSON (returns 'ok') |
+| clerk-user-onboarding | workflow | 9 | 0 | yes | PASS | — |
+| slack-twitch-automation-pipeline | workflow | 11 | 0 | yes | PASS | — |
+| sentry-performance-airtable-automation-pipeline | workflow | 11 | 0 | yes | PASS | — |
+| pdf-generator-to-twelve-data-with-deepai-image-generator-orchestration | workflow | 13 | 0 | yes | PASS | — |
+| shopify-admin-twilio-conversations-automation-pipeline | workflow | 11 | 0 | yes | PASS | — |
+| braintree-payments-to-airtable-with-contentful-content-management-system-orchestration | workflow | 13 | 0 | yes | PASS | — |
+| slack-ibm-watson-language-translator-automation-pipeline | workflow | 11 | 0 | yes | PASS | — |
+| slack-microsoft-azure-face-automation-pipeline | workflow | 11 | 0 | yes | PASS | — |
+| shopify-admin-amazon-polly-automation-pipeline | workflow | 11 | 1 | no | FAIL | [S1] sandbox exit code 1: FileExistsError: [Errno 17] File exists: 'mock_input.json'<br>[S1] sandbox stderr contains Traceback<br>[S1] workflow --dry-run produced no stdout |
+| weatherapi-launchdarkly-feature-automation-pipeline | workflow | 9 | 0 | yes | PASS | — |
+| salesforce-rest-weatherapi-automation-pipeline | workflow | 11 | 0 | no | FAIL | [S1] requests.http contains no valid HTTP requests |
+| jira-rest-twilio-conversations-automation-pipeline | workflow | 11 | 1 | no | FAIL | [S1] sandbox exit code 1: RuntimeError: Missing required environment variable: JIRA_PROJECT_KEY<br>[S1] sandbox stderr contains Traceback<br>[S1] workflow --dry-run produced no stdout |
+| jira-rest-notion-api-for-automation-automation-pipeline | workflow | 11 | 1 | no | FAIL | [S1] sandbox exit code 1: RuntimeError: Jira response for dry-run-value is missing fields<br>[S1] sandbox stderr contains Traceback<br>[S1] workflow --dry-run produced no stdout<br>[S1] requests.http contains no valid HTTP requests |
+| convertkit-github-copilot-automation-pipeline | workflow | 11 | 0 | yes | PASS | — |
+| calendly-notion-api-for-automation-v2-automation-pipeline | workflow | 10 | 0 | yes | PASS | — |
+| calendly-pinecone-vector-automation-pipeline | workflow | 11 | 0 | yes | PASS | — |
+| asana-automation-calendly-automation-pipeline | workflow | 11 | 0 | yes | PASS | — |
+| openai-whisper-api | api | 5 | 0 | yes | PASS | — |
+| stripe-payments-api | api | 5 | 0 | yes | PASS | — |
+| supabase-database-api | api | 5 | 0 | yes | PASS | — |
+| anthropic-claude-api | api | 5 | 0 | yes | PASS | — |
+| google-gemini-api | api | 5 | 0 | yes | PASS | — |
+| resend-email-api | api | 5 | 0 | yes | PASS | — |
+| clerk-authentication-api | api | 5 | 0 | yes | PASS | — |
+| cloudflare-workers-api | api | 5 | 0 | yes | PASS | — |
+| mapbox-maps-api | api | 5 | 0 | yes | PASS | — |
+| twilio-messaging-api | api | 5 | 0 | yes | PASS | — |
+| hugging-face-inference-api | api | 5 | 0 | yes | PASS | — |
+| cohere-embed-api | api | 5 | 0 | yes | PASS | — |
+| pinecone-vector-api | api | 5 | 0 | yes | PASS | — |
+| auth0-authentication-api | api | 5 | 0 | yes | PASS | — |
+| sendgrid-email-api | api | 5 | 0 | yes | PASS | — |
+| algolia-search-api | api | 5 | 0 | yes | PASS | — |
+| openweather-weather-api | api | 5 | 0 | yes | PASS | — |
+| shopify-admin-api | api | 7 | 0 | yes | PASS | — |
+| notion-api | api | 5 | 0 | yes | PASS | — |
+| airtable-api | api | 5 | 0 | yes | PASS | — |
+| mistral-ai-api | api | 5 | 0 | yes | PASS | — |
+| groq-inference-api | api | 5 | 0 | yes | PASS | — |
+| together-ai-api | api | 5 | 0 | yes | PASS | — |
+| replicate-model-api | api | 5 | 0 | yes | PASS | — |
+| elevenlabs-voice-api | api | 5 | 0 | yes | PASS | — |
+| deepgram-speech-api | api | 5 | 0 | yes | PASS | — |
+| stability-ai-image-api | api | 5 | 0 | yes | PASS | — |
+| weaviate-vector-api | api | 5 | 0 | yes | PASS | — |
+| qdrant-vector-api | api | 5 | 0 | yes | PASS | — |
+| mongodb-atlas-api | api | 5 | 0 | yes | PASS | — |
+| upstash-redis-api | api | 5 | 0 | yes | PASS | — |
+| vercel-blob-api | api | 5 | 0 | yes | PASS | — |
+| liveblocks-collaboration-api | api | 5 | 0 | yes | PASS | — |
+| ably-realtime-api | api | 5 | 0 | yes | PASS | — |
+| posthog-analytics-api | api | 5 | 0 | yes | PASS | — |
+| sentry-error-api | api | 5 | 0 | yes | PASS | — |
+| launchdarkly-feature-api | api | 5 | 0 | yes | PASS | — |
+| doppler-secrets-api | api | 5 | 0 | yes | PASS | — |
+| openai-batch-api | api | 5 | 0 | yes | PASS | — |
+| google-sheets-api | api | 5 | 0 | yes | PASS | — |
+| slack-web-api | api | 5 | 0 | yes | PASS | — |
+| hubspot-crm-api | api | 5 | 0 | yes | PASS | — |
+| zendesk-support-api | api | 5 | 0 | yes | PASS | — |
+| salesforce-rest-api | api | 5 | 0 | yes | PASS | — |
+| discord-bot-api | api | 5 | 0 | yes | PASS | — |
+| telegram-bot-api | api | 5 | 0 | yes | PASS | — |
+| github-rest-api | api | 5 | 0 | yes | PASS | — |
+| linear-graphql-api | api | 5 | 0 | yes | PASS | — |
+| microsoft-graph-api | api | 5 | 0 | yes | PASS | — |
+| openai-dall-e-api | api | 5 | 0 | yes | PASS | — |
+| microsoft-azure-cognitive-services-api | api | 5 | 0 | yes | PASS | — |
+| openai-gpt-4-api | api | 5 | 0 | yes | PASS | — |
+| openai-embeddings-api | api | 5 | 0 | yes | PASS | — |
+| twitch-api | api | 5 | 0 | yes | PASS | — |
+| aws-s3-api | api | 6 | 0 | yes | PASS | — |
+| ibm-watson-text-to-speech-api | api | 5 | 0 | yes | PASS | — |
+| aws-lambda-api | api | 6 | 0 | yes | PASS | — |
+| paypal-payments-api | api | 5 | 0 | yes | PASS | — |
+| ibm-cloud-object-storage-api | api | 5 | 0 | yes | PASS | — |
+| aws-rekognition-api | api | 6 | 0 | yes | PASS | — |
+| aws-ses-api | api | 6 | 0 | yes | PASS | — |
+| yelp-fusion-api | api | 5 | 0 | yes | PASS | — |
+| ibm-watson-language-translator-api | api | 5 | 0 | yes | PASS | — |
+| ibm-watson-assistant-api | api | 5 | 0 | yes | PASS | — |
+| ibm-watson-discovery-api | api | 5 | 0 | yes | PASS | — |
+| azure-face-api | api | 5 | 0 | yes | PASS | — |
+| aws-polly-api | api | 5 | 0 | yes | PASS | — |
+| azure-cosmos-db-api | api | 5 | 0 | yes | PASS | — |
+| google-maps-api | api | 5 | 0 | yes | PASS | — |
+| plaid-financial-api | api | 5 | 0 | yes | PASS | — |
+| twilio-video-api | api | 5 | 0 | yes | PASS | — |
+| sendinblue-email-api | api | 5 | 0 | yes | PASS | — |
+| aws-transcribe-api | api | 6 | 0 | yes | PASS | — |
+| notion-automation-api | api | 5 | 0 | yes | PASS | — |
+| github-copilot-api | api | 5 | 0 | yes | PASS | — |
+| notion-forms-api | api | 5 | 0 | yes | PASS | — |
+| twitch-api-kraken | api | 5 | 0 | yes | PASS | — |
+| asana-api | api | 5 | 0 | yes | PASS | — |
+| twelvedata-api | api | 5 | 0 | yes | PASS | — |
+| pdf-generator-api | api | 5 | 0 | yes | PASS | — |
+| weatherapi | api | 13 | 0 | yes | PASS | — |
+| notion-api-for-automation | api | 5 | 0 | yes | PASS | — |
+| twilio-conversations-api | api | 5 | 0 | yes | PASS | — |
+| asana-automation-api | api | 5 | 0 | yes | PASS | — |
+| notion-api-for-automation-v2 | api | 5 | 0 | yes | PASS | — |
+| contentful-cms-api | api | 5 | 0 | yes | PASS | — |
+| tibber-api | api | 5 | 0 | yes | PASS | — |
+| braintree-payments-api | api | 6 | 0 | yes | PASS | — |
+| census-api | api | 5 | 0 | yes | PASS | — |
+| finnhub-stock-api | api | 5 | 0 | yes | PASS | — |
+| slack-api | api | 9 | 0 | yes | PASS | — |
+| tinkr-api | api | 5 | 0 | yes | PASS | — |
+| finnhub-crypto-api | api | 5 | 0 | yes | PASS | — |
+| squarespace-api | api | 5 | 0 | yes | PASS | — |
+| twitch-helix-api | api | 5 | 0 | yes | PASS | — |
+| pdf-co-api | api | 5 | 0 | yes | PASS | — |
+| aiven-kafka-api | api | 5 | 0 | yes | PASS | — |
+| api-ai-image-generator | api | 5 | 0 | yes | PASS | — |
+| sentry-performance-api | api | 5 | 0 | yes | PASS | — |
+| twitch-analytics-api | api | 5 | 0 | yes | PASS | — |
+| jira-rest-api | api | 9 | 0 | yes | PASS | — |
+| convertkit-api | api | 9 | 0 | yes | PASS | — |
+| klaviyo-api | api | 9 | 0 | yes | PASS | — |
+| calendly-api | api | 10 | 0 | yes | PASS | — |
+| figma-rest-api | api | 13 | 0 | yes | PASS | — |
+| webflow-api | api | 12 | 0 | yes | PASS | — |

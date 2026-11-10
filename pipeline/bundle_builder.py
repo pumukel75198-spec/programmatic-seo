@@ -29,6 +29,12 @@ from . import config as cfg
 
 _URL_RE = re.compile(r"https?://[^\s\"'<>)\]}]+")
 _ENV_RE = re.compile(r"os\.(?:environ\.get|getenv)\(\s*['\"]([A-Z0-9_]+)['\"]")
+# Helper functions such as ``_required_env("X")`` / ``_require_env("X")``
+# read environment variables without touching ``os.environ`` directly.
+_ENV_HELPER_RE = re.compile(
+    r"(?:_required_env|_require_env|_get_env|_read_env|_env_var|_env|"
+    r"require_env|required_env|get_env)\(\s*['\"]([A-Z0-9_]+)['\"]"
+)
 
 
 def _json_safe(value: Any) -> Any:
@@ -49,7 +55,11 @@ def _step_code(workflow: dict[str, Any]) -> str:
 
 
 def _env_names(code: str) -> list[str]:
-    return sorted(set(_ENV_RE.findall(code)) | set(_ENV_INDEX_RE.findall(code)))
+    return sorted(
+        set(_ENV_RE.findall(code))
+        | set(_ENV_INDEX_RE.findall(code))
+        | set(_ENV_HELPER_RE.findall(code))
+    )
 
 
 def _dry_run_env_value(name: str) -> str:
@@ -63,11 +73,16 @@ def _dry_run_env_value(name: str) -> str:
         or upper.endswith("_ENDPOINT")
         or upper.endswith("_HOST")
     )
+    # Directory variables (e.g. AUDIO_DIR) must point to a directory, not a
+    # file, otherwise ``os.makedirs`` fails with FileExistsError.
+    is_dir = upper.endswith("_DIR") or upper.endswith("DIR")
     # File-path variables (e.g. PROMPT_FIXTURE_PATH) must point to an existing
     # JSON mock so the dry-run never opens a non-existent file.
     is_file_path = any(
-        marker in upper for marker in ("_PATH", "_FILE", "FIXTURE", "_INPUT", "_DIR")
+        marker in upper for marker in ("_PATH", "_FILE", "FIXTURE", "_INPUT")
     )
+    if is_dir and not is_url:
+        return "mock_dir"
     if is_file_path and not is_url:
         return "mock_input.json"
     if "SUPABASE" in upper:
@@ -95,6 +110,18 @@ def _env_example(code: str) -> str:
     return header + "\n".join(f"{name}=" for name in names) + "\n"
 
 
+_MOCK_LIST_KEYS: frozenset[str] = frozenset(
+    {
+        "choices", "embeddings", "data", "url", "results", "items",
+        "documents", "episodes", "response", "hits", "fields", "records",
+        "messages", "topics", "drafts", "approved_drafts", "mentions",
+        "assets", "cohorts", "events", "files", "keywords", "nodes",
+        "orders", "products", "projects", "rows", "slots", "tags", "tasks",
+        "users", "edges", "entries",
+    }
+)
+
+
 def _shape_mock(step_code: str, mock: Any) -> Any:
     """Shape a mock into the structure the step code actually reads.
 
@@ -104,31 +131,27 @@ def _shape_mock(step_code: str, mock: Any) -> Any:
     attribute 'get'`` in the customer sandbox, so the mock is wrapped
     deterministically under the key the snippet actually accesses.
     """
+    read_keys = re.findall(r"\.get\(\s*['\"]([A-Za-z0-9_]+)['\"]", step_code)
     if isinstance(mock, list):
-        if ".get('choices'" in step_code or '.get("choices"' in step_code:
-            first = mock[0] if mock else ""
-            return {"choices": [{"message": {"content": first}}]}
-        if ".get('embeddings'" in step_code or '.get("embeddings"' in step_code:
-            return {"embeddings": mock}
-        if ".get('data'" in step_code or '.get("data"' in step_code:
-            return {"data": mock}
-        if ".get('url'" in step_code or '.get("url"' in step_code:
-            return {"url": mock[0] if mock else ""}
-        if ".get('results'" in step_code or '.get("results"' in step_code:
-            return {"results": mock}
-        if ".get('items'" in step_code or '.get("items"' in step_code:
-            return {"items": mock}
-        if ".get('documents'" in step_code or '.get("documents"' in step_code:
-            return {"documents": mock}
+        for key in read_keys:
+            if key not in _MOCK_LIST_KEYS:
+                continue
+            if key == "choices":
+                first = mock[0] if mock else ""
+                return {"choices": [{"message": {"content": first}}]}
+            if key == "url":
+                return {"url": mock[0] if mock else ""}
+            return {key: mock}
         return mock
     if not isinstance(mock, str):
         return mock
-    if ".get('choices'" in step_code or '.get("choices"' in step_code:
-        return {"choices": [{"message": {"content": mock}}]}
-    if ".get('feedback'" in step_code or '.get("feedback"' in step_code:
-        return {"feedback": mock}
-    if ".get('data'" in step_code or '.get("data"' in step_code:
-        return {"data": [{"id": "1", "text": mock, "value": 0.5}]}
+    for key in read_keys:
+        if key == "choices":
+            return {"choices": [{"message": {"content": mock}}]}
+        if key == "feedback":
+            return {"feedback": mock}
+        if key == "data":
+            return {"data": [{"id": "1", "text": mock, "value": 0.5}]}
     if "json.loads" in step_code:
         return {"__json_string__": mock}
     return mock
@@ -155,8 +178,19 @@ def _mock_data(workflow: dict[str, Any]) -> dict[str, Any]:
                     continue
         mock = _json_safe(mock)
         mock = _shape_mock(step_code, mock)
-        for url in _URL_RE.findall(step_code):
-            data.setdefault(url, mock)
+        for url in re.findall(r"https?://[^\s\"'<>]+", step_code):
+            # Normalise f-string placeholders to the same dry-run value the kit
+            # injects. When the expression cannot be closed (nested quotes),
+            # fall back to the stable prefix before the first brace.
+            if "{" in url:
+                if "}" in url:
+                    mock_key = re.sub(r"\{[^}]*\}", "dry-run-value", url)
+                else:
+                    mock_key = url.split("{", 1)[0]
+            else:
+                mock_key = url
+            if mock_key:
+                data.setdefault(mock_key, mock)
     code = _step_code(workflow).lower()
     if "x.com" in code or "twitter.com" in code:
         payload = {
@@ -271,8 +305,13 @@ def _requests_http(code: str, title: str = "", endpoint: str = "") -> str:
         "",
     ]
     urls: list[str] = []
-    for url in sorted(_URL_RE.findall(code)):
-        if any(marker in url for marker in ("<", ">", "{", "}")):
+    # ``_URL_RE`` stops at ``}`` so f-string URLs such as
+    # ``https://api.x.com/v1/{id}`` arrive truncated with a dangling ``{``.
+    # Use a dedicated pattern that stops *before* the placeholder and keep the
+    # literal base URL, so ``requests.http`` always contains a valid request.
+    _literal_url_re = re.compile(r"https?://[^\s\"'<>){}\]]+")
+    for url in sorted(_literal_url_re.findall(code)):
+        if any(marker in url for marker in ("<", ">")):
             continue
         urls.append(url)
 
@@ -326,7 +365,7 @@ def _requests_http(code: str, title: str = "", endpoint: str = "") -> str:
                 lines.append('{"text": "FlowMatrix test alert"}')
         lines.append("")
 
-    if len(lines) == 2:
+    if len(lines) == 4:
         lines.extend(
             [
                 "# No direct HTTP calls detected in this workflow.",
@@ -337,6 +376,68 @@ def _requests_http(code: str, title: str = "", endpoint: str = "") -> str:
             ]
         )
     return "\n".join(lines) + "\n"
+
+
+def _mock_input_payload(workflow: dict[str, Any], input_files: list[str]) -> Any:
+    """Best-effort fixture for local input files read by the workflow.
+
+    Prefer the step ``mock_response`` of a step that actually reads one of the
+    input files and shape it to the structure the snippet expects. Fall back to
+    a generic two-item list (one item without ``status`` so filters defaulting
+    to "pending" still find data, one "ok").
+    """
+    generic = [
+        {
+            "id": "1",
+            "title": "Sample",
+            "content": "Sample content",
+            "text": "sample text",
+            "value": 0.5,
+            "name": "sample",
+            "keyword": "sample",
+            "query": "sample",
+            "url": "https://example.com",
+        },
+        {
+            "id": "2",
+            "title": "Sample 2",
+            "content": "Sample content 2",
+            "text": "sample text 2",
+            "value": 0.5,
+            "name": "sample2",
+            "keyword": "sample",
+            "query": "sample",
+            "url": "https://example.com",
+            "status": "ok",
+        },
+    ]
+    wanted = set(input_files)
+    for step in (workflow.get("details") or {}).get("steps") or []:
+        if not isinstance(step, dict):
+            continue
+        code = str(step.get("code_snippet") or "")
+        if not any(name in code for name in wanted):
+            continue
+        raw = step.get("mock_response")
+        if not raw:
+            continue
+        try:
+            parsed = json.loads(raw) if isinstance(raw, str) else raw
+        except Exception:  # noqa: BLE001 - fall through to generic
+            continue
+        if not parsed:
+            continue
+        shaped = _shape_mock(code, parsed)
+        # If the snippet reads a specific key from the file (e.g.
+        # ``manifest['documents']`` or ``data.get('episodes', [])``), wrap the
+        # payload under that key so the dry-run does not raise KeyError.
+        for key in re.findall(
+            r"(?:\.get\(\s*|\[\s*)['\"]([A-Za-z0-9_]+)['\"]", code
+        ):
+            if key in _MOCK_LIST_KEYS and isinstance(shaped, list):
+                return {key: shaped}
+        return shaped
+    return generic
 
 
 def _workflow_script(workflow: dict[str, Any]) -> str:
@@ -355,11 +456,23 @@ def _workflow_script(workflow: dict[str, Any]) -> str:
         {
             path
             for path in re.findall(
-                r"['\"]([\w./-]+\.(?:json|csv|txt))['\"]", body
+                r"['\"]([\w./-]+\.(?:json|csv|txt|jsonl))['\"]", body
             )
             if not path.startswith(("/", "http://", "https://"))
+            # URL fragments such as ".zendesk.com/api/v2/tickets.json" are not
+            # local files and must never be created by the dry-run.
+            and not path.startswith(".")
+            and not re.match(r"^[a-z0-9-]+\.[a-z]{2,}/", path)
+        }
+        | {
+            str(value)
+            for value in env_defaults.values()
+            if isinstance(value, str)
+            and re.search(r"\.(?:json|csv|txt|jsonl)$", value)
+            and not value.startswith(("/", "http://", "https://"))
         }
     )
+    mock_input_payload = _mock_input_payload(workflow, input_files)
     indented = "\n".join(
         ("    " + line) if line.strip() else "" for line in body.splitlines()
     )
@@ -371,17 +484,29 @@ def _workflow_script(workflow: dict[str, Any]) -> str:
         import io
 
         _real_open = builtins.open
+        _real_exists = os.path.exists
+
+        def _safe_exists(file):
+            name = str(file)
+            if name.endswith((".json", ".jsonl", ".csv", ".txt")):
+                return True
+            return _real_exists(file)
 
         def _safe_open(file, mode="r", *args, **kwargs):
-            if "r" in mode and not os.path.exists(file):
+            if "r" in mode and not _real_exists(file):
                 name = str(file)
+                if name.endswith(".jsonl"):
+                    return io.StringIO(json.dumps({"custom_id": "prompt-001", "method": "POST", "url": "/v1/chat/completions", "body": {"model": "gpt-4o-mini", "messages": [{"role": "user", "content": "sample"}]}}) + "\\n")
                 if name.endswith(".json"):
-                    return io.StringIO(json.dumps([{"id": "1", "title": "Sample", "content": "Sample content", "text": "sample text", "value": 0.5, "name": "sample", "prompt": "sample prompt", "keyword": "sample", "query": "sample", "url": "https://example.com", "status": "ok"}]))
+                    return io.StringIO(json.dumps(__MOCK_INPUT_PAYLOAD__))
                 if name.endswith(".csv"):
                     return io.StringIO("id,name,value\\n1,sample,0.5\\n")
                 return io.StringIO("sample\\n")
             return _real_open(file, mode, *args, **kwargs)
 '''
+    safe_open_src = safe_open_src.replace(
+        "__MOCK_INPUT_PAYLOAD__", repr(mock_input_payload)
+    )
     return f'''#!/usr/bin/env python3
 """FlowMatrix Implementation Kit – {title}
 
@@ -404,6 +529,7 @@ def _mock_urlopen(mock_responses):
         def __init__(self, payload, status=200):
             self._payload = payload
             self.status = status
+            self.headers = {{}}
 
         def read(self, amount=-1):
             return self._payload if amount is None or amount < 0 else self._payload[:amount]
@@ -442,6 +568,66 @@ def _mock_urlopen(mock_responses):
             "value": 0.5,
             "status": "ok",
             "ok": True,
+            "results": [{{"id": "1", "name": "sample", "value": 0.5}}],
+            "hits": [{{"objectID": "1", "title": "sample", "url": "https://example.com"}}],
+            "documents": [{{"id": "1", "title": "sample", "text": "sample"}}],
+            "episodes": [{{"id": "1", "audio_url": "https://example.com/audio.mp3"}}],
+            "response": "sample response",
+            "fields": {{"summary": "sample", "status": {{"name": "To Do"}}}},
+            "items": [{{"id": "1", "name": "sample"}}],
+            "records": [{{"id": "1", "name": "sample"}}],
+            "messages": [],
+            "topics": [],
+            "drafts": [],
+            "approved_drafts": [],
+            "mentions": ["sample"],
+            "lead": {{"id": "1", "email": "test@example.com", "valid": True}},
+            "email": "test@example.com",
+            "keyword": "sample",
+            "id": "1",
+            "text": "sample",
+            "name": "sample",
+            "url": "https://example.com",
+            "model": "gpt-4o-mini",
+            "object": "list",
+            "created": 0,
+            "usage": {{"total_tokens": 1}},
+            "error": None,
+            "message": "ok",
+            "meta": {{}},
+            "metadata": {{}},
+            "payload": {{}},
+            "body": {{}},
+            "summary": "sample",
+            "details": {{}},
+            "account": {{}},
+            "auth": {{}},
+            "headers": {{}},
+            "rate_limit": {{}},
+            "profile": {{}},
+            "count": 1,
+            "total": 1,
+            "amount": 0.5,
+            "price": 0.5,
+            "quantity": 1,
+            "rate": 0.5,
+            "score": 0.8,
+            "sentiment": 0.8,
+            "z_score": 0.5,
+            "latency": 0.5,
+            "duration": 0.5,
+            "code": "ok",
+            "currency": "USD",
+            "description": "sample",
+            "key": "sample",
+            "query": "sample",
+            "role": "assistant",
+            "secret": "sample",
+            "title": "sample",
+            "token": "sample",
+            "type": "sample",
+            "updated_at": "2026-01-01T00:00:00Z",
+            "created_at": "2026-01-01T00:00:00Z",
         }}).encode("utf-8"))
 
     return _open
@@ -470,13 +656,15 @@ def main():
         for _name in {input_files!r}:
             if not os.path.exists(_name):
                 with open(_name, "w", encoding="utf-8") as _fh:
-                    if _name.endswith(".json"):
-                        json.dump([{{"id": "1", "title": "Sample", "content": "Sample content", "text": "sample text", "value": 0.5, "name": "sample", "keyword": "sample", "query": "sample", "url": "https://example.com", "status": "ok"}}], _fh)
+                    if _name.endswith(".jsonl"):
+                        _fh.write(json.dumps({{"custom_id": "prompt-001", "method": "POST", "url": "/v1/chat/completions", "body": {{"model": "gpt-4o-mini", "messages": [{{"role": "user", "content": "sample"}}]}}}}) + "\\n")
+                    elif _name.endswith(".json"):
+                        json.dump({mock_input_payload!r}, _fh)
                     elif _name.endswith(".csv"):
                         _fh.write("id,name,value\\n1,sample,0.5\\n")
                     else:
                         _fh.write("sample\\n")
-{safe_open_src}        with mock.patch("builtins.open", side_effect=_safe_open), mock.patch("urllib.request.urlopen", side_effect=_mock_urlopen(mock_responses)):
+{safe_open_src}        with mock.patch("builtins.open", side_effect=_safe_open), mock.patch("os.path.exists", side_effect=_safe_exists), mock.patch("time.sleep", return_value=None), mock.patch("urllib.request.urlopen", side_effect=_mock_urlopen(mock_responses)):
             run_workflow()
         print("Dry-run completed successfully.")
     else:

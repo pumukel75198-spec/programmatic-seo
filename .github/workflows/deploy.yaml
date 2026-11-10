@@ -32,6 +32,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Re-validates every stored workflow/API with the real validator.
+      # Live link checks are off: the disclaimer only guarantees reachability
+      # on the day of generation. A stale record blocks the deploy.
+      - name: Content gate (stored workflows & APIs)
+        run: python -m pipeline.content_gate
+
       - name: Content quality audit
         run: npm run content:audit
 

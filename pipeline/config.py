@@ -318,7 +318,7 @@ PLACEHOLDER_BASE_DOMAINS: dict[str, str] = {
 OPENROUTER_URL = os.environ.get(
     "OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"
 ).rstrip("/")
-LLM_MODEL = os.environ.get("OPENROUTER_MODEL", "openai/gpt-4o-mini")
+LLM_MODEL = os.environ.get("OPENROUTER_MODEL", "deepseek/deepseek-v4.1-flash-1017")
 LLM_TIMEOUT = 180
 LLM_MAX_ATTEMPTS = 4
 MAX_REPLACEMENT_TOPICS = 3
