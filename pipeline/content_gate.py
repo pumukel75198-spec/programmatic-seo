@@ -86,11 +86,17 @@ def check_workflow(workflow: dict[str, Any]) -> GateItem:
     return item
 
 
-def check_api(api: dict[str, Any]) -> GateItem:
+def check_api(api: dict[str, Any], *, skip_missing: bool = False) -> GateItem:
     slug = str(api.get("slug") or "unknown")
     item = GateItem(slug=slug, kind="api")
     script_path = _api_script_path(slug)
     if not script_path.exists():
+        if skip_missing:
+            # The private API scripts are gitignored and therefore absent in a
+            # plain CI checkout. The deploy gate validates workflows only; the
+            # full gate runs in generate-content.yaml where the scripts exist.
+            item.warnings = [f"API script not present in this checkout: {script_path}"]
+            return item
         item.ok = False
         item.errors = [f"API script missing: {script_path}"]
         return item
@@ -159,6 +165,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--only-workflow", action="append", default=[])
     parser.add_argument("--only-api", action="append", default=[])
+    parser.add_argument(
+        "--skip-api-scripts",
+        action="store_true",
+        help="Skip API records whose private script is not present (CI deploy checkout)",
+    )
     parser.add_argument("--report", default="pipeline/CONTENT_GATE_REPORT.md")
     parser.add_argument("--json-report", default="pipeline/content_gate_report.json")
     parser.add_argument("--quiet", action="store_true")
@@ -180,7 +191,7 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"    - {error}")
 
     for api in collect_apis(args.only_api):
-        item = check_api(api)
+        item = check_api(api, skip_missing=args.skip_api_scripts)
         items.append(item)
         if not args.quiet:
             print(f"[{'PASS' if item.ok else 'FAIL'}] api: {item.slug}")

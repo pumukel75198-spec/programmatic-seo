@@ -40,8 +40,11 @@ jobs:
       # Re-validates every stored workflow/API with the real validator.
       # Live link checks are off: the disclaimer only guarantees reachability
       # on the day of generation. A stale record blocks the deploy.
-      - name: Content gate (stored workflows & APIs)
-        run: python -m pipeline.content_gate
+      - name: Content gate (stored workflows)
+        # The private API scripts are gitignored and not part of a plain CI
+        # checkout. Workflows are fully re-validated here; the full API gate
+        # runs in generate-content.yaml where the scripts exist.
+        run: python -m pipeline.content_gate --skip-api-scripts
 
       - name: Content quality audit
         run: npm run content:audit
