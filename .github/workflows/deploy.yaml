@@ -91,7 +91,10 @@ jobs:
         run: npm run build
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        # The ubuntu-latest runner already ships the Chromium system libraries.
+        # Avoid ``--with-deps`` here: its apt step repeatedly failed on runner
+        # DNS resolution (azure.archive.ubuntu.com) and blocked the deploy.
+        run: npx playwright install chromium
 
       - name: E2E tests
         run: npm run test:e2e
