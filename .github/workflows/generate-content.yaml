@@ -53,7 +53,9 @@ jobs:
       - name: Run unified pipeline
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          OPENROUTER_MODEL: ${{ vars.OPENROUTER_MODEL || 'openai/gpt-4o-mini' }}
+          # Code generation must use the strong primary model. gpt-4o-mini is
+          # only a last-resort fallback inside the pipeline, never the default.
+          OPENROUTER_MODEL: ${{ vars.OPENROUTER_MODEL || 'deepseek/deepseek-v4.1-flash-1017' }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           PDF_KV_NAMESPACE_ID: 60b777e050ae4134bf22d3ef1b6a5a5e
@@ -108,10 +110,16 @@ jobs:
       - name: Customer audit & auto-heal (pre-deploy gate)
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          OPENROUTER_MODEL: ${{ vars.OPENROUTER_MODEL || 'openai/gpt-4o-mini' }}
+          OPENROUTER_MODEL: ${{ vars.OPENROUTER_MODEL || 'deepseek/deepseek-v4.1-flash-1017' }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: python -m pipeline.customer_audit_healer --skip-git --r2-only-healed
+
+      # The healer rewrites src/data/*.json via run_batch.save_json (compact
+      # arrays). Re-format AFTER the healer, otherwise the committed JSON fails
+      # the format check in deploy.yaml.
+      - name: Format generated data (post-heal)
+        run: npx prettier --write src/data
 
       - name: Commit new content
         id: commit

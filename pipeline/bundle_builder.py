@@ -33,7 +33,7 @@ _ENV_RE = re.compile(r"os\.(?:environ\.get|getenv)\(\s*['\"]([A-Z0-9_]+)['\"]")
 # read environment variables without touching ``os.environ`` directly.
 _ENV_HELPER_RE = re.compile(
     r"(?:_required_env|_require_env|_get_env|_read_env|_env_var|_env|"
-    r"require_env|required_env|get_env)\(\s*['\"]([A-Z0-9_]+)['\"]"
+    r"_env_required|require_env|required_env|get_env)\(\s*['\"]([A-Z0-9_]+)['\"]"
 )
 
 
@@ -62,8 +62,123 @@ def _env_names(code: str) -> list[str]:
     )
 
 
+def _dry_run_json_value(upper: str) -> str:
+    """Return a JSON string shaped like the value the snippet expects."""
+    if "REVIEWERS" in upper:
+        return json.dumps(["reviewer@example.com"])
+    if "RECEIPT" in upper:
+        return json.dumps(
+            {"sid": "SM123", "message_id": "SM123", "status": "delivered"}
+        )
+    if "ONBOARDED_USERS" in upper or upper.endswith("_USERS_JSON"):
+        return json.dumps(
+            [{"email": "test@example.com", "first_name": "Test", "name": "Test User"}]
+        )
+    if "ALERTS" in upper:
+        return json.dumps(
+            [
+                {
+                    "id": "1",
+                    "message": "Sample alert",
+                    "severity": "critical",
+                    "status": "open",
+                    "phone": "+15555550100",
+                }
+            ]
+        )
+    if "MISMATCHES" in upper:
+        return json.dumps(
+            [{"invoice_id": "inv-1", "stripe_amount": 100.0, "ledger_amount": 90.0}]
+        )
+    if "ASSETS" in upper:
+        return json.dumps(
+            [
+                {
+                    "id": "1",
+                    "name": "sample",
+                    "url": "https://example.com/asset.png",
+                    "path": "assets/sample.png",
+                    "size": 1024,
+                    "content_type": "image/png",
+                    "checksum": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+                    "verification_status": "verified",
+                }
+            ]
+        )
+    if "MERGED_PRS" in upper or "PULL_REQUESTS" in upper:
+        return json.dumps(
+            [
+                {
+                    "number": 1,
+                    "title": "Sample PR",
+                    "user": {"login": "sample"},
+                    "merged_at": "2026-01-01T00:00:00Z",
+                    "html_url": "https://example.com/pr/1",
+                    "url": "https://example.com/pr/1",
+                    "labels": [{"name": "feature"}],
+                    "updated_at": "2026-01-01T00:00:00Z",
+                }
+            ]
+        )
+    if "METRICS" in upper:
+        return json.dumps(
+            {
+                "channel": "sample",
+                "week": "2026-W01",
+                "average_viewers": 100,
+                "total_followers": 1000,
+                "engagement_rate": 0.05,
+            }
+        )
+    if "EMBEDDINGS" in upper:
+        return json.dumps([[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]])
+    if "ARTICLE_IDS" in upper:
+        return json.dumps(["article-1", "article-2"])
+    if "PURGE_FILES" in upper or upper.endswith("_FILES"):
+        return json.dumps(
+            ["https://example.com/", "https://example.com/index.html"]
+        )
+    if any(
+        marker in upper
+        for marker in (
+            "CONFIG",
+            "PAYLOAD",
+            "BODY",
+            "MAPPING",
+            "MAP",
+            "DICT",
+            "OBJECT",
+            "SUMMARY",
+            "STATS",
+            "RECEIPT",
+        )
+    ):
+        return json.dumps({"id": "1", "name": "sample", "value": 0.5, "status": "ok"})
+    return json.dumps(
+        [
+            {
+                "id": "1",
+                "name": "sample",
+                "title": "Sample",
+                "text": "sample",
+                "content": "Sample content",
+                "value": 0.5,
+                "url": "https://example.com",
+                "email": "test@example.com",
+                "status": "ok",
+            }
+        ]
+    )
+
+
 def _dry_run_env_value(name: str) -> str:
-    """Harmless but URL-valid defaults for ``workflow.py --dry-run``."""
+    """Type-aware, harmless defaults for ``workflow.py --dry-run``.
+
+    Generated snippets validate their inputs strictly (``json.loads``,
+    ``int()``, e-mail regex, Slack channel IDs). A single generic
+    ``"dry-run-value"`` therefore makes correct workflows fail in the sandbox,
+    so the mock value is derived from the variable name.
+    """
     upper = name.upper()
     is_url = (
         upper.endswith("_URL")
@@ -72,29 +187,150 @@ def _dry_run_env_value(name: str) -> str:
         or "WEBHOOK" in upper
         or upper.endswith("_ENDPOINT")
         or upper.endswith("_HOST")
+        or upper.endswith("_BASE")
+        or upper.endswith("_ORIGIN")
+        or upper.endswith("_DSN")
+        or upper.endswith("_INSTANCE")
     )
     # Directory variables (e.g. AUDIO_DIR) must point to a directory, not a
     # file, otherwise ``os.makedirs`` fails with FileExistsError.
     is_dir = upper.endswith("_DIR") or upper.endswith("DIR")
     # File-path variables (e.g. PROMPT_FIXTURE_PATH) must point to an existing
     # JSON mock so the dry-run never opens a non-existent file.
-    is_file_path = any(
-        marker in upper for marker in ("_PATH", "_FILE", "FIXTURE", "_INPUT")
+    # ``endswith`` is important: ``CLOUDFLARE_PURGE_FILES`` contains ``_FILE``
+    # as a substring but is a JSON array, not a file path.
+    is_file_path = (
+        upper.endswith("_PATH")
+        or upper.endswith("_FILE")
+        or "FIXTURE" in upper
     )
     if is_dir and not is_url:
         return "mock_dir"
     if is_file_path and not is_url:
         return "mock_input.json"
-    if "SUPABASE" in upper:
-        return "https://mock.supabase.co" if is_url else "dry-run-value"
-    if "SLACK" in upper:
-        return "https://hooks.slack.com/services/mock" if is_url else "dry-run-value"
-    if "OPENAI" in upper:
-        return "https://api.openai.com" if is_url else "dry-run-value"
-    if upper.startswith("X_") or "TWITTER" in upper:
-        return "https://api.x.com" if is_url else "dry-run-value"
     if is_url:
+        if "SUPABASE" in upper:
+            return "https://mock.supabase.co"
+        if "SLACK" in upper:
+            return "https://hooks.slack.com/services/mock"
+        if "OPENAI" in upper:
+            return "https://api.openai.com"
+        if upper.startswith("X_") or "TWITTER" in upper:
+            return "https://api.x.com"
         return "https://example.com"
+    # JSON payloads (checked before generic *_KEY/*_ID rules).
+    if upper == "FLOWMATRIX_STEP_INPUT":
+        return json.dumps(
+            {"cohorts": [{"id": "1", "name": "Cohort A", "users": 10}]}
+        )
+    if upper.endswith("_JSON") or upper.endswith("_FILES"):
+        return _dry_run_json_value(upper)
+    # Numeric settings. Suffix checks avoid false positives such as
+    # REPORT_FROM_EMAIL (contains "PORT") or TWILIO_ACCOUNT_SID ("COUNT").
+    numeric_suffixes = (
+        "TIMEOUT",
+        "THRESHOLD",
+        "RETRIES",
+        "RETRY",
+        "COUNT",
+        "LIMIT",
+        "PORT",
+        "INTERVAL",
+        "SIZE",
+        "DAYS",
+        "HOURS",
+        "MINUTES",
+        "SECONDS",
+        "PER_PAGE",
+        "PERCENTAGE",
+        "REORDER_POINT",
+    )
+    if (
+        upper.endswith(numeric_suffixes)
+        or upper == "TOP_K"
+        or upper.endswith("_TOP_K")
+        or "BATCH" in upper
+        or "RETRY_" in upper
+        or upper.startswith("MAX_")
+        or "_MAX_" in upper
+    ):
+        return "10"
+    # Contact data.
+    if any(
+        marker in upper
+        for marker in ("EMAIL", "RECIPIENTS", "SUBSCRIBERS", "REPLY_TO")
+    ) or upper in {"REPORT_FROM", "REPORT_TO"}:
+        return "test@example.com"
+    if "PHONE" in upper:
+        return "+15555550100"
+    if "CHAT_ID" in upper:
+        return "123456789"
+    if "CHANNEL_ID" in upper or upper == "SLACK_CHANNEL":
+        return "C0123456789"
+    # Environment / region / locale.
+    if "ENVIRONMENT" in upper or upper.endswith("_ENV"):
+        return "production"
+    if upper.endswith("_REGION") or upper.endswith("_DEFAULT_REGION"):
+        return "us-east-1"
+    if upper.endswith("_CURRENCY"):
+        return "USD"
+    if upper.endswith("_COUNTRY"):
+        return "US"
+    if upper.endswith("_LANGUAGE") or upper.endswith("_LOCALE"):
+        return "en"
+    if upper.endswith("_TIMEZONE"):
+        return "UTC"
+    if upper.endswith("_DOMAIN") or upper.endswith("_SUBDOMAIN"):
+        return "example.com"
+    # Version-like values.
+    if upper == "NOTION_VERSION":
+        return "2022-06-28"
+    if upper == "GITHUB_API_VERSION":
+        return "2022-11-28"
+    if upper == "WATSON_VERSION":
+        return "2021-06-14"
+    if upper.endswith("_VERSION"):
+        return "1.0"
+    # Human-readable labels.
+    if upper.endswith("_SLUG"):
+        return "sample"
+    if upper.endswith("_TITLE") or upper.endswith("_SUMMARY"):
+        return "Sample title"
+    if upper.endswith("_NAME") or upper.endswith("_BUCKET"):
+        return "sample"
+    if upper.endswith("_MESSAGE") or upper.endswith("_SCRIPT"):
+        return "Sample message"
+    if upper.endswith("_QUERY"):
+        return "sample query"
+    if upper.endswith("_LOCATION"):
+        return "Berlin"
+    if upper.endswith("_SYMBOL"):
+        return "AAPL"
+    if upper.endswith("_ISSUE_TYPE"):
+        return "Task"
+    if upper.endswith("_STATUS") or upper.endswith("_PROPERTY"):
+        return "Status"
+    if upper.endswith("_FORMAT"):
+        return "mp3"
+    if upper.endswith("_MODEL") or upper.endswith("_MODEL_ID"):
+        return "gpt-4o-mini"
+    if upper.endswith("_VOICE_ID"):
+        return "mock-voice-id"
+    if upper.endswith("_CHECKPOINT"):
+        return "2026-01-01T00:00:00Z"
+    if upper.endswith("_RANGE") or upper.endswith("_PERIOD"):
+        return "7d"
+    # S3 object keys and LaunchDarkly keys are identifiers, not secrets.
+    if upper.startswith("S3_") and upper.endswith("_KEY"):
+        return "sample"
+    if upper.endswith("_FLAG_KEY") or upper.endswith("_PROJECT_KEY"):
+        return "sample"
+    if upper == "MANIFEST_KEY":
+        return "manifest.json"
+    # IDs.
+    if upper.endswith("_ID") or upper.endswith("_IDS"):
+        return "mock-id"
+    # Secrets and everything else.
     return "dry-run-value"
 
 
@@ -132,7 +368,26 @@ def _shape_mock(step_code: str, mock: Any) -> Any:
     deterministically under the key the snippet actually accesses.
     """
     read_keys = re.findall(r"\.get\(\s*['\"]([A-Za-z0-9_]+)['\"]", step_code)
+    if isinstance(mock, dict):
+        # Nested list values (e.g. {"episodes": ["url1", "url2"]}) must be
+        # shaped to the object structure the snippet reads.
+        for key, value in list(mock.items()):
+            if isinstance(value, list) and "audio_url" in step_code:
+                mock[key] = [
+                    {"audio_url": item} if isinstance(item, str) else item
+                    for item in value
+                ]
+        return mock
     if isinstance(mock, list):
+        # A list of strings that the snippet reads via ``result.get('text')``
+        # is a transcription/LLM response, not an audio-URL list.
+        if "text" in read_keys and mock and isinstance(mock[0], str):
+            return {"text": mock[0]}
+        if "audio_url" in step_code:
+            mock = [
+                {"audio_url": item} if isinstance(item, str) else item
+                for item in mock
+            ]
         for key in read_keys:
             if key not in _MOCK_LIST_KEYS:
                 continue
@@ -151,7 +406,16 @@ def _shape_mock(step_code: str, mock: Any) -> Any:
         if key == "feedback":
             return {"feedback": mock}
         if key == "data":
-            return {"data": [{"id": "1", "text": mock, "value": 0.5}]}
+            return {
+                "data": [
+                    {
+                        "id": "1",
+                        "text": mock,
+                        "value": 0.5,
+                        "embedding": [0.1, 0.2, 0.3],
+                    }
+                ]
+            }
     if "json.loads" in step_code:
         return {"__json_string__": mock}
     return mock
@@ -206,7 +470,12 @@ def _mock_data(workflow: dict[str, Any]) -> dict[str, Any]:
     if "supabase" in code:
         data["supabase"] = []
     if "slack.com" in code:
-        data["slack.com"] = "ok"
+        # Slack Web API responses are JSON objects, not the plain string "ok".
+        data["slack.com"] = {
+            "ok": True,
+            "ts": "1234567890.123456",
+            "channel": "C0123456789",
+        }
     if not data:
         data = {
             "_note": (
@@ -427,6 +696,10 @@ def _mock_input_payload(workflow: dict[str, Any], input_files: list[str]) -> Any
             continue
         if not parsed:
             continue
+        # A snippet that validates ``isinstance(payload, list)`` needs a bare
+        # list, even if the step's mock_response is a wrapper object.
+        if re.search(r"isinstance\([^)]*,\s*list\)", code) or "JSON array" in code:
+            return generic
         shaped = _shape_mock(code, parsed)
         # If the snippet reads a specific key from the file (e.g.
         # ``manifest['documents']`` or ``data.get('episodes', [])``), wrap the
@@ -437,6 +710,23 @@ def _mock_input_payload(workflow: dict[str, Any], input_files: list[str]) -> Any
             if key in _MOCK_LIST_KEYS and isinstance(shaped, list):
                 return {key: shaped}
         return shaped
+    # No step-level mock_response: shape the generic fixture to the code that
+    # actually reads the input file. A snippet that validates
+    # ``isinstance(payload, list)`` needs a bare list; a snippet that reads
+    # ``data.get('episodes', [])`` needs the list wrapped under that key.
+    for step in (workflow.get("details") or {}).get("steps") or []:
+        if not isinstance(step, dict):
+            continue
+        code = str(step.get("code_snippet") or "")
+        if not any(name in code for name in wanted):
+            continue
+        if re.search(r"isinstance\([^)]*,\s*list\)", code) or "JSON array" in code:
+            return generic
+        for key in re.findall(
+            r"(?:\.get\(\s*|\[\s*)['\"]([A-Za-z0-9_]+)['\"]", code
+        ):
+            if key in _MOCK_LIST_KEYS:
+                return {key: generic}
     return generic
 
 
@@ -503,6 +793,33 @@ def _workflow_script(workflow: dict[str, Any]) -> str:
                     return io.StringIO("id,name,value\\n1,sample,0.5\\n")
                 return io.StringIO("sample\\n")
             return _real_open(file, mode, *args, **kwargs)
+
+        class _MockHTTPResponse:
+            def __init__(self, status=200, body=b""):
+                self.status = status
+                self._body = body
+
+            def read(self, amount=-1):
+                return self._body if amount is None or amount < 0 else self._body[:amount]
+
+            def getheader(self, name, default=None):
+                return default
+
+            def getheaders(self):
+                return []
+
+        class _MockHTTPSConnection:
+            def __init__(self, *args, **kwargs):
+                pass
+
+            def request(self, method, url, body=None, headers=None, **kwargs):
+                pass
+
+            def getresponse(self):
+                return _MockHTTPResponse(200, b"")
+
+            def close(self):
+                pass
 '''
     safe_open_src = safe_open_src.replace(
         "__MOCK_INPUT_PAYLOAD__", repr(mock_input_payload)
@@ -515,6 +832,7 @@ Run with --dry-run to execute against mock_data.json (no real API keys needed).
 All code uses the Python standard library only.
 """
 import argparse
+import http.client
 import json
 import os
 import sys
@@ -525,11 +843,15 @@ MOCK_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mock_data.
 
 
 def _mock_urlopen(mock_responses):
+    class _MockHeaders(dict):
+        def get_content_charset(self, failobj=None):
+            return "utf-8"
+
     class _Resp:
-        def __init__(self, payload, status=200):
+        def __init__(self, payload, status=200, headers=None):
             self._payload = payload
             self.status = status
-            self.headers = {{}}
+            self.headers = _MockHeaders(headers or {{}})
 
         def read(self, amount=-1):
             return self._payload if amount is None or amount < 0 else self._payload[:amount]
@@ -550,6 +872,41 @@ def _mock_urlopen(mock_responses):
                 "use urllib.request.Request(url, headers=...)"
             )
         url = getattr(request, "full_url", None) or str(request)
+        lowered = url.lower()
+        method = getattr(request, "get_method", lambda: "GET")()
+        # GitHub release creation (POST) returns a single object, while the
+        # pull-request listing (GET) returns a list.
+        if "github.com" in lowered and method == "POST":
+            return _Resp(
+                json.dumps(
+                    {{
+                        "id": 1,
+                        "html_url": "https://example.com/release/1",
+                        "created_at": "2026-01-01T00:00:00Z",
+                    }}
+                ).encode("utf-8"),
+                headers={{"Content-Type": "application/json"}},
+            )
+        # Notion block-children requests expect the nested block list.
+        if "notion.com" in lowered and "/blocks/" in lowered:
+            for payload in mock_responses.values():
+                if isinstance(payload, dict) and "block_children" in payload:
+                    return _Resp(
+                        json.dumps(payload["block_children"]).encode("utf-8"),
+                        headers={{"Content-Type": "application/json"}},
+                    )
+        # Dry-run only: text-to-speech endpoints return binary MP3 data, not
+        # JSON. A tiny ID3-prefixed payload satisfies the workflow's
+        # _is_mp3_audio() validation without shipping real audio.
+        if (
+            "elevenlabs" in lowered
+            or "text-to-speech" in lowered
+            or "/tts" in lowered
+        ):
+            return _Resp(
+                b"ID3" + b"\\x00" * 128,
+                headers={{"Content-Type": "audio/mpeg"}},
+            )
         for key, payload in mock_responses.items():
             if key in url:
                 if isinstance(payload, dict) and "__json_string__" in payload:
@@ -558,11 +915,23 @@ def _mock_urlopen(mock_responses):
                     body = payload.encode("utf-8")
                 else:
                     body = json.dumps(payload).encode("utf-8")
-                return _Resp(body)
+                return _Resp(body, headers={{"Content-Type": "application/json"}})
+        # Slack Web API always returns JSON.
+        if "slack.com" in lowered:
+            return _Resp(
+                json.dumps(
+                    {{
+                        "ok": True,
+                        "ts": "1234567890.123456",
+                        "channel": "C0123456789",
+                    }}
+                ).encode("utf-8"),
+                headers={{"Content-Type": "application/json"}},
+            )
         # Generic fallback so environment-driven mock URLs (e.g. a
         # dry-run SUPABASE_URL) still satisfy the common response contracts.
         return _Resp(json.dumps({{
-            "data": [{{"id": "1", "text": "sample", "value": 0.5}}],
+            "data": [{{"id": "1", "text": "sample", "value": 0.5, "embedding": [0.1, 0.2, 0.3], "status": "paid", "amount_paid": 1500, "customer": "cus_mock"}}],
             "choices": [{{"message": {{"content": "0.8"}}}}],
             "content": "0.8",
             "value": 0.5,
@@ -570,12 +939,28 @@ def _mock_urlopen(mock_responses):
             "ok": True,
             "results": [{{"id": "1", "name": "sample", "value": 0.5}}],
             "hits": [{{"objectID": "1", "title": "sample", "url": "https://example.com"}}],
+            "nbHits": 1,
+            "nbPages": 1,
+            "page": 0,
+            "hitsPerPage": 10,
+            "upsertedCount": 1,
+            "upserted_count": 1,
+            "matches": [{{"id": "1", "score": 0.9, "metadata": {{"text": "sample"}}}}],
+            "environments": {{"production": {{"fallthrough": {{"variations": [{{"variation": 0, "weight": 100000}}]}}}}}},
+            "success": True,
+            "result": {{}},
+            "errors": [],
+            "checksum": "1e9d7c27c8bbc8ddf0055c93e064a62fa995d177fee28cc8fa949bc8a4db06f4",
+            "etag": "mock-etag",
+            "values": [["sample", "0.5"]],
+            "sid": "SM123",
+            "queued": True,
             "documents": [{{"id": "1", "title": "sample", "text": "sample"}}],
             "episodes": [{{"id": "1", "audio_url": "https://example.com/audio.mp3"}}],
             "response": "sample response",
-            "fields": {{"summary": "sample", "status": {{"name": "To Do"}}}},
+            "fields": {{"summary": "sample", "title": "sample", "content": "Sample content", "Asset": "sample", "Theme": "sample", "Feedback": "sample", "Quantity": 1, "status": {{"name": "To Do"}}}},
             "items": [{{"id": "1", "name": "sample"}}],
-            "records": [{{"id": "1", "name": "sample"}}],
+            "records": [{{"id": "1", "name": "sample", "fields": {{"title": "sample", "content": "Sample content", "Asset": "sample", "Theme": "sample", "Feedback": "sample", "Quantity": 1}}}}],
             "messages": [],
             "topics": [],
             "drafts": [],
@@ -664,7 +1049,7 @@ def main():
                         _fh.write("id,name,value\\n1,sample,0.5\\n")
                     else:
                         _fh.write("sample\\n")
-{safe_open_src}        with mock.patch("builtins.open", side_effect=_safe_open), mock.patch("os.path.exists", side_effect=_safe_exists), mock.patch("time.sleep", return_value=None), mock.patch("urllib.request.urlopen", side_effect=_mock_urlopen(mock_responses)):
+{safe_open_src}        with mock.patch("builtins.open", side_effect=_safe_open), mock.patch("os.path.exists", side_effect=_safe_exists), mock.patch("time.sleep", return_value=None), mock.patch("urllib.request.urlopen", side_effect=_mock_urlopen(mock_responses)), mock.patch("http.client.HTTPSConnection", _MockHTTPSConnection), mock.patch("sys.stdin", io.StringIO(json.dumps([{{"article_id": "article-1", "duplicate_id": "article-2", "similarity": 0.95}}]))):
             run_workflow()
         print("Dry-run completed successfully.")
     else:

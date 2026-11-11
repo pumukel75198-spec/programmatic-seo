@@ -25,16 +25,12 @@
     "slug": "llm-evaluation-benchmark",
     "kind": "workflow",
     "pages": 10,
-    "dry_run_exit": "1",
-    "zip_ok": false,
+    "dry_run_exit": "0",
+    "zip_ok": true,
     "domains_ok": true,
     "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S1] sandbox exit code 1: AttributeError: 'list' object has no attribute 'get'",
-      "[S1] sandbox stderr contains Traceback",
-      "[S1] workflow --dry-run produced no stdout"
-    ]
+    "ok": true,
+    "findings": []
   },
   {
     "slug": "batch-llm-processing",
@@ -51,30 +47,23 @@
     "slug": "ai-customer-insights",
     "kind": "workflow",
     "pages": 10,
-    "dry_run_exit": "1",
-    "zip_ok": false,
+    "dry_run_exit": "0",
+    "zip_ok": true,
     "domains_ok": true,
     "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S1] sandbox exit code 1: step failed: FLOWMATRIX_STEP_INPUT is not valid JSON.",
-      "[S1] workflow --dry-run produced no stdout"
-    ]
+    "ok": true,
+    "findings": []
   },
   {
     "slug": "claude-document-summarizer",
     "kind": "workflow",
     "pages": 9,
-    "dry_run_exit": "1",
-    "zip_ok": false,
+    "dry_run_exit": "0",
+    "zip_ok": true,
     "domains_ok": true,
     "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S1] sandbox exit code 1: KeyError: 'documents'",
-      "[S1] sandbox stderr contains Traceback",
-      "[S1] workflow --dry-run produced no stdout"
-    ]
+    "ok": true,
+    "findings": []
   },
   {
     "slug": "gemini-multimodal-analyzer",
@@ -91,45 +80,34 @@
     "slug": "watson-assistant-helpdesk",
     "kind": "workflow",
     "pages": 9,
-    "dry_run_exit": "1",
-    "zip_ok": false,
+    "dry_run_exit": "0",
+    "zip_ok": true,
     "domains_ok": true,
     "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S1] sandbox exit code 1: FileNotFoundError: [Errno 2] No such file or directory: '.zendesk.com/api/v2/tickets.json'",
-      "[S1] sandbox stderr contains Traceback",
-      "[S1] workflow --dry-run produced no stdout"
-    ]
+    "ok": true,
+    "findings": []
   },
   {
     "slug": "podcast-transcription-pipeline",
     "kind": "workflow",
     "pages": 9,
-    "dry_run_exit": "1",
-    "zip_ok": false,
+    "dry_run_exit": "0",
+    "zip_ok": true,
     "domains_ok": true,
     "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S1] sandbox exit code 1: AttributeError: 'list' object has no attribute 'get'",
-      "[S1] sandbox stderr contains Traceback",
-      "[S1] workflow --dry-run produced no stdout"
-    ]
+    "ok": true,
+    "findings": []
   },
   {
     "slug": "ai-voiceover-production",
     "kind": "workflow",
     "pages": 12,
-    "dry_run_exit": "1",
-    "zip_ok": false,
+    "dry_run_exit": "0",
+    "zip_ok": true,
     "domains_ok": true,
     "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S1] sandbox exit code 1: RuntimeError: Missing required environment variable: ELEVENLABS_API_KEY",
-      "[S1] sandbox stderr contains Traceback"
-    ]
+    "ok": true,
+    "findings": []
   },
   {
     "slug": "ai-image-generation-pipeline",
@@ -145,7 +123,7 @@
   {
     "slug": "semantic-search-knowledge-base",
     "kind": "workflow",
-    "pages": 9,
+    "pages": 13,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,
@@ -178,7 +156,7 @@
   {
     "slug": "content-similarity-audit",
     "kind": "workflow",
-    "pages": 9,
+    "pages": 11,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,
@@ -189,18 +167,7 @@
   {
     "slug": "transactional-email-delivery",
     "kind": "workflow",
-    "pages": 9,
-    "dry_run_exit": "0",
-    "zip_ok": true,
-    "domains_ok": true,
-    "r2_synced": false,
-    "ok": true,
-    "findings": []
-  },
-  {
-    "slug": "email-campaign-automation",
-    "kind": "workflow",
-    "pages": 9,
+    "pages": 13,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,
@@ -211,7 +178,7 @@
   {
     "slug": "sms-alert-system",
     "kind": "workflow",
-    "pages": 9,
+    "pages": 13,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,
@@ -310,7 +277,7 @@
   {
     "slug": "ai-help-center-search",
     "kind": "workflow",
-    "pages": 9,
+    "pages": 13,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,
@@ -332,7 +299,7 @@
   {
     "slug": "subscription-billing-automation",
     "kind": "workflow",
-    "pages": 9,
+    "pages": 11,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,
@@ -343,7 +310,7 @@
   {
     "slug": "invoice-reconciliation",
     "kind": "workflow",
-    "pages": 9,
+    "pages": 11,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,
@@ -378,41 +345,33 @@
     "kind": "workflow",
     "pages": 9,
     "dry_run_exit": "0",
-    "zip_ok": false,
+    "zip_ok": true,
     "domains_ok": true,
     "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S1] requests.http contains no valid HTTP requests"
-    ]
+    "ok": true,
+    "findings": []
   },
   {
     "slug": "bank-transaction-enrichment",
     "kind": "workflow",
-    "pages": 9,
+    "pages": 13,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,
     "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S2] code snippet #2 OpenAI chat model must be gpt-4o/gpt-4o-mini: ['gpt-4']"
-    ]
+    "ok": true,
+    "findings": []
   },
   {
     "slug": "supabase-realtime-dashboard",
     "kind": "workflow",
-    "pages": 12,
-    "dry_run_exit": "1",
-    "zip_ok": false,
+    "pages": 13,
+    "dry_run_exit": "0",
+    "zip_ok": true,
     "domains_ok": true,
     "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S1] sandbox exit code 1: RuntimeError: Missing required environment variable: POSTHOG_PROJECT_ID",
-      "[S1] sandbox stderr contains Traceback",
-      "[S1] workflow --dry-run produced no stdout"
-    ]
+    "ok": true,
+    "findings": []
   },
   {
     "slug": "airtable-content-sync",
@@ -426,20 +385,9 @@
     "findings": []
   },
   {
-    "slug": "mongodb-data-pipeline",
-    "kind": "workflow",
-    "pages": 9,
-    "dry_run_exit": "0",
-    "zip_ok": true,
-    "domains_ok": true,
-    "r2_synced": false,
-    "ok": true,
-    "findings": []
-  },
-  {
     "slug": "redis-rate-limit-store",
     "kind": "workflow",
-    "pages": 9,
+    "pages": 11,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,
@@ -450,7 +398,7 @@
   {
     "slug": "google-sheets-reporting-hub",
     "kind": "workflow",
-    "pages": 9,
+    "pages": 13,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,
@@ -472,7 +420,7 @@
   {
     "slug": "feature-flag-rollout",
     "kind": "workflow",
-    "pages": 9,
+    "pages": 12,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,
@@ -484,30 +432,23 @@
     "slug": "secrets-rotation-audit",
     "kind": "workflow",
     "pages": 11,
-    "dry_run_exit": "1",
-    "zip_ok": false,
-    "domains_ok": true,
-    "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S1] sandbox exit code 1: AttributeError: '_Resp' object has no attribute 'headers'",
-      "[S1] sandbox stderr contains Traceback",
-      "[S1] workflow --dry-run produced no stdout"
-    ]
-  },
-  {
-    "slug": "serverless-job-scheduler",
-    "kind": "workflow",
-    "pages": 9,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,
     "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S2] code snippet #1 uses urlencode without 'import urllib.parse'",
-      "[S2] code snippet #1 Supabase write missing Prefer: return=representation"
-    ]
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "serverless-job-scheduler",
+    "kind": "workflow",
+    "pages": 14,
+    "dry_run_exit": "0",
+    "zip_ok": true,
+    "domains_ok": true,
+    "r2_synced": false,
+    "ok": true,
+    "findings": []
   },
   {
     "slug": "api-health-monitoring",
@@ -523,7 +464,7 @@
   {
     "slug": "linear-roadmap-sync",
     "kind": "workflow",
-    "pages": 9,
+    "pages": 13,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,
@@ -535,16 +476,12 @@
     "slug": "release-notes-generator",
     "kind": "workflow",
     "pages": 13,
-    "dry_run_exit": "1",
-    "zip_ok": false,
+    "dry_run_exit": "0",
+    "zip_ok": true,
     "domains_ok": true,
     "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S1] sandbox exit code 1: AttributeError: '_Resp' object has no attribute 'headers'",
-      "[S1] sandbox stderr contains Traceback",
-      "[S1] workflow --dry-run produced no stdout"
-    ]
+    "ok": true,
+    "findings": []
   },
   {
     "slug": "programmatic-seo-pipeline",
@@ -560,7 +497,7 @@
   {
     "slug": "ai-content-automation",
     "kind": "workflow",
-    "pages": 9,
+    "pages": 12,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,
@@ -572,16 +509,12 @@
     "slug": "seo-content-audit",
     "kind": "workflow",
     "pages": 11,
-    "dry_run_exit": "1",
-    "zip_ok": false,
+    "dry_run_exit": "0",
+    "zip_ok": true,
     "domains_ok": true,
     "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S1] sandbox exit code 1: RuntimeError: Algolia returned no indexed pages",
-      "[S1] sandbox stderr contains Traceback",
-      "[S1] workflow --dry-run produced no stdout"
-    ]
+    "ok": true,
+    "findings": []
   },
   {
     "slug": "blog-cms-publishing",
@@ -609,29 +542,23 @@
     "slug": "newsletter-automation",
     "kind": "workflow",
     "pages": 10,
-    "dry_run_exit": "1",
-    "zip_ok": false,
+    "dry_run_exit": "0",
+    "zip_ok": true,
     "domains_ok": true,
     "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S1] sandbox exit code 1: RuntimeError: Missing required environment variable: NEWSLETTER_HTML",
-      "[S1] sandbox stderr contains Traceback",
-      "[S1] workflow --dry-run produced no stdout"
-    ]
+    "ok": true,
+    "findings": []
   },
   {
     "slug": "content-localization-pipeline",
     "kind": "workflow",
     "pages": 9,
     "dry_run_exit": "0",
-    "zip_ok": false,
+    "zip_ok": true,
     "domains_ok": true,
     "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S1] requests.http contains no valid HTTP requests"
-    ]
+    "ok": true,
+    "findings": []
   },
   {
     "slug": "meeting-notes-automation",
@@ -647,7 +574,7 @@
   {
     "slug": "notion-task-sync",
     "kind": "workflow",
-    "pages": 10,
+    "pages": 12,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,
@@ -658,7 +585,7 @@
   {
     "slug": "document-approval-workflow",
     "kind": "workflow",
-    "pages": 9,
+    "pages": 11,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,
@@ -669,7 +596,7 @@
   {
     "slug": "form-submission-routing",
     "kind": "workflow",
-    "pages": 9,
+    "pages": 12,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,
@@ -680,7 +607,7 @@
   {
     "slug": "team-wiki-search",
     "kind": "workflow",
-    "pages": 9,
+    "pages": 13,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,
@@ -691,7 +618,7 @@
   {
     "slug": "design-feedback-collection",
     "kind": "workflow",
-    "pages": 9,
+    "pages": 10,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,
@@ -714,61 +641,45 @@
     "slug": "product-analytics-dashboard",
     "kind": "workflow",
     "pages": 10,
-    "dry_run_exit": "1",
-    "zip_ok": false,
+    "dry_run_exit": "0",
+    "zip_ok": true,
     "domains_ok": true,
     "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S1] sandbox exit code 1: RuntimeError: PostHog response is missing the 'results' list",
-      "[S1] sandbox stderr contains Traceback",
-      "[S1] workflow --dry-run produced no stdout"
-    ]
+    "ok": true,
+    "findings": []
   },
   {
     "slug": "error-tracking-alerts",
     "kind": "workflow",
-    "pages": 10,
-    "dry_run_exit": "1",
-    "zip_ok": false,
+    "pages": 13,
+    "dry_run_exit": "0",
+    "zip_ok": true,
     "domains_ok": true,
     "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S1] sandbox exit code 1: RuntimeError: Missing required environment variable: SENTRY_BEARER_TOKEN",
-      "[S1] sandbox stderr contains Traceback",
-      "[S1] workflow --dry-run produced no stdout"
-    ]
+    "ok": true,
+    "findings": []
   },
   {
     "slug": "website-performance-reporting",
     "kind": "workflow",
     "pages": 10,
-    "dry_run_exit": "1",
-    "zip_ok": false,
+    "dry_run_exit": "0",
+    "zip_ok": true,
     "domains_ok": true,
     "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S1] sandbox exit code 1: RuntimeError: No report HTML was provided by the previous workflow step",
-      "[S1] sandbox stderr contains Traceback",
-      "[S1] workflow --dry-run produced no stdout"
-    ]
+    "ok": true,
+    "findings": []
   },
   {
     "slug": "social-media-analytics",
     "kind": "workflow",
     "pages": 10,
-    "dry_run_exit": "1",
-    "zip_ok": false,
+    "dry_run_exit": "0",
+    "zip_ok": true,
     "domains_ok": true,
     "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S1] sandbox exit code 1: RuntimeError: Missing required environment variable: GOOGLE_SHEETS_OAUTH_TOKEN",
-      "[S1] sandbox stderr contains Traceback",
-      "[S1] workflow --dry-run produced no stdout"
-    ]
+    "ok": true,
+    "findings": []
   },
   {
     "slug": "shopify-order-automation",
@@ -784,7 +695,7 @@
   {
     "slug": "inventory-sync-automation",
     "kind": "workflow",
-    "pages": 9,
+    "pages": 10,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,
@@ -808,18 +719,16 @@
     "kind": "workflow",
     "pages": 9,
     "dry_run_exit": "0",
-    "zip_ok": false,
+    "zip_ok": true,
     "domains_ok": true,
     "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S1] requests.http contains no valid HTTP requests"
-    ]
+    "ok": true,
+    "findings": []
   },
   {
     "slug": "asset-backup-automation",
     "kind": "workflow",
-    "pages": 9,
+    "pages": 10,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,
@@ -831,34 +740,28 @@
     "slug": "s3-static-site-publishing",
     "kind": "workflow",
     "pages": 11,
-    "dry_run_exit": "1",
-    "zip_ok": false,
-    "domains_ok": true,
-    "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S1] sandbox exit code 1: RuntimeError: Missing required environment variable: CLOUDFLARE_ZONE_ID",
-      "[S1] sandbox stderr contains Traceback",
-      "[S1] workflow --dry-run produced no stdout"
-    ]
-  },
-  {
-    "slug": "auth0-sso-provisioning",
-    "kind": "workflow",
-    "pages": 9,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,
     "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S2] code snippet #4 parses Slack webhook response as JSON (returns 'ok')"
-    ]
+    "ok": true,
+    "findings": []
+  },
+  {
+    "slug": "auth0-sso-provisioning",
+    "kind": "workflow",
+    "pages": 12,
+    "dry_run_exit": "0",
+    "zip_ok": true,
+    "domains_ok": true,
+    "r2_synced": false,
+    "ok": true,
+    "findings": []
   },
   {
     "slug": "clerk-user-onboarding",
     "kind": "workflow",
-    "pages": 9,
+    "pages": 10,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,
@@ -947,16 +850,12 @@
     "slug": "shopify-admin-amazon-polly-automation-pipeline",
     "kind": "workflow",
     "pages": 11,
-    "dry_run_exit": "1",
-    "zip_ok": false,
+    "dry_run_exit": "0",
+    "zip_ok": true,
     "domains_ok": true,
     "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S1] sandbox exit code 1: FileExistsError: [Errno 17] File exists: 'mock_input.json'",
-      "[S1] sandbox stderr contains Traceback",
-      "[S1] workflow --dry-run produced no stdout"
-    ]
+    "ok": true,
+    "findings": []
   },
   {
     "slug": "weatherapi-launchdarkly-feature-automation-pipeline",
@@ -974,44 +873,33 @@
     "kind": "workflow",
     "pages": 11,
     "dry_run_exit": "0",
-    "zip_ok": false,
+    "zip_ok": true,
     "domains_ok": true,
     "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S1] requests.http contains no valid HTTP requests"
-    ]
+    "ok": true,
+    "findings": []
   },
   {
     "slug": "jira-rest-twilio-conversations-automation-pipeline",
     "kind": "workflow",
     "pages": 11,
-    "dry_run_exit": "1",
-    "zip_ok": false,
+    "dry_run_exit": "0",
+    "zip_ok": true,
     "domains_ok": true,
     "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S1] sandbox exit code 1: RuntimeError: Missing required environment variable: JIRA_PROJECT_KEY",
-      "[S1] sandbox stderr contains Traceback",
-      "[S1] workflow --dry-run produced no stdout"
-    ]
+    "ok": true,
+    "findings": []
   },
   {
     "slug": "jira-rest-notion-api-for-automation-automation-pipeline",
     "kind": "workflow",
     "pages": 11,
-    "dry_run_exit": "1",
-    "zip_ok": false,
+    "dry_run_exit": "0",
+    "zip_ok": true,
     "domains_ok": true,
     "r2_synced": false,
-    "ok": false,
-    "findings": [
-      "[S1] sandbox exit code 1: RuntimeError: Jira response for dry-run-value is missing fields",
-      "[S1] sandbox stderr contains Traceback",
-      "[S1] workflow --dry-run produced no stdout",
-      "[S1] requests.http contains no valid HTTP requests"
-    ]
+    "ok": true,
+    "findings": []
   },
   {
     "slug": "convertkit-github-copilot-automation-pipeline",
@@ -1401,7 +1289,7 @@
   {
     "slug": "vercel-blob-api",
     "kind": "api",
-    "pages": 5,
+    "pages": 8,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,
@@ -1786,7 +1674,7 @@
   {
     "slug": "aws-polly-api",
     "kind": "api",
-    "pages": 5,
+    "pages": 10,
     "dry_run_exit": "0",
     "zip_ok": true,
     "domains_ok": true,

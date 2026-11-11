@@ -106,7 +106,9 @@ PLIST_PATH = _ROOT / "pipeline" / PLIST_NAME
 LAUNCH_AGENTS = Path.home() / "Library" / "LaunchAgents"
 LAUNCHD_INTERVAL_SECONDS = 259200  # exactly 72 hours
 PRIMARY_MODEL = "deepseek/deepseek-v4.1-flash-1017"
-FALLBACK_MODEL = "openai/gpt-4o-mini"
+# gpt-4o-mini produced too many broken snippets; use a stronger model as the
+# last-resort fallback when the primary model is unavailable.
+FALLBACK_MODEL = "openai/gpt-4o"
 DIFFICULTY_BY_SIZE = {2: "Beginner", 3: "Intermediate", 4: "Advanced"}
 DURATION_BY_SIZE = {
     2: "35–45 minutes",

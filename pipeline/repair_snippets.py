@@ -47,7 +47,7 @@ PLACEHOLDER_RE = re.compile(
     re.IGNORECASE,
 )
 MIN_LINES = max(config.MIN_CODE_LINES, 10)
-FALLBACK_MODEL = os.environ.get("OPENROUTER_FALLBACK_MODEL", "openai/gpt-4o-mini")
+FALLBACK_MODEL = os.environ.get("OPENROUTER_FALLBACK_MODEL", "openai/gpt-4o")
 MODEL_LOCK = threading.Lock()
 
 SYSTEM_PROMPT = (

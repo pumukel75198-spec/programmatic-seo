@@ -452,7 +452,16 @@ def audit_python(code_blocks: list[str], kind: str) -> list[str]:
                 problems.append(
                     f"code snippet #{index + 1} Supabase call missing Authorization header"
                 )
-            if "prefer" not in lowered:
+            # Only writes need ``Prefer: return=representation``. A plain GET
+            # (e.g. polling a queue) must not be forced to send it.
+            is_write = bool(
+                re.search(
+                    r"method\s*=\s*['\"](?:POST|PATCH|PUT|DELETE)['\"]",
+                    code,
+                    re.IGNORECASE,
+                )
+            ) or "data=" in code
+            if is_write and "prefer" not in lowered:
                 problems.append(
                     f"code snippet #{index + 1} Supabase write missing Prefer: return=representation"
                 )

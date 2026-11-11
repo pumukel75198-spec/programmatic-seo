@@ -516,8 +516,7 @@
       "ok": true,
       "errors": [],
       "warnings": [
-        "Step 4: reassigns variable(s) from previous steps (grouped_feedback) \u2013 verify the data flow",
-        "Workflow dry-run failed: TypeError: object of type 'int' has no len()\nTraceback (most recent call last):\n  File \"/Users/tribunus/Desktop/programmatic-seo/pipeline/validator.py\", line 1195, in execute_workflow_dry_run\n    exec(compile(code, \"workflow.py\", \"exec\"), namespace)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"workflow.py\", line 113, in <module>\n  File \"workflow.py\", line 105, in update_notion\nTypeError: object of type 'int' has no len()\n"
+        "Step 4: reassigns variable(s) from previous steps (grouped_feedback) \u2013 verify the data flow"
       ]
     },
     {
