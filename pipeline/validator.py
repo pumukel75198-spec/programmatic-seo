@@ -81,6 +81,9 @@ def extract_urls(payload: Any) -> set[str]:
         if isinstance(payload, str)
         else json.dumps(payload, ensure_ascii=False)
     )
+    # LLMs often emit JSON-escaped slashes (``https:\/\/api.example.com``).
+    # Normalise them before parsing so the host never contains a backslash.
+    serialized = serialized.replace("\\/", "/")
     urls: set[str] = set()
     for match in _URL_RE.finditer(serialized):
         url = match.group(0).rstrip(".,;:")
@@ -95,16 +98,18 @@ def _dns_resolves(host: str) -> bool:
     try:
         socket.gethostbyname(host)
         return True
-    except OSError:
+    except (OSError, UnicodeError, ValueError):
         return False
 
 
 def _tcp_reachable(host: str, port: int = 443, timeout: float = 5.0) -> tuple[bool, str]:
     """Bounded TCP connect with a DNS fallback for blocked ports."""
+    if not host:
+        return False, "empty host"
     try:
         with socket.create_connection((host, port), timeout=timeout):
             return True, "TCP reachable"
-    except OSError as error:
+    except (OSError, UnicodeError, ValueError) as error:
         if _dns_resolves(host):
             return True, "DNS resolves (TCP blocked)"
         return False, f"{type(error).__name__}: {error}"
@@ -112,7 +117,10 @@ def _tcp_reachable(host: str, port: int = 443, timeout: float = 5.0) -> tuple[bo
 
 def check_domain_reachable(url: str) -> tuple[bool, str]:
     """HTTP check for one exact URL. Cached per URL (not per host)."""
-    host = urllib.parse.urlparse(url).hostname or ""
+    try:
+        host = urllib.parse.urlparse(url).hostname or ""
+    except ValueError as error:
+        return False, f"invalid URL: {error}"
     if not host:
         return False, "invalid URL"
     cache_key = url
@@ -121,19 +129,19 @@ def check_domain_reachable(url: str) -> tuple[bool, str]:
 
     last_reason = "no response"
     for method in ("HEAD", "GET"):
-        request = urllib.request.Request(
-            url,
-            method=method,
-            headers={
-                "User-Agent": (
-                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                    "AppleWebKit/537.36 (KHTML, like Gecko) "
-                    "Chrome/124.0 Safari/537.36"
-                ),
-                "Accept": "text/html,application/json;q=0.9,*/*;q=0.8",
-            },
-        )
         try:
+            request = urllib.request.Request(
+                url,
+                method=method,
+                headers={
+                    "User-Agent": (
+                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                        "AppleWebKit/537.36 (KHTML, like Gecko) "
+                        "Chrome/124.0 Safari/537.36"
+                    ),
+                    "Accept": "text/html,application/json;q=0.9,*/*;q=0.8",
+                },
+            )
             with urllib.request.urlopen(request, timeout=8) as response:
                 _DOMAIN_CACHE[cache_key] = (True, f"HTTP {response.getcode()}")
                 return _DOMAIN_CACHE[cache_key]
@@ -289,8 +297,13 @@ def validate_domains(payload: Any, context: str) -> list[str]:
     errors: list[str] = []
     checked: dict[str, tuple[bool, str]] = {}
     for url in sorted(extract_urls(payload)):
-        parsed_url = urllib.parse.urlparse(url)
-        host = parsed_url.hostname or ""
+        try:
+            parsed_url = urllib.parse.urlparse(url)
+            host = parsed_url.hostname or ""
+        except ValueError as error:
+            errors.append(f"{context}: invalid URL: {url} ({error})")
+            continue
+        host = host.strip().strip("\\").rstrip(".").strip()
         if not host:
             continue
 
@@ -1081,6 +1094,14 @@ def execute_workflow_dry_run(
     )
     env_names |= set(
         re.findall(r"os\.getenv\(\s*['\"]([A-Z0-9_]+)['\"]", code)
+    )
+    # Direct access (including ``from os import environ``) would raise KeyError
+    # in the sandbox. Register every referenced name with a deterministic mock.
+    env_names |= set(
+        re.findall(r"os\.environ\[\s*['\"]([A-Z0-9_]+)['\"]", code)
+    )
+    env_names |= set(
+        re.findall(r"(?<![\w.])environ\[\s*['\"]([A-Z0-9_]+)['\"]", code)
     )
     fake_env = {name: _fake_env_value(name) for name in env_names}
     fake_env.setdefault("API_KEY", "test-value")

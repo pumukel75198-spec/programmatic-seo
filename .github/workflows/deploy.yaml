@@ -37,6 +37,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install pipeline dependencies
+        run: pip install -r pipeline/requirements.txt
+
       # Re-validates every stored workflow/API with the real validator.
       # Live link checks are off: the disclaimer only guarantees reachability
       # on the day of generation. A stale record blocks the deploy.

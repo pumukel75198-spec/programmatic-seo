@@ -1,8 +1,8 @@
 name: Generate Content Batch
 
-# Alle 3 Tage um 06:00 UTC: zufällig ~10 neue Einträge
-# (APIs, Alternatives, Workflows) inkl. PDFs, Python-Skripten,
-# strenger Validierung, KV-Upload und Commit.
+# Alle 3 Tage um 06:00 UTC: 5 neue APIs, 5 Alternativen und
+# 3 neue Workflows inkl. PDFs, Python-Skripten, strenger Validierung,
+# R2-Upload und Commit. Ungültige Kandidaten werden verworfen und ersetzt.
 #
 # WICHTIG: Dieser Workflow deployt NICHT selbst. Er generiert, prüft
 # (Daten, Typen, Format, Unit-Tests, API-Skripte, Build) und committet
@@ -24,8 +24,9 @@ jobs:
   generate:
     name: Generate, validate & commit
     runs-on: ubuntu-latest
-    # Schutz gegen hängende Läufe: Batch dauert i. d. R. 6–15 Min.
-    timeout-minutes: 45
+    # Der verifizierende Daemon probiert Ersatzkandidaten und läuft den
+    # vollständigen Customer-Audit; 120 Minuten decken mehrere Runden ab.
+    timeout-minutes: 120
 
     steps:
       - name: Checkout repository
@@ -50,7 +51,7 @@ jobs:
       - name: Install pipeline dependencies
         run: pip install -r pipeline/requirements.txt
 
-      - name: Run unified pipeline
+      - name: Run verified content daemon
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           # Code generation must use the strong primary model. gpt-4o-mini is
@@ -70,7 +71,15 @@ jobs:
           PUBLIC_LEMON_WORKFLOW_CHECKOUT_EXPERT: ${{ vars.PUBLIC_LEMON_WORKFLOW_CHECKOUT_EXPERT }}
           PUBLIC_LEMON_CHECKOUT_URL: ${{ vars.PUBLIC_LEMON_CHECKOUT_URL }}
           PUBLIC_NEWSLETTER_URL: ${{ vars.PUBLIC_NEWSLETTER_URL }}
-        run: python -m pipeline.run_batch --workflows 4 --apis 4 --alternatives 3 --skip-deploy
+        # The daemon validates every new API seed against its live endpoint and
+        # documentation before spending any LLM tokens. Invalid candidates are
+        # discarded and replaced automatically; workflows are only persisted
+        # after the live-domain, AST/dry-run, PDF/kit and customer-audit gates
+        # pass. No unverified record can reach JSON storage or the website.
+        run: >
+          python -m pipeline.auto_3day_daemon
+          --apis 5 --alternatives 5 --workflows 3
+          --skip-git --skip-build --no-launchd
 
       # Generierte JSON-Dateien Prettier-konform formatieren, damit der
       # Format-Check im Deploy-Workflow nicht fehlschlägt.
@@ -100,20 +109,9 @@ jobs:
       - name: Content gate (stored workflows & APIs)
         run: python -m pipeline.content_gate
 
-      # --- Customer audit & auto-heal (hard pre-deploy gate) ----------------
-      # Runs the full six-level customer audit (PDF/ZIP cross-check, sandbox
-      # execution, deep PDF inspection, live domains, autonomous healing)
-      # BEFORE anything is committed or deployed. A non-zero exit code aborts
-      # the job, so a failing product can never reach production.
-      # ``--r2-only-healed`` keeps CI fast: the new artifacts were already
-      # uploaded by run_batch, so only healed packages need a re-upload.
-      - name: Customer audit & auto-heal (pre-deploy gate)
-        env:
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          OPENROUTER_MODEL: ${{ vars.OPENROUTER_MODEL || 'deepseek/deepseek-v4.1-flash-1017' }}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: python -m pipeline.customer_audit_healer --skip-git --r2-only-healed
+      # The daemon already ran the full customer audit & auto-heal as its
+      # hard pre-delivery gate (pipeline/auto_3day_daemon.py). Running it a
+      # second time would double the CI time without adding coverage.
 
       # The healer rewrites src/data/*.json via run_batch.save_json (compact
       # arrays). Re-format AFTER the healer, otherwise the committed JSON fails

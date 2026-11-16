@@ -1551,6 +1551,26 @@ def build_api_candidate_pool(
     return candidates[: max(count * 3, 3)]
 
 
+def filter_authentic_apis(candidates: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Preflight source APIs before any LLM token is spent.
+
+    Only candidates with a live endpoint host and documentation page are kept.
+    The batch size is adaptive: if only two authentic APIs are available, two
+    API kits are generated instead of failing the whole run.
+    """
+    authentic: list[dict[str, Any]] = []
+    for api in candidates:
+        errors = live_domain_check([api])
+        if errors:
+            log(
+                f"  [PREFLIGHT-DISCARD] {api.get('slug')}: "
+                f"{'; '.join(errors)[-500:]}"
+            )
+            continue
+        authentic.append(api)
+    return authentic
+
+
 def _api_metadata(api: dict[str, Any]) -> dict[str, Any]:
     timestamp = run_batch._now_timestamp()  # noqa: SLF001
     api["created_and_verified_at"] = timestamp
@@ -1978,6 +1998,28 @@ def process_alternative_candidate(
 # --------------------------------------------------------------------------- #
 # Preferred workflow concepts (include the freshly generated APIs)
 # --------------------------------------------------------------------------- #
+def _api_for_alternative(
+    alternative: dict[str, Any], apis: list[dict[str, Any]]
+) -> dict[str, Any] | None:
+    """Find the catalogue API that belongs to an alternative's original tool."""
+    original = (
+        str((alternative.get("details") or {}).get("original") or "")
+        .strip()
+        .lower()
+    )
+    if not original:
+        return None
+    for api in apis:
+        provider = (
+            str((api.get("details") or {}).get("provider") or "")
+            .strip()
+            .lower()
+        )
+        if provider and provider == original:
+            return api
+    return None
+
+
 def build_preferred_concepts(
     preferred_apis: list[dict[str, Any]],
     apis: list[dict[str, Any]],
@@ -2484,13 +2526,58 @@ def main(argv: list[str] | None = None) -> int:
 
     sync_state()
 
-    if args.plan_only:
-        api_pool = build_api_candidate_pool(
-            apis, targets["apis"], seed, set(successful_apis)
+    # ------------------------------------------------------------------ #
+    # Preflight: only authentic sources may enter the batch
+    # ------------------------------------------------------------------ #
+    api_pool = (
+        filter_authentic_apis(
+            build_api_candidate_pool(
+                apis, targets["apis"], seed, set(successful_apis)
+            )
         )
-        alt_pool = build_alternative_candidate_pool(
+        if targets["apis"] > 0
+        else []
+    )
+    alt_pool = (
+        build_alternative_candidate_pool(
             alternatives, apis, targets["alternatives"], seed + 1
         )
+        if targets["alternatives"] > 0
+        else []
+    )
+    alt_source_apis: list[dict[str, Any]] = []
+    for alt_seed in alt_pool:
+        original = str(alt_seed.get("original") or "").strip().lower()
+        if not original:
+            continue
+        for api in apis:
+            provider = str(
+                (api.get("details") or {}).get("provider") or ""
+            ).strip().lower()
+            if provider == original and api not in alt_source_apis:
+                alt_source_apis.append(api)
+                break
+    workflow_sources = {
+        str(api.get("slug")) for api in api_pool
+    } | {str(api.get("slug")) for api in alt_source_apis}
+    effective = {
+        "apis": min(targets["apis"], len(api_pool)),
+        "alternatives": min(targets["alternatives"], len(alt_pool)),
+        "workflows": min(targets["workflows"], len(workflow_sources)),
+    }
+    state["requested_targets"] = dict(targets)
+    state["effective_targets"] = dict(effective)
+    log(
+        f"[PREFLIGHT] authentic candidates: apis={len(api_pool)} "
+        f"alternatives={len(alt_pool)} | workflow sources="
+        f"{len(workflow_sources)} | effective targets: "
+        f"{effective['apis']}/{effective['alternatives']}/"
+        f"{effective['workflows']} (requested "
+        f"{targets['apis']}/{targets['alternatives']}/{targets['workflows']})"
+    )
+    sync_state()
+
+    if args.plan_only:
         wf_pool = build_candidate_pool(
             apis, alternatives, workflows, pool_size, seed + 2
         )
@@ -2512,23 +2599,23 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     # ------------------------------------------------------------------ #
-    # Phase 1: API production kits
+    # Phase 1: API production kits (adaptive: fewer authentic candidates)
     # ------------------------------------------------------------------ #
-    if targets["apis"] > 0:
-        api_pool = build_api_candidate_pool(
-            apis, targets["apis"], seed, set(successful_apis)
-        )
+    if effective["apis"] > 0:
+        rejected_api_slugs: set[str] = set()
         extension = 0
-        while len(successful_apis) < targets["apis"]:
+        while len(successful_apis) < effective["apis"]:
             if not api_pool:
                 extension += 1
                 if extension > 6:
                     break
-                extra = build_api_candidate_pool(
-                    apis,
-                    targets["apis"],
-                    seed + extension * 7919,
-                    set(successful_apis),
+                extra = filter_authentic_apis(
+                    build_api_candidate_pool(
+                        apis,
+                        targets["apis"],
+                        seed + extension * 7919,
+                        set(successful_apis) | rejected_api_slugs,
+                    )
                 )
                 known = {str(api.get("slug")) for api in api_pool}
                 extra = [
@@ -2552,10 +2639,11 @@ def main(argv: list[str] | None = None) -> int:
             if ok:
                 successful_apis.append(str(api.get("slug")))
                 log(
-                    f"[API-SUCCESS {len(successful_apis)}/{targets['apis']}] "
+                    f"[API-SUCCESS {len(successful_apis)}/{effective['apis']}] "
                     f"{api.get('slug')}"
                 )
             else:
+                rejected_api_slugs.add(str(api.get("slug")))
                 rejected["apis"].append(
                     {
                         "slug": api.get("slug"),
@@ -2565,25 +2653,19 @@ def main(argv: list[str] | None = None) -> int:
                 )
                 log(f"  [API-DISCARD] {api.get('slug')}: {reason[-500:]}")
             sync_state()
-        if len(successful_apis) < targets["apis"]:
+        if len(successful_apis) < effective["apis"]:
             log(
-                f"[FATAL] only {len(successful_apis)}/{targets['apis']} API kits "
-                "passed every gate – nothing was committed or pushed"
+                f"[WARN] only {len(successful_apis)}/{effective['apis']} "
+                "API kits passed every gate; continuing with the verified subset"
             )
-            state["status"] = "incomplete"
-            state["finished_at"] = _now()
-            sync_state()
-            return 1
 
     # ------------------------------------------------------------------ #
-    # Phase 2: Alternatives
+    # Phase 2: Alternatives (adaptive: fewer authentic candidates)
     # ------------------------------------------------------------------ #
-    if targets["alternatives"] > 0:
-        alt_pool = build_alternative_candidate_pool(
-            alternatives, apis, targets["alternatives"], seed + 1
-        )
+    if effective["alternatives"] > 0:
+        rejected_alt_originals: set[str] = set()
         extension = 0
-        while len(successful_alternatives) < targets["alternatives"]:
+        while len(successful_alternatives) < effective["alternatives"]:
             if not alt_pool:
                 extension += 1
                 if extension > 6:
@@ -2599,6 +2681,7 @@ def main(argv: list[str] | None = None) -> int:
                     item
                     for item in extra
                     if str(item.get("original")) not in known
+                    and str(item.get("original")) not in rejected_alt_originals
                 ]
                 if not extra:
                     break
@@ -2620,9 +2703,10 @@ def main(argv: list[str] | None = None) -> int:
                 successful_alternatives.append(str(candidate.get("slug")))
                 log(
                     f"[ALT-SUCCESS {len(successful_alternatives)}/"
-                    f"{targets['alternatives']}] {candidate.get('slug')}"
+                    f"{effective['alternatives']}] {candidate.get('slug')}"
                 )
             else:
+                rejected_alt_originals.add(str(candidate_seed.get("original")))
                 rejected["alternatives"].append(
                     {
                         "slug": candidate_seed.get("original"),
@@ -2635,112 +2719,171 @@ def main(argv: list[str] | None = None) -> int:
                     f"{reason[-500:]}"
                 )
             sync_state()
-        if len(successful_alternatives) < targets["alternatives"]:
+        if len(successful_alternatives) < effective["alternatives"]:
             log(
-                f"[FATAL] only {len(successful_alternatives)}/"
-                f"{targets['alternatives']} alternatives passed every gate – "
-                "nothing was committed or pushed"
+                f"[WARN] only {len(successful_alternatives)}/"
+                f"{effective['alternatives']} alternatives passed every gate; "
+                "continuing with the verified subset"
             )
-            state["status"] = "incomplete"
-            state["finished_at"] = _now()
-            sync_state()
-            return 1
 
     # ------------------------------------------------------------------ #
-    # Phase 3: Workflow kits (prefer the freshly generated APIs)
+    # Phase 3: Workflows – from newly verified APIs OR alternatives
     # ------------------------------------------------------------------ #
-    if targets["workflows"] > 0:
+    if effective["workflows"] > 0 and (
+        successful_apis or successful_alternatives
+    ):
         new_api_records = [
             api for api in apis if str(api.get("slug")) in successful_apis
         ]
-        pool = build_candidate_pool(
-            apis, alternatives, workflows, pool_size, seed + 2
-        )
-        preferred = build_preferred_concepts(
-            new_api_records,
-            apis,
-            alternatives,
-            workflows,
-            targets["workflows"],
-            seed + 3,
-        )
-        preferred_slugs = {concept["slug"] for concept in preferred}
-        pool = preferred + [
-            concept for concept in pool if concept["slug"] not in preferred_slugs
+        new_alternative_records = [
+            item
+            for item in alternatives
+            if str(item.get("slug")) in successful_alternatives
         ]
-        log(
-            f"[WF-POOL] prepared {len(pool)} candidate concept(s) "
-            f"({len(preferred)} include a new API)"
+        alt_api_records: list[dict[str, Any]] = []
+        for alternative in new_alternative_records:
+            api = _api_for_alternative(alternative, apis)
+            if api and all(
+                str(api.get("slug")) != str(existing.get("slug"))
+                for existing in alt_api_records
+            ):
+                alt_api_records.append(api)
+        preferred_api_records = list(
+            {
+                str(api.get("slug")): api
+                for api in (new_api_records + alt_api_records)
+            }.values()
         )
-        extension = 0
-        while len(successful_workflows) < targets["workflows"]:
+        if not preferred_api_records:
+            log(
+                "[WF-SKIP] no new APIs or matching alternative sources – "
+                "no workflows generated"
+            )
+        else:
+            available_workflows = min(
+                effective["workflows"], len(preferred_api_records)
+            )
+            pool = build_preferred_concepts(
+                preferred_api_records,
+                apis,
+                new_alternative_records,
+                workflows,
+                targets["workflows"],
+                seed + 3,
+            )
             if not pool:
-                extension += 1
-                if extension > 6:
-                    break
-                extra = build_candidate_pool(
-                    apis,
-                    alternatives,
-                    workflows,
-                    pool_size,
-                    seed + 2 + extension * 7919,
-                )
-                known = {str(item.get("slug")) for item in workflows} | {
-                    concept["slug"] for concept in pool
-                }
-                extra = [
-                    concept for concept in extra if concept["slug"] not in known
-                ]
-                if not extra:
-                    break
-                pool.extend(extra)
-                log(f"[WF-POOL] extended by {len(extra)} candidate(s)")
-            concept = pool.pop(0)
-            try:
-                ok, reason, candidate = process_candidate(
-                    concept,
-                    workflows,
-                    alternatives,
-                    skip_r2=args.skip_r2,
-                )
-            except Exception as error:  # noqa: BLE001
-                ok = False
-                candidate = None
-                reason = (
-                    f"{type(error).__name__}: {error}\n"
-                    f"{traceback.format_exc()[-1200:]}"
-                )
-            if ok and candidate is not None:
-                successful_workflows.append(str(candidate.get("slug")))
                 log(
-                    f"[WF-SUCCESS {len(successful_workflows)}/"
-                    f"{targets['workflows']}] {candidate.get('slug')}"
+                    "[WF-SKIP] no workflow concepts could be built from the "
+                    "new APIs/alternatives"
                 )
             else:
-                rejected["workflows"].append(
-                    {
-                        "slug": concept["slug"],
-                        "reason": reason[-1500:],
-                        "timestamp": _now(),
-                    }
+                effective_workflows = min(available_workflows, len(pool))
+                rejected_wf_slugs = {
+                    str(item.get("slug")) for item in rejected["workflows"]
+                }
+                log(
+                    f"[WF-POOL] prepared {len(pool)} candidate concept(s) from "
+                    f"{len(preferred_api_records)} new source(s) and "
+                    f"{len(new_alternative_records)} new alternative(s)"
                 )
-                log(f"  [WF-DISCARD] {concept['slug']}: {reason[-500:]}")
-                workflows[:] = [
-                    item
-                    for item in workflows
-                    if item.get("slug") != concept["slug"]
-                ]
-            sync_state()
-        if len(successful_workflows) < targets["workflows"]:
-            log(
-                f"[FATAL] only {len(successful_workflows)}/"
-                f"{targets['workflows']} workflows passed every gate – "
-                "nothing was committed or pushed"
-            )
-            state["status"] = "incomplete"
-            state["finished_at"] = _now()
-            sync_state()
-            return 1
+                extension = 0
+                while len(successful_workflows) < effective_workflows:
+                    if not pool:
+                        extension += 1
+                        if extension > 6:
+                            break
+                        extra = build_preferred_concepts(
+                            preferred_api_records,
+                            apis,
+                            new_alternative_records,
+                            workflows,
+                            targets["workflows"],
+                            seed + 3 + extension * 7919,
+                        )
+                        known = {
+                            concept["slug"] for concept in pool
+                        } | rejected_wf_slugs
+                        extra = [
+                            concept
+                            for concept in extra
+                            if concept["slug"] not in known
+                        ]
+                        if not extra:
+                            break
+                        pool.extend(extra)
+                        log(
+                            f"[WF-POOL] extended by {len(extra)} "
+                            "candidate(s)"
+                        )
+                    concept = pool.pop(0)
+                    try:
+                        ok, reason, candidate = process_candidate(
+                            concept,
+                            workflows,
+                            alternatives,
+                            skip_r2=args.skip_r2,
+                        )
+                    except Exception as error:  # noqa: BLE001
+                        ok = False
+                        candidate = None
+                        reason = (
+                            f"{type(error).__name__}: {error}\n"
+                            f"{traceback.format_exc()[-1200:]}"
+                        )
+                    if ok and candidate is not None:
+                        successful_workflows.append(
+                            str(candidate.get("slug"))
+                        )
+                        log(
+                            f"[WF-SUCCESS {len(successful_workflows)}/"
+                            f"{effective_workflows}] "
+                            f"{candidate.get('slug')}"
+                        )
+                    else:
+                        rejected_wf_slugs.add(str(concept["slug"]))
+                        rejected["workflows"].append(
+                            {
+                                "slug": concept["slug"],
+                                "reason": reason[-1500:],
+                                "timestamp": _now(),
+                            }
+                        )
+                        log(
+                            f"  [WF-DISCARD] {concept['slug']}: "
+                            f"{reason[-500:]}"
+                        )
+                        workflows[:] = [
+                            item
+                            for item in workflows
+                            if item.get("slug") != concept["slug"]
+                        ]
+                    sync_state()
+                if len(successful_workflows) < effective_workflows:
+                    log(
+                        f"[WARN] only {len(successful_workflows)}/"
+                        f"{effective_workflows} workflows passed every gate; "
+                        "continuing with the verified subset"
+                    )
+    elif effective["workflows"] > 0:
+        log(
+            "[WF-SKIP] no newly verified APIs or alternatives in this batch – "
+            "no workflows generated"
+        )
+
+    total_success = (
+        len(successful_apis)
+        + len(successful_alternatives)
+        + len(successful_workflows)
+    )
+    if total_success == 0:
+        log(
+            "[WARN] no new content passed the authenticity/quality gates – "
+            "nothing to commit or deploy"
+        )
+        state["status"] = "no-content"
+        state["finished_at"] = _now()
+        sync_state()
+        return 0
 
     # ------------------------------------------------------------------ #
     # Mandatory pre-deploy gate: end-to-end customer audit & auto-heal
