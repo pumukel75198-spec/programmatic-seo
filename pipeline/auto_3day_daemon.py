@@ -2391,7 +2391,12 @@ def _finalize(
     return git_ok, build_ok
 
 
-def run_customer_audit(args: argparse.Namespace) -> bool:
+def run_customer_audit(
+    args: argparse.Namespace,
+    successful_apis: list[str] | None = None,
+    successful_alternatives: list[str] | None = None,
+    successful_workflows: list[str] | None = None,
+) -> bool:
     """Run the end-to-end customer audit as the mandatory **pre-deploy** gate.
 
     Every 3-day batch must be audited exactly the way a paying buyer would
@@ -2399,10 +2404,11 @@ def run_customer_audit(args: argparse.Namespace) -> bool:
     anything is committed, pushed or deployed. The audit heals defects
     autonomously and writes ``CUSTOMER_AUDIT_REPORT.md``.
 
-    ``--skip-git`` is always passed: the daemon performs the single final
-    commit/push (which triggers the Cloudflare Pages deploy) only after this
-    gate has passed. This guarantees that a failing audit can never reach
-    production.
+    Only the records generated in this batch are audited. The existing
+    catalogue was already verified by previous runs; re-auditing it in CI
+    would fail on private API scripts that are not part of the checkout and
+    would block every new batch. ``--skip-git`` is always passed: the daemon
+    performs the single final commit/push only after this gate has passed.
     """
     log("[AUDIT] starting end-to-end customer audit & auto-heal (pre-deploy gate)")
     try:
@@ -2412,9 +2418,18 @@ def run_customer_audit(args: argparse.Namespace) -> bool:
         return False
 
     # The daemon owns the final git commit/push, so the audit must never push.
-    audit_args: list[str] = ["--skip-git"]
+    audit_args: list[str] = ["--skip-git", "--r2-only-healed"]
     if getattr(args, "skip_build", False):
         audit_args.append("--skip-build")
+    only: list[str] = []
+    for slug in successful_apis or []:
+        only.append(f"api:{slug}")
+    for slug in successful_alternatives or []:
+        only.append(f"alternative:{slug}")
+    for slug in successful_workflows or []:
+        only.append(f"workflow:{slug}")
+    if only:
+        audit_args.extend(["--only", ",".join(only)])
     try:
         code = customer_audit_healer.main(audit_args)
     except Exception as error:  # noqa: BLE001 - report, do not crash the daemon
@@ -2894,7 +2909,12 @@ def main(argv: list[str] | None = None) -> int:
         f"{len(successful_workflows)} workflow kits ready – "
         "running customer audit BEFORE delivery/deploy"
     )
-    audit_ok = run_customer_audit(args)
+    audit_ok = run_customer_audit(
+        args,
+        successful_apis,
+        successful_alternatives,
+        successful_workflows,
+    )
     state["customer_audit_ok"] = audit_ok
     sync_state()
     if not audit_ok:
