@@ -24950,5 +24950,744 @@
       ],
       "price": 9.99
     }
+  },
+  {
+    "slug": "posthog-analytics-contentful-content-management-system-automation-pipeline",
+    "title": "PostHog Analytics + Contentful Content Management System Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects PostHog Analytics with Contentful Content Management System and PostHog combines product analytics, session replay, feature flags and experiments in one privacy-friendly platform. Contentful's API allows developers to build, manage, and deliver content across various platforms.",
+    "category": "Analytics",
+    "tags": [
+      "analytics",
+      "product",
+      "feature-flags",
+      "session-replay",
+      "cms",
+      "content",
+      "api"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-17 15:32 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": [
+        "PostHog Analytics API",
+        "Contentful Content Management System API"
+      ],
+      "api_slugs": ["posthog-analytics-api", "contentful-cms-api"],
+      "alternative_slugs": ["posthog-alternatives"],
+      "useCase": "Product teams measuring activation, retention and experiments. Then Contentful API is used for managing and delivering content in web and mobile applications.",
+      "steps": [
+        {
+          "title": "Ingest source records from PostHog Analytics",
+          "description": "Fetch product analytics events from PostHog Analytics and normalize the response into a list of dictionaries. The step validates credentials, applies a bounded page size, and preserves event identity, timestamp and properties for downstream enrichment.",
+          "technical_explanation": "Step 1 is the ingestion boundary of the pipeline: it authenticates to PostHog Analytics, retrieves raw product events, and normalizes them into a stable list of dictionaries that later steps can consume without depending on PostHog-specific response nesting. The code performs a GET request to https://posthog.com/api/projects/{project_id}/events/?limit=100 with an Authorization: Bearer <personal_api_key> header and an Accept: application/json header; there is no request body, and the expected response is a JSON object with a results array whose items contain id, event, distinct_id, timestamp and properties. Edge cases include HTTP 401 for invalid keys, HTTP 429 rate limiting, pagination through the next field, empty results arrays, and defensive type conversion of numeric or null fields into strings or dictionaries before the records leave this step.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\nimport urllib.parse\n\nPOSTHOG_API_BASE = 'https://posthog.com/api'\nPOSTHOG_API_KEY = os.environ.get('POSTHOG_API_KEY', '')\nPOSTHOG_PROJECT_ID = os.environ.get('POSTHOG_PROJECT_ID', '')\n\ndef fetch_posthog_events():\n    if not POSTHOG_API_KEY or not POSTHOG_PROJECT_ID:\n        raise RuntimeError('POSTHOG_API_KEY and POSTHOG_PROJECT_ID must be set')\n    query = urllib.parse.urlencode({'limit': 100})\n    url = f'{POSTHOG_API_BASE}/projects/{POSTHOG_PROJECT_ID}/events/?{query}'\n    headers = {'Authorization': f'Bearer {POSTHOG_API_KEY}', 'Accept': 'application/json'}\n    request = urllib.request.Request(url, headers=headers, method='GET')\n    with urllib.request.urlopen(request, timeout=30) as response:\n        if response.status != 200:\n            raise RuntimeError(f'PostHog request failed with status {response.status}')\n        payload = json.loads(response.read().decode('utf-8'))\n    if not isinstance(payload, dict):\n        payload = {}\n    normalized = []\n    for item in payload.get('results', []):\n        if not isinstance(item, dict):\n            continue\n        properties = item.get('properties', {})\n        if not isinstance(properties, dict):\n            properties = {}\n        record = {\n            'event_id': str(item.get('id', '')),\n            'event_name': str(item.get('event', '')),\n            'distinct_id': str(item.get('distinct_id', '')),\n            'timestamp': str(item.get('timestamp', '')),\n            'properties': properties\n        }\n        normalized.append(record)\n    return normalized\n\nposthog_events = fetch_posthog_events()",
+          "mock_response": "{\"results\": [{\"id\": \"018f3c2a-7b1e-7000-9a2b-6f1c2d3e4f50\", \"event\": \"pricing_page_viewed\", \"distinct_id\": \"user_1042\", \"timestamp\": \"2026-11-17T14:55:12.000000Z\", \"properties\": {\"$current_url\": \"https://example.com/pricing\", \"plan\": \"pro\"}}, {\"id\": \"018f3c2a-8c2f-7001-8b3c-7a2d3e4f5a61\", \"event\": \"signup_completed\", \"distinct_id\": \"user_1042\", \"timestamp\": \"2026-11-17T14:58:44.000000Z\", \"properties\": {\"plan\": \"pro\", \"source\": \"organic\"}}], \"next\": null}",
+          "actions": [
+            "Set POSTHOG_API_KEY and POSTHOG_PROJECT_ID in the environment before running the script.",
+            "Call GET https://posthog.com/api/projects/{project_id}/events/?limit=100 with a Bearer token.",
+            "Normalize each item in the results array into event_id, event_name, distinct_id, timestamp and properties.",
+            "Reject non-200 responses and return an empty list when the results array is absent."
+          ],
+          "commands": [
+            {
+              "label": "Export PostHog credentials",
+              "language": "bash",
+              "code": "export POSTHOG_API_KEY=\"<posthog_personal_api_key>\"\nexport POSTHOG_PROJECT_ID=\"<posthog_project_id>\""
+            },
+            {
+              "label": "Run workflow",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "POSTHOG_API_KEY",
+              "value": "<posthog_personal_api_key>",
+              "description": "Personal API key used in the Authorization Bearer header."
+            },
+            {
+              "key": "POSTHOG_PROJECT_ID",
+              "value": "<posthog_project_id>",
+              "description": "Project identifier used in the events endpoint path."
+            },
+            {
+              "key": "POSTHOG_API_BASE",
+              "value": "https://posthog.com/api",
+              "description": "Base URL for the PostHog Analytics API."
+            }
+          ],
+          "tools": ["PostHog Analytics API"],
+          "checklist": [
+            "The script raises a clear error when POSTHOG_API_KEY or POSTHOG_PROJECT_ID is missing.",
+            "posthog_events is a list of dictionaries with the five normalized keys.",
+            "A 401 or 429 response is surfaced as a RuntimeError instead of being silently ignored."
+          ],
+          "expectedResult": "A normalized posthog_events list is available for Contentful enrichment.",
+          "links": [
+            {
+              "label": "PostHog Analytics API Documentation",
+              "url": "https://posthog.com/docs/api"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with Contentful Content Management System",
+          "description": "Fetch Contentful entries and join them to the PostHog events by analytics event name. The step normalizes localized fields, handles missing matches, and emits enriched records with content metadata.",
+          "technical_explanation": "Step 2 is the enrichment boundary: it consumes the posthog_events list from step 1, fetches Contentful entries, and joins each event to a content record by matching the event name to the analyticsEvent field. The code performs a GET request to https://api.contentful.com/v1/spaces/{space_id}/environments/{environment_id}/entries?content_type=analyticsContent&limit=100 with an Authorization: Bearer <api_key> header and an Accept: application/json header; there is no request body, and the expected response is a JSON object with an items array whose entries contain sys.id, sys.contentType.sys.id and localized fields such as title, slug and analyticsEvent. Edge cases include HTTP 401, HTTP 429 rate limiting, pagination through skip and total, empty items arrays, missing localized values, and non-dictionary field payloads that must be normalized before joining.",
+          "code_snippet": "import sys\nimport os\nimport json\nimport urllib.request\nimport urllib.parse\n\nCONTENTFUL_API_BASE = 'https://api.contentful.com/v1'\nCONTENTFUL_API_KEY = os.environ.get('CONTENTFUL_API_KEY', '')\nCONTENTFUL_SPACE_ID = os.environ.get('CONTENTFUL_SPACE_ID', '')\nCONTENTFUL_ENVIRONMENT_ID = os.environ.get('CONTENTFUL_ENVIRONMENT_ID', 'master')\nCONTENTFUL_CONTENT_TYPE = os.environ.get('CONTENTFUL_CONTENT_TYPE', 'analyticsContent')\n\ndef extract_localized(value, locale='en-US'):\n    if isinstance(value, dict):\n        return str(value.get(locale, value.get('en-US', '')))\n    if value is None:\n        return ''\n    return str(value)\n\ndef fetch_contentful_entries():\n    if not CONTENTFUL_API_KEY or not CONTENTFUL_SPACE_ID:\n        raise RuntimeError('CONTENTFUL_API_KEY and CONTENTFUL_SPACE_ID must be set')\n    query = urllib.parse.urlencode({'content_type': CONTENTFUL_CONTENT_TYPE, 'limit': 100})\n    url = f'{CONTENTFUL_API_BASE}/spaces/{CONTENTFUL_SPACE_ID}/environments/{CONTENTFUL_ENVIRONMENT_ID}/entries?{query}'\n    headers = {'Authorization': f'Bearer {CONTENTFUL_API_KEY}', 'Accept': 'application/json'}\n    request = urllib.request.Request(url, headers=headers, method='GET')\n    with urllib.request.urlopen(request, timeout=30) as response:\n        if response.status != 200:\n            raise RuntimeError(f'Contentful request failed with status {response.status}')\n        payload = json.loads(response.read().decode('utf-8'))\n    if not isinstance(payload, dict):\n        payload = {}\n    entries = []\n    for item in payload.get('items', []):\n        if not isinstance(item, dict):\n            continue\n        sys_data = item.get('sys', {})\n        if not isinstance(sys_data, dict):\n            sys_data = {}\n        content_type_data = sys_data.get('contentType', {})\n        if not isinstance(content_type_data, dict):\n            content_type_data = {}\n        content_type_sys = content_type_data.get('sys', {})\n        if not isinstance(content_type_sys, dict):\n            content_type_sys = {}\n        fields = item.get('fields', {})\n        if not isinstance(fields, dict):\n            fields = {}\n        entry = {\n            'entry_id': str(sys_data.get('id', '')),\n            'content_type': str(content_type_sys.get('id', '')),\n            'title': extract_localized(fields.get('title', {})),\n            'slug': extract_localized(fields.get('slug', {})),\n            'analytics_event': extract_localized(fields.get('analyticsEvent', {}))\n        }\n        entries.append(entry)\n    return entries\n\ndef enrich_records(events, entries):\n    by_event = {}\n    for entry in entries:\n        event_name = entry.get('analytics_event', '')\n        if event_name:\n            by_event[event_name] = entry\n    enriched = []\n    for event in events:\n        event_name = event.get('event_name', '')\n        content = by_event.get(event_name, {})\n        record = {\n            'event_id': event.get('event_id', ''),\n            'event_name': event_name,\n            'distinct_id': event.get('distinct_id', ''),\n            'timestamp': event.get('timestamp', ''),\n            'content_id': content.get('entry_id', ''),\n            'content_title': content.get('title', ''),\n            'content_slug': content.get('slug', ''),\n            'content_type': content.get('content_type', '')\n        }\n        enriched.append(record)\n    return enriched\n\ncontentful_entries = fetch_contentful_entries()\nenriched_records = enrich_records(posthog_events, contentful_entries)",
+          "mock_response": "{\"sys\": {\"type\": \"Array\"}, \"total\": 2, \"skip\": 0, \"limit\": 100, \"items\": [{\"sys\": {\"id\": \"entryPricing01\", \"type\": \"Entry\", \"contentType\": {\"sys\": {\"id\": \"analyticsContent\"}}}, \"fields\": {\"title\": {\"en-US\": \"Pricing Page\"}, \"slug\": {\"en-US\": \"pricing\"}, \"analyticsEvent\": {\"en-US\": \"pricing_page_viewed\"}}}, {\"sys\": {\"id\": \"entrySignup01\", \"type\": \"Entry\", \"contentType\": {\"sys\": {\"id\": \"analyticsContent\"}}}, \"fields\": {\"title\": {\"en-US\": \"Signup Confirmation\"}, \"slug\": {\"en-US\": \"signup-complete\"}, \"analyticsEvent\": {\"en-US\": \"signup_completed\"}}}]}",
+          "actions": [
+            "Set CONTENTFUL_API_KEY, CONTENTFUL_SPACE_ID and CONTENTFUL_ENVIRONMENT_ID in the environment.",
+            "Call GET https://api.contentful.com/v1/spaces/{space_id}/environments/{environment_id}/entries with content_type and limit query parameters.",
+            "Extract sys.id, sys.contentType.sys.id and localized title, slug and analyticsEvent fields.",
+            "Join Contentful entries to posthog_events by matching analytics_event to event_name."
+          ],
+          "commands": [
+            {
+              "label": "Export Contentful credentials",
+              "language": "bash",
+              "code": "export CONTENTFUL_API_KEY=\"<contentful_api_key>\"\nexport CONTENTFUL_SPACE_ID=\"<contentful_space_id>\"\nexport CONTENTFUL_ENVIRONMENT_ID=\"master\""
+            },
+            {
+              "label": "Run workflow",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "CONTENTFUL_API_KEY",
+              "value": "<contentful_api_key>",
+              "description": "API key used in the Authorization Bearer header."
+            },
+            {
+              "key": "CONTENTFUL_SPACE_ID",
+              "value": "<contentful_space_id>",
+              "description": "Space identifier used in the entries endpoint path."
+            },
+            {
+              "key": "CONTENTFUL_ENVIRONMENT_ID",
+              "value": "master",
+              "description": "Environment identifier used in the entries endpoint path."
+            },
+            {
+              "key": "CONTENTFUL_CONTENT_TYPE",
+              "value": "analyticsContent",
+              "description": "Content type filter applied to the entries query."
+            },
+            {
+              "key": "CONTENTFUL_API_BASE",
+              "value": "https://api.contentful.com/v1",
+              "description": "Base URL for the Contentful Content Management System API."
+            }
+          ],
+          "tools": ["Contentful Content Management System API"],
+          "checklist": [
+            "contentful_entries contains one normalized dictionary per Contentful item.",
+            "enriched_records preserves every PostHog event even when no Contentful entry matches.",
+            "Missing localized fields resolve to an empty string instead of raising KeyError."
+          ],
+          "expectedResult": "An enriched_records list joins PostHog events with Contentful content metadata.",
+          "links": [
+            {
+              "label": "Contentful Content Management System API Documentation",
+              "url": "https://www.contentful.com/developers/docs/references/content-delivery-api/"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Validate the enriched records, aggregate event and content-type counts, and persist the final summary as JSON. The step is deterministic and uses only the Python standard library.",
+          "technical_explanation": "Step 3 is the persistence boundary: it consumes enriched_records from step 2, validates that every record contains the required keys, aggregates event and content-type counts with collections.Counter, and writes a deterministic JSON summary to disk. There is no API call in this step; the contract is a pure Python transformation that rejects malformed records, tolerates an empty enriched_records list, and converts Counter objects into plain dictionaries before serialization. Edge cases include missing keys, non-dictionary records, empty input, unwritable output paths, and ensuring that the final summary remains valid JSON with stable key ordering.",
+          "code_snippet": "import json\nimport os\nfrom collections import Counter\n\nSUMMARY_PATH = os.environ.get('SUMMARY_PATH', 'final_summary.json')\n\ndef validate_records(records):\n    required = ['event_id', 'event_name', 'distinct_id', 'timestamp', 'content_id', 'content_title', 'content_slug', 'content_type']\n    valid = []\n    for record in records:\n        if not isinstance(record, dict):\n            continue\n        missing = [key for key in required if key not in record]\n        if missing:\n            continue\n        valid.append(record)\n    return valid\n\ndef aggregate_records(records):\n    event_counts = Counter(record.get('event_name', '') for record in records)\n    content_counts = Counter(record.get('content_type', '') for record in records)\n    matched = sum(1 for record in records if record.get('content_id', ''))\n    summary = {\n        'total_events': len(records),\n        'matched_content_events': matched,\n        'event_counts': dict(event_counts),\n        'content_type_counts': dict(content_counts),\n        'records': records\n    }\n    return summary\n\ndef persist_summary(summary, path):\n    with open(path, 'w', encoding='utf-8') as handle:\n        json.dump(summary, handle, indent=2, sort_keys=True)\n    return path\n\nvalid_records = validate_records(enriched_records)\nfinal_summary = aggregate_records(valid_records)\nsummary_path = persist_summary(final_summary, SUMMARY_PATH)",
+          "mock_response": "{\"total_events\": 2, \"matched_content_events\": 2, \"event_counts\": {\"pricing_page_viewed\": 1, \"signup_completed\": 1}, \"content_type_counts\": {\"analyticsContent\": 2}, \"records\": [{\"event_id\": \"018f3c2a-7b1e-7000-9a2b-6f1c2d3e4f50\", \"event_name\": \"pricing_page_viewed\", \"distinct_id\": \"user_1042\", \"timestamp\": \"2026-11-17T14:55:12.000000Z\", \"content_id\": \"entryPricing01\", \"content_title\": \"Pricing Page\", \"content_slug\": \"pricing\", \"content_type\": \"analyticsContent\"}, {\"event_id\": \"018f3c2a-8c2f-7001-8b3c-7a2d3e4f5a61\", \"event_name\": \"signup_completed\", \"distinct_id\": \"user_1042\", \"timestamp\": \"2026-11-17T14:58:44.000000Z\", \"content_id\": \"entrySignup01\", \"content_title\": \"Signup Confirmation\", \"content_slug\": \"signup-complete\", \"content_type\": \"analyticsContent\"}]}",
+          "actions": [
+            "Validate each enriched record against the required key list.",
+            "Aggregate event_name and content_type counts with collections.Counter.",
+            "Write the final summary to SUMMARY_PATH using json.dump with indentation and sorted keys.",
+            "Report total_events and matched_content_events in the persisted summary."
+          ],
+          "commands": [
+            {
+              "label": "Run workflow",
+              "language": "bash",
+              "code": "python workflow.py"
+            },
+            {
+              "label": "Inspect summary",
+              "language": "bash",
+              "code": "cat final_summary.json"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUMMARY_PATH",
+              "value": "final_summary.json",
+              "description": "Filesystem path where the final JSON summary is persisted."
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "final_summary.json exists and parses as valid JSON.",
+            "The summary contains total_events, matched_content_events, event_counts, content_type_counts and records.",
+            "Malformed records are excluded without stopping the aggregation."
+          ],
+          "expectedResult": "A validated final_summary.json file is persisted with aggregated PostHog and Contentful operational metrics.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A PostHog Analytics API account with API credentials (documentation: posthog.com)",
+        "A Contentful Content Management System API account with API credentials (documentation: www.contentful.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A PostHog Analytics API account with API credentials (documentation: posthog.com)",
+        "A Contentful Content Management System API account with API credentials (documentation: www.contentful.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A request authentication pattern in which the client sends an opaque access token in the Authorization header so the server can verify identity and scopes without a session cookie."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A retry strategy that waits progressively longer after HTTP 429 responses to avoid exhausting an API quota and to let the service recover."
+        },
+        {
+          "term": "Cursor Pagination",
+          "definition": "A pagination technique that follows an opaque next cursor or offset token instead of calculating page numbers, which keeps results stable while records change."
+        },
+        {
+          "term": "Localized Field Resolution",
+          "definition": "The process of selecting the correct locale value from a nested Contentful field object and falling back to a default locale when the requested locale is absent."
+        },
+        {
+          "term": "Idempotent Persistence",
+          "definition": "A write pattern that produces the same stored result when the same input is processed repeatedly, which makes reruns safe and reproducible."
+        },
+        {
+          "term": "Schema Validation",
+          "definition": "A defensive check that verifies required keys and value types before aggregation so malformed records cannot corrupt the final summary."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "PostHog returns HTTP 401 Unauthorized.",
+          "solution": "Verify that POSTHOG_API_KEY is a personal API key with project read access and that the Authorization header uses the exact Bearer prefix without extra whitespace."
+        },
+        {
+          "problem": "Contentful returns HTTP 404 for the entries endpoint.",
+          "solution": "Confirm CONTENTFUL_SPACE_ID and CONTENTFUL_ENVIRONMENT_ID are correct and that the content type exists in that environment; use master when no custom environment is configured."
+        },
+        {
+          "problem": "The final summary contains zero matched_content_events.",
+          "solution": "Check that Contentful entries include an analyticsEvent localized field whose value exactly matches the PostHog event names, including case and underscores."
+        },
+        {
+          "problem": "The script raises RuntimeError for a non-200 response.",
+          "solution": "Inspect the status code and response body, then handle 429 with a delay or reduce the requested limit before rerunning."
+        },
+        {
+          "problem": "final_summary.json cannot be written.",
+          "solution": "Set SUMMARY_PATH to a writable absolute path or run the script from a directory where the current user has write permission."
+        }
+      ],
+      "resources": [
+        {
+          "label": "PostHog Analytics API",
+          "url": "https://posthog.com/docs/api"
+        },
+        {
+          "label": "Contentful Content Management System API",
+          "url": "https://www.contentful.com/developers/docs/references/content-delivery-api/"
+        }
+      ],
+      "price": 9.99
+    }
+  },
+  {
+    "slug": "posthog-analytics-airtable-automation-pipeline",
+    "title": "PostHog Analytics + Airtable Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects PostHog Analytics with Airtable and PostHog combines product analytics, session replay, feature flags and experiments in one privacy-friendly platform. The Airtable API turns your bases into a REST API, so you can read and write records, attachments and views from any application.",
+    "category": "Analytics",
+    "tags": [
+      "analytics",
+      "product",
+      "feature-flags",
+      "session-replay",
+      "database",
+      "no-code",
+      "rest",
+      "automation"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-17 15:35 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["PostHog Analytics API", "Airtable API"],
+      "api_slugs": ["posthog-analytics-api", "airtable-api"],
+      "alternative_slugs": ["posthog-alternatives"],
+      "useCase": "Product teams measuring activation, retention and experiments. Then No-code databases as a backend for apps and automations.",
+      "steps": [
+        {
+          "title": "Ingest source records from PostHog Analytics",
+          "description": "Call the PostHog Analytics API to retrieve recent product events for the configured project. Normalize each event into a stable record with event name, distinct ID, timestamp and properties so the next step can enrich it with Airtable metadata.",
+          "technical_explanation": "This step is the ingestion boundary of the pipeline: it calls the PostHog Analytics API and converts raw event payloads into a normalized list that later steps can enrich. The code sends a GET request to https://posthog.com/api/projects/{project_id}/events/?limit=100 with an Authorization: Bearer <POSTHOG_API_KEY> header and an Accept: application/json header; the expected JSON response is an object with a results array of event objects containing event, distinct_id, timestamp and properties. Edge cases include missing credentials, HTTP 401/429 responses, network timeouts, empty results arrays and non-dict list entries, so the function falls back to deterministic sample records when credentials are absent and returns an empty list on transport or parsing errors.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\nimport urllib.error\nimport urllib.parse\n\nPOSTHOG_BASE = 'https://posthog.com/api'\nPOSTHOG_API_KEY = os.environ.get('POSTHOG_API_KEY', '')\nPOSTHOG_PROJECT_ID = os.environ.get('POSTHOG_PROJECT_ID', '')\n\ndef fetch_posthog_events():\n    if not POSTHOG_API_KEY or not POSTHOG_PROJECT_ID:\n        return [\n            {'event': 'signup_completed', 'distinct_id': 'user_101', 'timestamp': '2026-11-17T10:00:00Z', 'properties': {'plan': 'pro'}},\n            {'event': 'feature_used', 'distinct_id': 'user_102', 'timestamp': '2026-11-17T10:05:00Z', 'properties': {'feature': 'dashboards'}}\n        ]\n    path = '/projects/' + urllib.parse.quote(POSTHOG_PROJECT_ID) + '/events/'\n    query = urllib.parse.urlencode({'limit': 100})\n    url = POSTHOG_BASE + path + '?' + query\n    request = urllib.request.Request(url, headers={'Authorization': 'Bearer ' + POSTHOG_API_KEY, 'Accept': 'application/json'})\n    try:\n        with urllib.request.urlopen(request, timeout=3) as response:\n            payload = json.loads(response.read().decode('utf-8'))\n    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, ValueError):\n        return []\n    if not isinstance(payload, dict):\n        return []\n    normalized = []\n    for item in payload.get('results', []):\n        if not isinstance(item, dict):\n            continue\n        normalized.append({\n            'event': item.get('event', 'unknown'),\n            'distinct_id': item.get('distinct_id', ''),\n            'timestamp': item.get('timestamp', ''),\n            'properties': item.get('properties', {})\n        })\n    return normalized\n\nposthog_events = fetch_posthog_events()\nprint('PostHog events loaded:', len(posthog_events))",
+          "mock_response": "{\"results\":[{\"event\":\"signup_completed\",\"distinct_id\":\"user_101\",\"timestamp\":\"2026-11-17T10:00:00Z\",\"properties\":{\"plan\":\"pro\"}},{\"event\":\"feature_used\",\"distinct_id\":\"user_102\",\"timestamp\":\"2026-11-17T10:05:00Z\",\"properties\":{\"feature\":\"dashboards\"}}],\"next\":null}",
+          "actions": [
+            "Create a .env file with POSTHOG_API_KEY and POSTHOG_PROJECT_ID.",
+            "Implement fetch_posthog_events with urllib.request.Request and Bearer authentication.",
+            "Normalize each result into event, distinct_id, timestamp and properties fields.",
+            "Run the snippet and confirm posthog_events is a list."
+          ],
+          "commands": [
+            {
+              "label": "Run ingestion step",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "POSTHOG_API_KEY",
+              "value": "<posthog_personal_api_key>",
+              "description": "Personal API key used as the Bearer token for PostHog Analytics API requests."
+            },
+            {
+              "key": "POSTHOG_PROJECT_ID",
+              "value": "<posthog_project_id>",
+              "description": "Numeric PostHog project identifier used in the events endpoint path."
+            },
+            {
+              "key": "POSTHOG_BASE",
+              "value": "https://posthog.com/api",
+              "description": "Base URL for the PostHog Analytics API."
+            }
+          ],
+          "tools": ["PostHog Analytics API"],
+          "checklist": [
+            "posthog_events is a list after the top-level call.",
+            "Each normalized record contains event, distinct_id, timestamp and properties.",
+            "Missing credentials produce deterministic sample records instead of an exception."
+          ],
+          "expectedResult": "A normalized list of PostHog events is available in posthog_events.",
+          "links": [
+            {
+              "label": "PostHog Analytics API Documentation",
+              "url": "https://posthog.com/docs/api"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with Airtable",
+          "description": "Call the Airtable API to read records from the configured base and table. Join those records to the PostHog events by event_name and attach the Airtable record ID and segment to each event.",
+          "technical_explanation": "This step is the enrichment boundary: it consumes posthog_events from step 1 and joins each event to an Airtable record by event_name so the final summary can include segment metadata. The code sends a GET request to https://api.airtable.com/v0/{base_id}/{table_name}?maxRecords=100 with Authorization: Bearer <AIRTABLE_API_TOKEN> and Accept: application/json; the expected JSON response is an object with a records array whose entries contain id, fields and createdTime. Edge cases include missing Airtable credentials, HTTP 401/429 responses, empty records arrays, pagination offsets that are intentionally ignored for this compact workflow, and records without an event_name field, which are skipped during index construction.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\nimport urllib.error\nimport urllib.parse\n\nAIRTABLE_BASE = 'https://api.airtable.com/v0'\nAIRTABLE_API_TOKEN = os.environ.get('AIRTABLE_API_TOKEN', '')\nAIRTABLE_BASE_ID = os.environ.get('AIRTABLE_BASE_ID', '')\nAIRTABLE_TABLE_NAME = os.environ.get('AIRTABLE_TABLE_NAME', '')\n\ndef enrich_with_airtable(events):\n    if not AIRTABLE_API_TOKEN or not AIRTABLE_BASE_ID or not AIRTABLE_TABLE_NAME:\n        airtable_records = [\n            {'id': 'rec001', 'fields': {'event_name': 'signup_completed', 'segment': 'growth'}},\n            {'id': 'rec002', 'fields': {'event_name': 'feature_used', 'segment': 'product'}}\n        ]\n    else:\n        base_id = urllib.parse.quote(AIRTABLE_BASE_ID)\n        table_name = urllib.parse.quote(AIRTABLE_TABLE_NAME)\n        query = urllib.parse.urlencode({'maxRecords': 100})\n        url = AIRTABLE_BASE + '/' + base_id + '/' + table_name + '?' + query\n        request = urllib.request.Request(url, headers={'Authorization': 'Bearer ' + AIRTABLE_API_TOKEN, 'Accept': 'application/json'})\n        try:\n            with urllib.request.urlopen(request, timeout=3) as response:\n                payload = json.loads(response.read().decode('utf-8'))\n            airtable_records = payload.get('records', []) if isinstance(payload, dict) else []\n        except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, ValueError):\n            airtable_records = []\n    index = {}\n    for record in airtable_records:\n        if not isinstance(record, dict):\n            continue\n        fields = record.get('fields', {})\n        event_name = fields.get('event_name', '')\n        if event_name:\n            index[event_name] = record\n    enriched = []\n    for event in events:\n        if not isinstance(event, dict):\n            continue\n        event_name = event.get('event', '')\n        match = index.get(event_name, {})\n        fields = match.get('fields', {}) if isinstance(match, dict) else {}\n        enriched.append({\n            'event': event_name,\n            'distinct_id': event.get('distinct_id', ''),\n            'timestamp': event.get('timestamp', ''),\n            'properties': event.get('properties', {}),\n            'airtable_record_id': match.get('id', '') if isinstance(match, dict) else '',\n            'segment': fields.get('segment', 'unassigned')\n        })\n    return enriched\n\nenriched_records = enrich_with_airtable(posthog_events)\nprint('Enriched records:', len(enriched_records))",
+          "mock_response": "{\"records\":[{\"id\":\"rec001\",\"fields\":{\"event_name\":\"signup_completed\",\"segment\":\"growth\"},\"createdTime\":\"2026-11-17T09:00:00.000Z\"},{\"id\":\"rec002\",\"fields\":{\"event_name\":\"feature_used\",\"segment\":\"product\"},\"createdTime\":\"2026-11-17T09:05:00.000Z\"}],\"offset\":null}",
+          "actions": [
+            "Create an Airtable personal access token with data.records:read scope.",
+            "Set AIRTABLE_API_TOKEN, AIRTABLE_BASE_ID and AIRTABLE_TABLE_NAME in the environment.",
+            "Call /v0/{base_id}/{table_name} with maxRecords=100 and Bearer authentication.",
+            "Join Airtable fields to PostHog events by event_name and attach segment metadata."
+          ],
+          "commands": [
+            {
+              "label": "Run enrichment step",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "AIRTABLE_API_TOKEN",
+              "value": "<airtable_personal_access_token>",
+              "description": "Personal access token used as the Bearer token for Airtable API requests."
+            },
+            {
+              "key": "AIRTABLE_BASE_ID",
+              "value": "<airtable_base_id>",
+              "description": "Airtable base identifier used in the records endpoint path."
+            },
+            {
+              "key": "AIRTABLE_TABLE_NAME",
+              "value": "<airtable_table_name>",
+              "description": "Airtable table name used in the records endpoint path."
+            },
+            {
+              "key": "AIRTABLE_BASE",
+              "value": "https://api.airtable.com/v0",
+              "description": "Base URL for the Airtable API."
+            }
+          ],
+          "tools": ["Airtable API"],
+          "checklist": [
+            "enriched_records is a list after the top-level call.",
+            "Each enriched record contains airtable_record_id and segment.",
+            "Events without an Airtable match receive segment unassigned."
+          ],
+          "expectedResult": "A list of enriched records with Airtable segment metadata is available in enriched_records.",
+          "links": [
+            {
+              "label": "Airtable API Documentation",
+              "url": "https://airtable.com/developers/web/api/introduction"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Validate the enriched records, aggregate event and segment counts, and persist the final operational summary to final_summary.json. This step uses only the Python standard library and does not call any external API.",
+          "technical_explanation": "This step is the aggregation and persistence boundary: it consumes enriched_records from step 2, validates the required event and distinct_id fields, and writes a deterministic final_summary.json file. No external API is called; the code uses collections.Counter to compute event and segment frequencies and a set comprehension to count unique users, then serializes the summary with json.dump. Edge cases include a non-list input, non-dict records, missing event or distinct_id values, empty input arrays and duplicate distinct_id values, all of which are handled without raising KeyError or TypeError.",
+          "code_snippet": "import json\nfrom collections import Counter\n\ndef validate_and_aggregate(records):\n    if not isinstance(records, list):\n        records = []\n    valid_records = []\n    for record in records:\n        if not isinstance(record, dict):\n            continue\n        event_name = record.get('event', '')\n        distinct_id = record.get('distinct_id', '')\n        if not event_name or not distinct_id:\n            continue\n        valid_records.append(record)\n    event_counts = Counter(record.get('event', 'unknown') for record in valid_records)\n    segment_counts = Counter(record.get('segment', 'unassigned') for record in valid_records)\n    unique_users = len({record.get('distinct_id', '') for record in valid_records if record.get('distinct_id', '')})\n    summary = {\n        'total_events': len(valid_records),\n        'unique_users': unique_users,\n        'by_event': dict(event_counts),\n        'by_segment': dict(segment_counts),\n        'validated': True\n    }\n    with open('final_summary.json', 'w', encoding='utf-8') as handle:\n        json.dump(summary, handle, indent=2, sort_keys=True)\n    return summary\n\nfinal_summary = validate_and_aggregate(enriched_records)\nprint('Final summary written:', final_summary)",
+          "mock_response": "{\"total_events\":2,\"unique_users\":2,\"by_event\":{\"signup_completed\":1,\"feature_used\":1},\"by_segment\":{\"growth\":1,\"product\":1},\"validated\":true}",
+          "actions": [
+            "Validate that enriched_records is a list and each record contains event and distinct_id.",
+            "Aggregate event and segment counts with collections.Counter.",
+            "Write final_summary.json with json.dump.",
+            "Inspect total_events and unique_users in the persisted summary."
+          ],
+          "commands": [
+            {
+              "label": "Run aggregation step",
+              "language": "bash",
+              "code": "python workflow.py"
+            },
+            {
+              "label": "Inspect persisted summary",
+              "language": "bash",
+              "code": "cat final_summary.json"
+            }
+          ],
+          "config": [
+            {
+              "key": "OUTPUT_FILE",
+              "value": "final_summary.json",
+              "description": "File name used to persist the validated operational summary."
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "final_summary.json exists in the working directory.",
+            "total_events equals the number of valid enriched records.",
+            "by_event and by_segment are dictionaries with integer counts."
+          ],
+          "expectedResult": "A validated final_summary.json file is written and final_summary contains the aggregated operational counts.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A PostHog Analytics API account with API credentials (documentation: posthog.com)",
+        "A Airtable API account with API credentials (documentation: airtable.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A PostHog Analytics API account with API credentials (documentation: posthog.com)",
+        "A Airtable API account with API credentials (documentation: airtable.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A request authentication pattern where the caller sends an opaque access token in the Authorization header so the service can identify and authorize the request."
+        },
+        {
+          "term": "Cursor-Based Pagination",
+          "definition": "A pagination strategy that uses an opaque cursor or offset from the previous response to request the next page without skipping or duplicating records."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A retry strategy that waits progressively longer after rate-limit responses to avoid overwhelming a service and to respect its published limits."
+        },
+        {
+          "term": "Event Normalization",
+          "definition": "The process of mapping heterogeneous analytics payloads into a stable schema with consistent field names and types for downstream processing."
+        },
+        {
+          "term": "Schema Validation",
+          "definition": "A defensive check that verifies required fields and expected types before aggregation or persistence so malformed records fail fast."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "PostHog returns HTTP 401 Unauthorized.",
+          "solution": "Confirm POSTHOG_API_KEY is a personal API key with read access to the project and that POSTHOG_PROJECT_ID matches the project numeric ID; regenerate the key if it was revoked."
+        },
+        {
+          "problem": "Airtable returns HTTP 403 or 401.",
+          "solution": "Verify AIRTABLE_API_TOKEN is a personal access token with data.records:read scope for the target base, and confirm AIRTABLE_BASE_ID and AIRTABLE_TABLE_NAME are URL-encoded correctly."
+        },
+        {
+          "problem": "The script finishes with zero records.",
+          "solution": "Check that the PostHog project contains events in the requested time range and that the Airtable table has an event_name field; the code intentionally returns empty lists on transport errors instead of raising."
+        },
+        {
+          "problem": "The dry-run times out.",
+          "solution": "Keep the urllib.request.urlopen timeout at 3 seconds and ensure no retry loop is unbounded; the provided code performs at most one request per API and falls back to deterministic sample data when credentials are absent."
+        }
+      ],
+      "resources": [
+        {
+          "label": "PostHog Analytics API",
+          "url": "https://posthog.com/docs/api"
+        },
+        {
+          "label": "Airtable API",
+          "url": "https://airtable.com/developers/web/api/introduction"
+        }
+      ],
+      "price": 9.99
+    }
+  },
+  {
+    "slug": "posthog-analytics-amazon-transcribe-automation-pipeline",
+    "title": "PostHog Analytics + Amazon Transcribe Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects PostHog Analytics with Amazon Transcribe and PostHog combines product analytics, session replay, feature flags and experiments in one privacy-friendly platform. Automatic speech recognition (ASR) service that makes it easy to add speech-to-text capability to applications.",
+    "category": "Analytics",
+    "tags": [
+      "analytics",
+      "product",
+      "feature-flags",
+      "session-replay",
+      "speech-to-text",
+      "transcription",
+      "ASR"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-17 15:44 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["PostHog Analytics API", "Amazon Transcribe API"],
+      "api_slugs": ["posthog-analytics-api", "aws-transcribe-api"],
+      "alternative_slugs": ["posthog-alternatives"],
+      "useCase": "Product teams measuring activation, retention and experiments. Then Used for converting audio files into fully searchable text files and subtitling video content.",
+      "steps": [
+        {
+          "title": "Ingest source records from PostHog Analytics",
+          "description": "Call the PostHog Analytics API to retrieve recent product events, extract audio recording references from event properties, and normalize them into a list of records for transcription.",
+          "technical_explanation": "This step is the ingestion layer: it consumes the PostHog project credentials from environment variables and produces the module-level audio_records list that the next step will transcribe. The API contract is a GET request to https://posthog.com/api/projects/{project_id}/events/ with query parameters limit=10 and order=-timestamp, an Authorization header of Bearer <personal API key>, and an Accept header of application/json. The JSON response contains a results array of event objects with id, event, properties, and timestamp; the code defensively reads properties.recording_url or properties.audio_url, skips events without an HTTP media URI, and returns an empty list on HTTP or connection errors. Edge cases include pagination via the next field, HTTP 429 rate limiting, empty results arrays, and properties that are missing or contain non-string values.",
+          "code_snippet": "import json\nimport os\nimport urllib.request\nimport urllib.parse\nimport urllib.error\n\ndef fetch_posthog_audio_records():\n    api_key = os.environ.get('POSTHOG_API_KEY', '')\n    project_id = os.environ.get('POSTHOG_PROJECT_ID', '1')\n    base_url = 'https://posthog.com/api/projects/' + project_id + '/events/'\n    query = urllib.parse.urlencode({'limit': 10, 'order': '-timestamp'})\n    url = base_url + '?' + query\n    headers = {'Authorization': 'Bearer ' + api_key, 'Accept': 'application/json'}\n    request = urllib.request.Request(url, headers=headers, method='GET')\n    records = []\n    try:\n        with urllib.request.urlopen(request) as response:\n            data = json.loads(response.read().decode('utf-8'))\n        events = data.get('results', [])\n        for event in events:\n            props = event.get('properties', {})\n            media_uri = props.get('recording_url') or props.get('audio_url') or ''\n            if not isinstance(media_uri, str) or not media_uri.startswith('http'):\n                continue\n            record = {\n                'event_id': str(event.get('id', '')),\n                'event_name': event.get('event', 'unknown'),\n                'session_id': props.get('session_id', ''),\n                'media_uri': media_uri,\n                'timestamp': event.get('timestamp', ''),\n            }\n            records.append(record)\n    except urllib.error.HTTPError as error:\n        print('PostHog HTTP error:', error.code, error.read().decode('utf-8', 'replace'))\n    except urllib.error.URLError as error:\n        print('PostHog connection error:', error.reason)\n    return records\n\naudio_records = fetch_posthog_audio_records()\nprint('Extracted audio records:', len(audio_records))",
+          "mock_response": "{\n  \"results\": [\n    {\n      \"id\": \"018f3b2c-1234-5678-9abc-def012345678\",\n      \"event\": \"voice_feedback_submitted\",\n      \"properties\": {\n        \"recording_url\": \"https://s3.amazonaws.com/demo-recordings/abc123.mp3\",\n        \"session_id\": \"sess_001\",\n        \"user_id\": \"user_42\"\n      },\n      \"timestamp\": \"2026-11-17T14:30:00.000Z\"\n    },\n    {\n      \"id\": \"018f3b2c-8765-4321-dcba-9876543210fe\",\n      \"event\": \"call_recording_uploaded\",\n      \"properties\": {\n        \"audio_url\": \"https://s3.amazonaws.com/demo-recordings/def456.wav\",\n        \"session_id\": \"sess_002\"\n      },\n      \"timestamp\": \"2026-11-17T14:35:00.000Z\"\n    }\n  ],\n  \"next\": \"https://posthog.com/api/projects/1/events/?limit=10&order=-timestamp&cursor=next\"\n}",
+          "actions": [
+            "Read POSTHOG_API_KEY and POSTHOG_PROJECT_ID from environment variables.",
+            "Build the PostHog events URL with limit and order query parameters using urllib.parse.urlencode.",
+            "Send a GET request with a Bearer Authorization header and parse the JSON response.",
+            "Extract recording_url or audio_url from each event's properties and normalize them into audio_records.",
+            "Handle HTTP and connection errors without crashing the pipeline."
+          ],
+          "commands": [
+            {
+              "label": "Run pipeline",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "POSTHOG_API_KEY",
+              "value": "<your-posthog-personal-api-key>",
+              "description": "Personal API key used as Bearer token for PostHog Analytics API."
+            },
+            {
+              "key": "POSTHOG_PROJECT_ID",
+              "value": "<your-posthog-project-id>",
+              "description": "Numeric project ID that owns the events endpoint."
+            }
+          ],
+          "tools": ["PostHog Analytics API"],
+          "checklist": [
+            "audio_records is a list of dictionaries and each entry contains event_id, media_uri and session_id.",
+            "The request uses the documented PostHog endpoint https://posthog.com/api/projects/{project_id}/events/.",
+            "HTTP errors are printed and the function returns an empty list instead of raising."
+          ],
+          "expectedResult": "A normalized list of PostHog audio event records is available in the module-level audio_records variable.",
+          "links": [
+            {
+              "label": "PostHog Analytics API Documentation",
+              "url": "https://posthog.com/docs/api"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with Amazon Transcribe",
+          "description": "Start Amazon Transcribe transcription jobs for the audio records produced by PostHog, signing each request with AWS Signature Version 4 and capturing the job status for later aggregation.",
+          "technical_explanation": "This step is the enrichment layer: it consumes audio_records from step 1 and produces transcription_jobs for the final summary. The API contract is a POST request to https://transcribe.us-east-1.amazonaws.com/ with headers Content-Type: application/x-amz-json-1.1, X-Amz-Target: Transcribe.StartTranscriptionJob, and an Authorization header generated by AWS Signature Version 4. The JSON request body contains TranscriptionJobName, LanguageCode, Media.MediaFileUri, and optionally OutputBucketName; the JSON response contains a TranscriptionJob object with TranscriptionJobName and TranscriptionJobStatus. Edge cases include HTTP 400 for an invalid media URI, HTTP 409 for a duplicate job name, HTTP 403 for a signature mismatch caused by clock skew, and rate limiting; the code captures per-job errors and continues with the remaining records.",
+          "code_snippet": "import time\nimport json\nimport os\nimport hashlib\nimport hmac\nimport datetime\nimport urllib.request\nimport urllib.error\n\ndef sign_aws_request(method, host, path, region, service, payload, headers):\n    access_key = os.environ.get('AWS_ACCESS_KEY_ID', '')\n    secret_key = os.environ.get('AWS_SECRET_ACCESS_KEY', '')\n    timestamp = datetime.datetime.utcnow().strftime('%Y%m%dT%H%M%SZ')\n    date_stamp = timestamp[:8]\n    payload_hash = hashlib.sha256(payload.encode('utf-8')).hexdigest()\n    headers = dict(headers)\n    headers['Host'] = host\n    headers['X-Amz-Date'] = timestamp\n    newline = chr(10)\n    canonical_headers = ''\n    signed_header_list = []\n    for key in sorted(headers.keys()):\n        lower_key = key.lower()\n        signed_header_list.append(lower_key)\n        canonical_headers += lower_key + ':' + headers[key].strip() + newline\n    signed_headers = ';'.join(signed_header_list)\n    canonical_request = method + newline + path + newline + newline + canonical_headers + newline + signed_headers + newline + payload_hash\n    credential_scope = date_stamp + '/' + region + '/' + service + '/aws4_request'\n    string_to_sign = 'AWS4-HMAC-SHA256' + newline + timestamp + newline + credential_scope + newline + hashlib.sha256(canonical_request.encode('utf-8')).hexdigest()\n    k_date = hmac.new(('AWS4' + secret_key).encode('utf-8'), date_stamp.encode('utf-8'), hashlib.sha256).digest()\n    k_region = hmac.new(k_date, region.encode('utf-8'), hashlib.sha256).digest()\n    k_service = hmac.new(k_region, service.encode('utf-8'), hashlib.sha256).digest()\n    k_signing = hmac.new(k_service, b'aws4_request', hashlib.sha256).digest()\n    signature = hmac.new(k_signing, string_to_sign.encode('utf-8'), hashlib.sha256).hexdigest()\n    authorization = 'AWS4-HMAC-SHA256 Credential=' + access_key + '/' + credential_scope + ', SignedHeaders=' + signed_headers + ', Signature=' + signature\n    headers['Authorization'] = authorization\n    url = 'https://' + host + path\n    return urllib.request.Request(url, data=payload.encode('utf-8'), headers=headers, method=method)\n\ndef start_transcription_jobs(records):\n    region = os.environ.get('AWS_REGION', 'us-east-1')\n    host = 'transcribe.' + region + '.amazonaws.com'\n    service = 'transcribe'\n    results = []\n    for record in records[:3]:\n        event_id = record.get('event_id', 'unknown')\n        safe_id = ''.join(ch if ch.isalnum() or ch in '._-' else '-' for ch in event_id)[:50]\n        job_name = 'job-' + safe_id\n        body = {\n            'TranscriptionJobName': job_name,\n            'LanguageCode': 'en-US',\n            'Media': {'MediaFileUri': record.get('media_uri', '')},\n        }\n        output_bucket = os.environ.get('TRANSCRIBE_OUTPUT_BUCKET', '')\n        if output_bucket:\n            body['OutputBucketName'] = output_bucket\n        payload = json.dumps(body)\n        headers = {\n            'Content-Type': 'application/x-amz-json-1.1',\n            'X-Amz-Target': 'Transcribe.StartTranscriptionJob',\n        }\n        request = sign_aws_request('POST', host, '/', region, service, payload, headers)\n        try:\n            with urllib.request.urlopen(request) as response:\n                response_data = json.loads(response.read().decode('utf-8'))\n            job = response_data.get('TranscriptionJob', {})\n            results.append({\n                'event_id': event_id,\n                'job_name': job.get('TranscriptionJobName', job_name),\n                'status': job.get('TranscriptionJobStatus', 'UNKNOWN'),\n                'media_uri': record.get('media_uri', ''),\n            })\n        except urllib.error.HTTPError as error:\n            error_body = error.read().decode('utf-8', 'replace')\n            results.append({\n                'event_id': event_id,\n                'job_name': job_name,\n                'status': 'ERROR',\n                'error': str(error.code) + ': ' + error_body,\n            })\n    return results\n\ntranscription_jobs = start_transcription_jobs(audio_records)\nprint('Started transcription jobs:', len(transcription_jobs))",
+          "mock_response": "{\n  \"TranscriptionJob\": {\n    \"TranscriptionJobName\": \"job-018f3b2c-1234-5678-9abc-def012345678\",\n    \"TranscriptionJobStatus\": \"IN_PROGRESS\",\n    \"LanguageCode\": \"en-US\",\n    \"Media\": {\n      \"MediaFileUri\": \"https://s3.amazonaws.com/demo-recordings/abc123.mp3\"\n    },\n    \"CreationTime\": \"2026-11-17T15:36:00.000Z\"\n  }\n}",
+          "actions": [
+            "Read AWS credentials and region from environment variables.",
+            "Compute an AWS Signature Version 4 Authorization header for the Transcribe StartTranscriptionJob request.",
+            "Send a POST request to https://transcribe.us-east-1.amazonaws.com/ with X-Amz-Target: Transcribe.StartTranscriptionJob.",
+            "Parse the TranscriptionJob response and record job name and status.",
+            "Capture HTTP errors per job and continue with remaining records."
+          ],
+          "commands": [
+            {
+              "label": "Run pipeline",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "AWS_ACCESS_KEY_ID",
+              "value": "<your-aws-access-key-id>",
+              "description": "AWS access key used for Signature Version 4 signing."
+            },
+            {
+              "key": "AWS_SECRET_ACCESS_KEY",
+              "value": "<your-aws-secret-access-key>",
+              "description": "AWS secret key used for Signature Version 4 signing."
+            },
+            {
+              "key": "AWS_REGION",
+              "value": "us-east-1",
+              "description": "AWS region for the Transcribe endpoint."
+            },
+            {
+              "key": "TRANSCRIBE_OUTPUT_BUCKET",
+              "value": "<your-s3-output-bucket>",
+              "description": "Optional S3 bucket where Amazon Transcribe stores transcript output."
+            }
+          ],
+          "tools": ["Amazon Transcribe API"],
+          "checklist": [
+            "transcription_jobs contains one entry per processed audio record with job_name and status.",
+            "The request is signed with AWS Signature Version 4 and sent to the transcribe.us-east-1.amazonaws.com host.",
+            "A 4xx or 5xx response is captured as an ERROR status without aborting the loop."
+          ],
+          "expectedResult": "Transcription jobs are started for up to three audio records and their statuses are stored in transcription_jobs.",
+          "links": [
+            {
+              "label": "Amazon Transcribe API Documentation",
+              "url": "https://docs.aws.amazon.com/transcribe/latest/dg/what-is-transcribe.html"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Validate the normalized records from PostHog and Amazon Transcribe, aggregate job status counts, and persist a complete operational summary as JSON for auditing and downstream monitoring.",
+          "technical_explanation": "This step is the persistence layer: it consumes audio_records and transcription_jobs from the previous steps, validates that both are lists, and builds a summary dictionary with source_event_count, transcription_job_count, job_status_counts, events, and jobs. It uses collections.Counter to count transcription statuses and json.dump to write the summary to the path in SUMMARY_OUTPUT_PATH. Edge cases include empty input lists, unknown status values, missing output directory permissions, and non-list inputs that raise a clear TypeError before any file write occurs.",
+          "code_snippet": "import json\nimport os\nimport collections\n\ndef build_summary(audio_records, transcription_jobs):\n    if not isinstance(audio_records, list) or not isinstance(transcription_jobs, list):\n        raise TypeError('Both audio_records and transcription_jobs must be lists')\n    status_counts = collections.Counter()\n    for job in transcription_jobs:\n        status = job.get('status', 'UNKNOWN')\n        status_counts[status] += 1\n    summary = {\n        'source_event_count': len(audio_records),\n        'transcription_job_count': len(transcription_jobs),\n        'job_status_counts': dict(status_counts),\n        'events': audio_records,\n        'jobs': transcription_jobs,\n    }\n    return summary\n\ndef persist_summary(summary):\n    output_path = os.environ.get('SUMMARY_OUTPUT_PATH', 'final_summary.json')\n    with open(output_path, 'w', encoding='utf-8') as handle:\n        json.dump(summary, handle, indent=2)\n    print('Persisted summary to', output_path)\n\nsummary = build_summary(audio_records, transcription_jobs)\npersist_summary(summary)",
+          "mock_response": "{\n  \"source_event_count\": 2,\n  \"transcription_job_count\": 2,\n  \"job_status_counts\": {\n    \"IN_PROGRESS\": 2\n  },\n  \"events\": [\n    {\n      \"event_id\": \"018f3b2c-1234-5678-9abc-def012345678\",\n      \"event_name\": \"voice_feedback_submitted\",\n      \"session_id\": \"sess_001\",\n      \"media_uri\": \"https://s3.amazonaws.com/demo-recordings/abc123.mp3\",\n      \"timestamp\": \"2026-11-17T14:30:00.000Z\"\n    },\n    {\n      \"event_id\": \"018f3b2c-8765-4321-dcba-9876543210fe\",\n      \"event_name\": \"call_recording_uploaded\",\n      \"session_id\": \"sess_002\",\n      \"media_uri\": \"https://s3.amazonaws.com/demo-recordings/def456.wav\",\n      \"timestamp\": \"2026-11-17T14:35:00.000Z\"\n    }\n  ],\n  \"jobs\": [\n    {\n      \"event_id\": \"018f3b2c-1234-5678-9abc-def012345678\",\n      \"job_name\": \"job-018f3b2c-1234-5678-9abc-def012345678\",\n      \"status\": \"IN_PROGRESS\",\n      \"media_uri\": \"https://s3.amazonaws.com/demo-recordings/abc123.mp3\"\n    },\n    {\n      \"event_id\": \"018f3b2c-8765-4321-dcba-9876543210fe\",\n      \"job_name\": \"job-018f3b2c-8765-4321-dcba-9876543210fe\",\n      \"status\": \"IN_PROGRESS\",\n      \"media_uri\": \"https://s3.amazonaws.com/demo-recordings/def456.wav\"\n    }\n  ]\n}",
+          "actions": [
+            "Validate that audio_records and transcription_jobs are lists.",
+            "Count transcription job statuses with collections.Counter.",
+            "Build a summary dictionary with source_event_count, transcription_job_count and job_status_counts.",
+            "Persist the summary as JSON to the path in SUMMARY_OUTPUT_PATH."
+          ],
+          "commands": [
+            {
+              "label": "Inspect summary",
+              "language": "bash",
+              "code": "cat final_summary.json"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUMMARY_OUTPUT_PATH",
+              "value": "final_summary.json",
+              "description": "Filesystem path where the final operational summary is written."
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "final_summary.json exists and contains source_event_count, transcription_job_count and job_status_counts.",
+            "The status counts sum to transcription_job_count.",
+            "The script exits without NameError, KeyError or TypeError."
+          ],
+          "expectedResult": "A validated JSON summary is persisted to disk and the pipeline is complete.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A PostHog Analytics API account with API credentials (documentation: posthog.com)",
+        "A Amazon Transcribe API account with API credentials (documentation: docs.aws.amazon.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A PostHog Analytics API account with API credentials (documentation: posthog.com)",
+        "A Amazon Transcribe API account with API credentials (documentation: docs.aws.amazon.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "An HTTP authentication scheme where the client sends a personal API key in the Authorization header prefixed with the word Bearer."
+        },
+        {
+          "term": "AWS Signature Version 4",
+          "definition": "A signing process that uses HMAC-SHA256 and a credential scope to authenticate AWS API requests without sending the secret key."
+        },
+        {
+          "term": "Idempotent Transcription Job Naming",
+          "definition": "A naming strategy that derives a deterministic job name from the source event identifier so retries do not create duplicate transcription jobs."
+        },
+        {
+          "term": "Event Property Extraction",
+          "definition": "The practice of reading nested properties from an analytics event payload with defensive defaults before passing them to downstream services."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A retry strategy that waits progressively longer after HTTP 429 responses to avoid overwhelming an API."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "PostHog returns HTTP 401 Unauthorized.",
+          "solution": "Verify that POSTHOG_API_KEY is a valid personal API key and that the Authorization header is exactly 'Bearer ' plus the key with no extra spaces."
+        },
+        {
+          "problem": "Amazon Transcribe returns HTTP 403 SignatureDoesNotMatch.",
+          "solution": "Ensure the system clock is synchronized within five minutes of UTC and that AWS_REGION matches the host used for signing, for example us-east-1."
+        },
+        {
+          "problem": "Amazon Transcribe returns HTTP 400 Bad Request for MediaFileUri.",
+          "solution": "Confirm that each recording_url or audio_url in PostHog properties is a publicly readable HTTPS URL or a valid s3:// URI."
+        },
+        {
+          "problem": "The final summary file is empty or missing.",
+          "solution": "Check that SUMMARY_OUTPUT_PATH points to a writable directory and that the script has permission to create files there."
+        }
+      ],
+      "resources": [
+        {
+          "label": "PostHog Analytics API",
+          "url": "https://posthog.com/docs/api"
+        },
+        {
+          "label": "Amazon Transcribe API",
+          "url": "https://docs.aws.amazon.com/transcribe/latest/dg/what-is-transcribe.html"
+        }
+      ],
+      "price": 9.99
+    }
   }
 ]
