@@ -36,7 +36,11 @@
       "webflow-api",
       "figma-rest-api",
       "calendly-api",
-      "klaviyo-api"
+      "klaviyo-api",
+      "convertkit-api",
+      "jira-rest-api",
+      "twitch-analytics-api",
+      "sentry-performance-api"
     ],
     "workflows": [
       "seo-keyword-tracking-dashboard",
@@ -66,26 +70,30 @@
       "asana-automation-calendly-automation-pipeline",
       "calendly-pinecone-vector-automation-pipeline",
       "calendly-notion-api-for-automation-v2-automation-pipeline",
-      "convertkit-github-copilot-automation-pipeline"
+      "convertkit-github-copilot-automation-pipeline",
+      "jira-rest-notion-api-for-automation-automation-pipeline",
+      "jira-rest-twilio-conversations-automation-pipeline",
+      "salesforce-rest-weatherapi-automation-pipeline",
+      "weatherapi-launchdarkly-feature-automation-pipeline"
     ]
   },
-  "lastSentAt": "2026-11-09 17:57:45",
+  "lastSentAt": "2026-11-16 17:40:53",
   "pendingCampaign": {
-    "id": "204315771982055384",
-    "createdAt": "2026-11-16T17:38:26.169Z",
+    "id": "204399403128063179",
+    "createdAt": "2026-11-17T15:47:42.967Z",
     "slugs": {
       "insights": [],
       "apis": [
-        "convertkit-api",
-        "jira-rest-api",
-        "twitch-analytics-api",
-        "sentry-performance-api"
+        "trello-api",
+        "miro-rest-api",
+        "intercom-api",
+        "api-ai-image-generator"
       ],
       "workflows": [
-        "jira-rest-notion-api-for-automation-automation-pipeline",
-        "jira-rest-twilio-conversations-automation-pipeline",
-        "salesforce-rest-weatherapi-automation-pipeline",
-        "weatherapi-launchdarkly-feature-automation-pipeline"
+        "posthog-analytics-amazon-transcribe-automation-pipeline",
+        "posthog-analytics-airtable-automation-pipeline",
+        "posthog-analytics-contentful-content-management-system-automation-pipeline",
+        "miro-rest-slack-web-automation-pipeline"
       ]
     }
   }
