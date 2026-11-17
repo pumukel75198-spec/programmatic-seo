@@ -901,6 +901,19 @@ def generate_alternative(
                 separator = "&" if "?" in url else "?"
                 item["url"] = f"{url}{separator}ref=flowmatrix"
 
+        # The content audit requires at least one recommended option. The LLM
+        # does not always set the flag, so default to the first real tool.
+        options = details.get("alternatives") or []
+        if options and not any(
+            isinstance(item, dict) and item.get("recommended")
+            for item in options
+        ):
+            first = next(
+                (item for item in options if isinstance(item, dict)), None
+            )
+            if first is not None:
+                first["recommended"] = True
+
         result = validator.validate_alternative(candidate)
         result.errors.extend(
             validator.check_duplicate(

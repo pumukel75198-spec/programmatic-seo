@@ -1933,6 +1933,8 @@ def _merge_alternative(
             separator = "&" if "?" in url else "?"
             entry["url"] = f"{url}{separator}ref=flowmatrix"
         items.append(entry)
+    if items and not any(bool(item.get("recommended")) for item in items):
+        items[0]["recommended"] = True
     details["alternatives"] = items
     return candidate
 
