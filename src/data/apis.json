@@ -3081,5 +3081,92 @@
     },
     "created_and_verified_at": "2026-11-07 18:10 UTC",
     "price": 29.99
+  },
+  {
+    "slug": "intercom-api",
+    "title": "Intercom API",
+    "description": "The Intercom API manages contacts, conversations, tags and admins so support teams can automate inbox workflows and CRM synchronization.",
+    "category": "Customer Support",
+    "tags": ["support", "messaging", "intercom", "crm"],
+    "details": {
+      "provider": "Intercom",
+      "pricing": "Paid plans from $39/seat/month",
+      "features": [
+        "Create and update contacts",
+        "Read and reply to conversations",
+        "Apply tags and segments",
+        "Manage admins and teams"
+      ],
+      "useCase": "Automate support triage, customer context sync and follow-up workflows.",
+      "website": "https://www.intercom.com",
+      "endpoint": "https://api.intercom.io/contacts",
+      "authentication": "OAuth2 access token or API token (Bearer)",
+      "apiKeyRequired": true,
+      "sdkLanguages": ["Python", "JavaScript", "cURL"],
+      "rateLimit": "Tier-based; see the Intercom API reference",
+      "docsUrl": "https://developers.intercom.com/intercom-api-reference",
+      "lastVerified": "2026-11-17 05:10 UTC",
+      "disclaimer": "Verification & Link Validity Notice: This workflow blueprint was generated and technically verified on 2026-11-17 05:10 UTC. At the exact time of creation, all referenced domains, API endpoints, and external resource links were tested and confirmed reachable. Because third-party APIs and web services evolve continuously, domains, endpoints, or links inside this document may change or become unavailable over time."
+    },
+    "created_and_verified_at": "2026-11-17 05:10 UTC",
+    "price": 29.99
+  },
+  {
+    "slug": "miro-rest-api",
+    "title": "Miro REST API",
+    "description": "The Miro REST API manages boards, items, sticky notes and connectors, enabling automated workshops, visual planning and collaboration sync.",
+    "category": "Collaboration & Productivity",
+    "tags": ["collaboration", "whiteboard", "miro", "workshops"],
+    "details": {
+      "provider": "Miro",
+      "pricing": "Free; paid plans from $8/member/month",
+      "features": [
+        "Create and read boards",
+        "Manage items and sticky notes",
+        "Create connectors between items",
+        "Manage board members and sharing"
+      ],
+      "useCase": "Automate workshop boards, retrospective templates and visual planning sync.",
+      "website": "https://miro.com",
+      "endpoint": "https://api.miro.com/v2/boards",
+      "authentication": "OAuth2 access token (Bearer)",
+      "apiKeyRequired": true,
+      "sdkLanguages": ["Python", "JavaScript", "cURL"],
+      "rateLimit": "100 requests per minute per user by default",
+      "docsUrl": "https://developers.miro.com/reference/api-reference",
+      "lastVerified": "2026-11-17 05:11 UTC",
+      "disclaimer": "Verification & Link Validity Notice: This workflow blueprint was generated and technically verified on 2026-11-17 05:11 UTC. At the exact time of creation, all referenced domains, API endpoints, and external resource links were tested and confirmed reachable. Because third-party APIs and web services evolve continuously, domains, endpoints, or links inside this document may change or become unavailable over time."
+    },
+    "created_and_verified_at": "2026-11-17 05:11 UTC",
+    "price": 29.99
+  },
+  {
+    "slug": "trello-api",
+    "title": "Trello API",
+    "description": "The Trello REST API manages boards, lists, cards and webhooks so teams can automate project workflows and synchronize task boards.",
+    "category": "Productivity",
+    "tags": ["project-management", "trello", "tasks", "automation"],
+    "details": {
+      "provider": "Trello",
+      "pricing": "Free; paid plans from $5/user/month",
+      "features": [
+        "Create and read boards",
+        "Manage lists and cards",
+        "Add comments and checklists",
+        "Subscribe to webhooks"
+      ],
+      "useCase": "Automate project boards, task routing and cross-tool synchronization.",
+      "website": "https://trello.com",
+      "endpoint": "https://api.trello.com/1/boards",
+      "authentication": "API key and token",
+      "apiKeyRequired": true,
+      "sdkLanguages": ["Python", "JavaScript", "cURL"],
+      "rateLimit": "300 requests per 10 seconds per API key",
+      "docsUrl": "https://developer.atlassian.com/cloud/trello/rest/",
+      "lastVerified": "2026-11-17 05:12 UTC",
+      "disclaimer": "Verification & Link Validity Notice: This workflow blueprint was generated and technically verified on 2026-11-17 05:12 UTC. At the exact time of creation, all referenced domains, API endpoints, and external resource links were tested and confirmed reachable. Because third-party APIs and web services evolve continuously, domains, endpoints, or links inside this document may change or become unavailable over time."
+    },
+    "created_and_verified_at": "2026-11-17 05:12 UTC",
+    "price": 29.99
   }
 ]

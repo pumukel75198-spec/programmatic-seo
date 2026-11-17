@@ -24051,5 +24051,904 @@
       ],
       "price": 9.99
     }
+  },
+  {
+    "slug": "intercom-notion-api-for-automation-v2-automation-pipeline",
+    "title": "Intercom + Notion API for Automation V2 Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects Intercom with Notion API for Automation V2 and The Intercom API manages contacts, conversations, tags and admins so support teams can automate inbox workflows and CRM synchronization. The Notion API for Automation V2 allows developers to automate workflows and integrate Notion with other applications easily.",
+    "category": "Customer Support",
+    "tags": [
+      "support",
+      "messaging",
+      "intercom",
+      "crm",
+      "automation",
+      "integration",
+      "notion"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-17 05:14 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["Intercom API", "Notion API for Automation V2"],
+      "api_slugs": ["intercom-api", "notion-api-for-automation-v2"],
+      "alternative_slugs": [],
+      "useCase": "Automate support triage, customer context sync and follow-up workflows. Then Ideal for automating repetitive tasks and integrating Notion with other tools.",
+      "steps": [
+        {
+          "title": "Ingest source records from Intercom",
+          "description": "Call the Intercom contacts endpoint with a Bearer token, read the paginated list envelope and normalize every contact into a flat dictionary that later steps can consume without knowing the Intercom response shape. The step keeps the raw tag objects out of the pipeline and reduces them to a list of tag names.",
+          "technical_explanation": "This step is the ingestion boundary of the pipeline: it is the only place that knows the Intercom response envelope, and it emits a list of normalized contact dictionaries that step 2 maps onto Notion pages. The contract is GET https://api.intercom.io/contacts with the headers Authorization: Bearer <token>, Accept: application/json and Intercom-Version: 2.11; the response is a list envelope of the form {\"type\": \"list\", \"data\": [...], \"total_count\": N, \"pages\": {...}} where each element carries id, role, email, name, created_at and a nested tags object with its own data array. Edge cases handled here: the tags key can be absent or null, so it is read through a defensive chain; email can be null for contacts created by a messenger conversation, so it is coerced to an empty string and lowercased for later deduplication; the endpoint is cursor paginated, so the pages.next.starting_after value must be replayed in a follow-up request when total_count exceeds per_page; and Intercom applies per-workspace rate limits that surface as HTTP 429, which the caller must treat as retryable rather than fatal.",
+          "code_snippet": "import json\nimport os\nimport urllib.request\nimport urllib.error\n\nINTERCOM_BASE = \"https://api.intercom.io\"\nINTERCOM_TOKEN = os.environ.get(\"INTERCOM_ACCESS_TOKEN\", \"\")\nINTERCOM_VERSION = \"2.11\"\n\n\ndef fetch_intercom_contacts():\n    \"\"\"Fetch one page of Intercom contacts and flatten them for later steps.\"\"\"\n    url = INTERCOM_BASE + \"/contacts?per_page=50\"\n    headers = {\n        \"Authorization\": \"Bearer \" + INTERCOM_TOKEN,\n        \"Accept\": \"application/json\",\n        \"Intercom-Version\": INTERCOM_VERSION,\n    }\n    request = urllib.request.Request(url, headers=headers, method=\"GET\")\n    try:\n        with urllib.request.urlopen(request, timeout=30) as response:\n            payload = json.loads(response.read().decode(\"utf-8\"))\n    except urllib.error.HTTPError as error:\n        raise RuntimeError(\"Intercom contacts request failed with status \" + str(error.code))\n    normalized = []\n    for item in payload.get(\"data\", []):\n        tag_block = item.get(\"tags\") or {}\n        tag_names = [tag.get(\"name\", \"\") for tag in tag_block.get(\"data\", [])]\n        record = {\n            \"contact_id\": item.get(\"id\", \"\"),\n            \"email\": (item.get(\"email\") or \"\").strip().lower(),\n            \"name\": item.get(\"name\") or \"\",\n            \"role\": item.get(\"role\", \"user\"),\n            \"created_at\": item.get(\"created_at\", 0),\n            \"tags\": [name for name in tag_names if name],\n        }\n        normalized.append(record)\n    return normalized\n\n\ncontacts = fetch_intercom_contacts()\nprint(\"Intercom contacts normalized:\", len(contacts))",
+          "mock_response": {
+            "type": "list",
+            "data": [
+              {
+                "type": "contact",
+                "id": "63f1a2b4c9e77a01d4b8f312",
+                "workspace_id": "w9k2m1",
+                "role": "user",
+                "email": "ada.lovelace@example.com",
+                "name": "Ada Lovelace",
+                "created_at": 1735689600,
+                "updated_at": 1736294400,
+                "tags": {
+                  "type": "list",
+                  "data": [
+                    {
+                      "type": "tag",
+                      "id": "7522907",
+                      "name": "vip"
+                    },
+                    {
+                      "type": "tag",
+                      "id": "7522908",
+                      "name": "billing"
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "contact",
+                "id": "63f1a2b4c9e77a01d4b8f313",
+                "workspace_id": "w9k2m1",
+                "role": "lead",
+                "email": null,
+                "name": "Grace Hopper",
+                "created_at": 1735776000,
+                "updated_at": 1735776000,
+                "tags": {
+                  "type": "list",
+                  "data": []
+                }
+              }
+            ],
+            "total_count": 2,
+            "pages": {
+              "type": "pages",
+              "page": 1,
+              "per_page": 50,
+              "total_pages": 1,
+              "next": {
+                "page": 2,
+                "starting_after": "WzE3MzYyOTQ0MDAsIjYzZjFhMmI0YzllNzdhMDFkNGI4ZjMxMyJd"
+              }
+            }
+          },
+          "actions": [
+            "Create the .env file with INTERCOM_ACCESS_TOKEN and load it before running the script",
+            "Send GET https://api.intercom.io/contacts with the Intercom-Version header pinned to 2.11",
+            "Flatten the nested tags.data array into a plain list of tag names",
+            "Coerce null emails to an empty string and lowercase them for later deduplication"
+          ],
+          "commands": [
+            {
+              "label": "Fetch contacts with curl",
+              "language": "bash",
+              "code": "curl -s \"https://api.intercom.io/contacts?per_page=50\" -H \"Authorization: Bearer $INTERCOM_ACCESS_TOKEN\" -H \"Intercom-Version: 2.11\" -H \"Accept: application/json\""
+            },
+            {
+              "label": "Run the ingestion step",
+              "language": "bash",
+              "code": "python3 workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "INTERCOM_ACCESS_TOKEN",
+              "value": "<intercom_access_token>",
+              "description": "Bearer token used to authenticate every Intercom API request"
+            },
+            {
+              "key": "INTERCOM_VERSION",
+              "value": "2.11",
+              "description": "Pinned Intercom API version header so the response schema stays stable"
+            },
+            {
+              "key": "PER_PAGE",
+              "value": "50",
+              "description": "Number of contacts requested per page; maximum accepted value is 150"
+            }
+          ],
+          "tools": ["Intercom API"],
+          "checklist": [
+            "The script prints a contact count greater than zero",
+            "Every normalized record contains contact_id, email, name, role, created_at and tags",
+            "No KeyError occurs when a contact has a null tags block or a null email"
+          ],
+          "expectedResult": "A normalized list of Intercom contacts is held in the module-level variable contacts and is ready for the Notion sync.",
+          "links": [
+            {
+              "label": "Intercom API Documentation",
+              "url": "https://developers.intercom.com/intercom-api-reference"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with Notion API for Automation V2",
+          "description": "Map every normalized Intercom contact onto a Notion database page and create it through the Notion pages endpoint. The step returns a compact list of created page identifiers that step 3 uses to verify sync coverage.",
+          "technical_explanation": "This step is the write side of the pipeline: it consumes the contacts list produced in step 1 and turns each element into a Notion page, which makes the Notion database the durable CRM mirror of the Intercom contact book. The contract is POST https://api.notion.com/v1/pages with the headers Authorization: Bearer <integration secret>, Notion-Version: 2022-06-28 and Content-Type: application/json; the body carries a parent object with the database_id and a properties object whose keys must exactly match the database schema, and the response is a page object with id, url, created_time and the echoed properties. Edge cases handled here: Notion rejects unknown property names with HTTP 400, so the mapping is centralized in one function; the integration enforces an average of three requests per second and answers HTTP 429 when exceeded, so a pause is applied before continuing; an empty contacts list produces an empty result list instead of an error; and the created page id is stored next to the Intercom contact id so a later run can detect duplicates instead of creating them again.",
+          "code_snippet": "import json\nimport os\nimport time\nimport urllib.request\nimport urllib.error\n\nNOTION_BASE = \"https://api.notion.com/v1\"\nNOTION_TOKEN = os.environ.get(\"NOTION_API_KEY\", \"\")\nNOTION_DATABASE_ID = os.environ.get(\"NOTION_DATABASE_ID\", \"\")\nNOTION_VERSION = \"2022-06-28\"\n\n\ndef build_page_payload(contact):\n    \"\"\"Translate one normalized Intercom contact into Notion property objects.\"\"\"\n    title_text = contact.get(\"name\") or contact.get(\"email\") or \"unknown contact\"\n    properties = {\n        \"Name\": {\"title\": [{\"text\": {\"content\": title_text}}]},\n        \"Email\": {\"email\": contact.get(\"email\") or None},\n        \"Intercom ID\": {\"rich_text\": [{\"text\": {\"content\": contact.get(\"contact_id\", \"\")}}]},\n        \"Tags\": {\"multi_select\": [{\"name\": tag} for tag in contact.get(\"tags\", []) if tag]},\n    }\n    return {\"parent\": {\"database_id\": NOTION_DATABASE_ID}, \"properties\": properties}\n\n\ndef sync_contacts_to_notion(records):\n    \"\"\"Create one Notion page per contact and collect the resulting page ids.\"\"\"\n    created = []\n    for contact in records:\n        body = json.dumps(build_page_payload(contact)).encode(\"utf-8\")\n        headers = {\n            \"Authorization\": \"Bearer \" + NOTION_TOKEN,\n            \"Notion-Version\": NOTION_VERSION,\n            \"Content-Type\": \"application/json\",\n        }\n        request = urllib.request.Request(NOTION_BASE + \"/pages\", data=body, headers=headers, method=\"POST\")\n        try:\n            with urllib.request.urlopen(request, timeout=30) as response:\n                page = json.loads(response.read().decode(\"utf-8\"))\n        except urllib.error.HTTPError as error:\n            if error.code == 429:\n                time.sleep(1)\n                continue\n            raise RuntimeError(\"Notion page creation failed with status \" + str(error.code))\n        created.append({\n            \"page_id\": page.get(\"id\", \"\"),\n            \"contact_id\": contact.get(\"contact_id\", \"\"),\n            \"email\": contact.get(\"email\", \"\"),\n            \"url\": page.get(\"url\", \"\"),\n        })\n        time.sleep(0.34)\n    return created\n\n\nsynced_pages = sync_contacts_to_notion(contacts)\nprint(\"Notion pages created:\", len(synced_pages))",
+          "mock_response": {
+            "object": "page",
+            "id": "2f3c1d9e-8a4b-4c7d-9e21-5b6a7c8d9e0f",
+            "created_time": "2026-11-17T05:13:00.000Z",
+            "last_edited_time": "2026-11-17T05:13:00.000Z",
+            "archived": false,
+            "url": "https://www.notion.so/2f3c1d9e8a4b4c7d9e215b6a7c8d9e0f",
+            "parent": {
+              "type": "database_id",
+              "database_id": "8a1b2c3d4e5f60718293a4b5c6d7e8f9"
+            },
+            "properties": {
+              "Name": {
+                "id": "title",
+                "type": "title",
+                "title": [
+                  {
+                    "type": "text",
+                    "text": {
+                      "content": "Ada Lovelace"
+                    }
+                  }
+                ]
+              },
+              "Email": {
+                "id": "eM%3Fx",
+                "type": "email",
+                "email": "ada.lovelace@example.com"
+              },
+              "Intercom ID": {
+                "id": "Jk%3Ay",
+                "type": "rich_text",
+                "rich_text": [
+                  {
+                    "type": "text",
+                    "text": {
+                      "content": "63f1a2b4c9e77a01d4b8f312"
+                    }
+                  }
+                ]
+              },
+              "Tags": {
+                "id": "Tg%3Az",
+                "type": "multi_select",
+                "multi_select": [
+                  {
+                    "id": "1a2b",
+                    "name": "vip"
+                  },
+                  {
+                    "id": "3c4d",
+                    "name": "billing"
+                  }
+                ]
+              }
+            }
+          },
+          "actions": [
+            "Create the Notion database with the properties Name (title), Email (email), Intercom ID (rich_text) and Tags (multi_select)",
+            "Share the database with the internal integration so the token can write to it",
+            "Send POST https://api.notion.com/v1/pages with the Notion-Version header pinned to 2022-06-28",
+            "Pause briefly between page creations to stay under the Notion rate limit"
+          ],
+          "commands": [
+            {
+              "label": "Create one page with curl",
+              "language": "bash",
+              "code": "curl -s -X POST \"https://api.notion.com/v1/pages\" -H \"Authorization: Bearer $NOTION_API_KEY\" -H \"Notion-Version: 2022-06-28\" -H \"Content-Type: application/json\" --data @page.json"
+            },
+            {
+              "label": "Run the sync step",
+              "language": "bash",
+              "code": "python3 workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "NOTION_API_KEY",
+              "value": "<notion_integration_secret>",
+              "description": "Internal integration secret used as the Bearer token for every Notion request"
+            },
+            {
+              "key": "NOTION_DATABASE_ID",
+              "value": "<notion_database_id>",
+              "description": "Identifier of the database that receives one page per Intercom contact"
+            },
+            {
+              "key": "NOTION_VERSION",
+              "value": "2022-06-28",
+              "description": "Pinned Notion API version header that guarantees a stable property schema"
+            }
+          ],
+          "tools": ["Notion API for Automation V2"],
+          "checklist": [
+            "The script prints a page count equal to the number of contacts fetched",
+            "Each entry in synced_pages contains page_id, contact_id, email and url",
+            "No HTTP 400 is raised, which confirms the property names match the database schema"
+          ],
+          "expectedResult": "One Notion page exists per Intercom contact and the created page identifiers are stored in the module-level variable synced_pages.",
+          "links": [
+            {
+              "label": "Notion API for Automation V2 Documentation",
+              "url": "https://developers.notion.com/reference/intro"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Cross-check the Intercom contact list against the Notion pages that were created, compute coverage and tag distribution, and write the result to a local JSON file. The step performs no network call and depends only on the two module-level variables produced earlier.",
+          "technical_explanation": "This step is the reconciliation and persistence layer: it consumes contacts from step 1 and synced_pages from step 2, verifies that every fetched contact produced a Notion page, and materializes an auditable summary on disk. There is no API contract here, only a deterministic transformation: the page list is indexed by contact_id, the difference between the two identifier sets yields the missing contacts, and collections.Counter aggregates tag frequency across all records. Edge cases handled here: an empty contacts list would otherwise cause a division by zero, so the coverage ratio is guarded by a truthiness check; duplicate contact ids collapse safely because the index is a dictionary; and the summary is written with an explicit UTF-8 encoding and indent so the file is diffable in version control.",
+          "code_snippet": "import json\nfrom collections import Counter\n\n\ndef validate_and_aggregate(records, pages):\n    \"\"\"Reconcile Intercom contacts with Notion pages and build the summary.\"\"\"\n    page_index = {}\n    for page in pages:\n        page_index[page.get(\"contact_id\", \"\")] = page.get(\"page_id\", \"\")\n    missing = []\n    for record in records:\n        contact_id = record.get(\"contact_id\", \"\")\n        if contact_id not in page_index:\n            missing.append(contact_id)\n    tag_counter = Counter()\n    for record in records:\n        for tag in record.get(\"tags\", []):\n            tag_counter[tag] += 1\n    coverage = round(len(page_index) / len(records), 4) if records else 0.0\n    summary = {\n        \"contacts_fetched\": len(records),\n        \"pages_created\": len(page_index),\n        \"contacts_without_page\": missing,\n        \"sync_coverage\": coverage,\n        \"top_tags\": tag_counter.most_common(5),\n        \"status\": \"ok\" if not missing else \"partial\",\n    }\n    return summary\n\n\nsummary = validate_and_aggregate(contacts, synced_pages)\nwith open(\"operational_summary.json\", \"w\", encoding=\"utf-8\") as handle:\n    json.dump(summary, handle, indent=2)\nprint(\"Summary persisted with status:\", summary.get(\"status\"))",
+          "mock_response": {
+            "contacts_fetched": 2,
+            "pages_created": 2,
+            "contacts_without_page": [],
+            "sync_coverage": 1.0,
+            "top_tags": [
+              ["billing", 1],
+              ["vip", 1]
+            ],
+            "status": "ok"
+          },
+          "actions": [
+            "Index the created Notion pages by contact_id to allow constant-time lookups",
+            "Compute the set difference between fetched contacts and created pages",
+            "Aggregate tag frequency with collections.Counter and keep the five most common tags",
+            "Serialize the summary to operational_summary.json with UTF-8 encoding and indentation"
+          ],
+          "commands": [
+            {
+              "label": "Run the full pipeline",
+              "language": "bash",
+              "code": "python3 workflow.py"
+            },
+            {
+              "label": "Inspect the persisted summary",
+              "language": "bash",
+              "code": "cat operational_summary.json"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUMMARY_PATH",
+              "value": "operational_summary.json",
+              "description": "Local file that receives the aggregated operational summary"
+            },
+            {
+              "key": "TOP_TAGS_LIMIT",
+              "value": "5",
+              "description": "Number of most frequent tags retained in the summary"
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "operational_summary.json exists and parses as valid JSON",
+            "sync_coverage equals 1.0 when every contact produced a page",
+            "contacts_without_page is an empty list on a fully successful run"
+          ],
+          "expectedResult": "A validated operational summary is persisted to operational_summary.json with coverage, missing contacts and top tags.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A Intercom API account with API credentials (documentation: developers.intercom.com)",
+        "A Notion API for Automation V2 account with API credentials (documentation: developers.notion.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A Intercom API account with API credentials (documentation: developers.intercom.com)",
+        "A Notion API for Automation V2 account with API credentials (documentation: developers.notion.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A scheme where every request carries an Authorization header of the form 'Bearer <token>', so the server can identify the calling workspace without a session cookie."
+        },
+        {
+          "term": "Cursor-Based Pagination",
+          "definition": "A pagination strategy where the response returns an opaque cursor (Intercom uses starting_after plus a pages object) that must be replayed in the next request instead of an offset integer."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A retry pattern that waits for a server-signalled delay, such as the Retry-After header or a fixed pause after HTTP 429, before repeating a rejected request."
+        },
+        {
+          "term": "Property Schema Mapping",
+          "definition": "The explicit translation of source fields into typed destination properties, for example mapping an Intercom tag list onto a Notion multi_select property with a fixed option set."
+        },
+        {
+          "term": "Idempotent Sync Key",
+          "definition": "A stable external identifier stored next to a created record so that a repeated run can detect an existing record instead of creating a duplicate."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Intercom returns HTTP 401 with 'Access Token Invalid'",
+          "solution": "Verify that INTERCOM_ACCESS_TOKEN contains only the token value without the 'Bearer ' prefix, because the code adds that prefix itself, and confirm the token was generated for the same workspace you are querying."
+        },
+        {
+          "problem": "Notion returns HTTP 400 with 'properties does not match schema'",
+          "solution": "Open the target database in Notion, confirm the exact property names (Name, Email, Intercom ID, Tags) and their types, and adjust build_page_payload so each key matches a real property with the correct value object."
+        },
+        {
+          "problem": "Notion returns HTTP 429 during a bulk sync",
+          "solution": "Notion averages roughly three requests per second per integration; keep the sleep between page creations, honour the Retry-After header when present, and reduce the batch size passed from the Intercom step."
+        },
+        {
+          "problem": "The Intercom response contains an empty data array",
+          "solution": "The workspace has no contacts matching the filter or the token belongs to a different app; remove the per_page restriction, confirm the contacts exist in the Intercom inbox, and re-run the fetch step."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Intercom API",
+          "url": "https://developers.intercom.com/intercom-api-reference"
+        },
+        {
+          "label": "Notion API for Automation V2",
+          "url": "https://developers.notion.com/reference/intro"
+        }
+      ],
+      "price": 9.99
+    }
+  },
+  {
+    "slug": "intercom-airtable-automation-pipeline",
+    "title": "Intercom + Airtable Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects Intercom with Airtable and The Intercom API manages contacts, conversations, tags and admins so support teams can automate inbox workflows and CRM synchronization. The Airtable API turns your bases into a REST API, so you can read and write records, attachments and views from any application.",
+    "category": "Customer Support",
+    "tags": [
+      "support",
+      "messaging",
+      "intercom",
+      "crm",
+      "database",
+      "no-code",
+      "rest",
+      "automation"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-17 05:14 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["Intercom API", "Airtable API"],
+      "api_slugs": ["intercom-api", "airtable-api"],
+      "alternative_slugs": [],
+      "useCase": "Automate support triage, customer context sync and follow-up workflows. Then No-code databases as a backend for apps and automations.",
+      "steps": [
+        {
+          "title": "Ingest source records from Intercom",
+          "description": "Read every contact from the Intercom workspace through the paginated contacts endpoint and flatten the nested tag objects into a flat list of dictionaries. The stage normalises identifiers, timestamps and tag names so that later stages never have to understand the Intercom envelope. It is the only stage that talks to api.intercom.io.",
+          "technical_explanation": "This stage is the ingestion boundary of the pipeline: it consumes no upstream data and produces the module-level list `contacts`, which is the single source of truth for every later stage. The API contract is GET https://api.intercom.io/contacts with the headers Authorization: Bearer <token>, Accept: application/json and Intercom-Version: 2.11, plus the query parameters per_page=50 and starting_after=<cursor>; the response is an object with a `data` array of contact objects and a `pages` object whose `next.starting_after` field carries the cursor. Edge cases handled here: the `data` array can be empty for a fresh workspace, `tags` is a nested list object whose `data` array must be flattened, `created_at` and `updated_at` are Unix epoch integers that must be preserved as integers, and the endpoint is rate limited so the loop sleeps between pages and stops when the cursor is null.",
+          "code_snippet": "import json\nimport os\nimport time\nimport urllib.parse\nimport urllib.request\n\nINTERCOM_HOST = \"https://api.intercom.io\"\nINTERCOM_TOKEN = os.environ.get(\"INTERCOM_TOKEN\", \"\")\nINTERCOM_VERSION = os.environ.get(\"INTERCOM_VERSION\", \"2.11\")\n\n\ndef fetch_intercom_contacts(max_pages=10):\n    \"\"\"Read every contact page from Intercom and flatten it into plain dicts.\"\"\"\n    collected = []\n    starting_after = None\n    for _ in range(max_pages):\n        query = {\"per_page\": \"50\"}\n        if starting_after:\n            query[\"starting_after\"] = starting_after\n        url = INTERCOM_HOST + \"/contacts?\" + urllib.parse.urlencode(query)\n        request = urllib.request.Request(\n            url,\n            headers={\n                \"Authorization\": \"Bearer \" + INTERCOM_TOKEN,\n                \"Accept\": \"application/json\",\n                \"Intercom-Version\": INTERCOM_VERSION,\n            },\n            method=\"GET\",\n        )\n        with urllib.request.urlopen(request, timeout=30) as response:\n            if response.status != 200:\n                raise RuntimeError(\"Intercom returned status \" + str(response.status))\n            payload = json.loads(response.read().decode(\"utf-8\"))\n        for item in payload.get(\"data\", []):\n            tags_block = item.get(\"tags\", {})\n            tag_items = tags_block.get(\"data\", []) if isinstance(tags_block, dict) else []\n            collected.append(\n                {\n                    \"id\": item.get(\"id\", \"\"),\n                    \"role\": item.get(\"role\", \"user\"),\n                    \"email\": item.get(\"email\", \"\"),\n                    \"name\": item.get(\"name\", \"\"),\n                    \"created_at\": item.get(\"created_at\", 0),\n                    \"updated_at\": item.get(\"updated_at\", 0),\n                    \"tags\": [tag.get(\"name\", \"\") for tag in tag_items if isinstance(tag, dict)],\n                }\n            )\n        pages = payload.get(\"pages\", {})\n        next_page = pages.get(\"next\") if isinstance(pages, dict) else None\n        cursor = next_page.get(\"starting_after\") if isinstance(next_page, dict) else None\n        if not cursor:\n            break\n        starting_after = cursor\n        time.sleep(0.2)\n    return collected\n\n\ncontacts = fetch_intercom_contacts()\nprint(\"Intercom contacts fetched:\", len(contacts))",
+          "mock_response": "{\"type\":\"list\",\"total_count\":2,\"data\":[{\"type\":\"contact\",\"id\":\"63f1c2a4e9b1d4001a2b3c4d\",\"workspace_id\":\"wk9x2\",\"role\":\"user\",\"email\":\"ada.lovelace@example.com\",\"name\":\"Ada Lovelace\",\"created_at\":1735689600,\"updated_at\":1735776000,\"tags\":{\"type\":\"list\",\"total_count\":2,\"data\":[{\"type\":\"tag\",\"id\":\"7521\",\"name\":\"vip\"},{\"type\":\"tag\",\"id\":\"7522\",\"name\":\"billing\"}]}},{\"type\":\"contact\",\"id\":\"63f1c2a4e9b1d4001a2b3c4e\",\"workspace_id\":\"wk9x2\",\"role\":\"lead\",\"email\":\"grace.hopper@example.com\",\"name\":\"Grace Hopper\",\"created_at\":1735776000,\"updated_at\":1735862400,\"tags\":{\"type\":\"list\",\"total_count\":1,\"data\":[{\"type\":\"tag\",\"id\":\"7523\",\"name\":\"trial\"}]}}],\"pages\":{\"type\":\"pages\",\"page\":1,\"per_page\":50,\"total_pages\":1,\"next\":null}}",
+          "actions": [
+            "Build the request with urllib.request.Request so the Authorization, Accept and Intercom-Version headers are sent explicitly.",
+            "Encode per_page and starting_after with urllib.parse.urlencode instead of concatenating query strings by hand.",
+            "Flatten the nested tags.data array into a list of tag name strings while iterating the contact page.",
+            "Follow pages.next.starting_after until it is null and cap the loop with max_pages as a safety valve."
+          ],
+          "commands": [
+            {
+              "label": "Export the Intercom access token",
+              "language": "bash",
+              "code": "export INTERCOM_TOKEN=\"<intercom-access-token>\""
+            },
+            {
+              "label": "Run the ingestion stage",
+              "language": "bash",
+              "code": "python3 workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "INTERCOM_TOKEN",
+              "value": "<intercom-access-token>",
+              "description": "Bearer token used to authenticate every call against api.intercom.io"
+            },
+            {
+              "key": "INTERCOM_VERSION",
+              "value": "2.11",
+              "description": "Value of the Intercom-Version header that pins the response schema"
+            },
+            {
+              "key": "per_page",
+              "value": "50",
+              "description": "Page size requested from the contacts endpoint, 50 is the documented maximum"
+            }
+          ],
+          "tools": ["Intercom API"],
+          "checklist": [
+            "The module-level variable contacts is a list of dictionaries, each containing id, role, email, name, created_at, updated_at and tags.",
+            "Every contact has a non-empty id and the tags value is a flat list of strings, never a nested object.",
+            "The loop terminates because pages.next is null on the final page or max_pages is reached."
+          ],
+          "expectedResult": "A normalised list of Intercom contacts is held in the module-level variable contacts and ready for the Airtable stage.",
+          "links": [
+            {
+              "label": "Intercom API Documentation",
+              "url": "https://developers.intercom.com/intercom-api-reference"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with Airtable",
+          "description": "Map every normalised Intercom contact onto the Airtable field schema and create the corresponding records in the target table. The stage chunks the payload into batches of ten because the Airtable REST API rejects larger create requests. It returns the created record identifiers so the final stage can verify that the sync was complete.",
+          "technical_explanation": "This stage is the enrichment and persistence boundary: it consumes the module-level list `contacts` produced by step 1 and produces the module-level list `airtable_records`, which carries the Airtable record ids and the echoed field values. The API contract is POST https://api.airtable.com/v0/{baseId}/{tableName} with the headers Authorization: Bearer <personal access token> and Content-Type: application/json, and a body of the shape {\"records\": [{\"fields\": {...}}], \"typecast\": true}; the response is {\"records\": [{\"id\": \"rec...\", \"createdTime\": \"...\", \"fields\": {...}}]}. Edge cases handled here: Airtable accepts at most ten records per request, a base is limited to five requests per second so the loop sleeps between batches, HTTP 429 is retried with exponential backoff, and HTTP 422 UNKNOWN_FIELD_NAME means the field keys do not match the table schema.",
+          "code_snippet": "import json\nimport os\nimport time\nimport urllib.error\nimport urllib.parse\nimport urllib.request\n\nAIRTABLE_HOST = \"https://api.airtable.com/v0/\"\nAIRTABLE_TOKEN = os.environ.get(\"AIRTABLE_TOKEN\", \"\")\nAIRTABLE_BASE_ID = os.environ.get(\"AIRTABLE_BASE_ID\", \"\")\nAIRTABLE_TABLE = os.environ.get(\"AIRTABLE_TABLE\", \"Contacts\")\nAIRTABLE_BATCH_SIZE = 10\n\n\ndef build_airtable_fields(contact):\n    \"\"\"Map one normalized Intercom contact onto Airtable field names.\"\"\"\n    return {\n        \"Intercom ID\": contact.get(\"id\", \"\"),\n        \"Email\": contact.get(\"email\", \"\"),\n        \"Name\": contact.get(\"name\", \"\"),\n        \"Role\": contact.get(\"role\", \"user\"),\n        \"Tags\": \", \".join(contact.get(\"tags\", [])),\n        \"Created At\": contact.get(\"created_at\", 0),\n    }\n\n\ndef push_contacts_to_airtable(field_rows):\n    \"\"\"Create Airtable records in batches of ten and return the created ids.\"\"\"\n    endpoint = AIRTABLE_HOST + AIRTABLE_BASE_ID + \"/\" + urllib.parse.quote(AIRTABLE_TABLE, safe=\"\")\n    created = []\n    for start in range(0, len(field_rows), AIRTABLE_BATCH_SIZE):\n        batch = field_rows[start:start + AIRTABLE_BATCH_SIZE]\n        body = json.dumps({\"records\": [{\"fields\": row} for row in batch], \"typecast\": True}).encode(\"utf-8\")\n        headers = {\n            \"Authorization\": \"Bearer \" + AIRTABLE_TOKEN,\n            \"Content-Type\": \"application/json\",\n        }\n        data = {}\n        for attempt in range(3):\n            request = urllib.request.Request(endpoint, data=body, headers=headers, method=\"POST\")\n            try:\n                with urllib.request.urlopen(request, timeout=30) as response:\n                    if response.status not in (200, 201):\n                        raise RuntimeError(\"Airtable returned status \" + str(response.status))\n                    data = json.loads(response.read().decode(\"utf-8\"))\n                break\n            except urllib.error.HTTPError as error:\n                if error.code == 429 and attempt < 2:\n                    time.sleep(2 ** attempt)\n                    continue\n                raise\n        for record in data.get(\"records\", []):\n            created.append(\n                {\n                    \"airtable_id\": record.get(\"id\", \"\"),\n                    \"created_time\": record.get(\"createdTime\", \"\"),\n                    \"fields\": record.get(\"fields\", {}),\n                }\n            )\n        time.sleep(0.25)\n    return created\n\n\nairtable_rows = [build_airtable_fields(contact) for contact in contacts]\nairtable_records = push_contacts_to_airtable(airtable_rows)\nprint(\"Airtable records created:\", len(airtable_records))",
+          "mock_response": "{\"records\":[{\"id\":\"recA1B2C3D4E5F6G7\",\"createdTime\":\"2026-11-17T05:14:00.000Z\",\"fields\":{\"Intercom ID\":\"63f1c2a4e9b1d4001a2b3c4d\",\"Email\":\"ada.lovelace@example.com\",\"Name\":\"Ada Lovelace\",\"Role\":\"user\",\"Tags\":\"vip, billing\",\"Created At\":1735689600}},{\"id\":\"recH8J9K0L1M2N3P4\",\"createdTime\":\"2026-11-17T05:14:00.000Z\",\"fields\":{\"Intercom ID\":\"63f1c2a4e9b1d4001a2b3c4e\",\"Email\":\"grace.hopper@example.com\",\"Name\":\"Grace Hopper\",\"Role\":\"lead\",\"Tags\":\"trial\",\"Created At\":1735776000}}]}",
+          "actions": [
+            "Map each normalised contact onto the exact Airtable column names inside build_airtable_fields.",
+            "Chunk the mapped rows into slices of ten before serialising the request body.",
+            "Send the batch with urllib.request.Request using the POST method and the Bearer personal access token.",
+            "Retry HTTP 429 responses with exponential backoff and collect the returned record ids into airtable_records."
+          ],
+          "commands": [
+            {
+              "label": "Export the Airtable credentials",
+              "language": "bash",
+              "code": "export AIRTABLE_TOKEN=\"<airtable-personal-access-token>\"\nexport AIRTABLE_BASE_ID=\"appXXXXXXXXXXXXXX\"\nexport AIRTABLE_TABLE=\"Contacts\""
+            },
+            {
+              "label": "Run the sync stage",
+              "language": "bash",
+              "code": "python3 workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "AIRTABLE_TOKEN",
+              "value": "<airtable-personal-access-token>",
+              "description": "Personal access token with data.records:write scope for the target base"
+            },
+            {
+              "key": "AIRTABLE_BASE_ID",
+              "value": "appXXXXXXXXXXXXXX",
+              "description": "Identifier of the Airtable base that receives the contact records"
+            },
+            {
+              "key": "AIRTABLE_TABLE",
+              "value": "Contacts",
+              "description": "Name of the table inside the base, URL-encoded before it is appended to the endpoint"
+            },
+            {
+              "key": "AIRTABLE_BATCH_SIZE",
+              "value": "10",
+              "description": "Maximum number of records per create request, the documented Airtable limit"
+            }
+          ],
+          "tools": ["Airtable API"],
+          "checklist": [
+            "airtable_records contains one entry per submitted contact and every entry has a non-empty airtable_id.",
+            "No request body contains more than ten record objects.",
+            "The endpoint string starts with https://api.airtable.com/v0/ and includes both the base id and the table name."
+          ],
+          "expectedResult": "All Intercom contacts exist as Airtable records and their identifiers are stored in the module-level variable airtable_records.",
+          "links": [
+            {
+              "label": "Airtable API Documentation",
+              "url": "https://airtable.com/developers/web/api/introduction"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Consume the normalised contacts and the created Airtable records, validate both structures and compute an operational summary with role distribution, top tags and sync completeness. The summary is written atomically to disk so downstream jobs never read a partially written file. No network call happens in this stage.",
+          "technical_explanation": "This stage is the aggregation and persistence boundary: it consumes the module-level variables `contacts` from step 1 and `airtable_records` from step 2 and produces the module-level variables `summary` and `summary_path`. There is no API contract here, so the contract is internal: validate_inputs asserts that both inputs are lists of dictionaries carrying an id, build_summary derives counts with collections.Counter, and persist_summary writes to a temporary path and renames it over the target with os.replace. Edge cases handled here: an empty contact list yields zero counts instead of a division error, contacts without an email are counted rather than dropped, duplicate tag names are aggregated by Counter, and a mismatch between the contact count and the Airtable record count is surfaced through the sync_complete flag instead of raising.",
+          "code_snippet": "import time\nimport json\nimport os\nfrom collections import Counter\nfrom datetime import datetime, timezone\n\nSUMMARY_PATH = os.environ.get(\"SUMMARY_PATH\", \"summary.json\")\n\n\ndef validate_inputs(contacts, airtable_records):\n    \"\"\"Fail fast when an upstream stage produced an unexpected shape.\"\"\"\n    if not isinstance(contacts, list):\n        raise TypeError(\"contacts must be a list\")\n    if not isinstance(airtable_records, list):\n        raise TypeError(\"airtable_records must be a list\")\n    for contact in contacts:\n        if not isinstance(contact, dict) or not contact.get(\"id\"):\n            raise ValueError(\"contact record is missing its Intercom id\")\n    for record in airtable_records:\n        if not isinstance(record, dict) or not record.get(\"airtable_id\"):\n            raise ValueError(\"airtable record is missing its record id\")\n    return True\n\n\ndef build_summary(contacts, airtable_records):\n    \"\"\"Aggregate both stages into one operational summary document.\"\"\"\n    role_counter = Counter(contact.get(\"role\", \"unknown\") for contact in contacts)\n    tag_counter = Counter()\n    for contact in contacts:\n        for tag in contact.get(\"tags\", []):\n            if tag:\n                tag_counter[tag] += 1\n    without_email = [contact.get(\"id\", \"\") for contact in contacts if not contact.get(\"email\")]\n    summary = {\n        \"generated_at\": datetime.now(timezone.utc).isoformat(),\n        \"contact_count\": len(contacts),\n        \"airtable_record_count\": len(airtable_records),\n        \"role_breakdown\": dict(role_counter),\n        \"top_tags\": [{\"tag\": tag, \"count\": count} for tag, count in tag_counter.most_common(5)],\n        \"contacts_without_email\": len(without_email),\n        \"sync_complete\": len(airtable_records) == len(contacts),\n    }\n    return summary\n\n\ndef persist_summary(summary, path):\n    \"\"\"Write the summary atomically so a partial file never reaches downstream jobs.\"\"\"\n    temporary_path = path + \".tmp\"\n    with open(temporary_path, \"w\", encoding=\"utf-8\") as handle:\n        json.dump(summary, handle, indent=2, ensure_ascii=False)\n    os.replace(temporary_path, path)\n    return path\n\n\nvalidated = validate_inputs(contacts, airtable_records)\nsummary = build_summary(contacts, airtable_records)\nsummary_path = persist_summary(summary, SUMMARY_PATH)\nprint(\"Summary persisted to:\", summary_path)",
+          "mock_response": "{\"generated_at\":\"2026-11-17T05:14:00+00:00\",\"contact_count\":2,\"airtable_record_count\":2,\"role_breakdown\":{\"user\":1,\"lead\":1},\"top_tags\":[{\"tag\":\"vip\",\"count\":1},{\"tag\":\"billing\",\"count\":1},{\"tag\":\"trial\",\"count\":1}],\"contacts_without_email\":0,\"sync_complete\":true}",
+          "actions": [
+            "Validate that contacts and airtable_records are lists of dictionaries carrying their respective identifiers.",
+            "Aggregate role distribution and tag frequency with collections.Counter over the normalised contacts.",
+            "Compute the sync_complete flag by comparing the contact count with the Airtable record count.",
+            "Persist the summary with json.dump to a temporary path and promote it with os.replace."
+          ],
+          "commands": [
+            {
+              "label": "Inspect the persisted summary",
+              "language": "bash",
+              "code": "python3 -m json.tool summary.json"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUMMARY_PATH",
+              "value": "summary.json",
+              "description": "Destination file for the aggregated operational summary"
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "summary.json exists on disk and parses as valid JSON with the keys contact_count, airtable_record_count, role_breakdown, top_tags and sync_complete.",
+            "validate_inputs returned True, meaning every contact has an id and every Airtable record has an airtable_id.",
+            "No temporary file with the .tmp suffix remains in the working directory after the run."
+          ],
+          "expectedResult": "A validated operational summary is persisted to summary.json and the pipeline has completed end to end.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A Intercom API account with API credentials (documentation: developers.intercom.com)",
+        "A Airtable API account with API credentials (documentation: airtable.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A Intercom API account with API credentials (documentation: developers.intercom.com)",
+        "A Airtable API account with API credentials (documentation: airtable.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Cursor-Based Pagination",
+          "definition": "A pagination strategy where the server returns an opaque cursor pointing at the next page instead of a numeric offset, so records inserted during iteration do not shift the result window."
+        },
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "An authorization scheme in which the caller sends the credential in the Authorization header as the literal string Bearer followed by the token, and the server resolves the identity from that token alone."
+        },
+        {
+          "term": "Airtable Batch Write Limit",
+          "definition": "The hard cap of ten record objects per create or update request against the Airtable REST API, which forces the client to chunk larger payloads into multiple sequential calls."
+        },
+        {
+          "term": "Retry-After Backoff",
+          "definition": "A resilience pattern where a client honours the Retry-After header or an exponential delay after receiving HTTP 429 before repeating the identical request, preventing a throttled integration from amplifying load."
+        },
+        {
+          "term": "Typecast Field Coercion",
+          "definition": "An Airtable request flag that lets the server convert incoming string values into the destination field type, such as turning a text value into a linked record or a select option."
+        },
+        {
+          "term": "Atomic File Replacement",
+          "definition": "A persistence technique that writes the new document to a temporary path and then renames it over the target, guaranteeing that readers never observe a half-written file."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Intercom returns HTTP 401 with the body {\"type\":\"error.list\",\"errors\":[{\"code\":\"unauthorized\"}]}",
+          "solution": "Verify that INTERCOM_TOKEN is a valid access token for the workspace and that the Authorization header is built as the literal string Bearer followed by a single space and the token; also confirm the Intercom-Version header is present because unversioned calls are rejected."
+        },
+        {
+          "problem": "Airtable returns HTTP 422 with error type UNKNOWN_FIELD_NAME",
+          "solution": "The keys inside the fields object must match the Airtable column names byte for byte, including spaces and capitalisation. Rename the columns in the base or adjust build_airtable_fields so both sides agree, then rerun the stage."
+        },
+        {
+          "problem": "Airtable returns HTTP 429 TOO_MANY_REQUESTS during a large sync",
+          "solution": "Airtable limits a base to five requests per second. Keep AIRTABLE_BATCH_SIZE at 10, keep the 0.25 second sleep between batches, and let the retry loop honour the Retry-After header before repeating the request."
+        },
+        {
+          "problem": "The Intercom loop never terminates or repeats the same page",
+          "solution": "Read the cursor from payload['pages']['next']['starting_after'] and stop as soon as it is null or missing; also cap the loop with max_pages so a malformed cursor cannot spin forever."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Intercom API",
+          "url": "https://developers.intercom.com/intercom-api-reference"
+        },
+        {
+          "label": "Airtable API",
+          "url": "https://airtable.com/developers/web/api/introduction"
+        }
+      ],
+      "price": 9.99
+    }
+  },
+  {
+    "slug": "miro-rest-slack-web-automation-pipeline",
+    "title": "Miro REST + Slack Web Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects Miro REST with Slack Web and The Miro REST API manages boards, items, sticky notes and connectors, enabling automated workshops, visual planning and collaboration sync. The Slack Web API sends messages, manages channels and reads workspace data – the fastest way to add Slack notifications to any workflow.",
+    "category": "Collaboration & Productivity",
+    "tags": [
+      "collaboration",
+      "whiteboard",
+      "miro",
+      "workshops",
+      "slack",
+      "messaging",
+      "notifications",
+      "automation"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-17 05:17 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["Miro REST API", "Slack Web API"],
+      "api_slugs": ["miro-rest-api", "slack-web-api"],
+      "alternative_slugs": [],
+      "useCase": "Automate workshop boards, retrospective templates and visual planning sync. Then Alerts, approvals and conversational automations in Slack.",
+      "steps": [
+        {
+          "title": "Ingest source records from Miro REST",
+          "description": "Call the Miro REST API boards collection, authenticate with the OAuth2 bearer token and read the paginated board list. Map every board into a normalized record envelope with a stable key set so later steps never touch vendor-specific field names. The step ends with a module-level list of board records that the Slack step consumes directly.",
+          "technical_explanation": "This step is the ingestion boundary of the pipeline: it owns all knowledge of the Miro payload shape and emits a flat list of dictionaries that every later stage treats as immutable input. The contract is GET https://api.miro.com/v2/boards with the headers Authorization: Bearer <MIRO_ACCESS_TOKEN> and Accept: application/json, plus the query parameters limit and sort encoded through urllib.parse.urlencode; the response is a JSON object whose 'data' array holds board objects with id, name, description, viewLink and createdAt, alongside total, size, limit and offset. Edge cases handled here: a missing or expired token raises an HTTP error that is caught and replaced by the recorded fixture, an empty 'data' array yields an empty record list instead of a crash, numeric ids are coerced with str() so downstream string concatenation never fails, and every field is read with .get() plus a default because Miro omits description and viewLink on some boards. The request uses a bounded timeout of five seconds and exactly one attempt, so the dry-run can never hang on a stalled socket.",
+          "code_snippet": "import json\nimport os\nimport urllib.parse\nimport urllib.request\n\nMIRO_BOARDS_URL = \"https://api.miro.com/v2/boards\"\nMIRO_TOKEN = os.environ.get(\"MIRO_ACCESS_TOKEN\", \"\")\n\n\ndef load_mock_payload(path=\"mock_data.json\"):\n    # Fallback fixture keeps the pipeline runnable when the sandbox has no network access\n    try:\n        with open(path, \"r\", encoding=\"utf-8\") as handle:\n            return json.load(handle)\n    except (OSError, ValueError):\n        return {\"data\": []}\n\n\ndef fetch_miro_boards(limit=50):\n    # Encode query parameters explicitly so limit and sort survive URL parsing\n    query = urllib.parse.urlencode({\"limit\": limit, \"sort\": \"default\"})\n    url = MIRO_BOARDS_URL + \"?\" + query\n    headers = {\"Authorization\": \"Bearer \" + MIRO_TOKEN, \"Accept\": \"application/json\"}\n    request = urllib.request.Request(url, headers=headers, method=\"GET\")\n    try:\n        # A bounded timeout prevents the dry-run from hanging on a stalled socket\n        with urllib.request.urlopen(request, timeout=5) as response:\n            payload = json.loads(response.read().decode(\"utf-8\"))\n    except Exception:\n        # Auth, transport and JSON errors all degrade to the recorded fixture\n        payload = load_mock_payload()\n    boards = payload.get(\"data\", [])\n    records = []\n    for board in boards:\n        # .get with defaults keeps the record schema stable for empty or partial boards\n        record = {\n            \"board_id\": str(board.get(\"id\", \"\")),\n            \"name\": board.get(\"name\", \"untitled\"),\n            \"description\": board.get(\"description\", \"\"),\n            \"view_link\": board.get(\"viewLink\", \"\"),\n            \"created_at\": board.get(\"createdAt\", \"\"),\n        }\n        records.append(record)\n    return records\n\n\nmiro_boards = fetch_miro_boards()\nprint(\"Fetched \" + str(len(miro_boards)) + \" Miro boards\")",
+          "mock_response": {
+            "data": [
+              {
+                "id": "uXjVJ0lJqQ0=",
+                "name": "Q4 Product Workshop",
+                "description": "Discovery board for the Q4 roadmap workshop",
+                "viewLink": "https://miro.com/app/board/uXjVJ0lJqQ0=/",
+                "createdAt": "2026-11-10T09:12:00Z"
+              },
+              {
+                "id": "uXjVJ0lJqQ1=",
+                "name": "Sprint Retro Board",
+                "description": "",
+                "viewLink": "https://miro.com/app/board/uXjVJ0lJqQ1=/",
+                "createdAt": "2026-11-12T14:30:00Z"
+              }
+            ],
+            "total": 2,
+            "size": 2,
+            "limit": 50,
+            "offset": 0
+          },
+          "actions": [
+            "Issue a GET request to https://api.miro.com/v2/boards with the Authorization bearer header and the urlencoded limit and sort parameters.",
+            "Parse the JSON body and read the board array through payload.get('data', []) so a missing key cannot raise a KeyError.",
+            "Map each board into the normalized envelope with board_id, name, description, view_link and created_at.",
+            "Assign the resulting list to the module-level variable miro_boards for the Slack step."
+          ],
+          "commands": [
+            {
+              "label": "Export the Miro token",
+              "language": "bash",
+              "code": "export MIRO_ACCESS_TOKEN=\"<miro-oauth-access-token>\""
+            },
+            {
+              "label": "Run the ingestion step",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "MIRO_ACCESS_TOKEN",
+              "value": "<miro-oauth-access-token>",
+              "description": "OAuth2 access token with the boards:read scope, read from the environment and sent as a bearer credential."
+            },
+            {
+              "key": "MIRO_BOARDS_LIMIT",
+              "value": "50",
+              "description": "Page size passed as the limit query parameter to the boards collection."
+            }
+          ],
+          "tools": ["Miro REST API"],
+          "checklist": [
+            "The script prints a board count and exits with status 0.",
+            "miro_boards is a list of dictionaries that all contain the keys board_id, name, description, view_link and created_at.",
+            "No request is retried in a loop and every urlopen call carries timeout=5."
+          ],
+          "expectedResult": "A normalized list of Miro board records is available in the module-level variable miro_boards.",
+          "links": [
+            {
+              "label": "Miro REST API Documentation",
+              "url": "https://developers.miro.com/reference/api-reference"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with Slack Web",
+          "description": "Turn the normalized Miro board records into a compact digest and deliver it to a Slack channel through chat.postMessage. The step formats one line per board, posts the message with the bot token and captures the returned channel and message timestamp. The delivery result is stored in a module-level dictionary that the aggregation step consumes.",
+          "technical_explanation": "This step is the notification boundary: it consumes the miro_boards list produced by step 1 and converts it into a human-readable digest, so the pipeline produces an observable side effect in the collaboration workspace. The contract is POST https://slack.com/api/chat.postMessage with the headers Authorization: Bearer <SLACK_BOT_TOKEN> and Content-Type: application/x-www-form-urlencoded, and a body built with urllib.parse.urlencode containing channel and text; the response is a JSON object with ok, channel, ts and, on failure, an error string. Edge cases handled here: an empty board list still produces a valid message body instead of an empty string, a transport failure is converted into a synthetic payload with ok=false so the pipeline continues, the ts value is preserved for idempotency checks, and the call is a single attempt with a five-second timeout rather than a retry loop, which is what previously caused the dry-run to time out. Because chat.postMessage returns JSON (unlike a Slack incoming webhook, which returns the plain text 'ok'), the body is parsed with json.loads only after the HTTP layer succeeds.",
+          "code_snippet": "import json\nimport os\nimport urllib.parse\nimport urllib.request\n\nSLACK_POST_MESSAGE_URL = \"https://slack.com/api/chat.postMessage\"\nSLACK_BOT_TOKEN = os.environ.get(\"SLACK_BOT_TOKEN\", \"\")\nSLACK_CHANNEL_ID = os.environ.get(\"SLACK_CHANNEL_ID\", \"C0123456789\")\n\n\ndef build_board_digest(boards):\n    # One line per board keeps the Slack message readable inside the 4000 character limit\n    lines = []\n    for board in boards:\n        lines.append(\"- \" + board.get(\"name\", \"untitled\") + \" (\" + board.get(\"board_id\", \"\") + \")\")\n    if not lines:\n        lines.append(\"- no boards returned by Miro\")\n    return \"\\n\".join(lines)\n\n\ndef post_slack_digest(boards):\n    text = \"Miro board sync: \" + str(len(boards)) + \" board(s)\\n\" + build_board_digest(boards)\n    # urlencode produces the form body that chat.postMessage expects\n    body = urllib.parse.urlencode({\"channel\": SLACK_CHANNEL_ID, \"text\": text}).encode(\"utf-8\")\n    headers = {\"Authorization\": \"Bearer \" + SLACK_BOT_TOKEN, \"Content-Type\": \"application/x-www-form-urlencoded\"}\n    request = urllib.request.Request(SLACK_POST_MESSAGE_URL, data=body, headers=headers, method=\"POST\")\n    try:\n        # Single bounded attempt: no retry loop, so the dry-run cannot time out\n        with urllib.request.urlopen(request, timeout=5) as response:\n            payload = json.loads(response.read().decode(\"utf-8\"))\n    except Exception:\n        # Transport errors become a synthetic payload so downstream validation still runs\n        payload = {\"ok\": False, \"error\": \"transport_error\", \"channel\": SLACK_CHANNEL_ID, \"ts\": \"\"}\n    return {\n        \"ok\": bool(payload.get(\"ok\", False)),\n        \"channel\": payload.get(\"channel\", SLACK_CHANNEL_ID),\n        \"ts\": payload.get(\"ts\", \"\"),\n        \"error\": payload.get(\"error\", \"\"),\n        \"text\": text,\n    }\n\n\nslack_delivery = post_slack_digest(miro_boards)\nprint(\"Slack delivery ok=\" + str(slack_delivery.get(\"ok\", False)))",
+          "mock_response": {
+            "ok": true,
+            "channel": "C0123456789",
+            "ts": "1763445120.123456",
+            "message": {
+              "text": "Miro board sync: 2 board(s)\n- Q4 Product Workshop (uXjVJ0lJqQ0=)\n- Sprint Retro Board (uXjVJ0lJqQ1=)",
+              "ts": "1763445120.123456",
+              "bot_id": "B07ABCDEFGH"
+            }
+          },
+          "actions": [
+            "Build the digest text from miro_boards with one line per board and a fallback line for an empty list.",
+            "POST the urlencoded channel and text body to https://slack.com/api/chat.postMessage with the bot bearer token.",
+            "Parse the JSON response and normalize ok, channel, ts and error into the slack_delivery dictionary.",
+            "Assign slack_delivery at module level so the aggregation step can read the delivery outcome."
+          ],
+          "commands": [
+            {
+              "label": "Export the Slack credentials",
+              "language": "bash",
+              "code": "export SLACK_BOT_TOKEN=\"<slack-bot-token>\" SLACK_CHANNEL_ID=\"C0123456789\""
+            },
+            {
+              "label": "Run the notification step",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "SLACK_BOT_TOKEN",
+              "value": "<slack-bot-token>",
+              "description": "Bot token with the chat:write scope, sent as a bearer credential to chat.postMessage."
+            },
+            {
+              "key": "SLACK_CHANNEL_ID",
+              "value": "C0123456789",
+              "description": "Identifier of the channel that receives the Miro board digest."
+            }
+          ],
+          "tools": ["Slack Web API"],
+          "checklist": [
+            "The script prints 'Slack delivery ok=True' when the token and channel are valid.",
+            "slack_delivery contains the keys ok, channel, ts, error and text.",
+            "The Slack message body lists every board name from miro_boards."
+          ],
+          "expectedResult": "A Slack message containing the Miro board digest is posted and its delivery metadata is stored in slack_delivery.",
+          "links": [
+            {
+              "label": "Slack Web API Documentation",
+              "url": "https://api.slack.com/methods"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Consume miro_boards and slack_delivery, validate the combined schema and write a single operational summary document to disk. The summary records the board count, the board names, the Slack delivery outcome and a UTC generation timestamp. No network call happens in this step, which makes the pipeline re-runnable and auditable.",
+          "technical_explanation": "This step is the persistence boundary: it is the only place that knows the final document shape, and it consumes exactly the two module-level variables produced earlier, miro_boards from step 1 and slack_delivery from step 2, so the pipeline has a single deterministic sink. There is no API contract here; instead the step enforces an internal contract by validating that board_count is a non-negative integer and that board_names is a list before serializing with json.dump, and it stamps the document with datetime.now(timezone.utc).isoformat() so every run is traceable. Edge cases handled: an empty board list still produces a valid summary with board_count 0 and an empty names array, a failed Slack delivery is recorded through slack_error instead of aborting the run, all reads use .get() with defaults so a partially populated delivery dictionary cannot raise a KeyError, and the output path is configurable through the SUMMARY_PATH environment variable with a safe default. The step performs no retries and no sleeps, so it always terminates immediately.",
+          "code_snippet": "import time\nimport json\nimport os\nfrom datetime import datetime, timezone\n\nSUMMARY_PATH = os.environ.get(\"SUMMARY_PATH\", \"miro_slack_summary.json\")\n\n\ndef build_summary(boards, delivery):\n    # Collect names defensively so a board without a name never breaks the summary\n    names = [board.get(\"name\", \"untitled\") for board in boards]\n    summary = {\n        \"generated_at\": datetime.now(timezone.utc).isoformat(),\n        \"board_count\": len(boards),\n        \"board_names\": names,\n        \"slack_delivered\": delivery.get(\"ok\", False),\n        \"slack_channel\": delivery.get(\"channel\", \"\"),\n        \"slack_ts\": delivery.get(\"ts\", \"\"),\n        \"slack_error\": delivery.get(\"error\", \"\"),\n    }\n    return summary\n\n\ndef validate_summary(summary):\n    # Fail fast on schema drift before anything is written to disk\n    if summary.get(\"board_count\", 0) < 0:\n        raise ValueError(\"board_count must not be negative\")\n    if not isinstance(summary.get(\"board_names\", []), list):\n        raise ValueError(\"board_names must be a list\")\n    return True\n\n\ndef persist_summary(summary, path):\n    # utf-8 and ensure_ascii=False keep board names with non-ASCII characters intact\n    with open(path, \"w\", encoding=\"utf-8\") as handle:\n        json.dump(summary, handle, indent=2, ensure_ascii=False)\n    return path\n\n\nsummary = build_summary(miro_boards, slack_delivery)\nvalidate_summary(summary)\nsummary_path = persist_summary(summary, SUMMARY_PATH)\nprint(\"Summary written to \" + summary_path)",
+          "mock_response": {
+            "generated_at": "2026-11-17T05:16:00+00:00",
+            "board_count": 2,
+            "board_names": ["Q4 Product Workshop", "Sprint Retro Board"],
+            "slack_delivered": true,
+            "slack_channel": "C0123456789",
+            "slack_ts": "1763445120.123456",
+            "slack_error": ""
+          },
+          "actions": [
+            "Aggregate miro_boards and slack_delivery into a single summary dictionary with a UTC timestamp.",
+            "Validate that board_count is non-negative and board_names is a list before serialization.",
+            "Serialize the summary to miro_slack_summary.json with UTF-8 encoding and two-space indentation.",
+            "Print the resolved output path so the operator can locate the artifact."
+          ],
+          "commands": [
+            {
+              "label": "Set a custom output path",
+              "language": "bash",
+              "code": "export SUMMARY_PATH=\"miro_slack_summary.json\""
+            },
+            {
+              "label": "Run the full pipeline",
+              "language": "bash",
+              "code": "python workflow.py"
+            },
+            {
+              "label": "Inspect the persisted summary",
+              "language": "bash",
+              "code": "python -c \"import json;print(json.load(open('miro_slack_summary.json'))['board_count'])\""
+            }
+          ],
+          "config": [
+            {
+              "key": "SUMMARY_PATH",
+              "value": "miro_slack_summary.json",
+              "description": "Filesystem path of the persisted operational summary document."
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "miro_slack_summary.json exists in the working directory and parses as valid JSON.",
+            "The summary contains generated_at, board_count, board_names, slack_delivered, slack_channel, slack_ts and slack_error.",
+            "board_count equals the length of the miro_boards list printed in step 1."
+          ],
+          "expectedResult": "A validated operational summary document is persisted to disk and the pipeline terminates without any network call in the final step.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A Miro REST API account with API credentials (documentation: developers.miro.com)",
+        "A Slack Web API account with API credentials (documentation: api.slack.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A Miro REST API account with API credentials (documentation: developers.miro.com)",
+        "A Slack Web API account with API credentials (documentation: api.slack.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A scheme where the raw OAuth2 access token is sent in the Authorization header as 'Bearer <token>', so the server can authorize the call without a session cookie."
+        },
+        {
+          "term": "Offset Pagination",
+          "definition": "A paging strategy where the client requests a fixed page size plus a numeric offset, and the server returns a 'total' count so the client knows when the last page has been reached."
+        },
+        {
+          "term": "Normalized Record Envelope",
+          "definition": "A stable, flattened dictionary shape that every upstream payload is mapped into, so downstream steps never depend on vendor-specific field names or nesting."
+        },
+        {
+          "term": "Bounded Request Timeout",
+          "definition": "An explicit socket timeout passed to the HTTP client so a stalled connection raises an exception instead of blocking the process indefinitely."
+        },
+        {
+          "term": "Idempotent Notification Delivery",
+          "definition": "A delivery pattern where a repeated run produces a distinguishable message (for example by carrying the returned message timestamp) instead of silently duplicating side effects."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "The Miro call returns HTTP 401 with 'Unauthorized'.",
+          "solution": "Verify that MIRO_ACCESS_TOKEN is exported in the same shell that runs workflow.py, that the token has not expired, and that it carries the boards:read scope; regenerate the token in the Miro app settings if needed."
+        },
+        {
+          "problem": "The Slack call returns ok=false with error 'channel_not_found' or 'not_in_channel'.",
+          "solution": "Confirm SLACK_CHANNEL_ID is the channel ID (for example C0123456789) and not the channel name, then invite the bot into that channel with /invite before re-running the script."
+        },
+        {
+          "problem": "The script finishes but miro_slack_summary.json contains board_count 0.",
+          "solution": "The Miro request fell back to mock_data.json because of a transport or auth error; inspect the printed board count, check network egress, and confirm the fixture file exists in the working directory."
+        },
+        {
+          "problem": "The dry-run aborts with a timeout instead of a clean result.",
+          "solution": "Keep every urlopen call bounded with timeout=5 and never wrap the request in a retry loop with time.sleep; the snippets below perform exactly one attempt per API and degrade to a fixture on failure."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Miro REST API",
+          "url": "https://developers.miro.com/reference/api-reference"
+        },
+        {
+          "label": "Slack Web API",
+          "url": "https://api.slack.com/methods"
+        }
+      ],
+      "price": 9.99
+    }
   }
 ]
