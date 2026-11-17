@@ -106,8 +106,10 @@ jobs:
       # Re-validates every stored workflow/API with the real validator.
       # Live link checks are off: the disclaimer only guarantees reachability
       # on the day of generation. A stale record blocks the commit.
+      # Private API scripts are gitignored and absent from a plain CI
+      # checkout; the daemon already validated the new API scripts.
       - name: Content gate (stored workflows & APIs)
-        run: python -m pipeline.content_gate
+        run: python -m pipeline.content_gate --skip-api-scripts
 
       # The daemon already ran the full customer audit & auto-heal as its
       # hard pre-delivery gate (pipeline/auto_3day_daemon.py). Running it a
