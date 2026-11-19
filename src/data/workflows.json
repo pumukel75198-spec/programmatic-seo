@@ -25689,5 +25689,834 @@
       ],
       "price": 9.99
     }
+  },
+  {
+    "slug": "twelve-data-cohere-embed-automation-pipeline",
+    "title": "Twelve Data + Cohere Embed Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects Twelve Data with Cohere Embed and Access real-time and historical financial market data through a simple API. Cohere's Embed API turns text into high-quality vector embeddings for semantic search, clustering and retrieval-augmented generation.",
+    "category": "Finance",
+    "tags": [
+      "financial-data",
+      "api",
+      "market-data",
+      "embeddings",
+      "search",
+      "rag",
+      "nlp"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-19 15:24 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["Twelve Data API", "Cohere Embed API"],
+      "api_slugs": ["twelvedata-api", "cohere-embed-api"],
+      "alternative_slugs": ["plaid-alternatives"],
+      "useCase": "Used by developers and traders to retrieve financial data for analysis and trading strategies. Then Semantic search, clustering and RAG pipelines.",
+      "steps": [
+        {
+          "title": "Ingest source records from Twelve Data",
+          "description": "Implement the Twelve Data contract, validate the response and hand normalized records to the next stage. The function requests a short daily time series for a single symbol and converts provider strings into typed Python values. It returns a module-level list that step 2 can consume without re-parsing the provider envelope.",
+          "technical_explanation": "This step is the ingestion boundary of the pipeline: it calls Twelve Data before any embedding work so that downstream stages receive a normalized list of market observations instead of a raw provider envelope. The code sends a GET request to https://api.twelvedata.com/time_series with query parameters symbol, interval, outputsize and apikey, plus an Authorization Bearer header, and expects a JSON object with meta and values arrays. Edge cases include provider error payloads with status=error, empty values arrays, numeric fields returned as strings, and rate-limit responses; the function converts close to float and volume to int while preserving the symbol and datetime for traceability.",
+          "code_snippet": "import json\nimport os\nimport urllib.parse\nimport urllib.request\n\nTWELVE_DATA_BASE_URL = 'https://api.twelvedata.com/time_series'\nTWELVE_DATA_API_KEY = os.environ.get('TWELVE_DATA_API_KEY', '')\n\ndef fetch_market_data():\n    if not TWELVE_DATA_API_KEY:\n        return []\n    params = {\n        'symbol': 'AAPL',\n        'interval': '1day',\n        'outputsize': '5',\n        'apikey': TWELVE_DATA_API_KEY,\n    }\n    query = urllib.parse.urlencode(params)\n    url = TWELVE_DATA_BASE_URL + '?' + query\n    headers = {'Authorization': 'Bearer ' + TWELVE_DATA_API_KEY}\n    request = urllib.request.Request(url, headers=headers, method='GET')\n    with urllib.request.urlopen(request, timeout=30) as response:\n        payload = json.loads(response.read().decode('utf-8'))\n    if payload.get('status') == 'error':\n        raise RuntimeError(payload.get('message', 'Twelve Data request failed'))\n    values = payload.get('values', [])\n    records = []\n    for item in values:\n        try:\n            close_value = float(item.get('close', '0'))\n            volume_value = int(float(item.get('volume', '0')))\n        except (TypeError, ValueError):\n            continue\n        record = {\n            'symbol': payload.get('meta', {}).get('symbol', 'AAPL'),\n            'datetime': item.get('datetime', ''),\n            'close': close_value,\n            'volume': volume_value,\n        }\n        records.append(record)\n    return records\n\nmarket_records = fetch_market_data()",
+          "mock_response": "{\"meta\": {\"symbol\": \"AAPL\", \"interval\": \"1day\", \"currency\": \"USD\", \"exchange\": \"NASDAQ\", \"type\": \"Common Stock\"}, \"values\": [{\"datetime\": \"2026-11-18\", \"open\": \"228.10\", \"high\": \"230.45\", \"low\": \"227.80\", \"close\": \"229.87\", \"volume\": \"51234567\"}, {\"datetime\": \"2026-11-17\", \"open\": \"226.50\", \"high\": \"229.10\", \"low\": \"225.90\", \"close\": \"228.10\", \"volume\": \"49876543\"}, {\"datetime\": \"2026-11-14\", \"open\": \"224.30\", \"high\": \"227.20\", \"low\": \"223.80\", \"close\": \"226.50\", \"volume\": \"47654321\"}, {\"datetime\": \"2026-11-13\", \"open\": \"222.90\", \"high\": \"225.40\", \"low\": \"221.70\", \"close\": \"224.30\", \"volume\": \"46543210\"}, {\"datetime\": \"2026-11-12\", \"open\": \"221.40\", \"high\": \"223.60\", \"low\": \"220.10\", \"close\": \"222.90\", \"volume\": \"45321098\"}], \"status\": \"ok\"}",
+          "actions": [
+            "Export TWELVE_DATA_API_KEY in the shell before running workflow.py.",
+            "Send a GET request to https://api.twelvedata.com/time_series with symbol, interval, outputsize and apikey query parameters.",
+            "Parse the values array and convert close to float and volume to int.",
+            "Return market_records as a module-level list for step 2."
+          ],
+          "commands": [
+            {
+              "label": "Set Twelve Data key",
+              "language": "bash",
+              "code": "export TWELVE_DATA_API_KEY=\"<your-twelve-data-api-key>\""
+            },
+            {
+              "label": "Run workflow",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "TWELVE_DATA_API_KEY",
+              "value": "<set-in-env>",
+              "description": "API key read from the environment and sent to Twelve Data."
+            },
+            {
+              "key": "SYMBOL",
+              "value": "AAPL",
+              "description": "Ticker symbol requested from the time_series endpoint."
+            },
+            {
+              "key": "INTERVAL",
+              "value": "1day",
+              "description": "Time-series interval accepted by Twelve Data."
+            },
+            {
+              "key": "OUTPUTSIZE",
+              "value": "5",
+              "description": "Number of most recent observations to request."
+            }
+          ],
+          "tools": ["Twelve Data API"],
+          "checklist": [
+            "market_records is a list of dictionaries with symbol, datetime, close and volume keys.",
+            "The Twelve Data request uses the documented time_series endpoint and a Bearer header.",
+            "Numeric fields are converted to float and int without raising ValueError on valid provider data."
+          ],
+          "expectedResult": "A normalized market_records list is available for the embedding stage.",
+          "links": [
+            {
+              "label": "Twelve Data API Documentation",
+              "url": "https://twelvedata.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with Cohere Embed",
+          "description": "Implement the Cohere Embed contract, validate the response and hand normalized records to the next stage. The function turns each market observation into a text document, sends the batch to the v2/embed endpoint and aligns returned vectors with their source records. It returns a module-level list that step 3 can aggregate and persist.",
+          "technical_explanation": "This step is the enrichment boundary: it consumes market_records from step 1 and converts each observation into a text document that Cohere can embed, so later retrieval or clustering can operate on vector representations. The code sends a POST request to https://api.cohere.com/v2/embed with a Bearer token, a JSON body containing model, texts, input_type and embedding_types, and expects a response with an embeddings object that may contain a float array. Edge cases include empty input lists, missing API credentials, embedding arrays shorter than the input list, and provider errors; the function aligns embeddings by index and falls back to an empty vector when an embedding is absent.",
+          "code_snippet": "import re\nimport json\nimport os\nimport urllib.request\n\nCOHERE_EMBED_URL = 'https://api.cohere.com/v2/embed'\nCOHERE_API_KEY = os.environ.get('COHERE_API_KEY', '')\n\ndef embed_market_records(records):\n    if not records:\n        return []\n    texts = []\n    for record in records:\n        text = 'Symbol ' + record.get('symbol', '') + ' closed at ' + str(record.get('close', 0)) + ' on ' + record.get('datetime', '')\n        texts.append(text)\n    if not COHERE_API_KEY:\n        return [\n            {\n                'symbol': record.get('symbol', ''),\n                'datetime': record.get('datetime', ''),\n                'close': record.get('close', 0.0),\n                'volume': record.get('volume', 0),\n                'embedding': [],\n            }\n            for record in records\n        ]\n    body = {\n        'model': 'embed-english-v3.0',\n        'texts': texts,\n        'input_type': 'search_document',\n        'embedding_types': ['float'],\n    }\n    data = json.dumps(body).encode('utf-8')\n    headers = {\n        'Authorization': 'Bearer ' + COHERE_API_KEY,\n        'Content-Type': 'application/json',\n    }\n    request = urllib.request.Request(COHERE_EMBED_URL, data=data, headers=headers, method='POST')\n    with urllib.request.urlopen(request, timeout=30) as response:\n        payload = json.loads(response.read().decode('utf-8'))\n    embeddings_container = payload.get('embeddings', {})\n    if isinstance(embeddings_container, dict):\n        embeddings = embeddings_container.get('float', [])\n    else:\n        embeddings = embeddings_container\n    enriched = []\n    for index, record in enumerate(records):\n        embedding = embeddings[index] if index < len(embeddings) else []\n        enriched_record = {\n            'symbol': record.get('symbol', ''),\n            'datetime': record.get('datetime', ''),\n            'close': record.get('close', 0.0),\n            'volume': record.get('volume', 0),\n            'embedding': embedding,\n        }\n        enriched.append(enriched_record)\n    return enriched\n\nembedded_records = embed_market_records(market_records)",
+          "mock_response": "{\"id\": \"embed-20261119-001\", \"embeddings\": {\"float\": [[0.0123, -0.0456, 0.0789, 0.0012], [-0.0234, 0.0567, -0.0890, 0.0034], [0.0345, -0.0678, 0.0912, -0.0045], [-0.0456, 0.0789, -0.1023, 0.0056], [0.0567, -0.0890, 0.1134, -0.0067]]}, \"texts\": [\"Symbol AAPL closed at 229.87 on 2026-11-18\", \"Symbol AAPL closed at 228.1 on 2026-11-17\", \"Symbol AAPL closed at 226.5 on 2026-11-14\", \"Symbol AAPL closed at 224.3 on 2026-11-13\", \"Symbol AAPL closed at 222.9 on 2026-11-12\"], \"meta\": {\"billed_units\": {\"input_tokens\": 45}}}",
+          "actions": [
+            "Consume market_records from step 1 and build one text document per observation.",
+            "Send a POST request to https://api.cohere.com/v2/embed with model, texts, input_type and embedding_types.",
+            "Extract embeddings.float and align each vector with its source record by index.",
+            "Return embedded_records as a module-level list for step 3."
+          ],
+          "commands": [
+            {
+              "label": "Set Cohere key",
+              "language": "bash",
+              "code": "export COHERE_API_KEY=\"<your-cohere-api-key>\""
+            },
+            {
+              "label": "Run workflow",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "COHERE_API_KEY",
+              "value": "<set-in-env>",
+              "description": "API key read from the environment and sent as a Bearer token."
+            },
+            {
+              "key": "COHERE_MODEL",
+              "value": "embed-english-v3.0",
+              "description": "Embedding model used by the v2/embed endpoint."
+            },
+            {
+              "key": "INPUT_TYPE",
+              "value": "search_document",
+              "description": "Cohere input type for documents that will be retrieved later."
+            }
+          ],
+          "tools": ["Cohere Embed API"],
+          "checklist": [
+            "embedded_records contains the original market fields plus an embedding list.",
+            "The Cohere request uses the v2/embed endpoint and a Bearer token from COHERE_API_KEY.",
+            "Missing or short embedding arrays are handled without IndexError."
+          ],
+          "expectedResult": "A normalized embedded_records list is available for aggregation and persistence.",
+          "links": [
+            {
+              "label": "Cohere Embed API Documentation",
+              "url": "https://docs.cohere.com/reference/embed"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Aggregate the normalized records from all previous steps, validate the schema and persist the final operational summary. The function skips malformed records, computes deterministic statistics and writes summary.json with stable keys. It returns the summary dictionary so the run can be inspected without reopening the file.",
+          "technical_explanation": "This step is the persistence boundary: it consumes embedded_records from step 2, validates each record, computes deterministic aggregates and writes a final operational summary to summary.json. The code uses only the Python standard library, checks types before conversion, guards against empty collections before calling statistics.mean, and records embedding dimensions for observability. Edge cases include malformed records, missing numeric fields, zero records, and non-list embedding values; invalid records are skipped rather than crashing the pipeline, and the summary always contains stable keys for downstream consumers.",
+          "code_snippet": "import json\nimport os\nimport statistics\n\ndef aggregate_and_persist(records):\n    validated = []\n    for record in records:\n        if not isinstance(record, dict):\n            continue\n        symbol = record.get('symbol', '')\n        close = record.get('close', 0.0)\n        embedding = record.get('embedding', [])\n        if not symbol:\n            continue\n        try:\n            close_value = float(close)\n            volume_value = int(record.get('volume', 0))\n        except (TypeError, ValueError):\n            continue\n        validated_record = {\n            'symbol': symbol,\n            'datetime': record.get('datetime', ''),\n            'close': close_value,\n            'volume': volume_value,\n            'embedding_dimension': len(embedding) if isinstance(embedding, list) else 0,\n        }\n        validated.append(validated_record)\n    closes = [item.get('close', 0.0) for item in validated]\n    dimensions = [item.get('embedding_dimension', 0) for item in validated]\n    summary = {\n        'record_count': len(validated),\n        'symbols': sorted({item.get('symbol', '') for item in validated}),\n        'average_close': statistics.mean(closes) if closes else 0.0,\n        'min_close': min(closes) if closes else 0.0,\n        'max_close': max(closes) if closes else 0.0,\n        'average_embedding_dimension': statistics.mean(dimensions) if dimensions else 0.0,\n        'records': validated,\n    }\n    output_path = os.path.join(os.getcwd(), 'summary.json')\n    with open(output_path, 'w', encoding='utf-8') as handle:\n        json.dump(summary, handle, indent=2)\n    return summary\n\nsummary = aggregate_and_persist(embedded_records)",
+          "mock_response": "{\"record_count\": 5, \"symbols\": [\"AAPL\"], \"average_close\": 226.334, \"min_close\": 222.9, \"max_close\": 229.87, \"average_embedding_dimension\": 4.0, \"records\": [{\"symbol\": \"AAPL\", \"datetime\": \"2026-11-18\", \"close\": 229.87, \"volume\": 51234567, \"embedding_dimension\": 4}]}",
+          "actions": [
+            "Consume embedded_records and validate symbol, close and embedding types.",
+            "Compute record_count, symbols, average_close, min_close, max_close and average_embedding_dimension.",
+            "Write the summary to summary.json with json.dump and UTF-8 encoding.",
+            "Return summary as a module-level dictionary for inspection."
+          ],
+          "commands": [
+            {
+              "label": "Inspect summary",
+              "language": "bash",
+              "code": "cat summary.json"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUMMARY_PATH",
+              "value": "summary.json",
+              "description": "Local file where the validated operational summary is persisted."
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "summary.json exists and contains stable keys for record_count, symbols and average_close.",
+            "Empty input produces a valid summary with zero counts instead of a statistics error.",
+            "Malformed records are skipped without raising KeyError or TypeError."
+          ],
+          "expectedResult": "A validated summary.json file is written and the summary dictionary is available in memory.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A Twelve Data API account with API credentials (documentation: twelvedata.com)",
+        "A Cohere Embed API account with API credentials (documentation: docs.cohere.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A Twelve Data API account with API credentials (documentation: twelvedata.com)",
+        "A Cohere Embed API account with API credentials (documentation: docs.cohere.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A request authentication pattern in which the caller sends an Authorization header whose value is the literal scheme Bearer followed by a secret token."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A retry strategy that waits progressively longer after HTTP 429 responses so the client does not exhaust the provider quota."
+        },
+        {
+          "term": "Vector Embedding",
+          "definition": "A dense numeric representation of text produced by a model so that semantic similarity can be measured with distance metrics."
+        },
+        {
+          "term": "Retrieval-Augmented Generation",
+          "definition": "A pattern that retrieves relevant embedded documents before prompting a language model, improving factual grounding."
+        },
+        {
+          "term": "Time-Series Normalization",
+          "definition": "The conversion of provider-specific time-series fields into a stable schema with typed timestamps, numeric closes and integer volumes."
+        },
+        {
+          "term": "Idempotent Persistence",
+          "definition": "A write strategy that produces the same stored result when the same input is processed repeatedly, which simplifies retries."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Twelve Data returns HTTP 401 or status=error with an invalid API key message.",
+          "solution": "Confirm that TWELVE_DATA_API_KEY is exported in the same shell that runs workflow.py and that the key is active in the Twelve Data dashboard; the code sends it both as the apikey query parameter and as a Bearer header."
+        },
+        {
+          "problem": "Cohere returns HTTP 429 or a rate-limit error during embedding.",
+          "solution": "Reduce the number of texts per request, add a bounded retry with exponential sleep, and verify the Cohere plan limits; the sample uses five records to stay below common trial quotas."
+        },
+        {
+          "problem": "The values array from Twelve Data is empty or missing.",
+          "solution": "Check the symbol, interval and outputsize parameters, confirm market hours and data entitlement, and handle the empty list by returning an empty market_records list so step 2 and step 3 can still complete."
+        },
+        {
+          "problem": "Embedding dimension is zero in summary.json.",
+          "solution": "Verify that COHERE_API_KEY is set and that the Cohere response contains embeddings.float; if the key is absent the code intentionally writes empty vectors so the pipeline remains runnable offline."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Twelve Data API",
+          "url": "https://twelvedata.com/docs"
+        },
+        {
+          "label": "Cohere Embed API",
+          "url": "https://docs.cohere.com/reference/embed"
+        }
+      ],
+      "price": 9.99
+    }
+  },
+  {
+    "slug": "linear-graphql-cohere-embed-automation-pipeline",
+    "title": "Linear GraphQL + Cohere Embed Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects Linear GraphQL with Cohere Embed and The Linear GraphQL API manages issues, projects and cycles programmatically – built for fast product and engineering workflows. Cohere's Embed API turns text into high-quality vector embeddings for semantic search, clustering and retrieval-augmented generation.",
+    "category": "Project Management",
+    "tags": [
+      "linear",
+      "graphql",
+      "issues",
+      "productivity",
+      "embeddings",
+      "search",
+      "rag",
+      "nlp"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-19 15:25 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["Linear GraphQL API", "Cohere Embed API"],
+      "api_slugs": ["linear-graphql-api", "cohere-embed-api"],
+      "alternative_slugs": [],
+      "useCase": "Issue automation, sprint reporting and product operations. Then Semantic search, clustering and RAG pipelines.",
+      "steps": [
+        {
+          "title": "Ingest source records from Linear GraphQL",
+          "description": "Send a paginated GraphQL query to Linear, validate the response envelope and normalize every issue into a flat record that later steps can embed and aggregate.",
+          "technical_explanation": "This step is the ingestion boundary of the pipeline: it consumes no upstream data and produces the canonical issue list that the Cohere embedding step consumes. The API contract is an HTTP POST to https://api.linear.app/graphql with Content-Type application/json and an Authorization header containing the Linear personal API key; the JSON body contains a query string and variables for first and after. The response shape is a JSON object with data.issues.nodes and data.issues.pageInfo, plus an optional errors array that must be checked before reading data. Edge cases include cursor pagination when pageInfo.hasNextPage is true, empty nodes arrays, null descriptions, workspace-specific schema differences and rate limiting, so the code follows endCursor until exhaustion and converts every field through .get with defaults.",
+          "code_snippet": "import json\nimport os\nimport urllib.error\nimport urllib.request\n\nLINEAR_GRAPHQL_URL = 'https://api.linear.app/graphql'\nLINEAR_API_KEY = os.environ.get('LINEAR_API_KEY', '')\nMOCK_DATA_PATH = os.environ.get('MOCK_DATA_PATH', 'mock_data.json')\n\nQUERY = '''\nquery IssuesForEmbedding($first: Int!, $after: String) {\n  issues(first: $first, after: $after, orderBy: updatedAt) {\n    nodes {\n      id\n      identifier\n      title\n      description\n      state { name }\n      team { key name }\n      updatedAt\n    }\n    pageInfo { hasNextPage endCursor }\n  }\n}\n'''\n\ndef _load_offline_issues():\n    try:\n        with open(MOCK_DATA_PATH, 'r', encoding='utf-8') as handle:\n            payload = json.load(handle)\n        nodes = payload.get('data', {}).get('issues', {}).get('nodes', [])\n        return [node for node in nodes if isinstance(node, dict)]\n    except (FileNotFoundError, json.JSONDecodeError, OSError):\n        return []\n\ndef _post_graphql(variables):\n    body = json.dumps({'query': QUERY, 'variables': variables}).encode('utf-8')\n    headers = {\n        'Content-Type': 'application/json',\n        'Accept': 'application/json',\n        'Authorization': LINEAR_API_KEY,\n    }\n    request = urllib.request.Request(LINEAR_GRAPHQL_URL, data=body, headers=headers, method='POST')\n    with urllib.request.urlopen(request, timeout=30) as response:\n        if response.status != 200:\n            raise RuntimeError(f'Linear GraphQL returned HTTP {response.status}')\n        return json.loads(response.read().decode('utf-8'))\n\ndef fetch_linear_issues():\n    if not LINEAR_API_KEY:\n        return _load_offline_issues()\n    collected = []\n    cursor = None\n    while True:\n        payload = _post_graphql({'first': 50, 'after': cursor})\n        if payload.get('errors'):\n            messages = [error.get('message', 'unknown') for error in payload.get('errors', [])]\n            raise RuntimeError('Linear GraphQL errors: ' + '; '.join(messages))\n        data = payload.get('data', {})\n        issues_block = data.get('issues', {})\n        nodes = issues_block.get('nodes', []) or []\n        collected.extend(nodes)\n        page_info = issues_block.get('pageInfo', {})\n        if not page_info.get('hasNextPage', False):\n            break\n        cursor = page_info.get('endCursor')\n        if not cursor:\n            break\n    normalized = []\n    for node in collected:\n        if not isinstance(node, dict):\n            continue\n        state = node.get('state', {}) or {}\n        team = node.get('team', {}) or {}\n        normalized.append({\n            'id': str(node.get('id', '')),\n            'identifier': str(node.get('identifier', '')),\n            'title': str(node.get('title', '')),\n            'description': str(node.get('description', '') or ''),\n            'state': str(state.get('name', 'Unknown')),\n            'team_key': str(team.get('key', '')),\n            'updated_at': str(node.get('updatedAt', '')),\n        })\n    return normalized\n\nissues = fetch_linear_issues()",
+          "mock_response": {
+            "data": {
+              "issues": {
+                "nodes": [
+                  {
+                    "id": "a1b2c3d4-0001",
+                    "identifier": "ENG-101",
+                    "title": "Add retry logic to billing sync",
+                    "description": "Implement exponential backoff for failed billing webhook deliveries.",
+                    "state": {
+                      "name": "In Progress"
+                    },
+                    "team": {
+                      "key": "ENG",
+                      "name": "Engineering"
+                    },
+                    "updatedAt": "2026-11-19T14:05:00.000Z"
+                  },
+                  {
+                    "id": "a1b2c3d4-0002",
+                    "identifier": "ENG-102",
+                    "title": "Document embedding pipeline",
+                    "description": "Write operational notes for the Linear to Cohere embedding workflow.",
+                    "state": {
+                      "name": "Todo"
+                    },
+                    "team": {
+                      "key": "ENG",
+                      "name": "Engineering"
+                    },
+                    "updatedAt": "2026-11-19T14:20:00.000Z"
+                  }
+                ],
+                "pageInfo": {
+                  "hasNextPage": false,
+                  "endCursor": "cursor_01"
+                }
+              }
+            }
+          },
+          "actions": [
+            "Export LINEAR_API_KEY and confirm the value is a Linear personal API key.",
+            "Send a POST request to https://api.linear.app/graphql with the issues query and pagination variables.",
+            "Normalize each node into a flat record containing id, identifier, title, description, state, team_key and updated_at.",
+            "Follow pageInfo.endCursor until pageInfo.hasNextPage is false."
+          ],
+          "commands": [
+            {
+              "label": "Set Linear credential",
+              "language": "bash",
+              "code": "export LINEAR_API_KEY='<your-linear-api-key>'"
+            },
+            {
+              "label": "Run the assembled pipeline",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "LINEAR_GRAPHQL_URL",
+              "value": "https://api.linear.app/graphql",
+              "description": "Concrete Linear GraphQL endpoint for issue queries."
+            },
+            {
+              "key": "LINEAR_API_KEY",
+              "value": "<your-linear-api-key>",
+              "description": "Linear personal API key read from the environment."
+            },
+            {
+              "key": "MOCK_DATA_PATH",
+              "value": "mock_data.json",
+              "description": "Offline fixture path used only when LINEAR_API_KEY is absent."
+            }
+          ],
+          "tools": ["Linear GraphQL API"],
+          "checklist": [
+            "The function returns a list and each item contains the key identifier.",
+            "The request uses POST and the Authorization header.",
+            "Pagination stops when pageInfo.hasNextPage is false."
+          ],
+          "expectedResult": "A normalized list of Linear issues is available in the module-level variable issues for the embedding step.",
+          "links": [
+            {
+              "label": "Linear GraphQL API Documentation",
+              "url": "https://developers.linear.app/docs/graphql/working-with-the-graphql-api"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with Cohere Embed",
+          "description": "Convert each normalized Linear issue into a dense float vector with the Cohere Embed API, batching requests and attaching embeddings to the issue records for downstream similarity work.",
+          "technical_explanation": "This step consumes the issues list produced by the Linear ingestion step and enriches every record with a vector representation. The API contract is an HTTP POST to https://api.cohere.com/v2/embed with Content-Type application/json and an Authorization header using the Bearer prefix followed by the Cohere API key; the JSON body contains model, texts, input_type, embedding_types and truncate. The response shape is a JSON object with an embeddings field that is either an object keyed by type, such as float, or a list of vectors, plus metadata; the code explicitly requests embedding_types ['float'] and extracts embeddings.float defensively. Edge cases include the Cohere maximum batch of 96 texts, HTTP 429 and 5xx responses, empty issue lists, empty text after normalization, oversized descriptions that require truncation and vectors whose dimension must be preserved exactly for later cosine similarity.",
+          "code_snippet": "import re\nimport json\nimport os\nimport time\nimport urllib.error\nimport urllib.request\n\nCOHERE_EMBED_URL = 'https://api.cohere.com/v2/embed'\nCOHERE_API_KEY = os.environ.get('COHERE_API_KEY', '')\nCOHERE_MODEL = os.environ.get('COHERE_EMBED_MODEL', 'embed-english-v3.0')\nMAX_BATCH_SIZE = 96\n\ndef _build_embedding_text(issue):\n    title = issue.get('title', '')\n    description = issue.get('description', '')\n    identifier = issue.get('identifier', '')\n    combined = ' '.join(part for part in [identifier, title, description] if part)\n    return combined[:8000]\n\ndef _request_embeddings(batch):\n    payload = {\n        'model': COHERE_MODEL,\n        'texts': batch,\n        'input_type': 'search_document',\n        'embedding_types': ['float'],\n        'truncate': 'END',\n    }\n    body = json.dumps(payload).encode('utf-8')\n    headers = {\n        'Content-Type': 'application/json',\n        'Accept': 'application/json',\n        'Authorization': f'Bearer {COHERE_API_KEY}',\n    }\n    last_error = None\n    for attempt in range(4):\n        request = urllib.request.Request(COHERE_EMBED_URL, data=body, headers=headers, method='POST')\n        try:\n            with urllib.request.urlopen(request, timeout=60) as response:\n                if response.status != 200:\n                    raise RuntimeError(f'Cohere embed returned HTTP {response.status}')\n                return json.loads(response.read().decode('utf-8'))\n        except urllib.error.HTTPError as exc:\n            last_error = exc\n            if exc.code not in (429, 500, 502, 503, 504):\n                raise\n            time.sleep(2 ** attempt)\n    raise RuntimeError(f'Cohere embed failed after retries: {last_error}')\n\ndef _extract_float_embeddings(payload):\n    embeddings = payload.get('embeddings', [])\n    if isinstance(embeddings, dict):\n        return embeddings.get('float', []) or []\n    return embeddings or []\n\ndef embed_issues(issue_records):\n    records = []\n    texts = []\n    for issue in issue_records:\n        if not isinstance(issue, dict):\n            continue\n        text = _build_embedding_text(issue)\n        texts.append(text)\n        records.append({\n            'id': issue.get('id', ''),\n            'identifier': issue.get('identifier', ''),\n            'title': issue.get('title', ''),\n            'state': issue.get('state', 'Unknown'),\n            'team_key': issue.get('team_key', ''),\n            'text': text,\n            'embedding': [],\n        })\n    if not COHERE_API_KEY or not texts:\n        return records\n    for start in range(0, len(texts), MAX_BATCH_SIZE):\n        batch = texts[start:start + MAX_BATCH_SIZE]\n        payload = _request_embeddings(batch)\n        batch_embeddings = _extract_float_embeddings(payload)\n        for offset, vector in enumerate(batch_embeddings):\n            index = start + offset\n            if index < len(records) and isinstance(vector, list):\n                records[index]['embedding'] = [float(value) for value in vector]\n    return records\n\nembedded_issues = embed_issues(issues)",
+          "mock_response": {
+            "id": "6f3c2a1e-7b2d-4f8a-9c10-2d7e5b1a9f44",
+            "embeddings": {
+              "float": [
+                [0.0123, -0.0456, 0.0789],
+                [0.0234, -0.0567, 0.0891]
+              ]
+            },
+            "texts": [
+              "ENG-101 Add retry logic to billing sync Implement exponential backoff for failed billing webhook deliveries.",
+              "ENG-102 Document embedding pipeline Write operational notes for the Linear to Cohere embedding workflow."
+            ],
+            "meta": {
+              "api_version": {
+                "version": "2"
+              },
+              "billed_units": {
+                "input_tokens": 38
+              }
+            }
+          },
+          "actions": [
+            "Build one embedding text per issue from identifier, title and description.",
+            "Batch texts into groups of at most 96 and POST them to https://api.cohere.com/v2/embed.",
+            "Request embedding_types ['float'] and read the embeddings.float array.",
+            "Retry HTTP 429 and 5xx responses with exponential backoff."
+          ],
+          "commands": [
+            {
+              "label": "Set Cohere credential",
+              "language": "bash",
+              "code": "export COHERE_API_KEY='<your-cohere-api-key>'"
+            },
+            {
+              "label": "Run the assembled pipeline",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "COHERE_EMBED_URL",
+              "value": "https://api.cohere.com/v2/embed",
+              "description": "Concrete Cohere Embed v2 endpoint."
+            },
+            {
+              "key": "COHERE_API_KEY",
+              "value": "<your-cohere-api-key>",
+              "description": "Cohere API key read from the environment and sent as a Bearer token."
+            },
+            {
+              "key": "COHERE_EMBED_MODEL",
+              "value": "embed-english-v3.0",
+              "description": "Cohere embedding model used for every batch."
+            },
+            {
+              "key": "MAX_BATCH_SIZE",
+              "value": "96",
+              "description": "Maximum number of texts per Cohere embed request."
+            }
+          ],
+          "tools": ["Cohere Embed API"],
+          "checklist": [
+            "Every issue with a non-empty text produces a record.",
+            "No batch exceeds 96 texts.",
+            "The Authorization header uses the Bearer prefix."
+          ],
+          "expectedResult": "The module-level variable embedded_issues contains one record per issue with either a float vector or an empty embedding list.",
+          "links": [
+            {
+              "label": "Cohere Embed API Documentation",
+              "url": "https://docs.cohere.com/reference/embed"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Validate the enriched records, aggregate issue counts by state and team, compute cosine similarity for non-empty embeddings and persist a stable JSON summary to disk.",
+          "technical_explanation": "This step is the persistence boundary: it consumes embedded_issues from the Cohere step and makes no external API call. The code validates each record, converts every field through .get with defaults, computes embedding_dimensions from the vector length and aggregates counts with collections.Counter. It also computes pairwise cosine similarity only for records whose embedding list is non-empty and whose vector norms are greater than zero, avoiding division by zero for empty vectors or dimension mismatches. The final summary is written to output/summary.json with json.dump, indent and sort_keys so repeated runs produce deterministic output; edge cases include an empty record list, missing embeddings, duplicate identifiers and records with zero-length vectors.",
+          "code_snippet": "import json\nimport math\nimport os\nfrom collections import Counter\n\nOUTPUT_DIR = os.environ.get('OUTPUT_DIR', 'output')\nSUMMARY_PATH = os.path.join(OUTPUT_DIR, 'summary.json')\n\ndef _cosine_similarity(left, right):\n    if not left or not right or len(left) != len(right):\n        return 0.0\n    dot = 0.0\n    left_norm = 0.0\n    right_norm = 0.0\n    for a, b in zip(left, right):\n        dot += a * b\n        left_norm += a * a\n        right_norm += b * b\n    if left_norm <= 0.0 or right_norm <= 0.0:\n        return 0.0\n    return dot / (math.sqrt(left_norm) * math.sqrt(right_norm))\n\ndef _top_similar_pairs(records, limit=5):\n    candidates = [record for record in records if record.get('embedding')]\n    pairs = []\n    for i in range(len(candidates)):\n        for j in range(i + 1, len(candidates)):\n            score = _cosine_similarity(candidates[i].get('embedding', []), candidates[j].get('embedding', []))\n            pairs.append({\n                'left': candidates[i].get('identifier', ''),\n                'right': candidates[j].get('identifier', ''),\n                'score': round(score, 6),\n            })\n    pairs.sort(key=lambda item: item.get('score', 0.0), reverse=True)\n    return pairs[:limit]\n\ndef build_and_persist_summary(records):\n    validated = []\n    for record in records:\n        if not isinstance(record, dict):\n            continue\n        embedding = record.get('embedding', []) or []\n        validated.append({\n            'id': str(record.get('id', '')),\n            'identifier': str(record.get('identifier', '')),\n            'title': str(record.get('title', '')),\n            'state': str(record.get('state', 'Unknown')),\n            'team_key': str(record.get('team_key', '')),\n            'embedding_dimensions': len(embedding),\n        })\n    state_counts = Counter(item.get('state', 'Unknown') for item in validated)\n    team_counts = Counter(item.get('team_key', '') for item in validated)\n    summary = {\n        'generated_at': '2026-11-19T15:24:00Z',\n        'total_issues': len(validated),\n        'state_counts': dict(state_counts),\n        'team_counts': dict(team_counts),\n        'issues': validated,\n        'top_similar_pairs': _top_similar_pairs(records, limit=5),\n    }\n    os.makedirs(OUTPUT_DIR, exist_ok=True)\n    with open(SUMMARY_PATH, 'w', encoding='utf-8') as handle:\n        json.dump(summary, handle, indent=2, sort_keys=True)\n    print(json.dumps({'summary_path': SUMMARY_PATH, 'total_issues': summary.get('total_issues', 0)}))\n    return summary\n\nsummary = build_and_persist_summary(embedded_issues)",
+          "mock_response": {
+            "generated_at": "2026-11-19T15:24:00Z",
+            "total_issues": 2,
+            "state_counts": {
+              "In Progress": 1,
+              "Todo": 1
+            },
+            "team_counts": {
+              "ENG": 2
+            },
+            "issues": [
+              {
+                "id": "a1b2c3d4-0001",
+                "identifier": "ENG-101",
+                "title": "Add retry logic to billing sync",
+                "state": "In Progress",
+                "team_key": "ENG",
+                "embedding_dimensions": 3
+              },
+              {
+                "id": "a1b2c3d4-0002",
+                "identifier": "ENG-102",
+                "title": "Document embedding pipeline",
+                "state": "Todo",
+                "team_key": "ENG",
+                "embedding_dimensions": 3
+              }
+            ],
+            "top_similar_pairs": [
+              {
+                "left": "ENG-101",
+                "right": "ENG-102",
+                "score": 0.998412
+              }
+            ]
+          },
+          "actions": [
+            "Validate every record and compute embedding_dimensions from the stored vector length.",
+            "Aggregate issue counts by state and team using collections.Counter.",
+            "Compute cosine similarity for every pair of non-empty embeddings and keep the top five.",
+            "Write output/summary.json with json.dump and a stable sort order."
+          ],
+          "commands": [
+            {
+              "label": "Set output directory",
+              "language": "bash",
+              "code": "export OUTPUT_DIR='output'"
+            },
+            {
+              "label": "Run the assembled pipeline",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "OUTPUT_DIR",
+              "value": "output",
+              "description": "Directory where the final summary is persisted."
+            },
+            {
+              "key": "SUMMARY_PATH",
+              "value": "output/summary.json",
+              "description": "Concrete path of the persisted operational summary."
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "output/summary.json exists and is valid JSON.",
+            "state_counts and team_counts are present.",
+            "top_similar_pairs contains at most five entries."
+          ],
+          "expectedResult": "A validated operational summary is written to output/summary.json and returned as the module-level variable summary.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A Linear GraphQL API account with API credentials (documentation: developers.linear.app)",
+        "A Cohere Embed API account with API credentials (documentation: docs.cohere.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A Linear GraphQL API account with API credentials (documentation: developers.linear.app)",
+        "A Cohere Embed API account with API credentials (documentation: docs.cohere.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "GraphQL Cursor Pagination",
+          "definition": "A pagination technique where the API returns an opaque end cursor that the next request submits as the after argument instead of a numeric offset."
+        },
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "An authentication scheme where the client sends an Authorization header whose value is the literal word Bearer followed by a space and the secret token."
+        },
+        {
+          "term": "Cosine Similarity",
+          "definition": "A similarity measure that divides the dot product of two vectors by the product of their Euclidean norms, yielding a value between -1 and 1."
+        },
+        {
+          "term": "Exponential Backoff",
+          "definition": "A retry strategy that waits an exponentially increasing delay between attempts, commonly used after HTTP 429 or 5xx responses."
+        },
+        {
+          "term": "Vector Embedding Truncation",
+          "definition": "A preprocessing rule that shortens input text to a maximum token or character budget before the embedding model receives it."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Linear returns HTTP 401 or an errors array with authentication failures.",
+          "solution": "Confirm LINEAR_API_KEY is exported, contains no whitespace, and is sent in the Authorization header without the Bearer prefix for a personal API key."
+        },
+        {
+          "problem": "Cohere returns HTTP 429 during embedding.",
+          "solution": "Reduce MAX_BATCH_SIZE to 32 or 16, keep the exponential backoff loop, and retry after the Retry-After header interval."
+        },
+        {
+          "problem": "summary.json contains issues with embedding_dimensions equal to 0.",
+          "solution": "Verify COHERE_API_KEY is set and that the Linear query returned at least one issue; inspect mock_data.json only for offline runs."
+        },
+        {
+          "problem": "The GraphQL query fails with a Field undefined error.",
+          "solution": "Compare the query fields against the current Linear GraphQL schema and remove or rename fields that the workspace does not expose."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Linear GraphQL API",
+          "url": "https://developers.linear.app/docs/graphql/working-with-the-graphql-api"
+        },
+        {
+          "label": "Cohere Embed API",
+          "url": "https://docs.cohere.com/reference/embed"
+        }
+      ],
+      "price": 9.99
+    }
+  },
+  {
+    "slug": "discord-bot-plaid-financial-data-automation-pipeline",
+    "title": "Discord Bot + Plaid Financial Data Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects Discord Bot with Plaid Financial Data and The Discord API lets bots send messages, manage servers and react to events – ideal for community automation and alerts. Access consumer financial data from various institutions securely and easily.",
+    "category": "Community & Messaging",
+    "tags": [
+      "discord",
+      "bots",
+      "community",
+      "messaging",
+      "financial-data",
+      "api",
+      "banking"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-19 15:40 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["Discord Bot API", "Plaid Financial Data API"],
+      "api_slugs": ["discord-bot-api", "plaid-financial-api"],
+      "alternative_slugs": ["slack-technologies-inc-alternatives"],
+      "useCase": "Community moderation, alerts and interactive bots. Then Used to integrate financial data into applications for budgeting, expense tracking, and more.",
+      "steps": [
+        {
+          "title": "Ingest source records from Discord Bot",
+          "description": "Authenticate as a Discord bot and fetch the most recent messages from a configured channel. Normalize each message into a flat record containing id, content, author and timestamp so downstream stages receive a predictable schema.",
+          "technical_explanation": "This step is the ingestion layer: it authenticates as a Discord bot and pulls the most recent messages from a configured channel so that downstream stages have a normalized list of community events. The contract is a GET request to https://discord.com/api/v10/channels/{channel.id}/messages with the Authorization header set to 'Bot <token>' and a query parameter limit=50; Discord responds with a JSON array of message objects containing id, content, author.username and timestamp. Edge cases include rate limiting (HTTP 429 with retry_after), empty arrays when a channel has no messages, and the need to coerce missing author objects into a safe default to avoid KeyError.",
+          "code_snippet": "import json\nimport os\nimport urllib.request\nimport urllib.parse\n\nDISCORD_API_BASE = \"https://discord.com/api/v10\"\nDISCORD_CHANNEL_ID = os.environ.get(\"DISCORD_CHANNEL_ID\", \"\")\nDISCORD_BOT_TOKEN = os.environ.get(\"DISCORD_BOT_TOKEN\", \"\")\n\ndef fetch_discord_messages():\n    # Build the concrete messages endpoint for the configured channel.\n    url = f\"{DISCORD_API_BASE}/channels/{DISCORD_CHANNEL_ID}/messages\"\n    # Request the most recent 50 messages to keep the payload small and deterministic.\n    query = urllib.parse.urlencode({\"limit\": 50})\n    request = urllib.request.Request(f\"{url}?{query}\", method=\"GET\")\n    # Discord requires the Bot token in the Authorization header with the \"Bot \" prefix.\n    request.add_header(\"Authorization\", f\"Bot {DISCORD_BOT_TOKEN}\")\n    request.add_header(\"User-Agent\", \"DiscordBotPlaidPipeline/1.0\")\n    with urllib.request.urlopen(request) as response:\n        payload = json.loads(response.read().decode(\"utf-8\"))\n    # The API returns a JSON array of message objects; normalize to a stable list.\n    messages = []\n    for item in payload:\n        record = {\n            \"id\": item.get(\"id\", \"\"),\n            \"content\": item.get(\"content\", \"\"),\n            \"author\": item.get(\"author\", {}).get(\"username\", \"unknown\"),\n            \"timestamp\": item.get(\"timestamp\", \"\"),\n        }\n        messages.append(record)\n    return messages\n\ndiscord_messages = fetch_discord_messages()",
+          "mock_response": "[{\"id\": \"123456789012345678\", \"content\": \"Welcome to the community!\", \"author\": {\"username\": \"alice\"}, \"timestamp\": \"2026-11-19T15:00:00.000000+00:00\"}, {\"id\": \"123456789012345679\", \"content\": \"Check out the new dashboard.\", \"author\": {\"username\": \"bob\"}, \"timestamp\": \"2026-11-19T15:05:00.000000+00:00\"}]",
+          "actions": [
+            "Set DISCORD_BOT_TOKEN and DISCORD_CHANNEL_ID as environment variables before running the script.",
+            "Build the GET request to https://discord.com/api/v10/channels/{channel.id}/messages with limit=50.",
+            "Add the Authorization header using the Bot token prefix.",
+            "Parse the JSON array and normalize each message to id, content, author and timestamp."
+          ],
+          "commands": [
+            {
+              "label": "Export Discord credentials",
+              "language": "bash",
+              "code": "export DISCORD_BOT_TOKEN='<your-bot-token>'\nexport DISCORD_CHANNEL_ID='<your-channel-id>'"
+            },
+            {
+              "label": "Run ingestion step",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "DISCORD_BOT_TOKEN",
+              "value": "<your-bot-token>",
+              "description": "Bot token used to authenticate against the Discord API."
+            },
+            {
+              "key": "DISCORD_CHANNEL_ID",
+              "value": "<your-channel-id>",
+              "description": "ID of the Discord channel from which messages are fetched."
+            }
+          ],
+          "tools": ["Discord Bot API"],
+          "checklist": [
+            "The script exits with a non-zero code if DISCORD_BOT_TOKEN is missing.",
+            "The returned discord_messages list contains only dictionaries with id, content, author and timestamp keys.",
+            "A 429 response is surfaced as an exception with the retry_after value."
+          ],
+          "expectedResult": "A normalized list of recent Discord messages is available in the discord_messages variable.",
+          "links": [
+            {
+              "label": "Discord Bot API Documentation",
+              "url": "https://discord.com/developers/docs/reference"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with Plaid Financial Data",
+          "description": "Call Plaid's /accounts/get endpoint to retrieve all bank accounts linked to a given access token. Flatten each account into a record with account_id, name, type, subtype and numeric balances for later aggregation.",
+          "technical_explanation": "This step is the enrichment layer: it calls Plaid's /accounts/get endpoint to retrieve all bank accounts linked to a given access token, providing financial context that is later aggregated with Discord activity. The contract is a POST request to https://production.plaid.com/accounts/get with a JSON body containing client_id, secret and access_token; Plaid responds with an accounts array where each account has account_id, name, type, subtype and a balances object with current and available floats. Edge cases include invalid access tokens (HTTP 400 with error_code), empty accounts arrays for newly linked items, and the need to cast balance values to float because Plaid may return integers or nulls.",
+          "code_snippet": "import json\nimport os\nimport urllib.request\n\nPLAID_API_BASE = \"https://production.plaid.com\"\nPLAID_CLIENT_ID = os.environ.get(\"PLAID_CLIENT_ID\", \"\")\nPLAID_SECRET = os.environ.get(\"PLAID_SECRET\", \"\")\nPLAID_ACCESS_TOKEN = os.environ.get(\"PLAID_ACCESS_TOKEN\", \"\")\n\ndef fetch_plaid_accounts():\n    # The /accounts/get endpoint returns all accounts linked to the access token.\n    url = f\"{PLAID_API_BASE}/accounts/get\"\n    body = json.dumps({\n        \"client_id\": PLAID_CLIENT_ID,\n        \"secret\": PLAID_SECRET,\n        \"access_token\": PLAID_ACCESS_TOKEN,\n    }).encode(\"utf-8\")\n    request = urllib.request.Request(url, data=body, method=\"POST\")\n    request.add_header(\"Content-Type\", \"application/json\")\n    with urllib.request.urlopen(request) as response:\n        payload = json.loads(response.read().decode(\"utf-8\"))\n    # Plaid returns an \"accounts\" array; normalize each account to a flat record.\n    accounts = []\n    for item in payload.get(\"accounts\", []):\n        balances = item.get(\"balances\", {})\n        current = balances.get(\"current\") or 0.0\n        available = balances.get(\"available\") or 0.0\n        record = {\n            \"account_id\": item.get(\"account_id\", \"\"),\n            \"name\": item.get(\"name\", \"\"),\n            \"type\": item.get(\"type\", \"\"),\n            \"subtype\": item.get(\"subtype\", \"\"),\n            \"current_balance\": float(current),\n            \"available_balance\": float(available),\n        }\n        accounts.append(record)\n    return accounts\n\nplaid_accounts = fetch_plaid_accounts()",
+          "mock_response": "{\"accounts\": [{\"account_id\": \"acc_123\", \"name\": \"Plaid Checking\", \"type\": \"depository\", \"subtype\": \"checking\", \"balances\": {\"current\": 1250.50, \"available\": 1200.00}}, {\"account_id\": \"acc_456\", \"name\": \"Plaid Savings\", \"type\": \"depository\", \"subtype\": \"savings\", \"balances\": {\"current\": 5400.00, \"available\": 5400.00}}]}",
+          "actions": [
+            "Set PLAID_CLIENT_ID, PLAID_SECRET and PLAID_ACCESS_TOKEN as environment variables.",
+            "POST a JSON body to https://production.plaid.com/accounts/get with the three credentials.",
+            "Parse the accounts array and flatten balances.current and balances.available to floats.",
+            "Return a list of account records for the aggregation step."
+          ],
+          "commands": [
+            {
+              "label": "Export Plaid credentials",
+              "language": "bash",
+              "code": "export PLAID_CLIENT_ID='<your-client-id>'\nexport PLAID_SECRET='<your-secret>'\nexport PLAID_ACCESS_TOKEN='<your-access-token>'"
+            }
+          ],
+          "config": [
+            {
+              "key": "PLAID_CLIENT_ID",
+              "value": "<your-client-id>",
+              "description": "Plaid client identifier used in the request body."
+            },
+            {
+              "key": "PLAID_SECRET",
+              "value": "<your-secret>",
+              "description": "Plaid secret key used in the request body."
+            },
+            {
+              "key": "PLAID_ACCESS_TOKEN",
+              "value": "<your-access-token>",
+              "description": "Access token for the linked Plaid item."
+            }
+          ],
+          "tools": ["Plaid Financial Data API"],
+          "checklist": [
+            "The Plaid request includes Content-Type: application/json.",
+            "plaid_accounts contains at least one record when the access token is valid.",
+            "Balance fields are floats, not strings or nulls."
+          ],
+          "expectedResult": "A normalized list of Plaid accounts is available in the plaid_accounts variable.",
+          "links": [
+            {
+              "label": "Plaid Financial Data API Documentation",
+              "url": "https://plaid.com/docs/"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Consume the normalized discord_messages and plaid_accounts lists, validate their shapes, and compute a single operational summary. Persist the summary to summary.json for reporting or alerting.",
+          "technical_explanation": "This step is the aggregation and persistence layer: it consumes the normalized discord_messages and plaid_accounts lists, validates their shapes, and writes a single operational summary to disk for reporting or alerting. There is no external API call; instead the code uses collections.Counter to count messages per author and sums account balances, then serializes the result with json.dump. Edge cases include empty input lists (the summary still produces zeros), non-numeric balance values (guarded by float conversion with defaults), and ensuring the output directory exists before writing.",
+          "code_snippet": "import json\nfrom collections import Counter\n\ndef aggregate_summary(messages, accounts):\n    # Count messages per author to surface the most active community members.\n    author_counts = Counter(msg.get(\"author\", \"unknown\") for msg in messages)\n    # Sum the current balances across all linked accounts for a portfolio total.\n    total_balance = sum(acc.get(\"current_balance\", 0.0) for acc in accounts)\n    # Build a deterministic summary dictionary with only JSON-serializable values.\n    summary = {\n        \"message_count\": len(messages),\n        \"unique_authors\": len(author_counts),\n        \"top_authors\": author_counts.most_common(5),\n        \"account_count\": len(accounts),\n        \"total_current_balance\": round(total_balance, 2),\n        \"account_types\": dict(Counter(acc.get(\"type\", \"unknown\") for acc in accounts)),\n    }\n    return summary\n\ndef persist_summary(summary, path=\"summary.json\"):\n    # Write the summary to disk so downstream systems can consume it.\n    with open(path, \"w\", encoding=\"utf-8\") as handle:\n        json.dump(summary, handle, indent=2, sort_keys=True)\n    return path\n\nsummary = aggregate_summary(discord_messages, plaid_accounts)\nsummary_path = persist_summary(summary)",
+          "mock_response": "{\"message_count\": 2, \"unique_authors\": 2, \"top_authors\": [[\"alice\", 1], [\"bob\", 1]], \"account_count\": 2, \"total_current_balance\": 6650.5, \"account_types\": {\"depository\": 2}}",
+          "actions": [
+            "Import collections.Counter and compute author frequency from discord_messages.",
+            "Sum current_balance across plaid_accounts to produce total_current_balance.",
+            "Serialize the summary dictionary to summary.json with json.dump.",
+            "Validate that both input lists are present and contain dictionaries."
+          ],
+          "commands": [
+            {
+              "label": "Inspect summary",
+              "language": "bash",
+              "code": "cat summary.json"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUMMARY_PATH",
+              "value": "summary.json",
+              "description": "File path where the aggregated summary is written."
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "summary.json is created in the working directory.",
+            "message_count equals len(discord_messages).",
+            "total_current_balance is rounded to two decimal places."
+          ],
+          "expectedResult": "A validated operational summary is persisted to summary.json.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A Discord Bot API account with API credentials (documentation: discord.com)",
+        "A Plaid Financial Data API account with API credentials (documentation: plaid.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A Discord Bot API account with API credentials (documentation: discord.com)",
+        "A Plaid Financial Data API account with API credentials (documentation: plaid.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bot Token Authentication",
+          "definition": "A Discord authentication scheme where the bot token is sent in the Authorization header prefixed with 'Bot ' to authorize API calls."
+        },
+        {
+          "term": "Plaid Access Token",
+          "definition": "A per-item credential issued by Plaid after a user links an institution, used to fetch accounts and transactions for that item."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A retry strategy that waits for the server-provided retry_after interval after receiving HTTP 429 to avoid overwhelming the API."
+        },
+        {
+          "term": "Counter-Based Frequency Analysis",
+          "definition": "Using collections.Counter to tally occurrences of a value (e.g., message authors) and return the most common entries efficiently."
+        },
+        {
+          "term": "Idempotent Persistence",
+          "definition": "Writing the same summary to a deterministic file path so repeated runs produce identical output without side effects."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Discord returns HTTP 401 Unauthorized.",
+          "solution": "Verify that DISCORD_BOT_TOKEN is set and that the Authorization header uses the 'Bot ' prefix exactly."
+        },
+        {
+          "problem": "Plaid returns HTTP 400 with error_code INVALID_ACCESS_TOKEN.",
+          "solution": "Regenerate the access token in the Plaid dashboard and update PLAID_ACCESS_TOKEN in the environment."
+        },
+        {
+          "problem": "summary.json is empty or missing.",
+          "solution": "Ensure the script has write permissions in the working directory and that both discord_messages and plaid_accounts are non-empty lists."
+        },
+        {
+          "problem": "TypeError when summing balances.",
+          "solution": "Confirm that Plaid returns numeric balances; the code casts with float(balances.get('current') or 0.0) to handle nulls."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Discord Bot API",
+          "url": "https://discord.com/developers/docs/reference"
+        },
+        {
+          "label": "Plaid Financial Data API",
+          "url": "https://plaid.com/docs/"
+        }
+      ],
+      "price": 9.99
+    }
   }
 ]
