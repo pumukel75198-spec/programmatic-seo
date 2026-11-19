@@ -40,7 +40,11 @@
       "convertkit-api",
       "jira-rest-api",
       "twitch-analytics-api",
-      "sentry-performance-api"
+      "sentry-performance-api",
+      "trello-api",
+      "miro-rest-api",
+      "intercom-api",
+      "api-ai-image-generator"
     ],
     "workflows": [
       "seo-keyword-tracking-dashboard",
@@ -74,26 +78,30 @@
       "jira-rest-notion-api-for-automation-automation-pipeline",
       "jira-rest-twilio-conversations-automation-pipeline",
       "salesforce-rest-weatherapi-automation-pipeline",
-      "weatherapi-launchdarkly-feature-automation-pipeline"
+      "weatherapi-launchdarkly-feature-automation-pipeline",
+      "posthog-analytics-amazon-transcribe-automation-pipeline",
+      "posthog-analytics-airtable-automation-pipeline",
+      "posthog-analytics-contentful-content-management-system-automation-pipeline",
+      "miro-rest-slack-web-automation-pipeline"
     ]
   },
-  "lastSentAt": "2026-11-16 17:40:53",
+  "lastSentAt": "2026-11-17 15:49:47",
   "pendingCampaign": {
-    "id": "204399403128063179",
-    "createdAt": "2026-11-17T15:47:42.967Z",
+    "id": "204580335005992793",
+    "createdAt": "2026-11-19T15:43:32.661Z",
     "slugs": {
       "insights": [],
       "apis": [
-        "trello-api",
-        "miro-rest-api",
-        "intercom-api",
-        "api-ai-image-generator"
+        "twitch-api-kraken",
+        "notion-forms-api",
+        "github-copilot-api",
+        "notion-automation-api"
       ],
       "workflows": [
-        "posthog-analytics-amazon-transcribe-automation-pipeline",
-        "posthog-analytics-airtable-automation-pipeline",
-        "posthog-analytics-contentful-content-management-system-automation-pipeline",
-        "miro-rest-slack-web-automation-pipeline"
+        "discord-bot-plaid-financial-data-automation-pipeline",
+        "linear-graphql-cohere-embed-automation-pipeline",
+        "twelve-data-cohere-embed-automation-pipeline",
+        "intercom-airtable-automation-pipeline"
       ]
     }
   }
