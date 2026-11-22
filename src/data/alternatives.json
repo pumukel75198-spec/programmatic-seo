@@ -8750,5 +8750,471 @@
         "Threaded conversations and notifications"
       ]
     }
+  },
+  {
+    "slug": "weaviate-alternatives",
+    "title": "Weaviate Alternatives",
+    "description": "This page compares Weaviate with alternative vector databases and search engines for building AI applications. It covers open-source and managed options, highlighting deployment models, scaling characteristics, and developer experience. Use it to shortlist a vector database that fits your latency, cost, and operational needs.",
+    "category": "Vector Database",
+    "tags": ["vector database", "semantic search", "AI infrastructure"],
+    "details": {
+      "original": "Weaviate",
+      "alternatives": [
+        {
+          "name": "Pinecone",
+          "description": "A fully managed vector database designed for low-latency similarity search at production scale.",
+          "pros": [
+            "Fully managed with minimal operational overhead",
+            "Strong performance and scaling for production workloads",
+            "Good SDKs and ecosystem integrations"
+          ],
+          "cons": [
+            "Proprietary and closed source",
+            "Costs can rise significantly at large scale",
+            "Limited self-hosting options"
+          ],
+          "bestFor": "Teams that want a managed vector database without operating infrastructure.",
+          "url": "https://www.pinecone.io/?ref=flowmatrix",
+          "recommended": true
+        },
+        {
+          "name": "Qdrant",
+          "description": "An open-source vector database written in Rust with a focus on filtering, payload support, and production search.",
+          "pros": [
+            "Open-source with self-hosting and managed cloud options",
+            "Strong metadata filtering and payload capabilities",
+            "Efficient Rust-based engine"
+          ],
+          "cons": [
+            "Smaller ecosystem than some competitors",
+            "Managed cloud availability may vary by region",
+            "Advanced tuning can require operational expertise"
+          ],
+          "bestFor": "Developers who need open-source vector search with rich filtering and a managed option.",
+          "url": "https://qdrant.tech/?ref=flowmatrix"
+        },
+        {
+          "name": "Milvus",
+          "description": "An open-source vector database built for large-scale similarity search and AI applications.",
+          "pros": [
+            "Highly scalable distributed architecture",
+            "Broad index and metric support",
+            "Large open-source community and ecosystem"
+          ],
+          "cons": [
+            "Complex to deploy and operate at scale",
+            "Resource-heavy for small projects",
+            "Managed experience depends on Zilliz Cloud"
+          ],
+          "bestFor": "Organizations building large-scale vector search systems with dedicated infrastructure teams.",
+          "url": "https://milvus.io/?ref=flowmatrix"
+        },
+        {
+          "name": "Chroma",
+          "description": "An open-source embedding database focused on developer-friendly local and server-based vector search.",
+          "pros": [
+            "Simple developer experience and quick setup",
+            "Good fit for prototypes and small-to-medium applications",
+            "Open-source with local and hosted options"
+          ],
+          "cons": [
+            "Less mature for very large-scale distributed workloads",
+            "Fewer enterprise features than established databases",
+            "Hosted offering and limits may evolve"
+          ],
+          "bestFor": "Developers prototyping RAG and semantic search applications who want a lightweight vector store.",
+          "url": "https://www.trychroma.com/?ref=flowmatrix"
+        },
+        {
+          "name": "pgvector",
+          "description": "An open-source PostgreSQL extension for storing and searching vector embeddings directly in Postgres.",
+          "pros": [
+            "Uses existing PostgreSQL infrastructure and SQL",
+            "Open-source and avoids a separate database for many use cases",
+            "Supports common vector distance operators and indexing"
+          ],
+          "cons": [
+            "Performance and scaling depend on Postgres tuning",
+            "Fewer native vector-database features than specialized systems",
+            "Large-scale distributed vector search may require additional architecture"
+          ],
+          "bestFor": "Teams already using PostgreSQL that want vector search without adding a separate database.",
+          "url": "https://github.com/pgvector/pgvector?ref=flowmatrix"
+        }
+      ],
+      "bestFor": "Teams evaluating Weaviate alternatives for semantic search, RAG, or recommendation systems who need open-source or managed vector database options.",
+      "pricing": "Free open-source/self-hosted options; managed cloud plans typically range from about $25/month to $1,000+/month, with enterprise pricing custom.",
+      "features": [
+        "Hybrid vector and keyword search",
+        "Metadata filtering and multi-tenancy",
+        "Managed cloud and self-hosted deployment",
+        "Horizontal scaling and replication",
+        "REST, GraphQL, and language SDK support"
+      ]
+    }
+  },
+  {
+    "slug": "groq-alternatives",
+    "title": "Groq Alternatives",
+    "description": "This page compares managed AI inference platforms and model-serving services that can serve as alternatives to Groq. It focuses on low-latency LLM APIs, supported model catalogs, pricing models, and production deployment trade-offs.",
+    "category": "AI & Inference",
+    "tags": [
+      "AI inference",
+      "LLM APIs",
+      "Model serving",
+      "GPU cloud",
+      "Low-latency AI"
+    ],
+    "details": {
+      "original": "Groq",
+      "alternatives": [
+        {
+          "name": "Cerebras Inference",
+          "description": "Cerebras Inference provides ultra-fast LLM inference on wafer-scale hardware through a managed API and cloud platform.",
+          "pros": [
+            "Very high token throughput and low latency for supported models",
+            "Simple OpenAI-compatible API for common LLM workloads",
+            "Managed cloud service with no infrastructure setup"
+          ],
+          "cons": [
+            "Model catalog is narrower than broad GPU cloud platforms",
+            "Availability and capacity can vary by plan or region",
+            "Sustained high-volume usage may be costly compared with some alternatives"
+          ],
+          "bestFor": "Developers needing extremely fast inference for supported open and proprietary models.",
+          "url": "https://www.cerebras.ai/?ref=flowmatrix",
+          "recommended": true
+        },
+        {
+          "name": "Together AI",
+          "description": "Together AI offers managed inference, fine-tuning, and GPU clusters for open-source and custom models.",
+          "pros": [
+            "Broad model catalog including many open-source LLMs",
+            "OpenAI-compatible APIs and dedicated endpoints",
+            "GPU cluster and fine-tuning options in one platform"
+          ],
+          "cons": [
+            "Performance varies by model and endpoint type",
+            "Costs can rise with dedicated capacity and high volume",
+            "Some advanced features require platform-specific setup"
+          ],
+          "bestFor": "Teams that want a wide model catalog and flexible managed inference plus training infrastructure.",
+          "url": "https://www.together.ai/?ref=flowmatrix"
+        },
+        {
+          "name": "Fireworks AI",
+          "description": "Fireworks AI is a managed inference platform focused on fast, production-grade serving for open models and custom fine-tunes.",
+          "pros": [
+            "Low-latency serving optimized for production workloads",
+            "Supports fine-tuned and custom model deployment",
+            "OpenAI-compatible API and function-calling support"
+          ],
+          "cons": [
+            "Less suitable for teams needing raw GPU infrastructure control",
+            "Model availability depends on supported architectures",
+            "Pricing can be complex across serverless and dedicated modes"
+          ],
+          "bestFor": "Product teams deploying open-source or fine-tuned LLMs with production latency requirements.",
+          "url": "https://fireworks.ai/?ref=flowmatrix"
+        },
+        {
+          "name": "SambaNova Cloud",
+          "description": "SambaNova Cloud provides fast inference for leading open-source models on SambaNova's dataflow architecture.",
+          "pros": [
+            "High-speed inference for supported open models",
+            "Simple API access with managed infrastructure",
+            "Focus on enterprise deployment and data control"
+          ],
+          "cons": [
+            "Smaller model selection than general GPU clouds",
+            "Fewer self-service customization options than some competitors",
+            "Larger deployments may require sales contact for pricing and capacity"
+          ],
+          "bestFor": "Enterprises seeking fast managed inference on a specialized AI hardware platform.",
+          "url": "https://sambanova.ai/?ref=flowmatrix"
+        }
+      ],
+      "bestFor": "Teams evaluating low-latency LLM inference APIs and managed model-serving platforms as alternatives to Groq.",
+      "pricing": "Free tiers or credits are commonly available; paid usage typically ranges from about $0.05 to $6.00 per million tokens depending on model and provider, with dedicated capacity priced separately.",
+      "features": [
+        "Side-by-side comparison of managed inference providers",
+        "Pricing and latency trade-off notes for LLM workloads",
+        "Model catalog and API compatibility summaries",
+        "Deployment, scaling, and data-control considerations"
+      ]
+    }
+  },
+  {
+    "slug": "mongodb-alternatives",
+    "title": "MongoDB Alternatives",
+    "description": "This page compares MongoDB alternatives for document, key-value, wide-column, and relational workloads. It covers open-source and managed databases with different scaling, query, and pricing tradeoffs. Use it to shortlist databases based on data model, operational needs, and cloud strategy.",
+    "category": "Databases",
+    "tags": ["NoSQL", "Document Database", "Database Alternatives"],
+    "details": {
+      "original": "MongoDB",
+      "alternatives": [
+        {
+          "name": "PostgreSQL",
+          "description": "Open-source relational database with strong JSONB support, ACID compliance, and a mature extension ecosystem.",
+          "pros": [
+            "Mature ecosystem with extensive tooling and community support",
+            "Strong SQL capabilities combined with flexible JSONB document storage",
+            "Reliable ACID transactions and data integrity"
+          ],
+          "cons": [
+            "Not a native document database like MongoDB",
+            "Horizontal sharding is less built-in and often requires extensions or external tooling"
+          ],
+          "bestFor": "Teams that need relational integrity plus JSON document flexibility in a single database.",
+          "url": "https://www.postgresql.org/?ref=flowmatrix",
+          "recommended": true
+        },
+        {
+          "name": "Couchbase",
+          "description": "Distributed NoSQL document database with key-value access, SQL++ querying, caching, and mobile sync capabilities.",
+          "pros": [
+            "High performance and built-in caching for demanding workloads",
+            "SQL-like query language and multi-model support",
+            "Strong mobile and edge synchronization options"
+          ],
+          "cons": [
+            "Enterprise features and commercial licensing can be costly",
+            "Operational complexity is higher than simpler document databases"
+          ],
+          "bestFor": "Enterprises needing a scalable document database with caching and mobile synchronization.",
+          "url": "https://www.couchbase.com/?ref=flowmatrix"
+        },
+        {
+          "name": "Apache Cassandra",
+          "description": "Distributed wide-column NoSQL database designed for high availability, linear scalability, and multi-datacenter replication.",
+          "pros": [
+            "Excellent write throughput and linear scalability",
+            "Multi-datacenter replication with no single point of failure",
+            "Proven for large-scale, always-on workloads"
+          ],
+          "cons": [
+            "Not document-oriented and lacks MongoDB-style ad hoc document querying",
+            "Operational complexity and tuning requirements are significant"
+          ],
+          "bestFor": "Large-scale write-heavy workloads that require multi-region availability and fault tolerance.",
+          "url": "https://cassandra.apache.org/?ref=flowmatrix"
+        },
+        {
+          "name": "Redis",
+          "description": "In-memory data store with RedisJSON and Redis Stack for caching, real-time workloads, and document-like JSON data.",
+          "pros": [
+            "Very low latency and high throughput for real-time applications",
+            "Rich data structures and optional JSON document support",
+            "Flexible managed and self-hosted deployment options"
+          ],
+          "cons": [
+            "Memory-bound workloads can become expensive at scale",
+            "Persistence and durability tradeoffs compared with disk-based databases"
+          ],
+          "bestFor": "Real-time caching, session stores, and low-latency JSON workloads rather than full document database replacement.",
+          "url": "https://redis.io/?ref=flowmatrix"
+        },
+        {
+          "name": "Amazon DynamoDB",
+          "description": "Fully managed key-value and document database on AWS with serverless scaling and predictable performance.",
+          "pros": [
+            "Fully managed with serverless scaling and minimal operations",
+            "Predictable performance at scale with integrated AWS security and monitoring",
+            "Strong fit for AWS-native applications and event-driven architectures"
+          ],
+          "cons": [
+            "Vendor lock-in to AWS and limited portability",
+            "Query flexibility is more constrained than MongoDB, and costs can spike with poor access patterns"
+          ],
+          "bestFor": "AWS-native applications that need a fully managed, serverless NoSQL database at scale.",
+          "url": "https://aws.amazon.com/dynamodb/?ref=flowmatrix"
+        }
+      ],
+      "bestFor": "Teams evaluating NoSQL or document databases that need scalable, flexible alternatives to MongoDB for cloud, on-premises, or hybrid deployments.",
+      "pricing": "Free (self-hosted/open source) to about $15–$1,000+/month for managed deployments, with enterprise contracts often higher.",
+      "features": [
+        "Document and JSON data model support",
+        "Horizontal scaling and replication",
+        "Managed cloud and self-hosted deployment options",
+        "ACID transactions and secondary indexes",
+        "Multi-region availability and backup"
+      ]
+    }
+  },
+  {
+    "slug": "clerk-alternatives",
+    "title": "Clerk Alternatives",
+    "description": "This page compares Clerk alternatives for authentication and identity management across SaaS, open-source, and cloud-native options. It covers pricing, key features, pros and cons, and best-fit use cases so teams can choose the right auth platform.",
+    "category": "Auth & Identity",
+    "tags": ["authentication", "identity management", "SSO"],
+    "details": {
+      "original": "Clerk",
+      "alternatives": [
+        {
+          "name": "Auth0",
+          "description": "A mature identity platform for adding authentication, authorization, and SSO to web and mobile apps.",
+          "pros": [
+            "Broad protocol support including OAuth 2.0, OIDC, and SAML",
+            "Extensive enterprise SSO and MFA capabilities",
+            "Large integration ecosystem and documentation"
+          ],
+          "cons": [
+            "Pricing can become complex and expensive at scale",
+            "Configuration surface can be overwhelming for small teams"
+          ],
+          "bestFor": "Teams needing enterprise-grade SSO and flexible identity workflows.",
+          "url": "https://auth0.com/pricing?ref=flowmatrix",
+          "recommended": true
+        },
+        {
+          "name": "Supabase Auth",
+          "description": "An open-source Firebase alternative that includes authentication tightly integrated with a Postgres database.",
+          "pros": [
+            "Generous free tier and simple usage-based pricing",
+            "Deep integration with Supabase database, storage, and row-level security",
+            "Open-source and self-hostable options"
+          ],
+          "cons": [
+            "Less specialized enterprise identity features than dedicated auth vendors",
+            "Advanced SSO and organization management may require more setup"
+          ],
+          "bestFor": "Developers building on Supabase or wanting auth close to their Postgres data.",
+          "url": "https://supabase.com/auth?ref=flowmatrix"
+        },
+        {
+          "name": "Firebase Authentication",
+          "description": "Google's managed authentication service for mobile and web apps with built-in identity providers and SDKs.",
+          "pros": [
+            "Easy setup with first-party SDKs for mobile and web",
+            "Strong support for social login, phone auth, and anonymous auth",
+            "Integrates with Firebase and Google Cloud services"
+          ],
+          "cons": [
+            "Limited customization for complex enterprise identity flows",
+            "Vendor lock-in and usage-based costs can grow with scale"
+          ],
+          "bestFor": "Mobile-first teams already using Firebase or Google Cloud.",
+          "url": "https://firebase.google.com/products/auth?ref=flowmatrix"
+        },
+        {
+          "name": "Keycloak",
+          "description": "An open-source identity and access management server for self-hosted authentication and SSO.",
+          "pros": [
+            "Free and open source with no per-user licensing fees",
+            "Supports OIDC, SAML, LDAP, and identity brokering",
+            "Highly customizable and self-hostable"
+          ],
+          "cons": [
+            "Requires operational expertise to deploy, upgrade, and secure",
+            "User interface and developer experience are less polished than SaaS options"
+          ],
+          "bestFor": "Organizations that need self-hosted, open-source IAM and have DevOps capacity.",
+          "url": "https://www.keycloak.org/?ref=flowmatrix"
+        },
+        {
+          "name": "WorkOS",
+          "description": "An enterprise-ready auth platform focused on SSO, directory sync, and AuthKit for B2B SaaS.",
+          "pros": [
+            "Strong enterprise features like SAML SSO and SCIM directory sync",
+            "AuthKit provides a modern hosted login experience",
+            "Designed for B2B SaaS with admin portals and organization management"
+          ],
+          "cons": [
+            "Less suited to simple consumer apps with basic login needs",
+            "Pricing and feature focus are oriented toward enterprise sales"
+          ],
+          "bestFor": "B2B SaaS teams that need enterprise SSO and directory sync quickly.",
+          "url": "https://workos.com/?ref=flowmatrix"
+        }
+      ],
+      "bestFor": "Teams evaluating Clerk alternatives for user authentication, enterprise SSO, or self-hosted identity management.",
+      "pricing": "Free to $25/user/month; enterprise plans are custom.",
+      "features": [
+        "Email/password and social login",
+        "Multi-factor authentication",
+        "Session management and user profiles",
+        "Role-based access control",
+        "SSO/SAML and enterprise connections"
+      ]
+    }
+  },
+  {
+    "slug": "webflow-alternatives",
+    "title": "Webflow Alternatives",
+    "description": "This page compares Webflow alternatives for visual website building, CMS-driven content, and SEO-friendly publishing. It covers no-code and low-code platforms with different pricing, hosting, and design flexibility. Use it to shortlist a replacement based on ease of use, budget, and content workflow.",
+    "category": "Content & SEO",
+    "tags": ["Website Builder", "No-Code", "CMS"],
+    "details": {
+      "original": "Webflow",
+      "alternatives": [
+        {
+          "name": "Framer",
+          "description": "Framer is a visual web design and publishing platform focused on responsive sites, animations, and CMS content.",
+          "pros": [
+            "Strong design and animation tools with fast publishing",
+            "Free plan and simple pricing for landing pages and marketing sites"
+          ],
+          "cons": [
+            "Less mature CMS and ecommerce than Webflow",
+            "Advanced SEO and content workflows can be limited for large sites"
+          ],
+          "bestFor": "Designers and startups building polished marketing sites and landing pages.",
+          "url": "https://www.framer.com/?ref=flowmatrix",
+          "recommended": true
+        },
+        {
+          "name": "Wix",
+          "description": "Wix is a hosted website builder with drag-and-drop editing, templates, apps, and built-in business features.",
+          "pros": [
+            "Large template library and beginner-friendly editor",
+            "Built-in hosting, forms, SEO tools, and app market"
+          ],
+          "cons": [
+            "Less precise design control than Webflow",
+            "Plan lock-in and limited code export"
+          ],
+          "bestFor": "Small businesses and non-technical users who need a complete hosted website.",
+          "url": "https://www.wix.com/?ref=flowmatrix"
+        },
+        {
+          "name": "Squarespace",
+          "description": "Squarespace is a hosted website builder known for polished templates, integrated CMS, and commerce features.",
+          "pros": [
+            "High-quality templates and strong visual consistency",
+            "Integrated blogging, commerce, scheduling, and SEO basics"
+          ],
+          "cons": [
+            "Less flexible layout control than Webflow",
+            "Limited third-party app ecosystem and code customization"
+          ],
+          "bestFor": "Creators and small businesses that prioritize design polish and all-in-one hosting.",
+          "url": "https://www.squarespace.com/?ref=flowmatrix"
+        },
+        {
+          "name": "Carrd",
+          "description": "Carrd is a lightweight no-code builder for simple one-page sites, profiles, and landing pages.",
+          "pros": [
+            "Very affordable and fast to launch",
+            "Simple editor with responsive templates and forms"
+          ],
+          "cons": [
+            "Not suitable for complex CMS or multi-page sites",
+            "Limited design and SEO capabilities compared with Webflow"
+          ],
+          "bestFor": "Solo creators and small projects needing simple landing pages.",
+          "url": "https://carrd.co/?ref=flowmatrix"
+        }
+      ],
+      "bestFor": "Teams and creators who want Webflow-style visual site building without Webflow's learning curve or pricing.",
+      "pricing": "Free to $49/month; paid website plans typically range from $5 to $49/month.",
+      "features": [
+        "Visual drag-and-drop page design",
+        "Built-in CMS collections and dynamic content",
+        "Responsive breakpoints and mobile editing",
+        "Hosting, SSL, and global CDN",
+        "SEO controls and clean URL management",
+        "Ecommerce and form integrations"
+      ]
+    }
   }
 ]

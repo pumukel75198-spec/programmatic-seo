@@ -26518,5 +26518,758 @@
       ],
       "price": 9.99
     }
+  },
+  {
+    "slug": "mistral-ai-weaviate-vector-automation-pipeline",
+    "title": "Mistral AI + Weaviate Vector Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects Mistral AI with Weaviate Vector and The Mistral AI API offers fast, efficient open-weight language models for chat, coding and retrieval tasks at competitive prices. Weaviate is an open-source vector database with a GraphQL API for semantic search, hybrid search and RAG at scale.",
+    "category": "AI & LLM",
+    "tags": [
+      "llm",
+      "open-weight",
+      "chat",
+      "efficiency",
+      "vector-database",
+      "semantic-search",
+      "rag",
+      "open-source"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-22 14:14 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["Mistral AI API", "Weaviate Vector API"],
+      "api_slugs": ["mistral-ai-api", "weaviate-vector-api"],
+      "alternative_slugs": [],
+      "useCase": "Cost-efficient chat, coding and RAG applications. Then Semantic search, RAG and recommendation systems.",
+      "steps": [
+        {
+          "title": "Ingest source records from Mistral AI",
+          "description": "Send a single deterministic chat completion request to the Mistral AI API that asks the model to return one structured knowledge record per source topic. The response is parsed, type-normalised and stored in the module-level variable records, which becomes the only input of the Weaviate stage.",
+          "technical_explanation": "Architecture role: this is the ingestion stage of the pipeline and the only place where unstructured knowledge enters the system; it produces the canonical record list that every later stage consumes. API contract: POST https://api.mistral.ai/v1/chat/completions with headers Authorization: Bearer <MISTRAL_API_KEY>, Content-Type: application/json and Accept: application/json; the JSON body carries model, temperature, response_format {\"type\": \"json_object\"} and a messages array with one system and one user message, and the response contains choices[0].message.content (a JSON string) plus a usage block with prompt_tokens and completion_tokens. Edge cases: HTTP 429 rate limits must be retried with backoff, an empty choices array must return an empty list instead of raising IndexError, the assistant content may be non-JSON so the parse is guarded, and every token counter is coerced with int() because the API may return them as numbers or strings.",
+          "code_snippet": "import json\nimport os\nimport urllib.error\nimport urllib.request\n\n# The base URL is a constant because only the resource path varies between calls.\nMISTRAL_BASE_URL = \"https://api.mistral.ai/v1\"\nMISTRAL_MODEL = os.environ.get(\"MISTRAL_MODEL\", \"mistral-small-latest\")\nSOURCE_TOPICS = [\n    \"Vector index refresh policy\",\n    \"Hybrid search weighting\",\n    \"Retrieval augmented generation caching\",\n]\n\n\ndef fetch_mistral_summaries(topics):\n    \"\"\"Ask Mistral for one structured knowledge record per source topic.\"\"\"\n    api_key = os.environ.get(\"MISTRAL_API_KEY\")\n    if not api_key:\n        raise RuntimeError(\"MISTRAL_API_KEY is not set\")\n    # The prompt pins the output shape so the parser never has to guess keys.\n    prompt = (\n        \"Return a JSON object with the key 'records' holding one object per topic. \"\n        \"Each object needs the keys 'topic', 'summary' (max 40 words) and 'tags' (list of 2 strings). \"\n        \"Topics: \" + \"; \".join(topics)\n    )\n    payload = {\n        \"model\": MISTRAL_MODEL,\n        \"temperature\": 0,\n        \"response_format\": {\"type\": \"json_object\"},\n        \"messages\": [\n            {\"role\": \"system\", \"content\": \"You are a technical writer that answers only with valid JSON.\"},\n            {\"role\": \"user\", \"content\": prompt},\n        ],\n    }\n    # The body must be bytes, so the dict is serialised and encoded once.\n    data = json.dumps(payload).encode(\"utf-8\")\n    request = urllib.request.Request(\n        MISTRAL_BASE_URL + \"/chat/completions\",\n        data=data,\n        headers={\n            \"Authorization\": \"Bearer \" + api_key,\n            \"Content-Type\": \"application/json\",\n            \"Accept\": \"application/json\",\n        },\n        method=\"POST\",\n    )\n    try:\n        with urllib.request.urlopen(request, timeout=60) as response:\n            body = json.loads(response.read().decode(\"utf-8\"))\n    except urllib.error.HTTPError as error:\n        # The error body carries the reason, so it is surfaced instead of swallowed.\n        detail = error.read().decode(\"utf-8\", \"replace\")\n        raise RuntimeError(\"Mistral HTTP \" + str(error.code) + \": \" + detail) from error\n    choices = body.get(\"choices\", [])\n    if not choices:\n        return []\n    content = choices[0].get(\"message\", {}).get(\"content\", \"{}\")\n    try:\n        parsed = json.loads(content)\n    except json.JSONDecodeError as error:\n        raise RuntimeError(\"Mistral returned non-JSON content\") from error\n    usage = body.get(\"usage\", {})\n    prompt_tokens = int(usage.get(\"prompt_tokens\", 0))\n    completion_tokens = int(usage.get(\"completion_tokens\", 0))\n    records = []\n    for item in parsed.get(\"records\", []):\n        # Every field is coerced defensively so downstream stages get stable types.\n        record = {\n            \"topic\": str(item.get(\"topic\", \"untitled\")),\n            \"summary\": str(item.get(\"summary\", \"\")).strip(),\n            \"tags\": [str(tag) for tag in item.get(\"tags\", [])],\n            \"prompt_tokens\": prompt_tokens,\n            \"completion_tokens\": completion_tokens,\n        }\n        records.append(record)\n    return records\n\n\nrecords = fetch_mistral_summaries(SOURCE_TOPICS)\nprint(\"Mistral records:\", len(records))",
+          "mock_response": "{\"id\": \"cmpl-7d1f9a\", \"object\": \"chat.completion\", \"model\": \"mistral-small-latest\", \"usage\": {\"prompt_tokens\": 96, \"completion_tokens\": 142, \"total_tokens\": 238}, \"choices\": [{\"index\": 0, \"finish_reason\": \"stop\", \"message\": {\"role\": \"assistant\", \"content\": \"{\\\"records\\\": [{\\\"topic\\\": \\\"Vector index refresh policy\\\", \\\"summary\\\": \\\"Rebuild the HNSW graph nightly and keep delta merges below five percent of the corpus.\\\", \\\"tags\\\": [\\\"indexing\\\", \\\"operations\\\"]}, {\\\"topic\\\": \\\"Hybrid search weighting\\\", \\\"summary\\\": \\\"Blend BM25 and vector scores with alpha 0.7 for keyword-heavy support queries.\\\", \\\"tags\\\": [\\\"search\\\", \\\"ranking\\\"]}]}\"}}]}",
+          "actions": [
+            "Build the POST request against https://api.mistral.ai/v1/chat/completions with the Bearer authorization header and a JSON content type.",
+            "Pin temperature to 0 and request response_format json_object so the assistant content is machine-parseable.",
+            "Parse choices[0].message.content, coerce every field with str() or int(), and append one normalised record per topic.",
+            "Read prompt_tokens and completion_tokens from the usage block and attach them to every record for later cost accounting."
+          ],
+          "commands": [
+            {
+              "label": "Export the Mistral credential",
+              "language": "bash",
+              "code": "export MISTRAL_API_KEY=\"<paste-mistral-api-key>\""
+            },
+            {
+              "label": "Run the ingestion stage",
+              "language": "bash",
+              "code": "python3 workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "MISTRAL_API_KEY",
+              "value": "<mistral-api-key>",
+              "description": "Bearer credential read from the environment for every Mistral request"
+            },
+            {
+              "key": "MISTRAL_MODEL",
+              "value": "mistral-small-latest",
+              "description": "Model identifier sent in the request body"
+            },
+            {
+              "key": "SOURCE_TOPICS",
+              "value": "Vector index refresh policy; Hybrid search weighting; Retrieval augmented generation caching",
+              "description": "Topic list embedded in the user prompt that drives the generated records"
+            }
+          ],
+          "tools": ["Mistral AI API"],
+          "checklist": [
+            "The response contains a choices array with a non-empty message.content string.",
+            "records is a non-empty list where every element has topic, summary, tags, prompt_tokens and completion_tokens.",
+            "No KeyError is raised when the usage block or the records key is missing."
+          ],
+          "expectedResult": "A normalised list of Mistral-generated knowledge records is held in the module-level variable records.",
+          "links": [
+            {
+              "label": "Mistral AI API Documentation",
+              "url": "https://docs.mistral.ai/api/"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with Weaviate Vector",
+          "description": "Write every Mistral record into Weaviate as a typed object so it becomes searchable through the vector index. The stage consumes the records variable from step 1, posts one object per record to the objects endpoint and returns the server-assigned identifiers in stored_objects.",
+          "technical_explanation": "Architecture role: this is the persistence and enrichment stage; it converts the in-memory Mistral records into durable Weaviate objects whose ids and vectors can later be queried by semantic or hybrid search. API contract: POST https://weaviate.io/v1/objects with headers Authorization: Bearer <WEAVIATE_API_KEY>, Content-Type: application/json and Accept: application/json; the body is {\"class\": \"MistralChunk\", \"properties\": {...}} and the response echoes id, class, creationTimeUnix, properties and vector. Edge cases: a missing class returns HTTP 422, a bad key returns 401, an empty records list must skip the loop without error, and the vector array may be absent when vectorisation is delegated to a module, so its length is read with a defensive default.",
+          "code_snippet": "import json\nimport os\nimport urllib.error\nimport urllib.request\n\n# The base URL is a constant; only the documented resource path is appended.\nWEAVIATE_BASE_URL = \"https://weaviate.io/v1\"\nWEAVIATE_CLASS = os.environ.get(\"WEAVIATE_CLASS\", \"MistralChunk\")\n\n\ndef index_records_in_weaviate(records):\n    \"\"\"Persist every Mistral record as a Weaviate object and keep the returned ids.\"\"\"\n    api_key = os.environ.get(\"WEAVIATE_API_KEY\")\n    if not api_key:\n        raise RuntimeError(\"WEAVIATE_API_KEY is not set\")\n    stored_objects = []\n    for record in records:\n        # Property names are camelCase because the Weaviate schema is defined that way.\n        payload = {\n            \"class\": WEAVIATE_CLASS,\n            \"properties\": {\n                \"topic\": record.get(\"topic\", \"untitled\"),\n                \"summary\": record.get(\"summary\", \"\"),\n                \"tags\": record.get(\"tags\", []),\n                \"promptTokens\": int(record.get(\"prompt_tokens\", 0)),\n                \"completionTokens\": int(record.get(\"completion_tokens\", 0)),\n            },\n        }\n        request = urllib.request.Request(\n            WEAVIATE_BASE_URL + \"/objects\",\n            data=json.dumps(payload).encode(\"utf-8\"),\n            headers={\n                \"Authorization\": \"Bearer \" + api_key,\n                \"Content-Type\": \"application/json\",\n                \"Accept\": \"application/json\",\n            },\n            method=\"POST\",\n        )\n        try:\n            with urllib.request.urlopen(request, timeout=60) as response:\n                body = json.loads(response.read().decode(\"utf-8\"))\n        except urllib.error.HTTPError as error:\n            # The Weaviate error payload names the offending property, so it is re-raised verbatim.\n            detail = error.read().decode(\"utf-8\", \"replace\")\n            raise RuntimeError(\"Weaviate HTTP \" + str(error.code) + \": \" + detail) from error\n        vector = body.get(\"vector\", [])\n        if not isinstance(vector, list):\n            vector = []\n        stored = {\n            \"id\": str(body.get(\"id\", \"\")),\n            \"class\": str(body.get(\"class\", WEAVIATE_CLASS)),\n            \"topic\": record.get(\"topic\", \"untitled\"),\n            \"creation_time\": str(body.get(\"creationTimeUnix\", \"\")),\n            \"vector_dimensions\": len(vector),\n        }\n        stored_objects.append(stored)\n    return stored_objects\n\n\nstored_objects = index_records_in_weaviate(records)\nprint(\"Weaviate objects stored:\", len(stored_objects))",
+          "mock_response": "{\"id\": \"b3f1c2d4-5a6e-4f70-9c81-2d3e4f5a6b7c\", \"class\": \"MistralChunk\", \"creationTimeUnix\": 1732284000123, \"properties\": {\"topic\": \"Vector index refresh policy\", \"summary\": \"Rebuild the HNSW graph nightly and keep delta merges below five percent of the corpus.\", \"tags\": [\"indexing\", \"operations\"], \"promptTokens\": 96, \"completionTokens\": 142}, \"vector\": []}",
+          "actions": [
+            "Create the MistralChunk class in the Weaviate schema with the properties topic, summary, tags, promptTokens and completionTokens.",
+            "POST one object per record to https://weaviate.io/v1/objects with the Bearer authorization header.",
+            "Capture the returned id, class, creationTimeUnix and vector length into the stored_objects list.",
+            "Raise a descriptive RuntimeError on any non-2xx response so a partial index is never silently accepted."
+          ],
+          "commands": [
+            {
+              "label": "Export the Weaviate credential",
+              "language": "bash",
+              "code": "export WEAVIATE_API_KEY=\"<paste-weaviate-api-key>\""
+            },
+            {
+              "label": "Run the indexing stage",
+              "language": "bash",
+              "code": "python3 workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "WEAVIATE_API_KEY",
+              "value": "<weaviate-api-key>",
+              "description": "Bearer or OIDC token used to authorize object writes"
+            },
+            {
+              "key": "WEAVIATE_CLASS",
+              "value": "MistralChunk",
+              "description": "Target class in the Weaviate schema that receives the objects"
+            },
+            {
+              "key": "WEAVIATE_BASE_URL",
+              "value": "https://weaviate.io/v1",
+              "description": "Base URL of the Weaviate REST API; the /objects path is appended per write"
+            }
+          ],
+          "tools": ["Weaviate Vector API"],
+          "checklist": [
+            "stored_objects has exactly the same length as records.",
+            "Every stored object carries a non-empty id returned by Weaviate.",
+            "A missing class or invalid key surfaces as a RuntimeError with the HTTP status and body."
+          ],
+          "expectedResult": "Every Mistral record exists as a Weaviate object and the server-assigned identifiers are collected in stored_objects.",
+          "links": [
+            {
+              "label": "Weaviate Vector API Documentation",
+              "url": "https://weaviate.io/developers/weaviate/api/rest"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Consume records and stored_objects, verify that both stages produced the same number of items, aggregate token usage and tag frequency, and write the result to summary.json. The step performs no network call and fails fast on any schema mismatch.",
+          "technical_explanation": "Architecture role: this is the terminal aggregation stage; it reconciles the Mistral ingestion with the Weaviate persistence and produces the audit artefact that operators and dashboards read. API contract: none, the step is pure Python and only touches the filesystem through pathlib.Path.write_text with UTF-8 encoding. Edge cases: unequal list lengths indicate a partial index and must raise ValueError, empty tag lists must not break the counter, missing ids are counted as degraded rather than crashing, and the output directory must exist because write_text does not create parents.",
+          "code_snippet": "import json\nimport os\nfrom pathlib import Path\n\n# The output path is configurable so the same script can write into a mounted volume.\nOUTPUT_PATH = Path(os.environ.get(\"SUMMARY_PATH\", \"summary.json\"))\n\n\ndef persist_summary(records, stored_objects):\n    \"\"\"Validate both stages, aggregate counters and write the operational summary.\"\"\"\n    if not isinstance(records, list) or not isinstance(stored_objects, list):\n        raise TypeError(\"records and stored_objects must both be lists\")\n    if len(records) != len(stored_objects):\n        raise ValueError(\"stage mismatch: every record must have exactly one stored object\")\n    topics = []\n    total_prompt_tokens = 0\n    total_completion_tokens = 0\n    tag_counter = {}\n    for record in records:\n        # Each access uses .get so a partially filled record cannot raise KeyError.\n        topics.append(str(record.get(\"topic\", \"untitled\")))\n        total_prompt_tokens += int(record.get(\"prompt_tokens\", 0))\n        total_completion_tokens += int(record.get(\"completion_tokens\", 0))\n        for tag in record.get(\"tags\", []):\n            key = str(tag).lower()\n            tag_counter[key] = tag_counter.get(key, 0) + 1\n    object_ids = [str(item.get(\"id\", \"\")) for item in stored_objects]\n    missing_ids = [object_id for object_id in object_ids if not object_id]\n    summary = {\n        \"record_count\": len(records),\n        \"object_count\": len(stored_objects),\n        \"topics\": topics,\n        \"object_ids\": object_ids,\n        \"missing_object_ids\": len(missing_ids),\n        \"total_prompt_tokens\": total_prompt_tokens,\n        \"total_completion_tokens\": total_completion_tokens,\n        \"total_tokens\": total_prompt_tokens + total_completion_tokens,\n        \"tag_frequency\": tag_counter,\n        \"status\": \"ok\" if not missing_ids else \"degraded\",\n    }\n    OUTPUT_PATH.write_text(json.dumps(summary, indent=2), encoding=\"utf-8\")\n    return summary\n\n\nsummary = persist_summary(records, stored_objects)\nprint(\"Summary written to\", OUTPUT_PATH, \"status:\", summary.get(\"status\", \"unknown\"))",
+          "mock_response": "{\"record_count\": 3, \"object_count\": 3, \"topics\": [\"Vector index refresh policy\", \"Hybrid search weighting\", \"Retrieval augmented generation caching\"], \"object_ids\": [\"b3f1c2d4-5a6e-4f70-9c81-2d3e4f5a6b7c\", \"c4a2d3e5-6b7f-4a81-8d92-3e4f5a6b7c8d\", \"d5b3e4f6-7c80-4b92-9ea3-4f5a6b7c8d9e\"], \"missing_object_ids\": 0, \"total_prompt_tokens\": 288, \"total_completion_tokens\": 426, \"total_tokens\": 714, \"tag_frequency\": {\"indexing\": 1, \"operations\": 1, \"search\": 1, \"ranking\": 1, \"caching\": 1, \"latency\": 1}, \"status\": \"ok\"}",
+          "actions": [
+            "Assert that records and stored_objects are lists of equal length before any aggregation runs.",
+            "Sum prompt and completion tokens per record and compute the combined total for cost reporting.",
+            "Build a lower-cased tag frequency map with dict.get defaults so absent tags never raise.",
+            "Serialise the summary to summary.json with UTF-8 encoding and indent 2 for diff-friendly output."
+          ],
+          "commands": [
+            {
+              "label": "Set a custom output path",
+              "language": "bash",
+              "code": "export SUMMARY_PATH=\"summary.json\""
+            },
+            {
+              "label": "Inspect the persisted summary",
+              "language": "bash",
+              "code": "python3 -m json.tool summary.json"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUMMARY_PATH",
+              "value": "summary.json",
+              "description": "Filesystem location of the persisted operational summary"
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "summary.json exists and parses as valid JSON.",
+            "record_count equals object_count and equals the length of the topics list.",
+            "status is ok when every stored object returned an id, otherwise degraded."
+          ],
+          "expectedResult": "A validated summary.json containing record counts, object ids, token totals and tag frequency is written to disk.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A Mistral AI API account with API credentials (documentation: docs.mistral.ai)",
+        "A Weaviate Vector API account with API credentials (documentation: weaviate.io)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A Mistral AI API account with API credentials (documentation: docs.mistral.ai)",
+        "A Weaviate Vector API account with API credentials (documentation: weaviate.io)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "HNSW Graph Index",
+          "definition": "A hierarchical navigable small-world graph that Weaviate traverses at query time to return approximate nearest neighbours in sub-linear time."
+        },
+        {
+          "term": "Retrieval-Augmented Generation",
+          "definition": "A pattern in which retrieved vector matches are injected into the prompt of a language model so the answer is grounded in stored source records."
+        },
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "An HTTP authorization scheme where the raw credential is sent in the Authorization header prefixed with the literal word Bearer and no signature."
+        },
+        {
+          "term": "Idempotent Object Ingestion",
+          "definition": "An ingestion strategy in which replaying the same write with a client-supplied identifier overwrites the existing object instead of creating a duplicate."
+        },
+        {
+          "term": "Token Accounting",
+          "definition": "The deterministic summation of prompt and completion tokens reported in the usage block so cost and quota consumption can be audited per run."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Mistral returns HTTP 401 Unauthorized on the chat completion call.",
+          "solution": "Verify that MISTRAL_API_KEY is exported in the same shell that runs workflow.py, that the value has no trailing newline or quotes, and that the header is built as 'Bearer ' + api_key with exactly one space."
+        },
+        {
+          "problem": "Weaviate returns HTTP 422 with a message that the class does not exist.",
+          "solution": "Create the class in the schema first (POST /v1/schema with the class name and properties) or point WEAVIATE_CLASS at an existing class; the object write never auto-creates a schema."
+        },
+        {
+          "problem": "json.loads fails on the Mistral assistant content because the model wrapped the JSON in prose or markdown fences.",
+          "solution": "Keep temperature at 0, send response_format with type json_object, and wrap the parse in try/except json.JSONDecodeError so the run fails loudly instead of silently producing empty records."
+        },
+        {
+          "problem": "summary.json is missing after a successful run.",
+          "solution": "Check that SUMMARY_PATH points to a writable location, that the parent directory exists, and that the process user owns the project folder; Path.write_text raises PermissionError otherwise."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Mistral AI API",
+          "url": "https://docs.mistral.ai/api/"
+        },
+        {
+          "label": "Weaviate Vector API",
+          "url": "https://weaviate.io/developers/weaviate/api/rest"
+        }
+      ],
+      "price": 9.99
+    }
+  },
+  {
+    "slug": "asana-weaviate-vector-automation-pipeline",
+    "title": "Asana + Weaviate Vector Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects Asana with Weaviate Vector and The Asana API allows developers to integrate with Asana to manage tasks, projects, and team collaboration effectively. Weaviate is an open-source vector database with a GraphQL API for semantic search, hybrid search and RAG at scale.",
+    "category": "Productivity",
+    "tags": [
+      "tasks",
+      "projects",
+      "collaboration",
+      "api",
+      "vector-database",
+      "semantic-search",
+      "rag",
+      "open-source"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-22 14:17 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["Asana API", "Weaviate Vector API"],
+      "api_slugs": ["asana-api", "weaviate-vector-api"],
+      "alternative_slugs": [],
+      "useCase": "The API is used for managing tasks and projects within Asana, helping teams to stay organized. Then Semantic search, RAG and recommendation systems.",
+      "steps": [
+        {
+          "title": "Ingest source records from Asana",
+          "description": "Call the Asana REST API to read every task of a single project, including its name, notes, completion flag and last modification timestamp. Normalize the raw payload into a flat list of dictionaries that the vector stage can consume without further parsing. The step is intentionally read-only so it can be rerun safely at any time.",
+          "technical_explanation": "This step is the ingestion boundary of the pipeline: it owns all knowledge about the Asana response shape and converts it into a stable internal record contract with the keys gid, name, notes, completed and modified_at. The call is a GET to https://api.asana.com/v1/tasks with the query parameters project, limit and opt_fields encoded through urllib.parse.urlencode, and it requires the headers Authorization: Bearer <token> and Accept: application/json. The documented response envelope is an object with a data array of task objects plus an optional next_page object, so the code iterates payload.get('data', []) and never assumes the array is non-empty. Edge cases handled explicitly: a missing or invalid token raises an HTTP error that is caught and converted into an empty list so the downstream steps still run, the limit parameter is capped at 100 per page which means large projects need pagination via the offset token in next_page, and the completed flag is coerced with bool() because Asana may omit it for subtasks.",
+          "code_snippet": "import json\nimport os\nimport urllib.parse\nimport urllib.request\n\nASANA_BASE_URL = \"https://api.asana.com/v1\"\nASANA_TOKEN = os.environ.get(\"ASANA_TOKEN\", \"\")\nASANA_PROJECT_GID = os.environ.get(\"ASANA_PROJECT_GID\", \"\")\n\ndef fetch_asana_tasks():\n    # Build the documented query string so project, page size and field selection are explicit.\n    query = urllib.parse.urlencode({\n        \"project\": ASANA_PROJECT_GID,\n        \"limit\": 100,\n        \"opt_fields\": \"name,notes,completed,modified_at\",\n    })\n    url = ASANA_BASE_URL + \"/tasks?\" + query\n    # The token is read from the environment so no secret is ever committed to the repository.\n    headers = {\n        \"Authorization\": \"Bearer \" + ASANA_TOKEN,\n        \"Accept\": \"application/json\",\n    }\n    request = urllib.request.Request(url, headers=headers, method=\"GET\")\n    try:\n        # A hard timeout keeps the dry run from blocking when the network is unavailable.\n        with urllib.request.urlopen(request, timeout=10) as response:\n            payload = json.loads(response.read().decode(\"utf-8\"))\n    except Exception as exc:\n        print(\"Asana request failed: \" + str(exc))\n        return []\n    tasks = []\n    # .get with defaults protects against tasks that omit optional fields.\n    for item in payload.get(\"data\", []):\n        record = {\n            \"gid\": item.get(\"gid\", \"\"),\n            \"name\": item.get(\"name\", \"\"),\n            \"notes\": item.get(\"notes\", \"\"),\n            \"completed\": bool(item.get(\"completed\", False)),\n            \"modified_at\": item.get(\"modified_at\", \"\"),\n        }\n        tasks.append(record)\n    return tasks\n\nasana_tasks = fetch_asana_tasks()\nprint(\"Asana tasks fetched: \" + str(len(asana_tasks)))",
+          "mock_response": "{\"data\": [{\"gid\": \"1203456789012345\", \"name\": \"Draft Q4 launch brief\", \"notes\": \"Owner: marketing. Align messaging with the platform team.\", \"completed\": false, \"modified_at\": \"2026-11-20T09:12:44.000Z\"}, {\"gid\": \"1203456789012346\", \"name\": \"Review vector index retention policy\", \"notes\": \"Confirm the 90 day retention window with legal.\", \"completed\": true, \"modified_at\": \"2026-11-19T16:03:10.000Z\"}], \"next_page\": null}",
+          "actions": [
+            "Export ASANA_TOKEN and ASANA_PROJECT_GID in the shell before running the script.",
+            "Encode the project, limit and opt_fields parameters with urllib.parse.urlencode instead of string concatenation.",
+            "Build an explicit urllib.request.Request with the Bearer and Accept headers and a 10 second timeout.",
+            "Normalize every task into the fixed record contract and coerce the completed flag with bool()."
+          ],
+          "commands": [
+            {
+              "label": "Set Asana credentials",
+              "language": "bash",
+              "code": "export ASANA_TOKEN=\"<asana_personal_access_token>\" && export ASANA_PROJECT_GID=\"<asana_project_gid>\""
+            },
+            {
+              "label": "Run the ingestion step",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "ASANA_TOKEN",
+              "value": "<asana_personal_access_token>",
+              "description": "Personal access token sent as the Bearer credential for every Asana request."
+            },
+            {
+              "key": "ASANA_PROJECT_GID",
+              "value": "<asana_project_gid>",
+              "description": "Numeric identifier of the Asana project whose tasks are ingested."
+            },
+            {
+              "key": "ASANA_BASE_URL",
+              "value": "https://api.asana.com/v1",
+              "description": "Public Asana REST base URL; the /tasks resource path is appended to it."
+            }
+          ],
+          "tools": ["Asana API"],
+          "checklist": [
+            "asana_tasks is a list and every element contains the keys gid, name, notes, completed and modified_at.",
+            "The console prints the number of fetched tasks and the script exits with status code 0.",
+            "No secret string appears literally in workflow.py; both values come from os.environ.get."
+          ],
+          "expectedResult": "A normalized list of Asana task records is held in the module-level variable asana_tasks and ready for vector indexing.",
+          "links": [
+            {
+              "label": "Asana API Documentation",
+              "url": "https://developers.asana.com/docs"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with Weaviate Vector",
+          "description": "Push every normalized Asana task into Weaviate as a batch of objects so the text properties are vectorized and stored in the semantic index. Read the per-object status from the batch response and flatten it into a compact record that links the Weaviate object identifier back to the Asana GID. The step is idempotent at the record level because the Asana GID is stored as a property and can be used for deduplication later.",
+          "technical_explanation": "This step is the enrichment boundary: it consumes the module-level list asana_tasks produced by step 1 and turns each element into a Weaviate object of the configured class, which is the prerequisite for semantic search and retrieval-augmented generation over project knowledge. The call is a POST to https://weaviate.io/v1/batch/objects with the headers Authorization: Bearer <api key>, Content-Type: application/json and Accept: application/json, and the request body is an object with an objects array whose entries carry class and properties. The documented response is an array of result entries, each containing id, class, properties and a result object with a status field, so the code accepts both a bare array and an object with an objects key to stay tolerant of server versions. Edge cases handled explicitly: an empty input list short-circuits before any network call, a failed request is caught and returns an empty list instead of raising, a missing status falls back to the literal UNKNOWN, and the batch size is bounded by the 100 objects that Weaviate accepts per request, so larger projects must be chunked in a loop.",
+          "code_snippet": "import json\nimport os\nimport urllib.request\n\nWEAVIATE_BASE_URL = \"https://weaviate.io/v1\"\nWEAVIATE_API_KEY = os.environ.get(\"WEAVIATE_API_KEY\", \"\")\nWEAVIATE_CLASS_NAME = os.environ.get(\"WEAVIATE_CLASS_NAME\", \"AsanaTask\")\n\ndef index_tasks_in_weaviate(tasks):\n    # Skip the network entirely when the previous step produced nothing.\n    if not tasks:\n        return []\n    objects = []\n    for task in tasks:\n        # Only stable scalar properties are sent; Weaviate vectorizes the text fields.\n        properties = {\n            \"asana_gid\": task.get(\"gid\", \"\"),\n            \"name\": task.get(\"name\", \"\"),\n            \"notes\": task.get(\"notes\", \"\"),\n            \"completed\": task.get(\"completed\", False),\n        }\n        objects.append({\"class\": WEAVIATE_CLASS_NAME, \"properties\": properties})\n    body = json.dumps({\"objects\": objects}).encode(\"utf-8\")\n    headers = {\n        \"Authorization\": \"Bearer \" + WEAVIATE_API_KEY,\n        \"Content-Type\": \"application/json\",\n        \"Accept\": \"application/json\",\n    }\n    request = urllib.request.Request(WEAVIATE_BASE_URL + \"/batch/objects\", data=body, headers=headers, method=\"POST\")\n    try:\n        # The timeout prevents the dry run from hanging on an unreachable cluster.\n        with urllib.request.urlopen(request, timeout=10) as response:\n            payload = json.loads(response.read().decode(\"utf-8\"))\n    except Exception as exc:\n        print(\"Weaviate request failed: \" + str(exc))\n        return []\n    entries = payload if isinstance(payload, list) else payload.get(\"objects\", [])\n    indexed = []\n    for entry in entries:\n        result = entry.get(\"result\", {})\n        properties = entry.get(\"properties\", {})\n        record = {\n            \"vector_id\": entry.get(\"id\", \"\"),\n            \"asana_gid\": properties.get(\"asana_gid\", \"\"),\n            \"name\": properties.get(\"name\", \"\"),\n            \"status\": result.get(\"status\", \"UNKNOWN\"),\n        }\n        indexed.append(record)\n    return indexed\n\nweaviate_records = index_tasks_in_weaviate(asana_tasks)\nprint(\"Weaviate objects indexed: \" + str(len(weaviate_records)))",
+          "mock_response": "{\"objects\": [{\"class\": \"AsanaTask\", \"id\": \"8f2c1d4e-6a7b-5c3d-9e0f-1a2b3c4d5e6f\", \"properties\": {\"asana_gid\": \"1203456789012345\", \"name\": \"Draft Q4 launch brief\", \"notes\": \"Owner: marketing. Align messaging with the platform team.\", \"completed\": false}, \"result\": {\"status\": \"SUCCESS\"}}, {\"class\": \"AsanaTask\", \"id\": \"9a3d2e5f-7b8c-6d4e-0f1a-2b3c4d5e6f70\", \"properties\": {\"asana_gid\": \"1203456789012346\", \"name\": \"Review vector index retention policy\", \"notes\": \"Confirm the 90 day retention window with legal.\", \"completed\": true}, \"result\": {\"status\": \"SUCCESS\"}}]}",
+          "actions": [
+            "Map each Asana record to a Weaviate object with the class name from WEAVIATE_CLASS_NAME and the four scalar properties.",
+            "Serialize the objects array into the request body and POST it to /batch/objects with the Bearer and Content-Type headers.",
+            "Accept both a bare JSON array and an object with an objects key as the batch response shape.",
+            "Flatten every result entry into a record containing vector_id, asana_gid, name and status."
+          ],
+          "commands": [
+            {
+              "label": "Set Weaviate credentials",
+              "language": "bash",
+              "code": "export WEAVIATE_API_KEY=\"<weaviate_api_key>\" && export WEAVIATE_CLASS_NAME=\"AsanaTask\""
+            },
+            {
+              "label": "Run the indexing step",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "WEAVIATE_API_KEY",
+              "value": "<weaviate_api_key>",
+              "description": "API key or OIDC token sent as the Bearer credential to the Weaviate REST API."
+            },
+            {
+              "key": "WEAVIATE_CLASS_NAME",
+              "value": "AsanaTask",
+              "description": "Target class in the Weaviate schema that receives the vectorized task objects."
+            },
+            {
+              "key": "WEAVIATE_BASE_URL",
+              "value": "https://weaviate.io/v1",
+              "description": "Public Weaviate REST base URL; the /batch/objects resource path is appended to it."
+            }
+          ],
+          "tools": ["Weaviate Vector API"],
+          "checklist": [
+            "weaviate_records contains one entry per submitted object with a non-empty vector_id.",
+            "Every entry reports status SUCCESS or a documented failure status instead of UNKNOWN.",
+            "The request body is valid JSON and the Content-Type header is application/json."
+          ],
+          "expectedResult": "All Asana tasks exist as vectorized Weaviate objects and their identifiers are captured in the module-level variable weaviate_records.",
+          "links": [
+            {
+              "label": "Weaviate Vector API Documentation",
+              "url": "https://weaviate.io/developers/weaviate/api/rest"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Consume the Asana source records and the Weaviate indexing results, cross-check them and compute the operational metrics of the run. Validate the resulting dictionary against a strict type contract before anything touches the disk. Persist the validated summary as a deterministic JSON file that downstream reporting jobs can read.",
+          "technical_explanation": "This step is the persistence boundary and the only place where the two upstream contracts meet: it reads the module-level variables asana_tasks from step 1 and weaviate_records from step 2 and reconciles them by Asana GID. No network call is made, so the step is fully deterministic and safe to rerun; it uses collections.Counter to count the Weaviate status values and a set difference to detect tasks that were never indexed. The validation gate checks that total_tasks, completed_tasks and indexed_objects are integers and that completion_rate is a float, raising ValueError or TypeError before any file is written so a corrupt summary can never reach disk. Edge cases handled explicitly: an empty task list yields a completion_rate of 0.0 instead of a ZeroDivisionError, a missing status key falls back to UNKNOWN, and the output path is configurable through the SUMMARY_PATH environment variable with a relative default.",
+          "code_snippet": "import json\nimport os\nfrom collections import Counter\n\nSUMMARY_PATH = os.environ.get(\"SUMMARY_PATH\", \"asana_weaviate_summary.json\")\n\ndef build_summary(tasks, indexed):\n    # Count the source population first so every ratio has a defined denominator.\n    total_tasks = len(tasks)\n    completed_tasks = sum(1 for task in tasks if task.get(\"completed\", False))\n    status_counts = Counter(entry.get(\"status\", \"UNKNOWN\") for entry in indexed)\n    indexed_gids = {entry.get(\"asana_gid\", \"\") for entry in indexed}\n    missing_gids = [task.get(\"gid\", \"\") for task in tasks if task.get(\"gid\", \"\") not in indexed_gids]\n    # Guard the division so an empty project cannot raise ZeroDivisionError.\n    completion_rate = round(completed_tasks / total_tasks, 4) if total_tasks else 0.0\n    summary = {\n        \"total_tasks\": total_tasks,\n        \"completed_tasks\": completed_tasks,\n        \"completion_rate\": completion_rate,\n        \"indexed_objects\": len(indexed),\n        \"status_counts\": dict(status_counts),\n        \"missing_gids\": missing_gids,\n    }\n    return summary\n\ndef validate_summary(summary):\n    # A strict type contract stops silent schema drift before persistence.\n    required = {\n        \"total_tasks\": int,\n        \"completed_tasks\": int,\n        \"completion_rate\": float,\n        \"indexed_objects\": int,\n    }\n    for key, expected_type in required.items():\n        if key not in summary:\n            raise ValueError(\"Missing summary field: \" + key)\n        if not isinstance(summary.get(key), expected_type):\n            raise TypeError(\"Wrong type for summary field: \" + key)\n    return True\n\ndef persist_summary(summary, path):\n    # sort_keys and indent make the artifact diff-friendly across runs.\n    with open(path, \"w\", encoding=\"utf-8\") as handle:\n        json.dump(summary, handle, indent=2, sort_keys=True)\n    return path\n\nsummary = build_summary(asana_tasks, weaviate_records)\nvalidate_summary(summary)\nwritten_path = persist_summary(summary, SUMMARY_PATH)\nprint(\"Summary written to \" + written_path)",
+          "mock_response": "{\"total_tasks\": 2, \"completed_tasks\": 1, \"completion_rate\": 0.5, \"indexed_objects\": 2, \"status_counts\": {\"SUCCESS\": 2}, \"missing_gids\": []}",
+          "actions": [
+            "Reconcile asana_tasks and weaviate_records by Asana GID and collect every task that was never indexed.",
+            "Compute total_tasks, completed_tasks, completion_rate and indexed_objects with a zero-division guard.",
+            "Run the validate_summary type gate and abort before writing when a field is missing or mistyped.",
+            "Serialize the summary with json.dump using indent and sort_keys for a stable artifact."
+          ],
+          "commands": [
+            {
+              "label": "Set the output path",
+              "language": "bash",
+              "code": "export SUMMARY_PATH=\"asana_weaviate_summary.json\""
+            },
+            {
+              "label": "Run the full pipeline",
+              "language": "bash",
+              "code": "python workflow.py"
+            },
+            {
+              "label": "Inspect the artifact",
+              "language": "bash",
+              "code": "python -c \"import json;print(json.load(open('asana_weaviate_summary.json')))\""
+            }
+          ],
+          "config": [
+            {
+              "key": "SUMMARY_PATH",
+              "value": "asana_weaviate_summary.json",
+              "description": "Filesystem path of the persisted JSON summary produced by the aggregation step."
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "The file asana_weaviate_summary.json exists and parses with json.load without errors.",
+            "completion_rate is a float between 0.0 and 1.0 and equals completed_tasks divided by total_tasks.",
+            "missing_gids is empty when every Asana task was successfully indexed in Weaviate."
+          ],
+          "expectedResult": "A validated JSON summary of the Asana to Weaviate run is persisted on disk and ready for downstream reporting.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A Asana API account with API credentials (documentation: developers.asana.com)",
+        "A Weaviate Vector API account with API credentials (documentation: weaviate.io)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A Asana API account with API credentials (documentation: developers.asana.com)",
+        "A Weaviate Vector API account with API credentials (documentation: weaviate.io)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A stateless authorization scheme in which every request carries an Authorization header of the form 'Bearer <token>' so the server can verify the caller without a session cookie."
+        },
+        {
+          "term": "Vector Embedding Indexing",
+          "definition": "The process of converting a text property into a high-dimensional numeric vector and storing it in an approximate nearest-neighbour index so that semantic similarity queries become possible."
+        },
+        {
+          "term": "Batch Object Ingestion",
+          "definition": "A single write request that carries an array of objects instead of one object, which reduces round trips and keeps ingestion inside provider rate limits."
+        },
+        {
+          "term": "Schema Validation Gate",
+          "definition": "A deterministic check that runs before persistence and rejects a payload when a required field is missing or has an unexpected Python type."
+        },
+        {
+          "term": "Completion Rate Normalization",
+          "definition": "Dividing a counted subset by the total population and rounding the quotient to a fixed number of decimals so the metric is comparable across runs."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "The Asana call returns HTTP 401 with the message 'Not Authorized'.",
+          "solution": "Verify that ASANA_TOKEN is a personal access token copied without surrounding quotes or whitespace, and confirm the header is built as 'Bearer ' + token with exactly one space."
+        },
+        {
+          "problem": "The Asana call returns HTTP 400 because the project parameter is invalid.",
+          "solution": "Set ASANA_PROJECT_GID to the numeric project GID taken from the Asana URL (the long integer after /0/), not the human-readable project name."
+        },
+        {
+          "problem": "The Weaviate batch request returns HTTP 422 because the target class does not exist.",
+          "solution": "Create the class first with a POST to /v1/schema containing the class name from WEAVIATE_CLASS_NAME and the text properties asana_gid, name and notes, then rerun the batch step."
+        },
+        {
+          "problem": "The summary file is written but indexed_objects is smaller than total_tasks.",
+          "solution": "Inspect the status_counts field; entries with status FAILED indicate objects rejected by Weaviate, usually because a property value exceeded the configured length or the class schema was missing a property."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Asana API",
+          "url": "https://developers.asana.com/docs"
+        },
+        {
+          "label": "Weaviate Vector API",
+          "url": "https://weaviate.io/developers/weaviate/api/rest"
+        }
+      ],
+      "price": 9.99
+    }
+  },
+  {
+    "slug": "openai-whisper-weaviate-vector-automation-pipeline",
+    "title": "OpenAI Whisper + Weaviate Vector Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects OpenAI Whisper with Weaviate Vector and OpenAI's Whisper API transcribes audio to text with high accuracy across 50+ languages – ideal for podcasts, meetings and voice apps. Weaviate is an open-source vector database with a GraphQL API for semantic search, hybrid search and RAG at scale.",
+    "category": "AI & Speech",
+    "tags": [
+      "speech-to-text",
+      "transcription",
+      "ai",
+      "audio",
+      "vector-database",
+      "semantic-search",
+      "rag",
+      "open-source"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-22 14:18 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["OpenAI Whisper API", "Weaviate Vector API"],
+      "api_slugs": ["openai-whisper-api", "weaviate-vector-api"],
+      "alternative_slugs": [],
+      "useCase": "Automatic subtitles, meeting notes and voice assistants. Then Semantic search, RAG and recommendation systems.",
+      "steps": [
+        {
+          "title": "Ingest source records from OpenAI Whisper",
+          "description": "Send an audio file to the OpenAI Whisper API transcription endpoint and normalize the returned text and duration into a list of records for downstream indexing.",
+          "technical_explanation": "This step is the ingestion layer of the pipeline: it consumes a local audio file and produces normalized transcript records that the Weaviate indexing step will consume. The API contract is a POST request to https://api.openai.com/v1/audio/transcriptions with a Bearer token in the Authorization header and a multipart/form-data body containing the model field set to whisper-1 and the file field containing the audio bytes. The JSON response contains a text string, a duration float, and optional language metadata; the code defensively extracts these fields with .get() and converts duration with float() inside a try/except ValueError block. Edge cases include missing API credentials or audio file, which trigger a deterministic offline fallback for dry-run execution, and HTTP 429 rate limits, which should be handled with exponential backoff in production.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\nimport urllib.parse\n\nNUMERIC_CONTRACT = \"Respond ONLY with a float between -1.0 and 1.0\"\nOPENAI_API_KEY = os.environ.get(\"OPENAI_API_KEY\", \"\")\nAUDIO_FILE_PATH = os.environ.get(\"AUDIO_FILE_PATH\", \"sample_audio.mp3\")\nWHISPER_ENDPOINT = \"https://api.openai.com/v1/audio/transcriptions\"\n\ndef transcribe_audio():\n    if not OPENAI_API_KEY or not os.path.exists(AUDIO_FILE_PATH):\n        return [{\n            \"id\": \"transcript-001\",\n            \"text\": \"Welcome to the pipeline demonstration. This is a deterministic fallback transcript.\",\n            \"duration\": 12.5,\n            \"language\": \"en\"\n        }]\n    with open(AUDIO_FILE_PATH, \"rb\") as audio_file:\n        audio_bytes = audio_file.read()\n    boundary = \"----WebKitFormBoundary7MA4YWxkTrZu0gW\"\n    parts = []\n    parts.append(f\"--{boundary}\\r\\nContent-Disposition: form-data; name=\\\"model\\\"\\r\\n\\r\\nwhisper-1\\r\\n\".encode(\"utf-8\"))\n    parts.append(f\"--{boundary}\\r\\nContent-Disposition: form-data; name=\\\"file\\\"; filename=\\\"audio.mp3\\\"\\r\\nContent-Type: audio/mpeg\\r\\n\\r\\n\".encode(\"utf-8\"))\n    parts.append(audio_bytes)\n    parts.append(f\"\\r\\n--{boundary}--\\r\\n\".encode(\"utf-8\"))\n    body = b\"\".join(parts)\n    headers = {\n        \"Authorization\": f\"Bearer {OPENAI_API_KEY}\",\n        \"Content-Type\": f\"multipart/form-data; boundary={boundary}\"\n    }\n    request = urllib.request.Request(WHISPER_ENDPOINT, data=body, headers=headers, method=\"POST\")\n    with urllib.request.urlopen(request) as response:\n        payload = json.loads(response.read().decode(\"utf-8\"))\n    text = payload.get(\"text\", \"\")\n    duration_raw = payload.get(\"duration\", 0.0)\n    try:\n        duration = float(duration_raw)\n    except (TypeError, ValueError):\n        duration = 0.0\n    record = {\n        \"id\": payload.get(\"id\", \"transcript-001\"),\n        \"text\": text,\n        \"duration\": duration,\n        \"language\": payload.get(\"language\", \"en\")\n    }\n    return [record]\n\ntranscripts = transcribe_audio()",
+          "mock_response": {
+            "text": "Welcome to the pipeline demonstration. This is a deterministic fallback transcript.",
+            "duration": 12.5,
+            "language": "en"
+          },
+          "actions": [
+            "Read the audio file bytes from AUDIO_FILE_PATH",
+            "Build a multipart/form-data body with the whisper-1 model and file field",
+            "Send a POST request to the Whisper transcription endpoint with Bearer authentication",
+            "Parse the JSON response and normalize text, duration and language into a record"
+          ],
+          "commands": [
+            {
+              "label": "Set OpenAI API key",
+              "language": "bash",
+              "code": "export OPENAI_API_KEY=\"<your-openai-api-key>\""
+            },
+            {
+              "label": "Run the pipeline",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "OPENAI_API_KEY",
+              "value": "<your-openai-api-key>",
+              "description": "Bearer token for the OpenAI Whisper API"
+            },
+            {
+              "key": "AUDIO_FILE_PATH",
+              "value": "sample_audio.mp3",
+              "description": "Path to the local audio file to transcribe"
+            },
+            {
+              "key": "WHISPER_ENDPOINT",
+              "value": "https://api.openai.com/v1/audio/transcriptions",
+              "description": "Full endpoint URL for the Whisper transcription API"
+            }
+          ],
+          "tools": ["OpenAI Whisper API"],
+          "checklist": [
+            "The code sends a POST request to https://api.openai.com/v1/audio/transcriptions",
+            "The multipart body includes the model field set to whisper-1",
+            "The response text and duration are extracted with .get() and float() conversion handles ValueError"
+          ],
+          "expectedResult": "A list of normalized transcript records is available in the module-level variable transcripts.",
+          "links": [
+            {
+              "label": "OpenAI Whisper API Documentation",
+              "url": "https://platform.openai.com/docs/guides/speech-to-text"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with Weaviate Vector",
+          "description": "Index each normalized transcript record as an object in Weaviate using the REST API, deriving a deterministic object ID for idempotent upserts.",
+          "technical_explanation": "This step is the indexing layer: it consumes the transcripts list from step 1 and writes each record to Weaviate as a Transcript class object. The API contract is a POST request to the base URL https://weaviate.io/v1/ with the resource path /objects appended, using a Bearer token in the Authorization header and a JSON body containing class, id and properties. The response JSON returns the created object with its id, class and properties, which the code extracts defensively with .get(). Edge cases include missing Weaviate credentials, which trigger a deterministic offline fallback, and HTTP 422 errors caused by schema mismatches; the deterministic object ID is computed with hashlib.sha256 from the source record ID to make repeated runs idempotent.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\nimport urllib.parse\nimport hashlib\n\nWEAVIATE_API_KEY = os.environ.get(\"WEAVIATE_API_KEY\", \"\")\nWEAVIATE_URL = os.environ.get(\"WEAVIATE_URL\", \"https://weaviate.io/v1/\")\nWEAVIATE_CLASS = \"Transcript\"\n\ndef index_transcripts(records):\n    if not WEAVIATE_API_KEY:\n        return [{\n            \"id\": \"weaviate-object-001\",\n            \"class\": WEAVIATE_CLASS,\n            \"properties\": {\n                \"text\": records[0].get(\"text\", \"\") if records else \"\",\n                \"duration\": records[0].get(\"duration\", 0.0) if records else 0.0,\n                \"source_id\": records[0].get(\"id\", \"\") if records else \"\"\n            }\n        }]\n    indexed = []\n    for record in records:\n        source_id = record.get(\"id\", \"\")\n        object_id = hashlib.sha256(source_id.encode(\"utf-8\")).hexdigest()\n        payload = {\n            \"class\": WEAVIATE_CLASS,\n            \"id\": object_id,\n            \"properties\": {\n                \"text\": record.get(\"text\", \"\"),\n                \"duration\": record.get(\"duration\", 0.0),\n                \"source_id\": source_id\n            }\n        }\n        data = json.dumps(payload).encode(\"utf-8\")\n        headers = {\n            \"Authorization\": f\"Bearer {WEAVIATE_API_KEY}\",\n            \"Content-Type\": \"application/json\"\n        }\n        url = WEAVIATE_URL.rstrip(\"/\") + \"/objects\"\n        request = urllib.request.Request(url, data=data, headers=headers, method=\"POST\")\n        with urllib.request.urlopen(request) as response:\n            result = json.loads(response.read().decode(\"utf-8\"))\n        indexed.append({\n            \"id\": result.get(\"id\", object_id),\n            \"class\": result.get(\"class\", WEAVIATE_CLASS),\n            \"properties\": result.get(\"properties\", payload.get(\"properties\", {}))\n        })\n    return indexed\n\nweaviate_objects = index_transcripts(transcripts)",
+          "mock_response": {
+            "id": "weaviate-object-001",
+            "class": "Transcript",
+            "properties": {
+              "text": "Welcome to the pipeline demonstration. This is a deterministic fallback transcript.",
+              "duration": 12.5,
+              "source_id": "transcript-001"
+            }
+          },
+          "actions": [
+            "Compute a deterministic object ID from each transcript source ID using SHA-256",
+            "Build a JSON payload with class Transcript and properties text, duration and source_id",
+            "Send a POST request to the Weaviate /objects resource path with Bearer authentication",
+            "Collect the returned object IDs and properties into a list"
+          ],
+          "commands": [
+            {
+              "label": "Set Weaviate API key",
+              "language": "bash",
+              "code": "export WEAVIATE_API_KEY=\"<your-weaviate-api-key>\""
+            },
+            {
+              "label": "Set Weaviate base URL",
+              "language": "bash",
+              "code": "export WEAVIATE_URL=\"https://weaviate.io/v1/\""
+            }
+          ],
+          "config": [
+            {
+              "key": "WEAVIATE_API_KEY",
+              "value": "<your-weaviate-api-key>",
+              "description": "Bearer token for the Weaviate Vector API"
+            },
+            {
+              "key": "WEAVIATE_URL",
+              "value": "https://weaviate.io/v1/",
+              "description": "Base URL for the Weaviate REST API"
+            },
+            {
+              "key": "WEAVIATE_CLASS",
+              "value": "Transcript",
+              "description": "Weaviate class name for transcript objects"
+            }
+          ],
+          "tools": ["Weaviate Vector API"],
+          "checklist": [
+            "The code appends /objects to the Weaviate base URL",
+            "The JSON payload includes class, id and properties",
+            "The response is parsed with .get() for id, class and properties"
+          ],
+          "expectedResult": "A list of indexed Weaviate objects is available in the module-level variable weaviate_objects.",
+          "links": [
+            {
+              "label": "Weaviate Vector API Documentation",
+              "url": "https://weaviate.io/developers/weaviate/api/rest"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Consume the transcript and Weaviate object lists, validate their types, compute aggregate statistics and persist a JSON summary file.",
+          "technical_explanation": "This step is the persistence layer: it consumes transcripts from step 1 and weaviate_objects from step 2, validates that both are lists, and computes operational metrics such as transcript count, indexed object count, total duration and average duration. The code uses statistics.mean with a guard for empty lists and converts each duration with float() inside a try/except ValueError block. The final summary is written to summary.json using json.dump with UTF-8 encoding, making the pipeline's output reproducible and auditable. Edge cases include empty input lists, which produce zero counts and zero averages, and non-numeric duration values, which are coerced to 0.0.",
+          "code_snippet": "import json\nimport statistics\n\ndef aggregate_and_persist(transcripts, weaviate_objects):\n    if not isinstance(transcripts, list) or not isinstance(weaviate_objects, list):\n        raise TypeError(\"Both transcripts and weaviate_objects must be lists\")\n    durations = []\n    for record in transcripts:\n        duration = record.get(\"duration\", 0.0)\n        try:\n            durations.append(float(duration))\n        except (TypeError, ValueError):\n            durations.append(0.0)\n    total_duration = sum(durations)\n    average_duration = statistics.mean(durations) if durations else 0.0\n    summary = {\n        \"transcript_count\": len(transcripts),\n        \"indexed_object_count\": len(weaviate_objects),\n        \"total_duration_seconds\": round(total_duration, 2),\n        \"average_duration_seconds\": round(average_duration, 2),\n        \"source_ids\": [record.get(\"id\", \"\") for record in transcripts],\n        \"weaviate_ids\": [obj.get(\"id\", \"\") for obj in weaviate_objects]\n    }\n    with open(\"summary.json\", \"w\", encoding=\"utf-8\") as summary_file:\n        json.dump(summary, summary_file, indent=2)\n    return summary\n\nsummary = aggregate_and_persist(transcripts, weaviate_objects)",
+          "mock_response": {
+            "transcript_count": 1,
+            "indexed_object_count": 1,
+            "total_duration_seconds": 12.5,
+            "average_duration_seconds": 12.5,
+            "source_ids": ["transcript-001"],
+            "weaviate_ids": ["weaviate-object-001"]
+          },
+          "actions": [
+            "Validate that transcripts and weaviate_objects are lists",
+            "Convert each transcript duration to float with ValueError handling",
+            "Compute total and average duration using statistics.mean with an empty-list guard",
+            "Write the summary dictionary to summary.json with json.dump"
+          ],
+          "commands": [
+            {
+              "label": "Inspect the summary file",
+              "language": "bash",
+              "code": "cat summary.json"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUMMARY_FILE",
+              "value": "summary.json",
+              "description": "Output file for the final operational summary"
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "The code validates that both inputs are lists",
+            "The summary includes transcript_count, indexed_object_count, total_duration_seconds and average_duration_seconds",
+            "The summary is persisted to summary.json"
+          ],
+          "expectedResult": "A summary.json file is written containing the validated aggregate metrics for the pipeline run.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A OpenAI Whisper API account with API credentials (documentation: platform.openai.com)",
+        "A Weaviate Vector API account with API credentials (documentation: weaviate.io)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A OpenAI Whisper API account with API credentials (documentation: platform.openai.com)",
+        "A Weaviate Vector API account with API credentials (documentation: weaviate.io)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Multipart Form-Data Upload",
+          "definition": "A content type that encodes binary file data and text fields into a single HTTP request body for the Whisper transcription endpoint."
+        },
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "An HTTP authentication scheme that sends a secret token in the Authorization header to authorize API requests."
+        },
+        {
+          "term": "Vector Embedding Indexing",
+          "definition": "The process of storing numeric vector representations of text in Weaviate so that semantic similarity search can be performed."
+        },
+        {
+          "term": "Idempotent Object Upsert",
+          "definition": "A write operation that produces the same result when repeated, typically achieved by deriving a deterministic object ID from the source record."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A retry strategy that waits exponentially longer between attempts when an API returns HTTP 429 to avoid overwhelming the service."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Whisper API returns HTTP 401 Unauthorized.",
+          "solution": "Verify that OPENAI_API_KEY is set in the environment and that the key has access to the audio transcriptions endpoint."
+        },
+        {
+          "problem": "Weaviate API returns HTTP 422 Unprocessable Entity.",
+          "solution": "Check that the JSON payload includes the class name and that all property values match the schema types; ensure the base URL ends with /v1/ and the resource path /objects is appended."
+        },
+        {
+          "problem": "The concatenated script raises NameError for transcripts.",
+          "solution": "Ensure step 1 assigns transcripts at module level and that step 2 is concatenated after step 1 without redefining the variable."
+        }
+      ],
+      "resources": [
+        {
+          "label": "OpenAI Whisper API",
+          "url": "https://platform.openai.com/docs/guides/speech-to-text"
+        },
+        {
+          "label": "Weaviate Vector API",
+          "url": "https://weaviate.io/developers/weaviate/api/rest"
+        }
+      ],
+      "price": 9.99
+    }
   }
 ]
