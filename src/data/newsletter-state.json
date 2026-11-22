@@ -44,7 +44,11 @@
       "trello-api",
       "miro-rest-api",
       "intercom-api",
-      "api-ai-image-generator"
+      "api-ai-image-generator",
+      "twitch-api-kraken",
+      "notion-forms-api",
+      "github-copilot-api",
+      "notion-automation-api"
     ],
     "workflows": [
       "seo-keyword-tracking-dashboard",
@@ -82,26 +86,30 @@
       "posthog-analytics-amazon-transcribe-automation-pipeline",
       "posthog-analytics-airtable-automation-pipeline",
       "posthog-analytics-contentful-content-management-system-automation-pipeline",
-      "miro-rest-slack-web-automation-pipeline"
+      "miro-rest-slack-web-automation-pipeline",
+      "discord-bot-plaid-financial-data-automation-pipeline",
+      "linear-graphql-cohere-embed-automation-pipeline",
+      "twelve-data-cohere-embed-automation-pipeline",
+      "intercom-airtable-automation-pipeline"
     ]
   },
-  "lastSentAt": "2026-11-17 15:49:47",
+  "lastSentAt": "2026-11-19 15:45:56",
   "pendingCampaign": {
-    "id": "204580335005992793",
-    "createdAt": "2026-11-19T15:43:32.661Z",
+    "id": "204846974718969005",
+    "createdAt": "2026-11-22T14:21:40.132Z",
     "slugs": {
       "insights": [],
       "apis": [
-        "twitch-api-kraken",
-        "notion-forms-api",
-        "github-copilot-api",
-        "notion-automation-api"
+        "aws-transcribe-api",
+        "sendinblue-email-api",
+        "twilio-video-api",
+        "plaid-financial-api"
       ],
       "workflows": [
-        "discord-bot-plaid-financial-data-automation-pipeline",
-        "linear-graphql-cohere-embed-automation-pipeline",
-        "twelve-data-cohere-embed-automation-pipeline",
-        "intercom-airtable-automation-pipeline"
+        "openai-whisper-weaviate-vector-automation-pipeline",
+        "asana-weaviate-vector-automation-pipeline",
+        "mistral-ai-weaviate-vector-automation-pipeline",
+        "intercom-notion-api-for-automation-v2-automation-pipeline"
       ]
     }
   }
