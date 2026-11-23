@@ -48,7 +48,11 @@
       "twitch-api-kraken",
       "notion-forms-api",
       "github-copilot-api",
-      "notion-automation-api"
+      "notion-automation-api",
+      "aws-transcribe-api",
+      "sendinblue-email-api",
+      "twilio-video-api",
+      "plaid-financial-api"
     ],
     "workflows": [
       "seo-keyword-tracking-dashboard",
@@ -90,26 +94,30 @@
       "discord-bot-plaid-financial-data-automation-pipeline",
       "linear-graphql-cohere-embed-automation-pipeline",
       "twelve-data-cohere-embed-automation-pipeline",
-      "intercom-airtable-automation-pipeline"
+      "intercom-airtable-automation-pipeline",
+      "openai-whisper-weaviate-vector-automation-pipeline",
+      "asana-weaviate-vector-automation-pipeline",
+      "mistral-ai-weaviate-vector-automation-pipeline",
+      "intercom-notion-api-for-automation-v2-automation-pipeline"
     ]
   },
-  "lastSentAt": "2026-11-19 15:45:56",
+  "lastSentAt": "2026-11-22 14:23:48",
   "pendingCampaign": {
-    "id": "204846974718969005",
-    "createdAt": "2026-11-22T14:21:40.132Z",
+    "id": "204957405672375548",
+    "createdAt": "2026-11-23T19:36:55.464Z",
     "slugs": {
       "insights": [],
       "apis": [
-        "aws-transcribe-api",
-        "sendinblue-email-api",
-        "twilio-video-api",
-        "plaid-financial-api"
+        "google-maps-api",
+        "azure-cosmos-db-api",
+        "aws-polly-api",
+        "azure-face-api"
       ],
       "workflows": [
-        "openai-whisper-weaviate-vector-automation-pipeline",
-        "asana-weaviate-vector-automation-pipeline",
-        "mistral-ai-weaviate-vector-automation-pipeline",
-        "intercom-notion-api-for-automation-v2-automation-pipeline"
+        "shopify-admin-amazon-polly-automation-pipeline",
+        "slack-microsoft-azure-face-automation-pipeline",
+        "slack-ibm-watson-language-translator-automation-pipeline",
+        "braintree-payments-to-airtable-with-contentful-content-management-system-orchestration"
       ]
     }
   }
