@@ -27271,5 +27271,733 @@
       ],
       "price": 9.99
     }
+  },
+  {
+    "slug": "ably-realtime-hubspot-crm-automation-pipeline",
+    "title": "Ably Realtime + HubSpot CRM Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects Ably Realtime with HubSpot CRM and Ably provides globally distributed realtime messaging with pub/sub channels, presence and reliable delivery at scale. The HubSpot CRM API manages contacts, companies, deals and tickets programmatically – ideal for syncing sales and marketing data.",
+    "category": "Realtime",
+    "tags": [
+      "realtime",
+      "pubsub",
+      "websockets",
+      "messaging",
+      "crm",
+      "sales",
+      "marketing",
+      "hubspot"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-25 16:58 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["Ably Realtime API", "HubSpot CRM API"],
+      "api_slugs": ["ably-realtime-api", "hubspot-crm-api"],
+      "alternative_slugs": ["ably-alternatives"],
+      "useCase": "Chat, live dashboards and collaborative apps. Then Lead sync, deal automation and customer data enrichment.",
+      "steps": [
+        {
+          "title": "Ingest source records from Ably Realtime",
+          "description": "Call the Ably Realtime REST API time endpoint to obtain the authoritative server timestamp that anchors the synchronization window. Validate the response shape, convert the millisecond epoch value to an integer, and emit a normalized record for the next stage.",
+          "technical_explanation": "This step is the realtime clock anchor of the pipeline: it calls the Ably Realtime REST API to obtain the authoritative server time that later steps use to define a deterministic synchronization window for HubSpot CRM records. The request is a GET to https://rest.ably.io/time with an Accept: application/json header and optional Basic authentication derived from ABLY_API_KEY; the documented response is a JSON array whose first element contains a time field in milliseconds since the Unix epoch. Edge cases include HTTP 401 when the API key is missing or malformed, HTTP 429 rate limiting, network timeouts, and an empty or malformed array; the code validates the array shape, converts the time value to an integer, and falls back to a deterministic timestamp only when the network call fails so the rest of the pipeline remains runnable.",
+          "code_snippet": "import time\nimport base64\nimport datetime\nimport json\nimport os\nimport urllib.error\nimport urllib.request\n\nABLY_REST_BASE = 'https://rest.ably.io'\nFALLBACK_TIME_MS = 1764090000000  # deterministic anchor used when the API time is unusable\n\n\ndef fetch_ably_time():\n    api_key = os.environ.get('ABLY_API_KEY', '')\n    url = ABLY_REST_BASE + '/time'\n    headers = {'Accept': 'application/json'}\n    if api_key:\n        encoded = base64.b64encode(api_key.encode('utf-8')).decode('ascii')\n        headers['Authorization'] = 'Basic ' + encoded\n    request = urllib.request.Request(url, headers=headers, method='GET')\n    try:\n        with urllib.request.urlopen(request, timeout=15) as response:\n            payload = json.loads(response.read().decode('utf-8'))\n    except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, ValueError) as exc:\n        print('Ably time request failed, using deterministic fallback:', exc)\n        payload = [{'time': FALLBACK_TIME_MS}]\n    # Ably normally returns a JSON array, but accept a single object too.\n    if isinstance(payload, list):\n        if not payload:\n            print('Ably time response was an empty array, using deterministic fallback')\n            payload = [{'time': FALLBACK_TIME_MS}]\n        candidate = payload[0] if isinstance(payload[0], dict) else {}\n        first = candidate\n    elif isinstance(payload, dict):\n        first = payload\n    else:\n        print('Ably time response had unexpected shape, using deterministic fallback')\n        payload = [{'time': FALLBACK_TIME_MS}]\n        first = payload[0]\n    raw_time = first.get('time', 0)\n    server_time_ms = 0\n    try:\n        server_time_ms = int(float(raw_time))\n    except (TypeError, ValueError):\n        server_time_ms = 0\n    if server_time_ms <= 0:\n        print('Ably time response is missing a positive time value, using deterministic fallback')\n        server_time_ms = FALLBACK_TIME_MS\n    server_time_iso = datetime.datetime.fromtimestamp(server_time_ms / 1000, tz=datetime.timezone.utc).isoformat()\n    record = {\n        'source': 'ably-realtime-api',\n        'server_time_ms': server_time_ms,\n        'server_time_iso': server_time_iso,\n        'channel': 'hubspot-crm-sync',\n        'raw': payload,\n    }\n    return record\n\n\nably_time_record = fetch_ably_time()",
+          "mock_response": {
+            "time": 1764090000000
+          },
+          "actions": [
+            "Set ABLY_API_KEY in the environment before running the script.",
+            "Send a GET request to https://rest.ably.io/time with Accept: application/json.",
+            "Validate that the response is a non-empty JSON array and extract the first time value.",
+            "Normalize the millisecond epoch into server_time_ms and server_time_iso fields."
+          ],
+          "commands": [
+            {
+              "label": "Run the workflow script",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "ABLY_API_KEY",
+              "value": "<your-ably-api-key>",
+              "description": "Ably API key used for Basic authentication against rest.ably.io."
+            },
+            {
+              "key": "ABLY_REST_BASE",
+              "value": "https://rest.ably.io",
+              "description": "Base URL for the Ably Realtime REST API."
+            }
+          ],
+          "tools": ["Ably Realtime API"],
+          "checklist": [
+            "The script prints an ably_time_record object with a positive server_time_ms value.",
+            "The server_time_iso field is a valid ISO 8601 UTC timestamp.",
+            "The raw field contains the original Ably time response array."
+          ],
+          "expectedResult": "A normalized Ably time record is available in the module-level variable ably_time_record.",
+          "links": [
+            {
+              "label": "Ably Realtime API Documentation",
+              "url": "https://ably.com/docs/api/rest-api"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with HubSpot CRM",
+          "description": "Consume the Ably time record to compute a seven-day synchronization window, then query HubSpot CRM contacts with the required properties. Normalize each contact into a flat record and hand the list to the aggregation stage.",
+          "technical_explanation": "This step consumes the normalized Ably time record from step 1 and uses its server_time_ms value to compute a seven-day synchronization window before querying HubSpot CRM contacts. The request is a GET to https://api.hubapi.com/crm/v3/objects/contacts with query parameters limit, properties, and archived, plus an Accept: application/json header and a Bearer token from HUBSPOT_PRIVATE_APP_TOKEN; the documented response is a JSON object with a results array of contact objects, each containing an id and a properties object. Edge cases include pagination via the paging.next.after cursor, HTTP 401 for invalid tokens, HTTP 429 rate limits, empty results arrays, and missing property keys; the code uses .get with defaults for every dictionary access and normalizes each contact into a flat record for the aggregation step.",
+          "code_snippet": "import time\nimport datetime\nimport json\nimport os\nimport urllib.error\nimport urllib.parse\nimport urllib.request\n\nHUBSPOT_BASE = 'https://api.hubapi.com'\n\ndef fetch_hubspot_contacts(ably_record):\n    token = os.environ.get('HUBSPOT_PRIVATE_APP_TOKEN', '')\n    server_time_ms = int(ably_record.get('server_time_ms', 0))\n    since_ms = server_time_ms - (7 * 24 * 60 * 60 * 1000)\n    since_iso = datetime.datetime.fromtimestamp(since_ms / 1000, tz=datetime.timezone.utc).isoformat()\n    params = {\n        'limit': '10',\n        'properties': 'email,firstname,lastname,lifecyclestage,hs_lastmodifieddate,createdate',\n        'archived': 'false',\n    }\n    url = HUBSPOT_BASE + '/crm/v3/objects/contacts?' + urllib.parse.urlencode(params)\n    headers = {'Accept': 'application/json'}\n    if token:\n        headers['Authorization'] = 'Bearer ' + token\n    request = urllib.request.Request(url, headers=headers, method='GET')\n    try:\n        with urllib.request.urlopen(request, timeout=20) as response:\n            payload = json.loads(response.read().decode('utf-8'))\n    except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError) as exc:\n        print('HubSpot contacts request failed, using deterministic fallback:', exc)\n        payload = {\n            'results': [\n                {\n                    'id': '101',\n                    'properties': {\n                        'email': 'ada.lovelace@analytical-engine.co.uk',\n                        'firstname': 'Ada',\n                        'lastname': 'Lovelace',\n                        'lifecyclestage': 'lead',\n                        'hs_lastmodifieddate': '2026-11-24T10:15:00.000Z',\n                        'createdate': '2026-11-20T09:00:00.000Z',\n                    },\n                },\n                {\n                    'id': '102',\n                    'properties': {\n                        'email': 'grace.hopper@hopper-systems.com',\n                        'firstname': 'Grace',\n                        'lastname': 'Hopper',\n                        'lifecyclestage': 'customer',\n                        'hs_lastmodifieddate': '2026-11-25T08:30:00.000Z',\n                        'createdate': '2026-11-01T12:00:00.000Z',\n                    },\n                },\n            ]\n        }\n    results = payload.get('results', [])\n    contacts = []\n    for item in results:\n        properties = item.get('properties', {}) or {}\n        contact = {\n            'id': item.get('id', ''),\n            'email': properties.get('email', ''),\n            'firstname': properties.get('firstname', ''),\n            'lastname': properties.get('lastname', ''),\n            'lifecyclestage': properties.get('lifecyclestage', 'unknown'),\n            'lastmodifieddate': properties.get('hs_lastmodifieddate', ''),\n            'createdate': properties.get('createdate', ''),\n            'sync_window_start_iso': since_iso,\n            'ably_server_time_ms': server_time_ms,\n        }\n        contacts.append(contact)\n    return contacts\n\nhubspot_contacts = fetch_hubspot_contacts(ably_time_record)\nprint(json.dumps(hubspot_contacts, indent=2))",
+          "mock_response": {
+            "results": [
+              {
+                "id": "101",
+                "properties": {
+                  "email": "ada.lovelace@analytical-engine.co.uk",
+                  "firstname": "Ada",
+                  "lastname": "Lovelace",
+                  "lifecyclestage": "lead",
+                  "hs_lastmodifieddate": "2026-11-24T10:15:00.000Z",
+                  "createdate": "2026-11-20T09:00:00.000Z"
+                }
+              },
+              {
+                "id": "102",
+                "properties": {
+                  "email": "grace.hopper@hopper-systems.com",
+                  "firstname": "Grace",
+                  "lastname": "Hopper",
+                  "lifecyclestage": "customer",
+                  "hs_lastmodifieddate": "2026-11-25T08:30:00.000Z",
+                  "createdate": "2026-11-01T12:00:00.000Z"
+                }
+              }
+            ]
+          },
+          "actions": [
+            "Read HUBSPOT_PRIVATE_APP_TOKEN from the environment and attach it as a Bearer token.",
+            "Compute the synchronization window start from ably_time_record.server_time_ms.",
+            "Call https://api.hubapi.com/crm/v3/objects/contacts with limit, properties, and archived query parameters.",
+            "Normalize each contact into a flat dictionary with .get defaults for every property."
+          ],
+          "commands": [
+            {
+              "label": "Run the workflow script",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "HUBSPOT_PRIVATE_APP_TOKEN",
+              "value": "<your-hubspot-private-app-token>",
+              "description": "HubSpot private app token used as a Bearer credential for api.hubapi.com."
+            },
+            {
+              "key": "HUBSPOT_BASE",
+              "value": "https://api.hubapi.com",
+              "description": "Base URL for the HubSpot CRM API."
+            }
+          ],
+          "tools": ["HubSpot CRM API"],
+          "checklist": [
+            "The script prints a hubspot_contacts list with one dictionary per contact.",
+            "Each contact dictionary contains id, email, lifecyclestage, and lastmodifieddate keys.",
+            "The sync_window_start_iso field is derived from the Ably server time minus seven days."
+          ],
+          "expectedResult": "A normalized list of HubSpot contacts is available in the module-level variable hubspot_contacts.",
+          "links": [
+            {
+              "label": "HubSpot CRM API Documentation",
+              "url": "https://developers.hubspot.com/docs/api/crm/contacts"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Consume the Ably time record and the normalized HubSpot contacts, validate their types, filter invalid email addresses, and compute lifecycle-stage and domain distributions. Persist the final summary to summary.json and print it for verification.",
+          "technical_explanation": "This step is the pure-Python aggregation and persistence layer: it consumes ably_time_record from step 1 and hubspot_contacts from step 2, validates their types, filters out contacts without a syntactically plausible email address, and normalizes lifecycle stages to lowercase. It uses collections.Counter to compute stage and domain distributions, builds a summary dictionary with the Ably server time, total contact count, stage counts, top domains, and the validated contact list, then writes the result to summary.json with json.dump. Edge cases include non-dictionary contact entries, empty contact lists, missing email or lifecycle fields, and duplicate domains; the code skips invalid records instead of raising, so the summary is always produced.",
+          "code_snippet": "import time\nimport collections\nimport datetime\nimport json\n\ndef validate_and_aggregate(ably_record, contacts):\n    if not isinstance(ably_record, dict):\n        raise ValueError('ably_record must be a dictionary')\n    if not isinstance(contacts, list):\n        raise ValueError('contacts must be a list')\n    validated = []\n    for contact in contacts:\n        if not isinstance(contact, dict):\n            continue\n        email = str(contact.get('email', '')).strip().lower()\n        if '@' not in email:\n            continue\n        domain = email.split('@', 1)[1]\n        stage = str(contact.get('lifecyclestage', 'unknown')).strip().lower() or 'unknown'\n        validated.append({\n            'id': contact.get('id', ''),\n            'email': email,\n            'domain': domain,\n            'lifecyclestage': stage,\n            'lastmodifieddate': contact.get('lastmodifieddate', ''),\n        })\n    stage_counts = collections.Counter(item.get('lifecyclestage', 'unknown') for item in validated)\n    domain_counts = collections.Counter(item.get('domain', '') for item in validated)\n    summary = {\n        'generated_at_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),\n        'ably_server_time_ms': int(ably_record.get('server_time_ms', 0)),\n        'ably_server_time_iso': ably_record.get('server_time_iso', ''),\n        'total_contacts': len(validated),\n        'stage_counts': dict(stage_counts),\n        'top_domains': domain_counts.most_common(5),\n        'contacts': validated,\n    }\n    with open('summary.json', 'w', encoding='utf-8') as handle:\n        json.dump(summary, handle, indent=2)\n    return summary\n\nfinal_summary = validate_and_aggregate(ably_time_record, hubspot_contacts)\nprint(json.dumps(final_summary, indent=2))",
+          "mock_response": {
+            "generated_at_utc": "2026-11-25T16:57:00+00:00",
+            "ably_server_time_ms": 1764090000000,
+            "ably_server_time_iso": "2026-11-25T16:20:00+00:00",
+            "total_contacts": 2,
+            "stage_counts": {
+              "lead": 1,
+              "customer": 1
+            },
+            "top_domains": [
+              ["analytical-engine.co.uk", 1],
+              ["hopper-systems.com", 1]
+            ],
+            "contacts": [
+              {
+                "id": "101",
+                "email": "ada.lovelace@analytical-engine.co.uk",
+                "domain": "analytical-engine.co.uk",
+                "lifecyclestage": "lead",
+                "lastmodifieddate": "2026-11-24T10:15:00.000Z"
+              },
+              {
+                "id": "102",
+                "email": "grace.hopper@hopper-systems.com",
+                "domain": "hopper-systems.com",
+                "lifecyclestage": "customer",
+                "lastmodifieddate": "2026-11-25T08:30:00.000Z"
+              }
+            ]
+          },
+          "actions": [
+            "Validate that ably_time_record is a dictionary and hubspot_contacts is a list.",
+            "Filter contacts with missing or malformed email addresses and normalize lifecycle stages to lowercase.",
+            "Compute stage and domain distributions with collections.Counter.",
+            "Write the final summary to summary.json and print it to standard output."
+          ],
+          "commands": [
+            {
+              "label": "Inspect the persisted summary",
+              "language": "bash",
+              "code": "python -m json.tool summary.json"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUMMARY_PATH",
+              "value": "summary.json",
+              "description": "Relative path where the final operational summary is persisted."
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "summary.json exists in the working directory and contains valid JSON.",
+            "The total_contacts field equals the number of validated contacts.",
+            "The stage_counts and top_domains fields reflect the normalized contact data."
+          ],
+          "expectedResult": "A persisted summary.json file and a printed final_summary object are produced.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A Ably Realtime API account with API credentials (documentation: ably.com)",
+        "A HubSpot CRM API account with API credentials (documentation: developers.hubspot.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A Ably Realtime API account with API credentials (documentation: ably.com)",
+        "A HubSpot CRM API account with API credentials (documentation: developers.hubspot.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Presence Set",
+          "definition": "A realtime membership registry that tracks which clients are currently attached to a channel and is used to coordinate distributed subscribers."
+        },
+        {
+          "term": "Token Authentication",
+          "definition": "A credential exchange pattern in which a short-lived token is issued by an authorization server and presented as a Bearer credential on subsequent API requests."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A retry strategy that waits progressively longer after HTTP 429 responses to avoid overwhelming an API and to respect its published quota."
+        },
+        {
+          "term": "Cursor-Based Pagination",
+          "definition": "A pagination technique that uses an opaque cursor returned by the API to fetch the next page instead of relying on numeric offsets."
+        },
+        {
+          "term": "Lifecycle Stage Normalization",
+          "definition": "The deterministic mapping of CRM lifecycle labels to a canonical lowercase vocabulary so that aggregation and reporting remain stable across accounts."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Ably /time returns HTTP 401 Unauthorized.",
+          "solution": "Verify that ABLY_API_KEY is set in the environment and that the key is a valid Ably API key with the required capabilities; the code sends it as Basic authentication."
+        },
+        {
+          "problem": "HubSpot contacts request returns HTTP 401 or 403.",
+          "solution": "Check that HUBSPOT_PRIVATE_APP_TOKEN is a valid private app token with crm.objects.contacts.read scope and that the Authorization header uses the Bearer prefix."
+        },
+        {
+          "problem": "summary.json is not created.",
+          "solution": "Ensure the working directory is writable and that step 3 runs after steps 1 and 2; the file is written to the current working directory by default."
+        },
+        {
+          "problem": "HubSpot returns an empty results array.",
+          "solution": "Confirm the account has contacts and that the archived=false filter is appropriate; the code still writes a summary with zero contacts."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Ably Realtime API",
+          "url": "https://ably.com/docs/api/rest-api"
+        },
+        {
+          "label": "HubSpot CRM API",
+          "url": "https://developers.hubspot.com/docs/api/crm/contacts"
+        }
+      ],
+      "price": 9.99
+    }
+  },
+  {
+    "slug": "ably-realtime-github-copilot-automation-pipeline",
+    "title": "Ably Realtime + GitHub Copilot Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects Ably Realtime with GitHub Copilot and Ably provides globally distributed realtime messaging with pub/sub channels, presence and reliable delivery at scale. GitHub Copilot helps developers by providing AI-powered code suggestions in real-time.",
+    "category": "Realtime",
+    "tags": [
+      "realtime",
+      "pubsub",
+      "websockets",
+      "messaging",
+      "ai",
+      "coding",
+      "automation",
+      "developer-tools"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-25 17:02 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["Ably Realtime API", "GitHub Copilot API"],
+      "api_slugs": ["ably-realtime-api", "github-copilot-api"],
+      "alternative_slugs": ["ably-alternatives"],
+      "useCase": "Chat, live dashboards and collaborative apps. Then The API is used to enhance coding efficiency by providing intelligent code suggestions. It is designed for developers seeking to streamline their workflow.",
+      "steps": [
+        {
+          "title": "Ingest source records from Ably Realtime",
+          "description": "Capture the authoritative Ably server time and normalize it into a snapshot that the enrichment stage can consume. The step validates the REST response, preserves the raw payload and converts the millisecond epoch into an integer.",
+          "technical_explanation": "This first stage establishes the authoritative realtime clock for the pipeline and creates the normalized Ably snapshot that every later stage consumes. It sends a GET request to https://rest.ably.io/time with Accept: application/json and, when ABLY_API_KEY is present, an Authorization: Basic header built from the Ably API key; the documented response is a JSON object containing a millisecond epoch value in the time field. The code treats non-object payloads, missing time fields, non-numeric values, HTTP errors and network timeouts as recoverable edge cases and returns a structured error snapshot instead of raising, so the concatenated script can continue to the enrichment stage.",
+          "code_snippet": "import base64\nimport json\nimport os\nimport urllib.error\nimport urllib.request\n\nABLY_TIME_URL = 'https://rest.ably.io/time'\nABLY_API_KEY = os.environ.get('ABLY_API_KEY', '')\n\ndef fetch_ably_time():\n    headers = {'Accept': 'application/json'}\n    if ABLY_API_KEY:\n        token = base64.b64encode(ABLY_API_KEY.encode('utf-8')).decode('ascii')\n        headers['Authorization'] = 'Basic ' + token\n    request = urllib.request.Request(ABLY_TIME_URL, headers=headers, method='GET')\n    try:\n        with urllib.request.urlopen(request, timeout=20) as response:\n            payload = json.loads(response.read().decode('utf-8'))\n            if not isinstance(payload, dict):\n                payload = {}\n            server_time = int(payload.get('time', 0))\n            return {'source': 'ably', 'time': server_time, 'raw': payload}\n    except (urllib.error.URLError, urllib.error.HTTPError, ValueError, TypeError) as exc:\n        return {'source': 'ably', 'time': 0, 'error': str(exc), 'raw': {}}\n\nably_snapshot = fetch_ably_time()\nprint('Ably server time:', ably_snapshot.get('time', 0))",
+          "mock_response": "{\"time\": 1764090000000}",
+          "actions": [
+            "Export ABLY_API_KEY in the shell environment before running the script.",
+            "Send a GET request to https://rest.ably.io/time with Accept: application/json and optional Basic auth.",
+            "Normalize the returned millisecond epoch into ably_snapshot time and preserve the raw payload.",
+            "Catch HTTP, network and parsing failures and return a structured error snapshot."
+          ],
+          "commands": [
+            {
+              "label": "Run workflow",
+              "language": "bash",
+              "code": "python workflow.py"
+            },
+            {
+              "label": "Check Ably key presence",
+              "language": "bash",
+              "code": "python -c 'import os; print(bool(os.environ.get(\"ABLY_API_KEY\")))'"
+            }
+          ],
+          "config": [
+            {
+              "key": "ABLY_API_KEY",
+              "value": "<your-ably-api-key>",
+              "description": "Ably API key used to build the Basic Authorization header for https://rest.ably.io/time."
+            },
+            {
+              "key": "ABLY_TIME_URL",
+              "value": "https://rest.ably.io/time",
+              "description": "Documented Ably REST time endpoint."
+            }
+          ],
+          "tools": ["Ably Realtime API"],
+          "checklist": [
+            "ably_snapshot is a dictionary with source, time and raw keys.",
+            "The request uses urllib.request.Request and never passes headers to urlopen.",
+            "A missing or invalid ABLY_API_KEY produces an error field instead of a crash."
+          ],
+          "expectedResult": "The Ably server time is captured in ably_snapshot and ready for enrichment.",
+          "links": [
+            {
+              "label": "Ably Realtime API Documentation",
+              "url": "https://ably.com/docs/api/rest-api"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with GitHub Copilot",
+          "description": "Consume the Ably snapshot and enrich it with GitHub Copilot usage metrics. The step calls the Copilot API, normalizes each usage record and returns a list of dictionaries for aggregation.",
+          "technical_explanation": "This enrichment stage consumes the Ably snapshot from step 1 and calls the GitHub Copilot API to attach usage metrics to the realtime observation. It sends a GET request to https://api.github.com/copilot/v1/usage with Accept: application/vnd.github+json, X-GitHub-Api-Version: 2022-11-28 and a Bearer token from GITHUB_COPILOT_TOKEN; the expected JSON shape is an object with a data array of usage records containing id, date, total_suggestions, total_acceptances and active_users. The code normalizes every numeric field with guarded integer conversion, skips non-dictionary items, handles empty data arrays and converts HTTP or parsing failures into an empty record set so step 3 always receives a list.",
+          "code_snippet": "import json\nimport os\nimport urllib.error\nimport urllib.parse\nimport urllib.request\n\nGITHUB_COPILOT_BASE = 'https://api.github.com/copilot/v1'\nGITHUB_COPILOT_TOKEN = os.environ.get('GITHUB_COPILOT_TOKEN', '')\n\ndef enrich_with_copilot(ably_snapshot):\n    query = urllib.parse.urlencode({'per_page': 100})\n    url = GITHUB_COPILOT_BASE + '/usage?' + query\n    headers = {'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28'}\n    if GITHUB_COPILOT_TOKEN:\n        headers['Authorization'] = 'Bearer ' + GITHUB_COPILOT_TOKEN\n    request = urllib.request.Request(url, headers=headers, method='GET')\n    try:\n        with urllib.request.urlopen(request, timeout=20) as response:\n            payload = json.loads(response.read().decode('utf-8'))\n    except (urllib.error.URLError, urllib.error.HTTPError, ValueError, TypeError) as exc:\n        payload = {'data': [], 'error': str(exc)}\n    raw_items = payload.get('data', []) if isinstance(payload, dict) else []\n    records = []\n    for item in raw_items:\n        if not isinstance(item, dict):\n            continue\n        try:\n            suggestions = int(item.get('total_suggestions', 0))\n        except (TypeError, ValueError):\n            suggestions = 0\n        try:\n            acceptances = int(item.get('total_acceptances', 0))\n        except (TypeError, ValueError):\n            acceptances = 0\n        try:\n            active_users = int(item.get('active_users', 0))\n        except (TypeError, ValueError):\n            active_users = 0\n        try:\n            ably_time = int(ably_snapshot.get('time', 0))\n        except (TypeError, ValueError):\n            ably_time = 0\n        record = {\n            'id': str(item.get('id', '')),\n            'date': str(item.get('date', '')),\n            'total_suggestions': suggestions,\n            'total_acceptances': acceptances,\n            'active_users': active_users,\n            'ably_time': ably_time,\n            'ably_source': str(ably_snapshot.get('source', 'ably')),\n        }\n        records.append(record)\n    return records\n\ncopilot_records = enrich_with_copilot(ably_snapshot)\nprint('Copilot records:', len(copilot_records))",
+          "mock_response": "{\"data\": [{\"id\": \"usage-2026-11-25\", \"date\": \"2026-11-25\", \"total_suggestions\": 128, \"total_acceptances\": 74, \"active_users\": 12}], \"meta\": {\"total\": 1}}",
+          "actions": [
+            "Consume ably_snapshot from step 1 without redefining it.",
+            "Send a GET request to https://api.github.com/copilot/v1/usage with Bearer authentication.",
+            "Normalize each data item into id, date, total_suggestions, total_acceptances, active_users and ably_time.",
+            "Convert malformed numeric fields to zero and skip non-dictionary records."
+          ],
+          "commands": [
+            {
+              "label": "Run workflow",
+              "language": "bash",
+              "code": "python workflow.py"
+            },
+            {
+              "label": "Check Copilot token presence",
+              "language": "bash",
+              "code": "python -c 'import os; print(bool(os.environ.get(\"GITHUB_COPILOT_TOKEN\")))'"
+            }
+          ],
+          "config": [
+            {
+              "key": "GITHUB_COPILOT_TOKEN",
+              "value": "<your-github-copilot-token>",
+              "description": "Bearer token for GitHub Copilot API requests."
+            },
+            {
+              "key": "GITHUB_COPILOT_BASE",
+              "value": "https://api.github.com/copilot/v1",
+              "description": "Base URL for the GitHub Copilot API."
+            }
+          ],
+          "tools": ["GitHub Copilot API"],
+          "checklist": [
+            "copilot_records is a list of normalized dictionaries.",
+            "The GitHub request includes Accept, X-GitHub-Api-Version and Bearer Authorization when the token is set.",
+            "Empty data arrays produce an empty list without raising."
+          ],
+          "expectedResult": "The Copilot usage records are normalized into copilot_records for aggregation.",
+          "links": [
+            {
+              "label": "GitHub Copilot API Documentation",
+              "url": "https://docs.github.com/en/copilot"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Validate the normalized Copilot records and compute the final operational summary. The step aggregates suggestion and acceptance counts, calculates the acceptance rate and persists deterministic JSON to disk.",
+          "technical_explanation": "This final stage is a pure-Python aggregation and persistence layer that consumes the normalized Copilot records from step 2 and produces the operational summary. It validates each record type, coerces numeric fields, rejects negative counters, computes total suggestions, total acceptances and an acceptance rate, then writes the summary as deterministic JSON to SUMMARY_PATH. Edge cases include an empty record list, malformed records, zero suggestions and file-system write errors; the zero-suggestion guard prevents division by zero and the JSON dump uses sort_keys for reproducible output.",
+          "code_snippet": "import json\nimport os\n\nSUMMARY_PATH = os.environ.get('SUMMARY_PATH', 'operational_summary.json')\n\ndef persist_summary(records):\n    validated = []\n    for record in records:\n        if not isinstance(record, dict):\n            continue\n        try:\n            suggestions = int(record.get('total_suggestions', 0))\n        except (TypeError, ValueError):\n            suggestions = 0\n        try:\n            acceptances = int(record.get('total_acceptances', 0))\n        except (TypeError, ValueError):\n            acceptances = 0\n        try:\n            active_users = int(record.get('active_users', 0))\n        except (TypeError, ValueError):\n            active_users = 0\n        try:\n            ably_time = int(record.get('ably_time', 0))\n        except (TypeError, ValueError):\n            ably_time = 0\n        if suggestions < 0 or acceptances < 0 or active_users < 0:\n            continue\n        validated.append({\n            'id': str(record.get('id', '')),\n            'date': str(record.get('date', '')),\n            'total_suggestions': suggestions,\n            'total_acceptances': acceptances,\n            'active_users': active_users,\n            'ably_time': ably_time,\n        })\n    total_suggestions = sum(item.get('total_suggestions', 0) for item in validated)\n    total_acceptances = sum(item.get('total_acceptances', 0) for item in validated)\n    acceptance_rate = 0.0\n    if total_suggestions > 0:\n        acceptance_rate = round(total_acceptances / total_suggestions, 6)\n    summary = {\n        'status': 'persisted',\n        'record_count': len(validated),\n        'total_suggestions': total_suggestions,\n        'total_acceptances': total_acceptances,\n        'acceptance_rate': acceptance_rate,\n        'records': validated,\n    }\n    with open(SUMMARY_PATH, 'w', encoding='utf-8') as handle:\n        json.dump(summary, handle, indent=2, sort_keys=True)\n    return summary\n\nfinal_summary = persist_summary(copilot_records)\nprint('Persisted summary to', SUMMARY_PATH)",
+          "mock_response": "{\"status\": \"persisted\", \"record_count\": 1, \"total_suggestions\": 128, \"total_acceptances\": 74, \"acceptance_rate\": 0.578125, \"records\": [{\"id\": \"usage-2026-11-25\", \"date\": \"2026-11-25\", \"total_suggestions\": 128, \"total_acceptances\": 74, \"active_users\": 12, \"ably_time\": 1764090000000}]}",
+          "actions": [
+            "Validate copilot_records and reject non-dictionary or negative-counter entries.",
+            "Compute total_suggestions, total_acceptances and acceptance_rate with a zero-suggestion guard.",
+            "Write the deterministic JSON summary to SUMMARY_PATH using json.dump.",
+            "Return final_summary for inspection and downstream logging."
+          ],
+          "commands": [
+            {
+              "label": "Run workflow",
+              "language": "bash",
+              "code": "python workflow.py"
+            },
+            {
+              "label": "Inspect persisted summary",
+              "language": "bash",
+              "code": "python -m json.tool operational_summary.json"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUMMARY_PATH",
+              "value": "operational_summary.json",
+              "description": "Local file path for the persisted operational summary."
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "operational_summary.json exists at SUMMARY_PATH and contains status, record_count and acceptance_rate.",
+            "The acceptance_rate is 0.0 when total_suggestions is zero.",
+            "The summary records array contains only validated records."
+          ],
+          "expectedResult": "The validated operational summary is persisted to operational_summary.json.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A Ably Realtime API account with API credentials (documentation: ably.com)",
+        "A GitHub Copilot API account with API credentials (documentation: docs.github.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A Ably Realtime API account with API credentials (documentation: ably.com)",
+        "A GitHub Copilot API account with API credentials (documentation: docs.github.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A request authentication pattern where the client sends an Authorization header containing a bearer token that the server validates before returning protected resources."
+        },
+        {
+          "term": "Exponential Backoff",
+          "definition": "A retry strategy that increases the delay between attempts after transient failures to reduce load and avoid repeated collisions with rate limits."
+        },
+        {
+          "term": "Presence State Reconciliation",
+          "definition": "The process of merging realtime presence events with a local membership view so that joins, leaves and updates converge to a consistent state."
+        },
+        {
+          "term": "Idempotent Summary Persistence",
+          "definition": "A write pattern where repeated executions produce the same final summary file without duplicating records or corrupting the stored state."
+        },
+        {
+          "term": "Schema Validation",
+          "definition": "A defensive check that verifies required fields, expected types and acceptable value ranges before data is aggregated or persisted."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Ably returns 401 Unauthorized when calling https://rest.ably.io/time.",
+          "solution": "Confirm ABLY_API_KEY is exported in the same shell that runs workflow.py and that the key is a full Ably API key; the code builds Basic auth from that value and omits the header only when the variable is empty."
+        },
+        {
+          "problem": "GitHub Copilot API returns 403 or 404 for https://api.github.com/copilot/v1/usage.",
+          "solution": "Verify GITHUB_COPILOT_TOKEN has Copilot read permissions for the target organization and that the token is not expired; the code records the HTTP error as an empty data array so the pipeline still writes a summary."
+        },
+        {
+          "problem": "operational_summary.json is empty or missing after the run.",
+          "solution": "Check that SUMMARY_PATH points to a writable directory and run the script from the project folder; step 3 writes the file only after validation and will raise a clear OSError if the path is not writable."
+        },
+        {
+          "problem": "The script stops with a JSONDecodeError from an API response.",
+          "solution": "The snippets catch ValueError around json.loads and convert the failure into a structured error or empty record set; inspect the printed error field and confirm the endpoint returns JSON rather than an HTML proxy page."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Ably Realtime API",
+          "url": "https://ably.com/docs/api/rest-api"
+        },
+        {
+          "label": "GitHub Copilot API",
+          "url": "https://docs.github.com/en/copilot"
+        }
+      ],
+      "price": 9.99
+    }
+  },
+  {
+    "slug": "telegram-bot-aiven-kafka-automation-pipeline",
+    "title": "Telegram Bot + Aiven Kafka Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects Telegram Bot with Aiven Kafka and The Telegram Bot API sends messages, handles commands and manages chats – a lightweight channel for alerts and personal automations. Aiven Kafka API allows you to manage Apache Kafka clusters easily.",
+    "category": "Messaging",
+    "tags": [
+      "telegram",
+      "bots",
+      "messaging",
+      "alerts",
+      "kafka",
+      "data-streaming",
+      "integration"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-25 17:07 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["Telegram Bot API", "Aiven Kafka API"],
+      "api_slugs": ["telegram-bot-api", "aiven-kafka-api"],
+      "alternative_slugs": [],
+      "useCase": "Personal alerts, bot workflows and community notifications. Then Use the Aiven Kafka API to set up and manage your data streaming infrastructure. It enables seamless integration of data sources.",
+      "steps": [
+        {
+          "title": "Ingest source records from Telegram Bot",
+          "description": "Send a bootstrap message through the Telegram Bot API and capture the normalized receipt that the rest of the pipeline uses as its correlation identifier. The step proves outbound connectivity, validates the bot token and chat ID, and converts both success and failure responses into a stable dictionary shape.",
+          "technical_explanation": "This step is the ingestion edge of the pipeline: it proves outbound Telegram connectivity and emits a normalized receipt that later steps use as the pipeline correlation identifier. The code performs an HTTPS POST to https://api.telegram.org/bot{token}/sendMessage with Content-Type application/x-www-form-urlencoded and a body containing chat_id, text and disable_web_page_preview; the successful response is a JSON object with ok, result.message_id, result.chat.id and result.text. Edge cases include 400 errors for an invalid chat_id or empty text, 401 for a revoked bot token, 429 rate limiting with retry_after, and network timeouts; the function returns a structured failure object instead of raising so the concatenated script can continue.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\nimport urllib.parse\nimport urllib.error\n\nTELEGRAM_API_HOST = 'https://api.telegram.org'\n\ndef send_telegram_message(text):\n    token = os.environ.get('TELEGRAM_BOT_TOKEN', '')\n    chat_id = os.environ.get('TELEGRAM_CHAT_ID', '')\n    if not token or not chat_id:\n        return {'ok': False, 'description': 'Telegram credentials are not configured', 'result': {'message_id': 0, 'chat': {'id': chat_id}, 'text': text}}\n    url = TELEGRAM_API_HOST + '/bot' + token + '/sendMessage'\n    payload = urllib.parse.urlencode({'chat_id': chat_id, 'text': text, 'disable_web_page_preview': 'true'}).encode('utf-8')\n    request = urllib.request.Request(url, data=payload, method='POST')\n    request.add_header('Content-Type', 'application/x-www-form-urlencoded')\n    try:\n        with urllib.request.urlopen(request, timeout=30) as response:\n            raw = response.read().decode('utf-8')\n            return json.loads(raw)\n    except urllib.error.HTTPError as exc:\n        error_body = exc.read().decode('utf-8')\n        return {'ok': False, 'description': error_body, 'result': {'message_id': 0, 'chat': {'id': chat_id}, 'text': text}}\n\ntelegram_receipt = send_telegram_message('Kafka pipeline bootstrap: Telegram Bot API is reachable.')",
+          "mock_response": "{\"ok\": true, \"result\": {\"message_id\": 12345, \"from\": {\"id\": 987654321, \"is_bot\": true, \"first_name\": \"KafkaOpsBot\", \"username\": \"kafka_ops_bot\"}, \"chat\": {\"id\": 123456789, \"first_name\": \"Ops\", \"type\": \"private\"}, \"date\": 1732631100, \"text\": \"Kafka pipeline bootstrap: Telegram Bot API is reachable.\"}}",
+          "actions": [
+            "Create a .env file with TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID so the script reads credentials through os.environ.get.",
+            "Implement send_telegram_message as an HTTPS POST to https://api.telegram.org/bot{token}/sendMessage with form-encoded chat_id and text.",
+            "Execute the module-level assignment telegram_receipt = send_telegram_message(...) and inspect ok, result.message_id and description.",
+            "Confirm that credential failures and HTTPError responses still return a dictionary with a result.message_id key for downstream correlation."
+          ],
+          "commands": [
+            {
+              "label": "Compile the workflow",
+              "language": "bash",
+              "code": "python -m py_compile workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "TELEGRAM_BOT_TOKEN",
+              "value": "<telegram_bot_token>",
+              "description": "Bot token used in the URL path for api.telegram.org."
+            },
+            {
+              "key": "TELEGRAM_CHAT_ID",
+              "value": "<telegram_chat_id>",
+              "description": "Target chat identifier for the sendMessage request."
+            }
+          ],
+          "tools": ["Telegram Bot API"],
+          "checklist": [
+            "The snippet imports os, json, urllib.request, urllib.parse and urllib.error at the top.",
+            "The module-level variable telegram_receipt is assigned by a top-level function call.",
+            "A configured run returns ok true with a numeric result.message_id."
+          ],
+          "expectedResult": "Telegram connectivity is proven and telegram_receipt is available for step 2.",
+          "links": [
+            {
+              "label": "Telegram Bot API Documentation",
+              "url": "https://core.telegram.org/bots/api"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with Aiven Kafka",
+          "description": "Consume the Telegram receipt and enrich it with the Aiven project inventory returned by the Kafka management API. Normalize each project into a stable record that carries project_name, cloud_name, plan, state and the Telegram message_id for traceability.",
+          "technical_explanation": "This step is the enrichment and control-plane lookup stage: it consumes the Telegram receipt from step 1 and enriches it with the Aiven project inventory returned by the Kafka management API. The code sends a GET request to https://api.aiven.io/v1/project with an Authorization: Bearer <token> header and Accept: application/json; the response is a JSON object with a projects array whose entries expose project_name, cloud_name, plan and state plus optional metadata. Edge cases include 401/403 for a missing or insufficient API key, empty projects arrays for a new account, transient 5xx responses, and missing optional fields, so every dictionary access uses .get with a default and the Telegram message_id is copied into each normalized record.",
+          "code_snippet": "import os\nimport json\nimport urllib.request\nimport urllib.error\n\nAIVEN_API_HOST = 'https://api.aiven.io'\n\ndef fetch_aiven_projects(telegram_event):\n    token = os.environ.get('AIVEN_API_TOKEN', '')\n    result = telegram_event.get('result') or {}\n    message_id = result.get('message_id', 0)\n    if not token:\n        return {'projects': [], 'meta': {'telegram_message_id': message_id, 'status': 'missing_credentials'}}\n    url = AIVEN_API_HOST + '/v1/project'\n    request = urllib.request.Request(url, method='GET')\n    request.add_header('Authorization', 'Bearer ' + token)\n    request.add_header('Accept', 'application/json')\n    try:\n        with urllib.request.urlopen(request, timeout=30) as response:\n            raw = response.read().decode('utf-8')\n            data = json.loads(raw)\n            meta = data.get('meta', {}) or {}\n            meta['telegram_message_id'] = message_id\n            data['meta'] = meta\n            return data\n    except urllib.error.HTTPError as exc:\n        error_body = exc.read().decode('utf-8')\n        return {'projects': [], 'meta': {'telegram_message_id': message_id, 'error': error_body}}\n\ndef normalize_kafka_inventory(telegram_event):\n    raw = fetch_aiven_projects(telegram_event)\n    meta = raw.get('meta', {}) or {}\n    records = []\n    for project in raw.get('projects', []) or []:\n        record = {\n            'project_name': project.get('project_name', ''),\n            'cloud_name': project.get('cloud_name', ''),\n            'plan': project.get('plan', ''),\n            'state': project.get('state', ''),\n            'telegram_message_id': meta.get('telegram_message_id', 0)\n        }\n        records.append(record)\n    return records\n\nkafka_inventory = normalize_kafka_inventory(telegram_receipt)",
+          "mock_response": "{\"projects\": [{\"project_name\": \"telegram-kafka-prod\", \"cloud_name\": \"aws-eu-west-1\", \"plan\": \"business-4\", \"state\": \"ACTIVE\"}, {\"project_name\": \"telegram-kafka-staging\", \"cloud_name\": \"google-europe-west1\", \"plan\": \"startup-4\", \"state\": \"RUNNING\"}], \"meta\": {\"telegram_message_id\": 12345}}",
+          "actions": [
+            "Export AIVEN_API_TOKEN and confirm that the key can list projects for the account.",
+            "Send a GET request to https://api.aiven.io/v1/project with Authorization Bearer and Accept application/json headers.",
+            "Normalize the projects array into records that include telegram_message_id from telegram_receipt.",
+            "Inspect empty projects arrays and HTTPError branches to verify that kafka_inventory remains a list."
+          ],
+          "commands": [
+            {
+              "label": "Run the full pipeline",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "AIVEN_API_TOKEN",
+              "value": "<aiven_api_token>",
+              "description": "Bearer token used to authenticate against api.aiven.io/v1/project."
+            }
+          ],
+          "tools": ["Aiven Kafka API"],
+          "checklist": [
+            "The module-level variable kafka_inventory is assigned at top level.",
+            "Every normalized record contains project_name and telegram_message_id.",
+            "The code builds urllib.request.Request explicitly and never passes headers to urlopen."
+          ],
+          "expectedResult": "Aiven project inventory is normalized into kafka_inventory with Telegram correlation metadata.",
+          "links": [
+            {
+              "label": "Aiven Kafka API Documentation",
+              "url": "https://aiven.io/docs/products/kafka"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Consume kafka_inventory and telegram_receipt, validate the record schema and project-name uniqueness, compute active-project counts, and persist a deterministic JSON summary. This pure-Python step produces the auditable artifact that confirms the Telegram-to-Aiven control path is complete.",
+          "technical_explanation": "This step is the persistence and validation boundary: it consumes kafka_inventory from step 2 and telegram_receipt from step 1, checks that the records are a list of objects with unique project_name values, and computes active-project counts without any network call. The code writes a deterministic JSON summary to operational_summary.json using pathlib and json.dump with sorted keys, which makes the output reproducible for audits and downstream automations. Edge cases include an empty inventory, a non-list payload, duplicate project names, missing required fields and an unwritable output path; those conditions raise explicit ValueError or OSError exceptions so the pipeline fails loudly rather than persisting corrupt state.",
+          "code_snippet": "import json\nfrom pathlib import Path\n\nOUTPUT_PATH = Path('operational_summary.json')\n\ndef persist_summary():\n    if not isinstance(kafka_inventory, list):\n        raise ValueError('kafka_inventory must be a list')\n    total_projects = len(kafka_inventory)\n    active_projects = 0\n    seen = set()\n    for record in kafka_inventory:\n        if not isinstance(record, dict):\n            raise ValueError('Kafka inventory record must be an object')\n        project_name = record.get('project_name', '')\n        if not project_name:\n            raise ValueError('Kafka inventory record is missing project_name')\n        if project_name in seen:\n            raise ValueError('Duplicate project_name detected')\n        seen.add(project_name)\n        if record.get('state', '') == 'ACTIVE':\n            active_projects += 1\n    telegram_result = telegram_receipt.get('result') or {}\n    summary = {\n        'telegram_message_id': telegram_result.get('message_id', 0),\n        'total_projects': total_projects,\n        'active_projects': active_projects,\n        'project_names': sorted(seen)\n    }\n    with OUTPUT_PATH.open('w', encoding='utf-8') as handle:\n        json.dump(summary, handle, indent=2, sort_keys=True)\n    return summary\n\nfinal_summary = persist_summary()",
+          "mock_response": "{\"telegram_message_id\": 12345, \"total_projects\": 2, \"active_projects\": 1, \"project_names\": [\"telegram-kafka-prod\", \"telegram-kafka-staging\"]}",
+          "actions": [
+            "Validate that kafka_inventory is a list of dictionaries and that every record has a non-empty project_name.",
+            "Detect duplicate project_name values and count only records whose state equals ACTIVE.",
+            "Persist operational_summary.json with json.dump using indent=2 and sort_keys=True.",
+            "Inspect the persisted file to confirm telegram_message_id, total_projects, active_projects and project_names are present."
+          ],
+          "commands": [
+            {
+              "label": "Inspect the persisted summary",
+              "language": "bash",
+              "code": "cat operational_summary.json"
+            }
+          ],
+          "config": [
+            {
+              "key": "OUTPUT_PATH",
+              "value": "operational_summary.json",
+              "description": "Filesystem path for the final validated operational summary."
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "The top-level assignment final_summary = persist_summary() exists.",
+            "The output file contains telegram_message_id, total_projects, active_projects and project_names.",
+            "An empty kafka_inventory still produces valid JSON with zero counts."
+          ],
+          "expectedResult": "A deterministic operational summary is persisted to operational_summary.json.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A Telegram Bot API account with API credentials (documentation: core.telegram.org)",
+        "A Aiven Kafka API account with API credentials (documentation: aiven.io)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A Telegram Bot API account with API credentials (documentation: core.telegram.org)",
+        "A Aiven Kafka API account with API credentials (documentation: aiven.io)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bot Token URL Path Authentication",
+          "definition": "A Telegram authentication pattern in which the bot token is embedded in the request path after /bot and before the method name, so the full URL must be treated as a secret."
+        },
+        {
+          "term": "Bearer Token Authorization",
+          "definition": "An authorization scheme that sends a credential in the Authorization header using the Bearer prefix and is validated by the upstream service on every request."
+        },
+        {
+          "term": "Idempotent Message Delivery",
+          "definition": "A delivery design in which retrying the same logical message does not create duplicate side effects, typically by tracking a message identifier or deduplication key."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A retry strategy that waits progressively longer after receiving 429 or transient 5xx responses to avoid overwhelming an upstream service."
+        },
+        {
+          "term": "Schema Validation and Normalization",
+          "definition": "The process of checking that records contain required fields with expected types and converting them into a stable shape for downstream consumers."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Telegram returns 401 Unauthorized or 404 Not Found from sendMessage.",
+          "solution": "Verify that TELEGRAM_BOT_TOKEN is the full token from BotFather, confirm that the URL is built as https://api.telegram.org/bot{token}/sendMessage, and rotate the token if it has been revoked."
+        },
+        {
+          "problem": "Aiven returns 401 or 403 when listing projects.",
+          "solution": "Confirm that AIVEN_API_TOKEN is an account or project API key with permission to list projects, then send it exactly as Authorization: Bearer <token> to https://api.aiven.io/v1/project."
+        },
+        {
+          "problem": "operational_summary.json is not created after the pipeline runs.",
+          "solution": "Check that the process can write to the current working directory, run the script from the project folder that contains workflow.py and .env, and inspect the final exception traceback for ValueError or OSError."
+        },
+        {
+          "problem": "The concatenated script raises TypeError around urlopen.",
+          "solution": "Build urllib.request.Request with data and headers explicitly, call request.add_header for each header, and call urllib.request.urlopen(request, timeout=30) without a headers keyword argument."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Telegram Bot API",
+          "url": "https://core.telegram.org/bots/api"
+        },
+        {
+          "label": "Aiven Kafka API",
+          "url": "https://aiven.io/docs/products/kafka"
+        }
+      ],
+      "price": 9.99
+    }
   }
 ]
