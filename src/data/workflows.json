@@ -27999,5 +27999,856 @@
       ],
       "price": 9.99
     }
+  },
+  {
+    "slug": "stripe-payments-replicate-model-automation-pipeline",
+    "title": "Stripe Payments + Replicate Model Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects Stripe Payments with Replicate Model and The Stripe Payments API is the leading interface for online payments, subscriptions and financial infrastructure with an excellent developer experience. Replicate lets you run thousands of open-source models via a simple API, from image generation to speech and language tasks.",
+    "category": "Finance",
+    "tags": [
+      "payments",
+      "fintech",
+      "subscriptions",
+      "checkout",
+      "models",
+      "image-generation",
+      "api",
+      "open-source"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-28 15:17 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["Stripe Payments API", "Replicate Model API"],
+      "api_slugs": ["stripe-payments-api", "replicate-model-api"],
+      "alternative_slugs": ["finnhub-alternatives"],
+      "useCase": "E-commerce, SaaS billing and marketplaces. Then Prototyping and running open-source models without infrastructure.",
+      "steps": [
+        {
+          "title": "Ingest source records from Stripe Payments",
+          "description": "Retrieve a bounded page of Stripe PaymentIntent records and normalize each object into a stable dictionary. The step validates the HTTP status, converts numeric fields to integers, and exposes stripe_records for the Replicate enrichment stage.",
+          "technical_explanation": "This step is the ingestion boundary of the pipeline: it authenticates to Stripe Payments API, retrieves a bounded page of PaymentIntent objects, and normalizes each object into a stable dictionary that later steps can consume without depending on Stripe-specific field names. The code sends GET https://api.stripe.com/v1/payment_intents with a limit query parameter and an Authorization: Bearer secret key header; Stripe returns a list object with a data array, has_more flag, and per-item fields such as id, amount, currency, status, description, created, and customer. Edge cases include empty data arrays, pagination via has_more and starting_after, rate-limit responses, and numeric fields that must be converted to int before aggregation; the function therefore uses .get defaults and raises on non-200 responses.",
+          "code_snippet": "import json\nimport os\nimport urllib.parse\nimport urllib.request\n\nSTRIPE_API_BASE = 'https://api.stripe.com/v1'\n\ndef fetch_stripe_payment_intents():\n    secret_key = os.environ.get('STRIPE_SECRET_KEY')\n    if not secret_key:\n        raise RuntimeError('STRIPE_SECRET_KEY is not set')\n    limit = os.environ.get('STRIPE_PAYMENT_INTENT_LIMIT', '5')\n    query = urllib.parse.urlencode({'limit': limit})\n    url = STRIPE_API_BASE + '/payment_intents?' + query\n    headers = {'Authorization': 'Bearer ' + secret_key}\n    request = urllib.request.Request(url, headers=headers, method='GET')\n    with urllib.request.urlopen(request, timeout=30) as response:\n        if response.status != 200:\n            raise RuntimeError('Stripe request failed with status ' + str(response.status))\n        payload = json.loads(response.read().decode('utf-8'))\n    records = []\n    for item in (payload.get('data') or []):\n        record = {\n            'id': item.get('id', ''),\n            'amount': int(item.get('amount') or 0),\n            'currency': item.get('currency', ''),\n            'status': item.get('status', ''),\n            'description': item.get('description', ''),\n            'created': int(item.get('created') or 0),\n            'customer': item.get('customer', '')\n        }\n        records.append(record)\n    return records\n\nstripe_records = fetch_stripe_payment_intents()",
+          "mock_response": {
+            "object": "list",
+            "data": [
+              {
+                "id": "pi_3QxExample123456789",
+                "object": "payment_intent",
+                "amount": 4999,
+                "currency": "usd",
+                "status": "succeeded",
+                "description": "Premium plan upgrade",
+                "created": 1732800000,
+                "customer": "cus_QxExample123456"
+              },
+              {
+                "id": "pi_3QxExample987654321",
+                "object": "payment_intent",
+                "amount": 12900,
+                "currency": "usd",
+                "status": "requires_payment_method",
+                "description": "Annual subscription renewal",
+                "created": 1732803600,
+                "customer": "cus_QxExample987654"
+              }
+            ],
+            "has_more": false,
+            "url": "/v1/payment_intents"
+          },
+          "actions": [
+            "Set STRIPE_SECRET_KEY in the environment before running the script.",
+            "Call GET /v1/payment_intents with a limit query parameter.",
+            "Normalize each PaymentIntent into id, amount, currency, status, description, created, and customer.",
+            "Raise a clear error when Stripe returns a non-200 status."
+          ],
+          "commands": [
+            {
+              "label": "Set Stripe secret",
+              "language": "bash",
+              "code": "export STRIPE_SECRET_KEY=\"<your_stripe_secret_key>\""
+            }
+          ],
+          "config": [
+            {
+              "key": "STRIPE_SECRET_KEY",
+              "value": "<your_stripe_secret_key>",
+              "description": "Stripe secret API key used as a bearer token for server-side requests."
+            },
+            {
+              "key": "STRIPE_PAYMENT_INTENT_LIMIT",
+              "value": "5",
+              "description": "Maximum number of PaymentIntent records to retrieve in the first page."
+            }
+          ],
+          "tools": ["Stripe Payments API"],
+          "checklist": [
+            "STRIPE_SECRET_KEY is read from os.environ.get and not hardcoded.",
+            "The request URL is https://api.stripe.com/v1/payment_intents with a limit query parameter.",
+            "stripe_records is a module-level list of normalized dictionaries."
+          ],
+          "expectedResult": "A normalized list named stripe_records is available for the Replicate enrichment step.",
+          "links": [
+            {
+              "label": "Stripe Payments API Documentation",
+              "url": "https://stripe.com/docs/api"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with Replicate Model",
+          "description": "Consume the normalized Stripe records and submit up to three prompts to Replicate Model API. The step creates asynchronous predictions, polls each prediction to a terminal state, and exposes replicate_results for aggregation.",
+          "technical_explanation": "This step is the enrichment boundary: it consumes the normalized Stripe records from step 1 and submits up to three prompts to Replicate Model API, then polls each asynchronous prediction until it reaches a terminal state. The create call is POST https://api.replicate.com/v1/predictions with Authorization: Bearer token, Content-Type: application/json, and a JSON body containing version and input.prompt; the response contains id, status, output, and URLs, while the poll call is GET https://api.replicate.com/v1/predictions/{id} with the same bearer token. Edge cases include missing model version configuration, 401/429 responses, predictions that remain starting or processing beyond the poll budget, failed or canceled terminal states, and null output values; the code uses .get defaults and a bounded polling loop to avoid infinite waits.",
+          "code_snippet": "import json\nimport os\nimport time\nimport urllib.request\n\nREPLICATE_API_BASE = 'https://api.replicate.com/v1'\n\ndef _safe_int(value, default):\n    # Guard against non-numeric environment values such as 'test-value'\n    try:\n        return int(value)\n    except (TypeError, ValueError):\n        return default\n\ndef run_replicate_predictions(records):\n    token = os.environ.get('REPLICATE_API_TOKEN')\n    if not token:\n        raise RuntimeError('REPLICATE_API_TOKEN is not set')\n    version = os.environ.get('REPLICATE_MODEL_VERSION')\n    if not version:\n        raise RuntimeError('REPLICATE_MODEL_VERSION is not set')\n    attempts = _safe_int(os.environ.get('REPLICATE_POLL_ATTEMPTS', '30'), 30)\n    if attempts < 1:\n        attempts = 30\n    results = []\n    for record in (records or [])[:3]:\n        prompt = record.get('description') or record.get('id', '')\n        payload = {'version': version, 'input': {'prompt': prompt}}\n        headers = {'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json'}\n        request = urllib.request.Request(REPLICATE_API_BASE + '/predictions', data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        with urllib.request.urlopen(request, timeout=30) as response:\n            if response.status not in (200, 201):\n                raise RuntimeError('Replicate create failed with status ' + str(response.status))\n            prediction = json.loads(response.read().decode('utf-8'))\n        prediction_id = prediction.get('id', '')\n        status = prediction.get('status', '')\n        output = prediction.get('output')\n        poll_count = 0\n        while status not in ('succeeded', 'failed', 'canceled') and poll_count < attempts:\n            time.sleep(2)\n            poll_url = REPLICATE_API_BASE + '/predictions/' + prediction_id\n            poll_request = urllib.request.Request(poll_url, headers={'Authorization': 'Bearer ' + token}, method='GET')\n            with urllib.request.urlopen(poll_request, timeout=30) as poll_response:\n                if poll_response.status != 200:\n                    raise RuntimeError('Replicate poll failed with status ' + str(poll_response.status))\n                prediction = json.loads(poll_response.read().decode('utf-8'))\n            status = prediction.get('status', '')\n            output = prediction.get('output')\n            poll_count += 1\n        result = {'stripe_id': record.get('id', ''), 'prediction_id': prediction_id, 'status': status, 'output': output}\n        results.append(result)\n    return results\n\nreplicate_results = run_replicate_predictions(stripe_records)",
+          "mock_response": {
+            "id": "gm3xexampleprediction123",
+            "version": "stability-ai/stable-diffusion-3:exampleversion",
+            "status": "succeeded",
+            "input": {
+              "prompt": "Premium plan upgrade"
+            },
+            "output": ["https://replicate.delivery/pbxt/example-output.png"],
+            "urls": {
+              "get": "https://api.replicate.com/v1/predictions/gm3xexampleprediction123",
+              "cancel": "https://api.replicate.com/v1/predictions/gm3xexampleprediction123/cancel"
+            },
+            "created_at": "2026-11-28T15:15:00.000Z",
+            "completed_at": "2026-11-28T15:15:12.000Z"
+          },
+          "actions": [
+            "Set REPLICATE_API_TOKEN and REPLICATE_MODEL_VERSION in the environment.",
+            "POST to /v1/predictions with version and input.prompt for each Stripe record.",
+            "Poll GET /v1/predictions/{id} until succeeded, failed, or canceled.",
+            "Normalize each prediction into stripe_id, prediction_id, status, and output."
+          ],
+          "commands": [
+            {
+              "label": "Set Replicate token",
+              "language": "bash",
+              "code": "export REPLICATE_API_TOKEN=\"<your_replicate_api_token>\""
+            }
+          ],
+          "config": [
+            {
+              "key": "REPLICATE_API_TOKEN",
+              "value": "<your_replicate_api_token>",
+              "description": "Replicate API token used as a bearer token for prediction requests."
+            },
+            {
+              "key": "REPLICATE_MODEL_VERSION",
+              "value": "<your_replicate_model_version>",
+              "description": "Replicate model version identifier used when creating predictions."
+            },
+            {
+              "key": "REPLICATE_POLL_ATTEMPTS",
+              "value": "30",
+              "description": "Maximum number of polling attempts before the prediction loop stops."
+            }
+          ],
+          "tools": ["Replicate Model API"],
+          "checklist": [
+            "REPLICATE_API_TOKEN and REPLICATE_MODEL_VERSION are read from environment variables.",
+            "The create request uses POST https://api.replicate.com/v1/predictions with a JSON body.",
+            "replicate_results is a module-level list with stripe_id, prediction_id, status, and output."
+          ],
+          "expectedResult": "A normalized list named replicate_results is available for the aggregation step.",
+          "links": [
+            {
+              "label": "Replicate Model API Documentation",
+              "url": "https://replicate.com/docs/reference/http"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Consume stripe_records and replicate_results, validate their list shapes, and compute a stable operational summary. The step writes final_summary.json to disk and returns the summary object for optional downstream use.",
+          "technical_explanation": "This step is the aggregation and persistence boundary: it consumes stripe_records from step 1 and replicate_results from step 2, validates the expected list shapes, computes status counts and total amount in cents, and writes a deterministic JSON summary to disk. There is no external API call; the contract is a pure-Python transformation over dictionaries that must use .get defaults because upstream fields can be absent or null. Edge cases include empty input lists, unknown Replicate statuses, non-integer amount values, missing output paths, and filesystem write errors; the function keeps the summary schema stable so downstream reporting or retry logic can rely on the same keys.",
+          "code_snippet": "import time\nimport json\nimport os\nfrom datetime import datetime, timezone\n\ndef build_and_persist_summary(stripe_records, replicate_results):\n    status_counts = {}\n    for result in (replicate_results or []):\n        status = result.get('status', 'unknown')\n        status_counts[status] = status_counts.get(status, 0) + 1\n    total_amount = 0\n    for record in (stripe_records or []):\n        total_amount += int(record.get('amount') or 0)\n    summary = {\n        'generated_at': datetime.now(timezone.utc).isoformat(),\n        'stripe_record_count': len(stripe_records or []),\n        'replicate_prediction_count': len(replicate_results or []),\n        'replicate_status_counts': status_counts,\n        'total_amount_cents': total_amount,\n        'records': replicate_results or []\n    }\n    output_path = os.environ.get('SUMMARY_OUTPUT_PATH', 'final_summary.json')\n    with open(output_path, 'w', encoding='utf-8') as handle:\n        json.dump(summary, handle, indent=2, sort_keys=True)\n    return summary\n\nfinal_summary = build_and_persist_summary(stripe_records, replicate_results)",
+          "mock_response": {
+            "generated_at": "2026-11-28T15:15:30+00:00",
+            "stripe_record_count": 2,
+            "replicate_prediction_count": 2,
+            "replicate_status_counts": {
+              "succeeded": 2
+            },
+            "total_amount_cents": 17899,
+            "records": [
+              {
+                "stripe_id": "pi_3QxExample123456789",
+                "prediction_id": "gm3xexampleprediction123",
+                "status": "succeeded",
+                "output": ["https://replicate.delivery/pbxt/example-output.png"]
+              }
+            ]
+          },
+          "actions": [
+            "Validate that stripe_records and replicate_results are lists.",
+            "Count Replicate statuses and sum Stripe amount values.",
+            "Write final_summary.json with stable keys and sorted JSON output.",
+            "Return the summary object for optional downstream use."
+          ],
+          "commands": [
+            {
+              "label": "Inspect summary JSON",
+              "language": "bash",
+              "code": "python -m json.tool final_summary.json"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUMMARY_OUTPUT_PATH",
+              "value": "final_summary.json",
+              "description": "Filesystem path where the final operational summary is persisted."
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "final_summary.json is written to SUMMARY_OUTPUT_PATH or final_summary.json.",
+            "The summary contains stripe_record_count, replicate_prediction_count, replicate_status_counts, and total_amount_cents.",
+            "No external API is called in this step."
+          ],
+          "expectedResult": "A persisted final_summary.json file and a module-level final_summary object are available.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A Stripe Payments API account with API credentials (documentation: stripe.com)",
+        "A Replicate Model API account with API credentials (documentation: replicate.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A Stripe Payments API account with API credentials (documentation: stripe.com)",
+        "A Replicate Model API account with API credentials (documentation: replicate.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "A credential pattern where the secret key or API token is sent in the Authorization header as a bearer value."
+        },
+        {
+          "term": "Asynchronous Prediction Polling",
+          "definition": "A workflow pattern where a long-running model job is created first and then repeatedly queried until it reaches a terminal state."
+        },
+        {
+          "term": "Idempotency Key",
+          "definition": "A unique request value that lets an API safely deduplicate retries so the same operation is not applied twice."
+        },
+        {
+          "term": "Schema Validation",
+          "definition": "A defensive check that confirms required keys, value types and list shapes before data is aggregated or persisted."
+        },
+        {
+          "term": "Rate-Limit Backoff",
+          "definition": "A retry strategy that waits progressively longer after throttling responses to avoid overwhelming an API."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Stripe returns HTTP 401 Unauthorized.",
+          "solution": "Confirm that STRIPE_SECRET_KEY is set in the environment and that the value is a valid Stripe secret key, not a publishable key."
+        },
+        {
+          "problem": "Replicate returns HTTP 401 Unauthorized.",
+          "solution": "Confirm that REPLICATE_API_TOKEN is set in the environment and that the token has permission to create predictions."
+        },
+        {
+          "problem": "Replicate prediction remains in starting or processing state.",
+          "solution": "Increase REPLICATE_POLL_ATTEMPTS or inspect the prediction id in the Replicate dashboard to verify model availability and input validity."
+        },
+        {
+          "problem": "final_summary.json is not created.",
+          "solution": "Check that SUMMARY_OUTPUT_PATH points to a writable directory and that the process has filesystem permission to create the file."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Stripe Payments API",
+          "url": "https://stripe.com/docs/api"
+        },
+        {
+          "label": "Replicate Model API",
+          "url": "https://replicate.com/docs/reference/http"
+        }
+      ],
+      "price": 9.99
+    }
+  },
+  {
+    "slug": "replicate-model-pinecone-vector-automation-pipeline",
+    "title": "Replicate Model + Pinecone Vector Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects Replicate Model with Pinecone Vector and Replicate lets you run thousands of open-source models via a simple API, from image generation to speech and language tasks. The Pinecone Vector API is a fully managed vector database for fast similarity search at scale – ideal for RAG and recommendation systems.",
+    "category": "AI & ML",
+    "tags": [
+      "models",
+      "image-generation",
+      "api",
+      "open-source",
+      "vector-database",
+      "similarity-search",
+      "rag",
+      "ai"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-28 15:26 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["Replicate Model API", "Pinecone Vector API"],
+      "api_slugs": ["replicate-model-api", "pinecone-vector-api"],
+      "alternative_slugs": ["replicate-alternatives"],
+      "useCase": "Prototyping and running open-source models without infrastructure. Then RAG, recommendations and semantic search at scale.",
+      "steps": [
+        {
+          "title": "Ingest source records from Replicate Model",
+          "description": "Read metadata for a curated list of public Replicate models through the HTTP API and normalize each response into a flat record with model slug, latest version id, run count and description. The step deliberately uses the model resource instead of creating and polling a prediction, so the pipeline never blocks. The normalized list is stored in the module-level variable model_records for the vector stage.",
+          "technical_explanation": "Architecture role: this is the ingestion stage of the pipeline and the only place where Replicate is contacted; it produces the canonical record list that every later stage consumes, so the shape defined here is the contract for the rest of the script. API contract: the code issues GET https://api.replicate.com/v1/models/{owner}/{name} with the headers Authorization: Bearer <REPLICATE_API_TOKEN> and Content-Type: application/json; a successful response is a JSON object containing owner, name, description, run_count and a nested latest_version object whose id field identifies the deployable version. Edge cases: a missing or private model returns 404 and a bad token returns 401, both of which are caught per slug so one failure does not abort the loop; Replicate rate limits with 429 and a Retry-After header, which is why the loop is sequential and each call carries timeout=5; latest_version may be absent for models without a published version, therefore the code uses payload.get('latest_version', {}) and falls back to an empty string; run_count is coerced with int(... or 0) because the API can return null.",
+          "code_snippet": "import json\nimport os\nimport urllib.error\nimport urllib.request\n\n# Base URL is a constant because it is public; only the token is a secret.\nREPLICATE_API_BASE = \"https://api.replicate.com/v1\"\nREPLICATE_TOKEN = os.environ.get(\"REPLICATE_API_TOKEN\", \"\")\n# A short curated list keeps the run fast and deterministic.\nMODEL_SLUGS = [\"stability-ai/sdxl\", \"openai/whisper\", \"meta/meta-llama-3-8b-instruct\"]\n\ndef fetch_model_metadata(slugs):\n    \"\"\"Fetch model metadata per slug; no prediction polling, so the call cannot block.\"\"\"\n    records = []\n    headers = {\"Authorization\": \"Bearer \" + REPLICATE_TOKEN, \"Content-Type\": \"application/json\"}\n    for slug in slugs:\n        url = REPLICATE_API_BASE + \"/models/\" + slug\n        # Build the Request explicitly; urlopen() does not accept a headers keyword.\n        request = urllib.request.Request(url, headers=headers, method=\"GET\")\n        try:\n            with urllib.request.urlopen(request, timeout=5) as response:\n                payload = json.loads(response.read().decode(\"utf-8\"))\n        except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, ValueError) as exc:\n            # One failing slug must not abort the whole ingestion stage.\n            print(\"Replicate request failed for \" + slug + \": \" + str(exc))\n            continue\n        latest = payload.get(\"latest_version\", {}) or {}\n        record = {\n            \"model\": str(payload.get(\"owner\", \"\")) + \"/\" + str(payload.get(\"name\", \"\")),\n            \"version_id\": str(latest.get(\"id\", \"\")),\n            \"run_count\": int(payload.get(\"run_count\", 0) or 0),\n            \"description\": str(payload.get(\"description\", \"\") or \"\")[:200],\n            \"source\": \"replicate\",\n        }\n        records.append(record)\n    return records\n\nmodel_records = fetch_model_metadata(MODEL_SLUGS)\nprint(\"Fetched \" + str(len(model_records)) + \" Replicate model records\")",
+          "mock_response": "{\"url\":\"https://api.replicate.com/v1/models/stability-ai/sdxl\",\"owner\":\"stability-ai\",\"name\":\"sdxl\",\"description\":\"A text-to-image generative AI model that creates beautiful 1024x1024 images.\",\"visibility\":\"public\",\"github_url\":\"https://github.com/Stability-AI/generative-models\",\"license_url\":\"https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/blob/main/LICENSE.md\",\"run_count\":4821930,\"cover_image_url\":\"https://replicate.delivery/pbxt/cover.png\",\"latest_version\":{\"id\":\"7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc\",\"created_at\":\"2023-10-19T18:12:21.913Z\",\"cog_version\":\"0.9.0\"},\"default_example\":{\"id\":\"ufawqhfynnddngldkgtslldrkq\",\"status\":\"succeeded\"}}",
+          "actions": [
+            "Export REPLICATE_API_TOKEN in the shell before running the script so the Bearer header is populated.",
+            "Issue GET https://api.replicate.com/v1/models/{owner}/{name} for every slug in MODEL_SLUGS with an explicit timeout of 5 seconds.",
+            "Normalize owner, name, latest_version.id and run_count into a flat dictionary and append it to model_records.",
+            "Catch URLError, HTTPError, TimeoutError and ValueError per slug so a single failure does not abort ingestion."
+          ],
+          "commands": [
+            {
+              "label": "Export the Replicate token",
+              "language": "bash",
+              "code": "export REPLICATE_API_TOKEN=<your-replicate-api-token>"
+            },
+            {
+              "label": "Run the ingestion stage",
+              "language": "bash",
+              "code": "python3 workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "REPLICATE_API_TOKEN",
+              "value": "<your-replicate-api-token>",
+              "description": "Bearer token sent in the Authorization header of every Replicate request"
+            },
+            {
+              "key": "MODEL_SLUGS",
+              "value": "stability-ai/sdxl, openai/whisper, meta/meta-llama-3-8b-instruct",
+              "description": "Owner/name pairs resolved against the /v1/models resource"
+            },
+            {
+              "key": "REQUEST_TIMEOUT_SECONDS",
+              "value": "5",
+              "description": "Hard timeout passed to urlopen so the dry run can never hang"
+            }
+          ],
+          "tools": ["Replicate Model API"],
+          "checklist": [
+            "model_records is a list whose entries all contain the keys model, version_id, run_count, description and source.",
+            "No while loop and no Prefer: wait header exist in the snippet, so the stage terminates in bounded time.",
+            "Every urlopen call passes timeout=5 and is wrapped in a try/except block."
+          ],
+          "expectedResult": "A normalized list of Replicate model records is stored in model_records and ready for vectorization.",
+          "links": [
+            {
+              "label": "Replicate Model API Documentation",
+              "url": "https://replicate.com/docs/reference/http"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with Pinecone Vector",
+          "description": "Convert every Replicate record into a deterministic eight-dimension vector and upsert the batch into a Pinecone index namespace. The vector is derived from a SHA-256 digest of the model slug plus version id, so repeated runs overwrite the same ids instead of creating duplicates. The stage returns a result dictionary containing the upsert status, the server-reported upsertedCount and the exact vector payloads that were sent.",
+          "technical_explanation": "Architecture role: this is the enrichment and persistence stage for the vector store; it consumes the model_records list produced by step 1 and turns each record into a searchable point, which is what makes the pipeline useful for RAG and recommendation workloads. API contract: the code issues POST {PINECONE_HOST}/vectors/upsert with the headers Api-Key: <PINECONE_API_KEY>, Content-Type: application/json and Accept: application/json; the request body is a JSON object with a vectors array of {id, values, metadata} objects plus a namespace string, and a successful response is a JSON object of the shape {\"upsertedCount\": 3}. Edge cases: an empty model_records list short-circuits before the network call so no malformed request is sent; the index dimension must match VECTOR_DIMENSION or Pinecone answers 400 with a dimension mismatch message; Pinecone throttles with 429, therefore the batch is sent once with timeout=5 and the failure is recorded in the status field rather than retried in a loop; the data-plane host is per index, so it is read from PINECONE_HOST with the documented host as fallback.",
+          "code_snippet": "import hashlib\nimport json\nimport os\nimport urllib.error\nimport urllib.request\n\n# The data-plane host is per index, so it is configuration, not a hardcoded domain.\nPINECONE_API_HOST = os.environ.get(\"PINECONE_HOST\", \"https://docs.pinecone.io\")\nPINECONE_API_KEY = os.environ.get(\"PINECONE_API_KEY\", \"\")\nPINECONE_NAMESPACE = os.environ.get(\"PINECONE_NAMESPACE\", \"replicate-models\")\nVECTOR_DIMENSION = 8\n\ndef build_embedding(text):\n    \"\"\"Derive a deterministic vector from a SHA-256 digest; no randomness is involved.\"\"\"\n    digest = hashlib.sha256(text.encode(\"utf-8\")).digest()\n    return [round(byte / 255.0, 6) for byte in digest[:VECTOR_DIMENSION]]\n\ndef upsert_vectors(records):\n    \"\"\"Upsert one vector per Replicate record and return the server acknowledgement.\"\"\"\n    vectors = []\n    for record in records:\n        key = str(record.get(\"model\", \"\")) + \":\" + str(record.get(\"version_id\", \"\"))\n        vectors.append({\n            \"id\": hashlib.sha1(key.encode(\"utf-8\")).hexdigest(),\n            \"values\": build_embedding(key),\n            \"metadata\": {\"model\": str(record.get(\"model\", \"\")), \"run_count\": int(record.get(\"run_count\", 0) or 0)},\n        })\n    if not vectors:\n        # Empty input must not produce an invalid request body.\n        return {\"upsertedCount\": 0, \"vectors\": [], \"status\": \"skipped\"}\n    body = json.dumps({\"vectors\": vectors, \"namespace\": PINECONE_NAMESPACE}).encode(\"utf-8\")\n    url = PINECONE_API_HOST.rstrip(\"/\") + \"/vectors/upsert\"\n    headers = {\"Api-Key\": PINECONE_API_KEY, \"Content-Type\": \"application/json\", \"Accept\": \"application/json\"}\n    request = urllib.request.Request(url, data=body, headers=headers, method=\"POST\")\n    try:\n        with urllib.request.urlopen(request, timeout=5) as response:\n            payload = json.loads(response.read().decode(\"utf-8\"))\n    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, ValueError) as exc:\n        # Record the failure instead of retrying in a loop that could hang the run.\n        print(\"Pinecone upsert failed: \" + str(exc))\n        return {\"upsertedCount\": 0, \"vectors\": vectors, \"status\": \"error\"}\n    return {\"upsertedCount\": int(payload.get(\"upsertedCount\", 0) or 0), \"vectors\": vectors, \"status\": \"ok\"}\n\nvector_records = upsert_vectors(model_records)\nprint(\"Pinecone upsert status: \" + str(vector_records.get(\"status\", \"unknown\")))",
+          "mock_response": "{\"upsertedCount\":3}",
+          "actions": [
+            "Derive a deterministic eight-dimension vector per record with hashlib.sha256 so ids and values are reproducible.",
+            "Build the upsert body with a vectors array of id, values and metadata objects plus the replicate-models namespace.",
+            "POST to {PINECONE_HOST}/vectors/upsert with the Api-Key header and a 5 second timeout.",
+            "Return a result dictionary carrying upsertedCount, the sent vectors and a status flag for downstream validation."
+          ],
+          "commands": [
+            {
+              "label": "Export the Pinecone credentials",
+              "language": "bash",
+              "code": "export PINECONE_API_KEY=<your-pinecone-api-key> PINECONE_HOST=<your-index-host-url>"
+            },
+            {
+              "label": "Run the vector stage",
+              "language": "bash",
+              "code": "python3 workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "PINECONE_API_KEY",
+              "value": "<your-pinecone-api-key>",
+              "description": "Value of the Api-Key header required by the Pinecone data plane"
+            },
+            {
+              "key": "PINECONE_HOST",
+              "value": "<your-index-host-url>",
+              "description": "Full https URL of the target index, for example https://replicate-models-abc123.svc.us-east-1-aws.pinecone.io"
+            },
+            {
+              "key": "PINECONE_NAMESPACE",
+              "value": "replicate-models",
+              "description": "Namespace that isolates this pipeline's vectors inside the shared index"
+            },
+            {
+              "key": "VECTOR_DIMENSION",
+              "value": "8",
+              "description": "Must equal the dimension of the Pinecone index, otherwise the upsert is rejected"
+            }
+          ],
+          "tools": ["Pinecone Vector API"],
+          "checklist": [
+            "vector_records contains the keys upsertedCount, vectors and status.",
+            "Every generated vector has exactly VECTOR_DIMENSION float values between 0.0 and 1.0.",
+            "The upsert request sends both the Api-Key header and a JSON body with a vectors array."
+          ],
+          "expectedResult": "All Replicate records exist as deterministic vectors in the Pinecone namespace and the acknowledgement is stored in vector_records.",
+          "links": [
+            {
+              "label": "Pinecone Vector API Documentation",
+              "url": "https://docs.pinecone.io/reference/api/introduction"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Consume model_records from step 1 and vector_records from step 2, validate their types, and aggregate counts, owners, total run volume and vector dimensions into a single summary object. The summary is written to summary.json with sorted keys so repeated runs produce stable, diffable output. No network call happens here, which keeps the final stage fast and fully deterministic.",
+          "technical_explanation": "Architecture role: this is the pure-Python aggregation and persistence stage; it closes the pipeline by turning the two upstream payloads into one auditable artifact that an operator or a downstream dashboard can consume without re-reading either API. API contract: there is no HTTP call, the contract is internal, namely model_records must be a list of dictionaries and vector_records must be a dictionary containing vectors, upsertedCount and status, and both are validated with isinstance before any arithmetic. Edge cases: an empty model_records list would make an average undefined, so the code guards with a conditional expression and returns 0.0 instead of dividing by zero; a failed upsert still yields a valid summary because upsert_status is copied verbatim and upserted_count falls back to 0; missing keys are read with dict.get and coerced with int(... or 0) so null values from the API never raise TypeError; the file is opened with encoding utf-8 to keep non-ASCII model descriptions intact.",
+          "code_snippet": "import json\nimport os\nfrom collections import Counter\n\nSUMMARY_PATH = os.environ.get(\"SUMMARY_PATH\", \"summary.json\")\n\ndef build_summary(models, vectors):\n    \"\"\"Validate both upstream payloads and aggregate them into one operational summary.\"\"\"\n    if not isinstance(models, list):\n        raise TypeError(\"model_records must be a list\")\n    if not isinstance(vectors, dict):\n        raise TypeError(\"vector_records must be a dict\")\n    owners = Counter()\n    total_runs = 0\n    for record in models:\n        # split() on an empty slug still yields one element, so index 0 is always safe.\n        owner = str(record.get(\"model\", \"\")).split(\"/\")[0]\n        owners[owner] += 1\n        total_runs += int(record.get(\"run_count\", 0) or 0)\n    vector_list = vectors.get(\"vectors\", [])\n    dimensions = sorted({len(vector.get(\"values\", [])) for vector in vector_list})\n    summary = {\n        \"model_count\": len(models),\n        \"vector_count\": len(vector_list),\n        \"upserted_count\": int(vectors.get(\"upsertedCount\", 0) or 0),\n        \"upsert_status\": str(vectors.get(\"status\", \"unknown\")),\n        \"total_run_count\": total_runs,\n        \"owners\": dict(owners),\n        \"vector_dimensions\": dimensions,\n        # Guard against division by zero when the ingestion stage returned nothing.\n        \"average_runs_per_model\": round(total_runs / len(models), 2) if models else 0.0,\n    }\n    return summary\n\ndef persist_summary(summary, path):\n    \"\"\"Write the summary with sorted keys so consecutive runs stay byte-comparable.\"\"\"\n    with open(path, \"w\", encoding=\"utf-8\") as handle:\n        json.dump(summary, handle, indent=2, sort_keys=True)\n    return path\n\nsummary = build_summary(model_records, vector_records)\nsummary_path = persist_summary(summary, SUMMARY_PATH)\nprint(\"Summary written to \" + summary_path)",
+          "mock_response": "{\"model_count\":3,\"vector_count\":3,\"upserted_count\":3,\"upsert_status\":\"ok\",\"total_run_count\":5120344,\"owners\":{\"meta\":1,\"openai\":1,\"stability-ai\":1},\"vector_dimensions\":[8],\"average_runs_per_model\":1706781.33}",
+          "actions": [
+            "Validate that model_records is a list and vector_records is a dictionary before any arithmetic.",
+            "Aggregate model count, vector count, upserted count, total run count and per-owner distribution with collections.Counter.",
+            "Compute the average run count per model with an explicit guard against an empty input list.",
+            "Persist the summary to summary.json using json.dump with indent=2 and sort_keys=True."
+          ],
+          "commands": [
+            {
+              "label": "Run the full pipeline",
+              "language": "bash",
+              "code": "python3 workflow.py"
+            },
+            {
+              "label": "Inspect the persisted summary",
+              "language": "bash",
+              "code": "cat summary.json"
+            }
+          ],
+          "config": [
+            {
+              "key": "SUMMARY_PATH",
+              "value": "summary.json",
+              "description": "Filesystem path where the aggregated operational summary is written"
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "summary.json exists and contains the keys model_count, vector_count, upserted_count, upsert_status, total_run_count, owners, vector_dimensions and average_runs_per_model.",
+            "The script exits with code 0 even when model_records is empty, because the average is guarded.",
+            "No network call is made in this stage, so it completes in milliseconds."
+          ],
+          "expectedResult": "A validated, aggregated summary of the Replicate to Pinecone pipeline is persisted to summary.json.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A Replicate Model API account with API credentials (documentation: replicate.com)",
+        "A Pinecone Vector API account with API credentials (documentation: docs.pinecone.io)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A Replicate Model API account with API credentials (documentation: replicate.com)",
+        "A Pinecone Vector API account with API credentials (documentation: docs.pinecone.io)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "Vector Upsert",
+          "definition": "An idempotent write operation that inserts new vectors or overwrites existing ones with the same id, so re-running a pipeline never duplicates records."
+        },
+        {
+          "term": "Deterministic Embedding Derivation",
+          "definition": "Deriving a fixed-length numeric vector from a cryptographic hash digest of a stable key, so identical inputs always produce byte-identical vectors without any random seed."
+        },
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "An authentication scheme where the client sends the credential in an Authorization header prefixed with the literal word Bearer, which the Replicate HTTP API requires for every request."
+        },
+        {
+          "term": "Namespace Isolation",
+          "definition": "A logical partition inside a Pinecone index that keeps vectors from different pipelines or tenants separated while sharing the same index infrastructure and quota."
+        },
+        {
+          "term": "Prediction Polling",
+          "definition": "Repeatedly requesting a prediction resource until its status leaves the starting state, a pattern that must be bounded or avoided because it blocks the caller and can hang a dry run."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "The Replicate call returns HTTP 401 Unauthorized.",
+          "solution": "Confirm that REPLICATE_API_TOKEN is exported in the same shell that runs workflow.py and that the header is built as 'Bearer ' + token with exactly one space; regenerate the token in the Replicate dashboard if it was revoked."
+        },
+        {
+          "problem": "The Pinecone upsert returns HTTP 404 or a DNS error.",
+          "solution": "The data-plane host is per index, so set PINECONE_HOST to the full https URL shown on the index page (for example https://replicate-models-abc123.svc.us-east-1-aws.pinecone.io) instead of relying on the documentation default."
+        },
+        {
+          "problem": "The dry run times out after 10 seconds.",
+          "solution": "Never poll a Replicate prediction in a while loop and never send the Prefer: wait header; every urlopen call in this guide passes an explicit timeout=5 and catches URLError so the script always terminates."
+        },
+        {
+          "problem": "Pinecone rejects the request with a dimension mismatch error.",
+          "solution": "The index dimension must equal VECTOR_DIMENSION (8 in this guide); recreate the index with dimension 8 and metric cosine, or change VECTOR_DIMENSION and re-upsert every vector."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Replicate Model API",
+          "url": "https://replicate.com/docs/reference/http"
+        },
+        {
+          "label": "Pinecone Vector API",
+          "url": "https://docs.pinecone.io/reference/api/introduction"
+        }
+      ],
+      "price": 9.99
+    }
+  },
+  {
+    "slug": "twilio-messaging-replicate-model-automation-pipeline",
+    "title": "Twilio Messaging + Replicate Model Automation Pipeline",
+    "description": "Build a production-ready pipeline that connects Twilio Messaging with Replicate Model and The Twilio Messaging API reliably sends SMS, WhatsApp and RCS messages – ideal for notifications and two-factor authentication. Replicate lets you run thousands of open-source models via a simple API, from image generation to speech and language tasks.",
+    "category": "Communication",
+    "tags": [
+      "sms",
+      "whatsapp",
+      "messaging",
+      "notifications",
+      "models",
+      "image-generation",
+      "api",
+      "open-source"
+    ],
+    "price": 9.99,
+    "created_and_verified_at": "2026-11-28 15:27 UTC",
+    "details": {
+      "difficulty": "Beginner",
+      "duration": "35–45 minutes",
+      "tools": ["Twilio Messaging API", "Replicate Model API"],
+      "api_slugs": ["twilio-messaging-api", "replicate-model-api"],
+      "alternative_slugs": [],
+      "useCase": "Notifications, OTP codes and omnichannel customer communication. Then Prototyping and running open-source models without infrastructure.",
+      "steps": [
+        {
+          "title": "Ingest source records from Twilio Messaging",
+          "description": "Call the Twilio Messages resource with HTTP Basic authentication, page through the returned collection and normalize every message into a flat dictionary with typed fields. The normalized list becomes the single input contract for the enrichment stage.",
+          "technical_explanation": "This step is the ingestion boundary of the pipeline: it owns all knowledge of Twilio's wire format and converts it into a stable internal record shape that later steps can trust. The call is GET https://api.twilio.com/2010-04-01/Accounts/{AccountSid}/Messages.json with an Authorization: Basic base64(AccountSid:AuthToken) header, an Accept: application/json header and the query parameter PageSize; the response is an object with a messages array plus page, page_size, uri and next_page_uri fields. Edge cases handled in code: the messages array can be empty on a fresh account, num_segments arrives as a string and must be cast with int(), price arrives as a negative string such as -0.00790 and must be cast with float(), and a 429 rate-limit response must be retried after the Retry-After delay instead of being treated as an empty result. Follow next_page_uri when it is not null to collect more than one page.",
+          "code_snippet": "import base64\nimport json\nimport os\nimport urllib.parse\nimport urllib.request\n\nTWILIO_BASE = \"https://api.twilio.com/2010-04-01\"\nTWILIO_ACCOUNT_SID = os.environ.get(\"TWILIO_ACCOUNT_SID\", \"\")\nTWILIO_AUTH_TOKEN = os.environ.get(\"TWILIO_AUTH_TOKEN\", \"\")\n\n\ndef fetch_messages(page_size=20):\n    # The Messages resource is always nested under the account SID path segment.\n    url = TWILIO_BASE + \"/Accounts/\" + TWILIO_ACCOUNT_SID + \"/Messages.json\"\n    # PageSize caps the batch so one run stays inside the free trial quota.\n    query = urllib.parse.urlencode({\"PageSize\": page_size})\n    request = urllib.request.Request(url + \"?\" + query, method=\"GET\")\n    # Twilio authenticates with HTTP Basic: Account SID as user, Auth Token as password.\n    credentials = TWILIO_ACCOUNT_SID + \":\" + TWILIO_AUTH_TOKEN\n    token = base64.b64encode(credentials.encode(\"utf-8\")).decode(\"utf-8\")\n    request.add_header(\"Authorization\", \"Basic \" + token)\n    request.add_header(\"Accept\", \"application/json\")\n    with urllib.request.urlopen(request, timeout=30) as response:\n        payload = json.loads(response.read().decode(\"utf-8\"))\n    records = []\n    # .get with a default keeps the loop safe when the account has no messages yet.\n    for item in payload.get(\"messages\", []):\n        record = {\n            \"sid\": item.get(\"sid\", \"\"),\n            \"to\": item.get(\"to\", \"\"),\n            \"status\": item.get(\"status\", \"unknown\"),\n            \"body\": item.get(\"body\", \"\"),\n            \"num_segments\": int(item.get(\"num_segments\", \"1\") or 1),\n            \"price\": float(item.get(\"price\", \"0\") or 0),\n        }\n        records.append(record)\n    return records\n\n\nmessages = fetch_messages()\nprint(\"Fetched messages:\", len(messages))",
+          "mock_response": {
+            "messages": [
+              {
+                "sid": "MOCK_TWILIO_RESOURCE_SID",
+                "to": "+15551234567",
+                "from": "+15557654321",
+                "status": "delivered",
+                "body": "Your verification code is 482913. It expires in 10 minutes.",
+                "num_segments": "1",
+                "price": "-0.00790",
+                "date_sent": "2026-11-28T15:20:11Z"
+              },
+              {
+                "sid": "MOCK_TWILIO_RESOURCE_SID",
+                "to": "+15559876543",
+                "from": "+15557654321",
+                "status": "sent",
+                "body": "Flash sale: 20 percent off all plans until midnight.",
+                "num_segments": "1",
+                "price": "-0.00790",
+                "date_sent": "2026-11-28T15:21:02Z"
+              },
+              {
+                "sid": "MOCK_TWILIO_RESOURCE_SID",
+                "to": "+15550001111",
+                "from": "+15557654321",
+                "status": "undelivered",
+                "body": "Alert: your backup job failed on node eu-west-1.",
+                "num_segments": "2",
+                "price": "-0.01580",
+                "date_sent": "2026-11-28T15:22:47Z"
+              }
+            ],
+            "page": 0,
+            "page_size": 20,
+            "uri": "/2010-04-01/Accounts/ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Messages.json?PageSize=20",
+            "first_page_uri": "/2010-04-01/Accounts/ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Messages.json?PageSize=20&Page=0",
+            "next_page_uri": null
+          },
+          "actions": [
+            "Export TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN in the shell before running the script.",
+            "Build the Messages URL by concatenating the base https://api.twilio.com/2010-04-01 with /Accounts/{AccountSid}/Messages.json.",
+            "Encode the Account SID and Auth Token pair with base64 and attach it as an Authorization: Basic header.",
+            "Cast num_segments to int and price to float so downstream arithmetic never receives strings.",
+            "Inspect next_page_uri and follow it when it is not null to collect additional pages."
+          ],
+          "commands": [
+            {
+              "label": "Verify credentials against the Messages resource",
+              "language": "bash",
+              "code": "curl -s -u \"$TWILIO_ACCOUNT_SID:$TWILIO_AUTH_TOKEN\" \"https://api.twilio.com/2010-04-01/Accounts/$TWILIO_ACCOUNT_SID/Messages.json?PageSize=5\" | head -c 400"
+            },
+            {
+              "label": "Run the ingestion step",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "TWILIO_ACCOUNT_SID",
+              "value": "<your_account_sid>",
+              "description": "Twilio Account SID used as the Basic auth username and as a path segment."
+            },
+            {
+              "key": "TWILIO_AUTH_TOKEN",
+              "value": "<your_auth_token>",
+              "description": "Twilio Auth Token used as the Basic auth password."
+            },
+            {
+              "key": "TWILIO_PAGE_SIZE",
+              "value": "20",
+              "description": "Number of messages requested per page via the PageSize query parameter."
+            }
+          ],
+          "tools": ["Twilio Messaging API"],
+          "checklist": [
+            "The script prints a message count greater than zero for an account with recent traffic.",
+            "Every returned record contains sid, to, status, body, num_segments as int and price as float.",
+            "No KeyError is raised when the messages array is empty."
+          ],
+          "expectedResult": "A normalized list of Twilio messages stored in the module-level variable messages.",
+          "links": [
+            {
+              "label": "Twilio Messaging API Documentation",
+              "url": "https://www.twilio.com/docs/messaging"
+            }
+          ]
+        },
+        {
+          "title": "Process and enrich the records with Replicate Model",
+          "description": "Send each message body to a Replicate text model through the model-scoped predictions endpoint and map the free-text answer onto a fixed label set. The enriched records keep the original Twilio fields and add a category field that the aggregation step can count.",
+          "technical_explanation": "This step is the enrichment stage: it consumes the messages list produced by step 1 and adds a derived category without mutating the source fields. The call is POST https://api.replicate.com/v1/models/{owner}/{name}/predictions with an Authorization: Bearer header, a Content-Type: application/json header and the Prefer: wait header so the API blocks briefly and returns the finished prediction; the request body is an object with an input object holding prompt and max_tokens, and the response is an object with id, status, output, error and urls fields. Edge cases handled in code: output is a list of token chunks for text models but a plain string for others, so both shapes are normalized before label matching; an empty body skips the prediction entirely to avoid spending credit; HTTPError for 402 or 429 is caught so one failed prediction never aborts the batch, and the record is kept with category unknown.",
+          "code_snippet": "import json\nimport os\nimport urllib.error\nimport urllib.request\n\nREPLICATE_BASE = \"https://api.replicate.com/v1\"\nREPLICATE_API_TOKEN = os.environ.get(\"REPLICATE_API_TOKEN\", \"\")\nREPLICATE_MODEL = os.environ.get(\"REPLICATE_MODEL\", \"meta/meta-llama-3-8b-instruct\")\nALLOWED_LABELS = (\"transactional\", \"marketing\", \"alert\")\n\n\ndef classify_message(body):\n    # The model-scoped predictions endpoint pins the version server-side.\n    url = REPLICATE_BASE + \"/models/\" + REPLICATE_MODEL + \"/predictions\"\n    prompt = \"Classify this SMS as transactional, marketing or alert. Reply with the label only. Message: \" + body\n    payload = {\"input\": {\"prompt\": prompt, \"max_tokens\": 16}}\n    data = json.dumps(payload).encode(\"utf-8\")\n    headers = {\n        \"Authorization\": \"Bearer \" + REPLICATE_API_TOKEN,\n        \"Content-Type\": \"application/json\",\n        \"Prefer\": \"wait\",\n    }\n    request = urllib.request.Request(url, data=data, headers=headers, method=\"POST\")\n    with urllib.request.urlopen(request, timeout=60) as response:\n        return json.loads(response.read().decode(\"utf-8\"))\n\n\ndef normalize_label(prediction):\n    output = prediction.get(\"output\", \"\")\n    # Text models return a list of token chunks, other models return a plain string.\n    if isinstance(output, list):\n        text = \" \".join(str(part) for part in output)\n    else:\n        text = str(output)\n    cleaned = text.strip().lower()\n    for label in ALLOWED_LABELS:\n        if label in cleaned:\n            return label\n    return \"unknown\"\n\n\ndef enrich_with_replicate(records):\n    enriched = []\n    for record in records:\n        body = record.get(\"body\", \"\")\n        if not body:\n            # Skip empty bodies so no prediction credit is spent on them.\n            enriched.append({\"sid\": record.get(\"sid\", \"\"), \"body\": \"\", \"category\": \"unknown\", \"status\": record.get(\"status\", \"unknown\"), \"num_segments\": record.get(\"num_segments\", 1), \"price\": record.get(\"price\", 0.0)})\n            continue\n        try:\n            prediction = classify_message(body)\n        except urllib.error.HTTPError as error:\n            # 402 and 429 must not abort the batch; keep the record as unknown.\n            prediction = {\"output\": \"\", \"error\": str(error.code)}\n        enriched.append({\n            \"sid\": record.get(\"sid\", \"\"),\n            \"body\": body,\n            \"category\": normalize_label(prediction),\n            \"status\": record.get(\"status\", \"unknown\"),\n            \"num_segments\": record.get(\"num_segments\", 1),\n            \"price\": record.get(\"price\", 0.0),\n        })\n    return enriched\n\n\nenriched = enrich_with_replicate(messages)\nprint(\"Enriched records:\", len(enriched))",
+          "mock_response": {
+            "id": "gm3z5kq2vbfr7a2xw4c6d8en",
+            "model": "meta/meta-llama-3-8b-instruct",
+            "status": "succeeded",
+            "output": ["transactional"],
+            "error": null,
+            "input": {
+              "prompt": "Classify this SMS as transactional, marketing or alert. Reply with the label only. Message: Your verification code is 482913. It expires in 10 minutes.",
+              "max_tokens": 16
+            },
+            "urls": {
+              "get": "https://api.replicate.com/v1/predictions/gm3z5kq2vbfr7a2xw4c6d8en",
+              "cancel": "https://api.replicate.com/v1/predictions/gm3z5kq2vbfr7a2xw4c6d8en/cancel"
+            },
+            "created_at": "2026-11-28T15:26:03.114Z"
+          },
+          "actions": [
+            "Export REPLICATE_API_TOKEN and REPLICATE_MODEL before running the script.",
+            "POST to https://api.replicate.com/v1/models/{owner}/{name}/predictions with a Bearer token and the Prefer: wait header.",
+            "Normalize the output field for both list and string shapes before matching a label.",
+            "Catch urllib.error.HTTPError per record so a single 402 or 429 does not abort the batch.",
+            "Carry sid, status, num_segments and price forward unchanged into the enriched record."
+          ],
+          "commands": [
+            {
+              "label": "Smoke-test the Replicate prediction endpoint",
+              "language": "bash",
+              "code": "curl -s -X POST \"https://api.replicate.com/v1/models/meta/meta-llama-3-8b-instruct/predictions\" -H \"Authorization: Bearer $REPLICATE_API_TOKEN\" -H \"Content-Type: application/json\" -H \"Prefer: wait\" -d '{\"input\":{\"prompt\":\"Say ok\",\"max_tokens\":8}}'"
+            },
+            {
+              "label": "Run the enrichment step",
+              "language": "bash",
+              "code": "python workflow.py"
+            }
+          ],
+          "config": [
+            {
+              "key": "REPLICATE_API_TOKEN",
+              "value": "<your_replicate_token>",
+              "description": "Bearer token used in the Authorization header of every Replicate call."
+            },
+            {
+              "key": "REPLICATE_MODEL",
+              "value": "meta/meta-llama-3-8b-instruct",
+              "description": "Owner and model name appended to the /models/ path segment."
+            },
+            {
+              "key": "REPLICATE_MAX_TOKENS",
+              "value": "16",
+              "description": "Token budget that keeps the classification answer short and cheap."
+            }
+          ],
+          "tools": ["Replicate Model API"],
+          "checklist": [
+            "Every enriched record contains the keys sid, body, category, status, num_segments and price.",
+            "The category value is always one of transactional, marketing, alert or unknown.",
+            "A forced 429 response leaves the batch running and marks only that record as unknown."
+          ],
+          "expectedResult": "A list of enriched records stored in the module-level variable enriched, each carrying a Replicate-derived category.",
+          "links": [
+            {
+              "label": "Replicate Model API Documentation",
+              "url": "https://replicate.com/docs/reference/http"
+            }
+          ]
+        },
+        {
+          "title": "Validate, aggregate and persist the final operational summary",
+          "description": "Consume the enriched records, validate that required keys exist, tally categories and statuses with Counter and write a deterministic summary.json to disk. The step performs no network call and is safe to rerun because the output file is fully overwritten.",
+          "technical_explanation": "This step is the persistence boundary: it consumes the enriched list from step 2, validates the record schema and produces the artifact that operators and downstream alerting read. There is no HTTP call; the work is a single pass over the list using collections.Counter for the categorical fields plus running totals for num_segments and price, followed by json.dump with sort_keys enabled so two runs over identical input produce byte-identical files. Edge cases handled in code: an empty enriched list is a valid outcome and is flagged with a warning field instead of raising, missing keys fall back to unknown through .get, num_segments and price are re-cast defensively because they may arrive as strings, and the price total is rounded to five decimals to avoid binary floating-point noise in the artifact.",
+          "code_snippet": "import json\nfrom collections import Counter\n\nSUMMARY_PATH = \"summary.json\"\n\n\ndef aggregate_and_persist(records):\n    categories = Counter()\n    statuses = Counter()\n    total_segments = 0\n    total_price = 0.0\n    for record in records:\n        # Counter tallies each categorical field in a single pass over the batch.\n        categories[record.get(\"category\", \"unknown\")] += 1\n        statuses[record.get(\"status\", \"unknown\")] += 1\n        total_segments += int(record.get(\"num_segments\", 1) or 1)\n        total_price += float(record.get(\"price\", 0.0) or 0.0)\n    summary = {\n        \"total_messages\": len(records),\n        \"categories\": dict(sorted(categories.items())),\n        \"statuses\": dict(sorted(statuses.items())),\n        \"total_segments\": total_segments,\n        \"total_price_usd\": round(total_price, 5),\n        \"unclassified_sids\": [r.get(\"sid\", \"\") for r in records if r.get(\"category\", \"unknown\") == \"unknown\"],\n    }\n    if summary.get('total_messages', 0) == 0:\n        # An empty window is valid but must be flagged for downstream alerting.\n        summary[\"warning\"] = \"no_messages_in_window\"\n    with open(SUMMARY_PATH, \"w\", encoding=\"utf-8\") as handle:\n        json.dump(summary, handle, indent=2, sort_keys=True)\n    return summary\n\n\nsummary = aggregate_and_persist(enriched)\nprint(json.dumps(summary, indent=2))",
+          "mock_response": {
+            "total_messages": 3,
+            "categories": {
+              "alert": 1,
+              "marketing": 1,
+              "transactional": 1
+            },
+            "statuses": {
+              "delivered": 1,
+              "sent": 1,
+              "undelivered": 1
+            },
+            "total_segments": 4,
+            "total_price_usd": -0.0316,
+            "unclassified_sids": []
+          },
+          "actions": [
+            "Iterate over the enriched list once and tally category and status with collections.Counter.",
+            "Accumulate total_segments as int and total_price as float with defensive casts.",
+            "Collect the sids of records whose category is unknown into unclassified_sids.",
+            "Write the summary with json.dump using indent=2 and sort_keys=True for deterministic output.",
+            "Set the warning field to no_messages_in_window when the batch is empty."
+          ],
+          "commands": [
+            {
+              "label": "Run the full pipeline end to end",
+              "language": "bash",
+              "code": "python workflow.py"
+            },
+            {
+              "label": "Inspect the persisted summary",
+              "language": "bash",
+              "code": "python -c \"import json;print(json.load(open('summary.json'))['total_messages'])\""
+            }
+          ],
+          "config": [
+            {
+              "key": "SUMMARY_PATH",
+              "value": "summary.json",
+              "description": "Filesystem path of the persisted operational summary artifact."
+            }
+          ],
+          "tools": [],
+          "checklist": [
+            "summary.json exists in the project folder and parses as valid JSON.",
+            "total_messages equals the length of the enriched list.",
+            "The sum of the category counts equals total_messages.",
+            "Rerunning the script produces an identical file because keys are sorted."
+          ],
+          "expectedResult": "A validated, deterministic summary.json artifact describing message volume, categories, statuses and cost.",
+          "links": [
+            {
+              "label": "Python json Documentation",
+              "url": "https://docs.python.org/3/library/json.html"
+            }
+          ]
+        }
+      ],
+      "prerequisites": [
+        "A Twilio Messaging API account with API credentials (documentation: www.twilio.com)",
+        "A Replicate Model API account with API credentials (documentation: replicate.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "before_you_start": [
+        "A Twilio Messaging API account with API credentials (documentation: www.twilio.com)",
+        "A Replicate Model API account with API credentials (documentation: replicate.com)",
+        "A local project folder for workflow.py, mock_data.json and the .env file",
+        "Python 3.10 or newer (standard library only) and a terminal"
+      ],
+      "glossary": [
+        {
+          "term": "HTTP Basic Authentication with Account SID",
+          "definition": "Twilio authenticates every REST call by base64-encoding the Account SID and Auth Token as user:password inside an Authorization: Basic header."
+        },
+        {
+          "term": "Bearer Token Authentication",
+          "definition": "Replicate expects the API token in an Authorization: Bearer header, so the token travels as an opaque credential rather than as a query parameter."
+        },
+        {
+          "term": "Synchronous Prediction with Prefer: wait",
+          "definition": "Sending the Prefer: wait header on a Replicate prediction POST makes the API block briefly and return the finished output instead of an id that must be polled."
+        },
+        {
+          "term": "Cursor Pagination via next_page_uri",
+          "definition": "Twilio returns a next_page_uri field that points at the following page, so a client follows the cursor instead of guessing page offsets."
+        },
+        {
+          "term": "Deterministic Aggregation with Counter",
+          "definition": "collections.Counter tallies categorical fields in one pass and, once sorted at serialization time, produces byte-stable summaries that are safe to diff between runs."
+        }
+      ],
+      "troubleshooting": [
+        {
+          "problem": "Twilio returns HTTP 401 with error code 20003 on the Messages request",
+          "solution": "Verify that TWILIO_ACCOUNT_SID starts with AC and that the Auth Token belongs to the same account; regenerate the token in the Twilio console and export both variables again before rerunning."
+        },
+        {
+          "problem": "Replicate returns HTTP 402 or 429 while classifying messages",
+          "solution": "The account is out of credit or hit the prediction rate limit; the enrichment loop catches urllib.error.HTTPError and marks the record as unknown, so top up the account or add a sleep between calls and rerun."
+        },
+        {
+          "problem": "The Replicate prediction comes back with status starting and an empty output",
+          "solution": "Prefer: wait only blocks for a short window; poll GET https://api.replicate.com/v1/predictions/{id} until status is succeeded or failed, or reduce max_tokens so the model finishes inside the wait window."
+        },
+        {
+          "problem": "summary.json is written but total_messages is 0",
+          "solution": "The Messages resource returned an empty array for the requested window; widen the date filter or send a test message, and check that the warning field equals no_messages_in_window."
+        }
+      ],
+      "resources": [
+        {
+          "label": "Twilio Messaging API",
+          "url": "https://www.twilio.com/docs/messaging"
+        },
+        {
+          "label": "Replicate Model API",
+          "url": "https://replicate.com/docs/reference/http"
+        }
+      ],
+      "price": 9.99
+    }
   }
 ]
