@@ -56,7 +56,11 @@
       "google-maps-api",
       "azure-cosmos-db-api",
       "aws-polly-api",
-      "azure-face-api"
+      "azure-face-api",
+      "ibm-watson-discovery-api",
+      "ibm-watson-assistant-api",
+      "ibm-watson-language-translator-api",
+      "yelp-fusion-api"
     ],
     "workflows": [
       "seo-keyword-tracking-dashboard",
@@ -106,26 +110,30 @@
       "shopify-admin-amazon-polly-automation-pipeline",
       "slack-microsoft-azure-face-automation-pipeline",
       "slack-ibm-watson-language-translator-automation-pipeline",
-      "braintree-payments-to-airtable-with-contentful-content-management-system-orchestration"
+      "braintree-payments-to-airtable-with-contentful-content-management-system-orchestration",
+      "telegram-bot-aiven-kafka-automation-pipeline",
+      "ably-realtime-github-copilot-automation-pipeline",
+      "ably-realtime-hubspot-crm-automation-pipeline",
+      "shopify-admin-twilio-conversations-automation-pipeline"
     ]
   },
-  "lastSentAt": "2026-11-23 19:38:45",
+  "lastSentAt": "2026-11-25 17:12:47",
   "pendingCampaign": {
-    "id": "205129370515277510",
-    "createdAt": "2026-11-25T17:10:13.785Z",
+    "id": "205394877768271114",
+    "createdAt": "2026-11-28T15:30:21.356Z",
     "slugs": {
       "insights": [],
       "apis": [
-        "ibm-watson-discovery-api",
-        "ibm-watson-assistant-api",
-        "ibm-watson-language-translator-api",
-        "yelp-fusion-api"
+        "aws-ses-api",
+        "aws-rekognition-api",
+        "ibm-cloud-object-storage-api",
+        "paypal-payments-api"
       ],
       "workflows": [
-        "telegram-bot-aiven-kafka-automation-pipeline",
-        "ably-realtime-github-copilot-automation-pipeline",
-        "ably-realtime-hubspot-crm-automation-pipeline",
-        "shopify-admin-twilio-conversations-automation-pipeline"
+        "twilio-messaging-replicate-model-automation-pipeline",
+        "replicate-model-pinecone-vector-automation-pipeline",
+        "stripe-payments-replicate-model-automation-pipeline",
+        "pdf-generator-to-twelve-data-with-deepai-image-generator-orchestration"
       ]
     }
   }
